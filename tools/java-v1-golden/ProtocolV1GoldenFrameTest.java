@@ -91,6 +91,17 @@ class ProtocolV1GoldenFrameTest {
     }
 
     @Test
+    void decodesAndReencodesGoGoldenFailedGlobalBeginResponseFrame() {
+        RpcMessage message = decodeAndReencode(
+                "dada0100000026001001010000000001000200000c626567696e2064656e6965640100000000");
+
+        GlobalBeginResponse response = assertInstanceOf(GlobalBeginResponse.class, message.getBody());
+        assertEquals("begin denied", response.getMsg());
+        assertEquals("", response.getXid());
+        assertEquals("", response.getExtraData());
+    }
+
+    @Test
     void decodesAndReencodesGoGoldenGlobalBeginResponseFrame() {
         RpcMessage message = decodeAndReencode(
                 "dada01000000280010010100000000010002010000103132372e302e302e313a383039313a310000");
