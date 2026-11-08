@@ -67,12 +67,14 @@ A test that compares only level 1 does not prove Java frame compatibility.
 
 The following are source-derived candidate frames with no head map, request ID 1, Seata serializer 1 and NONE compressor 0.
 
-| Frame | Request type | Full length | Expected frame hex |
-|---|---:|---:|---|
-| GlobalBegin request | 0 | 42 | `dada010000002a0010000100000000010001000007d000125365617461476f5472616e73616374696f6e` |
-| GlobalBegin response | 1 | 40 | `dada01000000280010010100000000010002010000103132372e302e302e313a383039313a310000` |
+| Frame | Request type | Full length | Head length | Expected frame hex |
+|---|---:|---:|---:|---|
+| GlobalBegin request | 0 | 42 | 16 | `dada010000002a0010000100000000010001000007d000125365617461476f5472616e73616374696f6e` |
+| GlobalBegin response | 1 | 40 | 16 | `dada01000000280010010100000000010002010000103132372e302e302e313a383039313a310000` |
+| GlobalBegin request with `traceId` head map | 0 | 62 | 36 | `dada010000003e002400010000000001000774726163654964000974726163652d3030310001000007d000125365617461476f5472616e73616374696f6e` |
+| Failed GlobalBegin response with zero-length XID/ExtraData | 1 | 38 | 16 | `dada0100000026001001010000000001000200000c626567696e2064656e6965640100000000` |
 
-The Go verification harness reconstructs these frames from the actual Go serializer payload bytes and checks exact equality against the committed frame fixtures.
+The Go verification harness reconstructs all four frames from actual Go serializer payload bytes and checks exact equality against the committed frame fixtures. The Java JUnit overlay feeds the same four complete frames through Java V1 Decoder → Encoder and requires byte-for-byte equality.
 
 ## 5. Java decoder behavior and caveats
 
