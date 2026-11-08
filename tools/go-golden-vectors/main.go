@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/hex"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -16,6 +17,16 @@ import (
 	"seata.apache.org/seata-go/v2/pkg/protocol/message"
 	seataerrors "seata.apache.org/seata-go/v2/pkg/util/errors"
 )
+
+type expectedFrame struct {
+	Name string `json:"name"`
+	SourceVector string `json:"source_vector"`
+	RequestType byte `json:"request_type"`
+	RequestID uint32 `json:"request_id"`
+	SerializerID byte `json:"serializer_id"`
+	CompressorID byte `json:"compressor_id"`
+	FrameHex string `json:"frame_hex"`
+}
 
 type expectedVector struct {
 	Name    string `json:"name"`
@@ -93,6 +104,7 @@ func main() {
 
 	codec.Init()
 	manager := codec.GetCodecManager()
+	serializedByName := make(map[string][]byte, len(vectors))
 	for i, vector := range vectors {
 		want := expected[i]
 		if vector.name != want.Name {
@@ -119,6 +131,7 @@ func main() {
 		if gotSerializedHex != wantSerializedHex {
 			fail("%s: Seata serializer payload mismatch\\n got: %s\\nwant: %s", vector.name, gotSerializedHex, wantSerializedHex)
 		}
+		serializedByName[vector.name] = serialized
 		decoded := messageCodec.Decode(body)
 		roundTrip := messageCodec.Encode(decoded)
 		if !reflect.DeepEqual(body, roundTrip) {
