@@ -14,11 +14,15 @@ Seata-Rust follows a staged strategy:
 
 ## Architecture & Roadmap
 
-The full architecture plan, module-by-module comparison, transaction execution flows, compatibility matrix, risk register, testing strategy and phased OpenSpec roadmap are documented here:
+- [Seata-Rust Architecture & Roadmap](docs/architecture/SEATA_RUST_ARCHITECTURE_PLAN.md) — overall vision, module matrix, execution flows, staged roadmap and V1 acceptance goals.
+- [Phase 0 Research Index](docs/phase-0/README.md) — pinned upstream snapshots, source mapping, protocol compatibility and state-machine specifications.
+- [Architecture Decision Records](docs/adr/README.md) — accepted and proposed architecture decisions.
 
-**[Seata-Rust Architecture & Roadmap](docs/architecture/SEATA_RUST_ARCHITECTURE_PLAN.md)**
+### Phase 0 scope
 
-The document uses GitHub-rendered Markdown tables, Mermaid diagrams, code examples and task checklists for an at-a-glance, page-like reading experience.
+Phase 0 is research and specification only. It establishes source provenance, protocol facts, state semantics, compatibility risks and ADRs before implementation begins. **No application/business code is being started in this phase.**
+
+The Phase 0 documents distinguish source-verified facts, test-verified behavior, inference and unknowns. A README claim, source directory, Cargo feature or matching enum name is not considered proof of compatibility.
 
 ## Reference Projects
 
@@ -28,7 +32,7 @@ The document uses GitHub-rendered Markdown tables, Mermaid diagrams, code exampl
 
 ## Project Status
 
-Architecture planning. No production-readiness or protocol-conformance claim is made until implementation and compatibility tests provide evidence.
+Architecture planning / Phase 0 research. No production-readiness or protocol-conformance claim is made until implementation and compatibility tests provide evidence.
 
 ## License
 
