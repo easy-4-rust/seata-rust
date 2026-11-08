@@ -29,6 +29,7 @@ Seata-Rust follows a staged strategy:
 - [Phase 0 Validation Ledger](docs/phase-0/validation-ledger.md) — pinned source SHAs, runtime evidence and WP-00 gates.
 - [Protocol Compatibility CI](.github/workflows/phase-0-protocol-compatibility.yml) — automated pinned Go and Java V1 protocol tests.
 - [Java TC Live Integration Plan](docs/phase-0/java-tc-live-integration-plan.md) — Phase 0.9 live TC test topology and acceptance gates.
+- [V1 TM/RM Registration Wire Contract](docs/phase-0/registration-v1-wire-contract.md) — pinned Java/Go RegisterTM/RegisterRM wire layout and V1 server channel selection.
 - [Java TC Integration Harness](tools/java-tc-integration/README.md) — pinned Java TC FILE build/start/stop/reset scripts.
 - [Java TC Bootstrap CI](.github/workflows/phase-0-java-tc-file-smoke.yml) — builds and starts the pinned Java TC in CI.
 - [RSeata Reference Disposition](docs/phase-0/rseata-module-disposition.md) — third-party Rust reference audit, not a migration plan.
