@@ -72,7 +72,7 @@ Earlier failed runs were caused by harness setup issues and one incorrect test e
 
 **WP-00 as a whole remains open.** It is still blocked on Java TC recovery tests REC-TIMEOUT-001–010, Java request exception runtime tests, and a live Java TC integration test that exercises actual registration and transaction execution.
 
-Do not begin claiming V1 protocol conformance or mark source-derived candidate vectors as certified golden vectors until the CI jobs pass.
+The Go vectors and four Java V1 frame fixtures are now certified against their pinned runtime test suites. Do not claim full Seata-Rust V1 protocol conformance until all-message Java compatibility, live Java TC request/response integration and Rust codec conformance also pass.
 
 ## 7. Commands for local reproduction
 
