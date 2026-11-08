@@ -28,7 +28,11 @@
 |---|---|
 | [Source Mapping](source-mapping.md) | File-level source map across Java, Go and RSeata; proposed Rust module ownership |
 | [Protocol Compatibility](protocol-compatibility.md) | Wire framing, message types, payload contracts, XID and transport boundaries |
-| [Transaction State Machines](transaction-state-machines.md) | Global/branch states, status code comparison, transition semantics and known mismatches |
+| [Transaction State Baseline](transaction-state-machines.md) | Global/branch state codes and cross-language semantic hazards |
+| [Java TC Transition & Recovery Matrix](java-tc-state-transition-matrix.md) | Source-derived state transitions, retries, timeouts, terminal states and restart recovery |
+| [V1 Payload Golden Vectors](protocol-golden-vectors.md) | Deterministic body-payload hex vectors and explicit Go/Java/Rust certification gates |
+| [TM/TC/RM Call Chains](tm-tc-rm-call-chains.md) | Method-level execution paths and uncertain-outcome/error matrix |
+| [RSeata Module Disposition](rseata-module-disposition.md) | Keep/Refactor/Rewrite classification of third-party RSeata modules |
 | [ADR index](../adr/README.md) | Accepted and proposed architecture decisions |
 
 ## Current high-impact findings
@@ -64,5 +68,7 @@ Phase 0 is complete only when:
 - [ ] RSeata reuse candidates have been classified as keep/refactor/rewrite with test evidence.
 - [ ] ADRs are reviewed and the V1 scope is frozen.
 - [ ] V1 OpenSpec tasks are derived from the approved specifications.
+
+**Reference-role clarification:** RSeata is an independent third-party Rust project, not the user's implementation and not the Seata-Rust migration baseline. Seata-Go v2 is the primary V1 engineering reference; Java Seata 2.x remains the compatibility authority.
 
 **Non-goal:** Phase 0 does not implement TM, RM, AT, XA, TCC, Saga or a Rust TC.
