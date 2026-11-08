@@ -104,16 +104,16 @@ The Go codecs are the most direct executable reference for Seata V1 payload fiel
 | Message | Observed payload field order |
 |---|---|
 | GlobalBeginRequest | timeout milliseconds as uint32; transaction name as length-prefixed string16 |
-| GlobalCommitRequest | common global-end payload: XID string16; extra data string32 |
+| GlobalCommitRequest | common global-end payload: XID string16; extra data string16 |
 | GlobalRollbackRequest | common global-end payload: XID string16; extra data string32 |
 | GlobalStatusRequest | common global-end payload |
-| GlobalReportRequest | common global-end payload plus global status (verify exact codec) |
+| GlobalReportRequest | XID string16; extra data string16; GlobalStatus byte |
 | BranchRegisterRequest | XID string16; BranchType byte; resource ID string16; lock key string32; application data string32 |
 | BranchReportRequest | XID string16; Branch ID uint64; BranchStatus byte; resource ID string16; application data string32; BranchType byte |
 | BranchCommitRequest | XID string16; Branch ID uint64; BranchType byte; resource ID string16; application data string32 |
 | BranchRollbackRequest | XID string16; Branch ID uint64; BranchType byte; resource ID string16; application data string32 |
 
-The exact byte order, signedness, string encoding, null/empty behavior, and serializer/compressor identifiers must be captured in Rust golden-vector tests. Do not infer these from the table alone.
+Response payloads also have message-specific fields. For example, Go's BranchRegisterResponse codec writes result code byte, optional error message string16 on failure, transaction error code byte and Branch ID uint64; BranchCommit/BranchRollback responses add XID string16, Branch ID uint64 and BranchStatus byte after the result/error prefix. The exact byte order, signedness, string encoding, null/empty behavior, error-code values and serializer/compressor identifiers must be captured in Rust golden-vector tests. Do not infer these from the table alone.
 
 ### 4.1 Registration identity
 
