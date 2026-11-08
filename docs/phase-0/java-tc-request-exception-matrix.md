@@ -1,6 +1,6 @@
 # Java Seata 2.x — V1 Request Exception / Result Mapping Matrix
 
-> **Status:** pinned-source-derived. No runtime test is claimed.
+ > **Status:** pinned-source-derived; selected runtime cases passed in GitHub Actions Run #18. Remaining registration, lock-conflict and fallback-error cases are still pending.
 >
 > Java baseline: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
 >
@@ -101,9 +101,22 @@ Sources:
 | Protocol failure | invalid frame, invalid type, malformed payload, unknown ordinal | fail closed; do not retry identical bytes |
 | TC internal/store failure | decoded FailedStore response | surface typed error; status fallback only for Commit/Rollback/Status |
 
+## 5.1 Runtime verification result
+
+The overlay suite `tools/java-v1-golden/AbstractTCInboundHandlerExceptionTest.java` passed against the pinned Java source in [GitHub Actions Run #18](https://github.com/easy-4-rust/seata-rust/actions/runs/42458368199). It adds eight test methods covering:
+
+- GlobalBegin TransactionException, RuntimeException and StoreException wrapping;
+- GlobalCommit exception status fallback when a session exists and when it is absent;
+- GlobalStatus exception status fallback when a session exists;
+- GlobalReport RuntimeException preserving the request status without status lookup;
+- BranchRegister StoreException wrapping as FailedStore.
+
+Combined with the four V1 frame tests, Maven reports **12 tests, 0 failures, 0 errors, 0 skipped**. This verifies the selected handler cases, not every row in the full request matrix.
+
 ## 6. Verification tasks
 
-- [ ] Overlay JUnit tests for each request's TransactionException and RuntimeException behavior.
+- [x] Overlay JUnit tests for selected request TransactionException, RuntimeException and StoreException behavior (GlobalBegin, GlobalCommit, GlobalStatus, GlobalReport, BranchRegister); see runtime result above.
+- [ ] Extend runtime tests to GlobalRollback, BranchReport and GlobalLockQuery.
 - [ ] Verify Commit/Rollback/Status status fallback when session exists and when it is absent.
 - [ ] Verify status fallback lookup itself throws and leaves initial status unchanged.
 - [ ] Verify BranchRegister lock conflict maps LockKeyConflict and returns failed result.
