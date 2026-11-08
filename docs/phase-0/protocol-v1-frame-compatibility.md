@@ -131,6 +131,14 @@ The next executable Java test should use the pinned Java checkout and test both 
 - Unknown message type.
 - Heartbeat request/response with unexpected body bytes.
 
+## 6.0 Cross-language empty-string normalization
+
+The new failed GlobalBegin response frame contains zero-length XID and ExtraData fields. The pinned Go decoder reads these as empty string / empty byte slice. Java's `GlobalBeginResponseCodec.decode` only assigns XID or ExtraData when the decoded length is greater than zero, leaving the Java fields `null`.
+
+This is a **semantic representation difference with byte-equivalent re-encoding**: Java's encoder writes a zero length for `null`, so the original frame can still round-trip byte-for-byte. Rust should preserve this distinction at the protocol model boundary where practical (for example, `Option<String>` / `Option<Bytes>`) rather than assuming that byte equality implies object-level equality.
+
+Evidence: pinned Java `GlobalBeginResponseCodec.decode/encode` and Go `GlobalBeginResponseCodec.Decode/Encode`. The Java fixture asserts null after decode and exact original frame bytes after re-encode. Runtime test execution is still pending.
+
 ## 6.1 Reproducible Java decoder/encoder test
 
 A JUnit overlay test is now committed at `tools/java-v1-golden/ProtocolV1GoldenFrameTest.java`. It feeds both complete Go-derived frames to Java `ProtocolDecoderV1`, asserts decoded message class and fields, then passes the decoded RpcMessage through Java `ProtocolEncoderV1` and requires exact full-frame byte equality.
