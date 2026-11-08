@@ -107,11 +107,11 @@ A successful RM registration is a prerequisite for TC phase-two callbacks. It do
 
 Go source harness constructs RegisterTM/RM payloads in `tools/go-golden-vectors/main.go`. Their serialized payloads are already part of `expected.json` and the 29-vector Go runtime test set.
 
-Two full V1 registration frames have now been added to `frames.json`:
+Two full V1 registration frames have now been added to `frames.json` and passed the pinned Go and Java runtime harness in [GitHub Actions Run #40](https://github.com/easy-4-rust/seata-rust/actions/runs/42473731588):
 - `RegisterTMRequestFrame`: request ID 2, full length 57 bytes.
 - `RegisterRMRequestFrame`: request ID 3, full length 75 bytes.
 
-Java V1 Decoder → Encoder byte-identical round-trip tests have been added to `ProtocolV1GoldenFrameTest.java`. The Go and Java workflow must pass before these are marked runtime-certified.
+Java V1 Decoder → Encoder byte-identical round-trip tests have been added to `ProtocolV1GoldenFrameTest.java`. Run #40 verified all 29 Go payload vectors and 6 complete frames; Java passed all 6 frame decode/re-encode tests. This certifies the tested codec/frame bytes, not a live TC registration exchange.
 
 ## 7. Authentication boundary
 
@@ -134,4 +134,4 @@ Before production-like integration:
 | REG-005 | RM reconnect | fresh channel re-registers all cached resource IDs |
 | REG-006 | TC callback routing | TC finds the registered RM channel by resource ID/client association |
 
-No REG-xxx live Java TC result is claimed yet.
+No REG-xxx live Java TC result is claimed yet. The wire payload and frame sub-gate is verified; server-side channel registration is still pending.
