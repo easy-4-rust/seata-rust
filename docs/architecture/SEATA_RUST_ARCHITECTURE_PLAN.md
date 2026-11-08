@@ -37,7 +37,7 @@
 |---|---|---|
 | [Apache Seata Java 2.x](https://github.com/apache/incubator-seata/tree/2.x) | 核心参考实现 | 事务协议、状态机、TC、RM、TM、事务模式、存储与集群能力的权威参考 |
 | [Apache Seata-Go v2](https://github.com/apache/incubator-seata-go) | 官方多语言实现 | 学习另一种语言如何实现 TM/RM、兼容 Java TC 和实现多语言互操作 |
-| [RSeata](https://github.com/oulover/rseata) | Rust 代码资产 | 提供 Rust 代码起点，复核 TC、TM、RM、SeaORM、Undo Log 和事务状态管理 |
+| [RSeata](https://github.com/oulover/rseata) | 第三方 Rust 参考样本 | 研究异步架构、Trait、Session、锁和数据库适配设计；不是 Seata-Rust 的前身或 V1 代码迁移基线 |
 | **Seata-Rust** | Rust 原生分布式事务基础设施 | 先兼容 Java TC，再建立独立 Rust TC，最终扩展完整 Seata 生态能力 |
 
 ### 1.1 版本基准
@@ -375,9 +375,9 @@ AT、XA、TCC 属于不同的资源协调模型，不能只用一个通用的 `c
 - TCC：Try / Confirm / Cancel。
 - Saga：正向事务和补偿事务。
 
-## 四、RSeata 现有代码审计结论
+## 四、RSeata 第三方 Rust 参考项目审计
 
-不建议直接推倒 RSeata 重写，也不建议原封不动地继续开发。应先进行架构保留和代码质量审计。
+RSeata 是独立第三方项目，不属于 Seata-Rust，也不是用户自己的实现。这里的审计用于提炼 Rust 设计参考和识别不可照搬的实现，不构成迁移、接管或继续开发 RSeata 的计划。
 
 目前已检查部分确认的情况：
 
@@ -394,19 +394,19 @@ AT、XA、TCC 属于不同的资源协调模型，不能只用一个通用的 `c
 
 RSeata 的 `FIXES_SUMMARY.md` 也将 Undo Log 完整性、XA 两阶段提交和测试覆盖列为后续改进事项。因此当前 RSeata 可以作为代码参考，但还不能作为 Seata-Rust 的完整基础。
 
-### 4.1 代码资产分类
+### 4.1 第三方参考模块的借鉴分类
 
 | 分类 | 代码或能力 | 处理方式 |
 |---|---|---|
-| 🟢 保留/改造 | Session 模型、基础 XID 类型、Tonic 服务端、SeaORM 接口适配、已有 SQL 镜像和 Undo Log 代码 | 逐项验证后继承 |
-| 🟡 重构 | Transaction Store、Global/Branch 状态机、TM 事务生命周期、RM 注册与报告、数据库代理、异步上下文 | 按官方语义重建 |
-| 🔴 重新实现 | Seata V1 协议编码、Java TC 兼容通信、可靠持久化、故障恢复引擎、全局锁一致性、生产级重试机制 | 不直接继承当前实现 |
+| 🟢 借鉴设计 | Session 模型、强类型 XID、Tonic 服务端分层、SeaORM 适配边界、SQL 镜像和 Undo Log 抽象 | 作为设计参考，重新按 Java/Go 语义验证 |
+| 🟡 参考后重构 | Transaction Store、Global/Branch 状态机、TM 生命周期、RM 注册与报告、数据库代理、异步上下文 | 以 Seata-Go 的 V1 行为和 Java 语义为准，独立设计 |
+| 🔴 不复用当前实现作为 V1 基础 | Seata V1 原生协议、Java TC 兼容通信、可靠持久化、故障恢复、全局锁一致性、生产级重试机制 | V1 依照 Seata-Go 实现，协议/状态以 Java 为准 |
 
 以上是已检查部分的初步审计，不是对整个仓库逐行测试后的最终结论。后续必须以实际源码和测试为准。
 
 ## 五、Seata-Rust V1：按照 Seata-Go 的路线实现
 
-**V1 核心目标：Rust TM + Rust RM + Java Seata TC，先实现一个真正可以投入业务使用的多语言分布式事务客户端。**
+**V1 核心目标：以 Seata-Go v2 为主要工程参考，使用 Rust TM + Rust RM + Java Seata TC，完成经过跨语言与故障测试的生产可用客户端。RSeata 仅作为第三方 Rust 设计参考。**
 
 ### 5.1 V1 整体架构
 
