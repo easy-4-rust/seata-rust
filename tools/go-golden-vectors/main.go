@@ -122,14 +122,14 @@ func main() {
 		gotHex := hex.EncodeToString(body)
 		wantHex := strings.ToLower(strings.ReplaceAll(want.BodyHex, " ", ""))
 		if gotHex != wantHex {
-			fail("%s: codec payload mismatch\\n got: %s\\nwant: %s", vector.name, gotHex, wantHex)
+			fail("%s: codec payload mismatch\n got: %s\nwant: %s", vector.name, gotHex, wantHex)
 		}
 
 		serialized := manager.Encode(codec.CodecTypeSeata, vector.msg)
 		gotSerializedHex := hex.EncodeToString(serialized)
 		wantSerializedHex := strings.ToLower(strings.ReplaceAll(want.SerializedHex, " ", ""))
 		if gotSerializedHex != wantSerializedHex {
-			fail("%s: Seata serializer payload mismatch\\n got: %s\\nwant: %s", vector.name, gotSerializedHex, wantSerializedHex)
+			fail("%s: Seata serializer payload mismatch\n got: %s\nwant: %s", vector.name, gotSerializedHex, wantSerializedHex)
 		}
 		serializedByName[vector.name] = serialized
 		decoded := messageCodec.Decode(body)
@@ -160,12 +160,11 @@ func main() {
 		got := hex.EncodeToString(frame)
 		want := strings.ToLower(strings.ReplaceAll(expectedFrame.FrameHex, " ", ""))
 		if got != want {
-			fail("%s: V1 frame mismatch\\n got: %s\\nwant: %s", expectedFrame.Name, got, want)
+			fail("%s: V1 frame mismatch\n got: %s\nwant: %s", expectedFrame.Name, got, want)
 		}
-		fmt.Printf("PASS %-28s frame-bytes=%d\\n", expectedFrame.Name, len(frame))
+		fmt.Printf("PASS %-28s frame-bytes=%d\n", expectedFrame.Name, len(frame))
 	}
-	fmt.Printf("\\nGo codec + V1 frame fixture verification passed: %d payloads, %d frames\\n", len(vectors), len(frames))
-	fmt.Printf("\nGo codec verification passed: %d/%d payload vectors\n", len(vectors), len(vectors))
+	fmt.Printf("\nGo codec + V1 frame fixture verification passed: %d payloads, %d frames\n", len(vectors), len(frames))
 }
 
 func must(err error) {
