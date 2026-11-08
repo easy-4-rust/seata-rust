@@ -22,10 +22,10 @@ actual="$(git -C "$TC_SOURCE_DIR" rev-parse HEAD)"
 (
   cd "$TC_SOURCE_DIR"
   mvn -B -ntp -Prelease-seata-jar -pl server -am \
-    clean package -DskipTests \
+    -DskipTests \
     -Dcheckstyle.skip=true \
     -Dspotless.check.skip=true \
-    package
+    clean package
 )
 
 [[ -f "$TC_JAR" ]] || {
