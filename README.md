@@ -23,6 +23,9 @@ Seata-Rust follows a staged strategy:
 - [Go Golden Vector Runner](tools/go-golden-vectors/verify.sh) — reproducible pinned Go codec and frame verification harness.
 - [Java V1 Frame Runner](tools/java-v1-golden/verify.sh) — reproducible pinned Java decoder/encoder frame round-trip test.
 - [TM/TC/RM Call Chains](docs/phase-0/tm-tc-rm-call-chains.md) — method-level flows and failure matrix.
+- [Java TC Request Exception Matrix](docs/phase-0/java-tc-request-exception-matrix.md) — per-request exception and response semantics.
+- [Seata-Go Transport Semantics](docs/phase-0/seata-go-transport-timeout-semantics.md) — timeout, correlation, late responses and RM reconnect.
+- [V1 Implementation Acceptance Checklist](docs/phase-0/v1-implementation-acceptance-checklist.md) — dependency-ordered V1 work packages and test gates.
 - [RSeata Reference Disposition](docs/phase-0/rseata-module-disposition.md) — third-party Rust reference audit, not a migration plan.
 - [Architecture Decision Records](docs/adr/README.md) — accepted and proposed architecture decisions.
 
