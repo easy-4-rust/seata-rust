@@ -135,15 +135,26 @@ A Rust TC must not automatically delete retry-timeout sessions merely because th
 
 For V1 (Rust TM/RM + Java TC), the Rust client must treat CommitRetryTimeout and RollbackRetryTimeout as authoritative TC outcomes and surface the operator-action requirement. It must not start a local retry loop that competes with Java TC.
 
+## 6.1 Runtime verification of the FILE/RAFT reload branch
+
+The overlay test `tools/java-v1-golden/SessionHolderRetryTimeoutRecoveryTest.java` passed in [GitHub Actions Run #25](https://github.com/easy-4-rust/seata-rust/actions/runs/42458877018). It adds three focused tests:
+
+1. Calls the pinned `FileSessionManager.checkSessionStatus` predicate and verifies that `RollbackRetryTimeout` is filtered while `CommitRetryTimeout` is retained.
+2. Calls `SessionHolder.reload(..., SessionMode.FILE, false)` with `CommitRetryTimeout` and verifies the pinned reload switch throws `ShouldNeverHappenException`.
+3. Calls the RAFT reload path with both retry-timeout states and verifies neither has an explicit recovery case.
+
+The test suite proves the source-level filter/reload behavior. It does **not** recreate an on-disk persisted transaction and restart a full TC process, nor does it exercise DB/Redis storage or a live Raft leader transition. Therefore REC-TIMEOUT-001–004 remain integration-level tasks even though their underlying code branches now have unit-level evidence.
+
 ## 7. Evidence status
 
 | Statement | Evidence |
 |---|---|
 | Both retry-timeout states are accepted by Java console `changeGlobalStatus` | Verified in pinned source and existing unit test |
 | SessionHolder FILE/RAFT reload switch has no explicit case for either | Verified in pinned source |
-| FILE pre-filter removes RollbackRetryTimeout but not CommitRetryTimeout | Verified in pinned source |
+| FILE pre-filter removes RollbackRetryTimeout but not CommitRetryTimeout | Verified in pinned source and unit test in Run #25 |
 | DB/Redis cleanup query omits both | Verified in pinned source |
-| FILE CommitRetryTimeout causes a production server startup failure in a real persisted deployment | Inferred from call chain; not runtime reproduced |
+| SessionHolder FILE reload throws for a retained CommitRetryTimeout session | Verified by unit test in Run #25 |
+| FILE CommitRetryTimeout causes a production server startup failure in a real persisted deployment | Inferred from call chain; full restart not runtime reproduced |
 | DB/Redis sessions remain queryable and manually retryable after restart | Unknown; targeted integration tests required |
 | RAFT behavior in a live leader restart | Unknown; targeted integration test required |
 
