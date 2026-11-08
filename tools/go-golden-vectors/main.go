@@ -110,9 +110,15 @@ func main() {
 		gotHex := hex.EncodeToString(body)
 		wantHex := strings.ToLower(strings.ReplaceAll(want.BodyHex, " ", ""))
 		if gotHex != wantHex {
-			fail("%s: payload mismatch\n got: %s\nwant: %s", vector.name, gotHex, wantHex)
+			fail("%s: codec payload mismatch\\n got: %s\\nwant: %s", vector.name, gotHex, wantHex)
 		}
 
+		serialized := manager.Encode(codec.CodecTypeSeata, vector.msg)
+		gotSerializedHex := hex.EncodeToString(serialized)
+		wantSerializedHex := strings.ToLower(strings.ReplaceAll(want.SerializedHex, " ", ""))
+		if gotSerializedHex != wantSerializedHex {
+			fail("%s: Seata serializer payload mismatch\\n got: %s\\nwant: %s", vector.name, gotSerializedHex, wantSerializedHex)
+		}
 		decoded := messageCodec.Decode(body)
 		roundTrip := messageCodec.Encode(decoded)
 		if !reflect.DeepEqual(body, roundTrip) {
