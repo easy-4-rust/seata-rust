@@ -1,6 +1,6 @@
 # Java Seata 2.x — V1 Request Exception / Result Mapping Matrix
 
- > **Status:** pinned-source-derived; selected runtime cases passed in GitHub Actions Run #18. Remaining registration, lock-conflict and fallback-error cases are still pending.
+> **Status:** pinned-source-derived; selected runtime cases passed in GitHub Actions Run #18. Remaining registration, lock-conflict and fallback-error cases are still pending.
 >
 > Java baseline: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
 >
