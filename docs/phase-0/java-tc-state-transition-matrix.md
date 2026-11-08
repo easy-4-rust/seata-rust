@@ -136,6 +136,61 @@ This matrix records the observed normal coordinator path and the source location
 
 The coordinator may expose Committed to TM while the global session is still AsyncCommitting and branch cleanup is pending. Rust clients must not interpret the returned status as proof that every asynchronous cleanup action has already completed. The exact client-visible response and subsequent session cleanup must be tested against the selected Java server.
 
+## 3.4 Exact retry-queue and durable status update methods
+
+The pinned `GlobalSession` implementation makes the retry transitions explicit:
+
+| Method | Current status | Action |
+|---|---|---|
+| `asyncCommit()` | commit eligible | `changeGlobalStatus(AsyncCommitting)` |
+| `queueToRetryCommit()` | StopCommitOrCommitRetry | no-op; operator stop is respected |
+| `queueToRetryCommit()` | other retryable commit failure | `changeGlobalStatus(CommitRetrying)` |
+| `queueToRetryRollback()` | StopRollbackOrRollbackRetry | no-op; operator stop is respected |
+| `queueToRetryRollback()` | TimeoutRollbacking | `changeGlobalStatus(TimeoutRollbackRetrying)` |
+| `queueToRetryRollback()` | other retryable rollback failure | `changeGlobalStatus(RollbackRetrying)` |
+
+`GlobalSession.changeGlobalStatus(newStatus)` performs these operations in order:
+
+1. If entering Rollbacking or TimeoutRollbacking, update global lock status to Rollbacking.
+2. Call `SessionManager.onStatusChange(session, newStatus)` to persist/store the status change.
+3. Only after successful store update, assign the in-memory `session.status`.
+4. Notify lifecycle listeners.
+
+This means a store failure must not be treated as a successful in-memory transition. Rust TC must preserve the durable-before-visible state update ordering.
+
+`changeBranchStatus` similarly calls the SessionManager branch-status callback before notifying lifecycle listeners. The branch status itself is maintained on the BranchSession object by the relevant caller.
+
+## 3.5 Operator stop, resume, branch stop and manual deletion
+
+These are explicit administrative state transitions, not automatic retry outcomes.
+
+| Administrative operation | Preconditions | Transition / action | Source |
+|---|---|---|---|
+| Stop global retry (commit) | status in commit-in-progress/retry set | StopCommitOrCommitRetry | AbstractGlobalService.stopGlobalRetry |
+| Stop global retry (rollback) | status in rollback-in-progress/retry set | StopRollbackOrRollbackRetry | AbstractGlobalService.stopGlobalRetry |
+| Start global retry (commit) | StopCommitOrCommitRetry | CommitRetrying | AbstractGlobalService.startGlobalRetry |
+| Start global retry (rollback) | StopRollbackOrRollbackRetry | RollbackRetrying | AbstractGlobalService.startGlobalRetry |
+| Stop branch retry | non-Saga; branch status Unknown, Registered or PhaseOne_Done; global transaction is in a retry/commit/rollback state | BranchStatus.STOP_RETRY | AbstractBranchService.stopBranchRetry |
+| Start branch retry | branch status STOP_RETRY; non-Saga | BranchStatus.Registered | AbstractBranchService.startBranchRetry |
+| Delete global session | status in failure/retry/finish/stop/deleting allowlist | Deleting; delete branch records; end session | AbstractGlobalService.deleteGlobalSession |
+| Force delete global session | administrative force-delete path | Deleting; force-delete branches; end session | AbstractGlobalService.forceDeleteGlobalSession |
+
+The operator APIs do not make a failed branch successful. They pause/resume retries or explicitly delete transaction metadata. These actions require audit logging and permission checks in a future Rust TC.
+
+## 3.6 XA prepare-failure special transition
+
+XA prepare failure is not just an ordinary PhaseOne_Failed branch:
+
+1. Rust/Java XA RM reports BranchStatus.PhaseOne_PrepareFailed.
+2. Java XACore.branchReport delegates to the normal branch report path.
+3. XACore closes the GlobalSession to prevent new branch registration.
+4. If the global status is still Begin, XACore changes it directly to RollbackRetrying.
+5. The retry rollback scheduler then drives the global rollback path.
+
+This is why PhaseOne_PrepareFailed must remain distinct from generic PhaseOne_Failed in the Rust branch model.
+
+Source: [XACore.java](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/server/src/main/java/org/apache/seata/server/transaction/xa/XACore.java).
+
 ## 4. Retry and timeout policy
 
 | Mechanism | Scan set | Timeout/failure behavior | Source |
