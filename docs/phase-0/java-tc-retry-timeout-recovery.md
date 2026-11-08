@@ -1,6 +1,6 @@
 # Java Seata 2.x — Retry-Timeout Recovery and Operator-Intervention Audit
 
-> **Status:** source-derived storage-path audit. No Java test was executed in this session.
+ > **Status:** source-derived storage-path audit; FILE/RAFT reload branches now have three passing Java unit tests in GitHub Actions Run #25. Full persisted-store restart and operator retry integration remain untested.
 >
 > Java baseline: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
 
