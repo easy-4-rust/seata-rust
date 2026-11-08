@@ -1,6 +1,6 @@
-# Phase 0.8 — Compatibility Validation Ledger
+# Seata-Rust Phase 0 — Compatibility and Integration Validation Ledger
 
-> **Status: Go/Java protocol, selected Java TC exception, and FILE/RAFT reload unit tests passed in GitHub Actions Runs #8, #18 and #25.** This ledger distinguishes pinned-source facts, static fixture validation, and runtime test results. Full durable recovery and live Rust↔Java TC integration remain open.
+> **Current status:** Go codec/frame vectors and selected Java V1/TC unit tests have passed in GitHub Actions. Phase 0.9 Java TC FILE bootstrap harness is committed; its CI execution is pending. No live Java TC Seata request/response interoperability is claimed yet.
 
 ## 1. Frozen source baselines
 
@@ -10,50 +10,63 @@
 | Apache Seata-Go v2 | `82570d905919c1c66bb025a3a5979f25390de498` | Native Seata codec and primary V1 client execution reference |
 | RSeata | `c6062776c72a2490f62f8ebb25012c60884f62bd` | Third-party Rust abstraction reference only |
 
-## 2. Baseline defect corrected in Phase 0.8
+## 2. Protocol runtime evidence
 
-The previous `tools/go-golden-vectors/verify.sh` referenced Go commit `82970d905919c1c66bb025a3a5979f25390de498`, while all Phase 0 source documentation declared `82570d905919c1c66bb025a3a5979f25390de498`.
+### Run #8 — Go and Java V1 protocol tests
 
-The script now checks out the exact documented commit:
+[GitHub Actions Run #8](https://github.com/easy-4-rust/seata-rust/actions/runs/42457053815), Seata-Rust commit `756a34a9e0198b0d6b2d6a7cafe9f404a2109804`.
 
-```bash
-GO_SHA="82570d905919c1c66bb025a3a5979f25390de498"
-```
+- Go job passed 29 codec payload vectors and 4 complete V1 frames against Go commit `82570d9`.
+- Java job passed 4 V1 Decoder → Encoder complete-frame byte-identical round trips against Java commit `cba73e1`.
+- This proves the tested Go codec/serializer fixtures and four Java V1 frame cases. It does not prove all Java message codecs or a live Java TC transaction.
 
-This is a provenance correction. It does not certify the vectors; only an actual run can do that.
+### Run #18 — Java TC inbound exception tests
 
-## 3. Executable test assets
+[GitHub Actions Run #18](https://github.com/easy-4-rust/seata-rust/actions/runs/42458368199).
 
-| Asset | Coverage | Runtime status |
+- 8 selected `AbstractTCInboundHandler` exception tests passed.
+- Together with 4 V1 frame tests, Maven reported 12 tests, 0 failures, 0 errors, 0 skipped.
+- Covered GlobalBegin TransactionException/RuntimeException/StoreException, GlobalCommit status fallback, GlobalStatus status fallback, GlobalReport request-status preservation and BranchRegister StoreException.
+- Remaining GlobalRollback, BranchReport, GlobalLockQuery, RegTM/RM auth and status-fallback lookup failure cases remain open.
+
+### Run #25 — Java retry-timeout FILE/RAFT reload unit tests
+
+[GitHub Actions Run #25](https://github.com/easy-4-rust/seata-rust/actions/runs/42458877018).
+
+- 3 retry-timeout unit tests passed.
+- Together with the 12 earlier tests, Maven reported 15 tests, 0 failures, 0 errors, 0 skipped.
+- Verified FILE pre-filter asymmetry and SessionHolder FILE/RAFT reload branches.
+- This does not reproduce a full persisted FILE restart, DB/Redis restart, or live Raft leader recovery.
+
+## 3. Fixture inventory
+
+| Asset | Coverage | Evidence |
 |---|---|---|
-| `tools/go-golden-vectors/expected.json` | 29 codec body + serialized payload fixtures (25 base messages + 4 failure responses) | Candidate; Go execution pending |
-| `tools/go-golden-vectors/frames.json` | 4 complete V1 frames (begin request, begin response, optional head map, failed begin response) | Candidate; Go execution pending |
-| `tools/go-golden-vectors/main.go` | Constructs typed Go messages; checks type IDs, codec body, serializer prefix, decode equality, re-encode stability and complete frame bytes | Not executed in this session |
-| `tools/java-v1-golden/ProtocolV1GoldenFrameTest.java` | Four Java V1 decode/re-encode frame tests, including optional head map and zero-length field semantics | Not executed in this session |
+| `tools/go-golden-vectors/expected.json` | 29 codec-body + serialized-payload vectors (25 base messages + 4 failure responses) | Go runtime verified in Run #8 |
+| `tools/go-golden-vectors/frames.json` | 4 full V1 frames: begin request, begin response, optional head map, failed begin response | Go runtime verified in Run #8 |
+| `tools/go-golden-vectors/main.go` | Type IDs, body bytes, serializer prefix, decode equality, byte-stable re-encode and frame checks | Run #8 |
+| `tools/java-v1-golden/ProtocolV1GoldenFrameTest.java` | Four Java V1 frame decode/re-encode tests | 4/4 passed in Run #8 |
+| `tools/java-v1-golden/AbstractTCInboundHandlerExceptionTest.java` | Eight selected Java TC exception/status fallback cases | 8/8 passed in Run #18 |
+| `tools/java-v1-golden/SessionHolderRetryTimeoutRecoveryTest.java` | Three FILE/RAFT retry-timeout reload branch cases | 3/3 passed in Run #25 |
 
-## 4. GitHub Actions automation
+## 4. Phase 0.9 Java TC bootstrap harness
 
-Workflow: [Phase 0 Protocol Compatibility](../../.github/workflows/phase-0-protocol-compatibility.yml)
+Harness: [tools/java-tc-integration](../../tools/java-tc-integration/README.md)
 
-Triggers:
-- push to main when protocol fixtures, scripts, workflow or Phase 0 docs change;
-- pull requests touching the same paths;
-- manual workflow dispatch.
+Workflow: [Phase 0.9 Java TC FILE Bootstrap](../../.github/workflows/phase-0-java-tc-file-smoke.yml)
 
-Jobs:
-1. `go-golden-vectors`: Go 1.23; clones and checks out the pinned Go commit; runs `bash tools/go-golden-vectors/verify.sh`.
-2. `java-v1-frames`: Temurin JDK 17; clones the pinned Java commit; overlays the JUnit test; runs `bash tools/java-v1-golden/verify.sh`.
+Pinned Java source: `cba73e180fd8896a99df6415b859d275122feaa7`.
 
-**Verified by test:** [GitHub Actions Run #8](https://github.com/easy-4-rust/seata-rust/actions/runs/42457053815) completed successfully for Seata-Rust commit `756a34a9e0198b0d6b2d6a7cafe9f404a2109804` on 2026-11-08.
+The harness:
+- clones and checks out the pinned Java source;
+- builds the server reactor with Maven;
+- starts the server using an isolated FILE storage configuration;
+- waits for the native TCP listener;
+- supports stop and isolated storage reset.
 
-- `go-golden-vectors`: success; 29 payload vectors and 4 complete frames passed against Go commit `82570d905919c1c66bb025a3a5979f25390de498`.
-- `java-v1-frames`: success; 4 Java V1 decoder/encoder round-trip tests passed against Java commit `cba73e180fd8896a99df6415b859d275122feaa7`; Maven reactor build succeeded.
+**Execution status:** scripts and workflow are committed, but no successful Phase 0.9 bootstrap workflow result is recorded in this ledger yet. Update this section with the workflow run URL, tested Seata-Rust commit, Maven result, server process result and listener result when CI finishes.
 
-Earlier failed runs were caused by harness setup issues and one incorrect test expectation. Those were corrected before Run #8. Run #8 is the authoritative passing result.
-
-[Run #18](https://github.com/easy-4-rust/seata-rust/actions/runs/42458368199) executed the Java TC inbound exception overlay: 8 handler tests passed. Together with 4 V1 frame tests, Maven reported **12 tests, 0 failures, 0 errors, 0 skipped**.
-
-[Run #25](https://github.com/easy-4-rust/seata-rust/actions/runs/42458877018) additionally executed three Java TC retry-timeout recovery tests for FILE filtering and FILE/RAFT SessionHolder reload. Maven reported **15 tests, 0 failures, 0 errors, 0 skipped**.
+**Evidence boundary:** even a passing bootstrap workflow proves only that the pinned Java TC process starts and accepts TCP connections. It does not prove RegisterTM/RegisterRM, Seata V1 frame acceptance by the live TC, transaction lifecycle, RM callbacks or persistence recovery.
 
 ## 5. Evidence ledger
 
@@ -61,35 +74,48 @@ Earlier failed runs were caused by harness setup issues and one incorrect test e
 |---|---|---|---|
 | SRC-001 | Java source contains V1 decoder/encoder and serializer | Verified in pinned source | Complete |
 | SRC-002 | Go native codec prepends big-endian uint16 message type | Verified in pinned source | Complete |
-| FIX-001 | 29 fixture serialized prefixes match their declared type IDs | Static fixture check | Complete; not runtime proof |
-| FIX-002 | Four frame fixtures have consistent full/head lengths | Static fixture check | Complete; not runtime proof |
-| GO-001 | Pinned Go encoder reproduces all 29 codec vectors | Verified by test in Run #8 | Passed |
-| GO-002 | Pinned Go serializer reproduces all four full frames | Verified by test in Run #8 | Passed |
-| JAVA-001 | Java V1 decoder accepts all four frames and Java encoder re-emits identical bytes | Verified by test in Run #8; 4 tests, 0 failures | Passed |
-| TC-001 | Selected Java TC request exception mapping (GlobalBegin, GlobalCommit, GlobalStatus, GlobalReport, BranchRegister) | Verified by test in Run #18; 8 handler tests passed | Passed for covered cases; remaining matrix cases pending |
-| TC-002 | Java retry-timeout FILE/RAFT filter and reload branches | Verified by test in Run #25; 3 tests passed | Unit-level behavior passed; durable FILE restart, DB/Redis and live Raft recovery pending |
-| RUST-001 | Rust protocol implementation matches Java/Go | Not implemented | Not started |
+| GO-001 | Pinned Go encoder reproduces all 29 payload vectors | Verified by test, Run #8 | Passed |
+| GO-002 | Pinned Go serializer reproduces all 4 full frames | Verified by test, Run #8 | Passed |
+| JAVA-001 | Java V1 decoder accepts and re-encodes the 4 fixtures byte-identically | Verified by test, Run #8 | Passed |
+| TC-001 | Selected Java TC request exception mapping | Verified by test, Run #18 | Passed for covered cases |
+| TC-002 | Java retry-timeout FILE/RAFT reload branches | Verified by test, Run #25 | Unit-level passed; durable recovery pending |
+| ENV-001 | Pinned Java TC executable server build | CI runtime required | Pending Phase 0.9 workflow |
+| ENV-002 | Java TC FILE startup and TCP listener | CI runtime required | Pending Phase 0.9 workflow |
+| INT-001 | Live RegisterTM over native Seata V1 | Live TC integration required | Not implemented |
+| INT-002 | Live RegisterRM over native Seata V1 | Live TC integration required | Not implemented |
+| INT-003–010 | GlobalBegin, BranchRegister, Status, Commit/Rollback and RM phase-two callbacks | Live TC integration required | Not implemented |
+| INT-011–014 | FILE restart, branch persistence and response-loss reconciliation | Live TC integration required | Not implemented |
+| RUST-001 | Rust protocol implementation matches Java/Go | Rust implementation/test required | Not started |
 
-## 6. Current WP-00 exit decision
+## 6. Phase 0 exit decision
 
-**Protocol codec/frame sub-gate: passed.** GO-001, GO-002 and JAVA-001 are now runtime-verified.
+**Protocol codec/frame sub-gate: passed.** GO-001, GO-002 and JAVA-001 have runtime evidence.
 
-**WP-00 as a whole remains open.** Unit-level FILE/RAFT retry-timeout branches are now verified, but REC-TIMEOUT-001–010 still require durable store/restart and operator-retry integration coverage. Remaining exception-matrix cases (GlobalRollback, BranchReport, GlobalLockQuery, RegTM/RM auth and fallback lookup failure), plus a live Java TC integration test, also remain open.
+**Selected Java TC unit-test sub-gates: passed.** TC-001 covered cases and TC-002 FILE/RAFT reload unit branches have test evidence.
 
-The Go vectors and four Java V1 frame fixtures are now certified against their pinned runtime test suites. Do not claim full Seata-Rust V1 protocol conformance until all-message Java compatibility, live Java TC request/response integration and Rust codec conformance also pass.
+**WP-00 / Phase 0 as a whole: still open.** Remaining gates include:
+- Phase 0.9.1 Java TC FILE build/start smoke;
+- live RegisterTM/RegisterRM and transaction lifecycle over native V1;
+- RM callback handling;
+- durable FILE restart and operator retry;
+- remaining Java TC exception matrix cases;
+- all-message Java serializer equivalence and eventual Rust codec conformance.
 
-## 7. Commands for local reproduction
+Do not claim full Seata-Rust V1 protocol conformance or production readiness from the current test set.
+
+## 7. Reproduction commands
 
 From the Seata-Rust repository root:
 
 ```bash
 bash tools/go-golden-vectors/verify.sh
 bash tools/java-v1-golden/verify.sh
+bash tools/java-tc-integration/scripts/build-tc.sh
+bash tools/java-tc-integration/scripts/smoke.sh
 ```
 
-Required local prerequisites:
+Prerequisites:
 - Git and network access to GitHub;
-- Go 1.23 (Go module declares Go 1.20);
-- JDK 17+ and Maven;
+- Go 1.23;
+- JDK 17 and Maven;
 - network access for Maven and Go dependencies.
-
