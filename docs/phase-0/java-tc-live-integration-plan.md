@@ -76,8 +76,8 @@ This was a **TCP bootstrap smoke only**. No Seata message was exchanged in Run #
 | INT-ENV-002 | Start FILE TC | Process remains alive and binds configured port | Verified by test, Run #15 |
 | INT-ENV-003 | Stop TC | Graceful shutdown releases port | Verified by test, Run #15 |
 | INT-ENV-004 | Reset isolated storage | Resets dedicated data directory while stopped | Verified by test, Run #15; refusal-while-running negative case pending |
-| INT-001 | RegisterTM over native V1 | Identified=true from live TC | Rust client implemented; live CI pending |
-| INT-002 | RegisterRM over native V1 | Identified=true and resource association established | Rust client implemented; live CI pending |
+| INT-001 | RegisterTM over native V1 | Identified=true from live TC | Verified by test, Run #23; auth disabled |
+| INT-002 | RegisterRM over native V1 | Identified=true and resource association established | Verified by test, Run #23; auth disabled |
 | INT-003 | GlobalBegin | TC returns valid XID | Not implemented |
 | INT-004 | BranchRegister | TC returns BranchId and stores branch | Not implemented |
 | INT-005 | GlobalStatus | TC returns authoritative status | Not implemented |
@@ -105,9 +105,21 @@ Current behavior:
 
 Runner: `bash tools/java-tc-integration/scripts/run-rust-registration.sh`.
 
-The FILE smoke script now starts Java TC and runs this Rust client before stopping TC. The CI workflow installs stable Rust and rustfmt. The next workflow result will be the first live REG-001/REG-002 verification. Until that run passes, the client is implemented but live registration is not yet certified.
+The FILE smoke script starts Java TC and runs this Rust client before stopping TC. The CI workflow installs stable Rust. Run #23 has verified live RegisterTM/RegisterRM with auth disabled. The client is now being aligned to the pinned Go client's version string (1.1.0), and the FILE data directory has been corrected to sit under the resettable `data/` path.
 
 The next client increment must keep the RM connection alive in a receive loop, handle BranchCommit/BranchRollback callbacks, and respond with the exact Java-compatible message types. Only then can TM GlobalCommit/GlobalRollback be considered end-to-end tests.
+
+### 5.1 Live registration result — Run #23
+
+[GitHub Actions Run #23](https://github.com/easy-4-rust/seata-rust/actions/runs/42475353541) passed on 2026-11-08.
+
+The workflow built the pinned Java TC, started FILE storage, and ran the independent Rust client. Observed responses:
+- `RegisterTMResponse`: `identified=true`, protocol V1, server version `2.8.0-SNAPSHOT`.
+- `RegisterRMResponse`: `identified=true`, protocol V1, resource ID `mysql://orders`, server version `2.8.0-SNAPSHOT`.
+- Rust client unit tests: 2 passed.
+- Java TC stopped cleanly after the registration smoke.
+
+The client initially used the version string from the Go codec test fixture. It is being aligned to the actual pinned Seata-Go client constant `constant.SeataVersion = "1.1.0"` for subsequent runs. The bootstrap config still has auth checks disabled; this proves the unauthenticated registration path only.
 
 ## 6. Evidence labels
 
@@ -120,6 +132,6 @@ A successful INT-ENV smoke does not close transaction lifecycle gates INT-003–
 
 ## 7. Exit gate to WP-01
 
-Phase 0.9.1 passes when INT-ENV-001–004 are verified in CI and the TC can be repeatedly built, started, stopped and reset from a clean runner.
+Phase 0.9.1 bootstrap gates INT-ENV-001–003 passed in Run #15; the stopped-state storage reset ran successfully. The negative reset-while-running case remains pending. REG-001/REG-002 passed in Run #23 with auth disabled.
 
 Phase 0.9 as a whole remains open until live RegisterTM/RegisterRM, global transaction lifecycle, RM callbacks and at least FILE restart behavior are tested. Only then should WP-01 be treated as unblocked by live-TC evidence.
