@@ -153,6 +153,7 @@ The script checks out the pinned Java commit `cba73e180fd8896a99df6415b859d27512
 | Java V1 serializer prepends uint16 message type | **Verified in source** |
 | Go V1 serializer payload prepends the same type ID | **Verified in source** |
 | Go harness has 25 codec vectors and 2 frame fixtures | **Committed; not executed in this session** |
+| Java harness overlays two complete frame round-trip tests on the pinned test-suite module | **Committed; not executed in this session** |
 | Java accepts all 25 Go-produced V1 payloads | **Unknown; runtime test not executed** |
 | Java and Go produce byte-identical complete frames | **Unknown; runtime test not executed** |
 | Rust matches Java/Go V1 frame bytes | **Not implemented / not tested** |
