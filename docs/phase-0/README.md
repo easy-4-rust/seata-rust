@@ -90,6 +90,6 @@ Phase 0 is complete only when:
 
 **Phase 0.7 status:** Java request exception mappings, Seata-Go transport timeout/reconnect semantics, RSeata no-copy disposition and the V1 implementation acceptance checklist are now documented from pinned source. These are source-derived specifications, not runtime interoperability results.
 
-**Phase 0.8 status:** corrected the Go harness source SHA, fixed both CI harness working-directory/cache issues and the Java zero-length ExtraData expectation, and passed the Go/Java protocol CI sub-gate. WP-00 remains open for TC recovery, request-exception runtime tests and live Java TC integration.
+**Phase 0.8 status:** corrected the Go harness source SHA, fixed CI harness issues and the Java zero-length ExtraData expectation. Run #8 passed the 29 Go payloads, 4 Go frames and 4 Java V1 frame tests. Run #18 additionally passed 8 Java TC inbound exception tests (12 Maven tests total, 0 failures). WP-00 remains open for retry-timeout recovery and live Java TC integration; the remaining request matrix cases are tracked separately.
 
 **Non-goal:** Phase 0 does not implement TM, RM, AT, XA, TCC, Saga or a Rust TC.
