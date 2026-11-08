@@ -1,6 +1,6 @@
 # Phase 0.8 — Compatibility Validation Ledger
 
- > **Status: Go and Java V1 protocol jobs passed in GitHub Actions Run #8.** This ledger distinguishes pinned-source facts, static fixture validation, and runtime test results. The Java TC recovery and live Rust↔Java TC integration gates remain open.
+> **Status: Go/Java protocol, selected Java TC exception, and FILE/RAFT reload unit tests passed in GitHub Actions Runs #8, #18 and #25.** This ledger distinguishes pinned-source facts, static fixture validation, and runtime test results. Full durable recovery and live Rust↔Java TC integration remain open.
 
 ## 1. Frozen source baselines
 
