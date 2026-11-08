@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Overlay the Seata-Rust V1 frame tests onto the exact Java Seata source snapshot.
+# Overlay the Seata-Rust V1 frame and TC exception tests onto the exact Java Seata source snapshot.
 # Requirements: git, Maven, a JDK supported by the pinned Seata commit, and network access.
 
 ROOT="$(git rev-parse --show-toplevel)"
