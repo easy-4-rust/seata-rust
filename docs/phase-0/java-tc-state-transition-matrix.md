@@ -166,16 +166,16 @@ These are explicit administrative state transitions, not automatic retry outcome
 
 | Administrative operation | Preconditions | Transition / action | Source |
 |---|---|---|---|
-| Stop global retry (commit) | status in commit-in-progress/retry set | StopCommitOrCommitRetry | AbstractGlobalService.stopGlobalRetry |
-| Stop global retry (rollback) | status in rollback-in-progress/retry set | StopRollbackOrRollbackRetry | AbstractGlobalService.stopGlobalRetry |
+| Stop global retry (commit) | Committing or CommitRetrying | StopCommitOrCommitRetry | AbstractGlobalService.stopGlobalRetry / AbstractService.COMMIT_ING_STATUS |
+| Stop global retry (rollback) | Rollbacking, RollbackRetrying, TimeoutRollbacking or TimeoutRollbackRetrying | StopRollbackOrRollbackRetry | AbstractGlobalService.stopGlobalRetry / AbstractService.ROLLBACK_ING_STATUS |
 | Start global retry (commit) | StopCommitOrCommitRetry | CommitRetrying | AbstractGlobalService.startGlobalRetry |
 | Start global retry (rollback) | StopRollbackOrRollbackRetry | RollbackRetrying | AbstractGlobalService.startGlobalRetry |
 | Stop branch retry | non-Saga; branch status Unknown, Registered or PhaseOne_Done; global transaction is in a retry/commit/rollback state | BranchStatus.STOP_RETRY | AbstractBranchService.stopBranchRetry |
 | Start branch retry | branch status STOP_RETRY; non-Saga | BranchStatus.Registered | AbstractBranchService.startBranchRetry |
 | Delete global session | status in failure/retry/finish/stop/deleting allowlist | Deleting; delete branch records; end session | AbstractGlobalService.deleteGlobalSession |
-| Force delete global session | administrative force-delete path | Deleting; force-delete branches; end session | AbstractGlobalService.forceDeleteGlobalSession |
+| Force delete global session | administrative force-delete path (no status allowlist in this method) | Deleting; force-delete branches; end session | AbstractGlobalService.forceDeleteGlobalSession |
 
-The operator APIs do not make a failed branch successful. They pause/resume retries or explicitly delete transaction metadata. These actions require audit logging and permission checks in a future Rust TC.
+The operator APIs do not make a failed branch successful. They pause/resume retries or explicitly delete transaction metadata. These actions require audit logging and permission checks in a future Rust TC. The inspected `AbstractService.FAIL_ROLLBACK_STATUS` includes TimeoutRollbacked but not TimeoutRollbackFailed, while force-delete bypasses that allowlist. Preserve this as a source-observed administrative behavior and verify it with console tests before designing a Rust TC admin API.
 
 ## 3.6 XA prepare-failure special transition
 
