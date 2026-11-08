@@ -131,6 +131,20 @@ The next executable Java test should use the pinned Java checkout and test both 
 - Unknown message type.
 - Heartbeat request/response with unexpected body bytes.
 
+## 6.1 Reproducible Java decoder/encoder test
+
+A JUnit overlay test is now committed at `tools/java-v1-golden/ProtocolV1GoldenFrameTest.java`. It feeds both complete Go-derived frames to Java `ProtocolDecoderV1`, asserts decoded message class and fields, then passes the decoded RpcMessage through Java `ProtocolEncoderV1` and requires exact full-frame byte equality.
+
+Run from the Seata-Rust repository root:
+
+```bash
+bash tools/java-v1-golden/verify.sh
+```
+
+The script checks out the pinned Java commit `cba73e180fd8896a99df6415b859d275122feaa7`, overlays the test into the existing `test-suite/test-new-version` module (which already depends on the SEATA serializer), and runs the targeted Maven test through the reactor.
+
+**Execution status in this research session:** the test and script are committed but Maven has not been executed here. Java V1 source support is verified; this test remains pending runtime execution.
+
 ## 7. Evidence status
 
 | Claim | Status |
