@@ -24,6 +24,8 @@ However, the storage-mode recovery paths are asymmetric and do not consistently 
 
 Pinned source: [SessionHolder.java](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/server/src/main/java/org/apache/seata/server/session/SessionHolder.java)
 
+RAFT leader re-entry call site: [RaftStateMachine.java](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/server/src/main/java/org/apache/seata/server/cluster/raft/RaftStateMachine.java) invokes `SessionHolder.reload(SessionHolder.getRootSessionManager().allSessions(), SessionMode.RAFT, false)` when the node becomes leader again.
+
 The FILE/RAFT reload switch explicitly handles:
 
 - cleanup/removal: Finished, UnKnown, CommitFailed, RollbackFailed, TimeoutRollbackFailed;
