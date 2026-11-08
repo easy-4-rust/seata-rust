@@ -15,3 +15,4 @@ bash "$SCRIPT_DIR/start-tc.sh"
 # send a Seata V1 registration or transaction message.
 wait_for_tcp "$TC_PORT" 5
 echo "PASS: pinned Java TC process is alive and TCP port $TC_PORT accepts connections"
+bash "$SCRIPT_DIR/run-rust-registration.sh"
