@@ -13,6 +13,8 @@ mkdir -p "$TC_DATA_DIR" "$TC_LOG_DIR"
 
 export SEATA_TC_WORK_DIR="$TC_WORK_DIR"
 export SPRING_CONFIG_LOCATION="file:$TC_CONFIG"
+export SERVER_PORT="$TC_PORT"
+export SEATA_SERVER_SERVICE_PORT="$TC_PORT"
 nohup java -jar "$TC_JAR" >"$TC_LOG_DIR/console.log" 2>&1 &
 
 pid=$!
