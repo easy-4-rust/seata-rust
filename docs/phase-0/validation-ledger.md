@@ -88,6 +88,18 @@ The harness:
 
 **Evidence boundary:** even a passing bootstrap workflow proves only that the pinned Java TC process starts and accepts TCP connections. It does not prove RegisterTM/RegisterRM, Seata V1 frame acceptance by the live TC, transaction lifecycle, RM callbacks or persistence recovery.
 
+### Run #15 — Java TC FILE bootstrap passed
+
+[GitHub Actions Run #15](https://github.com/easy-4-rust/seata-rust/actions/runs/42474316751) passed on 2026-11-08.
+
+- Pinned Java Seata source checked out at `cba73e180fd8896a99df6415b859d275122feaa7`.
+- Maven `release-seata-jar` build succeeded and produced `server/target/seata-server.jar`.
+- Java ServerApplication started with the isolated FILE configuration.
+- TCP listener accepted connections at `127.0.0.1:18091`.
+- Smoke script stopped the TC process successfully.
+
+This is TCP bootstrap evidence only. Run #15 did not exchange Seata V1 messages. The independent Rust registration client was added after Run #15; live RegisterTM/RegisterRM will be verified by the subsequent workflow.
+
 ## 5. Evidence ledger
 
 | ID | Claim / gate | Evidence level | Status |
@@ -99,19 +111,23 @@ The harness:
 | JAVA-001 | Java V1 decoder accepts and re-encodes the 4 fixtures byte-identically | Verified by test, Run #8 | Passed |
 | TC-001 | Selected Java TC request exception mapping | Verified by test, Run #18 | Passed for covered cases |
 | TC-002 | Java retry-timeout FILE/RAFT reload branches | Verified by test, Run #25 | Unit-level passed; durable recovery pending |
-| ENV-001 | Pinned Java TC executable server build | CI runtime required | Pending Phase 0.9 workflow |
-| ENV-002 | Java TC FILE startup and TCP listener | CI runtime required | Pending Phase 0.9 workflow |
-| INT-001 | Live RegisterTM over native Seata V1 | Live TC integration required | Not implemented |
-| INT-002 | Live RegisterRM over native Seata V1 | Live TC integration required | Not implemented |
+| ENV-001 | Pinned Java TC executable server build | Verified by test, Run #15 | Passed |
+| ENV-002 | Java TC FILE startup and TCP listener | Verified by test, Run #15 | Passed |
+| INT-001 | Live RegisterTM over native Seata V1 | Rust test client implemented; next live TC workflow required | Pending |
+| INT-002 | Live RegisterRM over native Seata V1 | Rust test client implemented; next live TC workflow required | Pending |
 | INT-003–010 | GlobalBegin, BranchRegister, Status, Commit/Rollback and RM phase-two callbacks | Live TC integration required | Not implemented |
 | INT-011–014 | FILE restart, branch persistence and response-loss reconciliation | Live TC integration required | Not implemented |
 | RUST-001 | Rust protocol implementation matches Java/Go | Rust implementation/test required | Not started |
+
+| INT-CLIENT-001 | Rust standalone TM/RM registration client compiles and validates response frame | Next Phase 0.9 workflow | Pending live CI |
 
 ## 6. Phase 0 exit decision
 
 **Protocol codec/frame sub-gate: passed.** GO-001, GO-002 and JAVA-001 have runtime evidence.
 
 **Selected Java TC unit-test sub-gates: passed.** TC-001 covered cases and TC-002 FILE/RAFT reload unit branches have test evidence.
+
+**Java TC bootstrap sub-gate: passed in Run #15.** The self-contained Java TC builds, starts, binds TCP 18091 and shuts down with isolated FILE storage.
 
 **WP-00 / Phase 0 as a whole: still open.** Remaining gates include:
 - Phase 0.9.1 Java TC FILE build/start smoke;
