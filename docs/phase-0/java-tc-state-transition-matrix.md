@@ -256,7 +256,7 @@ The pinned `SessionHolder.reload` implementation applies different handling by s
 | Finished / UnKnown / CommitFailed / RollbackFailed / TimeoutRollbackFailed | removeInErrorState | cleanup/error-state removal; not automatic retry |
 | AsyncCommitting / Committing / CommitRetrying | retain for commit retry scheduler; Raft path performs lock cleanup first | resume/retry commit path |
 | StopCommitOrCommitRetry / StopRollbackOrRollbackRetry / Deleting | retained in the explicit switch | operator/cleanup state; not automatically rewritten |
-| CommitRetryTimeout / RollbackRetryTimeout | no explicit case in FILE/RAFT reload switch; default unexpected-status path. DB/Redis cleanup scan shown here also omits them. | recovery/retention behavior unresolved; targeted test required |
+| CommitRetryTimeout / RollbackRetryTimeout | neither has an explicit SessionHolder FILE/RAFT reload case. FILE pre-filter removes RollbackRetryTimeout but does not filter CommitRetryTimeout; DB/Redis cleanup query omits both. | storage-mode asymmetry; CommitRetryTimeout can reach FILE reload's unexpected-status path; targeted test required |
 | Rollbacking / RollbackRetrying / TimeoutRollbacking / TimeoutRollbackRetrying | branch locks restored; rollback family retained for retry | resume rollback path |
 | Begin in Raft reload | older session may be moved to RollbackRetrying; new leader-era session is activated | avoids treating a newly created leader session as stale |
 | Begin in non-Raft reload | activated | timeout scanner later decides whether timeout rollback is needed |
@@ -264,6 +264,17 @@ The pinned `SessionHolder.reload` implementation applies different handling by s
 For DB/Redis and other storage modes, reload also asynchronously scans selected error/terminal statuses (including UnKnown, Committed, Rollbacked, TimeoutRollbacked and Finished) for cleanup. Do not assume all storage modes have identical reload mechanics.
 
 **Important source-level gap:** CommitRetryTimeout and RollbackRetryTimeout are not handled in the explicit FILE/RAFT switch above; they reach the default unexpected-status path. The DB/Redis cleanup query shown in the pinned source also does not include these two retry-timeout statuses. Their intended recovery/retention behavior needs a targeted test and may be version/configuration-specific.
+
+### 6.0 Retry-timeout storage-path asymmetry
+
+A deeper audit of the concrete FILE store adds an important distinction to the table above:
+
+- `FileSessionManager.checkSessionStatus` returns false for RollbackRetryTimeout, so the file-log restore path drops it from the active session map before `SessionHolder.reload`.
+- The same filter does **not** include CommitRetryTimeout. That status remains in the FILE session map and then reaches `SessionHolder.reload`'s default unexpected-status branch, because no explicit switch case exists.
+- DB/Redis cleanup scan omits both retry-timeout statuses.
+- The Java console explicitly treats both as manually retryable failure states via `changeGlobalStatus`.
+
+This is not merely a missing switch arm: it is a cross-store recovery asymmetry. The exact impact must be confirmed with pinned Java restart tests. See [Retry-Timeout Recovery Audit](java-tc-retry-timeout-recovery.md) for the full source chain and REC-TIMEOUT-001–010 acceptance matrix.
 
 ### 6.1 Recovery invariants to preserve in Rust TC
 
@@ -294,7 +305,7 @@ For DB/Redis and other storage modes, reload also asynchronously scans selected 
 - [ ] Capture retry scheduler periods and defaults from the chosen Java server config.
 - [ ] Verify Deleting and operator-stop transitions from admin/controller methods.
 - [ ] Verify Saga's GlobalReport and Finished semantics separately.
-- [ ] Run restart/failure tests for DB, file, Redis and Raft session stores.
+- [ ] Run restart/failure tests for DB, file, Redis and Raft session stores, including REC-TIMEOUT-001–010.
 - [ ] Add model-based transition tests and compare Java's observed transitions with the Rust domain model.
 
 Until these are complete, this is a source-backed transition matrix and recovery map, not a formal proof of the entire Java state machine.
