@@ -40,7 +40,7 @@ mvn -B -ntp -pl server -am \
   package
 ```
 
-It expects the Spring Boot executable artifact at `server/target/seata-server-exec.jar`, based on the pinned server POM's `finalName=seata-server`, `classifier=exec`, and `attach=false` configuration.
+It expects the self-contained Spring Boot executable artifact at `server/target/seata-server.jar`, based on the pinned server POM's `release-seata-jar` profile (`finalName=seata-server`, default executable JAR layout). The `release-seata` profile instead creates a ZIP-layout launcher that relies on an external `lib/` directory; invoking it with plain `java -jar` does not provide Spring Boot classes and is not used by this harness.
 
 ## What the smoke test proves
 
