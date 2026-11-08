@@ -2,11 +2,11 @@
 
 > **Status: Initial source map · commit-pinned**
 >
- > This document identifies the primary source entry points for the V1 design and the future Rust TC. It is not yet an exhaustive mapping of every upstream class or function.
+> This document identifies the primary source entry points for the V1 design and the future Rust TC. It is not yet an exhaustive mapping of every upstream class or function.
 >
-> Role clarification: Java Seata 2.x is the semantic/protocol authority; Seata-Go v2 is the primary V1 engineering reference; RSeata is an independent third-party Rust sample used only to study Rust abstractions. It is not a codebase being migrated or renamed.
+> **Reference hierarchy:** Java Seata 2.x is the semantic/protocol authority; Seata-Go v2 is the primary V1 engineering reference; RSeata is an independent third-party Rust sample used only to study Rust abstractions. RSeata is not a codebase being migrated or renamed.
 >
-> Role clarification: Java Seata 2.x is the semantic/protocol authority; Seata-Go v2 is the primary V1 engineering reference; RSeata is an independent third-party Rust sample used only to study Rust abstractions. It is not a codebase being migrated or renamed. Paths below are pinned to the snapshots listed in the [Phase 0 index](README.md).
+> Paths below are pinned to the snapshots listed in the [Phase 0 index](README.md).
 
 ## 1. Repository snapshots
 
