@@ -18,6 +18,7 @@ Seata-Rust uses ADRs to keep architectural choices explicit, reviewable and trac
 | [0004](0004-v1-scope-at-mysql.md) | V1 acceptance starts with MySQL AT and Java TC interoperability | Accepted |
 | [0005](0005-rseata-reuse-policy.md) | Reuse RSeata code only after semantic and protocol audit | Proposed |
 | [0006](0006-tc-provider-boundary.md) | Hide Java/Rust TC choice behind a TC endpoint/provider boundary | Proposed |
+| [0007](0007-v1-reference-hierarchy.md) | Seata-Go v2 is the V1 engineering reference; RSeata is third-party reference only | Accepted |
 
 ## ADR template
 
