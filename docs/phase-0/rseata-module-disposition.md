@@ -132,6 +132,7 @@ V1 does not run this module. It remains useful for future Rust TC research.
 |---|---|---|
 | Tonic interceptor / gRPC context propagation | **REFACTOR** | V1 propagation must carry TC-issued XID over Rust service boundaries; keep framework adapters outside transaction core |
 | procedural macro | **KEEP idea / REFACTOR** | API must guarantee transaction completion on Rust error, panic and cancellation paths |
+| `global_transaction` macro implementation | **REFACTOR / do not copy as-is** | The inspected macro computes `_is_result` but does not use it; generated code assumes Result-style `?` and `Ok/Err` handling. Verify return types, panic mapping, cancellation and commit/rollback errors with compile-fail and runtime tests |
 | error derive macro | **KEEP concept** | derive support is reusable if error taxonomy is rebuilt around protocol/transport/transaction/database categories |
 | error enum | **REFACTOR** | distinguish definite rejection from unknown outcome and retryable from unretryable branch failure |
 
