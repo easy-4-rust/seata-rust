@@ -20,6 +20,7 @@ Seata-Rust follows a staged strategy:
 - [V1 Payload Golden Vectors](docs/phase-0/protocol-golden-vectors.md) — codec-body and serialized-payload vectors with explicit certification status.
 - [Java V1 Frame Compatibility](docs/phase-0/protocol-v1-frame-compatibility.md) — Java V1 frame source audit and runtime test gates.
 - [Go Golden Vector Runner](tools/go-golden-vectors/verify.sh) — reproducible pinned Go codec and frame verification harness.
+- [Java V1 Frame Runner](tools/java-v1-golden/verify.sh) — reproducible pinned Java decoder/encoder frame round-trip test.
 - [TM/TC/RM Call Chains](docs/phase-0/tm-tc-rm-call-chains.md) — method-level flows and failure matrix.
 - [RSeata Reference Disposition](docs/phase-0/rseata-module-disposition.md) — third-party Rust reference audit, not a migration plan.
 - [Architecture Decision Records](docs/adr/README.md) — accepted and proposed architecture decisions.
