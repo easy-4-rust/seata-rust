@@ -1,6 +1,6 @@
 # Phase 0.8 — Compatibility Validation Ledger
 
-> **Status: CI execution pending.** This ledger distinguishes pinned-source facts, static fixture validation, and runtime test results. A committed workflow is not a passing workflow.
+ > **Status: Go and Java V1 protocol jobs passed in GitHub Actions Run #8.** This ledger distinguishes pinned-source facts, static fixture validation, and runtime test results. The Java TC recovery and live Rust↔Java TC integration gates remain open.
 
 ## 1. Frozen source baselines
 
@@ -44,7 +44,12 @@ Jobs:
 1. `go-golden-vectors`: Go 1.23; clones and checks out the pinned Go commit; runs `bash tools/go-golden-vectors/verify.sh`.
 2. `java-v1-frames`: Temurin JDK 17; clones the pinned Java commit; overlays the JUnit test; runs `bash tools/java-v1-golden/verify.sh`.
 
-The workflow has been committed, but no successful workflow run is recorded in this ledger yet. Update this section with the run URL, conclusion, tested commit and job results after GitHub Actions finishes.
+**Verified by test:** [GitHub Actions Run #8](https://github.com/easy-4-rust/seata-rust/actions/runs/42457053815) completed successfully for Seata-Rust commit `756a34a9e0198b0d6b2d6a7cafe9f404a2109804` on 2026-11-08.
+
+- `go-golden-vectors`: success; 29 payload vectors and 4 complete frames passed against Go commit `82570d905919c1c66bb025a3a5979f25390de498`.
+- `java-v1-frames`: success; 4 Java V1 decoder/encoder round-trip tests passed against Java commit `cba73e180fd8896a99df6415b859d275122feaa7`; Maven reactor build succeeded.
+
+Earlier failed runs were caused by harness setup issues and one incorrect test expectation. Those were corrected before Run #8. Run #8 is the authoritative passing result.
 
 ## 5. Evidence ledger
 
@@ -54,16 +59,18 @@ The workflow has been committed, but no successful workflow run is recorded in t
 | SRC-002 | Go native codec prepends big-endian uint16 message type | Verified in pinned source | Complete |
 | FIX-001 | 29 fixture serialized prefixes match their declared type IDs | Static fixture check | Complete; not runtime proof |
 | FIX-002 | Four frame fixtures have consistent full/head lengths | Static fixture check | Complete; not runtime proof |
-| GO-001 | Pinned Go encoder reproduces all 29 codec vectors | Runtime test required | Pending CI |
-| GO-002 | Pinned Go serializer reproduces all four full frames | Runtime test required | Pending CI |
-| JAVA-001 | Java V1 decoder accepts all four frames and Java encoder re-emits identical bytes | Runtime test required | Pending CI |
+| GO-001 | Pinned Go encoder reproduces all 29 codec vectors | Verified by test in Run #8 | Passed |
+| GO-002 | Pinned Go serializer reproduces all four full frames | Verified by test in Run #8 | Passed |
+| JAVA-001 | Java V1 decoder accepts all four frames and Java encoder re-emits identical bytes | Verified by test in Run #8; 4 tests, 0 failures | Passed |
 | TC-001 | Java TC request exception mapping | Source audit | Complete; runtime tests pending |
 | TC-002 | Java retry-timeout storage recovery | Source audit / inferred storage impact | Runtime reproduction pending |
 | RUST-001 | Rust protocol implementation matches Java/Go | Not implemented | Not started |
 
 ## 6. Current WP-00 exit decision
 
-**WP-00 is not closed.** It remains blocked on GO-001, GO-002 and JAVA-001, plus the Java TC recovery tests or an explicitly accepted external-TC limitation.
+**Protocol codec/frame sub-gate: passed.** GO-001, GO-002 and JAVA-001 are now runtime-verified.
+
+**WP-00 as a whole remains open.** It is still blocked on Java TC recovery tests REC-TIMEOUT-001–010, Java request exception runtime tests, and a live Java TC integration test that exercises actual registration and transaction execution.
 
 Do not begin claiming V1 protocol conformance or mark source-derived candidate vectors as certified golden vectors until the CI jobs pass.
 
