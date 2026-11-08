@@ -60,6 +60,15 @@
 
 This verifies registration payload/frame compatibility against the pinned Go and Java codecs. It is not a live RegisterTM/RegisterRM exchange with a running TC.
 
+### Run #42 — Registration V1 frames and all current Java unit overlays
+
+[GitHub Actions Run #42](https://github.com/easy-4-rust/seata-rust/actions/runs/42474150028) passed on the registration contract/test commit.
+
+- Go: 29 payload vectors and 6 complete V1 frames passed, including RegisterTM and RegisterRM.
+- Java: 6 V1 frame round trips passed; 8 selected TC exception tests passed; 3 FILE/RAFT reload tests passed.
+- Maven result: **17 tests, 0 failures, 0 errors, 0 skipped; BUILD SUCCESS**.
+- Java's RegisterRM codec decodes zero-length extraData to null, unlike the TM identify-request decoder which produces an empty string. Both re-encode to the same zero-length wire field; the fixture asserts this difference.
+
 ## 4. Phase 0.9 Java TC bootstrap harness
 
 Harness: [tools/java-tc-integration](../../tools/java-tc-integration/README.md)
@@ -75,7 +84,7 @@ The harness:
 - waits for the native TCP listener;
 - supports stop and isolated storage reset.
 
-**Execution status:** scripts and workflow are committed, but no successful Phase 0.9 bootstrap workflow result is recorded in this ledger yet. Update this section with the workflow run URL, tested Seata-Rust commit, Maven result, server process result and listener result when CI finishes.
+**Execution status:** the harness has reached the Java ServerApplication startup path, but no successful end-to-end smoke result is recorded yet. Run #14 failed during Maven dependency resolution with a transient Maven Central HTTP 504 while resolving Kotlin compiler 2.2.20; the build script now retries Maven up to three times. The current retry-enabled bootstrap run is pending. Record its final run URL, Maven result, server process result and listener result before marking ENV-001/002 passed.
 
 **Evidence boundary:** even a passing bootstrap workflow proves only that the pinned Java TC process starts and accepts TCP connections. It does not prove RegisterTM/RegisterRM, Seata V1 frame acceptance by the live TC, transaction lifecycle, RM callbacks or persistence recovery.
 
