@@ -84,12 +84,12 @@ Phase 0 is complete only when:
 - [ ] ADRs are reviewed and the V1 scope is frozen.
 - [ ] V1 OpenSpec tasks are derived from the approved specifications.
 
-**Reference-role clarification:** RSeata is an independent third-party Rust project, not the user's implementation and not the Seata-Rust migration baseline. Seata-Go v2 is the primary V1 engineering reference; Java Seata 2.x remains the compatibility authority. The payload vectors are currently source-derived candidates, not Go-runtime, Java-interoperability or Rust-conformance test results.
+**Reference-role clarification:** RSeata is an independent third-party Rust project, not the user's implementation and not the Seata-Rust migration baseline. Seata-Go v2 is the primary V1 engineering reference; Java Seata 2.x remains the compatibility authority. The 29 payload vectors and 4 complete frames are now verified by the pinned Go runtime; four complete frames also pass Java V1 decoder/encoder round trips. All-message Java serializer equivalence, live Java TC interoperability and Rust conformance remain unverified.
 
-**Validation status:** the Go harness (29 payloads + 4 frames, including error responses and optional head map) and Java harness (4 full-frame decoder/encoder round trips, including empty-field normalization) are committed but have not been executed in this session. The Go toolchain is available in this container, but the pinned upstream checkout cannot be fetched from this network-restricted execution environment; Maven is not installed. Java V1 support is verified in source only; runtime acceptance remains unknown.
+**Validation status:** GitHub Actions [Run #8](https://github.com/easy-4-rust/seata-rust/actions/runs/42457053815) passed. Pinned Seata-Go verified 29 payload vectors + 4 full frames; pinned Java Seata 2.x passed 4 V1 frame decode/encode tests (4 tests, 0 failures). This does not yet certify all Java message serializers or live Java TC request handling.
 
 **Phase 0.7 status:** Java request exception mappings, Seata-Go transport timeout/reconnect semantics, RSeata no-copy disposition and the V1 implementation acceptance checklist are now documented from pinned source. These are source-derived specifications, not runtime interoperability results.
 
-**Phase 0.8 status:** corrected the Go harness source SHA to match the pinned manifest, added GitHub Actions for Go/Java protocol tests, and added a validation ledger. WP-00 remains open until the workflow reports successful runtime results.
+**Phase 0.8 status:** corrected the Go harness source SHA, fixed both CI harness working-directory/cache issues and the Java zero-length ExtraData expectation, and passed the Go/Java protocol CI sub-gate. WP-00 remains open for TC recovery, request-exception runtime tests and live Java TC integration.
 
 **Non-goal:** Phase 0 does not implement TM, RM, AT, XA, TCC, Saga or a Rust TC.
