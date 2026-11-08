@@ -17,6 +17,7 @@ mkdir -p "$HARNESS_DIR"
 cp "$ROOT/tools/go-golden-vectors/main.go" "$HARNESS_DIR/main.go"
 cp "$ROOT/tools/go-golden-vectors/expected.json" "$HARNESS_DIR/expected.json"
 cp "$ROOT/tools/go-golden-vectors/frames.json" "$HARNESS_DIR/frames.json"
+gofmt -w "$HARNESS_DIR/main.go"
 
 (
   cd "$TMP/seata-go"
