@@ -1,0 +1,44 @@
+# Test-only Java Seata TC configuration.
+# Pinned source: apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7
+server:
+  port: 18091
+
+spring:
+  application:
+    name: seata-rust-java-tc-integration
+  main:
+    web-application-type: none
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: ${SEATA_TC_WORK_DIR:./work}/logs
+
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 18091
+    # Phase 0.9.1 only validates isolated TC startup and TCP reachability.
+    # Authentication is intentionally disabled until the registration/auth
+    # interoperability cases are implemented in the independent client.
+    enable-check-auth: false
+  store:
+    mode: file
+    session:
+      mode: file
+    lock:
+      mode: file
+    file:
+      dir: ${SEATA_TC_WORK_DIR:./work}/sessionStore
+      max-branch-session-size: 16384
+      max-global-session-size: 512
+      file-write-buffer-cache-size: 16384
+      session-reload-read-size: 100
+      flush-disk-mode: sync
+  metrics:
+    enabled: false
+  transport:
+    rpc-tc-request-timeout: 15000
