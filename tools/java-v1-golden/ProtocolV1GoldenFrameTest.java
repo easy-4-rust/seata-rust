@@ -43,7 +43,13 @@ class ProtocolV1GoldenFrameTest {
     private static RpcMessage decodeAndReencode(String frameHex) {
         byte[] expected = hex(frameHex);
         ProtocolDecoderV1 decoder = new ProtocolDecoderV1();
-        RpcMessage decoded = decoder.decodeFrame(Unpooled.wrappedBuffer(expected));
+        ByteBuf input = Unpooled.wrappedBuffer(expected);
+        RpcMessage decoded;
+        try {
+            decoded = decoder.decodeFrame(input);
+        } finally {
+            input.release();
+        }
 
         ByteBuf output = Unpooled.buffer();
         try {
