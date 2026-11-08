@@ -100,6 +100,19 @@ The harness:
 
 This is TCP bootstrap evidence only. Run #15 did not exchange Seata V1 messages. The independent Rust registration client was added after Run #15; live RegisterTM/RegisterRM will be verified by the subsequent workflow.
 
+### Run #23 — Live Rust RegisterTM/RegisterRM against Java TC
+
+[GitHub Actions Run #23](https://github.com/easy-4-rust/seata-rust/actions/runs/42475353541) passed on 2026-11-08.
+
+- Pinned Java Seata TC built and started with isolated FILE storage.
+- Rust standalone client compiled and passed 2 unit tests.
+- Over a live native V1 TCP connection, Java returned RegisterTM `identified=true`.
+- Over a second live native V1 TCP connection, Java returned RegisterRM `identified=true` for resource ID `mysql://orders`.
+- Both responses reported server version `2.8.0-SNAPSHOT`.
+- Java TC shut down cleanly after the test.
+
+**Boundary:** this run used `enable-check-auth=false`; it verifies the unauthenticated registration path, not authentication. It also does not yet test GlobalBegin, BranchRegister, phase-two callbacks or recovery. The client is being aligned to Seata-Go's actual `constant.SeataVersion = "1.1.0"` and the FILE data path has been corrected to the resettable data directory; those adjustments require a subsequent CI confirmation.
+
 ## 5. Evidence ledger
 
 | ID | Claim / gate | Evidence level | Status |
@@ -113,13 +126,13 @@ This is TCP bootstrap evidence only. Run #15 did not exchange Seata V1 messages.
 | TC-002 | Java retry-timeout FILE/RAFT reload branches | Verified by test, Run #25 | Unit-level passed; durable recovery pending |
 | ENV-001 | Pinned Java TC executable server build | Verified by test, Run #15 | Passed |
 | ENV-002 | Java TC FILE startup and TCP listener | Verified by test, Run #15 | Passed |
-| INT-001 | Live RegisterTM over native Seata V1 | Rust test client implemented; next live TC workflow required | Pending |
-| INT-002 | Live RegisterRM over native Seata V1 | Rust test client implemented; next live TC workflow required | Pending |
+| INT-001 | Live RegisterTM over native Seata V1 | Verified by test, Run #23; auth disabled | Passed for unauthenticated path |
+| INT-002 | Live RegisterRM over native Seata V1 | Verified by test, Run #23; auth disabled | Passed for unauthenticated path |
 | INT-003–010 | GlobalBegin, BranchRegister, Status, Commit/Rollback and RM phase-two callbacks | Live TC integration required | Not implemented |
 | INT-011–014 | FILE restart, branch persistence and response-loss reconciliation | Live TC integration required | Not implemented |
 | RUST-001 | Rust protocol implementation matches Java/Go | Rust implementation/test required | Not started |
 
-| INT-CLIENT-001 | Rust standalone TM/RM registration client compiles and validates response frame | Next Phase 0.9 workflow | Pending live CI |
+| INT-CLIENT-001 | Rust standalone TM/RM registration client compiles and validates response frame | Verified by test, Run #23; 2 unit tests + live TC registration | Passed; Go version-string alignment and storage path correction pending re-run |
 
 ## 6. Phase 0 exit decision
 
