@@ -42,6 +42,9 @@
 | [Seata-Go Transport Semantics](seata-go-transport-timeout-semantics.md) | Getty/gRPC request correlation, timeout, late response, retry and RM reconnect behavior |
 | [V1 Implementation Acceptance Checklist](v1-implementation-acceptance-checklist.md) | OpenSpec-ready V1 work packages, dependencies, scope and test gates |
 | [Phase 0 Validation Ledger](validation-ledger.md) | Frozen source SHAs, fixture counts, CI commands and source/runtime evidence status |
+| [Java TC Live Integration Plan](java-tc-live-integration-plan.md) | Phase 0.9 topology, isolated FILE TC bootstrap, INT-ENV and live transaction gates |
+| [Java TC Integration Harness](../../tools/java-tc-integration/README.md) | Pinned Java TC build/start/stop/reset and TCP bootstrap smoke scripts |
+| [Java TC FILE Bootstrap CI](../../.github/workflows/phase-0-java-tc-file-smoke.yml) | Build pinned Java TC, start FILE storage and verify TCP listener in CI |
 | [RSeata Module Disposition](rseata-module-disposition.md) | Keep/Refactor/Rewrite classification of third-party RSeata modules |
 | [ADR index](../adr/README.md) | Accepted and proposed architecture decisions |
 
