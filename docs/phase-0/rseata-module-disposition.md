@@ -29,6 +29,8 @@
 | `examples/user-service` | Example service and gRPC integration | **KEEP as reference only** | Reuse scenario ideas, not transaction assumptions |
 | `examples/example-proto` | Protobuf demo | **DEFER** | Not part of Java native V1 compatibility |
 | root binaries / web | Example TC process and web/management scaffolding | **DEFER / REFACTOR V2** | V1 does not ship Rust TC |
+| root `src/lib.rs` facade | Feature-gated re-exports for TM/RM/micro/DB proxy | **KEEP concept / REFACTOR API** | Review feature combinations and avoid exposing internal implementation types as stable public API |
+| root `src/main.rs` | Prints build-success and feature summary | **REWRITE V2 / DEFER V1** | Placeholder binary, not a production TC entry point |
 
 ## 3. rseata-core module details
 
@@ -114,6 +116,15 @@ V1 does not run this module. It remains useful for future Rust TC research.
 | Lock manager | **REFACTOR V2** | validate atomic conflict detection, transaction ownership and restart behavior |
 | retry / timeout | **REWRITE V2 scheduler** | derive full Java state machine and durable retry policy |
 | audit / metrics | **KEEP concepts / REFACTOR** | useful separation, but not proof of correctness |
+
+### 8.1 Additional TC/session correctness findings
+
+| Finding | Source | Disposition |
+|---|---|---|
+| `DefaultSessionManager.update_global_session_status` has the `session.set_status(status)` mutation commented out, then persists the supplied session reference. | `rseata-core/src/session/defaults/default_session_manager.rs` | **REFACTOR / verify callers** — prove the caller mutates the session before invoking this method; otherwise status persistence may write the previous value. |
+| `DefaultGlobalSession::is_timeout` uses elapsed milliseconds compared to `begin_time_millis * 1000`, not the stored `timeout_millis`. | `rseata-core/src/session/defaults/default_global_session.rs` | **REWRITE method** — use checked elapsed-time arithmetic against the configured timeout and add boundary tests. |
+| `get_sessions_by_condition` currently returns all values; the condition is not applied. | `rseata-core/src/store/memery_transaction_store_manager.rs` | **REWRITE query** — implement all SessionCondition fields and indexes before a TC uses it. |
+| Memory store uses HashMap/RwLock and is process-local. | `rseata-core/src/store/memery_transaction_store_manager.rs` | **KEEP test adapter only** — never treat as durable TC persistence. |
 
 ## 9. rseata-micro and error modules
 
