@@ -1,6 +1,6 @@
 # Java Seata V1 Frame Compatibility — Source Audit & Executable Fixture Plan
 
-> **Status:** Java V1 decoder/encoder support verified in pinned source; cross-runtime integration not executed yet.
+> **Status:** four complete V1 frame fixtures passed Java Decoder → Encoder byte-identical round trips in GitHub Actions Run #8. Live Java TC acceptance and all-message Java serializer equivalence remain unverified.
 >
 > Java source: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
 > Go source: `apache/incubator-seata-go@82570d905919c1c66bb025a3a5979f25390de498`.
@@ -154,6 +154,10 @@ bash tools/java-v1-golden/verify.sh
 The script checks out the pinned Java commit `cba73e180fd8896a99df6415b859d275122feaa7`, overlays the test into the existing `test-suite/test-new-version` module (which already depends on the SEATA serializer), and runs the targeted Maven test through the reactor.
 
 **Execution status in this research session:** the test and script are committed but Maven has not been executed here. Java V1 source support is verified; this test remains pending runtime execution.
+
+## 6.2 Runtime result
+
+[GitHub Actions Run #8](https://github.com/easy-4-rust/seata-rust/actions/runs/42457053815) passed against the pinned Java and Go source snapshots. Maven reported **4 tests, 0 failures, 0 errors, 0 skipped** for `ProtocolV1GoldenFrameTest`. The Go job independently passed **29 payload vectors and 4 full frames**. The Java tests prove Java V1 decoder/encoder round-trip behavior for these four fixtures; they do not prove that a running Java TC accepts every request family or that all 29 Java serializer payloads match Go.
 
 ## 7. Evidence status
 
