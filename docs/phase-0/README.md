@@ -33,6 +33,8 @@
 | [Java TC Transition & Recovery Matrix](java-tc-state-transition-matrix.md) | Source-derived state transitions, retries, timeouts, terminal states and restart recovery |
 | [V1 Payload Golden Vectors](protocol-golden-vectors.md) | Deterministic codec-body and serialized-payload hex vectors, Go verification harness and certification gates |
 | [Java V1 Frame Compatibility](protocol-v1-frame-compatibility.md) | Java V1 encoder/decoder source audit, fixed frame layout and runtime interop gates |
+| [Go codec/frame harness](../../tools/go-golden-vectors/verify.sh) | Execute 25 pinned Seata-Go codec vectors, serializer type prefixes and two complete V1 frame fixtures |
+| [Java V1 frame harness](../../tools/java-v1-golden/verify.sh) | Execute Java V1 decoder → encoder exact-frame round trips against the pinned Java source snapshot |
 | [TM/TC/RM Call Chains](tm-tc-rm-call-chains.md) | Method-level execution paths and uncertain-outcome/error matrix |
 | [RSeata Module Disposition](rseata-module-disposition.md) | Keep/Refactor/Rewrite classification of third-party RSeata modules |
 | [ADR index](../adr/README.md) | Accepted and proposed architecture decisions |
