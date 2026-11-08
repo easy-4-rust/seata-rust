@@ -51,7 +51,9 @@ Jobs:
 
 Earlier failed runs were caused by harness setup issues and one incorrect test expectation. Those were corrected before Run #8. Run #8 is the authoritative passing result.
 
-The same [Run #18](https://github.com/easy-4-rust/seata-rust/actions/runs/42458368199) also executed the Java TC inbound exception overlay: 8 additional handler tests passed. Together with 4 V1 frame tests, Maven reported **12 tests, 0 failures, 0 errors, 0 skipped**.
+[Run #18](https://github.com/easy-4-rust/seata-rust/actions/runs/42458368199) executed the Java TC inbound exception overlay: 8 handler tests passed. Together with 4 V1 frame tests, Maven reported **12 tests, 0 failures, 0 errors, 0 skipped**.
+
+[Run #25](https://github.com/easy-4-rust/seata-rust/actions/runs/42458877018) additionally executed three Java TC retry-timeout recovery tests for FILE filtering and FILE/RAFT SessionHolder reload. Maven reported **15 tests, 0 failures, 0 errors, 0 skipped**.
 
 ## 5. Evidence ledger
 
@@ -65,14 +67,14 @@ The same [Run #18](https://github.com/easy-4-rust/seata-rust/actions/runs/424583
 | GO-002 | Pinned Go serializer reproduces all four full frames | Verified by test in Run #8 | Passed |
 | JAVA-001 | Java V1 decoder accepts all four frames and Java encoder re-emits identical bytes | Verified by test in Run #8; 4 tests, 0 failures | Passed |
 | TC-001 | Selected Java TC request exception mapping (GlobalBegin, GlobalCommit, GlobalStatus, GlobalReport, BranchRegister) | Verified by test in Run #18; 8 handler tests passed | Passed for covered cases; remaining matrix cases pending |
-| TC-002 | Java retry-timeout storage recovery | Source audit / inferred storage impact | Runtime reproduction pending |
+| TC-002 | Java retry-timeout FILE/RAFT filter and reload branches | Verified by test in Run #25; 3 tests passed | Unit-level behavior passed; durable FILE restart, DB/Redis and live Raft recovery pending |
 | RUST-001 | Rust protocol implementation matches Java/Go | Not implemented | Not started |
 
 ## 6. Current WP-00 exit decision
 
 **Protocol codec/frame sub-gate: passed.** GO-001, GO-002 and JAVA-001 are now runtime-verified.
 
-**WP-00 as a whole remains open.** It is still blocked on Java TC recovery tests REC-TIMEOUT-001–010, remaining exception-matrix cases (GlobalRollback, BranchReport, GlobalLockQuery, RegTM/RM auth and fallback lookup failure), and a live Java TC integration test that exercises actual registration and transaction execution.
+**WP-00 as a whole remains open.** Unit-level FILE/RAFT retry-timeout branches are now verified, but REC-TIMEOUT-001–010 still require durable store/restart and operator-retry integration coverage. Remaining exception-matrix cases (GlobalRollback, BranchReport, GlobalLockQuery, RegTM/RM auth and fallback lookup failure), plus a live Java TC integration test, also remain open.
 
 The Go vectors and four Java V1 frame fixtures are now certified against their pinned runtime test suites. Do not claim full Seata-Rust V1 protocol conformance until all-message Java compatibility, live Java TC request/response integration and Rust codec conformance also pass.
 
