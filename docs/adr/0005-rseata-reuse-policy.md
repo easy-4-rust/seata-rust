@@ -1,11 +1,11 @@
-# ADR-0005: Reuse RSeata Code Only After Semantic and Protocol Audit
+# ADR-0005: Treat RSeata as a Third-Party Rust Reference, Not the V1 Codebase
 
 - **Status:** Proposed
 - **Date:** 2026-11-08
 
 ## Context
 
-RSeata is a useful Rust code reference and already contains TC/TM/RM, Session models, Tonic services, lock abstractions and SeaORM AT/XA adapters. However, the inspected snapshot also contains protocol and correctness gaps:
+RSeata is an independent third-party Rust project. It is not the user's implementation, is not a predecessor of Seata-Rust, and is not the V1 migration baseline. It is useful as a Rust design sample: it contains TC/TM/RM boundaries, Session models, Tonic services, lock abstractions and SeaORM AT/XA adapter experiments. The inspected snapshot also contains protocol and correctness gaps:
 
 - Custom Protobuf service contract rather than Java native Seata remoting.
 - XID generation differs from Java Seata.
@@ -19,7 +19,7 @@ Therefore, copying RSeata modules wholesale would import unverified semantics an
 
 ## Decision
 
-No RSeata module is accepted for direct production reuse solely because it compiles or has a matching name.
+No RSeata module is accepted for direct production reuse solely because it compiles or has a matching name. Architecture inspiration and source-code reuse are separate decisions.
 
 Every reuse candidate must pass:
 
@@ -36,7 +36,7 @@ Classify each candidate as:
 - **Rewrite** — protocol/state/persistence behavior is incompatible or unsafe.
 - **Reject** — no clear value or introduces unacceptable coupling.
 
-Initial candidates:
+Initial disposition:
 - Keep only after validation: XID wrapper, common error/result abstractions, tracing scaffolding.
 - Refactor: Session model, coordinator interfaces, lock traits, SeaORM adapters.
 - Rewrite: native Java protocol codec, XID generation/handling boundary, status mapping, durable TC store and recovery.
