@@ -18,11 +18,11 @@ package org.apache.seata.core.rpc.netty.v1;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import org.apache.seata.core.compressor.CompressorType;
 import org.apache.seata.core.protocol.RpcMessage;
 import org.apache.seata.core.protocol.transaction.GlobalBeginRequest;
 import org.apache.seata.core.protocol.transaction.GlobalBeginResponse;
 import org.apache.seata.core.serializer.SerializerType;
-import org.apache.seata.core.compressor.CompressorType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
