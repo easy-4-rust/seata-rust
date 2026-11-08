@@ -260,6 +260,8 @@ The pinned `SessionHolder.reload` implementation applies different handling by s
 
 For DB/Redis and other storage modes, reload also asynchronously scans selected error/terminal statuses (including UnKnown, Committed, Rollbacked, TimeoutRollbacked and Finished) for cleanup. Do not assume all storage modes have identical reload mechanics.
 
+**Important source-level gap:** CommitRetryTimeout and RollbackRetryTimeout are not handled in the explicit FILE/RAFT switch above; they reach the default unexpected-status path. The DB/Redis cleanup query shown in the pinned source also does not include these two retry-timeout statuses. Their intended recovery/retention behavior needs a targeted test and may be version/configuration-specific.
+
 ### 6.1 Recovery invariants to preserve in Rust TC
 
 - Persist the GlobalSession status before treating the transition as durable.
