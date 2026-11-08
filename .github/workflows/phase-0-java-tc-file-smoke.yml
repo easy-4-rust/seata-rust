@@ -1,0 +1,52 @@
+name: Phase 0.9 Java TC FILE Bootstrap
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "tools/java-tc-integration/**"
+      - ".github/workflows/phase-0-java-tc-file-smoke.yml"
+  pull_request:
+    paths:
+      - "tools/java-tc-integration/**"
+      - ".github/workflows/phase-0-java-tc-file-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase-0-java-tc-file-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  java-tc-file-smoke:
+    name: Build and start pinned Java TC with FILE storage
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Seata-Rust harness
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Show toolchain
+        run: |
+          java -version
+          mvn -version
+          git --version
+
+      - name: Build and smoke-test Java TC
+        run: bash tools/java-tc-integration/scripts/smoke.sh
+
+      - name: Upload Java TC logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-tc-file-smoke-logs
+          path: /tmp/seata-rust-java-tc/logs/
+          if-no-files-found: ignore
