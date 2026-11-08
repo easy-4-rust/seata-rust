@@ -92,6 +92,10 @@ func main() {
 		{"RegisterRMRequest", message.RegisterRMRequest{AbstractIdentifyRequest: identity, ResourceIds: resourceID}},
 		{"RegisterRMResponse", message.RegisterRMResponse{AbstractIdentifyResponse: identifyResponse}},
 		{"UndoLogDeleteRequest", message.UndoLogDeleteRequest{BranchType: branch.BranchTypeAT, ResourceId: resourceID, SaveDays: 7}},
+		{"GlobalBeginResponseFailed", message.GlobalBeginResponse{AbstractTransactionResponse: message.AbstractTransactionResponse{AbstractResultMessage: message.AbstractResultMessage{ResultCode: message.ResultCodeFailed, Msg: "begin denied"}, TransactionErrorCode: seataerrors.TransactionErrorCodeBeginFailed}, Xid: "", ExtraData: []byte{}}},
+		{"GlobalCommitResponseFailed", message.GlobalCommitResponse{AbstractGlobalEndResponse: message.AbstractGlobalEndResponse{AbstractTransactionResponse: message.AbstractTransactionResponse{AbstractResultMessage: message.AbstractResultMessage{ResultCode: message.ResultCodeFailed, Msg: "commit pending"}, TransactionErrorCode: seataerrors.TransactionErrorCodeIO}, GlobalStatus: message.GlobalStatusCommitting}}},
+		{"BranchRegisterResponseFailed", message.BranchRegisterResponse{AbstractTransactionResponse: message.AbstractTransactionResponse{AbstractResultMessage: message.AbstractResultMessage{ResultCode: message.ResultCodeFailed, Msg: "lock conflict"}, TransactionErrorCode: seataerrors.TransactionErrorCodeLockKeyConflict}, BranchId: 0}},
+		{"BranchCommitResponseFailed", message.BranchCommitResponse{AbstractBranchEndResponse: message.AbstractBranchEndResponse{AbstractTransactionResponse: message.AbstractTransactionResponse{AbstractResultMessage: message.AbstractResultMessage{ResultCode: message.ResultCodeFailed, Msg: "branch retry"}, TransactionErrorCode: seataerrors.TransactionErrorCodeIO}, Xid: xid, BranchId: branchID, BranchStatus: branch.BranchStatusPhasetwoCommitFailedRetryable}}},
 	}
 
 	expectedBytes, err := os.ReadFile("expected.json")
