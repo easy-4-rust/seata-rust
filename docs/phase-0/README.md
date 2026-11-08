@@ -34,9 +34,12 @@
 | [Java TC Retry-Timeout Recovery Audit](java-tc-retry-timeout-recovery.md) | FILE/RAFT/DB/Redis retry-timeout recovery asymmetry and REC-TIMEOUT-001–010 regression plan |
 | [V1 Payload Golden Vectors](protocol-golden-vectors.md) | Deterministic codec-body and serialized-payload hex vectors, Go verification harness and certification gates |
 | [Java V1 Frame Compatibility](protocol-v1-frame-compatibility.md) | Java V1 encoder/decoder source audit, fixed frame layout and runtime interop gates |
-| [Go codec/frame harness](../../tools/go-golden-vectors/verify.sh) | Execute 25 pinned Seata-Go codec vectors, serializer type prefixes and two complete V1 frame fixtures |
+| [Go codec/frame harness](../../tools/go-golden-vectors/verify.sh) | Execute 29 pinned Seata-Go payload vectors, serializer type prefixes and four complete V1 frame fixtures |
 | [Java V1 frame harness](../../tools/java-v1-golden/verify.sh) | Execute Java V1 decoder → encoder exact-frame round trips against the pinned Java source snapshot |
 | [TM/TC/RM Call Chains](tm-tc-rm-call-chains.md) | Method-level execution paths and uncertain-outcome/error matrix |
+| [Java TC Request Exception Matrix](java-tc-request-exception-matrix.md) | Per-request ResultCode, TransactionExceptionCode, status fallback and registration response behavior |
+| [Seata-Go Transport Semantics](seata-go-transport-timeout-semantics.md) | Getty/gRPC request correlation, timeout, late response, retry and RM reconnect behavior |
+| [V1 Implementation Acceptance Checklist](v1-implementation-acceptance-checklist.md) | OpenSpec-ready V1 work packages, dependencies, scope and test gates |
 | [RSeata Module Disposition](rseata-module-disposition.md) | Keep/Refactor/Rewrite classification of third-party RSeata modules |
 | [ADR index](../adr/README.md) | Accepted and proposed architecture decisions |
 
@@ -82,5 +85,7 @@ Phase 0 is complete only when:
 **Reference-role clarification:** RSeata is an independent third-party Rust project, not the user's implementation and not the Seata-Rust migration baseline. Seata-Go v2 is the primary V1 engineering reference; Java Seata 2.x remains the compatibility authority. The payload vectors are currently source-derived candidates, not Go-runtime, Java-interoperability or Rust-conformance test results.
 
 **Validation status:** the Go harness (29 payloads + 4 frames, including error responses and optional head map) and Java harness (4 full-frame decoder/encoder round trips, including empty-field normalization) are committed but have not been executed in this session. The Go toolchain is available in this container, but the pinned upstream checkout cannot be fetched from this network-restricted execution environment; Maven is not installed. Java V1 support is verified in source only; runtime acceptance remains unknown.
+
+**Phase 0.7 status:** Java request exception mappings, Seata-Go transport timeout/reconnect semantics, RSeata no-copy disposition and the V1 implementation acceptance checklist are now documented from pinned source. These are source-derived specifications, not runtime interoperability results.
 
 **Non-goal:** Phase 0 does not implement TM, RM, AT, XA, TCC, Saga or a Rust TC.
