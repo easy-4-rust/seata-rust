@@ -2,7 +2,9 @@
 
 > **Status: Initial source map · commit-pinned**
 >
-> This document identifies the primary source entry points for the V1 design and the future Rust TC. It is not yet an exhaustive mapping of every upstream class or function. Paths below are pinned to the snapshots listed in the [Phase 0 index](README.md).
+ > This document identifies the primary source entry points for the V1 design and the future Rust TC. It is not yet an exhaustive mapping of every upstream class or function.
+>
+> Role clarification: Java Seata 2.x is the semantic/protocol authority; Seata-Go v2 is the primary V1 engineering reference; RSeata is an independent third-party Rust sample used only to study Rust abstractions. It is not a codebase being migrated or renamed. Paths below are pinned to the snapshots listed in the [Phase 0 index](README.md).
 
 ## 1. Repository snapshots
 
@@ -10,7 +12,7 @@
 |---|---|---|
 | Java Seata 2.x | `cba73e180fd8896a99df6415b859d275122feaa7` | [Source tree](https://github.com/apache/incubator-seata/tree/cba73e180fd8896a99df6415b859d275122feaa7) |
 | Seata-Go v2 | `82570d905919c1c66bb025a3a5979f25390de498` | [Source tree](https://github.com/apache/incubator-seata-go/tree/82570d905919c1c66bb025a3a5979f25390de498) |
-| RSeata | `c6062776c72a2490f62f8ebb25012c60884f62bd` | [Source tree](https://github.com/oulover/rseata/tree/c6062776c72a2490f62f8ebb25012c60884f62bd) |
+| RSeata (third-party reference only) | `c6062776c72a2490f62f8ebb25012c60884f62bd` | [Source tree](https://github.com/oulover/rseata/tree/c6062776c72a2490f62f8ebb25012c60884f62bd) |
 
 ## 2. Responsibility map: TC / TM / RM
 
@@ -82,7 +84,7 @@
 | XA transaction lifecycle | RM XA implementation and TC branch coordination | `tx_xa.go`, XA resource manager | XA transaction proxy | `seata-xa` |
 | Recovery | Java TC retry/recovery + XA resource behavior | Java TC handles global coordination | Not established by current source inspection | V2 TC + XA recovery adapter |
 
-## 5. RSeata audit findings to carry into implementation planning
+## 5. RSeata third-party reference findings (not a migration backlog)
 
 | Finding | Source evidence | Classification | Required action |
 |---|---|---|---|
