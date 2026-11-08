@@ -133,6 +133,9 @@ func main() {
 		}
 		serializedByName[vector.name] = serialized
 		decoded := messageCodec.Decode(body)
+		if !reflect.DeepEqual(vector.msg, decoded) {
+			fail("%s: decode result differs from source fixture: %#v", vector.name, decoded)
+		}
 		roundTrip := messageCodec.Encode(decoded)
 		if !reflect.DeepEqual(body, roundTrip) {
 			fail("%s: decode/re-encode is not byte stable", vector.name)
