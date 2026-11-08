@@ -265,6 +265,10 @@ For DB/Redis and other storage modes, reload also asynchronously scans selected 
 
 **Important source-level gap:** CommitRetryTimeout and RollbackRetryTimeout are not handled in the explicit FILE/RAFT switch above; they reach the default unexpected-status path. The DB/Redis cleanup query shown in the pinned source also does not include these two retry-timeout statuses. Their intended recovery/retention behavior needs a targeted test and may be version/configuration-specific.
 
+### 6.0.1 Unit-level verification
+
+The FILE filter and FILE/RAFT reload branches described below now have a pinned Java runtime test overlay: `tools/java-v1-golden/SessionHolderRetryTimeoutRecoveryTest.java`. GitHub Actions [Run #25](https://github.com/easy-4-rust/seata-rust/actions/runs/42458877018) passed three tests confirming the asymmetric FILE predicate and the missing SessionHolder reload cases. Full persisted-store restart and operator retry behavior remain unverified; see [Retry-Timeout Recovery Audit](java-tc-retry-timeout-recovery.md).
+
 ### 6.0 Retry-timeout storage-path asymmetry
 
 A deeper audit of the concrete FILE store adds an important distinction to the table above:
