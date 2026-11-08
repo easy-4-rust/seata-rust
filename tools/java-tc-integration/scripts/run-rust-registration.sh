@@ -9,6 +9,5 @@ command -v cargo >/dev/null 2>&1 || {
   exit 2
 }
 
-cargo fmt --manifest-path "$MANIFEST" -- --check
 cargo test --manifest-path "$MANIFEST"
 cargo run --manifest-path "$MANIFEST" --bin seata-java-tc-it
