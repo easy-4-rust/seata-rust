@@ -71,6 +71,19 @@ All integers below use the Go codec's big-endian byte writers. Length-prefixed s
 | RegisterRMResponse | 104 | 7 | `01 00 04 56 31 2c 30` |
 | UndoLogDeleteRequest | 111 | 19 | `00 00 0e 6d 79 73 71 6c 3a 2f 2f 6f 72 64 65 72 73 00 07` |
 
+## 3.1 V1 message coverage boundary
+
+The 25 rows above cover the core TM/RM request/response codecs present in the pinned Go codec registry, plus UndoLogDeleteRequest. They do not claim that every optional Java message family is included.
+
+| Java message ID | Message family | Current Phase 0 disposition |
+|---:|---|---|
+| 105 / 106 | Unregister RM / result | Java IDs exist; no corresponding Go native codec was found in the pinned Go codec registry. Investigate whether Go relies on channel teardown/resource lifecycle instead. Not part of the initial required vector set until semantics are confirmed. |
+| 59 / 60 | Seata merge / merge result | Optional message batching family; defer until core request/response compatibility is complete. |
+| 120 | Heartbeat | Transport control frame; request/response types 3/4 carry no ordinary serialized body. Validate at the frame layer, not as a body payload vector. |
+| 121 | Batch result | Optional batching result; defer with merge support. |
+
+This is a deliberate scope boundary, not a claim that these Java message types do not exist.
+
 ## 4. Codec contract notes
 
 - GlobalBeginRequest: timeout is converted from Go `time.Duration` to milliseconds and written as uint32, followed by transaction name as string16.
