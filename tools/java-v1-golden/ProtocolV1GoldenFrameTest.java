@@ -79,6 +79,18 @@ class ProtocolV1GoldenFrameTest {
     }
 
     @Test
+    void decodesAndReencodesGoGoldenGlobalBeginRequestWithHeadMapFrame() {
+        RpcMessage message = decodeAndReencode(
+                "dada010000003e002400010000000001000774726163654964000974726163652d3030310001000007d000125365617461476f5472616e73616374696f6e");
+
+        assertEquals(1, message.getId());
+        assertEquals("trace-001", message.getHeadMap().get("traceId"));
+        GlobalBeginRequest request = assertInstanceOf(GlobalBeginRequest.class, message.getBody());
+        assertEquals(2000, request.getTimeout());
+        assertEquals("SeataGoTransaction", request.getTransactionName());
+    }
+
+    @Test
     void decodesAndReencodesGoGoldenGlobalBeginResponseFrame() {
         RpcMessage message = decodeAndReencode(
                 "dada01000000280010010100000000010002010000103132372e302e302e313a383039313a310000");
