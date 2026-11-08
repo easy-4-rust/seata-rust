@@ -114,6 +114,6 @@ class ProtocolV1GoldenFrameTest {
 
         GlobalBeginResponse response = assertInstanceOf(GlobalBeginResponse.class, message.getBody());
         assertEquals("127.0.0.1:8091:1", response.getXid());
-        assertEquals("", response.getExtraData());
+        assertNull(response.getExtraData(), "Java V1 decoder leaves zero-length extraData unset");
     }
 }
