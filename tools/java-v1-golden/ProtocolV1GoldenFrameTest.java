@@ -139,7 +139,7 @@ class ProtocolV1GoldenFrameTest {
         assertEquals("V1,0", request.getVersion());
         assertEquals("orders-rust", request.getApplicationId());
         assertEquals("default_tx_group", request.getTransactionServiceGroup());
-        assertEquals("", request.getExtraData());
+        assertNull(request.getExtraData(), "Java RM decoder leaves zero-length extraData unset");
         assertEquals("mysql://orders", request.getResourceIds());
     }
 
