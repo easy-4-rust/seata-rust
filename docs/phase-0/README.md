@@ -34,8 +34,8 @@
 | [Java TC Retry-Timeout Recovery Audit](java-tc-retry-timeout-recovery.md) | FILE/RAFT/DB/Redis retry-timeout recovery asymmetry and REC-TIMEOUT-001–010 regression plan |
 | [V1 Payload Golden Vectors](protocol-golden-vectors.md) | Deterministic codec-body and serialized-payload hex vectors, Go verification harness and certification gates |
 | [Java V1 Frame Compatibility](protocol-v1-frame-compatibility.md) | Java V1 encoder/decoder source audit, fixed frame layout and runtime interop gates |
-| [Go codec/frame harness](../../tools/go-golden-vectors/verify.sh) | Execute 29 pinned Seata-Go payload vectors, serializer type prefixes and four complete V1 frame fixtures |
-| [Java V1 frame harness](../../tools/java-v1-golden/verify.sh) | Execute Java V1 decoder → encoder exact-frame round trips against the pinned Java source snapshot |
+| [Go codec/frame harness](../../tools/go-golden-vectors/verify.sh) | Execute 29 pinned Seata-Go payload vectors, serializer type prefixes and six complete V1 frame fixtures |
+| [Java V1 frame harness](../../tools/java-v1-golden/verify.sh) | Execute six Java V1 decoder → encoder frame round trips plus TC exception and recovery overlays |
 | [Protocol Compatibility CI](../../.github/workflows/phase-0-protocol-compatibility.yml) | GitHub Actions jobs for pinned Go vectors and Java V1 frame round trips |
 | [TM/TC/RM Call Chains](tm-tc-rm-call-chains.md) | Method-level execution paths and uncertain-outcome/error matrix |
 | [Java TC Request Exception Matrix](java-tc-request-exception-matrix.md) | Per-request ResultCode, TransactionExceptionCode, status fallback and registration response behavior |
@@ -45,13 +45,13 @@
 | [Java TC Live Integration Plan](java-tc-live-integration-plan.md) | Phase 0.9 topology, isolated FILE TC bootstrap, INT-ENV and live transaction gates |
 | [V1 TM/RM Registration Wire Contract](registration-v1-wire-contract.md) | Java/Go RegisterTM/RegisterRM message IDs, body layout, V1 channel selection and response semantics |
 | [Java TC Integration Harness](../../tools/java-tc-integration/README.md) | Pinned Java TC build/start/stop/reset and TCP bootstrap smoke scripts |
-| [Java TC FILE Bootstrap CI](../../.github/workflows/phase-0-java-tc-file-smoke.yml) | Build pinned Java TC, start FILE storage and verify TCP listener in CI |
+| [Java TC FILE Bootstrap CI](../../.github/workflows/phase-0-java-tc-file-smoke.yml) | Build pinned Java TC, start FILE storage, and run Rust RegisterTM/RegisterRM against the live TC |
 | [RSeata Module Disposition](rseata-module-disposition.md) | Keep/Refactor/Rewrite classification of third-party RSeata modules |
 | [ADR index](../adr/README.md) | Accepted and proposed architecture decisions |
 
 ## Current high-impact findings
 
-1. Java Seata 2.x defines protocol versions 0, 1 and 2, and the current `ProtocolConstants.VERSION` is 2. Seata-Go's native protocol package declares version 1 and a 16-byte V1 fixed header. V1 compatibility with the selected Java 2.x server must be demonstrated through integration tests; it must not be assumed from matching magic bytes alone.
+1. Java Seata 2.x defines protocol versions 0, 1 and 2, and the current `ProtocolConstants.VERSION` is 2. Seata-Go's native protocol package declares version 1 and a 16-byte V1 fixed header. Java `MultiProtocolDecoder` selects the decoder/encoder from the incoming frame's version byte; live Run #23 confirmed V1 RegisterTM/RegisterRM succeeds against the pinned Java TC with auth disabled.
 2. Seata-Go supports both `seata` and `grpc` transport selections. Its native Seata message codec is a separate concern from transport selection.
 3. The pinned Java Seata snapshot contains V1 `ProtocolDecoderV1`, `ProtocolEncoderV1` and `SeataSerializerV1` implementations. V1 support exists in source, but the default protocol version is 2; runtime protocol selection and actual TC acceptance remain to be tested.
 4. The Go `CodecManager.Encode` and Java `SeataSerializerV1.serialize` both prepend a big-endian uint16 message type to the message-specific codec body. The golden-vector document now distinguishes codec body, serialized message payload and full TCP frame.
@@ -88,9 +88,9 @@ Phase 0 is complete only when:
 - [ ] ADRs are reviewed and the V1 scope is frozen.
 - [ ] V1 OpenSpec tasks are derived from the approved specifications.
 
-**Reference-role clarification:** RSeata is an independent third-party Rust project, not the user's implementation and not the Seata-Rust migration baseline. Seata-Go v2 is the primary V1 engineering reference; Java Seata 2.x remains the compatibility authority. The 29 payload vectors and 4 complete frames are now verified by the pinned Go runtime; four complete frames also pass Java V1 decoder/encoder round trips. All-message Java serializer equivalence, live Java TC interoperability and Rust conformance remain unverified.
+**Reference-role clarification:** RSeata is an independent third-party Rust project, not the user's implementation and not the Seata-Rust migration baseline. Seata-Go v2 is the primary V1 engineering reference; Java Seata 2.x remains the compatibility authority. The 29 payload vectors and 6 complete frames are verified by the pinned Go runtime; all 6 frames pass Java V1 decoder/encoder round trips. Live Run #23 confirmed RegisterTM/RegisterRM against the pinned Java TC with auth disabled. GlobalBegin/BranchRegister/phase-two callbacks, auth-enabled registration, all-message Java serializer equivalence and production Rust TM/RM conformance remain unverified.
 
-**Validation status:** GitHub Actions [Run #8](https://github.com/easy-4-rust/seata-rust/actions/runs/42457053815) passed. Pinned Seata-Go verified 29 payload vectors + 4 full frames; pinned Java Seata 2.x passed 4 V1 frame decode/encode tests (4 tests, 0 failures). This does not yet certify all Java message serializers or live Java TC request handling.
+**Validation status:** [Run #42](https://github.com/easy-4-rust/seata-rust/actions/runs/42474150028) passed 29 Go payload vectors + 6 full V1 frames and 17 Java tests (6 frame round trips, 8 TC exception tests, 3 FILE/RAFT reload tests; 0 failures). [Run #23](https://github.com/easy-4-rust/seata-rust/actions/runs/42475353541) passed live Java TC RegisterTM/RegisterRM using the independent Rust client. Auth was disabled for this test; transaction lifecycle and callback handling remain open.
 
 **Phase 0.7 status:** Java request exception mappings, Seata-Go transport timeout/reconnect semantics, RSeata no-copy disposition and the V1 implementation acceptance checklist are now documented from pinned source. These are source-derived specifications, not runtime interoperability results.
 
