@@ -206,7 +206,11 @@ Before declaring V1 protocol-compatible, require:
 
 No byte vector should be handwritten from assumptions. Generate it from the pinned Java and Go implementations and store the provenance alongside the fixture.
 
-## 10. Open protocol questions
+## 10. Source-derived payload vector set
+
+A deterministic payload fixture set for the core V1 TM/RM messages is documented in [protocol-golden-vectors.md](protocol-golden-vectors.md). Those values are currently source-derived candidates; they are not marked Go-runtime verified, Java-compatible or Rust-conformant until the prescribed encoder/cross-decoder tests have run. The fixture set excludes optional UnregisterRM, merge/batch and heartbeat control-frame behavior, which is explicitly tracked in that document.
+
+## 11. Open protocol questions
 
 - Which Java 2.x server configurations negotiate/accept V1 by default?
 - Which serializer ID and serializer implementation does the selected Java server use by default?
