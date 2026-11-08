@@ -21,7 +21,7 @@ actual="$(git -C "$TC_SOURCE_DIR" rev-parse HEAD)"
 
 (
   cd "$TC_SOURCE_DIR"
-  mvn -B -ntp -pl server -am \
+  mvn -B -ntp -Prelease-seata -pl server -am \
     -DskipTests \
     -Dcheckstyle.skip=true \
     -Dspotless.check.skip=true \
@@ -29,7 +29,7 @@ actual="$(git -C "$TC_SOURCE_DIR" rev-parse HEAD)"
 )
 
 [[ -f "$TC_JAR" ]] || {
-  echo "expected executable server jar not found: $TC_JAR" >&2
+  echo "expected executable server jar not found: $TC_JAR (the pinned server POM declares it under the release-seata profile)" >&2
   find "$TC_SOURCE_DIR/server/target" -maxdepth 1 -type f -name '*.jar' -print >&2 || true
   exit 1
 }
