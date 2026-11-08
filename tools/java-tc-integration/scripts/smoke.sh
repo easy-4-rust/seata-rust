@@ -4,12 +4,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
 cleanup() {
-  "$SCRIPT_DIR/stop-tc.sh" || true
+  bash "$SCRIPT_DIR/stop-tc.sh" || true
 }
 trap cleanup EXIT
 
-"$SCRIPT_DIR/reset-storage.sh"
-"$SCRIPT_DIR/start-tc.sh"
+bash "$SCRIPT_DIR/reset-storage.sh"
+bash "$SCRIPT_DIR/start-tc.sh"
 
 # This is intentionally only a process/TCP-listener smoke test. It does not
 # send a Seata V1 registration or transaction message.
