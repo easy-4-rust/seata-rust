@@ -43,6 +43,7 @@
 | [V1 Implementation Acceptance Checklist](v1-implementation-acceptance-checklist.md) | OpenSpec-ready V1 work packages, dependencies, scope and test gates |
 | [Phase 0 Validation Ledger](validation-ledger.md) | Frozen source SHAs, fixture counts, CI commands and source/runtime evidence status |
 | [Java TC Live Integration Plan](java-tc-live-integration-plan.md) | Phase 0.9 topology, isolated FILE TC bootstrap, INT-ENV and live transaction gates |
+| [V1 TM/RM Registration Wire Contract](registration-v1-wire-contract.md) | Java/Go RegisterTM/RegisterRM message IDs, body layout, V1 channel selection and response semantics |
 | [Java TC Integration Harness](../../tools/java-tc-integration/README.md) | Pinned Java TC build/start/stop/reset and TCP bootstrap smoke scripts |
 | [Java TC FILE Bootstrap CI](../../.github/workflows/phase-0-java-tc-file-smoke.yml) | Build pinned Java TC, start FILE storage and verify TCP listener in CI |
 | [RSeata Module Disposition](rseata-module-disposition.md) | Keep/Refactor/Rewrite classification of third-party RSeata modules |
