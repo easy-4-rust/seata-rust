@@ -19,6 +19,7 @@ Seata-Rust uses ADRs to keep architectural choices explicit, reviewable and trac
 | [0005](0005-rseata-reuse-policy.md) | Reuse RSeata code only after semantic and protocol audit | Proposed |
 | [0006](0006-tc-provider-boundary.md) | Hide Java/Rust TC choice behind a TC endpoint/provider boundary | Proposed |
 | [0007](0007-v1-reference-hierarchy.md) | Seata-Go v2 is the V1 engineering reference; RSeata is third-party reference only | Accepted |
+| [0008](0008-wire-optionality-and-unknown-outcomes.md) | Preserve Java wire optionality and distinguish unknown transaction outcomes | Proposed |
 
 ## ADR template
 
