@@ -227,11 +227,11 @@ class AbstractTCInboundHandlerExceptionTest {
         }
 
         private static void throwIfConfigured(Exception failure) throws TransactionException {
-            if (failure instanceof TransactionException transactionException) {
-                throw transactionException;
+            if (failure instanceof TransactionException) {
+                throw (TransactionException) failure;
             }
-            if (failure instanceof RuntimeException runtimeException) {
-                throw runtimeException;
+            if (failure instanceof RuntimeException) {
+                throw (RuntimeException) failure;
             }
             if (failure != null) {
                 throw new IllegalStateException(failure);
