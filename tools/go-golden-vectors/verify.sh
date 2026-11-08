@@ -20,6 +20,6 @@ cp "$ROOT/tools/go-golden-vectors/frames.json" "$HARNESS_DIR/frames.json"
 gofmt -w "$HARNESS_DIR/main.go"
 
 (
-  cd "$TMP/seata-go"
-  GOWORK=off go run ./tools/seata-rust-golden-vectors
+  cd "$HARNESS_DIR"
+  GOWORK=off go run .
 )
