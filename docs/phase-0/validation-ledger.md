@@ -51,6 +51,8 @@ Jobs:
 
 Earlier failed runs were caused by harness setup issues and one incorrect test expectation. Those were corrected before Run #8. Run #8 is the authoritative passing result.
 
+The same [Run #18](https://github.com/easy-4-rust/seata-rust/actions/runs/42458368199) also executed the Java TC inbound exception overlay: 8 additional handler tests passed. Together with 4 V1 frame tests, Maven reported **12 tests, 0 failures, 0 errors, 0 skipped**.
+
 ## 5. Evidence ledger
 
 | ID | Claim / gate | Evidence level | Status |
@@ -62,7 +64,7 @@ Earlier failed runs were caused by harness setup issues and one incorrect test e
 | GO-001 | Pinned Go encoder reproduces all 29 codec vectors | Verified by test in Run #8 | Passed |
 | GO-002 | Pinned Go serializer reproduces all four full frames | Verified by test in Run #8 | Passed |
 | JAVA-001 | Java V1 decoder accepts all four frames and Java encoder re-emits identical bytes | Verified by test in Run #8; 4 tests, 0 failures | Passed |
-| TC-001 | Java TC request exception mapping | Source audit | Complete; runtime tests pending |
+| TC-001 | Selected Java TC request exception mapping (GlobalBegin, GlobalCommit, GlobalStatus, GlobalReport, BranchRegister) | Verified by test in Run #18; 8 handler tests passed | Passed for covered cases; remaining matrix cases pending |
 | TC-002 | Java retry-timeout storage recovery | Source audit / inferred storage impact | Runtime reproduction pending |
 | RUST-001 | Rust protocol implementation matches Java/Go | Not implemented | Not started |
 
@@ -70,7 +72,7 @@ Earlier failed runs were caused by harness setup issues and one incorrect test e
 
 **Protocol codec/frame sub-gate: passed.** GO-001, GO-002 and JAVA-001 are now runtime-verified.
 
-**WP-00 as a whole remains open.** It is still blocked on Java TC recovery tests REC-TIMEOUT-001–010, Java request exception runtime tests, and a live Java TC integration test that exercises actual registration and transaction execution.
+**WP-00 as a whole remains open.** It is still blocked on Java TC recovery tests REC-TIMEOUT-001–010, remaining exception-matrix cases (GlobalRollback, BranchReport, GlobalLockQuery, RegTM/RM auth and fallback lookup failure), and a live Java TC integration test that exercises actual registration and transaction execution.
 
 The Go vectors and four Java V1 frame fixtures are now certified against their pinned runtime test suites. Do not claim full Seata-Rust V1 protocol conformance until all-message Java compatibility, live Java TC request/response integration and Rust codec conformance also pass.
 
