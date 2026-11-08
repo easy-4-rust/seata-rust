@@ -5,7 +5,7 @@ set -euo pipefail
 # Requirements: git, Go toolchain, and network access for Go module dependencies.
 
 ROOT="$(git rev-parse --show-toplevel)"
-GO_SHA="82570d905919c1c66bb025a3a5979f25390de498"
+GO_SHA="82970d905919c1c66bb025a3a5979f25390de498"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
