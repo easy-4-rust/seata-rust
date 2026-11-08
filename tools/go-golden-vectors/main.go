@@ -139,6 +139,32 @@ func main() {
 		}
 		fmt.Printf("PASS %-28s type=%3d bytes=%d body=%s\n", vector.name, typeID, len(body), gotHex)
 	}
+	frameBytes, err := os.ReadFile("frames.json")
+	must(err)
+	var frames []expectedFrame
+	must(json.Unmarshal(frameBytes, &frames))
+	for _, expectedFrame := range frames {
+		payload, ok := serializedByName[expectedFrame.SourceVector]
+		if !ok {
+			fail("%s: unknown source vector %s", expectedFrame.Name, expectedFrame.SourceVector)
+		}
+		frame := make([]byte, 16+len(payload))
+		frame[0], frame[1], frame[2] = 0xda, 0xda, 1
+		binary.BigEndian.PutUint32(frame[3:7], uint32(len(frame)))
+		binary.BigEndian.PutUint16(frame[7:9], 16)
+		frame[9] = expectedFrame.RequestType
+		frame[10] = expectedFrame.SerializerID
+		frame[11] = expectedFrame.CompressorID
+		binary.BigEndian.PutUint32(frame[12:16], expectedFrame.RequestID)
+		copy(frame[16:], payload)
+		got := hex.EncodeToString(frame)
+		want := strings.ToLower(strings.ReplaceAll(expectedFrame.FrameHex, " ", ""))
+		if got != want {
+			fail("%s: V1 frame mismatch\\n got: %s\\nwant: %s", expectedFrame.Name, got, want)
+		}
+		fmt.Printf("PASS %-28s frame-bytes=%d\\n", expectedFrame.Name, len(frame))
+	}
+	fmt.Printf("\\nGo codec + V1 frame fixture verification passed: %d payloads, %d frames\\n", len(vectors), len(frames))
 	fmt.Printf("\nGo codec verification passed: %d/%d payload vectors\n", len(vectors), len(vectors))
 }
 
