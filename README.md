@@ -15,7 +15,11 @@ Seata-Rust follows a staged strategy:
 ## Architecture & Roadmap
 
 - [Seata-Rust Architecture & Roadmap](docs/architecture/SEATA_RUST_ARCHITECTURE_PLAN.md) — overall vision, module matrix, execution flows, staged roadmap and V1 acceptance goals.
-- [Phase 0 Research Index](docs/phase-0/README.md) — pinned upstream snapshots, source mapping, protocol compatibility and state-machine specifications.
+- [Phase 0 Research Index](docs/phase-0/README.md) — pinned upstream snapshots and all Phase 0 deliverables.
+- [Java TC State Transition Matrix](docs/phase-0/java-tc-state-transition-matrix.md) — global/branch states, retry, timeout and recovery.
+- [V1 Payload Golden Vectors](docs/phase-0/protocol-golden-vectors.md) — source-derived byte vectors with explicit certification status.
+- [TM/TC/RM Call Chains](docs/phase-0/tm-tc-rm-call-chains.md) — method-level flows and failure matrix.
+- [RSeata Reference Disposition](docs/phase-0/rseata-module-disposition.md) — third-party Rust reference audit, not a migration plan.
 - [Architecture Decision Records](docs/adr/README.md) — accepted and proposed architecture decisions.
 
 ### Phase 0 scope
