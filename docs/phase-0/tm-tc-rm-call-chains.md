@@ -22,6 +22,28 @@ Rust Application
 Rust RM ─── database adapter ─── MySQL local transaction
 ```
 
+## 1.1 Java TC native request ingress and exception handling
+
+The Java server's inbound method layer is not just a direct call to `DefaultCore`:
+
+```text
+Netty remoting server / request dispatcher
+  -> TransactionMessageHandler dispatches request by message body type
+  -> DefaultCoordinator (extends AbstractTCInboundHandler)
+  -> AbstractTCInboundHandler.handle(request, RpcContext)
+  -> exceptionHandleTemplate(callback, request, response)
+  -> DefaultCoordinator.doGlobalBegin / doGlobalCommit / doGlobalRollback /
+     doGlobalStatus / doGlobalReport / doBranchRegister / doBranchReport / doLockCheck
+  -> DefaultCore / branch-type Core
+  -> response object (ResultCode + message + status / XID / BranchId)
+```
+
+The pinned `AbstractTCInboundHandler` creates a typed response for each request and wraps execution in `exceptionHandleTemplate`. GlobalCommit, GlobalRollback and GlobalStatus additionally override exception callbacks to call `checkTransactionStatus`; if a GlobalSession still exists, the response status is replaced with the persisted current status, otherwise it is set to Finished. This is important: a TC business exception may still return the authoritative current status, rather than only a generic error.
+
+Source: [AbstractTCInboundHandler.java](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/server/src/main/java/org/apache/seata/server/AbstractTCInboundHandler.java).
+
+The Rust protocol client must preserve both the result/error fields and the status field. Do not discard a status because ResultCode is failure, and do not interpret a success ResultCode as proof that the requested global transition completed.
+
 ## 2. TM: GlobalBegin call chain
 
 ### 2.1 Seata-Go reference path
