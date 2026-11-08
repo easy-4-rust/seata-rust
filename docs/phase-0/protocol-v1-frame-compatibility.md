@@ -57,7 +57,7 @@ The pinned Go `CodecManager.Encode` performs the same operation: it prepends the
 
 Therefore three distinct levels must be compared:
 
-1. **Codec body** — message-specific fields only; stored as `body_hex` in the 25-vector table.
+1. **Codec body** — message-specific fields only; stored as `body_hex` in the 29-vector table.
 2. **Serialized message payload** — two-byte type ID + codec body; stored as `serialized_hex` in `tools/go-golden-vectors/expected.json`.
 3. **V1 TCP frame** — fixed header + optional head map + serialized payload; examples are in `tools/go-golden-vectors/frames.json`.
 
@@ -106,7 +106,7 @@ The next executable Java test should use the pinned Java checkout and test both 
 2. Generate the complete V1 frame with serializer=SEATA and compressor=NONE.
 3. Feed the raw frame bytes into Java `ProtocolDecoderV1.decodeFrame` (or the actual Netty pipeline).
 4. Assert request type, request ID, serializer, compressor, message class and every decoded field.
-5. Repeat for every V1 message in the 25-vector set.
+5. Repeat for every V1 message in the 29-vector set.
 
 ### B. Java encoder → Rust/Go decoder
 
@@ -152,9 +152,9 @@ The script checks out the pinned Java commit `cba73e180fd8896a99df6415b859d27512
 | Java source has V1 constants and V1 encoder/decoder | **Verified in source** |
 | Java V1 serializer prepends uint16 message type | **Verified in source** |
 | Go V1 serializer payload prepends the same type ID | **Verified in source** |
-| Go harness has 25 codec vectors and 2 frame fixtures | **Committed; not executed in this session** |
+| Go harness has 29 codec vectors and 2 frame fixtures | **Committed; not executed in this session** |
 | Java harness overlays two complete frame round-trip tests on the pinned test-suite module | **Committed; not executed in this session** |
-| Java accepts all 25 Go-produced V1 payloads | **Unknown; runtime test not executed** |
+| Java accepts all 29 Go-produced V1 payloads | **Unknown; runtime test not executed** |
 | Java and Go produce byte-identical complete frames | **Unknown; runtime test not executed** |
 | Rust matches Java/Go V1 frame bytes | **Not implemented / not tested** |
 
