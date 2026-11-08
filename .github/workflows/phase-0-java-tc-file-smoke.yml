@@ -36,10 +36,17 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      - name: Set up stable Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
       - name: Show toolchain
         run: |
           java -version
           mvn -version
+          rustc --version
+          cargo --version
           git --version
 
       - name: Build and smoke-test Java TC
