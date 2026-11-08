@@ -12,11 +12,8 @@ bash "$SCRIPT_DIR/build-tc.sh"
 mkdir -p "$TC_DATA_DIR" "$TC_LOG_DIR"
 
 export SEATA_TC_WORK_DIR="$TC_WORK_DIR"
-nohup java -jar "$TC_JAR" \
-  --spring.config.location="file:$TC_CONFIG" \
-  --server.port="$TC_PORT" \
-  --seata.server.service-port="$TC_PORT" \
-  >"$TC_LOG_DIR/console.log" 2>&1 &
+export SPRING_CONFIG_LOCATION="file:$TC_CONFIG"
+nohup java -jar "$TC_JAR" >"$TC_LOG_DIR/console.log" 2>&1 &
 
 pid=$!
 echo "$pid" > "$TC_PID_FILE"
