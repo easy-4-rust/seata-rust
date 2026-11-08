@@ -10,6 +10,7 @@ on:
   pull_request:
     paths:
       - "tools/java-tc-integration/**"
+      - "docs/phase-0/java-tc-live-integration-plan.md"
       - ".github/workflows/phase-0-java-tc-file-smoke.yml"
   workflow_dispatch:
 
@@ -42,6 +43,8 @@ jobs:
           git --version
 
       - name: Build and smoke-test Java TC
+        env:
+          SEATA_TC_WORK_DIR: ${{ runner.temp }}/seata-rust-java-tc
         run: bash tools/java-tc-integration/scripts/smoke.sh
 
       - name: Upload Java TC logs on failure
