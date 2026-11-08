@@ -31,6 +31,7 @@
 | [Protocol Compatibility](protocol-compatibility.md) | Wire framing, message types, payload contracts, XID and transport boundaries |
 | [Transaction State Baseline](transaction-state-machines.md) | Global/branch state codes and cross-language semantic hazards |
 | [Java TC Transition & Recovery Matrix](java-tc-state-transition-matrix.md) | Source-derived state transitions, retries, timeouts, terminal states and restart recovery |
+| [Java TC Retry-Timeout Recovery Audit](java-tc-retry-timeout-recovery.md) | FILE/RAFT/DB/Redis retry-timeout recovery asymmetry and REC-TIMEOUT-001–010 regression plan |
 | [V1 Payload Golden Vectors](protocol-golden-vectors.md) | Deterministic codec-body and serialized-payload hex vectors, Go verification harness and certification gates |
 | [Java V1 Frame Compatibility](protocol-v1-frame-compatibility.md) | Java V1 encoder/decoder source audit, fixed frame layout and runtime interop gates |
 | [Go codec/frame harness](../../tools/go-golden-vectors/verify.sh) | Execute 25 pinned Seata-Go codec vectors, serializer type prefixes and two complete V1 frame fixtures |
