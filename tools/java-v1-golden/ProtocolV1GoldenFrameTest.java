@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ProtocolV1GoldenFrameTest {
 
@@ -97,8 +98,8 @@ class ProtocolV1GoldenFrameTest {
 
         GlobalBeginResponse response = assertInstanceOf(GlobalBeginResponse.class, message.getBody());
         assertEquals("begin denied", response.getMsg());
-        assertEquals("", response.getXid());
-        assertEquals("", response.getExtraData());
+        assertNull(response.getXid(), "Java V1 decoder leaves zero-length XID unset");
+        assertNull(response.getExtraData(), "Java V1 decoder leaves zero-length extraData unset");
     }
 
     @Test
