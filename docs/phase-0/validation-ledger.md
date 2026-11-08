@@ -43,11 +43,22 @@
 | Asset | Coverage | Evidence |
 |---|---|---|
 | `tools/go-golden-vectors/expected.json` | 29 codec-body + serialized-payload vectors (25 base messages + 4 failure responses) | Go runtime verified in Run #8 |
-| `tools/go-golden-vectors/frames.json` | 4 full V1 frames: begin request, begin response, optional head map, failed begin response | Go runtime verified in Run #8 |
+| `tools/go-golden-vectors/frames.json` | 6 full V1 frames: 4 begin cases plus RegisterTM and RegisterRM | Go runtime verified in Run #8 and Run #40 |
 | `tools/go-golden-vectors/main.go` | Type IDs, body bytes, serializer prefix, decode equality, byte-stable re-encode and frame checks | Run #8 |
-| `tools/java-v1-golden/ProtocolV1GoldenFrameTest.java` | Four Java V1 frame decode/re-encode tests | 4/4 passed in Run #8 |
+| `tools/java-v1-golden/ProtocolV1GoldenFrameTest.java` | Six Java V1 frame decode/re-encode tests, including TM/RM registration | 6/6 passed in Run #40 |
 | `tools/java-v1-golden/AbstractTCInboundHandlerExceptionTest.java` | Eight selected Java TC exception/status fallback cases | 8/8 passed in Run #18 |
 | `tools/java-v1-golden/SessionHolderRetryTimeoutRecoveryTest.java` | Three FILE/RAFT retry-timeout reload branch cases | 3/3 passed in Run #25 |
+
+### Run #40 — RegisterTM/RegisterRM V1 frames added
+
+[GitHub Actions Run #40](https://github.com/easy-4-rust/seata-rust/actions/runs/42473731588) passed after adding complete RegisterTM and RegisterRM V1 frames.
+
+- Go: 29 payload vectors and all 6 complete V1 frames passed.
+- Java: 6 V1 frame Decoder → Encoder round trips passed, including RegisterTM and RegisterRM.
+- The same Java Maven run executed 8 TC exception tests and 3 FILE/RAFT reload tests: **17 tests, 0 failures, 0 errors, 0 skipped**.
+- The Java RM registration request decoder maps a zero-length `extraData` field to `null`, while TM's shared IdentifyRequest decoder maps it to an empty string. The test now asserts the Java behavior explicitly; byte re-encoding remains stable.
+
+This verifies registration payload/frame compatibility against the pinned Go and Java codecs. It is not a live RegisterTM/RegisterRM exchange with a running TC.
 
 ## 4. Phase 0.9 Java TC bootstrap harness
 
