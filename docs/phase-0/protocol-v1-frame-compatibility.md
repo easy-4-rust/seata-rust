@@ -161,15 +161,17 @@ The script checks out the pinned Java commit `cba73e180fd8896a99df6415b859d27512
 
 ## 7. Evidence status
 
+Runtime test evidence: [GitHub Actions Run #8](https://github.com/easy-4-rust/seata-rust/actions/runs/42457053815), Seata-Rust commit `756a34a9e0198b0d6b2d6a7cafe9f404a2109804`.
+
 | Claim | Status |
 |---|---|
 | Java source has V1 constants and V1 encoder/decoder | **Verified in source** |
 | Java V1 serializer prepends uint16 message type | **Verified in source** |
 | Go V1 serializer payload prepends the same type ID | **Verified in source** |
-| Go harness has 29 codec vectors and 4 frame fixtures | **Committed; not executed in this session** |
-| Java harness overlays four complete frame round-trip tests on the pinned test-suite module | **Committed; not executed in this session** |
+| Go harness has 29 codec vectors and 4 frame fixtures | **Verified by test in Run #8** |
+| Java harness overlays four complete frame round-trip tests on the pinned test-suite module | **Verified by test in Run #8: 4/4 passed** |
 | Java accepts all 29 Go-produced V1 payloads | **Unknown; runtime test not executed** |
-| Java and Go produce byte-identical complete frames | **Unknown; runtime test not executed** |
+| Java V1 decoder accepts and re-encodes the four committed Go frames byte-identically | **Verified by test in Run #8** |
 | Rust matches Java/Go V1 frame bytes | **Not implemented / not tested** |
 
 ## 8. Pinned source references
