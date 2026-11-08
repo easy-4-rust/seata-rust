@@ -16,6 +16,10 @@ TEST_DIR="$TMP/seata-java/test-suite/test-new-version/src/test/java/org/apache/s
 mkdir -p "$TEST_DIR"
 cp "$ROOT/tools/java-v1-golden/ProtocolV1GoldenFrameTest.java" "$TEST_DIR/ProtocolV1GoldenFrameTest.java"
 
+EXCEPTION_TEST_DIR="$TMP/seata-java/test-suite/test-new-version/src/test/java/org/apache/seata/server"
+mkdir -p "$EXCEPTION_TEST_DIR"
+cp "$ROOT/tools/java-v1-golden/AbstractTCInboundHandlerExceptionTest.java" "$EXCEPTION_TEST_DIR/AbstractTCInboundHandlerExceptionTest.java"
+
 (
   cd "$TMP/seata-java"
   mvn -pl test-suite/test-new-version -am \
