@@ -80,6 +80,6 @@ Phase 0 is complete only when:
 
 **Reference-role clarification:** RSeata is an independent third-party Rust project, not the user's implementation and not the Seata-Rust migration baseline. Seata-Go v2 is the primary V1 engineering reference; Java Seata 2.x remains the compatibility authority. The payload vectors are currently source-derived candidates, not Go-runtime, Java-interoperability or Rust-conformance test results.
 
-**Validation status:** the Go harness (25 payloads + 2 frames) and Java harness (2 full-frame decoder/encoder round trips) are committed but have not been executed in this session. The Go toolchain is available in this container, but the pinned upstream checkout cannot be fetched from this network-restricted execution environment; Maven is not installed. Java V1 support is verified in source only; runtime acceptance remains unknown.
+**Validation status:** the Go harness (29 payloads + 2 frames) and Java harness (2 full-frame decoder/encoder round trips) are committed but have not been executed in this session. The Go toolchain is available in this container, but the pinned upstream checkout cannot be fetched from this network-restricted execution environment; Maven is not installed. Java V1 support is verified in source only; runtime acceptance remains unknown.
 
 **Non-goal:** Phase 0 does not implement TM, RM, AT, XA, TCC, Saga or a Rust TC.
