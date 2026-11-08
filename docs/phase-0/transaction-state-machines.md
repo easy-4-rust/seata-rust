@@ -199,7 +199,11 @@ RSeata internal `BranchType` is 1..4, but the proto enum is 0..3. Its `From<i32>
 5. Rust domain enums must not be serialized by their ordinal/discriminant.
 6. Mode-specific state (AT Undo Log, XA prepare state, TCC fence, Saga state machine) must not be collapsed into GlobalStatus or BranchStatus.
 
-## 9. Required state-machine work before Phase 0 exit
+## 9. Canonical Java TC transition matrix
+
+The method-level Java coordinator transitions, retry deadlines, timeout behavior, terminal states and storage-mode recovery branches are documented in [java-tc-state-transition-matrix.md](java-tc-state-transition-matrix.md). That matrix is the detailed source-backed reference; this document remains the cross-language status-code and semantic baseline.
+
+## 10. Required state-machine work before Phase 0 exit
 
 - [ ] Extract all Java GlobalSession status mutation methods and their caller paths.
 - [ ] Extract DefaultCoordinator commit/rollback decision branches, retry behavior and async AT commit behavior.
