@@ -8,7 +8,7 @@ if is_running; then
   exit 0
 fi
 
-"$SCRIPT_DIR/build-tc.sh"
+bash "$SCRIPT_DIR/build-tc.sh"
 mkdir -p "$TC_DATA_DIR" "$TC_LOG_DIR"
 
 export SEATA_TC_WORK_DIR="$TC_WORK_DIR"
