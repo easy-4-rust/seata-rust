@@ -4,7 +4,7 @@
 >
 > Java baseline: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
 >
-> Main sources: `server/.../AbstractTCInboundHandler.java`, `core/.../AbstractExceptionHandler.java`, `server/.../DefaultCoordinator.java`, `core/.../DefaultServerMessageListenerImpl.java`, and `core/.../processor/server/ServerOnRequestProcessor.java`.
+> Main sources: `server/.../AbstractTCInboundHandler.java`, `core/.../AbstractExceptionHandler.java`, `server/.../DefaultCoordinator.java`, `core/.../processor/server/RegTmProcessor.java`, `RegRmProcessor.java`, and `ServerOnRequestProcessor.java`.
 
 ## 1. Common exception template
 
@@ -86,7 +86,8 @@ The Java remoting listener handles RegisterTM and RegisterRM separately from tra
 The registration response's `Identified` flag is not the same field as the transaction `ResultCode`. Rust should model these as separate response types.
 
 Sources:
-- [DefaultServerMessageListenerImpl](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/core/src/main/java/org/apache/seata/core/rpc/DefaultServerMessageListenerImpl.java)
+- [RegTmProcessor](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/core/src/main/java/org/apache/seata/core/rpc/processor/server/RegTmProcessor.java)
+- [RegRmProcessor](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/core/src/main/java/org/apache/seata/core/rpc/processor/server/RegRmProcessor.java)
 - [ServerOnRequestProcessor](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/core/src/main/java/org/apache/seata/core/rpc/processor/server/ServerOnRequestProcessor.java)
 
 ## 5. Request-level failure categories for Rust
