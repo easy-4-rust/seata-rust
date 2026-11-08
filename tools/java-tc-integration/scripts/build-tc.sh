@@ -21,15 +21,15 @@ actual="$(git -C "$TC_SOURCE_DIR" rev-parse HEAD)"
 
 (
   cd "$TC_SOURCE_DIR"
-  mvn -B -ntp -Prelease-seata -pl server -am \
-    -DskipTests \
+  mvn -B -ntp -Prelease-seata-jar -pl server -am \
+    clean package -DskipTests \
     -Dcheckstyle.skip=true \
     -Dspotless.check.skip=true \
     package
 )
 
 [[ -f "$TC_JAR" ]] || {
-  echo "expected executable server jar not found: $TC_JAR (the pinned server POM declares it under the release-seata profile)" >&2
+  echo "expected executable server jar not found: $TC_JAR (the pinned server POM declares the self-contained artifact under the release-seata-jar profile)" >&2
   find "$TC_SOURCE_DIR/server/target" -maxdepth 1 -type f -name '*.jar' -print >&2 || true
   exit 1
 }
