@@ -18,7 +18,7 @@ TC_LOG_DIR="$TC_WORK_DIR/logs"
 TC_PID_FILE="$TC_WORK_DIR/seata-tc.pid"
 TC_PORT="${SEATA_TC_PORT:-18091}"
 TC_CONFIG="$ROOT/tools/java-tc-integration/config/application.yml"
-TC_JAR="$TC_SOURCE_DIR/server/target/seata-server-exec.jar"
+TC_JAR="$TC_SOURCE_DIR/server/target/seata-server.jar"
 
 require_command() {
   command -v "$1" >/dev/null 2>&1 || {
