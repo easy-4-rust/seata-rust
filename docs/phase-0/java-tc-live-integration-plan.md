@@ -1,8 +1,8 @@
 # Phase 0.9 — Live Java TC Integration Validation Plan
 
-> **Current substage:** 0.9.1 — isolated Java TC FILE bootstrap.
+> **Current substage:** 0.9.2 — independent Rust registration client.
 >
-> **Boundary:** no production Seata-Rust TM/RM implementation is added here. The harness first proves that the pinned Java TC can be built and started reproducibly. TCP reachability is not protocol interoperability.
+> **Boundary:** no production Seata-Rust TM/RM implementation is added here. The standalone test client currently covers only V1 RegisterTM/RegisterRM; transaction lifecycle and phase-two callback handling remain separate gates.
 
 ## 1. Frozen runtime topology
 
@@ -55,16 +55,29 @@ The workflow result must be recorded with:
 - TCP listener result;
 - log artifact on failure.
 
+### 3.1 Bootstrap runtime result
+
+[GitHub Actions Run #15](https://github.com/easy-4-rust/seata-rust/actions/runs/42474316751) passed on 2026-11-08 using Java Seata commit `cba73e180fd8896a99df6415b859d275122feaa7`.
+
+Verified in that run:
+- Maven built the self-contained `server/target/seata-server.jar` with the pinned `release-seata-jar` profile.
+- The Java TC process started with the isolated FILE configuration.
+- The native TCP listener accepted connections on `127.0.0.1:18091`.
+- The smoke script stopped the Java TC process successfully.
+- The isolated storage reset ran before startup.
+
+This was a **TCP bootstrap smoke only**. No Seata message was exchanged in Run #15. The build script retries Maven up to three times because a prior run encountered a Maven Central HTTP 504 while resolving Kotlin compiler 2.2.20.
+
 ## 4. INT test sequence after bootstrap
 
 | ID | Test | Required behavior | Status |
 |---|---|---|---|
-| INT-ENV-001 | Build pinned Java TC | Executable server artifact created | Pending CI |
-| INT-ENV-002 | Start FILE TC | Process remains alive and binds configured port | Pending CI |
-| INT-ENV-003 | Stop TC | Graceful shutdown releases port | Pending CI |
-| INT-ENV-004 | Reset isolated storage | Refuses while running; resets only dedicated data directory | Scripted; runtime pending |
-| INT-001 | RegisterTM over native V1 | Identified=true from live TC | Not implemented |
-| INT-002 | RegisterRM over native V1 | Identified=true and resource association established | Not implemented |
+| INT-ENV-001 | Build pinned Java TC | Executable server artifact created | Verified by test, Run #15 |
+| INT-ENV-002 | Start FILE TC | Process remains alive and binds configured port | Verified by test, Run #15 |
+| INT-ENV-003 | Stop TC | Graceful shutdown releases port | Verified by test, Run #15 |
+| INT-ENV-004 | Reset isolated storage | Resets dedicated data directory while stopped | Verified by test, Run #15; refusal-while-running negative case pending |
+| INT-001 | RegisterTM over native V1 | Identified=true from live TC | Rust client implemented; live CI pending |
+| INT-002 | RegisterRM over native V1 | Identified=true and resource association established | Rust client implemented; live CI pending |
 | INT-003 | GlobalBegin | TC returns valid XID | Not implemented |
 | INT-004 | BranchRegister | TC returns BranchId and stores branch | Not implemented |
 | INT-005 | GlobalStatus | TC returns authoritative status | Not implemented |
@@ -78,16 +91,23 @@ The workflow result must be recorded with:
 | INT-013 | Response loss after BranchRegister | Unknown outcome reconciled without duplicate branch | Not implemented |
 | INT-014 | Response loss after Commit/Rollback | Query/retry follows TC authoritative state | Not implemented |
 
-## 5. Required independent client behavior
+## 5. Independent Rust test client
 
-The future test client must use two independently registered logical clients/connections:
+The first independent Rust client now exists under `tools/java-tc-integration/rust-client` and uses only the Rust standard library; it is not a production crate.
 
-- TM connection: RegisterTM, GlobalBegin, GlobalStatus, GlobalCommit/GlobalRollback.
-- RM connection: RegisterRM, receive TC BranchCommit/BranchRollback requests, send typed responses.
+Current behavior:
+- Builds Seata V1 16-byte frame headers and Seata serializer payloads.
+- Opens independent TCP connections for TM and RM.
+- Sends RegisterTM (type 101) and RegisterRM (type 103).
+- Reads partial-safe V1 response frames, correlates request IDs, validates protocol/serializer/compressor fields, and parses IdentifyResponse (types 102/104).
+- Requires `identified=true`; preserves both connections briefly after registration.
+- Unit tests check V1 header fields and the RM string32 ResourceIds encoding.
 
-The RM listener must remain alive while the TM issues second-phase requests. A one-way request-only client cannot validate a real transaction lifecycle.
+Runner: `bash tools/java-tc-integration/scripts/run-rust-registration.sh`.
 
-Before Rust test-client code is introduced, protocol and transport fixtures remain the reference for V1 frame and payload bytes. The integration client must not invent new encodings.
+The FILE smoke script now starts Java TC and runs this Rust client before stopping TC. The CI workflow installs stable Rust and rustfmt. The next workflow result will be the first live REG-001/REG-002 verification. Until that run passes, the client is implemented but live registration is not yet certified.
+
+The next client increment must keep the RM connection alive in a receive loop, handle BranchCommit/BranchRollback callbacks, and respond with the exact Java-compatible message types. Only then can TM GlobalCommit/GlobalRollback be considered end-to-end tests.
 
 ## 6. Evidence labels
 
@@ -96,7 +116,7 @@ Before Rust test-client code is introduced, protocol and transport fixtures rema
 - **TCP smoke only:** process starts and socket accepts connections; no Seata message exchanged.
 - **Unknown:** no live request/response evidence yet.
 
-A successful INT-ENV smoke does not close INT-001–INT-014.
+A successful INT-ENV smoke does not close transaction lifecycle gates INT-003–INT-014. REG-001/REG-002 are separately verified only when the Rust client workflow passes against the running TC.
 
 ## 7. Exit gate to WP-01
 
