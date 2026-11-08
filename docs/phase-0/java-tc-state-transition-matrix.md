@@ -254,6 +254,7 @@ The pinned `SessionHolder.reload` implementation applies different handling by s
 | Finished / UnKnown / CommitFailed / RollbackFailed / TimeoutRollbackFailed | removeInErrorState | cleanup/error-state removal; not automatic retry |
 | AsyncCommitting / Committing / CommitRetrying | retain for commit retry scheduler; Raft path performs lock cleanup first | resume/retry commit path |
 | StopCommitOrCommitRetry / StopRollbackOrRollbackRetry / Deleting | retained in the explicit switch | operator/cleanup state; not automatically rewritten |
+| CommitRetryTimeout / RollbackRetryTimeout | no explicit case in FILE/RAFT reload switch; default unexpected-status path. DB/Redis cleanup scan shown here also omits them. | recovery/retention behavior unresolved; targeted test required |
 | Rollbacking / RollbackRetrying / TimeoutRollbacking / TimeoutRollbackRetrying | branch locks restored; rollback family retained for retry | resume rollback path |
 | Begin in Raft reload | older session may be moved to RollbackRetrying; new leader-era session is activated | avoids treating a newly created leader session as stale |
 | Begin in non-Raft reload | activated | timeout scanner later decides whether timeout rollback is needed |
