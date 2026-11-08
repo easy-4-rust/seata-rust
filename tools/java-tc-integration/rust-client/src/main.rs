@@ -16,6 +16,7 @@ const TYPE_REGISTER_TM: u16 = 101;
 const TYPE_REGISTER_TM_RESULT: u16 = 102;
 const TYPE_REGISTER_RM: u16 = 103;
 const TYPE_REGISTER_RM_RESULT: u16 = 104;
+const CLIENT_VERSION: &str = "1.1.0";
 
 fn invalid(message: impl Into<String>) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidData, message.into())
@@ -186,7 +187,7 @@ fn register_tm(
     tx_group: &str,
 ) -> io::Result<TcpStream> {
     let mut body = Vec::new();
-    write_string16("V1,0", &mut body)?;
+    write_string16(CLIENT_VERSION, &mut body)?;
     write_string16(app_id, &mut body)?;
     write_string16(tx_group, &mut body)?;
     write_string16("", &mut body)?;
@@ -265,7 +266,7 @@ mod tests {
     #[test]
     fn tm_frame_has_v1_header_and_type_101() {
         let mut body = Vec::new();
-        write_string16("V1,0", &mut body).unwrap();
+        write_string16(CLIENT_VERSION, &mut body).unwrap();
         write_string16("orders-rust", &mut body).unwrap();
         write_string16("default_tx_group", &mut body).unwrap();
         write_string16("", &mut body).unwrap();
