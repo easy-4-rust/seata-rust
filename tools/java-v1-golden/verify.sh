@@ -23,7 +23,7 @@ cp "$ROOT/tools/java-v1-golden/AbstractTCInboundHandlerExceptionTest.java" "$EXC
 (
   cd "$TMP/seata-java"
   mvn -pl test-suite/test-new-version -am \
-    -Dtest=ProtocolV1GoldenFrameTest \
+    -Dtest=ProtocolV1GoldenFrameTest,AbstractTCInboundHandlerExceptionTest \
     -Dsurefire.failIfNoSpecifiedTests=false \
     test
 )
