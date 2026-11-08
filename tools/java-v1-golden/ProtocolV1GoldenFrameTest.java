@@ -19,6 +19,8 @@ package org.apache.seata.core.rpc.netty.v1;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.apache.seata.core.compressor.CompressorType;
+import org.apache.seata.core.protocol.RegisterRMRequest;
+import org.apache.seata.core.protocol.RegisterTMRequest;
 import org.apache.seata.core.protocol.RpcMessage;
 import org.apache.seata.core.protocol.transaction.GlobalBeginRequest;
 import org.apache.seata.core.protocol.transaction.GlobalBeginResponse;
@@ -116,4 +118,29 @@ class ProtocolV1GoldenFrameTest {
         assertEquals("127.0.0.1:8091:1", response.getXid());
         assertNull(response.getExtraData(), "Java V1 decoder leaves zero-length extraData unset");
     }
+    @Test
+    void decodesAndReencodesGoGoldenRegisterTMRequestFrame() {
+        RpcMessage message = decodeAndReencode(
+                "dada01000000390010000100000000020065000456312c30000b6f72646572732d72757374001064656661756c745f74785f67726f75700000");
+
+        RegisterTMRequest request = assertInstanceOf(RegisterTMRequest.class, message.getBody());
+        assertEquals("V1,0", request.getVersion());
+        assertEquals("orders-rust", request.getApplicationId());
+        assertEquals("default_tx_group", request.getTransactionServiceGroup());
+        assertEquals("", request.getExtraData());
+    }
+
+    @Test
+    void decodesAndReencodesGoGoldenRegisterRMRequestFrame() {
+        RpcMessage message = decodeAndReencode(
+                "dada010000004b0010000100000000030067000456312c30000b6f72646572732d72757374001064656661756c745f74785f67726f757000000000000e6d7973716c3a2f2f6f7264657273");
+
+        RegisterRMRequest request = assertInstanceOf(RegisterRMRequest.class, message.getBody());
+        assertEquals("V1,0", request.getVersion());
+        assertEquals("orders-rust", request.getApplicationId());
+        assertEquals("default_tx_group", request.getTransactionServiceGroup());
+        assertEquals("", request.getExtraData());
+        assertEquals("mysql://orders", request.getResourceIds());
+    }
+
 }
