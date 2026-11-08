@@ -84,6 +84,27 @@ The 25 rows above cover the core TM/RM request/response codecs present in the pi
 
 This is a deliberate scope boundary, not a claim that these Java message types do not exist.
 
+## 3.2 Important distinction: codec body vs Seata serializer payload
+
+The table in §3 records the bytes returned by each Go message-specific `Codec.Encode` method. It deliberately excludes the two-byte message type prefix.
+
+The complete V1 Seata serializer payload is:
+
+```text
+uint16_be(message_type_id) || codec_body
+```
+
+This is verified in both pinned source trees:
+
+- Go `pkg/protocol/codec/codec.go`: `CodecManager.Encode` prepends the big-endian uint16 message type before the codec body.
+- Java `serializer/.../SeataSerializer.java`: `SeataSerializerV1.serialize` writes the message type short followed by the message codec output.
+
+The executable harness therefore checks two byte strings for every message:
+1. `body_hex`: message-specific codec body.
+2. `serialized_hex`: two-byte message type prefix plus codec body.
+
+Do not pass a body-only vector directly as the V1 frame body. The V1 frame body contains `serialized_hex`.
+
 ## 4. Codec contract notes
 
 - GlobalBeginRequest: timeout is converted from Go `time.Duration` to milliseconds and written as uint32, followed by transaction name as string16.
@@ -101,6 +122,23 @@ This is a deliberate scope boundary, not a claim that these Java message types d
 - RM registration request: same identity fields plus ResourceIds string32.
 - TM/RM registration response: Identified byte (0/1) + Version string16.
 - UndoLogDelete request: BranchType byte, ResourceId string16, SaveDays uint16.
+
+## 4.1 Reproducible Seata-Go verification harness
+
+The repository now contains:
+
+- `tools/go-golden-vectors/expected.json`: expected codec body and serialized payload for all 25 vectors.
+- `tools/go-golden-vectors/frames.json`: deterministic full V1 frame examples for GlobalBegin request and response.
+- `tools/go-golden-vectors/main.go`: constructs the same 25 typed Go messages, executes the pinned Go codec registry, checks body bytes, checks the serializer's type-code prefix, and verifies decode/re-encode byte stability. It also checks the two full-frame examples.
+- `tools/go-golden-vectors/verify.sh`: clones the exact Seata-Go commit `82570d905919c1c66bb025a3a5979f25390de498`, places the harness inside that module and runs it.
+
+Run from the Seata-Rust repository root:
+
+```bash
+bash tools/go-golden-vectors/verify.sh
+```
+
+**Execution status in this research session:** harness and fixtures have been committed, but the Go command has not been executed in a Go-enabled checkout. These remain candidate vectors until that command passes. No Go runtime pass is claimed.
 
 ## 5. What these vectors do not certify
 
