@@ -153,3 +153,38 @@ No source file is copied into Seata-Rust until the reuse ledger contains:
 **RSeata contributes Rust design references; Seata-Go supplies the V1 implementation model; Java Seata defines the compatibility contract.**
 
 Do not migrate RSeata wholesale. Do not reject useful Rust abstractions merely because the project is third-party. Evaluate each abstraction independently, and keep code reuse separate from architectural inspiration.
+
+## 11. Exact audited source manifest and final V1 reuse decision
+
+The following paths exist in the pinned RSeata tree and are the concrete audit anchors. The classification is about architectural concepts and implementation disposition; it is not a blanket source-copy approval.
+
+| Crate | Audited source paths | Final V1 disposition |
+|---|---|---|
+| `rseata-core` | `src/types.rs`; `src/branch/{mod.rs,branch_manager_inbound.rs,branch_manager_outbound.rs,branch_transaction.rs,undo_log.rs}`; `src/session/{global_session.rs,branch_session.rs,session_condition.rs,session_helper.rs,session_manager.rs,session_life_cycle.rs,session_lifecycle_listener.rs}`; `src/session/defaults/{default_global_session.rs,default_branch_session.rs,default_session_manager.rs}`; `src/store/{transaction_store_manager.rs,memery_transaction_store_manager.rs}`; `src/lock/*`; `src/resource/*`; `src/grpc_client/*` | **REFACTOR concepts only**; do not use its custom XID or status/branch wire mapping; session/lock store patterns are future TC research, not V1 client implementation |
+| `rseata-proto` | `proto/rseata.proto`; `src/lib.rs`; `build.rs` | **REWRITE / exclude from V1 native protocol**; independent Tonic/Protobuf contract |
+| `rseata-tm` | `src/transaction_manager.rs`; `src/lib.rs` | **REFACTOR concept**; compare scope/role/propagation against Go; do not reuse gRPC client as Java native transport |
+| `rseata-rm` | `src/resource/impl_branch_manager_inbound.rs`; `impl_branch_manager_outbound.rs`; `impl_branch_transaction_registry.rs`; `impl_resource_registry.rs`; `src/config.rs` | **REFACTOR interfaces**; rewrite protocol adapter and status mapping; add durable idempotency and reconnect registration |
+| `rseata-tc` | `src/coordinator/default_coordinator/*`; `src/coordinator/default_core_holder/*`; `src/coordinator/core/at_core/*`; `src/coordinator/core/xa_core/*`; `src/grpc_service/{tm_service.rs,rm_service.rs}`; `src/init.rs`; `src/web/*`; `src/audit_logger/*` | **DEFER V1; REFACTOR V2**; no Rust TC implementation in V1 |
+| `rseata-db-proxy` | `src/sea_orm/at/connection_proxy/*`; `src/sea_orm/at/transaction_proxy/*`; `src/sea_orm/at/undo_log.rs`; `src/sea_orm/at/undo_log_postgres.rs`; `src/sea_orm/xa/connection_proxy/*`; `src/sea_orm/xa/transaction_proxy/*`; `src/table_primary_select.rs`; `src/diesel/mod.rs` | **REFACTOR / REWRITE critical transaction paths**; never copy SQL string substitution for Undo Log writes; MySQL AT is implemented against Java/Go semantics, not assumed from SeaORM adapter structure |
+| `rseata-micro` | `src/lib.rs` | **KEEP concept / REFACTOR**; framework propagation adapter only; V1 XID is TC-issued |
+| `rseata-error` | `src/lib.rs`; `crates/rseata-error-derive/src/lib.rs` | **KEEP derive idea / REFACTOR taxonomy**; separate protocol, transport, TC rejection, unknown outcome and local DB errors |
+| `examples/example-proto` | `proto/rseata.proto`; `src/{client.rs,lazy.rs,lib.rs}` | **DEFER**; custom protobuf demo |
+| `examples/order-service`, `examples/user-service` | `src/main.rs`, service modules and gRPC integration | **KEEP scenario ideas only**; rewrite examples against Seata-Rust V1 public APIs |
+| root facade / binary | `src/lib.rs`; `src/main.rs` | **KEEP facade concept / DEFER binary**; root main is not a production TC |
+
+### 11.1 No-copy rules
+
+1. No RSeata message type, Protobuf enum, XID generator, or gRPC service is accepted as the Java V1 wire contract.
+2. No RSeata session or lock implementation is accepted as production durable storage without a separate Java TC semantic audit, crash-recovery proof and concurrency tests.
+3. No AT SQL/Undo Log path is accepted without comparing SQL parsing, before/after images, lock keys, Undo Log schema/serialization, dirty-data checks and transaction atomicity to pinned Java/Go behavior.
+4. Trait names and module boundaries may inspire Rust API design, but every reused abstraction must pass the reuse gate in §10.
+5. V1 implementation order remains Go TM/RM architecture + Java protocol/semantics. RSeata does not change that order.
+
+### 11.2 Final classification summary
+
+- **KEEP (concept/reference):** event hooks, trait separation, error derive concept, example scenarios, facade layering.
+- **REFACTOR:** core types, TM scope/context, RM resource registry, branch handlers, database adapter boundaries, micro integration.
+- **REWRITE:** native protocol adapters, explicit enum mappings, XID handling, critical Undo Log SQL paths, any custom gRPC/Protobuf code presented as Java V1 transport.
+- **DEFER:** RSeata TC, durable session/lock/retry implementation, XA and other non-V1 modes, custom Protobuf examples and binaries.
+
+This final disposition is a V1 reuse boundary, not a judgment that RSeata has no value. It is a useful independent Rust reference, but the compatibility contract and V1 execution sequence remain Java Seata 2.x + Seata-Go v2.
