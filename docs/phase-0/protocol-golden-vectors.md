@@ -132,8 +132,8 @@ The vector set has been expanded with four explicit negative-result responses: G
 The repository now contains:
 
 - `tools/go-golden-vectors/expected.json`: expected codec body and serialized payload for all 29 vectors.
-- `tools/go-golden-vectors/frames.json`: deterministic full V1 frame examples for GlobalBegin request and response.
-- `tools/go-golden-vectors/main.go`: constructs the same 25 typed Go messages, executes the pinned Go codec registry, checks body bytes, checks the serializer's type-code prefix, and verifies decode/re-encode byte stability. It also checks the two full-frame examples.
+- `tools/go-golden-vectors/frames.json`: deterministic full V1 frame examples for successful GlobalBegin request/response, failed GlobalBegin response, and a request with an optional head map.
+- `tools/go-golden-vectors/main.go`: constructs 25 base typed Go messages plus 4 failure-response variants, executes the pinned Go codec registry, checks body bytes, checks the serializer's type-code prefix, and verifies decode/re-encode byte stability. It also checks the four full-frame examples.
 - `tools/go-golden-vectors/verify.sh`: clones the exact Seata-Go commit `82570d905919c1c66bb025a3a5979f25390de498`, places the harness inside that module and runs it.
 
 Run from the Seata-Rust repository root:
