@@ -123,6 +123,15 @@ Before production-like integration:
 3. test denied registration and confirm `identified=false` response semantics;
 4. test reconnect and re-registration on a new TCP channel.
 
+## 7.1 Live Java TC registration evidence
+
+[GitHub Actions Run #23](https://github.com/easy-4-rust/seata-rust/actions/runs/42475353541) passed the independent Rust client's live V1 registration against the pinned Java TC:
+- RegisterTM response type 102: `identified=true`.
+- RegisterRM response type 104: `identified=true`, resource ID `mysql://orders`.
+- Both response frames used protocol V1 and reported Java server version `2.8.0-SNAPSHOT`.
+
+The run used the test-only configuration `enable-check-auth=false`. Authentication success/denial semantics are not covered. The initial live client sent version `V1,0` from the codec fixture; the current Rust client is being aligned to the actual pinned Go runtime constant `constant.SeataVersion = "1.1.0"`. The next CI run must reconfirm registration with that value.
+
 ## 8. Integration test gates
 
 | ID | Test | Expected evidence |
@@ -134,4 +143,4 @@ Before production-like integration:
 | REG-005 | RM reconnect | fresh channel re-registers all cached resource IDs |
 | REG-006 | TC callback routing | TC finds the registered RM channel by resource ID/client association |
 
-No REG-xxx live Java TC result is claimed yet. The wire payload and frame sub-gate is verified; server-side channel registration is still pending.
+REG-001 and REG-002 have live Java TC evidence in Run #23 for the auth-disabled test configuration. REG-003/004 auth-denial and REG-005 reconnect remain open. The registration frame/payload sub-gate is verified independently in Run #42.
