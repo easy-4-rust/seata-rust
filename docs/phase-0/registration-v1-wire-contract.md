@@ -107,11 +107,11 @@ A successful RM registration is a prerequisite for TC phase-two callbacks. It do
 
 Go source harness constructs RegisterTM/RM payloads in `tools/go-golden-vectors/main.go`. Their serialized payloads are already part of `expected.json` and the 29-vector Go runtime test set.
 
-Two full V1 registration frames have now been added to `frames.json` and passed the pinned Go and Java runtime harness in [GitHub Actions Run #40](https://github.com/easy-4-rust/seata-rust/actions/runs/42473731588):
+Two full V1 registration frames have now been added to `frames.json` and passed the pinned Go and Java runtime harness in [GitHub Actions Run #42](https://github.com/easy-4-rust/seata-rust/actions/runs/42474150028):
 - `RegisterTMRequestFrame`: request ID 2, full length 57 bytes.
 - `RegisterRMRequestFrame`: request ID 3, full length 75 bytes.
 
-Java V1 Decoder → Encoder byte-identical round-trip tests have been added to `ProtocolV1GoldenFrameTest.java`. Run #40 verified all 29 Go payload vectors and 6 complete frames; Java passed all 6 frame decode/re-encode tests. This certifies the tested codec/frame bytes, not a live TC registration exchange.
+Java V1 Decoder → Encoder byte-identical round-trip tests have been added to `ProtocolV1GoldenFrameTest.java`. Run #42 verified all 29 Go payload vectors and 6 complete frames; Java passed all 6 frame decode/re-encode tests. The full Java overlay run reported 17 tests with 0 failures/errors. This certifies the tested codec/frame bytes, not a live TC registration exchange.
 
 ## 7. Authentication boundary
 
