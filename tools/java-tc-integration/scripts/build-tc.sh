@@ -21,11 +21,24 @@ actual="$(git -C "$TC_SOURCE_DIR" rev-parse HEAD)"
 
 (
   cd "$TC_SOURCE_DIR"
-  mvn -B -ntp -Prelease-seata-jar -pl server -am \
-    -DskipTests \
-    -Dcheckstyle.skip=true \
-    -Dspotless.check.skip=true \
-    clean package
+  built=false
+  for attempt in 1 2 3; do
+    echo "Building pinned Java TC (attempt $attempt/3)"
+    if mvn -B -ntp -Prelease-seata-jar -pl server -am \
+      -Dmaven.wagon.http.retryHandler.count=5 \
+      -DskipTests \
+      -Dcheckstyle.skip=true \
+      -Dspotless.check.skip=true \
+      clean package; then
+      built=true
+      break
+    fi
+    if [[ "$attempt" -lt 3 ]]; then
+      echo "Maven build failed; retrying after transient dependency/network failure" >&2
+      sleep 10
+    fi
+  done
+  [[ "$built" == true ]] || exit 1
 )
 
 [[ -f "$TC_JAR" ]] || {
