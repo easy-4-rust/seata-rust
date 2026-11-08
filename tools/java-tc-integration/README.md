@@ -11,7 +11,7 @@ This harness creates an isolated, reproducible Java Seata TC process for the lat
 - Native service port: 18091 by default
 - Data and logs: `$SEATA_TC_WORK_DIR`, defaulting to `$TMPDIR/seata-rust-java-tc`
 
-The checked-in configuration disables TC auth checks **only for this isolated bootstrap smoke test**. Authentication and registration behavior are separate Phase 0.9 integration gates and must not be considered verified by this smoke test.
+The checked-in configuration disables TC auth checks **only for this isolated test harness**. Run #23 verified RegisterTM/RegisterRM with auth disabled; authentication compatibility and denial behavior remain separate gates.
 
 ## Commands
 
@@ -57,14 +57,13 @@ It validates V1 framing, serializer IDs, request correlation, IdentifyResponse a
 
 - The pinned Java Seata server source can be built into its executable server artifact.
 - The server process starts with the isolated FILE configuration and accepts TCP connections.
-- The independent Rust client can exchange native V1 RegisterTM and RegisterRM messages with the live Java TC (when the latest workflow passes).
+- The independent Rust client exchanged native V1 RegisterTM and RegisterRM messages with the live Java TC in [Run #23](https://github.com/easy-4-rust/seata-rust/actions/runs/42475353541). The follow-up run will reconfirm using the pinned Go client version string 1.1.0 and the corrected resettable FILE data path.
 
 ## What it does NOT prove
 
 - GlobalBegin / BranchRegister / GlobalStatus / Commit / Rollback behavior.
 - Authentication compatibility.
-- GlobalBegin / BranchRegister / GlobalStatus / Commit / Rollback behavior.
 - RM phase-two callbacks.
 - Session/branch persistence across a real process restart.
 
-Those remain later INT-xxx gates. In particular, a successful TCP connect is not a successful Seata protocol handshake.
+Those remain later INT-xxx gates. A successful TCP connect alone is not a successful Seata protocol handshake; the Rust registration requests now provide the first live protocol evidence.
