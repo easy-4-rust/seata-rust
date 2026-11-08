@@ -4,6 +4,14 @@ set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 JAVA_SHA="cba73e180fd8896a99df6415b859d275122feaa7"
 TC_WORK_DIR="${SEATA_TC_WORK_DIR:-${TMPDIR:-/tmp}/seata-rust-java-tc}"
+mkdir -p "$TC_WORK_DIR"
+TC_WORK_DIR="$(cd "$TC_WORK_DIR" && pwd -P)"
+case "$TC_WORK_DIR" in
+  /|"$HOME"|"$ROOT")
+    echo "unsafe SEATA_TC_WORK_DIR: $TC_WORK_DIR" >&2
+    exit 2
+    ;;
+esac
 TC_SOURCE_DIR="$TC_WORK_DIR/seata-java"
 TC_DATA_DIR="$TC_WORK_DIR/data"
 TC_LOG_DIR="$TC_WORK_DIR/logs"
