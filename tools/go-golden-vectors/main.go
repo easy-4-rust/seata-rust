@@ -25,6 +25,8 @@ type expectedFrame struct {
 	RequestID uint32 `json:"request_id"`
 	SerializerID byte `json:"serializer_id"`
 	CompressorID byte `json:"compressor_id"`
+	HeadMapHex string `json:"head_map_hex"`
+	HeadLength uint16 `json:"head_length"`
 	FrameHex string `json:"frame_hex"`
 }
 
@@ -155,15 +157,22 @@ func main() {
 		if !ok {
 			fail("%s: unknown source vector %s", expectedFrame.Name, expectedFrame.SourceVector)
 		}
-		frame := make([]byte, 16+len(payload))
+		headMap, err := hex.DecodeString(expectedFrame.HeadMapHex)
+		must(err)
+		headLength := uint16(16 + len(headMap))
+		if expectedFrame.HeadLength != headLength {
+			fail("%s: head length fixture mismatch: got %d want %d", expectedFrame.Name, headLength, expectedFrame.HeadLength)
+		}
+		frame := make([]byte, int(headLength)+len(payload))
 		frame[0], frame[1], frame[2] = 0xda, 0xda, 1
 		binary.BigEndian.PutUint32(frame[3:7], uint32(len(frame)))
-		binary.BigEndian.PutUint16(frame[7:9], 16)
+		binary.BigEndian.PutUint16(frame[7:9], headLength)
 		frame[9] = expectedFrame.RequestType
 		frame[10] = expectedFrame.SerializerID
 		frame[11] = expectedFrame.CompressorID
 		binary.BigEndian.PutUint32(frame[12:16], expectedFrame.RequestID)
-		copy(frame[16:], payload)
+		copy(frame[16:], headMap)
+		copy(frame[headLength:], payload)
 		got := hex.EncodeToString(frame)
 		want := strings.ToLower(strings.ReplaceAll(expectedFrame.FrameHex, " ", ""))
 		if got != want {
