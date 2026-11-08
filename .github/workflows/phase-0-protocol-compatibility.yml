@@ -1,0 +1,58 @@
+name: Phase 0 Protocol Compatibility
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "tools/go-golden-vectors/**"
+      - "tools/java-v1-golden/**"
+      - ".github/workflows/phase-0-protocol-compatibility.yml"
+      - "docs/phase-0/**"
+  pull_request:
+    paths:
+      - "tools/go-golden-vectors/**"
+      - "tools/java-v1-golden/**"
+      - ".github/workflows/phase-0-protocol-compatibility.yml"
+      - "docs/phase-0/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase-0-protocol-compatibility-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go-golden-vectors:
+    name: Seata-Go codec and V1 frame vectors
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Seata-Rust fixtures
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache: false
+
+      - name: Run pinned Seata-Go vectors
+        run: bash tools/go-golden-vectors/verify.sh
+
+  java-v1-frames:
+    name: Java Seata V1 frame round trips
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Seata-Rust fixtures
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Verify Java V1 decoder and encoder
+        run: bash tools/java-v1-golden/verify.sh
