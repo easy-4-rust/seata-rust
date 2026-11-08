@@ -21,6 +21,7 @@ type expectedVector struct {
 	Name    string `json:"name"`
 	TypeID  int    `json:"type_id"`
 	BodyHex string `json:"body_hex"`
+	SerializedHex string `json:"serialized_hex"`
 }
 
 func txResponse() message.AbstractTransactionResponse {
