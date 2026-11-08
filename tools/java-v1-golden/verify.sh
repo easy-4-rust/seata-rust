@@ -19,11 +19,12 @@ cp "$ROOT/tools/java-v1-golden/ProtocolV1GoldenFrameTest.java" "$TEST_DIR/Protoc
 EXCEPTION_TEST_DIR="$TMP/seata-java/test-suite/test-new-version/src/test/java/org/apache/seata/server"
 mkdir -p "$EXCEPTION_TEST_DIR"
 cp "$ROOT/tools/java-v1-golden/AbstractTCInboundHandlerExceptionTest.java" "$EXCEPTION_TEST_DIR/AbstractTCInboundHandlerExceptionTest.java"
+cp "$ROOT/tools/java-v1-golden/SessionHolderRetryTimeoutRecoveryTest.java" "$EXCEPTION_TEST_DIR/SessionHolderRetryTimeoutRecoveryTest.java"
 
 (
   cd "$TMP/seata-java"
   mvn -pl test-suite/test-new-version -am \
-    -Dtest=ProtocolV1GoldenFrameTest,AbstractTCInboundHandlerExceptionTest \
+    -Dtest=ProtocolV1GoldenFrameTest,AbstractTCInboundHandlerExceptionTest,SessionHolderRetryTimeoutRecoveryTest \
     -Dsurefire.failIfNoSpecifiedTests=false \
     test
 )
