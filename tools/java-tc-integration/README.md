@@ -33,11 +33,11 @@ Environment overrides:
 The build script clones the Java source if needed, checks out the exact pinned SHA, then runs:
 
 ```bash
-mvn -B -ntp -pl server -am \
+mvn -B -ntp -Prelease-seata-jar -pl server -am \
   -DskipTests \
   -Dcheckstyle.skip=true \
   -Dspotless.check.skip=true \
-  package
+  clean package
 ```
 
 It expects the self-contained Spring Boot executable artifact at `server/target/seata-server.jar`, based on the pinned server POM's `release-seata-jar` profile (`finalName=seata-server`, default executable JAR layout). The `release-seata` profile instead creates a ZIP-layout launcher that relies on an external `lib/` directory; invoking it with plain `java -jar` does not provide Spring Boot classes and is not used by this harness.
