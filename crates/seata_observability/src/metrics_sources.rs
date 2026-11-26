@@ -1,5 +1,8 @@
 #[cfg(feature = "mysql")]
-use seata_db_mysql::{MySqlRecoveryMetricsSampler, MySqlRecoveryOperation};
+use seata_db_mysql::{
+    MySqlRecoveryMetricsSampler, MySqlRecoveryOperation, MySqlUndoMetricsSampler,
+    MySqlUndoOperation,
+};
 use seata_rm::{BranchPhase, RmCallMetricsSampler, RmMetricsSampler, RmOperation};
 use seata_tm::{TmMetricsSampler, TmOperation};
 use seata_transport::{PoolSampler, PoolSlotState};
@@ -15,6 +18,8 @@ pub struct MetricsSources {
     rm_calls: Option<RmCallMetricsSampler>,
     #[cfg(feature = "mysql")]
     mysql_recovery: Option<MySqlRecoveryMetricsSampler>,
+    #[cfg(feature = "mysql")]
+    mysql_undo: Option<MySqlUndoMetricsSampler>,
 }
 
 impl MetricsSources {
@@ -28,6 +33,8 @@ impl MetricsSources {
             rm_calls: None,
             #[cfg(feature = "mysql")]
             mysql_recovery: None,
+            #[cfg(feature = "mysql")]
+            mysql_undo: None,
         }
     }
 
@@ -80,9 +87,17 @@ impl MetricsSources {
         self
     }
 
+    /// 参数为数据源签发的只读独立 Undo 计数；返回增加 20 条固定序列的新来源。
+    /// 不授予数据库权限，不输出业务身份；此计数不与恢复管理器控制次数相加推断效果。
+    #[cfg(feature = "mysql")]
+    pub fn with_mysql_undo(mut self, source: MySqlUndoMetricsSampler) -> Self {
+        self.mysql_undo = Some(source);
+        self
+    }
+
     pub(crate) fn is_empty(&self) -> bool {
         #[cfg(feature = "mysql")]
-        if self.mysql_recovery.is_some() {
+        if self.mysql_recovery.is_some() || self.mysql_undo.is_some() {
             return false;
         }
         self.tm.is_none()
@@ -276,6 +291,39 @@ impl MetricsSources {
                 for (resolution, count) in [("applied", c.applied), ("unresolved", c.unresolved)] {
                     output.push_str(&format!("seata_mysql_control_resolutions_total{{operation=\"{name}\",resolution=\"{resolution}\"}} {count}\n"));
                 }
+            }
+        }
+        #[cfg(feature = "mysql")]
+        if let Some(source) = &self.mysql_undo {
+            for (operation, name) in [
+                (MySqlUndoOperation::Rollback, "rollback"),
+                (MySqlUndoOperation::Fence, "fence"),
+            ] {
+                let c = source.snapshot(operation);
+                output.push_str(&format!(
+                    "seata_mysql_undo_active{{operation=\"{name}\"}} {}\n",
+                    c.active
+                ));
+                for (outcome, count) in [
+                    ("completed", c.completed),
+                    ("unknown_commit", c.unknown_commit),
+                    ("before_commit_error", c.before_commit_error),
+                    ("cancelled", c.cancelled),
+                ] {
+                    output.push_str(&format!("seata_mysql_undo_total{{operation=\"{name}\",outcome=\"{outcome}\"}} {count}\n"));
+                }
+                for (observation, count) in [
+                    ("consumed", c.consumed),
+                    ("fenced_inserted", c.fenced_inserted),
+                    ("fenced_existing", c.fenced_existing),
+                    ("undo_present", c.undo_present),
+                ] {
+                    output.push_str(&format!("seata_mysql_undo_observations_total{{operation=\"{name}\",observation=\"{observation}\"}} {count}\n"));
+                }
+                output.push_str(&format!(
+                    "seata_mysql_undo_restored_rows_observed_total{{operation=\"{name}\"}} {}\n",
+                    c.observed_restored_rows
+                ));
             }
         }
         output

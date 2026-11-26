@@ -1193,3 +1193,10 @@ Rust 1.99/1.85 全工作区全功能各 707 项通过、317 项 ignored；双版
 提取三类正式补偿执行器的 SQL 构建/镜像选择方法，SQLx 真实执行及 AbstractUndoExecutor 分派共用这些方法。固定原三个测试类六例、13 处断言在双 Rust 逐项匹配；保留三个原输入均为 UPDATE、JDBC CHAR、KeyType、原字符串及对象镜像身份。
 
 双版本各五组真实 MySQL 补偿通过，覆盖复合 PK 与绑定顺序、反序日志、脏数据整体回滚及已恢复跳过。三个源代码变异目标失败；正式 SQL 构建器变异触发真实 MySQL 1064，恢复后同目标通过。原 Undo/物理会话归零，自有容器清理。全工作区全功能各 723 passed / 318 ignored，MySQL 严格 Clippy 均通过。证据、诊断与审查边界见 [Undo 执行器原案例](phase-2/evidence/mysql-undo-executor-source/README.md)。独立外部审查、其余原案例、WP05–07 及后续 Phase 保持开放，不累加为完整对象或全局迁移已完成。
+
+
+## 2026-11-27：独立 MySQL Undo 调用指标
+
+正式 rollback_undo_log/fence_undo_log 现在按数据源克隆共享只读计数，未轮询 Future 不计；完成、未知 COMMIT、提交前错误、取消分别结算。成功观察与明确返回的恢复行数另计，未知结果即使在服务器实际完成补偿也不计成功。可选 mysql 导出增加固定 20 条序列，不带身份/SQL/凭据标签，默认运行依赖无 MySQL/SQLx。
+
+双版本各六组真实 API/等待/HTTP 现场通过，四次原 MySQL COMMIT OK 被截留；每版本 12 项原证据削弱拒绝。移除正式结算在真实目标计数断言失败，恢复原字节后通过。两个版本全工作区全功能各 726 passed / 320 ignored，MySQL 和 observability 全目标严格 Clippy 通过，自有容器清理。详见 [独立 Undo 指标](phase-2/evidence/mysql-undo-metrics/README.md)。一阶段业务指标、生产日志/采集/告警、独立审查、WP05–07 及后续 Phase 仍开放。

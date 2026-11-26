@@ -93,3 +93,71 @@ async fn mysql_only_source_exports_42_fixed_series_after_source_close() {
     }
     exporter.shutdown().await.unwrap();
 }
+
+#[tokio::test]
+#[ignore = "requires owned real MySQL fixture"]
+async fn independent_undo_source_exports_20_fixed_series_without_identity_after_close() {
+    let options = MySqlOptions::new(
+        "127.0.0.1".into(),
+        std::env::var("SEATA_MYSQL_PORT").unwrap().parse().unwrap(),
+        "root".into(),
+        std::env::var("SEATA_MYSQL_PASSWORD").unwrap(),
+        std::env::var("SEATA_MYSQL_DATABASE").unwrap(),
+    )
+    .unwrap()
+    .with_insecure_loopback_tls()
+    .unwrap();
+    let source = MySqlDataSource::connect(options).await.unwrap();
+    let clone = source.clone();
+    let exporter = MetricsExporter::start(
+        MetricsServerConfig::new("127.0.0.1:0".parse().unwrap(), TOKEN.into()).unwrap(),
+        MetricsSources::default().with_mysql_undo(source.undo_metrics_sampler()),
+    )
+    .await
+    .unwrap();
+    assert!(fetch(exporter.local_addr(), "wrong-token")
+        .await
+        .starts_with("HTTP/1.1 401"));
+    let zero = fetch(exporter.local_addr(), TOKEN).await;
+    let zero_body = zero.split_once("\r\n\r\n").unwrap().1;
+    assert_eq!(zero_body.lines().count(), 20);
+    assert!(zero_body.lines().all(|line| line.ends_with(" 0")));
+    let xid = "private-independent-undo-xid";
+    assert!(source.fence_undo_log(xid, 77441122).await.is_ok());
+    assert!(clone.fence_undo_log(xid, 77441122).await.is_ok());
+    assert!(source
+        .rollback_undo_log("", 0, MySqlJdbcProfile::Connector8Default)
+        .await
+        .is_err());
+    source.close().await.unwrap();
+    drop(source);
+    drop(clone);
+    let output = fetch(exporter.local_addr(), TOKEN).await;
+    assert!(output.starts_with("HTTP/1.1 200"));
+    let body = output.split_once("\r\n\r\n").unwrap().1;
+    assert_eq!(body.lines().count(), 20);
+    assert!(body
+        .lines()
+        .all(|line| line.starts_with("seata_mysql_undo_")));
+    assert!(body.contains("seata_mysql_undo_total{operation=\"fence\",outcome=\"completed\"} 2\n"));
+    assert!(body.contains("seata_mysql_undo_observations_total{operation=\"fence\",observation=\"fenced_inserted\"} 1\n"));
+    assert!(body.contains("seata_mysql_undo_observations_total{operation=\"fence\",observation=\"fenced_existing\"} 1\n"));
+    assert!(body.contains(
+        "seata_mysql_undo_total{operation=\"rollback\",outcome=\"before_commit_error\"} 1\n"
+    ));
+    for secret in [
+        TOKEN,
+        xid,
+        "77441122",
+        "jdbc:mysql",
+        "seata-mysql-fixture-only",
+    ] {
+        assert!(!output.contains(secret));
+    }
+    if let Some(folder) = std::env::var_os("SEATA_UNDO_STORE_OUT") {
+        let root = std::path::PathBuf::from(folder);
+        std::fs::write(root.join("independent-undo-http-zero.txt"), zero_body).unwrap();
+        std::fs::write(root.join("independent-undo-http-after-close.txt"), body).unwrap();
+    }
+    exporter.shutdown().await.unwrap();
+}

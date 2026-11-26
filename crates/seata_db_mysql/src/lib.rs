@@ -142,3 +142,14 @@ mod my_sql_recovery_operation;
 pub use my_sql_control_metrics::MySqlControlMetrics;
 pub use my_sql_recovery_metrics_sampler::MySqlRecoveryMetricsSampler;
 pub use my_sql_recovery_operation::MySqlRecoveryOperation;
+
+#[cfg(test)]
+mod my_sql_undo_metrics_sampler_tests;
+
+mod my_sql_undo_guard;
+mod my_sql_undo_metrics;
+mod my_sql_undo_metrics_sampler;
+mod my_sql_undo_operation;
+pub use my_sql_undo_metrics::MySqlUndoMetrics;
+pub use my_sql_undo_metrics_sampler::MySqlUndoMetricsSampler;
+pub use my_sql_undo_operation::MySqlUndoOperation;

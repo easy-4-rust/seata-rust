@@ -19,8 +19,14 @@ pub struct MySqlDataSource {
     pub(crate) registration_checks: MySqlAtRegistrationChecks,
     operation_timeout: Duration,
     recovery_metrics: crate::MySqlRecoveryMetricsSampler,
+    undo_metrics: crate::MySqlUndoMetricsSampler,
 }
 impl MySqlDataSource {
+    /// 无参数；返回同数据源克隆共享的独立 Undo 调用计数，不授予连接、恢复或关闭权限。
+    pub fn undo_metrics_sampler(&self) -> crate::MySqlUndoMetricsSampler {
+        self.undo_metrics.clone()
+    }
+
     /// 无参数；返回同数据源克隆与管理器共享的只读控制事务计数，不授予数据库权限。
     pub fn recovery_metrics_sampler(&self) -> crate::MySqlRecoveryMetricsSampler {
         self.recovery_metrics.clone()
@@ -86,6 +92,21 @@ impl MySqlDataSource {
         profile: seata_at::MySqlJdbcProfile,
         format: crate::undo::UndoSerializer,
     ) -> Result<crate::UndoRollbackObservation, crate::UndoRollbackError> {
+        let guard = self.undo_metrics.begin(crate::MySqlUndoOperation::Rollback);
+        let result = self
+            .rollback_undo_log_for_serializer_inner(xid, branch_id, profile, format)
+            .await;
+        guard.finish_rollback(&result);
+        result
+    }
+
+    async fn rollback_undo_log_for_serializer_inner(
+        &self,
+        xid: &str,
+        branch_id: i64,
+        profile: seata_at::MySqlJdbcProfile,
+        format: crate::undo::UndoSerializer,
+    ) -> Result<crate::UndoRollbackObservation, crate::UndoRollbackError> {
         use crate::UndoRollbackError;
         if xid.is_empty() || xid.len() > 128 || branch_id <= 0 {
             return Err(UndoRollbackError::InvalidIdentity);
@@ -142,6 +163,17 @@ impl MySqlDataSource {
     }
     /// 参数为原XID/分支号；确认独立控制围栏，不提交业务或证明二阶段结果。
     pub async fn fence_undo_log(
+        &self,
+        xid: &str,
+        branch_id: i64,
+    ) -> Result<crate::UndoFenceObservation, crate::UndoFenceError> {
+        let guard = self.undo_metrics.begin(crate::MySqlUndoOperation::Fence);
+        let result = self.fence_undo_log_inner(xid, branch_id).await;
+        guard.finish_fence(&result);
+        result
+    }
+
+    async fn fence_undo_log_inner(
         &self,
         xid: &str,
         branch_id: i64,
@@ -314,6 +346,7 @@ impl MySqlDataSource {
                 },
                 operation_timeout: options.operation_timeout,
                 recovery_metrics: crate::MySqlRecoveryMetricsSampler::new(),
+                undo_metrics: crate::MySqlUndoMetricsSampler::new(),
             }),
             Err(error) => {
                 // 最后Pool owner丢弃，所有租约已标记有限关闭，不在失败路径再做无界await。

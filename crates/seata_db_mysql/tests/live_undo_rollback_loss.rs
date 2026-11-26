@@ -10,6 +10,9 @@ mod rollback_fixture;
 use seata_at::MySqlJdbcProfile;
 use seata_db_mysql::{DbError, MySqlDataSource, UndoRollbackError, UndoRollbackObservation};
 use std::time::Duration;
+#[path = "support/undo_metrics_snapshot.rs"]
+mod undo_metrics_snapshot;
+use seata_db_mysql::MySqlUndoOperation;
 
 #[tokio::test]
 #[ignore = "requires owned MySQL and original packet COMMIT observer"]
@@ -33,6 +36,7 @@ async fn uncertain_rollback_commit_keeps_original_identity_and_recovers_without_
     )
     .await
     .unwrap();
+    let metrics = ds.undo_metrics_sampler();
     let error = ds
         .rollback_undo_log("rollback:xid", 42, MySqlJdbcProfile::Connector8Default)
         .await
@@ -44,6 +48,21 @@ async fn uncertain_rollback_commit_keeps_original_identity_and_recovers_without_
     assert_eq!(error.identity(), Some(("rollback:xid", 42)));
     assert!(error.is_unknown_outcome());
     assert!(!format!("{error:?} {error}").contains("rollback:xid"));
+    let unknown_metrics = metrics.snapshot(MySqlUndoOperation::Rollback);
+    assert_eq!(unknown_metrics.active, 0);
+    assert_eq!(unknown_metrics.unknown_commit, 1);
+    assert_eq!(unknown_metrics.completed, 0);
+    assert_eq!(
+        unknown_metrics.before_commit_error + unknown_metrics.cancelled,
+        0
+    );
+    assert_eq!(
+        unknown_metrics.consumed
+            + unknown_metrics.fenced_inserted
+            + unknown_metrics.fenced_existing
+            + unknown_metrics.observed_restored_rows,
+        0
+    );
     let mode = std::env::var("SEATA_ROLLBACK_FAULT").unwrap();
     if mode == "delay_ok" {
         assert!(matches!(
@@ -73,6 +92,27 @@ async fn uncertain_rollback_commit_keeps_original_identity_and_recovers_without_
         } else {
             UndoRollbackObservation::Fenced { inserted: true }
         }
+    );
+    let final_metrics = metrics.snapshot(MySqlUndoOperation::Rollback);
+    assert_eq!(final_metrics.active, 0);
+    assert_eq!(final_metrics.unknown_commit, 1);
+    assert_eq!(final_metrics.completed, 1);
+    assert_eq!(
+        final_metrics.before_commit_error + final_metrics.cancelled,
+        0
+    );
+    assert_eq!(final_metrics.consumed, u64::from(mode == "block_commit"));
+    assert_eq!(
+        final_metrics.observed_restored_rows,
+        u64::from(mode == "block_commit")
+    );
+    assert_eq!(
+        final_metrics.fenced_inserted,
+        u64::from(mode != "block_commit")
+    );
+    fixture::save(
+        "rollback-independent-metrics.json",
+        &serde_json::json!({"unknown":undo_metrics_snapshot::snapshot(unknown_metrics),"after_explicit_observation":undo_metrics_snapshot::snapshot(final_metrics)}),
     );
     assert_eq!(fixture::count(&mut admin, "undo_work").await, 0);
     let final_undo = fixture::count(&mut admin, "undo_log").await;

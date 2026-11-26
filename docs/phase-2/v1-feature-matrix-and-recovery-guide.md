@@ -15,6 +15,7 @@
 | 有变化本地 COMMIT、原报告和跨进程 RM 恢复 | **默认关闭的实验特性** | `experimental_changed_commit` 下的 006 尝试记录、004 见证、007 报告门闩有[选定故障证据](evidence/mysql-commit-attempt-arm/README.md)。两个真正独立恢复者进程竞争已在[受控 RM 对端](evidence/mysql-report-process-race/README.md)与[固定原 Java TC](evidence/java-tc-changed-commit-report/README.md)的真实 MySQL 场景双工具链通过；持久 TM 接管已有[停止证明与原 TC 联试](evidence/tm-stop-nodes/README.md)，完整外部写入器准入和生产部署继续验收。 |
 | Undo SHA-256 | 013 迁移的新版本行已验证 | 版本 4 的摘要与业务、Undo、见证同事务提交，独立恢复和正式回调拒绝改写。旧行保留 NULL 摘要及历史语义。[双工具链现场证据](evidence/java-tc-changed-commit-report/README.md#undo-sha-256-与同一分支恢复)。 |
 | MySQL AT 二阶段补偿与幂等 | 选定实验配置十项已验证 | [WP06 验收项](../phase-0/v1-implementation-acceptance-checklist.md#wp-06--mysql-at-phase-2)包含原 TC、MySQL、幂等、回包丢失和断连证据。生产验收仍依赖 WP05 完整门槛。 |
+| 独立 Undo API 调用指标 | 选定 MySQL 场景已验证 | 固定 20 条只读序列区分完成、未知、提交前错误和取消；重复围栏与明确观察的恢复行数不代表全部实际效果。[指标证据](evidence/mysql-undo-metrics/README.md)。生产采集/告警仍开放。 |
 | 生产可观测、部署配置、TLS/认证、负载与安全 | 未验收 | [WP07](../phase-0/v1-implementation-acceptance-checklist.md#wp-07--production-readiness)仍开放；[依赖审计](evidence/wp07-dependency-audit/README.md)仍报告 `rsa`。 |
 | 其他 AT 数据库、XA、TCC、Saga、Rust TC | V1 范围外 | 按原[能力决策](../phase-0/v1-implementation-acceptance-checklist.md#5-v1-supported-feature-matrix)分别立项，不通过 MySQL AT 证据推断支持。 |
 

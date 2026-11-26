@@ -124,3 +124,17 @@ MySqlDataSource 及使用同一数据源克隆的 MySqlDataSourceManager 签发 
 每次 control 维护 active，返回时互斥记录 completed、unknown_commit、before_commit_error；取消或 panic 记 cancelled。completed 只表示本次独立控制事务在期限内返回 Ok，可能仅确认登记、方向或只读回滚，不能证明业务提交。成功结果另按原 BranchResolution 记录 applied 或 unresolved；Applied 可来自读取已有终态，不作为业务执行次数或 SQL 重放计数。unknown_commit 仅来自原 MySqlRecoveryError::CommitOutcomeUnknown，before_commit_error 不证明旧业务未执行。取消后 MySQL 仍可能迟到提交，指标不得改变原恢复行为。
 
 采样器仅持固定原子计数，无池、资源、身份和恢复权限；逐字段采样，累计饱和不回绕，不查询数据库聚合。默认关闭的 observability mysql 特性可通过 with_mysql_recovery 导出六动作各 active、四结果以及 applied/unresolved，共 42 条固定序列；不含 XID、BranchId、URL、SQL、锁键或凭据。验收须包括实际 MySQL 持久化与重复读取、提交前错误、受阻取消、COMMIT 确认丢失及后续原分支恢复，不能以成功 HTTP 代替数据库事实。该增量不代表一阶段业务 COMMIT、独立 Undo API 或完整 MySQL 指标均已覆盖。
+
+
+## 独立 MySQL Undo API 计量（实施基线，2026-11-27）
+
+对数据源的 rollback_undo_log（含内部序列化器分派）与 fence_undo_log 实际已轮询调用各结算一次。固定 operation=rollback|fence，累计 completed、unknown_commit、before_commit_error、cancelled 分开；active 是在途 gauge。非法身份计本次 COMMIT 前错误；Future 未轮询不计，轮询后取消或 panic 由守卫记取消，不推断 COMMIT 阶段。
+
+成功观察另区分 consumed、fenced_inserted、fenced_existing、undo_present；observed_restored_rows 仅累计明确 Ok(Consumed) 返回的行数，不能当作所有实际数据库效果总数。未知 COMMIT 可能已产生补偿，禁止把它计成功或把后续围栏观察当作原补偿行数。重复读取既有围栏只增加观察次数。全部累计饱和不回绕，快照逐字段采样，不保证跨字段原子。
+
+同数据源克隆共享只读采样能力，新连接建立独立数据源归零，关闭后仍可读。可选 mysql 导出增加固定 20 条序列，无身份、URL、SQL 或凭据标签；默认导出器不增加 SQLx 运行依赖。既有恢复管理器 control 计数与独立 Undo API 调用口径分开，不相加宣称业务效果次数。
+
+验收须包含真实 MySQL 的成功/既有围栏/Normal 存在/输入错误/锁等待取消或期限、原 COMMIT OK 丢失的未知分类及同身份后续观察；通过受认证 HTTP 核对固定序列和敏感哨兵缺席，完成源代码反例、双 Rust 回归与严格 Clippy。该增量不关闭 WP05–07 或生产采集/告警部署门禁。
+
+
+本节选定范围现已通过双 Rust 的真实 API、锁等待取消/期限、两个 API 的原 COMMIT OK 丢失及授权 HTTP 验证；各 12 项原证据削弱拒绝，正式结算变异目标失败且恢复后通过。固定 20 条序列、默认运行依赖及双版本 726 passed / 320 ignored 与受影响两组件严格 Clippy 见 [独立 Undo 指标证据](evidence/mysql-undo-metrics/README.md)。该结果不替代一阶段业务指标、生产日志/采集/告警及独立审查。

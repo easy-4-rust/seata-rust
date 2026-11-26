@@ -1,0 +1,77 @@
+{
+  "status": "INDEPENDENT_MYSQL_UNDO_METRICS_SELECTED_PROFILE_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "operations": [
+    "rollback",
+    "fence"
+  ],
+  "fixed_series": 20,
+  "source_api": "MySqlDataSource::undo_metrics_sampler",
+  "export_api": "MetricsSources::with_mysql_undo",
+  "counters": [
+    "completed",
+    "unknown_commit",
+    "before_commit_error",
+    "cancelled"
+  ],
+  "observations": [
+    "consumed",
+    "fenced_inserted",
+    "fenced_existing",
+    "undo_present"
+  ],
+  "restored_rows_semantics": "Only rows in observed Ok(Consumed), not all actual database effects after unknown COMMIT",
+  "datasource_clone_scoped": true,
+  "new_datasource_starts_at_zero": true,
+  "readable_after_close": true,
+  "never_polled_future_not_counted": true,
+  "cumulative_saturates": true,
+  "identity_labels": false,
+  "evidence": {
+    "live": {
+      "path": "docs/phase-2/evidence/mysql-undo-metrics/run_20261127_035149_a0250459",
+      "catalog_sha256": "df1d7c6232834997daf6a3c2711bf1173626aad938a3181da0fdbe59a16c7f9f"
+    },
+    "validation": {
+      "path": "docs/phase-2/evidence/mysql-undo-metrics/validation_20261127_040004_05a754e1",
+      "catalog_sha256": "f5d097b1554d42bef37c8203b0ac2f7f5dd7e71bf3bd2b7172ac834c9b260fe3"
+    },
+    "regression_199": {
+      "path": "docs/phase-2/evidence/mysql-undo-metrics/regression_1.99_20261127_035502_120c1824",
+      "catalog_sha256": "58c631bf17886d12660b7f7756932fb6aa93d64bcb6625ecbdc857aeb605653e"
+    },
+    "regression_185": {
+      "path": "docs/phase-2/evidence/mysql-undo-metrics/regression_1.85_20261127_035502_37975b4d",
+      "catalog_sha256": "e356a49d0fc7163390b698118a9ed223db89d1975b450be8550b1a257dff69fc"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/mysql-undo-metrics/default_20261127_040049_ca660e07",
+      "catalog_sha256": "524be8ce2641a45ffb01307df97ced9e7f373daf0a4fee26c096fce1b6e91dd2"
+    }
+  },
+  "live_cases_per_version": 6,
+  "actual_COMMIT_OK_losses": 4,
+  "negative_controls_per_version": 12,
+  "real_settlement_mutation_rejected": true,
+  "restored_original_bytes": true,
+  "workspace": {
+    "1.99": {
+      "passed": 726,
+      "ignored": 320
+    },
+    "1.85": {
+      "passed": 726,
+      "ignored": 320
+    }
+  },
+  "strict_clippy_packages": [
+    "seata-db-mysql",
+    "seata-observability"
+  ],
+  "default_exporter_mysql_or_sqlx_runtime_dependency": false,
+  "independent_human_or_other_agent_review": "OPEN",
+  "first_phase_business_metrics_complete": false,
+  "production_scraping_alerts_and_logs_complete": false,
+  "WP07_complete": false,
+  "full_V1_complete": false
+}

@@ -1,9 +1,12 @@
 //! 补偿操作在真实原Undo锁等待中的取消/期限夹具。
 use super::{fixture, owned_mysql, rollback_fixture};
 use seata_at::MySqlJdbcProfile;
+use seata_db_mysql::MySqlUndoOperation;
 use seata_db_mysql::{DbError, MySqlDataSource, UndoRollbackError, UndoRollbackObservation};
 use sqlx::Connection;
 use std::time::Duration;
+#[path = "undo_metrics_snapshot.rs"]
+mod undo_metrics_snapshot;
 pub async fn blocked_rollback(cancel: bool) {
     let (mut admin, seed_ds) = rollback_fixture::seed(
         &[],
@@ -25,6 +28,7 @@ pub async fn blocked_rollback(cancel: bool) {
     )
     .await
     .unwrap();
+    let metrics = ds.undo_metrics_sampler();
     let mut owner = owned_mysql::admin().await;
     let mut lock = owner.begin().await.unwrap();
     sqlx::query(
@@ -55,6 +59,7 @@ pub async fn blocked_rollback(cancel: bool) {
             "actual Undo lock wait missing"
         );
     }
+    assert_eq!(metrics.snapshot(MySqlUndoOperation::Rollback).active, 1);
     if cancel {
         drop(future);
     } else {
@@ -66,6 +71,14 @@ pub async fn blocked_rollback(cancel: bool) {
             })
         ));
     }
+    let interrupted = metrics.snapshot(MySqlUndoOperation::Rollback);
+    assert_eq!(interrupted.active, 0);
+    assert_eq!(interrupted.cancelled, u64::from(cancel));
+    assert_eq!(interrupted.before_commit_error, u64::from(!cancel));
+    assert_eq!(
+        interrupted.unknown_commit + interrupted.completed + interrupted.observed_restored_rows,
+        0
+    );
     lock.rollback().await.unwrap();
     assert_eq!(before, rollback_fixture::snapshot(&mut admin).await);
     assert_eq!(fixture::count(&mut admin, "undo_work").await, 1);
@@ -77,6 +90,19 @@ pub async fn blocked_rollback(cancel: bool) {
             logs: 1,
             restored_rows: 1
         }
+    );
+    let recovered = metrics.snapshot(MySqlUndoOperation::Rollback);
+    assert_eq!(recovered.active, 0);
+    assert_eq!(recovered.completed, 1);
+    assert_eq!(recovered.consumed, 1);
+    assert_eq!(recovered.observed_restored_rows, 1);
+    fixture::save(
+        if cancel {
+            "independent-undo-cancel-metrics.json"
+        } else {
+            "independent-undo-deadline-metrics.json"
+        },
+        &serde_json::json!({"interrupted":undo_metrics_snapshot::snapshot(interrupted),"after_explicit_recovery":undo_metrics_snapshot::snapshot(recovered)}),
     );
     ds.close().await.unwrap();
 }
