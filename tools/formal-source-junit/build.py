@@ -9,10 +9,10 @@ MVN=Path('D:/Java/maven/apache-maven-3.9.16/bin/mvn.cmd')
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def need(v,why):
     if not v:raise ValueError(why)
-def run():
+def run(evidence_root=None):
     stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8]
     work=Path('D:/codex-builds')/('seata_source_junit_'+stamp);work.mkdir()
-    out=ROOT/'docs/phase-2/evidence/source-junit'/('run_'+stamp);out.mkdir(parents=True)
+    out=(evidence_root or ROOT/'docs/phase-2/evidence/source-junit')/('run_'+stamp);out.mkdir(parents=True)
     print('SOURCE_JUNIT_BUILD '+str(out),flush=True)
     (out/'build-executed.py').write_bytes(Path(__file__).read_bytes())
     env=os.environ|dict(MAVEN_SKIP_RC='1',JAVA_HOME=str(JDK),TEMP='D:/Temp',TMP='D:/Temp',PYTHONUTF8='1',PYTHONDONTWRITEBYTECODE='1',MAVEN_OPTS='-Xmx1024m -XX:MaxMetaspaceSize=512m -Duser.home='+str(work/'home')+' -Djava.io.tmpdir=D:/Temp',PATH=str(JDK/'bin')+os.pathsep+os.environ['PATH'])
@@ -54,4 +54,5 @@ def run():
     (out/'compile-result.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(result),flush=True)
     if code:raise SystemExit(code)
+    return out
 if __name__=='__main__':run()

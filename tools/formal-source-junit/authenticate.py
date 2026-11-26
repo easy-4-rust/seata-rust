@@ -2,10 +2,10 @@
 import concurrent.futures,datetime,hashlib,json,re,urllib.error,urllib.request,uuid
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];REPO=Path('D:/codex-builds/seata-source-junit-m2')
-def run():
+def run(evidence_root=None):
     files=sorted([*REPO.rglob('*.pom'),*REPO.rglob('*.jar')]);stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8]
     work=Path('D:/codex-builds')/('seata_junit_dependency_auth_'+stamp);work.mkdir()
-    out=ROOT/'docs/phase-2/evidence/source-junit'/('dependency_auth_'+stamp);out.mkdir(parents=True);print('SOURCE_JUNIT_DEPENDENCY_AUTH '+str(out)+' files='+str(len(files)),flush=True)
+    out=(evidence_root or ROOT/'docs/phase-2/evidence/source-junit')/('dependency_auth_'+stamp);out.mkdir(parents=True);print('SOURCE_JUNIT_DEPENDENCY_AUTH '+str(out)+' files='+str(len(files)),flush=True)
     def check(p):
         leaf=p.relative_to(REPO).as_posix();url='https://repo.maven.apache.org/maven2/'+leaf+'.sha1';data=p.read_bytes();value=dict(path=str(p),relative=leaf,sha256=hashlib.sha256(data).hexdigest(),sha1=hashlib.sha1(data).hexdigest(),checksum_url=url)
         try:
@@ -24,4 +24,5 @@ def run():
     summary={status:sum(v['status']==status for v in rows) for status in sorted({v['status'] for v in rows})}
     (out/'dependency-authentication.json').write_text(json.dumps(dict(repository=str(REPO),work=str(work),counts=summary,files=rows,all_authenticated=all(v['status']=='MATCH' for v in rows)),indent=2)+'\n',encoding='utf-8')
     (out/'authenticate-executed.py').write_bytes(Path(__file__).read_bytes());print(json.dumps(dict(path=str(out),counts=summary)),flush=True)
+    return out
 if __name__=='__main__':run()

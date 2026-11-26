@@ -7,13 +7,13 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def read(p):return json.loads(p.read_bytes())
 def need(v,why):
     if not v:raise ValueError(why)
-def run(build,mode):
+def run(build,mode,evidence_root=None):
     result=read(build/'compile-result.json');need(result['status']=='SOURCE_TEST_COMPILE_PASSED','Original source tests did not compile')
     stage=Path(result['work']);source=stage/'source';need(stage.resolve().is_relative_to(Path('D:/codex-builds').resolve()),'Stage escaped D workspace')
     for row in read(build/'original-source-inputs.json'):need(sha(source/row['path'])==row['sha256'],'Original compiled input drift: '+row['path'])
     stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8];work=stage/('junit_'+stamp);work.mkdir();(work/'classes').mkdir();(work/'home').mkdir()
     family='source-junit-literal' if read(build/'build-command.json').get('literal_Git_blobs_verified') else 'source-junit'
-    out=ROOT/('docs/phase-2/evidence/'+family)/('runtime_'+stamp);out.mkdir(parents=True);print('SOURCE_JUNIT_RUNTIME '+str(out),flush=True)
+    out=(evidence_root or ROOT/('docs/phase-2/evidence/'+family))/('runtime_'+stamp);out.mkdir(parents=True);print('SOURCE_JUNIT_RUNTIME '+str(out),flush=True)
     (out/'run-executed.py').write_bytes(Path(__file__).read_bytes())
     def save(name,v):
         p=out/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
