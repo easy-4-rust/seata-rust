@@ -428,9 +428,9 @@ seata:
             processes.append(guard.support.spawn(proxy, work, env, out, role))
             guard.support.wait_owned(processes[-1], listen, env)
         if env.get("SEATA_TRANSPORT_TLS_MATERIAL"):
-            assert scenario in ("commit", "commit_callback_reply_loss", "rollback_callback_reply_loss")
+            assert scenario in ("commit", "commit_callback_reply_loss", "rollback_callback_reply_loss", "tm_durable_commit_loss", "tm_durable_rollback_loss")
             from transport_tls import Frontend
-            for role in ("TM", "RM"):
+            for role in (("TM",) if tm_durable_mode and not tm_at else ("TM", "RM")):
                 key = "SEATA_" + role + "_ENDPOINT"
                 frontend = Frontend(env["SEATA_TRANSPORT_TLS_MATERIAL"], env[key], role)
                 tls_frontends.append(frontend)
@@ -968,6 +968,8 @@ seata:
             guard.put(out / stage_metrics.name, stage_metrics.read_bytes())
         for event_file in observations.glob("rm-callback-write-events.json"):
             guard.put(out / event_file.name, event_file.read_bytes())
+        for binding_file in observations.glob("tm-transport-binding.json"):
+            guard.put(out / binding_file.name, binding_file.read_bytes())
         guard.save(out / "process-cleanup.json", {"stopped": all(p.poll() is not None for p in processes),
                                                   "signer_removed": signer_created,
                                                   "pids": [p.pid for p in processes]})

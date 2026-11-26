@@ -9,9 +9,10 @@ repository.workspace = true
 publish = false
 
 [features]
-tls = ["dep:tokio-rustls"]
+tls = ["dep:tokio-rustls", "dep:sha2"]
 
 [dependencies]
+sha2 = { version = "=0.10.9", optional = true }
 seata-protocol = { path = "../seata_protocol" }
 tokio-rustls = { version = "=0.26.4", default-features = false, features = ["ring"], optional = true }
 thiserror.workspace = true

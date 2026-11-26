@@ -371,3 +371,40 @@ fn export_java_tls_material() {
         std::fs::write(folder.join(name), bytes).unwrap();
     }
 }
+
+#[test]
+fn peer_trust_binding_canonicalizes_roots_and_name_without_binding_client_credentials() {
+    let pki = tls_peer::Pki::new();
+    let other = tls_peer::Pki::new();
+    let build = |name: &str, roots: Vec<Vec<u8>>, cert: Vec<u8>, key: Vec<u8>| {
+        TlsClientConfig::new(name.into(), roots, vec![cert], key).unwrap()
+    };
+    let original = pki.client("seata.example.test");
+    let renamed = pki.client("SEATA.EXAMPLE.TEST");
+    assert_eq!(original.peer_trust_binding(), renamed.peer_trust_binding());
+    let rotated = build(
+        "seata.example.test",
+        vec![pki.root.clone()],
+        other.client_certificate.clone(),
+        other.client_key.clone(),
+    );
+    assert_eq!(original.peer_trust_binding(), rotated.peer_trust_binding());
+    let wider = build(
+        "seata.example.test",
+        vec![pki.root.clone(), other.root.clone()],
+        pki.client_certificate.clone(),
+        pki.client_key.clone(),
+    );
+    let reordered = build(
+        "seata.example.test",
+        vec![other.root.clone(), pki.root.clone(), pki.root.clone()],
+        pki.client_certificate.clone(),
+        pki.client_key.clone(),
+    );
+    assert_eq!(wider.peer_trust_binding(), reordered.peer_trust_binding());
+    assert_ne!(original.peer_trust_binding(), wider.peer_trust_binding());
+    assert_ne!(
+        original.peer_trust_binding(),
+        pki.client("other.example.test").peer_trust_binding()
+    );
+}

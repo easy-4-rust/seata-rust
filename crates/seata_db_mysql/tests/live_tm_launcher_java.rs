@@ -5,6 +5,12 @@
 mod java_tm_at;
 #[path = "support/java_tm_attested.rs"]
 mod java_tm_attested;
+#[cfg(feature = "transport_tls")]
+#[path = "support/java_tm_transport_binding.rs"]
+mod java_tm_transport_binding;
+#[path = "support/java_transport_tls.rs"]
+#[allow(dead_code)]
+mod java_transport_tls;
 #[path = "support/owned_mysql.rs"]
 mod owned_mysql;
 #[cfg(feature = "experimental_changed_commit")]
@@ -45,7 +51,7 @@ async fn durable_tm_lost_end_reply(rollback: bool) {
     let store = MySqlLauncherStore::new(data_source.clone());
     let (pool, identity) = tm_connection();
     let endpoint = pool.endpoint();
-    let tm = TransactionManager::builder(pool, identity.clone())
+    let tm = java_transport_tls::tm(TransactionManager::builder(pool, identity.clone()))
         .request_timeout(Duration::from_secs(10))
         .build()
         .unwrap();
@@ -56,14 +62,21 @@ async fn durable_tm_lost_end_reply(rollback: bool) {
         .unwrap();
     let xid = tx.xid().clone();
     let original_metrics = tm.metrics_sampler();
+    #[cfg(feature = "transport_tls")]
+    let original_binding = tm.peer_trust_binding().copied();
     observe_lost_end(rollback, &tm, tx, &mut admin, endpoint).await;
     tm.shutdown().await.unwrap();
-    let observer = TransactionManager::builder(pool, identity)
+    let observer = java_transport_tls::tm(TransactionManager::builder(pool, identity.clone()))
         .request_timeout(Duration::from_secs(10))
         .build()
         .unwrap();
     let snapshot = store.load_snapshot(&xid).await.unwrap().unwrap();
     assert_ne!(snapshot.owner_instance_id(), observer.owner_instance_id());
+    #[cfg(feature = "transport_tls")]
+    if let Some(expected) = original_binding {
+        java_tm_transport_binding::verify(&store, &snapshot, &observer, &expected, pool, identity)
+            .await;
+    }
     let outcome = snapshot
         .query_original_tc(&observer, "order-original-tc")
         .await
@@ -140,6 +153,14 @@ async fn apply_launcher_schema(admin: &mut sqlx::MySqlConnection) {
     .execute(&mut *admin)
     .await
     .unwrap();
+    if std::env::var_os("SEATA_TRANSPORT_TLS_MATERIAL").is_some() {
+        sqlx::raw_sql(include_str!(
+            "../migrations/014_seata_rs_tm_transport_binding.sql"
+        ))
+        .execute(&mut *admin)
+        .await
+        .unwrap();
+    }
 }
 
 fn tm_connection() -> (ConnectionPoolConfig, RegistrationIdentity) {

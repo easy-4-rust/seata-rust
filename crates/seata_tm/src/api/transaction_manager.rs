@@ -23,6 +23,7 @@ pub struct TransactionManager {
     tc_endpoint: std::net::SocketAddr,
     identity: RegistrationIdentity,
     owner_instance_id: [u8; 32],
+    peer_trust_binding: Option<[u8; 32]>,
     owner_stop_scope: Option<[u8; 32]>,
     pub(crate) recovery_authority: std::sync::Arc<()>,
 }
@@ -43,6 +44,11 @@ impl TransactionManager {
     /// 它不授予网络、关闭或事务恢复权限；计数不跨管理器或进程聚合。
     pub fn metrics_sampler(&self) -> super::TmMetricsSampler {
         self.metrics.clone()
+    }
+
+    /// 无参数；返回原 TC 的 TLS 信任摘要；明文返回 None，摘要不授予恢复或结束权限。
+    pub fn peer_trust_binding(&self) -> Option<&[u8; 32]> {
+        self.peer_trust_binding.as_ref()
     }
 
     /// 返回此管理器的随机实例 ID；供受信进程监护器把停止证据与 008 来源对应，ID 本身不授予恢复权。
@@ -107,6 +113,7 @@ impl TransactionManager {
             remaining,
             captured_at: Instant::now(),
             owner_instance_id: self.owner_instance_id,
+            peer_trust_binding: self.peer_trust_binding,
             owner_stop_scope: self.owner_stop_scope,
         };
         store
@@ -487,6 +494,13 @@ impl TransactionManagerBuilder {
         let identity = self.identity.clone();
         let registration = SessionRegistration::tm(self.identity, self.registration_timeout)
             .map_err(|e| TmError::Infrastructure(Box::new(e)))?;
+        #[cfg(feature = "tls")]
+        let peer_trust_binding = self
+            .transport_tls
+            .as_ref()
+            .map(|tls| *tls.peer_trust_binding());
+        #[cfg(not(feature = "tls"))]
+        let peer_trust_binding = None;
         let pool = {
             #[cfg(feature = "tls")]
             {
@@ -510,6 +524,7 @@ impl TransactionManagerBuilder {
             tc_endpoint,
             identity,
             owner_instance_id,
+            peer_trust_binding,
             owner_stop_scope: self.owner_stop_scope,
             recovery_authority: std::sync::Arc::new(()),
         })

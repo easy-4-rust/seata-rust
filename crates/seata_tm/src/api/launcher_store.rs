@@ -5,7 +5,7 @@ use crate::TmOperation;
 /// 对应 Java: DefaultGlobalTransaction 的 Begin/Commit/Rollback 调用边界。
 #[allow(async_fn_in_trait)]
 pub trait LauncherStore {
-    /// 保存 Begin 来源及期限；失败或提交结果不明时返回错误。
+    /// 保存 Begin 来源、TC 传输信任摘要及期限；失败或提交结果不明时返回错误。
     async fn record_begin(
         &self,
         origin: &LauncherOrigin,

@@ -1,0 +1,144 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-tm-trust-20261127-061414-c2eb7992",
+      "--label",
+      "seata.tm.trust.owner=31303b43e9664877a070021cc4c1bb9d",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_tm_trust_20261127_061414_c2eb7992/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:51334:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_31303b43e966",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "3f0946e040867e44ca9ccb31d859da65317024e57fead04003730582e3ad5037"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_tm_transport_binding",
+      "--features",
+      "transport_tls",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-live",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_tm_transport_binding-e24a1f8927460703.exe",
+      "--ignored",
+      "--skip",
+      "binding_owner_child",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_tm_transport_binding",
+      "--features",
+      "transport_tls",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-live",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_tm_transport_binding-d0bf7181af9df8da.exe",
+      "--ignored",
+      "--skip",
+      "binding_owner_child",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "3f0946e040867e44ca9ccb31d859da65317024e57fead04003730582e3ad5037"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "3f0946e040867e44ca9ccb31d859da65317024e57fead04003730582e3ad5037"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "3f0946e040867e44ca9ccb31d859da65317024e57fead04003730582e3ad5037"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "3f0946e040867e44ca9ccb31d859da65317024e57fead04003730582e3ad5037"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "3f0946e040867e44ca9ccb31d859da65317024e57fead04003730582e3ad5037"
+    ],
+    "exit_code": 1
+  }
+]

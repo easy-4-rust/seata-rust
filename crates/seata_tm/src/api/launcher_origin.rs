@@ -16,6 +16,7 @@ pub struct LauncherOrigin {
     pub(crate) remaining: Duration,
     pub(crate) captured_at: Instant,
     pub(crate) owner_instance_id: [u8; 32],
+    pub(crate) peer_trust_binding: Option<[u8; 32]>,
     pub(crate) owner_stop_scope: Option<[u8; 32]>,
 }
 impl LauncherOrigin {
@@ -26,6 +27,10 @@ impl LauncherOrigin {
     /// 返回原登记的数值 TC 端点。
     pub const fn tc_endpoint(&self) -> SocketAddr {
         self.tc_endpoint
+    }
+    /// 无参数；返回必须与来源一同持久化的 TC 信任摘要；历史明文来源为 None。
+    pub fn peer_trust_binding(&self) -> Option<&[u8; 32]> {
+        self.peer_trust_binding.as_ref()
     }
     /// 返回原登记的应用标识。
     pub fn application_id(&self) -> &str {

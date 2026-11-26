@@ -1,0 +1,113 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-tm-trust-20261127-060852-c88a9180",
+      "--label",
+      "seata.tm.trust.owner=c29b868928a44febad5d2a027828ec6b",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_tm_trust_20261127_060852_c88a9180/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:55833:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_c29b868928a4",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "1bfcbb1430ce5641de0d4ff5f6599ee846c9f2fd14d90d37a4ef5e5c7ef6db44"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_tm_transport_binding",
+      "--features",
+      "transport_tls",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-live",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_tm_transport_binding-e24a1f8927460703.exe",
+      "--ignored",
+      "--skip",
+      "binding_owner_child",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_code": 101
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "1bfcbb1430ce5641de0d4ff5f6599ee846c9f2fd14d90d37a4ef5e5c7ef6db44"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "1bfcbb1430ce5641de0d4ff5f6599ee846c9f2fd14d90d37a4ef5e5c7ef6db44"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "1bfcbb1430ce5641de0d4ff5f6599ee846c9f2fd14d90d37a4ef5e5c7ef6db44"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "1bfcbb1430ce5641de0d4ff5f6599ee846c9f2fd14d90d37a4ef5e5c7ef6db44"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "1bfcbb1430ce5641de0d4ff5f6599ee846c9f2fd14d90d37a4ef5e5c7ef6db44"
+    ],
+    "exit_code": 1
+  }
+]

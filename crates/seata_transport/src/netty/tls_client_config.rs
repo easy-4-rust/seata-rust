@@ -1,4 +1,5 @@
 use crate::TransportError;
+use sha2::{Digest, Sha256};
 use std::{fmt, sync::Arc};
 use tokio_rustls::{
     rustls::{
@@ -14,6 +15,7 @@ use tokio_rustls::{
 #[derive(Clone)]
 pub struct TlsClientConfig {
     connector: TlsConnector,
+    peer_trust_binding: [u8; 32],
     server_name: ServerName<'static>,
 }
 
@@ -53,6 +55,31 @@ impl TlsClientConfig {
             return Err(invalid());
         }
         let server_name = ServerName::try_from(server_name).map_err(|_| invalid())?;
+        // 仅绑定 TC 的信任边界；客户端身份可以按接管授权独立续期或更换。
+        let name = server_name.to_str().to_ascii_lowercase();
+        let mut anchors: Vec<[u8; 32]> = roots_der
+            .iter()
+            .map(|der| Sha256::digest(der).into())
+            .collect();
+        anchors.sort_unstable();
+        anchors.dedup();
+        let mut digest = Sha256::new();
+        digest.update(b"seata-rust.tc-peer-trust.v1\0TLS1.3.mTLS\0");
+        digest.update(
+            u32::try_from(name.len())
+                .map_err(|_| invalid())?
+                .to_be_bytes(),
+        );
+        digest.update(name.as_bytes());
+        digest.update(
+            u32::try_from(anchors.len())
+                .map_err(|_| invalid())?
+                .to_be_bytes(),
+        );
+        for anchor in anchors {
+            digest.update(anchor);
+        }
+        let peer_trust_binding = digest.finalize().into();
         let mut roots = RootCertStore::empty();
         for certificate in roots_der {
             roots
@@ -74,8 +101,15 @@ impl TlsClientConfig {
         config.resumption = rustls::client::Resumption::disabled();
         Ok(Self {
             connector: TlsConnector::from(Arc::new(config)),
+            peer_trust_binding,
             server_name,
         })
+    }
+
+    /// 无参数；返回 TC SAN、信任根集合和 TLS profile 的规范摘要，不含客户端身份或密钥。
+    /// 用于持久来源的一致性比较，摘要本身不授予恢复权限。
+    pub const fn peer_trust_binding(&self) -> &[u8; 32] {
+        &self.peer_trust_binding
     }
 
     /// 参数为尚未发送 V1 字节的原 TCP 流和原绝对期限；返回经验证的同一物理 TLS 流。

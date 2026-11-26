@@ -7,6 +7,7 @@ use std::net::SocketAddr;
 pub struct MySqlLauncherSnapshot {
     pub(crate) xid: Xid,
     pub(crate) tc_endpoint: SocketAddr,
+    pub(crate) peer_trust_binding: Option<[u8; 32]>,
     pub(crate) application_id: String,
     pub(crate) service_group: String,
     pub(crate) begin_exception_code: TransactionExceptionCode,
@@ -28,6 +29,12 @@ impl MySqlLauncherSnapshot {
         manager: &TransactionManager,
         business_intent: &str,
     ) -> Result<TransactionOutcome, TmError> {
+        if self.peer_trust_binding.as_ref() != manager.peer_trust_binding() {
+            return Err(TmError::IllegalState {
+                xid: Some(self.xid.clone()),
+                reason: "TM transport trust does not match launcher origin",
+            });
+        }
         if self.business_intent != business_intent {
             return Err(TmError::IllegalState {
                 xid: Some(self.xid.clone()),
@@ -55,6 +62,10 @@ impl MySqlLauncherSnapshot {
     /// 返回来源记录中的原 TC 数值端点。
     pub const fn tc_endpoint(&self) -> SocketAddr {
         self.tc_endpoint
+    }
+    /// 无参数；返回来源的 TC 信任摘要；旧明文来源为 None，不构成恢复权限。
+    pub fn peer_trust_binding(&self) -> Option<&[u8; 32]> {
+        self.peer_trust_binding.as_ref()
     }
     /// 返回原 TM 登记应用标识。
     pub fn application_id(&self) -> &str {

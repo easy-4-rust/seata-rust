@@ -105,7 +105,8 @@ impl MySqlLauncherStore {
             if locked.is_none() || !authorized() {
                 return Err(DbError::RecoveryConflict);
             }
-            let result = sqlx::query("UPDATE seata_rs_tm_launcher_v1 SET owner_epoch=?,owner_instance_id=?,owner_stop_scope=?,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND schema_version=1 AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND begin_exception_code=? AND begin_extra_data <=> ? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=? AND end_operation=? AND send_started=0 AND deadline_at>UTC_TIMESTAMP(6)")
+            let statement = Self::trust_guarded_sql("UPDATE seata_rs_tm_launcher_v1 SET owner_epoch=?,owner_instance_id=?,owner_stop_scope=?,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND schema_version=1 AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND begin_exception_code=? AND begin_extra_data <=> ? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=? AND end_operation=? AND send_started=0 AND deadline_at>UTC_TIMESTAMP(6)", snapshot.peer_trust_binding());
+            let mut query = sqlx::query(&statement)
                 .bind(next_epoch)
                 .bind(manager.owner_instance_id().as_slice())
                 .bind(manager.owner_stop_scope().map(|scope| scope.as_slice()))
@@ -121,7 +122,9 @@ impl MySqlLauncherStore {
                 .bind(snapshot.owner_stop_scope().map(|scope| scope.as_slice()))
                 .bind(snapshot.owner_epoch())
                 .bind(Self::operation_code(operation))
-                .execute(&mut *transaction).await
+;
+            if let Some(binding) = snapshot.peer_trust_binding() { query = query.bind(binding.as_slice()); }
+            let result = query.execute(&mut *transaction).await
                 .map_err(|error| DbError::driver("TM launcher claim update", error))?;
             if result.rows_affected() != 1 {
                 return Err(DbError::RecoveryConflict);
@@ -148,6 +151,9 @@ impl MySqlLauncherStore {
         manager: &TransactionManager,
         operation: TmOperation,
     ) -> Result<(), DbError> {
+        if snapshot.peer_trust_binding() != manager.peer_trust_binding() {
+            return Err(DbError::RecoveryConflict);
+        }
         let deadline = Instant::now() + self.data_source.operation_timeout();
         timeout_at(deadline, async {
             let mut connection = self.data_source.control_pool().acquire().await
@@ -164,7 +170,8 @@ impl MySqlLauncherStore {
                 return Err(DbError::RecoveryConflict);
             }
             // 新语句在行锁取得后检查服务器期限，并仅允许确认过的新代际置位一次。
-            let result = sqlx::query("UPDATE seata_rs_tm_launcher_v1 SET send_started=1,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND schema_version=1 AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND begin_exception_code=? AND begin_extra_data <=> ? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=? AND end_operation=? AND send_started=0 AND deadline_at>UTC_TIMESTAMP(6)")
+            let statement = Self::trust_guarded_sql("UPDATE seata_rs_tm_launcher_v1 SET send_started=1,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND schema_version=1 AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND begin_exception_code=? AND begin_extra_data <=> ? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=? AND end_operation=? AND send_started=0 AND deadline_at>UTC_TIMESTAMP(6)", snapshot.peer_trust_binding());
+            let mut query = sqlx::query(&statement)
                 .bind(digest.as_slice())
                 .bind(snapshot.xid().as_str().as_bytes())
                 .bind(snapshot.tc_endpoint().to_string().into_bytes())
@@ -177,7 +184,9 @@ impl MySqlLauncherStore {
                 .bind(manager.owner_stop_scope().map(|scope| scope.as_slice()))
                 .bind(epoch)
                 .bind(Self::operation_code(operation))
-                .execute(&mut *transaction).await
+;
+            if let Some(binding) = snapshot.peer_trust_binding() { query = query.bind(binding.as_slice()); }
+            let result = query.execute(&mut *transaction).await
                 .map_err(|error| DbError::driver("TM recovered send update", error))?;
             if result.rows_affected() != 1 {
                 return Err(DbError::RecoveryConflict);
@@ -193,7 +202,7 @@ impl MySqlLauncherStore {
         let row = timeout_at(deadline, async {
             let mut connection = self.data_source.control_pool().acquire().await.map_err(|e| DbError::acquisition("TM launcher inspect acquire", e))?;
             connection.close_on_drop();
-            sqlx::query("SELECT schema_version,xid,tc_endpoint,application_id,service_group,begin_exception_code,begin_extra_data,business_intent,owner_epoch,owner_instance_id,owner_stop_scope,end_operation,send_started,CAST(deadline_at <= UTC_TIMESTAMP(6) AS UNSIGNED) AS deadline_passed FROM seata_rs_tm_launcher_v1 WHERE xid_digest=?")
+            sqlx::query("SELECT *,CAST(deadline_at <= UTC_TIMESTAMP(6) AS UNSIGNED) AS deadline_passed FROM seata_rs_tm_launcher_v1 WHERE xid_digest=?")
                 .bind(digest.as_slice())
                 .fetch_optional(&mut *connection).await.map_err(|e| DbError::driver("TM launcher inspect", e))
         }).await.map_err(|_| DbError::Deadline { operation: "TM launcher inspect" })??;
@@ -206,6 +215,15 @@ impl MySqlLauncherStore {
             return Err(DbError::RecoveryConflict);
         }
         let version: u16 = row.try_get("schema_version").map_err(read)?;
+        // 同一行读取版本与可选新列；只有版本 1 才允许旧 schema 缺少该列。
+        let peer_trust_binding = match row.try_get::<Option<Vec<u8>>, _>("transport_binding") {
+            Ok(Some(bytes)) if version == 2 => {
+                Some(<[u8; 32]>::try_from(bytes).map_err(|_| DbError::RecoveryConflict)?)
+            }
+            Ok(None) if version == 1 => None,
+            Err(sqlx::Error::ColumnNotFound(_)) if version == 1 => None,
+            _ => return Err(DbError::RecoveryConflict),
+        };
         let endpoint: Vec<u8> = row.try_get("tc_endpoint").map_err(read)?;
         let application: Vec<u8> = row.try_get("application_id").map_err(read)?;
         let group: Vec<u8> = row.try_get("service_group").map_err(read)?;
@@ -226,7 +244,12 @@ impl MySqlLauncherStore {
         let operation: u8 = row.try_get("end_operation").map_err(read)?;
         let send: u8 = row.try_get("send_started").map_err(read)?;
         let expired: u64 = row.try_get("deadline_passed").map_err(read)?;
-        if version != 1 || epoch == 0 || send > 1 || expired > 1 || (send == 1 && operation == 0) {
+        if !matches!(version, 1 | 2)
+            || epoch == 0
+            || send > 1
+            || expired > 1
+            || (send == 1 && operation == 0)
+        {
             return Err(DbError::RecoveryConflict);
         }
         let end_operation = match operation {
@@ -261,6 +284,7 @@ impl MySqlLauncherStore {
         Ok(Some(MySqlLauncherSnapshot {
             xid: xid.clone(),
             tc_endpoint,
+            peer_trust_binding,
             application_id,
             service_group,
             begin_exception_code,
@@ -273,6 +297,16 @@ impl MySqlLauncherStore {
             send_started: send == 1,
             deadline_passed: expired == 1,
         }))
+    }
+    fn trust_guarded_sql(statement: &str, binding: Option<&[u8; 32]>) -> String {
+        if binding.is_some() {
+            format!(
+                "{} AND transport_binding=?",
+                statement.replace("schema_version=1", "schema_version=2")
+            )
+        } else {
+            statement.to_owned()
+        }
     }
     fn digest(origin: &LauncherOrigin) -> [u8; 32] {
         Sha256::digest(origin.xid().as_str().as_bytes()).into()
@@ -301,11 +335,12 @@ impl MySqlLauncherStore {
             let mut connection = self.data_source.control_pool().acquire().await.map_err(|e| DbError::acquisition("TM launcher acquire", e))?;
             connection.close_on_drop();
             let sql = if send {
-                "UPDATE seata_rs_tm_launcher_v1 SET send_started=1,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=1 AND end_operation=? AND send_started=0"
+                "UPDATE seata_rs_tm_launcher_v1 SET send_started=1,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=1 AND end_operation=? AND send_started=0 AND schema_version=1"
             } else {
-                "UPDATE seata_rs_tm_launcher_v1 SET end_operation=?,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=1 AND end_operation=0 AND send_started=0"
+                "UPDATE seata_rs_tm_launcher_v1 SET end_operation=?,modified_at=UTC_TIMESTAMP(6) WHERE xid_digest=? AND xid=? AND tc_endpoint=? AND application_id=? AND service_group=? AND business_intent=? AND owner_instance_id=? AND owner_stop_scope <=> ? AND owner_epoch=1 AND end_operation=0 AND send_started=0 AND schema_version=1"
             };
-            let query = sqlx::query(sql);
+            let statement = Self::trust_guarded_sql(sql, origin.peer_trust_binding());
+            let query = sqlx::query(&statement);
             let query = if send { query } else { query.bind(code) };
             let digest = Self::digest(origin);
             let affected = query
@@ -318,6 +353,7 @@ impl MySqlLauncherStore {
                 .bind(origin.owner_instance_id().as_slice())
                 .bind(origin.owner_stop_scope().map(|scope| scope.as_slice()));
             let affected = if send { affected.bind(code) } else { affected };
+            let affected = if let Some(binding) = origin.peer_trust_binding() { affected.bind(binding.as_slice()) } else { affected };
             affected.execute(&mut *connection).await.map_err(|e| DbError::driver("TM launcher update", e)).map(|v| v.rows_affected())
         }).await.map_err(|_| DbError::Deadline { operation: "TM launcher update" })??;
         if result != 1 {
@@ -339,8 +375,14 @@ impl LauncherStore for MySqlLauncherStore {
             let safe_remaining = origin.remaining().saturating_sub(self.data_source.operation_timeout());
             let remaining = i64::try_from(safe_remaining.as_micros()).map_err(|_| DbError::Invalid { reason: "TM remaining deadline exceeds MySQL interval" })?;
             if remaining <= 0 { return Err(DbError::Deadline { operation: "TM launcher insert" }); }
-            sqlx::query("INSERT INTO seata_rs_tm_launcher_v1 (schema_version,xid_digest,xid,tc_endpoint,application_id,service_group,begin_exception_code,begin_extra_data,business_intent,owner_instance_id,owner_stop_scope,deadline_at,created_at,modified_at) VALUES (1,?,?,?,?,?,?,?,?,?,?,DATE_ADD(UTC_TIMESTAMP(6),INTERVAL ? MICROSECOND),UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))")
-                .bind(Self::digest(origin).as_slice())
+            let plain_statement = "INSERT INTO seata_rs_tm_launcher_v1 (schema_version,xid_digest,xid,tc_endpoint,application_id,service_group,begin_exception_code,begin_extra_data,business_intent,owner_instance_id,owner_stop_scope,deadline_at,created_at,modified_at) VALUES (1,?,?,?,?,?,?,?,?,?,?,DATE_ADD(UTC_TIMESTAMP(6),INTERVAL ? MICROSECOND),UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))";
+            let statement = if origin.peer_trust_binding().is_some() {
+                plain_statement.replace("owner_stop_scope,deadline_at", "owner_stop_scope,transport_binding,deadline_at")
+                    .replace("VALUES (1,", "VALUES (2,").replace("?,DATE_ADD", "?,?,DATE_ADD")
+            } else { plain_statement.to_owned() };
+            let digest = Self::digest(origin);
+            let mut query = sqlx::query(&statement)
+                .bind(digest.as_slice())
                 .bind(origin.xid().as_str().as_bytes())
                 .bind(origin.tc_endpoint().to_string().into_bytes())
                 .bind(origin.application_id().as_bytes())
@@ -350,7 +392,9 @@ impl LauncherStore for MySqlLauncherStore {
                 .bind(origin.business_intent().as_bytes())
                 .bind(origin.owner_instance_id().as_slice())
                 .bind(origin.owner_stop_scope().map(|scope| scope.as_slice()))
-                .bind(remaining)
+;
+            if let Some(binding) = origin.peer_trust_binding() { query = query.bind(binding.as_slice()); }
+            query.bind(remaining)
                 .execute(&mut *connection).await.map_err(|e| DbError::driver("TM launcher insert", e)).map(|v| v.rows_affected())
         }).await.map_err(|_| DbError::Deadline { operation: "TM launcher insert" })??;
         if result != 1 {

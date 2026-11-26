@@ -1221,3 +1221,10 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 正式单连接、连接池及 TM/RM 构建器新增默认关闭的显式 mTLS 入口；证书/SAN 校验、原绝对握手期限及 TLS 重连均无明文回退。写入还需在同一期限内 flush 加密/缓冲记录，不能在接受明文时提前发布完成；确定性受阻 flush 先 RED 后 GREEN。
 
 双 Rust 各八组真实 TLS 目标、27 传输库测试及三组原 Java TC/MySQL 场景通过；会话证书摘要、协商协议及字节总数逐连接绑定原 V1 帧。两项正式源代码变异各失败，恢复后通过；每版本九项证据削弱拒绝。全工作区全功能各 742 passed / 324 ignored，四组件严格 Clippy、默认特性测试/严格检查和默认传输依赖检查通过。见 [传输 TLS 证据](phase-2/evidence/transport-tls/README.md)。这是同主机 TLS 终止代理 profile，不声明 Java TC 原生 TLS 或完整生产认证；证书运维/代理部署授权、独立审查、WP05–07 和 Phase4–7 继续。
+
+
+## 2026-11-27：持久 TM 来源绑定 TC 传输信任
+
+修复真实 TLS 来源可被同端点明文替代者提供伪造状态的问题。迁移 014 为新 TLS 来源保存版本 2 的根集合/SAN/profile 摘要；查询与持锁接管/恢复发送 CAS 检查同一绑定。旧明文与无 014 schema 保持兼容；新 TLS 缺迁移时保留原 XID，来源失败不交付业务 Launcher。
+
+双版本各五组真实 TLS/MySQL 用例和两组原 Java TC 丢结束回包场景通过，覆盖真实监控子进程停止、行锁改写竞态拒绝及恢复原字节后同来源完成。三个源变异每版本目标失败，原字节恢复后通过；独立程序校验拒绝 native 每版本 12 项、Java 每 profile 12 项证据削弱。全工作区各 743 passed / 330 ignored，四组件严格 Clippy 与默认配置检查通过。见 [来源信任证据](phase-2/evidence/tm-transport-binding/README.md)。独立外部审查、受控信任迁移、生产证书运维、WP05–07 与 Phase4–7 继续。
