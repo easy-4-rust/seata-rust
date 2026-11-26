@@ -131,3 +131,11 @@ Fory 三个原用例已在固定 Java 和两套 Rust 上匹配。类描述由固
 固定 Java 的 TableRecordsTest 六个原用例均已重新执行。Rust 的原记录对象复用 sqlparser 的 TableMeta，临时元数据仅能附加一次，空镜像拒绝追加及读取元数据。结果集投影使用缓存列的 JDBC 类型和列名，保留结果列与行的顺序，并拒绝缓存中不存在的列。Druid mock 的专用 getter 返回空 Blob 与 Clob，Rust 按相同装箱语义保留空值对象。主键对照记录并核验每行键数和值。
 
 前五例的结果集投影已经与固定 Java 匹配。第六例保留 JDBC 2014 的 OffsetDateTime 装箱类型，经默认 UTC Jackson 数值模式逐字节匹配并恢复原值。补充差分涵盖负秒与负亚秒、纳秒精度、偏移转 UTC、日期边界、非法小数尺度及带类型标签的 Undo 字段。此阶段输入为已读取的 JDBC 值，使用兼容对象层。真实数据库驱动和物理回滚仍按既有验收契约执行。 [前五例证据](wp05-table-records-source.json) [第六例及类级验收](wp05-table-records-offset-source.json)
+
+## RM 元数据四类原测试的补充迁移
+
+本轮选择 rm-datasource 中 ColumnMetaTest、IndexMetaTest、IndexTypeTest、TableMetaTest 四个完整原类。旧完整 JUnit 基线的物理目录缺失，不据历史清单声称已恢复全部基线。新运行先核对后续封存 classpath 清单的摘要，只读取字节完全匹配的缓存输入；目标生产类与原测试类由固定 Git blob 在 D 盘重新编译，由原 JUnit 引擎重新执行。实际加载来源与所需依赖另行封存并重放。
+
+用于实参差分的观察副本与未改动的原测试严格分开：仅在副本中把 Assertions 调用替换为记录器，再委托未改动的原 JUnit。保留十个原案例的全部断言、顺序、异常和对象变更；Rust 使用已正式实现的元数据类型，逐案例比较记录。原案例完成与全部原对象/JDK 环境完成分开统计，不推造缺失的全局基线总数。原始测试、资源和 Java oracle 不修改。
+
+本轮十例及 51 处原断言在固定 Java 和双 Rust 已实际匹配，四个 Rust 测试文件分别对应原类；十三项已验证依赖通过 portable 模式独立重放。程序只读复核通过，但未进行独立人工或另一 Agent 审查，因此该审查门禁与完整 WP05 仍开放。旧完整基线的不可用状态和历史总数已显式标注，不将历史计数机械累加为当前事实。[元数据增量证据](evidence/rm-metadata-source/README.md) · [逐案账本](wp05-rm-metadata-source.json)
