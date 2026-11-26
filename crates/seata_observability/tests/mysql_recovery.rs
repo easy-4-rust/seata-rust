@@ -10,6 +10,8 @@ use tokio::{
     net::TcpStream,
 };
 const TOKEN: &str = "mysql-private-bearer-0123456789012345";
+#[path = "../../seata_rm/tests/support/rm_peer.rs"]
+mod phase_peer;
 async fn fetch(address: std::net::SocketAddr, token: &str) -> String {
     let mut socket = TcpStream::connect(address).await.unwrap();
     socket
@@ -158,6 +160,83 @@ async fn independent_undo_source_exports_20_fixed_series_without_identity_after_
         let root = std::path::PathBuf::from(folder);
         std::fs::write(root.join("independent-undo-http-zero.txt"), zero_body).unwrap();
         std::fs::write(root.join("independent-undo-http-after-close.txt"), body).unwrap();
+    }
+    exporter.shutdown().await.unwrap();
+}
+
+#[tokio::test]
+#[ignore = "requires owned real MySQL fixture"]
+async fn first_phase_source_exports_31_stage_series_without_promoting_preparation_to_commit() {
+    use seata_db_mysql::{MySqlPhaseOneOperation as Operation, MySqlPhaseOneOutcome as Outcome};
+    let options = MySqlOptions::new(
+        "127.0.0.1".into(),
+        std::env::var("SEATA_MYSQL_PORT").unwrap().parse().unwrap(),
+        "root".into(),
+        std::env::var("SEATA_MYSQL_PASSWORD").unwrap(),
+        std::env::var("SEATA_MYSQL_DATABASE").unwrap(),
+    )
+    .unwrap()
+    .with_insecure_loopback_tls()
+    .unwrap();
+    let source = MySqlDataSource::connect(options).await.unwrap();
+    let manager =
+        MySqlDataSourceManager::new(source.clone(), MySqlJdbcProfile::Connector8Default).unwrap();
+    let metrics = source.phase_one_metrics_sampler();
+    let exporter = MetricsExporter::start(
+        MetricsServerConfig::new("127.0.0.1:0".parse().unwrap(), TOKEN.into()).unwrap(),
+        MetricsSources::default().with_mysql_phase_one(manager.phase_one_metrics_sampler()),
+    )
+    .await
+    .unwrap();
+    assert!(fetch(exporter.local_addr(), "wrong-token")
+        .await
+        .starts_with("HTTP/1.1 401"));
+    let zero = fetch(exporter.local_addr(), TOKEN).await;
+    let zero_body = zero.split_once("\r\n\r\n").unwrap().1;
+    assert_eq!(zero_body.lines().count(), 31);
+    assert!(zero_body.lines().all(|line| line.ends_with(" 0")));
+    // 受控 RM 只提供类型化客户端；非法身份在真实准备入口内拒绝，不发送注册。
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let (rm, _) = phase_peer::manager(&listener, std::time::Duration::from_secs(2)).await;
+    let transaction = source.begin().await.unwrap();
+    assert!(manager
+        .prepare_transaction(transaction, &rm.client(), "", None)
+        .await
+        .is_err());
+    assert_eq!(
+        metrics
+            .snapshot(Operation::Prepare)
+            .count(Outcome::PrepareFailed),
+        1
+    );
+    rm.shutdown().await.unwrap();
+    source.close().await.unwrap();
+    drop(manager);
+    drop(source);
+    let output = fetch(exporter.local_addr(), TOKEN).await;
+    assert!(output.starts_with("HTTP/1.1 200"));
+    let body = output.split_once("\r\n\r\n").unwrap().1;
+    assert_eq!(body.lines().count(), 31);
+    assert!(body.contains(
+        "seata_mysql_phase_one_total{operation=\"prepare\",outcome=\"prepare_failed\"} 1\n"
+    ));
+    for line in body.lines() {
+        assert!(line.starts_with("seata_mysql_phase_one_"));
+        assert!(
+            line.ends_with(if line.contains("outcome=\"prepare_failed\"") {
+                " 1"
+            } else {
+                " 0"
+            })
+        );
+    }
+    for secret in [TOKEN, "jdbc:mysql", "seata-mysql-fixture-only"] {
+        assert!(!output.contains(secret));
+    }
+    if let Some(folder) = std::env::var_os("SEATA_UNDO_STORE_OUT") {
+        let root = std::path::PathBuf::from(folder);
+        std::fs::write(root.join("phase-one-http-zero.txt"), zero_body).unwrap();
+        std::fs::write(root.join("phase-one-http-after-close.txt"), body).unwrap();
     }
     exporter.shutdown().await.unwrap();
 }

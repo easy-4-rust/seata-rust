@@ -46,6 +46,8 @@ mod java_undo_orphan;
 mod java_witness_query_failure;
 #[path = "support/owned_mysql.rs"]
 mod owned_mysql;
+#[path = "support/phase_one_metrics_snapshot.rs"]
+mod phase_one_metrics_snapshot;
 use seata_at::{MySqlJdbcProfile, SqlRecognizerFactory};
 use seata_db_mysql::{MySqlDataSource, MySqlDataSourceManager};
 use seata_protocol::GlobalStatus;
@@ -344,6 +346,7 @@ async fn original_java_tc_missing_undo(current_schema: bool) {
     }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
+    phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     ds.close().await.unwrap();
 }
 
@@ -885,6 +888,7 @@ async fn original_java_tc_changed_commit(
         }
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
+        phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
         ds.close().await.unwrap();
         return;
     }
@@ -932,6 +936,7 @@ async fn original_java_tc_changed_commit(
         }
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
+        phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
         ds.close().await.unwrap();
         return;
     }
@@ -990,6 +995,7 @@ async fn original_java_tc_changed_commit(
         }
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
+        phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
         ds.close().await.unwrap();
         return;
     }
@@ -1076,6 +1082,7 @@ async fn original_java_tc_changed_commit(
     }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
+    phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     ds.close().await.unwrap();
 }
 
@@ -1167,6 +1174,7 @@ async fn original_java_tc_cross_process_commit_child() {
         let receipt = checked.commit_changed(&adapter).await.unwrap();
         assert_eq!(receipt.identity().xid(), xid);
     }
+    phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     // 故意退出而不执行 RM shutdown：新进程只能从原数据库记录恢复身份。
     std::process::exit(0);
 }
@@ -1237,6 +1245,7 @@ async fn original_java_tc_report_race_child() {
         .unwrap();
     assert_eq!(signal[0], 2);
     rm.shutdown().await.unwrap();
+    phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     ds.close().await.unwrap();
     println!("REPORT_RACE={outcome}");
 }
@@ -1633,6 +1642,7 @@ async fn original_java_tc_cross_process_recovery(case: CrossProcessRecovery) {
         );
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
+        phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
         ds.close().await.unwrap();
         return;
     }
@@ -1822,6 +1832,7 @@ async fn original_java_tc_cross_process_recovery(case: CrossProcessRecovery) {
     );
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
+    phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     ds.close().await.unwrap();
 }
 
@@ -1982,6 +1993,7 @@ async fn original_java_tc_failed_report(lose_reply: bool) {
     );
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
+    phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     ds.close().await.unwrap();
 }
 
@@ -2329,5 +2341,6 @@ async fn original_java_tc_prepare_error_reports(failure_kind: &str, lose_reply: 
     );
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
+    phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     ds.close().await.unwrap();
 }

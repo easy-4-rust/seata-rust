@@ -23,10 +23,27 @@ pub struct MySqlPreparedTransaction {
     profile: MySqlJdbcProfile,
 }
 impl MySqlPreparedTransaction {
+    /// 无参数；返回原准备作用域所属数据源的只读一阶段计数能力。
+    pub(crate) fn phase_one_metrics_sampler(&self) -> crate::MySqlPhaseOneMetricsSampler {
+        self.source.phase_one_metrics_sampler()
+    }
+
     /// 消耗原准备作用域，在原业务事务中锁定核对恢复行与 Normal Undo；返回仍只能回滚的仲裁作用域。
     /// 如果恢复表已启用 004 迁移，成功时在同一事务暂存一阶段见证。
     /// 失败或取消关闭原事务；不授权业务提交，不证明 TC 锁覆盖或所有旧尝试均已围栏。
     pub async fn lock_commit_preconditions(
+        self,
+    ) -> Result<crate::MySqlCommitCheckedTransaction, crate::MySqlCommitCheckError> {
+        let guard = self
+            .source
+            .phase_one_metrics_sampler()
+            .begin(crate::MySqlPhaseOneOperation::CheckCommit);
+        let result = self.lock_commit_preconditions_inner().await;
+        guard.finish_check(&result);
+        result
+    }
+
+    async fn lock_commit_preconditions_inner(
         mut self,
     ) -> Result<crate::MySqlCommitCheckedTransaction, crate::MySqlCommitCheckError> {
         let witness_staged = match self

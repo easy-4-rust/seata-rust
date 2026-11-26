@@ -22,6 +22,11 @@ pub struct MySqlDataSourceManager {
     profile: MySqlJdbcProfile,
 }
 impl MySqlDataSourceManager {
+    /// 无参数；返回原数据源的一阶段只读计数，重新构造管理器不清零。
+    pub fn phase_one_metrics_sampler(&self) -> crate::MySqlPhaseOneMetricsSampler {
+        self.source.phase_one_metrics_sampler()
+    }
+
     /// 无参数；返回原数据源克隆共享的控制计数，重新构造管理器不清零。
     pub fn recovery_metrics_sampler(&self) -> crate::MySqlRecoveryMetricsSampler {
         self.source.recovery_metrics_sampler()

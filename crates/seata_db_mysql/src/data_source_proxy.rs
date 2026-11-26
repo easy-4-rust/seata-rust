@@ -20,8 +20,14 @@ pub struct MySqlDataSource {
     operation_timeout: Duration,
     recovery_metrics: crate::MySqlRecoveryMetricsSampler,
     undo_metrics: crate::MySqlUndoMetricsSampler,
+    phase_one_metrics: crate::MySqlPhaseOneMetricsSampler,
 }
 impl MySqlDataSource {
+    /// 无参数；返回同数据源克隆共享的一阶段编排计数，不授予事务或报告权限。
+    pub fn phase_one_metrics_sampler(&self) -> crate::MySqlPhaseOneMetricsSampler {
+        self.phase_one_metrics.clone()
+    }
+
     /// 无参数；返回同数据源克隆共享的独立 Undo 调用计数，不授予连接、恢复或关闭权限。
     pub fn undo_metrics_sampler(&self) -> crate::MySqlUndoMetricsSampler {
         self.undo_metrics.clone()
@@ -347,6 +353,7 @@ impl MySqlDataSource {
                 operation_timeout: options.operation_timeout,
                 recovery_metrics: crate::MySqlRecoveryMetricsSampler::new(),
                 undo_metrics: crate::MySqlUndoMetricsSampler::new(),
+                phase_one_metrics: crate::MySqlPhaseOneMetricsSampler::new(),
             }),
             Err(error) => {
                 // 最后Pool owner丢弃，所有租约已标记有限关闭，不在失败路径再做无界await。

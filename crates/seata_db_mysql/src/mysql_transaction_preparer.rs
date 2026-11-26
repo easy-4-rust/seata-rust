@@ -14,6 +14,32 @@ impl MySqlTransactionPreparer {
     /// 参数为精确资源管理器、原事务和原注册字段；返回仅可回滚的准备作用域。
     pub(crate) async fn prepare(
         manager: &MySqlDataSourceManager,
+        transaction: MySqlLocalTransaction,
+        client: &ResourceClient,
+        xid: &str,
+        application_data: Option<String>,
+        profile: MySqlJdbcProfile,
+        failure_slot: Option<&mut Option<MySqlPrepareError>>,
+    ) -> Result<MySqlPreparedTransaction, MySqlPrepareError> {
+        let guard = manager
+            .phase_one_metrics_sampler()
+            .begin(crate::MySqlPhaseOneOperation::Prepare);
+        let result = Self::prepare_inner(
+            manager,
+            transaction,
+            client,
+            xid,
+            application_data,
+            profile,
+            failure_slot,
+        )
+        .await;
+        guard.finish_prepare(&result);
+        result
+    }
+
+    async fn prepare_inner(
+        manager: &MySqlDataSourceManager,
         mut transaction: MySqlLocalTransaction,
         client: &ResourceClient,
         xid: &str,

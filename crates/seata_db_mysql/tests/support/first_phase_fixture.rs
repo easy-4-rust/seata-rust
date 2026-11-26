@@ -7,6 +7,8 @@ use seata_protocol::Message;
 use seata_rm::{BranchResource, ResourceCatalog, ResourceManager};
 use std::{sync::Arc, time::Duration};
 use tokio::net::{TcpListener, TcpStream};
+#[path = "phase_one_metrics_snapshot.rs"]
+mod phase_one_metrics_snapshot;
 
 /// 单个测试的自有作用域；只在运行器创建的随机库使用。
 pub struct Harness {
@@ -17,6 +19,23 @@ pub struct Harness {
     listener: TcpListener,
 }
 impl Harness {
+    /// 参数为阶段、结果和次数；核对本夹具原数据源的已结算计数。
+    #[allow(dead_code)]
+    pub fn assert_phase(
+        &self,
+        operation: seata_db_mysql::MySqlPhaseOneOperation,
+        outcome: seata_db_mysql::MySqlPhaseOneOutcome,
+        expected: u64,
+    ) {
+        assert_eq!(
+            self.source
+                .phase_one_metrics_sampler()
+                .snapshot(operation)
+                .count(outcome),
+            expected
+        );
+    }
+
     pub async fn start(budget: Duration, request_timeout: Duration) -> Self {
         Self::start_with_store(budget, request_timeout, rm_fixture::journal().await).await
     }
@@ -111,6 +130,7 @@ impl Harness {
         self.rm.shutdown().await.unwrap();
         rm_fixture::peer::eof(socket).await;
         self.source.close().await.unwrap();
+        phase_one_metrics_snapshot::save(&self.source.phase_one_metrics_sampler());
         (
             fixture::count(&mut self.admin, "undo_work").await,
             fixture::count(&mut self.admin, "undo_log").await,

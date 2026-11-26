@@ -12,6 +12,9 @@ mod fixture;
 mod managed_rollback_fence_cases;
 #[path = "support/owned_mysql.rs"]
 mod owned_mysql;
+#[cfg(feature = "experimental_changed_commit")]
+#[path = "support/first_phase_metrics_cases.rs"]
+mod phase_metrics_cases;
 #[path = "support/rm_recovery_fixture.rs"]
 #[allow(dead_code)]
 mod recovery;
@@ -247,6 +250,11 @@ async fn experimental_changed_commit_persists_business_undo_and_witness_together
         .await
         .unwrap_err()
         .is_unknown_outcome());
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitChanged,
+        seata_db_mysql::MySqlPhaseOneOutcome::ChangedCommitted,
+        1,
+    );
     assert_eq!(h.closed_counts(&mut socket).await, (1, 1, (1, 0, 0)));
 }
 
@@ -276,6 +284,11 @@ async fn experimental_changed_commit_rejects_missing_attempt_migration_before_sq
     ));
     assert_eq!(fixture::count(&mut h.admin, "undo_work").await, 0);
     assert_eq!(fixture::count(&mut h.admin, "undo_log").await, 0);
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitChanged,
+        seata_db_mysql::MySqlPhaseOneOutcome::ArmingFailed,
+        1,
+    );
     assert_eq!(h.closed_counts(&mut socket).await, (0, 0, (1, 0, 0)));
 }
 
@@ -406,6 +419,16 @@ async fn experimental_changed_commit_rejects_legacy_witness_before_sending() {
         error.registered_branch().unwrap().identity().branch_id(),
         42
     );
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CheckCommit,
+        seata_db_mysql::MySqlPhaseOneOutcome::CheckedWithoutWitness,
+        1,
+    );
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitChanged,
+        seata_db_mysql::MySqlPhaseOneOutcome::ChangedNotEligible,
+        1,
+    );
     assert_eq!(h.closed_counts(&mut socket).await, (0, 0, (1, 0, 0)));
 }
 
@@ -486,6 +509,16 @@ async fn experimental_changed_commit_driver_loss_retains_unknown_receipt() {
         seata_at::MySqlJdbcProfile::Connector8Default,
     )
     .unwrap();
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitChanged,
+        seata_db_mysql::MySqlPhaseOneOutcome::ChangedCommitUnknown,
+        1,
+    );
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitAndReport,
+        seata_db_mysql::MySqlPhaseOneOutcome::ReportLocalUncertain,
+        1,
+    );
     assert_eq!(h.closed_counts(&mut socket).await, (0, 0, (1, 0, 0)));
     assert_eq!(
         reopened
@@ -1092,6 +1125,11 @@ async fn experimental_changed_commit_observer_loss_retains_unknown_after_durable
         .first_phase_commit_observed(&receipt)
         .await
         .unwrap());
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitChanged,
+        seata_db_mysql::MySqlPhaseOneOutcome::ChangedCommitUnknown,
+        1,
+    );
     assert_eq!(h.closed_counts(&mut socket).await, (1, 1, (1, 0, 0)));
 }
 
@@ -1292,6 +1330,16 @@ async fn experimental_changed_commit_reports_only_after_durable_witness() {
         .await
         .unwrap());
     let mut socket = peer.await.unwrap();
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitChanged,
+        seata_db_mysql::MySqlPhaseOneOutcome::ChangedCommitted,
+        1,
+    );
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::CommitAndReport,
+        seata_db_mysql::MySqlPhaseOneOutcome::ReportObserved,
+        1,
+    );
     assert_eq!(h.closed_counts(&mut socket).await, (1, 1, (1, 0, 0)));
 }
 

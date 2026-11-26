@@ -187,6 +187,7 @@ pub(crate) fn loopback_source(port: u16, acquire_timeout: Duration) -> MySqlData
         operation_timeout: Duration::from_millis(1_500),
         recovery_metrics: crate::MySqlRecoveryMetricsSampler::new(),
         undo_metrics: crate::MySqlUndoMetricsSampler::new(),
+        phase_one_metrics: crate::MySqlPhaseOneMetricsSampler::new(),
     }
 }
 

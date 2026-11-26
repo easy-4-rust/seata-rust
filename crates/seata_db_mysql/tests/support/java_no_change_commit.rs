@@ -264,5 +264,6 @@ async fn exercise(scenario: Scenario) {
     }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
+    crate::phase_one_metrics_snapshot::save(&source.phase_one_metrics_sampler());
     source.close().await.unwrap();
 }

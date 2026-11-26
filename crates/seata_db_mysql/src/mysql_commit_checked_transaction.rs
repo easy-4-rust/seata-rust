@@ -55,6 +55,16 @@ impl MySqlCommitCheckedTransaction {
     /// 消耗经仲裁且无变化、无 TC 分支的作用域，发送一次真实本地 COMMIT。
     /// 参数无；成功返回空结果，不向 TC 报告。驱动调用失败均保守归为未知，不重放业务 SQL。
     pub async fn commit_no_change(self) -> Result<(), MySqlNoChangeCommitError> {
+        let guard = self
+            .prepared
+            .phase_one_metrics_sampler()
+            .begin(crate::MySqlPhaseOneOperation::CommitNoChange);
+        let result = self.commit_no_change_inner().await;
+        guard.finish_no_change(&result);
+        result
+    }
+
+    async fn commit_no_change_inner(self) -> Result<(), MySqlNoChangeCommitError> {
         if self.prepared.registered_branch().is_some()
             || self.prepared.undo_log_count() != 0
             || self.witness_staged
@@ -74,6 +84,20 @@ impl MySqlCommitCheckedTransaction {
     /// 参数为原配置的资源观察者；返回真实回执仅表示本地提交及见证已确认，不发送 TC 报告。
     /// 发送前拒绝与可能已生效的未知结果分开返回；该特性默认关闭，不构成生产锁安全认证。
     pub async fn commit_changed(
+        self,
+        observer: &MySqlDataSourceManager,
+    ) -> Result<RegisteredBranch, MySqlChangedCommitError> {
+        let guard = self
+            .prepared
+            .phase_one_metrics_sampler()
+            .begin(crate::MySqlPhaseOneOperation::CommitChanged);
+        let result = self.commit_changed_inner(observer).await;
+        guard.finish_changed(&result);
+        result
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    async fn commit_changed_inner(
         self,
         observer: &MySqlDataSourceManager,
     ) -> Result<RegisteredBranch, MySqlChangedCommitError> {
@@ -140,6 +164,21 @@ impl MySqlCommitCheckedTransaction {
     /// 参数为同资源观察者及原 RM 客户端；成功返回原回执，失败区分本地结果与报告结果。
     /// 报告响应丢失不重报，不改写本地提交事实；该入口仍不构成生产锁安全认证。
     pub async fn commit_changed_and_report(
+        self,
+        observer: &MySqlDataSourceManager,
+        client: &ResourceClient,
+    ) -> Result<RegisteredBranch, MySqlFirstPhaseReportError> {
+        let guard = self
+            .prepared
+            .phase_one_metrics_sampler()
+            .begin(crate::MySqlPhaseOneOperation::CommitAndReport);
+        let result = self.commit_changed_and_report_inner(observer, client).await;
+        guard.finish_report(&result);
+        result
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    async fn commit_changed_and_report_inner(
         self,
         observer: &MySqlDataSourceManager,
         client: &ResourceClient,

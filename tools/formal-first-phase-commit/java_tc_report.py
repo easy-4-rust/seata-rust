@@ -950,6 +950,9 @@ seata:
             if not (out / "signer.log").exists():
                 guard.put(out / "signer.log", guard.reg.command(["docker", "logs", signer_name], env))
             guard.reg.command(["docker", "rm", "-fv", signer_name], env)
+        # Preserve supplemental fixed stage counters after all original processes stop.
+        for stage_metrics in sorted(observations.glob("phase-one-stage-*.json")):
+            guard.put(out / stage_metrics.name, stage_metrics.read_bytes())
         guard.save(out / "process-cleanup.json", {"stopped": all(p.poll() is not None for p in processes),
                                                   "signer_removed": signer_created,
                                                   "pids": [p.pid for p in processes]})

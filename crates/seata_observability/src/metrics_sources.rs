@@ -20,6 +20,8 @@ pub struct MetricsSources {
     mysql_recovery: Option<MySqlRecoveryMetricsSampler>,
     #[cfg(feature = "mysql")]
     mysql_undo: Option<MySqlUndoMetricsSampler>,
+    #[cfg(feature = "mysql")]
+    mysql_phase_one: Option<seata_db_mysql::MySqlPhaseOneMetricsSampler>,
 }
 
 impl MetricsSources {
@@ -35,6 +37,8 @@ impl MetricsSources {
             mysql_recovery: None,
             #[cfg(feature = "mysql")]
             mysql_undo: None,
+            #[cfg(feature = "mysql")]
+            mysql_phase_one: None,
         }
     }
 
@@ -95,9 +99,23 @@ impl MetricsSources {
         self
     }
 
+    /// 参数为数据源签发的一阶段只读计数；返回增加 31 条固定序列的来源。
+    /// 不授权提交或报告；各阶段观察不可相加当作业务效果次数。
+    #[cfg(feature = "mysql")]
+    pub fn with_mysql_phase_one(
+        mut self,
+        source: seata_db_mysql::MySqlPhaseOneMetricsSampler,
+    ) -> Self {
+        self.mysql_phase_one = Some(source);
+        self
+    }
+
     pub(crate) fn is_empty(&self) -> bool {
         #[cfg(feature = "mysql")]
-        if self.mysql_recovery.is_some() || self.mysql_undo.is_some() {
+        if self.mysql_recovery.is_some()
+            || self.mysql_undo.is_some()
+            || self.mysql_phase_one.is_some()
+        {
             return false;
         }
         self.tm.is_none()
@@ -324,6 +342,24 @@ impl MetricsSources {
                     "seata_mysql_undo_restored_rows_observed_total{{operation=\"{name}\"}} {}\n",
                     c.observed_restored_rows
                 ));
+            }
+        }
+        #[cfg(feature = "mysql")]
+        if let Some(source) = &self.mysql_phase_one {
+            for operation in seata_db_mysql::MySqlPhaseOneOperation::ALL {
+                let name = operation.label();
+                let counts = source.snapshot(operation);
+                output.push_str(&format!(
+                    "seata_mysql_phase_one_active{{operation=\"{name}\"}} {}\n",
+                    counts.active
+                ));
+                for outcome in operation.outcomes() {
+                    output.push_str(&format!(
+                        "seata_mysql_phase_one_total{{operation=\"{name}\",outcome=\"{}\"}} {}\n",
+                        outcome.label(),
+                        counts.count(*outcome)
+                    ));
+                }
             }
         }
         output
