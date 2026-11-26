@@ -10,7 +10,9 @@ pub use api::{
     LauncherStore, RecoveredEndAuthority, RecoveredEndGate, StoppedLauncherOwner,
     TransactionManager, TransactionManagerBuilder, TransactionalTemplate,
 };
+pub use api::{TransactionAdmission, TransactionPermit};
 pub use context::{RootContext, TransactionContext};
+pub use exception::AdmissionError;
 pub use exception::TmError;
 pub use exception::TransactionError;
 pub use model::RecoveryToken;

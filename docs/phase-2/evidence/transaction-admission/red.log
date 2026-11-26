@@ -1,0 +1,31 @@
+   Compiling rustls v0.23.46
+   Compiling signature v2.2.0
+   Compiling getrandom v0.2.17
+   Compiling crypto-common v0.1.7
+   Compiling tracing v0.1.44
+   Compiling ed25519 v2.2.3
+   Compiling digest v0.10.7
+   Compiling ring v0.17.14
+   Compiling curve25519-dalek v4.1.3
+   Compiling sha2 v0.10.9
+   Compiling ed25519-dalek v2.2.0
+   Compiling rustls-webpki v0.103.16
+   Compiling rcgen v0.14.0
+   Compiling tokio-rustls v0.26.4
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+error[E0432]: unresolved imports `seata_tm::AdmissionError`, `seata_tm::TransactionAdmission`
+ --> crates\seata_tm\tests\transaction_admission.rs:1:16
+  |
+1 | use seata_tm::{AdmissionError, TransactionAdmission};
+  |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^ no `TransactionAdmission` in the root
+  |                |
+  |                no `AdmissionError` in the root
+  |
+help: a similar name exists in the module
+  |
+1 - use seata_tm::{AdmissionError, TransactionAdmission};
+1 + use seata_tm::{AdmissionError, TransactionCompletion};
+  |
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-tm` (test "transaction_admission") due to 1 previous error

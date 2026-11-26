@@ -1,0 +1,35 @@
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+warning: field `released` is never read
+  --> crates\seata_tm\src\api\transaction_permit.rs:11:5
+   |
+ 9 | pub struct TransactionPermit {
+   |            ----------------- field in this struct
+10 |     permit: Option<OwnedSemaphorePermit>,
+11 |     released: Arc<Notify>,
+   |     ^^^^^^^^
+   |
+   = note: `TransactionPermit` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-tm` (lib) generated 1 warning
+    Finished `test` profile [unoptimized] target(s) in 0.93s
+     Running tests\transaction_admission.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\transaction_admission-4945ca4aaf3027b2.exe)
+
+running 1 test
+test multiple_drainers_wait_until_the_last_admitted_scope_exits ... FAILED
+
+failures:
+
+---- multiple_drainers_wait_until_the_last_admitted_scope_exits stdout ----
+
+thread 'multiple_drainers_wait_until_the_last_admitted_scope_exits' (54432) panicked at crates\seata_tm\tests\transaction_admission.rs:75:14:
+called `Result::unwrap()` on an `Err` value: Elapsed(())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    multiple_drainers_wait_until_the_last_admitted_scope_exits
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 1.01s
+
+error: test failed, to rerun pass `-p seata-tm --test transaction_admission`

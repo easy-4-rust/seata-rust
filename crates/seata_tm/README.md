@@ -43,3 +43,10 @@ Failed Begin保留完整报告字段，但报告XID不会绑定为Launcher。`Tm
 基础Java功能运行使用空全局事务，包含Begin/Commit、业务失败Rollback、三种参与传播、RequiresNew/NotSupported、参与方不结束全局、业务期限；七个事务最终均查询到Finished。只读收尾查询等待Java异步清理，不重发事务，也不从Finished倒推历史结果。
 
 后续正式TM真实故障驱动分别丢弃原TC成功Begin/Commit/Rollback响应。Begin不构造业务、无XID、不再次发起；两个结束模式从原作用域错误恢复，只在查询后显式重复同操作，实际15/15仍保留原未知。Rollback同时保留业务错误，真实RM回调在原连接按完整身份回包，内存动作各一次并释放测试锁。原始帧唯一应答及查询时序有独立破坏控制，额外原响应投递或旧在途查询不能冒充恢复证据。RM动作是测试模拟；持久RM幂等/SQL补偿、跨进程恢复、生产认证/TLS及完整V1仍须完成，外部TC风险未接受，共享锁继续延期。
+
+
+## 应用停机准入
+
+TransactionAdmission 为应用提供共享的正数容量与关闭边界。业务工厂构造及 TM 调用前取得 TransactionPermit，持有到整个作用域完成或持久交接之后。close 拒绝所有克隆的新准入；drain 同时关闭入口并有界等待已接纳许可释放。超时返回当时在途数量，保留原作用域和关闭状态。调用方在排空失败时仍应持有 TM/RM 所有者，按明确策略继续等待或持久交接，不能因错误提前 Drop 所有者。
+
+[接口示例](src/api/transaction_admission.rs)以业务工厂避免准入前执行，并以可选所有者槽位保证排空超时不取走 TM。RAII 许可释放只证明本地作用域退出，未知全局结果仍需按原身份记录和恢复。组件不会强制拦截所有直接 TM 调用，应用必须统一入口接入；它不注册 OS 信号，也不代表部署验收。双版本组件和真实 TCP 证据见[验收记录](../../docs/phase-2/evidence/transaction-admission/README.md)。

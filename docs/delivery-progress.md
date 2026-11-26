@@ -1120,3 +1120,8 @@ Rust 1.99/1.85 各 89 项 `seata-transport` 测试、全目标严格 Clippy、�
 ## 2026-11-25：TM 009 实例绑定与旧行失败关闭
 
 正式 TM 构建时生成 32 字节随机实例 ID，Begin 来源写入该 ID，原意图与发送门闩 CAS 均须匹配，快照提供只读核验。新增 009 增量迁移，保留 008 的旧行并令其 ID 为 `NULL`；旧行无法通过新 CAS 或快照核验，不会凭空获得接管权。真实 MySQL 的 008→009 旧行迁移、不同实例 CAS 拒绝、同摘要异 XID 拒绝、Begin→Commit 标记与进程退出后数据库 ID 对应测试在 Rust 1.99/1.85 均通过。模拟 MySQL 标记已提交而存储层确认丢失时，没有结束帧。固定原 Java TC 的 Commit/Rollback 成功回包丢失四组也按最终迁移路径重新通过；见[详细证据](phase-2/evidence/tm-launcher-store/README.md)。双工具链目标严格 Clippy、格式检查和相关 TM/MySQL 单元测试通过。实例 ID 仍不是旧进程停止的可信证明；接管 API、生产数据库权限与 WP05/WP06 完整验收继续开放。
+
+
+## 2026-11-26：应用事务准入与有界排空
+
+沿用 WP07 停机契约，正式 TM crate 新增共享 TransactionAdmission 与独占 TransactionPermit，拒绝关闭后的新作用域，并等待旧作用域释放。超时只返回数量，不取消业务、不重新开放入口、不自动改写事务结果。真实 TCP 测试在原 Commit 响应被对端屏障持有时验证排空超时，随后原作用域完成并关闭 TM。缺 API 的测试先失败；删掉释放通知的变异版本在已挂起等待者断言失败。Rust 1.99/1.85 各通过 47 项组件回归和 1 项接口示例，另 7 项外部环境测试保持 ignored；严格目标 Clippy 通过。证据见[应用准入验收](phase-2/evidence/transaction-admission/README.md)。生产应用仍须统一接入、绑定信号并验证部署；WP07 总项和全部计划继续开放。
