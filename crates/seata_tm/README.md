@@ -50,3 +50,10 @@ Failed Begin保留完整报告字段，但报告XID不会绑定为Launcher。`Tm
 TransactionAdmission 为应用提供共享的正数容量与关闭边界。业务工厂构造及 TM 调用前取得 TransactionPermit，持有到整个作用域完成或持久交接之后。close 拒绝所有克隆的新准入；drain 同时关闭入口并有界等待已接纳许可释放。超时返回当时在途数量，保留原作用域和关闭状态。调用方在排空失败时仍应持有 TM/RM 所有者，按明确策略继续等待或持久交接，不能因错误提前 Drop 所有者。
 
 [接口示例](src/api/transaction_admission.rs)以业务工厂避免准入前执行，并以可选所有者槽位保证排空超时不取走 TM。RAII 许可释放只证明本地作用域退出，未知全局结果仍需按原身份记录和恢复。组件不会强制拦截所有直接 TM 调用，应用必须统一入口接入；它不注册 OS 信号，也不代表部署验收。双版本组件和真实 TCP 证据见[验收记录](../../docs/phase-2/evidence/transaction-admission/README.md)。
+
+
+## 可选停机信号
+
+为 seata-tm 显式启用 application_signals 功能后，应用可在 Tokio 初始化阶段调用 ApplicationSignals::install，监听 Windows Ctrl-C/Ctrl-Break 或 Unix SIGINT/SIGTERM。recv 返回 ShutdownSignalKind，收到事件后调用共享准入的 drain；排空成功后再取走并 shutdown TM/RM 所有者。排空错误返回时仍须持有所有者，继续等待或执行明确的持久交接策略。
+
+默认构建不启用 Tokio signal 功能，也不会安装处理器。信号处理器是进程级资源，监听器 Drop 不保证恢复默认处理，连续事件可能合并；不会自动把第二次事件解释成强杀。此入口不接管 Windows 服务控制器及系统关机宽限期。[接口示例](src/api/application_signals.rs)与[真实 Windows 事件双版本证据](../../docs/phase-2/evidence/application-signals/README.md)可供应用接入。Unix 分支尚无现场运行证据，真实业务服务与部署验收继续。

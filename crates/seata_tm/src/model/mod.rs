@@ -16,3 +16,7 @@ pub use transaction_config::{TransactionConfig, TransactionConfigBuilder};
 pub use transaction_outcome::TransactionOutcome;
 pub use transaction_result::TransactionResult;
 pub use xid::Xid;
+#[cfg(all(feature = "application_signals", any(windows, unix)))]
+mod shutdown_signal_kind;
+#[cfg(all(feature = "application_signals", any(windows, unix)))]
+pub use shutdown_signal_kind::ShutdownSignalKind;

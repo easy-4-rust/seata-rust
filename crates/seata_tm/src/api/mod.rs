@@ -39,3 +39,7 @@ mod transaction_admission;
 mod transaction_permit;
 pub use transaction_admission::TransactionAdmission;
 pub use transaction_permit::TransactionPermit;
+#[cfg(all(feature = "application_signals", any(windows, unix)))]
+mod application_signals;
+#[cfg(all(feature = "application_signals", any(windows, unix)))]
+pub use application_signals::ApplicationSignals;

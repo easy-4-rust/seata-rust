@@ -3,6 +3,8 @@ mod api;
 mod context;
 mod exception;
 mod model;
+#[cfg(all(feature = "application_signals", any(windows, unix)))]
+pub use api::ApplicationSignals;
 pub use api::{
     DurableGlobalTransaction, DurableTmError, GlobalTransaction, LauncherOrigin,
     LauncherProcessMonitor, LauncherStopChallenge, LauncherStopExchange, LauncherStopKeyRotation,
@@ -16,6 +18,8 @@ pub use exception::AdmissionError;
 pub use exception::TmError;
 pub use exception::TransactionError;
 pub use model::RecoveryToken;
+#[cfg(all(feature = "application_signals", any(windows, unix)))]
+pub use model::ShutdownSignalKind;
 pub use model::{
     GlobalTransactionRole, Propagation, TransactionConfig, TransactionConfigBuilder, Xid,
 };

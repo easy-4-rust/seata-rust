@@ -1125,3 +1125,8 @@ Rust 1.99/1.85 各 89 项 `seata-transport` 测试、全目标严格 Clippy、�
 ## 2026-11-26：应用事务准入与有界排空
 
 沿用 WP07 停机契约，正式 TM crate 新增共享 TransactionAdmission 与独占 TransactionPermit，拒绝关闭后的新作用域，并等待旧作用域释放。超时只返回数量，不取消业务、不重新开放入口、不自动改写事务结果。真实 TCP 测试在原 Commit 响应被对端屏障持有时验证排空超时，随后原作用域完成并关闭 TM。缺 API 的测试先失败；删掉释放通知的变异版本在已挂起等待者断言失败。Rust 1.99/1.85 各通过 47 项组件回归和 1 项接口示例，另 7 项外部环境测试保持 ignored；严格目标 Clippy 通过。证据见[应用准入验收](phase-2/evidence/transaction-admission/README.md)。生产应用仍须统一接入、绑定信号并验证部署；WP07 总项和全部计划继续开放。
+
+
+## 2026-11-26：可选应用停机信号与 Windows 原生事件
+
+在 WP07 契约下新增 application_signals 可选功能，由应用显式安装 ApplicationSignals 接收 Windows Ctrl-C/Ctrl-Break 或 Unix SIGINT/SIGTERM。默认 Tokio 功能图无 signal；接口不会隐式消耗 TM/RM 所有者。Rust 1.99/1.85 各在独立隐藏控制台接收真实 Ctrl-C 和 Ctrl-Break；原 Commit 响应仍被屏障持有时，关闭准入、排空超时且原作用域和通讯所有者仍有效。各例再次接收同种事件后仍保持原作用域，控制器放行原响应后仅一次 Commit、排空完成及 socket EOF。把 Ctrl-Break 错映射为 Ctrl-C 的变异现场被实际断言拒绝。两工具链各通过 47 项组件回归和 2 项接口示例，全目标严格 Clippy 与默认功能构建通过；8 项环境相关测试在普通回归中保持 ignored，其中新增信号用例已由外部运行器显式执行。见[原生事件证据](phase-2/evidence/application-signals/README.md)。Unix 实测、完整业务入口覆盖和真实部署验收仍开放，整体计划未完成。
