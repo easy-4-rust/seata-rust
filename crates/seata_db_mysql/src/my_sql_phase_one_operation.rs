@@ -14,15 +14,21 @@ pub enum MySqlPhaseOneOperation {
     CommitChanged,
     /// 实验本地提交及单次成功报告组合入口。
     CommitAndReport,
+    /// 原本地事务中的业务 DML 与镜像准备，不表示已提交。
+    Execute,
+    /// 显式原本地事务回滚，不含自动 Drop。
+    Rollback,
 }
 impl MySqlPhaseOneOperation {
     /// 固定全部阶段；实验阶段为零不表示相应能力已经启用。
-    pub const ALL: [Self; 5] = [
+    pub const ALL: [Self; 7] = [
         Self::Prepare,
         Self::CheckCommit,
         Self::CommitNoChange,
         Self::CommitChanged,
         Self::CommitAndReport,
+        Self::Execute,
+        Self::Rollback,
     ];
     /// 无参数；返回固定阶段标签，不含业务身份。
     pub const fn label(self) -> &'static str {
@@ -32,12 +38,16 @@ impl MySqlPhaseOneOperation {
             Self::CommitNoChange => "commit_no_change",
             Self::CommitChanged => "commit_changed",
             Self::CommitAndReport => "commit_and_report",
+            Self::Execute => "execute",
+            Self::Rollback => "rollback",
         }
     }
     /// 无参数；返回本阶段适用的固定结果，用于有界导出。
     pub fn outcomes(self) -> &'static [MySqlPhaseOneOutcome] {
         use MySqlPhaseOneOutcome as O;
         match self {
+            Self::Execute => &[O::ExecutionCompleted, O::ExecutionFailed, O::Cancelled],
+            Self::Rollback => &[O::RollbackConfirmed, O::RollbackUnconfirmed, O::Cancelled],
             Self::Prepare => &[
                 O::PreparedUnregistered,
                 O::PreparedRegistered,

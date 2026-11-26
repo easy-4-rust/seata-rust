@@ -1228,3 +1228,12 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 修复真实 TLS 来源可被同端点明文替代者提供伪造状态的问题。迁移 014 为新 TLS 来源保存版本 2 的根集合/SAN/profile 摘要；查询与持锁接管/恢复发送 CAS 检查同一绑定。旧明文与无 014 schema 保持兼容；新 TLS 缺迁移时保留原 XID，来源失败不交付业务 Launcher。
 
 双版本各五组真实 TLS/MySQL 用例和两组原 Java TC 丢结束回包场景通过，覆盖真实监控子进程停止、行锁改写竞态拒绝及恢复原字节后同来源完成。三个源变异每版本目标失败，原字节恢复后通过；独立程序校验拒绝 native 每版本 12 项、Java 每 profile 12 项证据削弱。全工作区各 743 passed / 330 ignored，四组件严格 Clippy 与默认配置检查通过。见 [来源信任证据](phase-2/evidence/tm-transport-binding/README.md)。独立外部审查、受控信任迁移、生产证书运维、WP05–07 与 Phase4–7 继续。
+
+
+## 2026-11-27：业务 DML 与显式本地回滚指标
+
+正式 execute 与显式 rollback 入口新增数据源共享的结果计数，未提交的 DML 成功、原错误、回滚确认/未确认及取消分开，Prepared/Checked 转发仅底层结算一次。未轮询与自动 Drop 不计显式 API。原 31 条导出保持语义，新增八条形成 39 条固定序列。
+
+双版本各五组真实 MySQL 和一组授权 HTTP 通过，涵盖真实锁等待/取消/期限、重复键、中毒作用域、代理截留回滚响应及原行锁已释放。每版本两种正式源结算变异失败、恢复后现场通过；12 项证据削弱拒绝。全工作区全功能各 743 passed / 335 ignored，MySQL/observability 全目标严格 Clippy 通过。见 [业务与回滚计量](phase-2/evidence/business-metrics/README.md)。失败报告完整计量、结构化数据库事件、生产采集/告警、独立外部审查及剩余 WP05–07/Phase4–7 继续。
+
+本增量的双版本默认测试/严格检查及默认导出器无 SQLx 依赖验证也已通过。

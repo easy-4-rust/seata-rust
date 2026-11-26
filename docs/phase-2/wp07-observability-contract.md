@@ -159,3 +159,13 @@ MySqlDataSource 及使用同一数据源克隆的 MySqlDataSourceManager 签发 
 
 
 该选定范围现已通过双工具链真实 TCP、原 Java TC 普通提交及两方向实际回包丢失重试验证；九项证据削弱及实际结算源代码变异均拒绝。写后未知的新增测试属于原错误类型分类，不等于真实 socket 写超时注入。全工作区各 732 passed / 323 ignored，详情见 [回调本地写入事件证据](evidence/rm-callback-write-events/README.md)。生产 subscriber/收集与剩余事件边界继续。
+
+
+## 业务 DML 与显式本地回滚计量（实施基线，2026-11-27）
+
+沿用数据源克隆共享的一阶段只读采样器，新增 execute、rollback 两个固定 operation。execute 仅在正式 MySqlLocalTransaction::execute 实际轮询后计量，返回 Ok 记 execution_completed（含零行），任何原错误记 execution_failed；二者都不证明本地或全局提交，也不把失败解释为业务 SQL 未执行。rollback 只计显式 rollback API，Prepared/Checked 的转发只在底层结算一次；返回 Ok 记 rollback_confirmed，原错误记 rollback_unconfirmed，不推断全局结果。自动 Drop 回滚不计显式 API，未轮询 Future 不计，进入后取消/panic 记 cancelled，active 在退出时归还。
+
+原五阶段的 31 条导出序列保留原义，新增两阶段各 active/三个结果，共 39 条固定序列。不统计 SQL、行数或身份标签，不授予连接/发送/恢复权限。验收包括真实 MySQL 的多种 DML、零行、本地输入/数据库错误、锁等待取消和期限、原事务回滚后独立连接可见状态、共享克隆与关闭后最终样本、授权 HTTP、源代码反例与双 Rust 回归。失败报告和其他生产门禁仍独立开放。
+
+
+本节选定行为已通过双 Rust 的真实 MySQL 五组现场、认证 HTTP 与两种正式源结算反例；恢复原字节后目标通过，每版本 12 项证据削弱拒绝。最终全工作区各 743 passed / 335 ignored、两组件严格 Clippy 与原始证据见 [业务与回滚指标](evidence/business-metrics/README.md)。原五阶段历史 31 条现场仍按其固定摘要解释，当前导出为 39 条。

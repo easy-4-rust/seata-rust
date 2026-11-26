@@ -11,7 +11,7 @@ use std::sync::{
 /// 对应 Java: 无直接对象；WP07 Rust 一阶段编排调用观测扩展。
 #[derive(Debug, Clone)]
 pub struct MySqlPhaseOneMetricsSampler {
-    counts: Arc<[[AtomicU64; OUTCOME_COUNT + 1]; 5]>,
+    counts: Arc<[[AtomicU64; OUTCOME_COUNT + 1]; 7]>,
 }
 impl MySqlPhaseOneMetricsSampler {
     /// 无参数；创建数据源独立的零值计数能力。

@@ -1,0 +1,33 @@
+    Checking seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+    Checking time v0.3.45
+    Checking yasna v0.5.2
+    Checking rcgen v0.14.0
+    Checking seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+    Checking seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Checking seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+error: used `expect()` on a `Result` value
+  --> crates\seata_db_mysql\tests\support\stall_proxy.rs:20:24
+   |
+20 |           let listener = TcpListener::bind("127.0.0.1:0")
+   |  ________________________^
+21 | |             .await
+22 | |             .expect("owned proxy bind");
+   | |_______________________________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#expect_used
+   = note: `-D clippy::expect-used` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::expect_used)]`
+
+error: used `expect()` on a `Result` value
+  --> crates\seata_db_mysql\tests\support\stall_proxy.rs:23:20
+   |
+23 |         let port = listener.local_addr().expect("proxy address").port();
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#expect_used
+
+error: could not compile `seata-db-mysql` (test "live_business_metrics") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

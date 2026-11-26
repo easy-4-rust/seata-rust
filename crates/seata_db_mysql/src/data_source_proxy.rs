@@ -419,6 +419,7 @@ impl MySqlDataSource {
             self.registration_checks,
             self.pool.connect_options(),
             self.operation_timeout,
+            self.phase_one_metrics.clone(),
         ))
     }
     /// 无参数；停止新借用并最多等待3秒关闭，超时不报告完整排空。

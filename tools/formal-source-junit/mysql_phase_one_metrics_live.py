@@ -173,7 +173,7 @@ def run():
         need(sha(ROOT / row['path']) == row['sha256'], 'Source not restored after mutation')
     save(out / 'result.json', dict(status='PHASE_ONE_STAGE_METRICS_MYSQL_AND_HTTP_VERIFIED', Rust_versions=['1.99', '1.85'],
          live_cases_per_version=14, settlement_mutation_rejected=True,
-         restored_target_passed=True, fixed_http_series=31, WP07_complete=False))
+         restored_target_passed=True, fixed_http_series=39, WP07_complete=False))
     save(out / 'catalog.json', [dict(path=p.relative_to(out).as_posix(), sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()])
     print(json.dumps(dict(evidence=str(out), catalog_sha256=sha(out / 'catalog.json'))), flush=True)
 

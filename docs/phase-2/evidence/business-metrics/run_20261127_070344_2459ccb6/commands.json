@@ -1,0 +1,196 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-business-metrics-20261127-070344-2459ccb6",
+      "--label",
+      "seata.business.metrics.owner=ac2ede798c7446fba1bd2afd749ed67b",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_business_metrics_20261127_070344_2459ccb6/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:54229:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_ac2ede798c74",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "8cf68568d6a38bcb7b755dd5292b39fbbcdcd33e0b601aaa2098c41fbe6f672e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_business_metrics",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-live",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_business_metrics-a0967fd29e9e3c0a.exe",
+      "--ignored",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-http-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-observability",
+      "--test",
+      "mysql_recovery",
+      "--features",
+      "mysql",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-http",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\mysql_recovery-7e032aa9b4414751.exe",
+      "first_phase_source_exports_31_stage_series_without_promoting_preparation_to_commit",
+      "--exact",
+      "--ignored",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_business_metrics",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-live",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_business_metrics-95d119d7370958ed.exe",
+      "--ignored",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-http-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-observability",
+      "--test",
+      "mysql_recovery",
+      "--features",
+      "mysql",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-http",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\mysql_recovery-94f70d0711040763.exe",
+      "first_phase_source_exports_31_stage_series_without_promoting_preparation_to_commit",
+      "--exact",
+      "--ignored",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "8cf68568d6a38bcb7b755dd5292b39fbbcdcd33e0b601aaa2098c41fbe6f672e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "8cf68568d6a38bcb7b755dd5292b39fbbcdcd33e0b601aaa2098c41fbe6f672e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "8cf68568d6a38bcb7b755dd5292b39fbbcdcd33e0b601aaa2098c41fbe6f672e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "8cf68568d6a38bcb7b755dd5292b39fbbcdcd33e0b601aaa2098c41fbe6f672e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "8cf68568d6a38bcb7b755dd5292b39fbbcdcd33e0b601aaa2098c41fbe6f672e"
+    ],
+    "exit_code": 1
+  }
+]

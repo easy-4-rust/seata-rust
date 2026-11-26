@@ -1,0 +1,67 @@
+{
+  "status": "SELECTED_BUSINESS_DML_AND_EXPLICIT_ROLLBACK_METRICS_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "new_operations": [
+    "execute",
+    "rollback"
+  ],
+  "fixed_exported_series": 39,
+  "previous_series_semantics_preserved": true,
+  "native_mysql_cases_per_version": 5,
+  "authenticated_HTTP_cases_per_version": 1,
+  "source_mutations_per_version": 2,
+  "evidence_negative_controls_per_version": 12,
+  "workspace_tests_per_version": {
+    "passed": 743,
+    "ignored": 335
+  },
+  "strict_Clippy_packages": [
+    "seata-db-mysql",
+    "seata-observability"
+  ],
+  "default_checks_passed": true,
+  "default_observability_sqlx_dependency": false,
+  "Java_TC_new_execution_this_increment": false,
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "complete failure-report metrics",
+    "durable MySQL structured events",
+    "production collection/alerts and independent review",
+    "remaining WP05-07 and Phase4-7"
+  ],
+  "evidence": {
+    "red": {
+      "path": "docs/phase-2/evidence/business-metrics/red_20261127_065646_9ba0db05",
+      "catalog_sha256": "a2c9548f8919610855592f325b311159745f5829eb44cab1048f6c0ee5353a7e"
+    },
+    "restored_native": {
+      "path": "docs/phase-2/evidence/business-metrics/run_20261127_070635_1eb289f2",
+      "catalog_sha256": "69d8b0c500d83832b2e93911c7864712cf8c646f56953775a69e480fab3882b4"
+    },
+    "source_mutations": {
+      "path": "docs/phase-2/evidence/business-metrics/mutations_20261127_070210_3fd2a6af",
+      "catalog_sha256": "b36076602b5b2b57e1291ec16070658e60fa75fd10b75295f717b33402a72ff2"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/business-metrics/validation_20261127_070738_8ff96e8e",
+      "catalog_sha256": "5b3b8ad31a9366919e64550d11cf485cae214be53c6e62d17d13353c37d00684"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/business-metrics/default_20261127_070823_f36ae67a",
+      "catalog_sha256": "921ab3d143a1a84bafc647f6c7761e452adfc8f807916ecd81780d94d87f9ff9"
+    },
+    "regression_199": {
+      "path": "docs/phase-2/evidence/business-metrics/regression_1.99_20261127_070728_1fc1c2f3",
+      "catalog_sha256": "a01a4e4234ce387103d9e8122e2592ac99f523246462769143c29554f66cfc93"
+    },
+    "regression_185": {
+      "path": "docs/phase-2/evidence/business-metrics/regression_1.85_20261127_070728_a3729d2c",
+      "catalog_sha256": "28dbfd3ad0cb2378ad6660616ff7af5029f3c7e1836b6123dc0841648cec1d19"
+    }
+  }
+}

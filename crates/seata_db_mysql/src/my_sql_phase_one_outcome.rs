@@ -45,6 +45,14 @@ pub enum MySqlPhaseOneOutcome {
     ReportUnknown,
     /// 本地提交已确认，单次报告返回其他错误。
     ReportFailed,
+    /// 原 DML 与镜像准备返回成功，不是提交证明。
+    ExecutionCompleted,
+    /// 原 DML 入口返回错误，不推断业务 SQL 是否已经执行。
+    ExecutionFailed,
+    /// 显式本地回滚已获驱动成功确认，不代表全局终态。
+    RollbackConfirmed,
+    /// 显式本地回滚返回错误，不能确认回滚结果。
+    RollbackUnconfirmed,
     /// 已轮询阶段取消或 panic 解栈，不推断提交边界。
     Cancelled,
 }
@@ -74,6 +82,10 @@ impl MySqlPhaseOneOutcome {
             Self::ReportClaimFailed => "report_claim_failed",
             Self::ReportUnknown => "report_unknown",
             Self::ReportFailed => "report_failed",
+            Self::ExecutionCompleted => "execution_completed",
+            Self::ExecutionFailed => "execution_failed",
+            Self::RollbackConfirmed => "rollback_confirmed",
+            Self::RollbackUnconfirmed => "rollback_unconfirmed",
             Self::Cancelled => "cancelled",
         }
     }

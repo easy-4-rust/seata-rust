@@ -26,6 +26,7 @@ pub struct MySqlLocalTransaction {
     undo_logs: Vec<SqlUndoLog>,
     undo_bytes: usize,
     undo_flushed: bool,
+    phase_one_metrics: crate::MySqlPhaseOneMetricsSampler,
 }
 impl MySqlLocalTransaction {
     /// 参数为原成功回执和固定配置；在原物理事务中保持恢复行及 Normal 锁，期限后不发布成功。
@@ -268,6 +269,18 @@ impl MySqlLocalTransaction {
         sql: &SqlRecognizer,
         parameters: &[FieldValue],
     ) -> Result<u64, DbError> {
+        let guard = self
+            .phase_one_metrics
+            .begin(crate::MySqlPhaseOneOperation::Execute);
+        let result = self.execute_inner(sql, parameters).await;
+        guard.finish_execute(&result);
+        result
+    }
+    async fn execute_inner(
+        &mut self,
+        sql: &SqlRecognizer,
+        parameters: &[FieldValue],
+    ) -> Result<u64, DbError> {
         if self.poisoned {
             return Err(DbError::Poisoned);
         }
@@ -411,6 +424,7 @@ impl MySqlLocalTransaction {
         }
     }
     /// 参数为独占SQLx事务及固定schema；返回可取消但不可共享连接的作用域。
+    #[allow(clippy::too_many_arguments)] // 同一数据源的原连接配置与只读计数归属必须一起交接。
     pub(crate) fn new(
         transaction: Transaction<'static, MySql>,
         database: String,
@@ -419,6 +433,7 @@ impl MySqlLocalTransaction {
         registration_checks: MySqlAtRegistrationChecks,
         metadata_options: std::sync::Arc<sqlx::mysql::MySqlConnectOptions>,
         operation_timeout: Duration,
+        phase_one_metrics: crate::MySqlPhaseOneMetricsSampler,
     ) -> Self {
         Self {
             transaction: Some(transaction),
@@ -432,6 +447,7 @@ impl MySqlLocalTransaction {
             undo_logs: Vec::new(),
             undo_bytes: 0,
             undo_flushed: false,
+            phase_one_metrics,
         }
     }
     /// 参数为原单表名；在同事务持有MDL后读取完整元数据，错误或取消保持poison。
@@ -475,7 +491,15 @@ impl MySqlLocalTransaction {
         }
     }
     /// 无参数；显式回滚并归还连接，返回原驱动分类；Drop仍由SQLx负责安全回滚。
-    pub async fn rollback(mut self) -> Result<(), DbError> {
+    pub async fn rollback(self) -> Result<(), DbError> {
+        let guard = self
+            .phase_one_metrics
+            .begin(crate::MySqlPhaseOneOperation::Rollback);
+        let result = self.rollback_inner().await;
+        guard.finish_rollback(&result);
+        result
+    }
+    async fn rollback_inner(mut self) -> Result<(), DbError> {
         let transaction = self.transaction.take().ok_or(DbError::Closed)?;
         timeout_at(
             Instant::now() + self.operation_timeout,

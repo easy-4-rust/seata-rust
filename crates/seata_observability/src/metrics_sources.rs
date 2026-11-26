@@ -99,7 +99,7 @@ impl MetricsSources {
         self
     }
 
-    /// 参数为数据源签发的一阶段只读计数；返回增加 31 条固定序列的来源。
+    /// 参数为数据源签发的一阶段只读计数；返回增加 39 条固定序列的来源。
     /// 不授权提交或报告；各阶段观察不可相加当作业务效果次数。
     #[cfg(feature = "mysql")]
     pub fn with_mysql_phase_one(

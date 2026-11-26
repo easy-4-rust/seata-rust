@@ -94,6 +94,22 @@ impl MySqlPhaseOneGuard {
             Err(MySqlFirstPhaseReportError::Report { .. }) => Outcome::ReportFailed,
         });
     }
+    /// 参数为原 DML 结果；无返回值，成功仅表示未提交作用域内的语句与镜像准备。
+    pub(crate) fn finish_execute(self, result: &Result<u64, crate::DbError>) {
+        self.finish(if result.is_ok() {
+            Outcome::ExecutionCompleted
+        } else {
+            Outcome::ExecutionFailed
+        });
+    }
+    /// 参数为原显式回滚结果；无返回值，失败不能确认回滚或全局结果。
+    pub(crate) fn finish_rollback(self, result: &Result<(), crate::DbError>) {
+        self.finish(if result.is_ok() {
+            Outcome::RollbackConfirmed
+        } else {
+            Outcome::RollbackUnconfirmed
+        });
+    }
     fn finish(mut self, outcome: Outcome) {
         self.sampler.increment(self.operation, outcome);
         self.finished = true;

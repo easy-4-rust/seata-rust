@@ -193,7 +193,7 @@ async fn first_phase_source_exports_31_stage_series_without_promoting_preparatio
         .starts_with("HTTP/1.1 401"));
     let zero = fetch(exporter.local_addr(), TOKEN).await;
     let zero_body = zero.split_once("\r\n\r\n").unwrap().1;
-    assert_eq!(zero_body.lines().count(), 31);
+    assert_eq!(zero_body.lines().count(), 39);
     assert!(zero_body.lines().all(|line| line.ends_with(" 0")));
     // 受控 RM 只提供类型化客户端；非法身份在真实准备入口内拒绝，不发送注册。
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
@@ -209,6 +209,24 @@ async fn first_phase_source_exports_31_stage_series_without_promoting_preparatio
             .count(Outcome::PrepareFailed),
         1
     );
+    let mut transaction = source.begin().await.unwrap();
+    let reserved =
+        seata_at::SqlRecognizerFactory::recognize("UPDATE seata_rs_at_resource_binding SET v=1")
+            .unwrap();
+    assert!(transaction.execute(&reserved, &[]).await.is_err());
+    transaction.rollback().await.unwrap();
+    assert_eq!(
+        metrics
+            .snapshot(Operation::Execute)
+            .count(Outcome::ExecutionFailed),
+        1
+    );
+    assert_eq!(
+        metrics
+            .snapshot(Operation::Rollback)
+            .count(Outcome::RollbackConfirmed),
+        1
+    );
     rm.shutdown().await.unwrap();
     source.close().await.unwrap();
     drop(manager);
@@ -216,19 +234,22 @@ async fn first_phase_source_exports_31_stage_series_without_promoting_preparatio
     let output = fetch(exporter.local_addr(), TOKEN).await;
     assert!(output.starts_with("HTTP/1.1 200"));
     let body = output.split_once("\r\n\r\n").unwrap().1;
-    assert_eq!(body.lines().count(), 31);
+    assert_eq!(body.lines().count(), 39);
     assert!(body.contains(
         "seata_mysql_phase_one_total{operation=\"prepare\",outcome=\"prepare_failed\"} 1\n"
     ));
     for line in body.lines() {
         assert!(line.starts_with("seata_mysql_phase_one_"));
-        assert!(
-            line.ends_with(if line.contains("outcome=\"prepare_failed\"") {
+        assert!(line.ends_with(
+            if line.contains("outcome=\"prepare_failed\"")
+                || line.contains("outcome=\"execution_failed\"")
+                || line.contains("outcome=\"rollback_confirmed\"")
+            {
                 " 1"
             } else {
                 " 0"
-            })
-        );
+            }
+        ));
     }
     for secret in [TOKEN, "jdbc:mysql", "seata-mysql-fixture-only"] {
         assert!(!output.contains(secret));
