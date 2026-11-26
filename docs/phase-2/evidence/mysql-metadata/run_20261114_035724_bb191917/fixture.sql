@@ -1,0 +1,32 @@
+-- Owned fixture only. at_md_15e4b61939ab is generated ASCII and never an application schema.
+CREATE TABLE account (
+ b BIGINT NOT NULL, a BIGINT NOT NULL, amount DECIMAL(65,30) NOT NULL,
+ note VARCHAR(50) NULL, payload VARBINARY(32) NULL, unsigned_id BIGINT UNSIGNED NOT NULL,
+ PRIMARY KEY (a,b)
+) ENGINE=InnoDB;
+INSERT INTO account VALUES
+ (-9223372036854775808,1,12345678901234567890123456789012345.123456789012345678901234567890,'fixture',X'00ff7f00',18446744073709551615),
+ (9223372036854775807,2,-0.000000000000000000000000000001,NULL,NULL,9007199254740993);
+CREATE TABLE mdl_guard (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE drop_guard (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE deadline_guard (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE no_pk (id INT) ENGINE=InnoDB;
+CREATE TABLE non_transactional (id INT PRIMARY KEY) ENGINE=MyISAM;
+CREATE TABLE generated_col (id INT PRIMARY KEY, v INT GENERATED ALWAYS AS (id+1) STORED) ENGINE=InnoDB;
+CREATE TABLE auto_id (id INT PRIMARY KEY AUTO_INCREMENT) ENGINE=InnoDB;
+CREATE TABLE float_col (id INT PRIMARY KEY, v DOUBLE) ENGINE=InnoDB;
+CREATE TABLE invisible_col (id INT PRIMARY KEY, v INT INVISIBLE) ENGINE=InnoDB;
+CREATE TABLE with_trigger (id INT PRIMARY KEY, v INT) ENGINE=InnoDB;
+CREATE TABLE trigger_log (id INT) ENGINE=InnoDB;
+CREATE TRIGGER fixture_trigger AFTER INSERT ON with_trigger FOR EACH ROW INSERT INTO trigger_log VALUES (NEW.id);
+CREATE TABLE fk_parent (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE fk_child (id INT PRIMARY KEY, parent_id INT, FOREIGN KEY(parent_id) REFERENCES fk_parent(id)) ENGINE=InnoDB;
+CREATE VIEW account_view AS SELECT * FROM account;
+CREATE USER 'metadata_low'@'%' IDENTIFIED BY 'seata-mysql-fixture-only';
+GRANT SELECT,UPDATE ON `at_md_15e4b61939ab`.* TO 'metadata_low'@'%';
+CREATE USER 'metadata_scoped'@'%' IDENTIFIED BY 'seata-mysql-fixture-only';
+GRANT SELECT,UPDATE,TRIGGER ON `at_md_15e4b61939ab`.* TO 'metadata_scoped'@'%';
+SET GLOBAL partial_revokes=ON;
+CREATE USER 'metadata_revoked'@'%' IDENTIFIED BY 'seata-mysql-fixture-only';
+GRANT SELECT,UPDATE,PROCESS,TRIGGER ON *.* TO 'metadata_revoked'@'%';
+REVOKE TRIGGER ON `at_md_15e4b61939ab`.* FROM 'metadata_revoked'@'%';

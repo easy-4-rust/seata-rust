@@ -1,0 +1,62 @@
+{
+  "result": {
+    "status": "RAW_RECOVERY_ATOMICITY_VERIFIED",
+    "mode": "delay_ok",
+    "physical_effect_connections": [
+      16
+    ],
+    "actual_compensations": 1,
+    "actual_terminal_updates": 1,
+    "automatic_business_replays": 0
+  },
+  "negative_controls": [
+    {
+      "mutation": "terminal_wrong_xid",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "compensation_wrong_pk",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "missing_dml_reply",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "wrong_commit_connection",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "forwarded_ERR",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "intermediate_ROLLBACK",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "raw_unclassified_ROLLBACK",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "prepared_COMMIT",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "preprepared_COMMIT",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "truncated_commit_ACK",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "missing_commit_ACK",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "intermediate_BEGIN",
+      "status": "REJECTED"
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.237" tests="48" errors="0" skipped="0" failures="29">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="java.class.path" value="D:\codex-builds\sjpref_20261112_221159_a16eafb1\core\target\test-classes;D:\codex-builds\sjpref_20261112_221159_a16eafb1\core\target\classes;D:\codex-builds\sjpref_20261112_221159_a16eafb1\common\target\classes;E:\Java\.m2\repository\org\apache\commons\commons-lang3\3.18.0\commons-lang3-3.18.0.jar;D:\codex-builds\sjpref_20261112_221159_a16eafb1\discovery\seata-discovery-core\target\classes;D:\codex-builds\sjpref_20261112_221159_a16eafb1\config\seata-config-core\target\classes;E:\Java\.m2\repository\com\typesafe\config\1.2.1\config-1.2.1.jar;E:\Java\.m2\repository\org\yaml\snakeyaml\2.0\snakeyaml-2.0.jar;D:\codex-builds\sjpref_20261112_221159_a16eafb1\threadpool\target\classes;E:\Java\.m2\repository\io\netty\netty-all\4.1.101.Final\netty-all-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-buffer\4.1.101.Final\netty-buffer-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec\4.1.101.Final\netty-codec-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-dns\4.1.101.Final\netty-codec-dns-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-haproxy\4.1.101.Final\netty-codec-haproxy-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-http\4.1.101.Final\netty-codec-http-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-http2\4.1.101.Final\netty-codec-http2-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-memcache\4.1.101.Final\netty-codec-memcache-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-mqtt\4.1.101.Final\netty-codec-mqtt-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-redis\4.1.101.Final\netty-codec-redis-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-smtp\4.1.101.Final\netty-codec-smtp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-socks\4.1.101.Final\netty-codec-socks-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-stomp\4.1.101.Final\netty-codec-stomp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-xml\4.1.101.Final\netty-codec-xml-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-common\4.1.101.Final\netty-common-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-handler\4.1.101.Final\netty-handler-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-unix-common\4.1.101.Final\netty-transport-native-unix-common-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-handler-proxy\4.1.101.Final\netty-handler-proxy-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-handler-ssl-ocsp\4.1.101.Final\netty-handler-ssl-ocsp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-resolver\4.1.101.Final\netty-resolver-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns\4.1.101.Final\netty-resolver-dns-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport\4.1.101.Final\netty-transport-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-rxtx\4.1.101.Final\netty-transport-rxtx-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-sctp\4.1.101.Final\netty-transport-sctp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-udt\4.1.101.Final\netty-transport-udt-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-classes-epoll\4.1.101.Final\netty-transport-classes-epoll-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-classes-kqueue\4.1.101.Final\netty-transport-classes-kqueue-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns-classes-macos\4.1.101.Final\netty-resolver-dns-classes-macos-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-epoll\4.1.101.Final\netty-transport-native-epoll-4.1.101.Final-linux-x86_64.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-epoll\4.1.101.Final\netty-transport-native-epoll-4.1.101.Final-linux-aarch_64.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-kqueue\4.1.101.Final\netty-transport-native-kqueue-4.1.101.Final-osx-x86_64.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-kqueue\4.1.101.Final\netty-transport-native-kqueue-4.1.101.Final-osx-aarch_64.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns-native-macos\4.1.101.Final\netty-resolver-dns-native-macos-4.1.101.Final-osx-x86_64.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns-native-macos\4.1.101.Final\netty-resolver-dns-native-macos-4.1.101.Final-osx-aarch_64.jar;E:\Java\.m2\repository\commons-pool\commons-pool\1.6\commons-pool-1.6.jar;E:\Java\.m2\repository\org\apache\commons\commons-dbcp2\2.9.0\commons-dbcp2-2.9.0.jar;E:\Java\.m2\repository\org\apache\commons\commons-pool2\2.11.1\commons-pool2-2.11.1.jar;E:\Java\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;E:\Java\.m2\repository\com\google\guava\guava\32.1.3-jre\guava-32.1.3-jre.jar;E:\Java\.m2\repository\com\google\guava\failureaccess\1.0.1\failureaccess-1.0.1.jar;E:\Java\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;E:\Java\.m2\repository\org\checkerframework\checker-qual\3.37.0\checker-qual-3.37.0.jar;E:\Java\.m2\repository\com\google\errorprone\error_prone_annotations\2.21.1\error_prone_annotations-2.21.1.jar;E:\Java\.m2\repository\com\google\j2objc\j2objc-annotations\2.8\j2objc-annotations-2.8.jar;E:\Java\.m2\repository\com\h2database\h2\1.4.181\h2-1.4.181.jar;E:\Java\.m2\repository\com\alibaba\fastjson\1.2.83\fastjson-1.2.83.jar;E:\Java\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.18.3\jackson-databind-2.18.3.jar;E:\Java\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.21\jackson-annotations-2.21.jar;E:\Java\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.18.3\jackson-core-2.18.3.jar;E:\Java\.m2\repository\com\google\protobuf\protobuf-java\3.25.5\protobuf-java-3.25.5.jar;E:\Java\.m2\repository\ch\qos\logback\logback-classic\1.3.14\logback-classic-1.3.14.jar;E:\Java\.m2\repository\org\slf4j\slf4j-api\2.0.17\slf4j-api-2.0.17.jar;E:\Java\.m2\repository\ch\qos\logback\logback-core\1.3.14\logback-core-1.3.14.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;E:\Java\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-launcher\1.8.2\junit-platform-launcher-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;E:\Java\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-suite-api\1.8.2\junit-platform-suite-api-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-suite-engine\1.8.2\junit-platform-suite-engine-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-suite-commons\1.8.2\junit-platform-suite-commons-1.8.2.jar;E:\Java\.m2\repository\org\mockito\mockito-core\4.11.0\mockito-core-4.11.0.jar;E:\Java\.m2\repository\net\bytebuddy\byte-buddy\1.14.15\byte-buddy-1.14.15.jar;E:\Java\.m2\repository\net\bytebuddy\byte-buddy-agent\1.12.23\byte-buddy-agent-1.12.23.jar;E:\Java\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;E:\Java\.m2\repository\org\mockito\mockito-junit-jupiter\4.11.0\mockito-junit-jupiter-4.11.0.jar;E:\Java\.m2\repository\org\mockito\mockito-inline\4.11.0\mockito-inline-4.11.0.jar;E:\Java\.m2\repository\org\assertj\assertj-core\3.27.7\assertj-core-3.27.7.jar;E:\Java\.m2\repository\org\slf4j\slf4j-simple\1.7.36\slf4j-simple-1.7.36.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="net.bytebuddy.experimental" value="true"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="Asia/Shanghai"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="CN"/>
+    <property name="sun.boot.library.path" value="D:\Java\jdk-17.0.12\bin"/>
+    <property name="sun.java.command" value="D:\Temp\surefire7298682656094170870\surefirebooter8212277697002410890.jar D:\Temp\surefire7298682656094170870 2026-11-12T22-15-31_176-jvmRun1 surefire8602699234928307122tmp surefire_01617298826617724782tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="test" value="AbstractTCInboundHandlerExceptionTest,BackendRetryTimeoutProbeTest,FailureVariantCompatibilityTest,FileRetryTimeoutProcessTest,GoErrorLengthCompatibilityTest,Http2DetectorTest,HttpDetectorTest,MergedMessageCompatibilityTest,MultiProtocolDecoderTest,PayloadGoldenCorpusTest,PayloadOptionalityTest,Phase0CredentialCheckAuthHandlerTest,ProtocolConstantsTest,ProtocolConstantsV0Test,ProtocolDecoderV0Test,ProtocolDecoderV1Test,ProtocolEncoderV0Test,ProtocolPrefaceFragmentationTest,ProtocolRpcMessageV0Test,ProtocolV1ControlEnvelopeTest,ProtocolV1GoldenFrameTest,RaftRetryTimeoutControlTest,RegistrationProcessorAuthTest,SessionHolderRetryTimeoutRecoveryTest,TCInboundFailureMatrixTest,TransactionExceptionProfileTest"/>
+    <property name="surefire.test.class.path" value="D:\codex-builds\sjpref_20261112_221159_a16eafb1\core\target\test-classes;D:\codex-builds\sjpref_20261112_221159_a16eafb1\core\target\classes;D:\codex-builds\sjpref_20261112_221159_a16eafb1\common\target\classes;E:\Java\.m2\repository\org\apache\commons\commons-lang3\3.18.0\commons-lang3-3.18.0.jar;D:\codex-builds\sjpref_20261112_221159_a16eafb1\discovery\seata-discovery-core\target\classes;D:\codex-builds\sjpref_20261112_221159_a16eafb1\config\seata-config-core\target\classes;E:\Java\.m2\repository\com\typesafe\config\1.2.1\config-1.2.1.jar;E:\Java\.m2\repository\org\yaml\snakeyaml\2.0\snakeyaml-2.0.jar;D:\codex-builds\sjpref_20261112_221159_a16eafb1\threadpool\target\classes;E:\Java\.m2\repository\io\netty\netty-all\4.1.101.Final\netty-all-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-buffer\4.1.101.Final\netty-buffer-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec\4.1.101.Final\netty-codec-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-dns\4.1.101.Final\netty-codec-dns-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-haproxy\4.1.101.Final\netty-codec-haproxy-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-http\4.1.101.Final\netty-codec-http-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-http2\4.1.101.Final\netty-codec-http2-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-memcache\4.1.101.Final\netty-codec-memcache-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-mqtt\4.1.101.Final\netty-codec-mqtt-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-redis\4.1.101.Final\netty-codec-redis-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-smtp\4.1.101.Final\netty-codec-smtp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-socks\4.1.101.Final\netty-codec-socks-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-stomp\4.1.101.Final\netty-codec-stomp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-codec-xml\4.1.101.Final\netty-codec-xml-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-common\4.1.101.Final\netty-common-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-handler\4.1.101.Final\netty-handler-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-unix-common\4.1.101.Final\netty-transport-native-unix-common-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-handler-proxy\4.1.101.Final\netty-handler-proxy-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-handler-ssl-ocsp\4.1.101.Final\netty-handler-ssl-ocsp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-resolver\4.1.101.Final\netty-resolver-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns\4.1.101.Final\netty-resolver-dns-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport\4.1.101.Final\netty-transport-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-rxtx\4.1.101.Final\netty-transport-rxtx-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-sctp\4.1.101.Final\netty-transport-sctp-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-udt\4.1.101.Final\netty-transport-udt-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-classes-epoll\4.1.101.Final\netty-transport-classes-epoll-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-classes-kqueue\4.1.101.Final\netty-transport-classes-kqueue-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns-classes-macos\4.1.101.Final\netty-resolver-dns-classes-macos-4.1.101.Final.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-epoll\4.1.101.Final\netty-transport-native-epoll-4.1.101.Final-linux-x86_64.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-epoll\4.1.101.Final\netty-transport-native-epoll-4.1.101.Final-linux-aarch_64.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-kqueue\4.1.101.Final\netty-transport-native-kqueue-4.1.101.Final-osx-x86_64.jar;E:\Java\.m2\repository\io\netty\netty-transport-native-kqueue\4.1.101.Final\netty-transport-native-kqueue-4.1.101.Final-osx-aarch_64.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns-native-macos\4.1.101.Final\netty-resolver-dns-native-macos-4.1.101.Final-osx-x86_64.jar;E:\Java\.m2\repository\io\netty\netty-resolver-dns-native-macos\4.1.101.Final\netty-resolver-dns-native-macos-4.1.101.Final-osx-aarch_64.jar;E:\Java\.m2\repository\commons-pool\commons-pool\1.6\commons-pool-1.6.jar;E:\Java\.m2\repository\org\apache\commons\commons-dbcp2\2.9.0\commons-dbcp2-2.9.0.jar;E:\Java\.m2\repository\org\apache\commons\commons-pool2\2.11.1\commons-pool2-2.11.1.jar;E:\Java\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;E:\Java\.m2\repository\com\google\guava\guava\32.1.3-jre\guava-32.1.3-jre.jar;E:\Java\.m2\repository\com\google\guava\failureaccess\1.0.1\failureaccess-1.0.1.jar;E:\Java\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;E:\Java\.m2\repository\org\checkerframework\checker-qual\3.37.0\checker-qual-3.37.0.jar;E:\Java\.m2\repository\com\google\errorprone\error_prone_annotations\2.21.1\error_prone_annotations-2.21.1.jar;E:\Java\.m2\repository\com\google\j2objc\j2objc-annotations\2.8\j2objc-annotations-2.8.jar;E:\Java\.m2\repository\com\h2database\h2\1.4.181\h2-1.4.181.jar;E:\Java\.m2\repository\com\alibaba\fastjson\1.2.83\fastjson-1.2.83.jar;E:\Java\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.18.3\jackson-databind-2.18.3.jar;E:\Java\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.21\jackson-annotations-2.21.jar;E:\Java\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.18.3\jackson-core-2.18.3.jar;E:\Java\.m2\repository\com\google\protobuf\protobuf-java\3.25.5\protobuf-java-3.25.5.jar;E:\Java\.m2\repository\ch\qos\logback\logback-classic\1.3.14\logback-classic-1.3.14.jar;E:\Java\.m2\repository\org\slf4j\slf4j-api\2.0.17\slf4j-api-2.0.17.jar;E:\Java\.m2\repository\ch\qos\logback\logback-core\1.3.14\logback-core-1.3.14.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;E:\Java\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;E:\Java\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-launcher\1.8.2\junit-platform-launcher-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;E:\Java\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-suite-api\1.8.2\junit-platform-suite-api-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-suite-engine\1.8.2\junit-platform-suite-engine-1.8.2.jar;E:\Java\.m2\repository\org\junit\platform\junit-platform-suite-commons\1.8.2\junit-platform-suite-commons-1.8.2.jar;E:\Java\.m2\repository\org\mockito\mockito-core\4.11.0\mockito-core-4.11.0.jar;E:\Java\.m2\repository\net\bytebuddy\byte-buddy\1.14.15\byte-buddy-1.14.15.jar;E:\Java\.m2\repository\net\bytebuddy\byte-buddy-agent\1.12.23\byte-buddy-agent-1.12.23.jar;E:\Java\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;E:\Java\.m2\repository\org\mockito\mockito-junit-jupiter\4.11.0\mockito-junit-jupiter-4.11.0.jar;E:\Java\.m2\repository\org\mockito\mockito-inline\4.11.0\mockito-inline-4.11.0.jar;E:\Java\.m2\repository\org\assertj\assertj-core\3.27.7\assertj-core-3.27.7.jar;E:\Java\.m2\repository\org\slf4j\slf4j-simple\1.7.36\slf4j-simple-1.7.36.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\hnxyh"/>
+    <property name="user.language" value="zh"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-07-16"/>
+    <property name="java.home" value="D:\Java\jdk-17.0.12"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="D:\codex-builds\sjpref_20261112_221159_a16eafb1\core"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="D:\Temp\surefire7298682656094170870\surefirebooter8212277697002410890.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.12+8-LTS-286"/>
+    <property name="user.name" value="hnxyh"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="GBK"/>
+    <property name="surefire.failIfNoSpecifiedTests" value="false"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="E:\Java\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="D:/Temp"/>
+    <property name="java.version" value="17.0.12"/>
+    <property name="user.dir" value="D:\codex-builds\sjpref_20261112_221159_a16eafb1\core"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="GBK"/>
+    <property name="java.library.path" value="D:\Java\jdk-17.0.12\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\hnxyh\.codex\tmp\arg0-windows\codex-arg0ryleRq;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\libheif\libheif\bin;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\jxrlib\jxrlib\bin;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\poppler\Library\bin;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\override;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\TortoiseGit\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;D:\Program Files\nvm;D:\Program Files\nodejs;D:\Java\jdk-17.0.12\bin;D:\Java\jdk-17.0.12\jre\bin;D:\Java\maven\apache-maven-3.9.9\bin;C:\Program Files (x86)\Gpg4win\..\GnuPG\bin;c:\Users\hnxyh\AppData\Local\Programs\cursor\resources\app\bin;C:\Program Files\Go\bin;C:\Program Files (x86)\dotnet\;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;D:\Program Files (x86)\微信web开发者工具;C:\Users\hnxyh\bin;C:\Espressif\tools\python;C:\Espressif\tools\python\Scripts;E:\Espressif;D:\Java\android-sdk-windows\cmdline-tools\latest\bin;D:\Java\android-sdk-windows\platform-tools;D:\Java\android-sdk-windows\emulator;C:\Users\hnxyh\.cargo\bin;C:\Users\hnxyh\.kimi-code\bin;C:\Users\hnxyh\.local\bin;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\hnxyh\AppData\Local\Microsoft\WindowsApps;C:\Users\hnxyh\AppData\Local\Programs\Ollama;D:\Program Files\Testcontainers Desktop\;D:\Program Files (x86)\Microsoft VS Code\bin;D:\Program Files (x86)\cursor\resources\app\bin;C:\Users\hnxyh\go\bin;C:\Users\hnxyh\AppData\Local\Programs\Qoder\bin;C:\Users\hnxyh\AppData\Roaming\npm;C:\Users\hnxyh\.local\tools\zig-0.16.0\zig-x86_64-windows-0.16.0;C:\Users\hnxyh\AppData\Local\Programs\DockerDesktop\resources\bin;C:\Users\hnxyh\AppData\Local\Microsoft\WinGet\Packages\GitHub.cli_Microsoft.Winget.Source_8wekyb3d8bbwe\bin;D:\Program Files\Arduino IDE\resources\app\lib\backend\resources;D:\Program Files\PlatformIO\penv\Scripts;C:\Users\hnxyh\AppData\Local\Programs\Swift\Runtimes\6.0.2\usr\bin\;C:\Users\hnxyh\AppData\Local\Programs\Swift\Toolchains\6.0.2+Asserts\usr\bin\;C:\Users\hnxyh\AppData\Local\Programs\Swift\Tools\6.0.2\;C:\Users\hnxyh\AppData\Local\Programs\Swift\Runtimes\6.2.1\usr\bin\;C:\Users\hnxyh\AppData\Local\Programs\Swift\Toolchains\6.2.1+Asserts\usr\bin\;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\fallback;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin;C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd;C:\Users\hnxyh\AppData\Local\OpenAI\Codex\bin\346c3d32ef2aec22;C:\Users\hnxyh\AppData\Local\OpenAI\Codex\bin\14b838c1d074ff01;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="17.0.12+8-LTS-286"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="handlerPreservesNonzeroReadableOffset" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.007">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <1> but was: <0>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.recognized(ProtocolPrefaceFragmentationTest.java:76)
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.handlerPreservesNonzeroReadableOffset(ProtocolPrefaceFragmentationTest.java:240)
+]]></failure>
+    <system-out><![CDATA[22:15:46.962 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [127, -38, -38, 1, 0, 0, 0, 16, 0, 16, 3, 1, 0, 16, 32, 48, 64]
+]]></system-out>
+  </testcase>
+  <testcase name="legacyBooleanDetectorStillRejectsWithoutOptionalWaitContract" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.002">
+    <system-out><![CDATA[22:15:46.971 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [127]
+]]></system-out>
+  </testcase>
+  <testcase name="completeControls(String)[1]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.033"/>
+  <testcase name="completeControls(String)[2]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.003"/>
+  <testcase name="completeControls(String)[3]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0"/>
+  <testcase name="completeControls(String)[4]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0"/>
+  <testcase name="completeControls(String)[5]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0"/>
+  <testcase name="completeControls(String)[6]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001"/>
+  <testcase name="completeControls(String)[7]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0"/>
+  <testcase name="completeControls(String)[8]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001"/>
+  <testcase name="completeControls(String)[9]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.057">
+    <system-out><![CDATA[22:15:47.074 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.maxCapacityPerThread: 4096
+22:15:47.074 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.ratio: 8
+22:15:47.074 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.chunkSize: 32
+22:15:47.074 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.blocking: false
+22:15:47.074 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.batchFastThreadLocalOnly: true
+22:15:47.091 [main] DEBUG io.netty.util.internal.PlatformDependent -- org.jctools-core.MpscChunkedArrayQueue: available
+]]></system-out>
+  </testcase>
+  <testcase name="unknownPrefixesClose(String)[1]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <system-out><![CDATA[22:15:47.118 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [0]
+]]></system-out>
+  </testcase>
+  <testcase name="unknownPrefixesClose(String)[2]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <system-out><![CDATA[22:15:47.119 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [127]
+]]></system-out>
+  </testcase>
+  <testcase name="unknownPrefixesClose(String)[3]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <system-out><![CDATA[22:15:47.120 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [-38, 0]
+]]></system-out>
+  </testcase>
+  <testcase name="unknownPrefixesClose(String)[4]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <system-out><![CDATA[22:15:47.121 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80, 88]
+]]></system-out>
+  </testcase>
+  <testcase name="unknownPrefixesClose(String)[5]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <system-out><![CDATA[22:15:47.122 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [71, 70]
+]]></system-out>
+  </testcase>
+  <testcase name="oversizedInputClosesBeforeProtocolSelection" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <system-out><![CDATA[22:15:47.124 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Packet size 8388609 exceeds maximum 8388608, closing connection from embedded
+22:15:47.124 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Packet size 8388609 exceeds maximum 8388608, closing connection from embedded
+22:15:47.124 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Packet size 8388609 exceeds maximum 8388608, closing connection from embedded
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[1]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.125 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [-38]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[2]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.002">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.126 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [71]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[3]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.002">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.129 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[4]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.130 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[5]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.132 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [68]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[6]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.134 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [72]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[7]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.137 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [79]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[8]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.002">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.137 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+  <testcase name="byteByByte(String)[9]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+]]></failure>
+    <system-out><![CDATA[22:15:47.140 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[1]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[2]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[3]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[4]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[5]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[6]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[7]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.002">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[8]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorsUseReadableOffset(String)[9]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+]]></failure>
+  </testcase>
+  <testcase name="detectorOrderingDoesNotChangeSeata(int)[1]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001"/>
+  <testcase name="detectorOrderingDoesNotChangeSeata(int)[2]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001"/>
+  <testcase name="detectorOrderingDoesNotChangeSeata(int)[3]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0"/>
+  <testcase name="legacyMutatingDetectorCannotConsumeOriginalBytes" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.003">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: array lengths differ, expected: <3> but was: <2>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.legacyMutatingDetectorCannotConsumeOriginalBytes(ProtocolPrefaceFragmentationTest.java:274)
+]]></failure>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[1]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.173 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [-38]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[2]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.175 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [71]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[3]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.178 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[4]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.181 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[5]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.183 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [68]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[6]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.185 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [72]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[7]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.187 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [79]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[8]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.191 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+  <testcase name="everyFragmentBoundary(String)[9]" classname="org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest" time="0.001">
+    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+]]></failure>
+    <system-out><![CDATA[22:15:47.193 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+]]></system-out>
+  </testcase>
+</testsuite>

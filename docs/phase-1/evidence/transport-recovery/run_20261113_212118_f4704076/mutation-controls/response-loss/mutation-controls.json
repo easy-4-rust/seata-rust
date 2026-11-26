@@ -1,0 +1,114 @@
+[
+  {
+    "name": "closed_generation_publishes_write_success",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "src/netty/write_receipt.rs",
+    "source_sha256": "54ec07d5de2116cea5584d8d6ba57ff593e26aa298540f0d68c09603ffb257df",
+    "patch": {
+      "old": "            if stats.closed {\n                self.fail_locked(\n                    state,\n                    stats\n                        .last_failure\n                        .clone()\n                        .unwrap_or(TransportError::ConnectionClosed),\n                );\n                return;\n            }\n",
+      "new": ""
+    },
+    "test": "netty::write_receipt::tests::closure_and_full_write_arbitrate_before_unpolled_caller_observes_result",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "reply_queues_without_runtime_guard",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "src/netty/connection_handle.rs",
+    "source_sha256": "8712426b852e5e03df9bde669bd48c0f1b97c5e557a43a0345e9c3acbe4795aa",
+    "patch": {
+      "old": "        if tokio::runtime::Handle::try_current().is_err() {\n            return Err(local(TransportError::InvalidConfiguration {\n                reason: \"Tokio I/O and time runtime required\",\n            }));\n        }\n",
+      "new": ""
+    },
+    "test": "reply_without_tokio_context_is_typed_local_failure_before_queue_or_write",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "reply_ignores_branch_identity",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "src/netty/connection_handle.rs",
+    "source_sha256": "ec55ff8c1dccac9b7b697269426c5c4da94d6e24914b9d85520756f620a2875d",
+    "patch": {
+      "old": " || !ResponseExpectation::reply_identity_matches(original, &body)",
+      "new": ""
+    },
+    "test": "wrong_family_or_branch_identity_is_rejected_without_writing",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "expired_or_cancelled_response_is_written",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "src/netty/tcp_connection.rs",
+    "source_sha256": "db05227c84f265594e7e1b8513781e53e7eece6c2ab76bac24da2a1de9feba33",
+    "patch": {
+      "old": "if !response.receipt.begin() {",
+      "new": "if false && !response.receipt.begin() {"
+    },
+    "test": "netty::tcp_connection::tests::response_queue_budget_and_prewrite_expiry_or_cancel_skip_all_reply_bytes",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "response_prefix_is_published_as_complete_frame",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "src/netty/tcp_connection.rs",
+    "source_sha256": "994f3b8634f70ec4bc03c5f839c0311f5e137a3ae675f0b090fe818da71984a4",
+    "patch": {
+      "old": "&response.bytes\n",
+      "new": "&response.bytes[..8]\n"
+    },
+    "test": "netty::tcp_connection::tests::response_partial_write_survives_deadline_or_cancellation_and_closure_never_reuses_stream",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "duplicate_callback_repeats_simulated_effect",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "examples/support/simulated_branch.rs",
+    "source_sha256": "cf49881770c3f9877a63fd7c345825743d52b79e9adf8ffcfa62de551eabdeee",
+    "patch": {
+      "old": "        if let Some(cached) = &self.cached {\n            return Ok(cached.clone());\n        }\n",
+      "new": ""
+    },
+    "test": "simulated_branch::tests::pending_identity_is_learned_only_from_exact_callback_and_duplicate_action_is_cached",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "callback_learns_branch_with_wrong_operation_nonce",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "examples/support/simulated_branch.rs",
+    "source_sha256": "ef149423e46d69979aa50c561c1fce870f9e963734a427579faae6651a77c0e6",
+    "patch": {
+      "old": "            || data != Some(self.data.as_str())\n",
+      "new": ""
+    },
+    "test": "simulated_branch::tests::mismatches_neither_learn_branch_nor_execute_simulated_action",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "finished_falsely_confirms_historical_commit",
+    "candidate": "D:\\codex-builds\\seata-loss-controls-dab17a53eb61",
+    "source": "examples/support/uncertain_commit.rs",
+    "source_sha256": "62cb191fa556370eee4b660781a5cd468e7b6bab4d374dbedce8f51a867571ca",
+    "patch": {
+      "old": "if status == GlobalStatus::Committed {",
+      "new": "if status == GlobalStatus::Committed || status == GlobalStatus::Finished {"
+    },
+    "test": "uncertain_commit::tests::finished_never_creates_commit_confirmation_and_does_not_erase_prior_authority",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  }
+]

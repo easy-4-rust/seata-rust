@@ -1,0 +1,20 @@
+[package]
+name = "seata-db-mysql"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "SQLx MySQL AT data source, metadata and local transaction integration"
+
+[dependencies]
+seata-datasource = { path = "../seata_datasource" }
+seata-at = { path = "../seata_at" }
+sqlx = { version = "=0.8.6", default-features = false, features = ["mysql", "runtime-tokio", "tls-rustls-ring-webpki", "bigdecimal"] }
+bigdecimal = "=0.4.10"
+thiserror.workspace = true
+tokio.workspace = true
+log = "=0.4.27"
+
+[lints]
+workspace = true

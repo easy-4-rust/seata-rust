@@ -1,0 +1,25 @@
+{
+  "scope": "selected commit cleanup change",
+  "file": "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs",
+  "sha256": "15a14d593f467fa0e869d4b3d3a8c20e7c1d7fadc822153bb2fc225ca32a47a8",
+  "physical_lines": 530,
+  "production_lines_before_inline_tests": 467,
+  "threshold_review": 500,
+  "authored_file_blocker": 800,
+  "decision": "KEEP",
+  "reason": "单一Java对应对象的Undo写入、原身份读取、fence、原日志删除与共用七列元数据核对；生产逻辑不足500行，尾部为同对象的单项聚焦current-read回归。不为行数拆散同一Java对象。",
+  "new_database_suites": [
+    {
+      "path": "crates/seata_db_mysql/tests/support/commit_direction_cases.rs",
+      "lines": 299
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/support/commit_direction_guard_cases.rs",
+      "lines": 244
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/support/commit_direction_recovery_cases.rs",
+      "lines": 423
+    }
+  ]
+}

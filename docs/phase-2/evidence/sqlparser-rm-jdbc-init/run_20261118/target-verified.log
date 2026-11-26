@@ -1,0 +1,31 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.97s
+     Running tests\jdbc_resource_init.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jdbc_resource_init-57b93eb7fec74c93.exe)
+
+running 4 tests
+SEATA_JDBC_INIT	jdbc-driver-probe-fails	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|probe|close-connection	java.lang.LinkageError:driver-probe
+test rust_host_failure_keeps_both_operation_and_close_errors ... ok
+test suppressed_retains_identity_and_does_not_form_an_arc_cycle ... ok
+SEATA_JDBC_INIT	jdbc-ok	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|driver=com.mysql.jdbc.Driver|db=mysql|close-connection|register	ok
+SEATA_JDBC_INIT	jdbc-acquire-sql	group=group|get-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:get-connection)
+SEATA_JDBC_INIT	jdbc-null-metadata	group=group|get-connection|metadata|close-connection	java.lang.NullPointerException:Cannot invoke "java.sql.DatabaseMetaData.getURL()" because the return value of "java.sql.Connection.getMetaData()" is null
+test db_type_null_reference_preserves_the_close_exception ... okSEATA_JDBC_INIT	jdbc-null-url	group=group|get-connection|metadata|url|close-connection	java.lang.NullPointerException:Cannot invoke "String.contains(java.lang.CharSequence)" because "jdbcUrl" is null
+
+SEATA_JDBC_INIT	jdbc-null-connection	group=group|get-connection	java.lang.NullPointerException:Cannot invoke "java.sql.Connection.getMetaData()" because "connection" is null
+SEATA_JDBC_INIT	jdbc-unknown-driver	group=group|get-connection|metadata|url|id=jdbc:unknown:db|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:unknown jdbc driver : jdbc:unknown:db?param=1)
+SEATA_JDBC_INIT	jdbc-close-sql	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|driver=com.mysql.jdbc.Driver|db=mysql|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	jdbc-metadata-and-close-sql	group=group|get-connection|metadata|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:metadata suppressed(java.sql.SQLException:close-connection))
+SEATA_JDBC_INIT	jdbc-null-metadata-and-close-sql	group=group|get-connection|metadata|close-connection	java.lang.NullPointerException:Cannot invoke "java.sql.DatabaseMetaData.getURL()" because the return value of "java.sql.Connection.getMetaData()" is null suppressed(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	xa-ok	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa|register	ok
+SEATA_JDBC_INIT	xa-acquire-sql	group=group|get-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:get-xa)
+SEATA_JDBC_INIT	xa-null-connection	group=group|get-xa	java.lang.NullPointerException:Cannot invoke "javax.sql.XAConnection.getConnection()" because "xaConnection" is null
+SEATA_JDBC_INIT	xa-inner-acquire-sql	group=group|get-xa|get-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:get-connection)
+SEATA_JDBC_INIT	xa-close-sql	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-xa)
+SEATA_JDBC_INIT	xa-inner-close-sql	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	xa-both-close-sql	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-xa)
+SEATA_JDBC_INIT	xa-close-replaces-runtime-error	group=group|get-xa|get-connection|metadata|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-xa)
+test jdbc_and_xa_initialization_match_original_close_and_registration_order ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

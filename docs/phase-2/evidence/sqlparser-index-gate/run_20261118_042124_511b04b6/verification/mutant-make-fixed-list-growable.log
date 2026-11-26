@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_index_metadata_20261118_040625_14ad5f14\mutants\verification_20261118_041625_065569\make-fixed-list-growable\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_index_metadata_20261118_040625_14ad5f14\mutants\verification_20261118_041625_065569\make-fixed-list-growable\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.74s
+     Running tests\index_java_diff.rs (D:/cargo-target/seata-index-mutants\debug\deps\index_java_diff-328d8b0e784fec8c.exe)
+
+running 1 test
+test all_list_equals_modes_and_mutations_match_jdk17 ... FAILED
+
+failures:
+
+---- all_list_equals_modes_and_mutations_match_jdk17 stdout ----
+
+thread 'all_list_equals_modes_and_mutations_match_jdk17' (37344) panicked at crates\seata_test\tests\index_java_diff.rs:40:5:
+assertion `left == right` failed: Java mismatch: eq/A/F/clear-right
+  left: ["E:java.util.ConcurrentModificationException", "2", "0", "0", "first,second", ""]
+ right: ["E:java.lang.UnsupportedOperationException", "2", "2", "0", "first,second", "first,second"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    all_list_equals_modes_and_mutations_match_jdk17
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-test --test index_java_diff`

@@ -1,0 +1,90 @@
+{
+  "status": "ORIGINAL_TC_ROW_TOKEN_GUARD_VERIFIED_BEFORE_NATIVE_RM_REGISTRATION",
+  "evidence": "docs/phase-2/evidence/tc-lock-registration-guard/run_20261118",
+  "spec": "docs/phase-2/tc-lock-coverage-contract.md",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "previous_witness_catalog_sha256": "8777249b4c4520cd2a4b5ec111d4e008302339a71e3e52d48c440886c7f240ed",
+  "original_lock_source_catalog_sha256": "ae17ddd3e0c05d1ea0162de5533e707f6a0b3b121644ce11b3fef06bbcf46544",
+  "mysql_runtime": "8.4.13",
+  "mysql_image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "java_source_cases": 6,
+  "java_source_recording_backend": true,
+  "original_java_TC_network_run": false,
+  "native_RM_peer": "controlled TCP",
+  "rejected_before_branch_write": 5,
+  "unchanged_successful_wire_requests": 1,
+  "release_container_verified": true,
+  "java_literal_format_generator_maintained": true,
+  "rust": {
+    "1.99": {
+      "ordinary": 509,
+      "ignored": 146,
+      "harnesses": 110,
+      "doc": 4,
+      "owned_mysql": 11,
+      "original_java_core_MATCH": 76,
+      "original_rm_jdbc_MATCH": 10
+    },
+    "1.85": {
+      "ordinary": 509,
+      "ignored": 146,
+      "harnesses": 110,
+      "doc": 4,
+      "owned_mysql": 11,
+      "original_java_core_MATCH": 76,
+      "original_rm_jdbc_MATCH": 10
+    }
+  },
+  "runtime_negative_controls": 1,
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "independent_status": "REQUESTED"
+  },
+  "open_coverage": [
+    "TC physical lock limits and collation",
+    "Composite identity collisions",
+    "Original TC current native RM positive registration and lock lifecycle"
+  ],
+  "public_first_phase_business_COMMIT_available": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user",
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "docs/phase-2/tc-lock-coverage-contract.md",
+      "sha256": "4791d3316a17cd226fa26282e58941a67766283cac7154df484d54b54fe5f13c"
+    },
+    {
+      "path": "crates/seata_at/src/connection_context.rs",
+      "sha256": "2a21861288a7a28ede8676dd722f2f9bb50d1fd4fdd0bf3046e9cac24c5eabbb"
+    },
+    {
+      "path": "crates/seata_at/src/exec/base_transactional_executor.rs",
+      "sha256": "6be81e4a937dbda64ee32ff32ee4a64980dcace1a3fa4cfeb3d77bad4e3f3b36"
+    },
+    {
+      "path": "crates/seata_at/src/exec/lock_key_output.rs",
+      "sha256": "8c3c23b0daae0efa146bbc3dca170853a100e0523d388f7795966c2314dfa08a"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/connection_proxy.rs",
+      "sha256": "243d4a75f82c28adccb07f6e5470cea1707444df83f4cff57239374efddae04c"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/live_first_phase_preparation.rs",
+      "sha256": "252fd501dbdaa4ec1b9fe3f3f6569380b73b62b04a6a6a8c3a363671c9ff6405"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/support/registration_guard_cases.rs",
+      "sha256": "ce1b77cee9de19bc264e2be091b1a79e7be139872a98676e59ce48bcb6a1497d"
+    }
+  ]
+}

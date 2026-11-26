@@ -1,0 +1,29 @@
+[package]
+name = "seata-tm"
+description = "Seata global transaction manager with scoped async context"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+seata-protocol = { path = "../seata_protocol" }
+seata-transport = { path = "../seata_transport" }
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+getrandom = "=0.2.17"
+ring = "=0.17.14"
+ed25519-dalek = { version = "=2.2.0", default-features = false }
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std"] }
+tokio-rustls = { version = "=0.26.4", default-features = false, features = ["ring"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }
+rcgen = { version = "=0.14.0", default-features = false, features = ["ring"] }
+time = "=0.3.45"
+
+[lints]
+workspace = true

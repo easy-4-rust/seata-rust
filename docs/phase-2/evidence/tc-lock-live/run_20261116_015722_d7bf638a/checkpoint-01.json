@@ -1,0 +1,59 @@
+{
+  "data": {
+    "SQL_rolled_back": true,
+    "cases": [
+      {
+        "case": "normal",
+        "contender_key": "t:1",
+        "owner_key": "t:1"
+      },
+      {
+        "case": "empty",
+        "contender_key": "t:",
+        "owner_key": "t:"
+      },
+      {
+        "case": "blank",
+        "contender_key": "t: ",
+        "owner_key": "t: "
+      },
+      {
+        "case": "unicode-blank",
+        "contender_key": "t: ",
+        "owner_key": "t: "
+      },
+      {
+        "case": "partial-empty",
+        "contender_key": "t:",
+        "owner_key": "t:,1"
+      },
+      {
+        "case": "semicolon",
+        "contender_key": "t:z",
+        "owner_key": "t:x;broken,z"
+      },
+      {
+        "case": "binary-same",
+        "contender_key": "t_binary:[0, -1]",
+        "owner_key": "t_binary:[0, -1]"
+      },
+      {
+        "case": "binary-distinct",
+        "contender_key": "t_binary:[0, -2]",
+        "owner_key": "t_binary:[0, -1]"
+      }
+    ]
+  },
+  "index": 0,
+  "stage": "provenance",
+  "observer_time_ns": 641802602047900,
+  "locks": [],
+  "branches": [],
+  "globals": [],
+  "business_counts": {
+    "t": 0,
+    "t_binary": 0,
+    "undo_log": 0
+  },
+  "observer_completed_ns": 641803591239900
+}

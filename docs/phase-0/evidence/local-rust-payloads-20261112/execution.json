@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-12",
+  "rust_base": "130ad634279cef10cd2998fc3bfae82996224d66",
+  "java_source": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "go_source": "82570d905919c1c66bb025a3a5979f25390de498",
+  "rustc": "1.99.0 (b940084d7 2026-09-28)",
+  "cargo": "1.99.0 (5f94df478 2026-08-27)",
+  "cargo_target": "D:/cargo-target/seata-phase09",
+  "java_current_version": "2.8.0-SNAPSHOT",
+  "rust_tests": {
+    "total": 73,
+    "new_payload_tests": 39,
+    "preexisting": 34,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0
+  },
+  "rust_checks": {
+    "fmt_exit_code": 0,
+    "clippy_all_targets_deny_warnings_exit_code": 0
+  },
+  "focused_java": {
+    "tests": 32,
+    "corpus": 29,
+    "optionality": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 0
+  },
+  "negative_controls": {
+    "missing_codec_red_exit": 101,
+    "nullable_status_red_exit": 101,
+    "java_version_default_red_exit": 101,
+    "isolated_semantic_timeout_mutant_exit": 101,
+    "canonical_fixtures_modified": false
+  },
+  "commands": [
+    "cargo test --manifest-path tools/java-tc-integration/rust-client/Cargo.toml",
+    "cargo clippy --manifest-path tools/java-tc-integration/rust-client/Cargo.toml --all-targets -- -D warnings",
+    "cargo fmt --manifest-path tools/java-tc-integration/rust-client/Cargo.toml -- --check",
+    "mvn -s D:/codex-builds/seata-phase09-live-20261111/maven-central-settings.xml -pl serializer/seata-serializer-seata -am -Dtest=PayloadGoldenCorpusTest,PayloadOptionalityTest -Dsurefire.failIfNoSpecifiedTests=false test"
+  ],
+  "boundaries": [
+    "Test-only codecs, no formal workspace/production API created",
+    "29 frozen corpus samples plus targeted boundaries; not every message variant",
+    "Java missing response version normalizes on reencoding; Rust wire presence and semantic adapter are separate",
+    "No Go rerun or new live TC execution in this increment",
+    "Shell runner syntax checked; fresh-clone shell entrypoint not executed on Windows",
+    "No branch switch, commit, push, tool install, or SDD initialization"
+  ]
+}

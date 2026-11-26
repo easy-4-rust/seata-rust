@@ -1,0 +1,52 @@
+"""封存前重新核对实际输入、依赖、原 JAR 类和执行产物。"""
+import hashlib
+import json
+from pathlib import Path
+
+from run import HERE, ROOT, module, original_jar_classes, sha
+from verify import EXPECTED_CLASSES, check_origins
+
+
+def validate(out):
+    inputs = json.loads((out / 'input-audit.json').read_bytes())
+    paths = [row['path'] for row in inputs]
+    if len(set(paths)) != len(paths):
+        raise ValueError('Duplicate frozen inputs')
+    required = {str(ROOT / name) for name in ['tools/go-java-v1-inflight/audit.py',
+        'tools/go-java-v1-sdk-profile/run.py', 'tools/go-java-v1-length-patch/run.py',
+        'tools/java-tc-integration/backend_recovery/run.py', 'tools/java-retry-timeout-candidate/file_runtime.py']}
+    if not required <= set(paths):
+        raise ValueError('Required dynamic source omitted')
+    for row in inputs:
+        if sha(out / row['snapshot']) != row['sha256'] or sha(Path(row['path'])) != row['sha256']:
+            raise ValueError('Frozen/current input differs: ' + row['path'])
+    deps = module('status_seal_dependencies', ROOT / 'tools/java-retry-timeout-candidate/file_runtime.py')
+    cp = (out / 'effective-classpath.txt').read_text().strip()
+    if deps.dependency_inventory(cp) != json.loads((out / 'dependencies-before.json').read_bytes()):
+        raise ValueError('Classpath dependency changed')
+    jar = json.loads((out / 'original-jar.json').read_bytes())
+    certified = 'aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5'
+    if jar['sha256'] != certified or sha(Path(jar['path'])) != certified:
+        raise ValueError('Certified original JAR differs')
+    original = original_jar_classes(Path(jar['path']), {name.replace('.', '/') + '.class' for name in EXPECTED_CLASSES})
+    java = json.loads((out / 'java.json').read_bytes())
+    check_origins(java['origins'])
+    rows = json.loads((out / 'critical-class-audit.json').read_bytes())
+    if len(rows) != 16 or {row['class'] for row in rows} != EXPECTED_CLASSES:
+        raise ValueError('Critical class audit incomplete')
+    for row in rows:
+        data, member = original[row['class'].replace('.', '/') + '.class']
+        expected = hashlib.sha256(data).hexdigest()
+        if row['jar_member'] != member or row['sha256'] != expected or any(
+            sha(path) != expected for path in [out / row['snapshot'], Path(row['path']), Path(row['original'])]):
+            raise ValueError('Original/executed class differs')
+    runtime = Path(json.loads((out / 'result.json').read_bytes())['runtime'])
+    if sha(runtime / 'classes/GlobalStatusContractProbe.class') != sha(out / 'artifacts/GlobalStatusContractProbe.class'):
+        raise ValueError('Executed JVM probe differs')
+    if (runtime / 'compile.args').read_bytes() != (out / 'compile.args').read_bytes():
+        raise ValueError('Executed compile arguments differ')
+    for mode in ['native', 'profile']:
+        row = json.loads((out / ('go-' + mode + '-binary.json')).read_bytes())
+        if sha(Path(row['path'])) != row['sha256'] or sha(out / ('artifacts/go-' + mode + '.exe')) != row['sha256']:
+            raise ValueError('Executed Go artifact differs')
+    return dict(frozen_inputs=len(inputs), critical_classes=16, execution_artifacts=3, dependency_entries=len(cp.split(';')))

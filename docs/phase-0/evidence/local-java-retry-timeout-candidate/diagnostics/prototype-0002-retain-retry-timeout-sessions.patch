@@ -1,0 +1,96 @@
+diff --git a/server/src/main/java/org/apache/seata/server/session/SessionHolder.java b/server/src/main/java/org/apache/seata/server/session/SessionHolder.java
+--- a/server/src/main/java/org/apache/seata/server/session/SessionHolder.java
++++ b/server/src/main/java/org/apache/seata/server/session/SessionHolder.java
+@@ -17,6 +17,7 @@
+ package org.apache.seata.server.session;
+ 
+ import org.apache.seata.common.ConfigurationKeys;
++import org.apache.seata.common.DefaultValues;
+ import org.apache.seata.common.XID;
+ import org.apache.seata.common.exception.ShouldNeverHappenException;
+ import org.apache.seata.common.exception.StoreException;
+@@ -210,6 +211,10 @@
+                     case RollbackFailed:
+                     case TimeoutRollbackFailed:
+                         removeInErrorState(globalSession);
++                        break;
++                    case CommitRetryTimeout:
++                    case RollbackRetryTimeout:
++                        reloadRetryTimeoutSession(globalSession, storeMode, acquireLock);
+                         break;
+                     case AsyncCommitting:
+                     case Committing:
+@@ -302,6 +307,62 @@
+         }
+     }
+ 
++    /**
++     * 保留原超时会话供人工重试，不改状态、不重新激活事务，也不加入自动重试。
++     *
++     * @param globalSession 原始超时会话及分支
++     * @param storeMode 当前FILE或RAFT存储模式
++     * @param acquireLock 是否需要重建进程内分支锁
++     */
++    private static void reloadRetryTimeoutSession(
++            GlobalSession globalSession, SessionMode storeMode, boolean acquireLock) {
++        globalSession.setActive(false);
++        if (globalSession.getStatus() == GlobalStatus.CommitRetryTimeout) {
++            // 与已有提交恢复保持一致：FILE不重新加锁，RAFT领导重入清理可能残留的提交锁。
++            if (storeMode == SessionMode.RAFT) {
++                try {
++                    globalSession.clean();
++                } catch (TransactionException error) {
++                    throw new RuntimeException(error);
++                }
++            }
++            return;
++        }
++
++        Configuration configuration = ConfigurationFactory.getInstance();
++        boolean unlock = configuration.getBoolean(
++                        ConfigurationKeys.ROLLBACK_RETRY_TIMEOUT_UNLOCK_ENABLE,
++                        DefaultValues.DEFAULT_ROLLBACK_FAILED_UNLOCK_ENABLE)
++                || configuration.getBoolean(
++                        ConfigurationKeys.ROLLBACK_FAILED_UNLOCK_ENABLE,
++                        DefaultValues.DEFAULT_ROLLBACK_FAILED_UNLOCK_ENABLE);
++        if (unlock) {
++            // 原调度器已允许超时解锁时，恢复不能反向锁住已释放的业务资源。
++            if (storeMode == SessionMode.RAFT) {
++                try {
++                    globalSession.clean();
++                } catch (TransactionException error) {
++                    throw new RuntimeException(error);
++                }
++            }
++            return;
++        }
++        if (acquireLock) {
++            for (BranchSession branchSession : globalSession.getSortedBranches()) {
++                branchSession.setLockStatus(LockStatus.Rollbacking);
++                try {
++                    // 不能沿用旧辅助方法忽略lock返回false的行为，否则恢复成功却没有应有的锁。
++                    if (!branchSession.lock()) {
++                        throw new ShouldNeverHappenException(
++                                "Could not restore retry-timeout branch lock: " + branchSession.getBranchId());
++                    }
++                } catch (TransactionException error) {
++                    throw new ShouldNeverHappenException(error);
++                }
++            }
++        }
++    }
++
+     private static void removeInErrorState(GlobalSession globalSession) {
+         try {
+             LOGGER.warn(
+diff --git a/server/src/main/java/org/apache/seata/server/storage/file/session/FileSessionManager.java b/server/src/main/java/org/apache/seata/server/storage/file/session/FileSessionManager.java
+--- a/server/src/main/java/org/apache/seata/server/storage/file/session/FileSessionManager.java
++++ b/server/src/main/java/org/apache/seata/server/storage/file/session/FileSessionManager.java
+@@ -236,7 +236,6 @@
+             case RollbackFailed:
+             case TimeoutRollbacked:
+             case TimeoutRollbackFailed:
+-            case RollbackRetryTimeout:
+             case Finished:
+                 return false;
+             default:

@@ -1,0 +1,7 @@
+INIT	testInitDataSourceResourceSuccess	group=test-group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|driver=com.mysql.jdbc.Driver|db=mysql|close-connection|register	ok
+INIT	testInitDataSourceResourceWithSQLException	group=test-group|get-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-source cause(java.sql.SQLException:Connection failed)
+INIT	testInitDataSourceResourceWithNullMetaData	group=test-group|get-connection|metadata|close-connection	java.lang.NullPointerException:Cannot invoke "java.sql.DatabaseMetaData.getURL()" because the return value of "java.sql.Connection.getMetaData()" is null
+INIT	testInitXADataSourceResourceSuccess	group=xa-group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa|register	ok
+INIT	testInitXADataSourceResourceWithSQLException	group=xa-group|get-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-source cause(java.sql.SQLException:XA connection failed)
+INIT	testInitXADataSourceResourceWithNullXAConnection	group=xa-group|get-xa	java.lang.NullPointerException:Cannot invoke "javax.sql.XAConnection.getConnection()" because "xaConnection" is null
+INIT	testInitXADataSourceResourceEnsuresConnectionClosed	group=xa-group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-source cause(java.sql.SQLException:Close failed)

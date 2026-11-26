@@ -1,0 +1,100 @@
+{
+  "cases": [
+    {
+      "branch_id": 4045081106496610308,
+      "case": "alias-owner",
+      "exception": null,
+      "local_rejected": false,
+      "lock_key": "undo_work:1",
+      "lockable": null,
+      "pk": "1",
+      "resource": "jdbc:mysql://127.0.0.1:53945/undo_c8edadf34590",
+      "table": "undo_work",
+      "tuple": null,
+      "xid": "198.18.0.1:53946:4045081106496610305"
+    },
+    {
+      "branch_id": null,
+      "case": "alias-same-id",
+      "exception": 2,
+      "local_rejected": false,
+      "lock_key": "undo_work:1",
+      "lockable": false,
+      "pk": "1",
+      "resource": "jdbc:mysql://127.0.0.1:53945/undo_c8edadf34590",
+      "table": "undo_work",
+      "tuple": null,
+      "xid": "198.18.0.1:53946:4045081106496610309"
+    },
+    {
+      "branch_id": null,
+      "case": "alias-other-id",
+      "exception": null,
+      "local_rejected": true,
+      "lock_key": "undo_work:1",
+      "lockable": null,
+      "pk": "1",
+      "resource": "jdbc:mysql://127.0.0.1:53949/undo_c8edadf34590",
+      "table": "undo_work",
+      "tuple": null,
+      "xid": "198.18.0.1:53946:4045081106496610312"
+    },
+    {
+      "branch_id": null,
+      "case": "composite-owner",
+      "exception": null,
+      "local_rejected": true,
+      "lock_key": "identity_pair:a_b_c",
+      "lockable": null,
+      "pk": "a_b_c",
+      "resource": "jdbc:mysql://127.0.0.1:53945/undo_c8edadf34590",
+      "table": "identity_pair",
+      "tuple": [
+        "a_b",
+        "c"
+      ],
+      "xid": "198.18.0.1:53946:4045081106496610313"
+    },
+    {
+      "branch_id": null,
+      "case": "composite-collision",
+      "exception": null,
+      "local_rejected": true,
+      "lock_key": "identity_pair:a_b_c",
+      "lockable": null,
+      "pk": "a_b_c",
+      "resource": "jdbc:mysql://127.0.0.1:53945/undo_c8edadf34590",
+      "table": "identity_pair",
+      "tuple": [
+        "a",
+        "b_c"
+      ],
+      "xid": "198.18.0.1:53946:4045081106496610314"
+    },
+    {
+      "branch_id": 4045081106496610322,
+      "case": "composite-distinct",
+      "exception": null,
+      "local_rejected": false,
+      "lock_key": "identity_pair:a_bd",
+      "lockable": true,
+      "pk": "a_bd",
+      "resource": "jdbc:mysql://127.0.0.1:53945/undo_c8edadf34590",
+      "table": "identity_pair",
+      "tuple": [
+        "a",
+        "bd"
+      ],
+      "xid": "198.18.0.1:53946:4045081106496610320"
+    }
+  ],
+  "physical": {
+    "alias": "jdbc:mysql://127.0.0.1:53949/undo_c8edadf34590",
+    "distinct_composite_rows": 3,
+    "mysql_port": "3306",
+    "primary": "jdbc:mysql://127.0.0.1:53945/undo_c8edadf34590",
+    "schema": "undo_c8edadf34590",
+    "seed": "physical-seed",
+    "server_uuid": "8f80f2c9-e8ea-11f1-acc1-726343efedc5"
+  }
+}

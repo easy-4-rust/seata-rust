@@ -1,5 +1,7 @@
 # Java Seata V1 Frame Compatibility — Source Audit & Executable Fixture Plan
 
+> 2026-11-13 implementation update: formal Rust V1 frame/ordered nullable HeadMap/empty heartbeat codecs now exist. [Formal evidence](../phase-1/evidence/protocol-frame/README.md) records74 Rust tests on1.99/1.85,37 new actual original-Java encoder/decoder frames, and original certified corpus coverage. Earlier pending/probe-only statements below are historical; full WP-01 Gate, peer-profile comparison and all live-client requirements remain open.
+
 > **Status:** four complete V1 frame fixtures passed Java Decoder → Encoder byte-identical round trips in GitHub Actions Run #8. Live Java TC acceptance and all-message Java serializer equivalence remain unverified.
 >
 > Java source: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
@@ -26,12 +28,12 @@ The Java V1 decoder/encoder documents and implements this fixed 16-byte header:
 |---:|---:|---|---|
 | 0 | 2 | Magic | `DA DA` |
 | 2 | 1 | Protocol version | `01` |
-| 3 | 4 | Full length | big-endian uint32; includes header + optional head map + body |
-| 7 | 2 | Head length | big-endian uint16; includes fixed 16-byte header + head map |
+| 3 | 4 | Full length | big-endian32-bit field; positive Java int range, includes header + optional head map + body |
+| 7 | 2 | Head length | big-endian positive Java signed short16..32767; includes fixed 16-byte header + head map |
 | 9 | 1 | Message type | 0 sync request, 1 response, 2 one-way, 3 heartbeat request, 4 heartbeat response |
 | 10 | 1 | Serializer | selected serializer code; Seata serializer is 1 in the pinned mapping |
 | 11 | 1 | Compressor | NONE is 0 in the selected fixture |
-| 12 | 4 | Request ID | big-endian uint32 |
+| 12 | 4 | Request ID | big-endian32-bit field; Java signed int bit pattern preserved |
 | 16 | variable | Head map | repeated string16 key + string16 value; absent in baseline fixtures |
 | headLength | variable | Body | compressed serialized message payload |
 
@@ -153,7 +155,7 @@ bash tools/java-v1-golden/verify.sh
 
 The script checks out the pinned Java commit `cba73e180fd8896a99df6415b859d275122feaa7`, overlays the test into the existing `test-suite/test-new-version` module (which already depends on the SEATA serializer), and runs the targeted Maven test through the reactor.
 
-**Execution status in this research session:** the test and script are committed but Maven has not been executed here. Java V1 source support is verified; this test remains pending runtime execution.
+**Historical execution note:** the initial source-only stage was followed by Run8 and Run42 and local pinned-source execution. See runtime results below and the validation ledger; current-head wrapper syntax checks do not imply a fresh CI run.
 
 ## 6.2 Runtime result
 
@@ -170,9 +172,9 @@ Runtime test evidence: [GitHub Actions Run #8](https://github.com/easy-4-rust/se
 | Go V1 serializer payload prepends the same type ID | **Verified in source** |
 | Go harness has 29 codec vectors and 4 frame fixtures | **Verified by test in Run #8** |
 | Java harness overlays four complete frame round-trip tests on the pinned test-suite module | **Verified by test in Run #8: 4/4 passed** |
-| Java accepts all 29 Go-produced V1 payloads | **Unknown; runtime test not executed** |
+| Java accepts all 29 current Go-produced V1 payload samples | **Verified locally 2026-11-12: 29 decode/semantic/re-encode cases; [evidence](evidence/local-java-payloads-20261112/README.md)** |
 | Java V1 decoder accepts and re-encodes the four committed Go frames byte-identically | **Verified by test in Run #8** |
-| Rust matches Java/Go V1 frame bytes | **Not implemented / not tested** |
+| Rust matches Java/Go V1 frame bytes | **Independent probe verifies the three new heartbeat frames; six merge frames match Java but Go lacks codecs59/60. Formal production codec remains unimplemented. [Evidence](evidence/local-control-envelopes/README.md)** |
 
 ## 8. Pinned source references
 
@@ -185,3 +187,7 @@ Runtime test evidence: [GitHub Actions Run #8](https://github.com/easy-4-rust/se
 - [Java V1 client/server serializer test](https://github.com/apache/incubator-seata/blob/cba73e180fd8896a99df6415b859d275122feaa7/test-suite/test-new-version/src/test/java/org/apache/seata/core/rpc/netty/v1/ProtocolV1SerializerTest.java)
 - [Go codec manager](https://github.com/apache/incubator-seata-go/blob/82570d905919c1c66bb025a3a5979f25390de498/pkg/protocol/codec/codec.go)
 - [Go message IDs and V1 constants](https://github.com/apache/incubator-seata-go/blob/82570d905919c1c66bb025a3a5979f25390de498/pkg/protocol/message/constant.go)
+
+## 9. Additional control envelopes
+
+The original six-frame corpus remains unchanged. Nine separately captured Java control frames cover bodyless PING/PONG, one heartbeat HeadMap, typed/nested request merges with optional child IDs, and result merges. Java selected163/Rust114/Python5 plus static checks pass. Only the three heartbeats have original Go Getty byte equivalence; six merge cases expose missing native codecs59/60 (GO-V1-MERGE-001 OPEN). [Wire mapping and limits](protocol-v1-control-envelopes.md), [executed evidence](evidence/local-control-envelopes/README.md). Rust implementations remain test-only and no live batching/negotiation claim is made.

@@ -1,0 +1,11 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_compare_mutants_4m20ptcf\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.79s
+     Running unittests src\lib.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\seata_db_mysql-0eae6d12f56bc15e.exe)
+
+thread 'undo_rollback_attempt_tests::acquire_failure_and_late_commit_remain_distinguishable' (59152) panicked at crates\seata_db_mysql\src\undo_rollback_attempt_tests.rs:96:5:
+assertion failed: matches!(commit.finish(XID, 42,
+    Some(Ok(Some(UndoRollbackObservation::Fenced { inserted: true }))), true),
+    Err(UndoRollbackError::CommitOutcomeUnknown
+    { source: DbError::Deadline { .. }, .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

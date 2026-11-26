@@ -1,0 +1,48 @@
+diff --git a/server/src/main/java/org/apache/seata/server/cluster/raft/RaftStateMachine.java b/server/src/main/java/org/apache/seata/server/cluster/raft/RaftStateMachine.java
+--- a/server/src/main/java/org/apache/seata/server/cluster/raft/RaftStateMachine.java
++++ b/server/src/main/java/org/apache/seata/server/cluster/raft/RaftStateMachine.java
+@@ -77,6 +77,7 @@
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
++import java.util.Objects;
+ import java.util.Set;
+ import java.util.concurrent.CompletableFuture;
+ import java.util.concurrent.ScheduledFuture;
+@@ -132,6 +133,17 @@
+      * current term
+      */
+     private final AtomicLong currentTerm = new AtomicLong(-1);
++
++    /** 最近成功完成会话恢复的任期；只用于观察，不代表当前领导就绪。 */
++    private final AtomicLong sessionReloadCompletedTerm = new AtomicLong(0);
++
++    /**
++     * 返回最近成功恢复任期，未成功时为 0；调用者须同时核对当前领导身份和任期。
++     * 无参数；返回单调递增的成功任期，不修改领导判断或事务重试策略。
++     */
++    public long getSessionReloadCompletedTerm() {
++        return sessionReloadCompletedTerm.get();
++    }
+ 
+     private final AtomicBoolean initSync = new AtomicBoolean(false);
+ 
+@@ -250,9 +262,17 @@
+                 } finally {
+                     SeataClusterContext.unbindGroup();
+                 }
++            }).whenComplete((ignored, failure) -> {
++                if (Objects.isNull(failure)) {
++                    // 旧任期异步任务可能晚完成，不能覆盖较新任期的成功记录。
++                    sessionReloadCompletedTerm.accumulateAndGet(term, Math::max);
++                    LOGGER.info("session reload completed, groupId: {}, term: {}", group, term);
++                } else {
++                    LOGGER.error("session reload failed, groupId: {}, term: {}", group, term, failure);
++                }
+             });
+             Configuration conf = RouteTable.getInstance().getConfiguration(group);
+-            // A member change might trigger a leader re-election. At this point, it’s necessary to filter out
++            // A member change might trigger a leader re-election. At this point, it鈥檚 necessary to filter out
+             // non-existent members and synchronize again.
+             changePeers(conf);
+         }

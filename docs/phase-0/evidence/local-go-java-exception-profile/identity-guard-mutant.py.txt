@@ -1,0 +1,8 @@
+def results(log, expected_bad):
+    rows = [json.loads(line.split(b'SEATA_EXCEPTION_RESULT ', 1)[1]) for line in log.read_bytes().splitlines() if line.startswith(b'SEATA_EXCEPTION_RESULT ')]
+    if len(rows) != 250 or len({r['name'] for r in rows}) != 250 or {r['name'] for r in rows} != EXPECTED:
+        raise RuntimeError('Go exception result inventory differs')
+    bad = {r['name'] for r in rows if not all((r[k] for k in ['encode_match', 'decode_match', 'reencode_match']))}
+    if not expected_bad and (not all((r.get('pointer_checked') is True and r.get('pointer_match') is True for r in rows))):
+        raise RuntimeError('Profile pointer/caller-preservation checks missing')
+    return rows

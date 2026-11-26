@@ -1,0 +1,78 @@
+{
+  "status": "ESCAPE_HANDLER_DEFAULT_METHODS_VERIFIED",
+  "evidence": "docs/phase-2/evidence/sqlparser-escape-handler/run_20261118_v2",
+  "predecessor": "docs/phase-2/evidence/sqlparser-sql-server-table/run_20261118_110031_96b905a4",
+  "predecessor_catalog_sha256": "19dca9fd67a88cf73b0a5fa407f29930146229c32d9b9f19d06ea845deddf967",
+  "original_object_states": {
+    "PARTIAL": 3,
+    "MISSING": 15,
+    "IMPLEMENTED": 13
+  },
+  "original_cases_MATCH": 76,
+  "new_original_JUnit_cases": 0,
+  "computed_Java_observations_MATCH": 397,
+  "original_JUnit_run_inherited": true,
+  "rust_toolchains": [
+    "1.99",
+    "1.85"
+  ],
+  "acceptance_passed_per_toolchain": 133,
+  "workspace": {
+    "1.99": {
+      "passed": 473,
+      "ignored": 143,
+      "doc": 4
+    },
+    "1.85": {
+      "status": "FAILED",
+      "parallel_log": "1.85-tests.log",
+      "serial_log": "1.85-serial-tests.log"
+    }
+  },
+  "full_dual_toolchain_workspace_verified": false,
+  "confirmed_behavioral_red": "Missing original bounds exception message",
+  "rejected_runtime_mutation": "Check text after first dot instead of last dot",
+  "earlier_attempt_tm_timeouts": "docs/phase-2/evidence/sqlparser-escape-handler/run_20261118/1.85-final-tests.log",
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "remaining_P1": 0,
+    "remaining_P2": 0
+  },
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "bdc86c034ce4cfdcb7dacee910eb552afd3a99b50c1171fe350d9ee7171b455b"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/escape_handler.rs",
+      "sha256": "c2e41aa20ec171968ce0969f839d885d3b6d364186bfeb395a1b0ebc4d65b674"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "9c31ac6b2605e9343eb3df1ecc79c3e74cd1f0060b41ad380f15fdee9721bd90"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/java_string.rs",
+      "sha256": "9928b19b229029b483dca38809153a7047a7ab241a468a6f8232a628862b4f49"
+    },
+    {
+      "path": "crates/seata_test/tests/escape_handler.rs",
+      "sha256": "7eb3c93ae77c17c21ca9cac49420d82913bd5e32781e7f70d43ca2ec7b3efcd8"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/EscapeHandlerOracle.java",
+      "sha256": "b57723a28473945b9ace3c1349c931092c500a18d0cecc11254032ca469cc2fa"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/escape-handler-java-v2.tsv",
+      "sha256": "b778bd0aa9e6ba7ffddf0a0482ec3603fd97e4aa2beb7eb9ef9133a2ce450b41"
+    }
+  ],
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

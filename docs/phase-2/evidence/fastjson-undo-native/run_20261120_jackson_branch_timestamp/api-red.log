@@ -1,0 +1,45 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved imports `seata_at::JacksonSqlUndoLog`, `seata_at::JacksonUndoRecords`
+   --> crates\seata_at\tests\jackson_undo_source.rs:435:20
+    |
+435 |     use seata_at::{JacksonSqlUndoLog, JacksonUndoField, JacksonUndoFieldValue, JacksonUndoRecords};
+    |                    ^^^^^^^^^^^^^^^^^ no `JacksonSqlUndoLog` in the root        ^^^^^^^^^^^^^^^^^^ no `JacksonUndoRecords` in the root
+    |
+help: a similar name exists in the module
+    |
+435 -     use seata_at::{JacksonSqlUndoLog, JacksonUndoField, JacksonUndoFieldValue, JacksonUndoRecords};
+435 +     use seata_at::{FastjsonSqlUndoLog, JacksonUndoField, JacksonUndoFieldValue, JacksonUndoRecords};
+    |
+help: a similar name exists in the module
+    |
+435 -     use seata_at::{JacksonSqlUndoLog, JacksonUndoField, JacksonUndoFieldValue, JacksonUndoRecords};
+435 +     use seata_at::{JacksonSqlUndoLog, JacksonUndoField, JacksonUndoFieldValue, FastjsonUndoRecords};
+    |
+
+error[E0599]: no method named `encode_typed_branch` found for struct `JacksonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:445:23
+    |
+445 |     let wire = parser.encode_typed_branch(Some("192.168.0.1:8091:123456"), 123457, Some(&logs)).unwrap();
+    |                       ^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `encode_typed_field` with a similar name, but with different arguments
+   --> crates\seata_at\src\undo\parser\jackson_undo_log_parser.rs:137:5
+    |
+137 |     pub fn encode_typed_field(&self, field: &JacksonUndoField) -> Result<Vec<u8>, UndoCodecError> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `decode_typed_logs` found for struct `JacksonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:447:26
+    |
+447 |     let decoded = parser.decode_typed_logs(&document).unwrap().unwrap();
+    |                          ^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `decode_typed_field` with a similar name
+    |
+447 -     let decoded = parser.decode_typed_logs(&document).unwrap().unwrap();
+447 +     let decoded = parser.decode_typed_field(&document).unwrap().unwrap();
+    |
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "jackson_undo_source") due to 3 previous errors

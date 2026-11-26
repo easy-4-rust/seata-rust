@@ -1,6 +1,23 @@
 # V1 TM/RM Registration Wire Contract
 
-> **Status:** source-derived contract with Go-generated payload fixtures and Java V1 frame round-trip tests added. Live Java TC registration remains unverified until the TC bootstrap and independent client execute against the running server.
+## Formal Rust session-readiness implementation contract (2026-11-13)
+
+Continue WP-02's every-new-authenticated-session registration task using this existing contract and ADR-0008. This is not a production credential policy or completion of RM business callbacks.
+
+- A registered pool selects exactly one native role per physical session, TM or RM. Java `ChannelManager.registerTMChannel` builds a TM role context and `registerRMChannel` builds/reuses an RM context; a convenience combined-role registration on one channel is not inferred. Raw pool startup remains explicit and does not acquire a business-ready label.
+- Identity version/application/group and optional extraData are caller supplied and bounded by native string16. Debug/log/observability must not print them. Existing JAVA-AUTH-EXTRADATA-001 remains open: TC may log extraData, so only public test credentials are used in live fixtures; a successful identified flag proves the configured TC hook accepted the registration, not a production authentication mechanism.
+- A bounded in-process resource registry retains exact `(BranchType, resource_id)` keys, monotonically checked revision and insertion order. Duplicate insertion is idempotent and does not change revision. Empty/comma-containing IDs are rejected: pinned Java `Constants.DBKEYS_SPLIT_CHAR=","` and `ChannelManager.dbKeytoSet` split that field without an escaping scheme. The payload codec still supports Java's full resource-list strings; this stricter registry boundary prevents one logical ID silently turning into multiple registrations. Resource removal and durable RM completion records remain later RM lifecycle work.
+- Every new RM session registers each required cached resource individually using type103/104 and checks `identified`; the first resource-bearing request establishes its identity as well. This supports TC hooks that require a resource in the initial authentication request. Only an empty resource registry sends RM registration with no resource list, which the configured TC hook may legitimately reject. The report's identity and first-resource views refer to that same attempt, not two wire calls. A TM session performs type101/102 only. Registration attempts share one absolute initialization deadline; per-resource iteration cannot multiply the configured timeout. Wrong response families remain protocol failures; identified=false is explicit rejection, while lost response preserves the transport call's local/unknown classification.
+- A bounded report records identity and every required resource as not attempted, accepted, rejected, local failure or unknown outcome, with typed transport errors where applicable. On the first failed prerequisite, later items remain not attempted and the session is closed; the next generation retries initialization from the whole current registry, never assuming a prior generation's partial registration succeeded. Initialization retry is identity/resource binding, not transaction/BranchRegister replay.
+- Registered slots expose Registering, Ready and Degraded in addition to raw lifecycle states. Only a completely accepted report for the exact current registry revision can be selected by a registered pool. Registry additions invalidate readiness immediately in selection/snapshot checks; the supervisor reinitializes the same live session before publishing its updated revision. Requests already in flight retain their original response/error bookkeeping. Low-level acquired ConnectionHandle remains a generation-bound transport handle, not an eternal ready capability; TM/RM entry points must use the registered pool and registered resource identity.
+- Shutdown/Drop must also terminate sessions currently registering, cancel their waiting futures and stop retries. Resource-revision changes cancel outdated initialization, retain bounded observability and rerun the current plan; late control replies cannot complete a newer request because IDs are not reused. Inbound callbacks received during initialization stay in the existing bounded session queue; they are forwarded only after readiness, with ordinary overflow/closure behavior.
+- Required evidence: withheld identity/resource replies prevent business sends; explicit identity denial and partial resource denial stay not-ready with per-resource outcomes; new generations repeat all required registrations; registry additions invalidate a previously ready snapshot and register the new revision; unknown registration response stays distinct from rejection; role/version/nullable fields, typed resource keys, delimiter rejection, budget and cancellation/close behavior have tests. Live pinned Java TC verification remains separate from loopback protocol fault injection.
+
+This work does not waive NET-010–012 transaction reconciliation, TLS/production authentication, the external TC findings or the deferred shared-lock issue.
+
+Implementation verification: [formal session-registration Gate](../phase-1/evidence/session-registration/README.md), 76tests onRust1.99/1.85 and six actual pinned JavaTC cases. The first-resource RM compatibility control has an actual RED/GREEN; latest Java execution freezes actual runtime SPI files and proves five loaded-class origins. This closes only the WP-02 per-session registration implementation task; full WP02/V1 and business callback/recovery gates remain open.
+
+> **Status (2026-11-12):** pinned codec/frame, live registration and bounded auth-hook/reconnect evidence are available. The checker is a local fixture; production authentication and formal Rust TM/RM remain undelivered.
 
 ## 1. Pinned source authority
 
@@ -35,6 +52,10 @@ Registration uses **IdentifyResponse**, not the ordinary transaction ResultCode 
 
 The Java response class also inherits result/message fields, but the Seata serializer's IdentifyResponse codec writes only the identified byte and version string. Do not invent additional ResultCode fields in this wire body.
 
+The fixed processors' auth-hook false/throw paths now have unit evidence: the original Java response has ResultCode.Failed and an error message, but native V1 omits both fields. A newly decoded Java response can therefore have inherited ResultCode.Success while `identified=false`; error text is unset. This confirms why clients must use the identified flag. Processor allow/deny/throw tests and RM closed-channel cleanup are [recorded here](evidence/local-java-handler-matrix-20261112/README.md); REG-003/004 live authentication is not claimed from them.
+
+A zero-length response version leaves Java's constructor default `Version.getCurrent()` intact (`2.8.0-SNAPSHOT` in the pinned build), rather than setting null/empty. Its Java re-encoding emits that default explicitly. Rust test codecs preserve original wire absence in `wire_version` and obtain the Java semantic value through `java_version(java_current)`; neither the TM runtime client version nor a guessed server version is substituted. [Three Java boundary tests and Rust evidence](evidence/local-rust-payloads-20261112/README.md) verify this independently of the 29 normal samples.
+
 ## 3. Request body layout
 
 All integer lengths are big-endian.
@@ -61,6 +82,10 @@ resourceIds              string32
 ```
 
 The RM resource ID is a 32-bit-length-prefixed UTF-8 string. It is not another string16 field.
+
+### Zero-length ExtraData differs by request codec
+
+Pinned Java `AbstractIdentifyRequestCodec.decode`, used by RegisterTM, still calls `setExtraData(new String(new byte[0], UTF8))` at zero length, yielding `""`. RegisterRM overrides decoding and only invokes the setter when length is positive, leaving `null` at zero length. Both encode the same zero-length bytes. The all-payload Java corpus test verifies these two distinct object semantics; ADR-0008's optionality rule must therefore be applied per field/codec, not by converting every zero-length string to `None`. [Runtime evidence](evidence/local-java-payloads-20261112/README.md).
 
 ## 4. V1 frame behavior
 
@@ -143,4 +168,6 @@ The run used the test-only configuration `enable-check-auth=false`. Authenticati
 | REG-005 | RM reconnect | fresh channel re-registers all cached resource IDs |
 | REG-006 | TC callback routing | TC finds the registered RM channel by resource ID/client association |
 
-REG-001 and REG-002 have live Java TC evidence in Run #23 for the auth-disabled test configuration. REG-003/004 auth-denial and REG-005 reconnect remain open. The registration frame/payload sub-gate is verified independently in Run #42.
+REG-001 and REG-002 have live Java TC evidence in Run #23 for the auth-disabled test configuration. REG-003/004 now pass locally for a separate test SPI:16 actual denials, identified=false, same-channel GlobalBegin closure and zero FILE allocation. REG-005/006 pass for one fresh authenticated RM connection re-registering two cached resources and handling two original-identity branch callbacks without branch re-registration. [Evidence](evidence/local-auth-registration/README.md). The registration frame/payload sub-gate is independently verified in Run #42. These scoped results do not deliver a production credential policy or durable RM reconnect.
+
+The original default auth provider is permissive even with checks enabled; disabling checks bypasses the test extension. Original INFO registration logs also include extraData, so production credentials cannot assume that field is log-safe. [Runtime boundaries and open logging issue](auth-runtime-boundaries.md).

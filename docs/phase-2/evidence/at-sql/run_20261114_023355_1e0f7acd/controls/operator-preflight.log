@@ -1,0 +1,39 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_at_sql_20261114_023355_1e0f7acd\operator-preflight\crates\seata_at)
+warning: variable `operators` is assigned to, but never used
+   --> crates\seata_at\src\sql_recognizer_factory.rs:135:13
+    |
+135 |         let mut operators = 0;
+    |             ^^^^^^^^^^^^^
+    |
+    = note: consider using `_operators` instead
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `operators` is never read
+   --> crates\seata_at\src\sql_recognizer_factory.rs:173:22
+    |
+173 |                 _ => operators += 1,
+    |                      ^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-at` (lib) generated 2 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.87s
+     Running tests\mysql_sql_recognition.rs (D:/cargo-target/seata-at-controls\debug\deps\mysql_sql_recognition-02986bf229d8be6e.exe)
+
+running 1 test
+
+thread 'flat_operator_budget_is_checked_before_constructing_a_deep_ast' (80616) panicked at crates\seata_at\tests\mysql_sql_recognition.rs:230:5:
+assertion failed: matches!(SqlRecognizerFactory::recognize(&sql),
+    Err(SqlError::Budget { limit: "SQL operators" }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test flat_operator_budget_is_checked_before_constructing_a_deep_ast ... FAILED
+
+failures:
+
+failures:
+    flat_operator_budget_is_checked_before_constructing_a_deep_ast
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test mysql_sql_recognition`

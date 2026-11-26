@@ -1,0 +1,37 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_jdbc_resource_init_mutant_mdesls7r\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.44s
+     Running tests\jdbc_resource_init.rs (D:/cargo-target/seata-rust-init-mutants\debug\deps\jdbc_resource_init-57b93eb7fec74c93.exe)
+
+running 1 test
+test jdbc_and_xa_initialization_match_original_close_and_registration_order ... FAILED
+
+failures:
+
+---- jdbc_and_xa_initialization_match_original_close_and_registration_order stdout ----
+SEATA_JDBC_INIT	jdbc-driver-probe-fails	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|probe|close-connection	java.lang.LinkageError:driver-probe
+SEATA_JDBC_INIT	jdbc-ok	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|driver=com.mysql.jdbc.Driver|db=mysql|close-connection|register	ok
+SEATA_JDBC_INIT	jdbc-acquire-sql	group=group|get-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:get-connection)
+SEATA_JDBC_INIT	jdbc-null-metadata	group=group|get-connection|metadata|close-connection	java.lang.NullPointerException:Cannot invoke "java.sql.DatabaseMetaData.getURL()" because the return value of "java.sql.Connection.getMetaData()" is null
+SEATA_JDBC_INIT	jdbc-null-url	group=group|get-connection|metadata|url|close-connection	java.lang.NullPointerException:Cannot invoke "String.contains(java.lang.CharSequence)" because "jdbcUrl" is null
+SEATA_JDBC_INIT	jdbc-null-connection	group=group|get-connection	java.lang.NullPointerException:Cannot invoke "java.sql.Connection.getMetaData()" because "connection" is null
+SEATA_JDBC_INIT	jdbc-unknown-driver	group=group|get-connection|metadata|url|id=jdbc:unknown:db|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:unknown jdbc driver : jdbc:unknown:db?param=1)
+SEATA_JDBC_INIT	jdbc-close-sql	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|driver=com.mysql.jdbc.Driver|db=mysql|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	jdbc-metadata-and-close-sql	group=group|get-connection|metadata|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:metadata suppressed(java.sql.SQLException:close-connection))
+SEATA_JDBC_INIT	jdbc-null-metadata-and-close-sql	group=group|get-connection|metadata|close-connection	java.lang.NullPointerException:Cannot invoke "java.sql.DatabaseMetaData.getURL()" because the return value of "java.sql.Connection.getMetaData()" is null suppressed(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	xa-ok	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa|register	ok
+SEATA_JDBC_INIT	xa-acquire-sql	group=group|get-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:get-xa)
+SEATA_JDBC_INIT	xa-null-connection	group=group|get-xa	java.lang.NullPointerException:Cannot invoke "javax.sql.XAConnection.getConnection()" because "xaConnection" is null
+
+thread 'jdbc_and_xa_initialization_match_original_close_and_registration_order' (45520) panicked at crates\seata_db_mysql\tests\jdbc_resource_init.rs:361:9:
+assertion `left == right` failed: xa-inner-acquire-sql
+  left: "group=group|get-xa|get-connection"
+ right: "group=group|get-xa|get-connection|close-xa"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    jdbc_and_xa_initialization_match_original_close_and_registration_order
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_resource_init`

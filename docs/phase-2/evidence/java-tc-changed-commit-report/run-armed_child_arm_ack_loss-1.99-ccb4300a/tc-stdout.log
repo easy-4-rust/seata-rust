@@ -1,0 +1,34 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+02:53:49.364  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+02:53:49.416  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+02:53:49.436  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 36376 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\java-armed_child_arm_ack_loss-report-1.99-ccb4300a)
+02:53:49.437  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+02:53:50.330  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+02:53:50.349  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+02:53:50.581  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 1.849 seconds (process running for 2.88)
+02:53:51.114  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+02:53:51.437  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+02:53:51.672  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 52675
+02:53:51.687  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/java-armed_child_arm_ack_loss-report-1.99-ccb4300a/logs.
+02:53:51.687  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 1098 millSeconds
+02:54:01.770  INFO --- [ttyServerNIOWorker_1_1_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x48cf63cf, L:/127.0.0.1:52675 - R:/127.0.0.1:64951],client version:1.1.0,client protocol-version:null
+02:54:01.777  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='mysql-cross-process-original-tc', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+02:54:01.794  INFO --- [rverHandlerThread_1_1_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:52675:4045081146875412481] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: mysql-cross-process-original-tc,timeout:60000,xid:198.18.0.1:52675:4045081146875412481
+02:54:01.795  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:52675:4045081146875412481', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+02:54:01.869  INFO --- [rverHandlerThread_1_2_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='jdbc:mysql://127.0.0.1:52681/undo_java_armed_child_arm_ack_loss_report_199_ccb4300a', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x8b266cfb, L:/127.0.0.1:52675 - R:/127.0.0.1:64957],client version:1.1.0
+02:54:01.918  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:52675:4045081146875412481', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:52681/undo_java_armed_child_arm_ack_loss_report_199_ccb4300a', lockKey='undo_work:1', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+02:54:01.946  INFO --- [rverHandlerThread_1_3_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:52675:4045081146875412481] : Register branch successfully, xid = 198.18.0.1:52675:4045081146875412481, branchId = 4045081146875412483, resourceId = jdbc:mysql://127.0.0.1:52681/undo_java_armed_child_arm_ack_loss_report_199_ccb4300a ,lockKeys = undo_work:1
+02:54:01.947  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045081146875412483, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+02:54:02.181  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:64957 to server channel inactive.
+02:54:02.181  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x8b266cfb, L:/127.0.0.1:52675 ! R:/127.0.0.1:64957]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:64957', channel=[id: 0x8b266cfb, L:/127.0.0.1:52675 ! R:/127.0.0.1:64957], resourceSets=[]}
+02:54:02.187  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:64951 to server channel inactive.
+02:54:02.187  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x48cf63cf, L:/127.0.0.1:52675 ! R:/127.0.0.1:64951]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:64951', channel=[id: 0x48cf63cf, L:/127.0.0.1:52675 ! R:/127.0.0.1:64951], resourceSets=null}

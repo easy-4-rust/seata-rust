@@ -1,0 +1,42 @@
+{
+  "issue": "JAVA-METRICS-RETRY-001",
+  "status": "OPEN",
+  "events": [
+    {
+      "path": "operator_loss/tc-stdout.log",
+      "line": 9125,
+      "context": [
+        "03:51:34.990 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@1f26b992 when dispatching event: GlobalTransactionEvent{id=4045076560369041409, role='tc', name='real-mixed-commit-timeout', applicationId='real-at-full-sdk', group='real_at', beginTime=1794513079107, endTime=null, status='CommitRetryTimeout', retryGlobal=true, retryBranch=false}",
+        "==> ",
+        "java.lang.NullPointerException: Cannot invoke \"java.lang.Long.longValue()\" because the return value of \"org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()\" is null",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)",
+        "\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
+        "\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)",
+        "\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:568)",
+        "\tat com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:85)"
+      ]
+    },
+    {
+      "path": "operator_replay/tc-stdout.log",
+      "line": 9125,
+      "context": [
+        "03:51:46.852 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@1f26b992 when dispatching event: GlobalTransactionEvent{id=4045076560369041409, role='tc', name='real-mixed-commit-timeout', applicationId='real-at-full-sdk', group='real_at', beginTime=1794513079107, endTime=null, status='CommitRetryTimeout', retryGlobal=true, retryBranch=false}",
+        "==> ",
+        "java.lang.NullPointerException: Cannot invoke \"java.lang.Long.longValue()\" because the return value of \"org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()\" is null",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)",
+        "\tat org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)",
+        "\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
+        "\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)",
+        "\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:568)",
+        "\tat com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:85)"
+      ]
+    }
+  ]
+}

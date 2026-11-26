@@ -1,0 +1,66 @@
+{
+  "reviewed_local": "2026-11-16T04:47:45",
+  "reviewer": "/root/inflight_review",
+  "read_only": true,
+  "catalog_sha256": "e679996e3feca7b1662c910fe6bada812992ad6eeacb87b03d15c52f9de43fdd",
+  "outcome": "NO_REMAINING_P1_P2_IN_SELECTED_COMPONENT",
+  "remaining_P1": 0,
+  "remaining_P2": 0,
+  "parent_members_rehashed": 7550,
+  "current_inputs_and_snapshots_rehashed": 7362,
+  "ordinary_tests_per_toolchain": 331,
+  "test_artifacts_rehashed": 116,
+  "actual_compiled_registry_packages_per_toolchain": 150,
+  "actual_RM_children_per_toolchain": 6,
+  "fresh_DB_cases_per_toolchain": 24,
+  "wire_packets_independently_rehashed": 6,
+  "wire_members_per_packet": 11943,
+  "wire_negative_controls_independently_replayed": 30,
+  "role_negative_controls": 6,
+  "delay_reply_actual_seconds": [
+    1.2006684,
+    1.2003923
+  ],
+  "base_store_ready_snapshot_input_records_rechecked": 95378,
+  "noncompiled_integration_superset_records_explicitly_excluded": 12,
+  "original_Java_child_packet_members": [
+    31,
+    30,
+    31,
+    30
+  ],
+  "original_guard_comparisons_per_toolchain": 2,
+  "original_store_comparisons_per_toolchain": 4,
+  "original_full_manager_or_JUnit_executed": false,
+  "original_selected_method_body_suffixes_unchanged": true,
+  "observer_failure_cleanup_actual_target_passed": 1,
+  "observer_failure_cleanup_container_removed": true,
+  "owned_qualification_containers_independently_inspected_absent": 15,
+  "closed_findings": [
+    {
+      "priority": "P2",
+      "finding": "wire labels alone did not bind original SQL parameters and COMMIT",
+      "resolution": "archive and independently decode original prepared parameter/request/reply packets with physical connection and ordering; actual packet-copy controls reject tampering"
+    },
+    {
+      "priority": "P2",
+      "finding": "observer stop exception could skip owned container cleanup",
+      "resolution": "independent cleanup finally; actual injected stop error after real stop still removes verified owned container"
+    }
+  ],
+  "actual_test_discovered_bug": {
+    "description": "RR consistent snapshot could miss guard already seen by current locking read",
+    "real_red": "docs/phase-2/evidence/mysql-undo-store/run_20261116_042728_ad6a0a73",
+    "red_catalog_sha256": "6ca686b6d33b625de5d428f105504a9c07419a7c41e0e011039fb6831fcb591d",
+    "resolution": "guard content also uses FOR UPDATE",
+    "both_toolchains_targeted_green": true
+  },
+  "inherited_other_DB_cases_per_toolchain": 39,
+  "inherited_cases_fresh": false,
+  "limitations": [
+    "no public business COMMIT or business/Undo atomic commit proof",
+    "no formal TC registration or TC safety gate pass",
+    "no complete original manager/JUnit migration",
+    "WP05 and WP06 and full V1 remain OPEN"
+  ]
+}

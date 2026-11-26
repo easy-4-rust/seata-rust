@@ -1,0 +1,61 @@
+{
+  "status": "POSTCHECK_CONSTRAINT_DDL_BLOCKED_UNTIL_ORIGINAL_ROLLBACK",
+  "mysql": "8.4.13",
+  "image": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+  "rust": {
+    "1.99": {
+      "ordinary_passed": 633,
+      "ignored": 184,
+      "live_schedule": 1,
+      "ddl_regression": 8,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary_passed": 633,
+      "ignored": 184,
+      "live_schedule": 1,
+      "ddl_regression": 8,
+      "strict_clippy": true
+    }
+  },
+  "coverage": [
+    "CREATE TRIGGER after successful public metadata check returns MySQL 1205",
+    "ADD outgoing foreign key after successful metadata check returns MySQL 1205",
+    "ADD incoming ON DELETE CASCADE foreign key after successful metadata check returns MySQL 1205",
+    "Original transaction still executes UPDATE and DELETE and rolls back all business changes",
+    "Independent query observes original parent value, retained child, and empty effect table",
+    "Same DDL succeeds after original rollback; fresh transaction rejects and becomes poisoned"
+  ],
+  "method": "Regression verification of existing production locks; no production behavior changed in this milestone.",
+  "remaining": [
+    "Independent Undo compensation current constraint checks and tests",
+    "Complete WP05/WP06 and remaining original plan"
+  ],
+  "sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/connection_proxy.rs": "25fffe31e659b71d5f5ea0f452fbeb1c1d10fcf21f1b2ad426a0f355f4c4ad87",
+    "crates/seata_db_mysql/src/current_table_constraints.rs": "7b5196546a116f0123a4dcc0e94f716b924aef654bd3b729c78b2b34389e78f8",
+    "crates/seata_db_mysql/tests/live_metadata.rs": "a483967272948be47f6e3e34aa7fd800fa91ec832027361721077ff6c1728e1b",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.85-clippy.log": "abdbb33d5b78c7ecfb294c9e9832f793d7f136ce324b4127f2c10bce7040540a",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.85-ddl-regression.log": "71ff4c7030e3ff5de916fc395b7dcc3bdf1ce880056aa8f47cd869040b309daa",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.85-live.log": "139963204d9715d69def5a9e492bec40baeb15b2d82545e53fcf6cc4c91641eb",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.85-workspace.log": "2608fa73e3a6e2fbaf99eb5632f475117b55e4ad07678961d23c913cfda68778",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.99-clippy.log": "a0b7d9e0f4bfc8ef7a7437aaad66df7247305d9b1c55aeab105b636858bb32f9",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.99-ddl-regression.log": "abe0a87b2eb0b087db615d0e5d1d421012b7f6c8fd59ac84202ca65bad843832",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.99-live.log": "254348f50a5fee774341834540b005d959eebbe21f922caf3288e6bed0394739",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/1.99-workspace.log": "3bfac3dd2d9dfdddc847720c0bbf2077e974d79c15b065793439d0b3d48cf2ea",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/cleanup-runtime.sh": "cb53f6b835088149b0e3853da1f05a0c175639ad617fd6da7580745c02b6e738",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/cleanup.log": "1db8348fbc404e81283f25d3375d4f042f3a3f637f1e82c1ab52a534ee9a7507",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/image.log": "cd85efb6b4ba2b9f0886b6507ff7756a283a71747bab040966278c97a152b9c9",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/run-ddl.ps1": "f78812d15ee9a0059987293cdbdff7220dd28300a315c252f57c7e6d1fd5920f",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/run-live.ps1": "c9fbe6438d96fde67fb36eed51568a5ae14b8e7a647c2cb12775b016cfe8ad17",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/run-workspace.ps1": "9be3409ecd3ca22222c1ded38acf6559382e9473dc357b36455f29b61a1c0dd2",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/runtime.log": "e696d22578ca7d378d826a5b22b89d4e8515842812a2b3cc3b9dd0587f0f8419",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/start-runtime.sh": "b50425d2c45b1332d0ad2afe95910b59302a2a812e9058639f6fe0c398247cd8",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/toolchains.log": "d55afb9c2c4e6c25cf412c7322eca0dd1eb330a8f9c65ba4cabe4011689cf079",
+    "docs/phase-2/evidence/mysql-metadata-postcheck-ddl/verify.py": "e61edaf9272ed5387afddb428b8957f3cb5392fa40576f1ba653c42b1534833d",
+    "docs/phase-2/mysql-foundation-contract.md": "936ac37bd05c82b5cff8b9ced1313b06fa2306707fa7bf00fd9faf2864cc822a"
+  }
+}

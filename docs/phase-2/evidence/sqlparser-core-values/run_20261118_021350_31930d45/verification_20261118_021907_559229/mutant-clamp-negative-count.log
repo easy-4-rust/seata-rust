@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_core_values_20261118_021350_31930d45\mutants\verification_20261118_021907_559229\clamp-negative-count\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_core_values_20261118_021350_31930d45\mutants\verification_20261118_021907_559229\clamp-negative-count\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.37s
+     Running tests\core_value_obligations.rs (D:/cargo-target/seata-core-value-mutants\debug\deps\core_value_obligations-311243abae4b61fc.exe)
+
+running 1 test
+test method_count_is_signed_and_participates_in_equality ... FAILED
+
+failures:
+
+---- method_count_is_signed_and_participates_in_equality stdout ----
+
+thread 'method_count_is_signed_and_participates_in_equality' (15576) panicked at crates\seata_test\tests\core_value_obligations.rs:21:9:
+assertion `left == right` failed
+  left: 0
+ right: -2147483648
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    method_count_is_signed_and_participates_in_equality
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test core_value_obligations`

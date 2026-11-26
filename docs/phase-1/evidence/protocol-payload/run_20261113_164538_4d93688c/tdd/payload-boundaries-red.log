@@ -1,0 +1,74 @@
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+error[E0432]: unresolved imports `seata_protocol::Message`, `seata_protocol::PayloadCodec`
+ --> crates\seata_protocol\tests\payload_boundaries.rs:3:35
+  |
+3 | use seata_protocol::{GlobalStatus,Message,MessageType,PayloadCodec,ProtocolError,ResultCode,TransactionExceptionCode};
+  |                                   ^^^^^^^             ^^^^^^^^^^^^ no `PayloadCodec` in the root
+  |                                   |
+  |                                   no `Message` in the root
+
+error[E0432]: unresolved imports `seata_protocol::protocol::RegisterRMRequest`, `seata_protocol::protocol::RegisterTMResponse`
+ --> crates\seata_protocol\tests\payload_boundaries.rs:4:32
+  |
+4 | use seata_protocol::protocol::{RegisterRMRequest,RegisterTMResponse};
+  |                                ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ no `RegisterTMResponse` in `protocol`
+  |                                |
+  |                                no `RegisterRMRequest` in `protocol`
+
+error[E0432]: unresolved import `seata_protocol::transaction`
+ --> crates\seata_protocol\tests\payload_boundaries.rs:5:21
+  |
+5 | use seata_protocol::transaction::{AbstractTransactionResponse,BranchReportResponse,GlobalBeginRequest,GlobalCommitResponse,GlobalLock...
+  |                     ^^^^^^^^^^^ could not find `transaction` in `seata_protocol`
+
+error[E0603]: module `protocol` is private
+  --> crates\seata_protocol\tests\payload_boundaries.rs:4:21
+   |
+ 4 | use seata_protocol::protocol::{RegisterRMRequest,RegisterTMResponse};
+   |                     ^^^^^^^^ private module
+   |
+note: the module `protocol` is defined here
+  --> crates\seata_protocol\src\lib.rs:10:1
+   |
+10 | mod protocol;
+   | ^^^^^^^^^^^^
+
+error[E0599]: no variant named `InvalidValue` found for enum `ProtocolError`
+  --> crates\seata_protocol\tests\payload_boundaries.rs:66:66
+   |
+66 |     assert!(matches!(codec().encode(&invalid),Err(ProtocolError::InvalidValue{..})));
+   |                                                                  ^^^^^^^^^^^^
+   |
+help: there is a variant with a similar name
+   |
+66 -     assert!(matches!(codec().encode(&invalid),Err(ProtocolError::InvalidValue{..})));
+66 +     assert!(matches!(codec().encode(&invalid),Err(ProtocolError::InvalidFrame{..})));
+   |
+
+error[E0599]: no variant named `InvalidValue` found for enum `ProtocolError`
+  --> crates\seata_protocol\tests\payload_boundaries.rs:68:66
+   |
+68 |     assert!(matches!(codec().encode(&invalid),Err(ProtocolError::InvalidValue{..})));
+   |                                                                  ^^^^^^^^^^^^
+   |
+help: there is a variant with a similar name
+   |
+68 -     assert!(matches!(codec().encode(&invalid),Err(ProtocolError::InvalidValue{..})));
+68 +     assert!(matches!(codec().encode(&invalid),Err(ProtocolError::InvalidFrame{..})));
+   |
+
+error[E0599]: no variant named `InvalidValue` found for enum `ProtocolError`
+  --> crates\seata_protocol\tests\payload_boundaries.rs:69:90
+   |
+69 |     assert!(matches!(codec().decode(&[0,103,0,0,0,0,0,0,0,0,0,0,0,0]),Err(ProtocolError::InvalidValue{..})));
+   |                                                                                          ^^^^^^^^^^^^
+   |
+help: there is a variant with a similar name
+   |
+69 -     assert!(matches!(codec().decode(&[0,103,0,0,0,0,0,0,0,0,0,0,0,0]),Err(ProtocolError::InvalidValue{..})));
+69 +     assert!(matches!(codec().decode(&[0,103,0,0,0,0,0,0,0,0,0,0,0,0]),Err(ProtocolError::InvalidFrame{..})));
+   |
+
+Some errors have detailed explanations: E0432, E0599, E0603.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-protocol` (test "payload_boundaries") due to 7 previous errors

@@ -1,0 +1,79 @@
+[ {
+  "case" : "empty",
+  "delegated_rows" : [ ],
+  "recording_backend_calls" : 0,
+  "key" : "lock_text:",
+  "acquire_returned" : true,
+  "parsed_rows" : [ ]
+}, {
+  "case" : "jdk-whitespace",
+  "delegated_rows" : [ ],
+  "recording_backend_calls" : 0,
+  "key" : "lock_text: ",
+  "acquire_returned" : true,
+  "parsed_rows" : [ ]
+}, {
+  "case" : "mixed-blank",
+  "delegated_rows" : [ {
+    "pk" : "valid",
+    "table" : "lock_text"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "lock_text:,valid",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "valid",
+    "table" : "lock_text"
+  } ]
+}, {
+  "case" : "semicolon",
+  "delegated_rows" : [ {
+    "pk" : "a",
+    "table" : "lock_text"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "lock_text:a;b",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "a",
+    "table" : "lock_text"
+  } ]
+}, {
+  "case" : "binary-list",
+  "delegated_rows" : [ {
+    "pk" : "[0",
+    "table" : "lock_binary"
+  }, {
+    "pk" : " -1]",
+    "table" : "lock_binary"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "lock_binary:[0, -1]",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "[0",
+    "table" : "lock_binary"
+  }, {
+    "pk" : " -1]",
+    "table" : "lock_binary"
+  } ]
+}, {
+  "case" : "safe",
+  "delegated_rows" : [ {
+    "pk" : "[-1]",
+    "table" : "lock_binary"
+  }, {
+    "pk" : " ",
+    "table" : "lock_text"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "lock_binary:[-1];lock_text: ",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "[-1]",
+    "table" : "lock_binary"
+  }, {
+    "pk" : " ",
+    "table" : "lock_text"
+  } ]
+} ]

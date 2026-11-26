@@ -1,0 +1,24 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_foundation_20261113_235227_16b0517f\cached-completion\crates\seata_rm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.48s
+     Running tests\dispatch.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\dispatch-2f34bd745731b6e6.exe)
+
+running 1 test
+test exact_duplicate_uses_completed_record_but_identity_or_phase_changes_do_not_execute ... FAILED
+
+failures:
+
+---- exact_duplicate_uses_completed_record_but_identity_or_phase_changes_do_not_execute stdout ----
+
+thread 'exact_duplicate_uses_completed_record_but_identity_or_phase_changes_do_not_execute' (54880) panicked at crates\seata_rm\tests\dispatch.rs:122:9:
+assertion `left == right` failed
+  left: PhaseTwoCommitFailedRetryable
+ right: PhaseTwoCommitted
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    exact_duplicate_uses_completed_record_but_identity_or_phase_changes_do_not_execute
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p seata-rm --test dispatch`

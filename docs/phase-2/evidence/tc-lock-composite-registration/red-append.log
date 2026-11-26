@@ -1,0 +1,23 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.57s
+     Running tests\global_lock_keys.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\global_lock_keys-fed3b4d7808cbd8a.exe)
+
+running 1 test
+test appending_to_a_registration_context_keeps_its_guard_and_original_keys ... FAILED
+
+failures:
+
+---- appending_to_a_registration_context_keeps_its_guard_and_original_keys stdout ----
+
+thread 'appending_to_a_registration_context_keeps_its_guard_and_original_keys' (41012) panicked at crates\seata_at\tests\global_lock_keys.rs:427:5:
+assertion failed: matches!(context.append_undo(&insert(&["a_b", "c"]), PROFILE),
+    Err(LockKeyError::Unsupported { .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    appending_to_a_registration_context_keeps_its_guard_and_original_keys
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test global_lock_keys`

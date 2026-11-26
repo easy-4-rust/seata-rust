@@ -1,0 +1,2440 @@
+{
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "rust_pin": "130ad634279cef10cd2998fc3bfae82996224d66",
+  "audit_date": "2026-11-18",
+  "retain_segments": 1,
+  "object_denominator": 31,
+  "case_denominator": 76,
+  "source_test_assets": 0,
+  "source_test_java_files": 12,
+  "source_authority": "../wp05-mysql-at-plan.md and ../source-junit-contract.md",
+  "topology": "independent synchronous metadata/value/SPI contracts in contained workspace; no DB/runtime dependency",
+  "project_test_package": "crates/seata_test (snake_case user override; publish=false)",
+  "objects": [
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/EscapeHandler.java",
+      "java_type": "org.apache.seata.sqlparser.EscapeHandler",
+      "rust": "crates/seata_sqlparser/src/escape_handler.rs",
+      "rust_type": "EscapeHandler",
+      "sha256": "928c27780d7af6f5692115dff1b91067f76cb9a1a9d7711279deb2bbab64cb20",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport org.apache.seata.common.util.StringUtils;\nimport org.apache.seata.sqlparser.struct.TableMeta;\n\n/**\n * The interface Keyword checker.\n *\n */\npublic interface EscapeHandler {\n\n    String DOT = \".\";\n\n    EscapeSymbol DEFAULT_ESCAPE_SYMBOL = new EscapeSymbol('\"');\n    /**\n     * check whether given field name and table name use keywords\n     *\n     * @param fieldOrTableName the field or table name\n     * @return boolean\n     */\n    boolean checkIfKeyWords(String fieldOrTableName);\n\n    /**\n     * check whether given field or table name use keywords. the method has database special logic.\n     * @param columnName the column or table name\n     * @param tableMeta the tableMeta\n     * @return true: need to escape. false: no need to escape.\n     */\n    boolean checkIfNeedEscape(String columnName, TableMeta tableMeta);\n\n    default EscapeSymbol getEscapeSymbol() {\n        return DEFAULT_ESCAPE_SYMBOL;\n    }\n\n    /**\n     * check fieldOrTableName if contains escape\n     * @param fieldOrTableName fieldOrTableName\n     * @return true if contains,otherwise return false\n     */\n    default boolean containsEscape(String fieldOrTableName) {\n        fieldOrTableName = fieldOrTableName.trim();\n        EscapeSymbol escapeSymbol = getEscapeSymbol();\n        return fieldOrTableName.charAt(0) == escapeSymbol.getLeftSymbol()\n                && fieldOrTableName.charAt(fieldOrTableName.length() - 1) == escapeSymbol.getRightSymbol();\n    }\n\n    /**\n     * add escape if colName is keywords\n     * @param colName colName\n     * @return colName\n     */\n    default String addColNameEscape(String colName) {\n        return addColNameEscape(colName, null);\n    }\n\n    /**\n     * add escape if colName is keywords\n     * @param colName colName\n     * @param tableMeta tableMeta\n     * @return colName\n     */\n    default String addColNameEscape(String colName, TableMeta tableMeta) {\n        String colNameToCheck = colName;\n        if (colName.contains(DOT)) {\n            colNameToCheck = colName.substring(colName.lastIndexOf(DOT) + 1);\n        }\n\n        boolean needEscape = checkIfNeedEscape(colNameToCheck, tableMeta);\n        if (!needEscape) {\n            return colName;\n        }\n        EscapeSymbol escapeChar = getEscapeSymbol();\n        if (colName.contains(DOT)) {\n            // like \"scheme\".id `scheme`.id\n            String str = escapeChar.getRightSymbol() + DOT;\n            int dotIndex = colName.indexOf(str);\n            if (dotIndex > -1) {\n                return new StringBuilder()\n                        .append(colName.substring(0, dotIndex + str.length()))\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(dotIndex + str.length()))\n                        .append(escapeChar.getRightSymbol())\n                        .toString();\n            }\n            // like scheme.\"id\" scheme.`id`\n            str = DOT + escapeChar.getLeftSymbol();\n            dotIndex = colName.indexOf(str);\n            if (dotIndex > -1) {\n                return new StringBuilder()\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(0, dotIndex))\n                        .append(escapeChar.getRightSymbol())\n                        .append(colName.substring(dotIndex))\n                        .toString();\n            }\n\n            str = DOT;\n            dotIndex = colName.indexOf(str);\n            if (dotIndex > -1) {\n                return new StringBuilder()\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(0, dotIndex))\n                        .append(escapeChar.getRightSymbol())\n                        .append(DOT)\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(dotIndex + str.length()))\n                        .append(escapeChar.getRightSymbol())\n                        .toString();\n            }\n        }\n\n        char[] buf = new char[colName.length() + 2];\n        buf[0] = escapeChar.getLeftSymbol();\n        buf[buf.length - 1] = escapeChar.getRightSymbol();\n\n        colName.getChars(0, colName.length(), buf, 1);\n\n        return new String(buf).intern();\n    }\n\n    /**\n     *\n     *  https://db.apache.org/derby/docs/10.1/ref/crefsqlj1003454.html\n     *  https://docs.oracle.com/javadb/10.8.3.0/ref/crefsqlj1003454.html\n     *  https://www.informit.com/articles/article.aspx?p=2036581&seqNum=2\n     * @param colName\n     * @return\n     */\n    default String delColNameEscape(String colName) {\n        if (StringUtils.isBlank(colName)) {\n            return colName;\n        }\n        EscapeSymbol escapeChar = getEscapeSymbol();\n        if (colName.charAt(0) == escapeChar.getLeftSymbol()\n                && colName.charAt(colName.length() - 1) == escapeChar.getRightSymbol()) {\n            // like \"scheme\".\"id\" `scheme`.`id`\n            String str = escapeChar.getRightSymbol() + DOT + escapeChar.getLeftSymbol();\n            int index = colName.indexOf(str);\n            if (index > -1) {\n                return colName.substring(1, index)\n                        + DOT\n                        + colName.substring(index + str.length(), colName.length() - 1);\n            }\n            return colName.substring(1, colName.length() - 1);\n        } else {\n            // like \"scheme\".id `scheme`.id\n            String str = escapeChar.getRightSymbol() + DOT;\n            int index = colName.indexOf(str);\n            if (index > -1 && colName.charAt(0) == escapeChar.getLeftSymbol()) {\n                return colName.substring(1, index) + DOT + colName.substring(index + str.length());\n            }\n            // like scheme.\"id\" scheme.`id`\n            str = DOT + escapeChar.getLeftSymbol();\n            index = colName.indexOf(str);\n            if (index > -1 && colName.charAt(colName.length() - 1) == escapeChar.getRightSymbol()) {\n                return colName.substring(0, index)\n                        + DOT\n                        + colName.substring(index + str.length(), colName.length() - 1);\n            }\n        }\n        return colName;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 37,
+          "declaration": "boolean checkIfKeyWords(String fieldOrTableName)"
+        },
+        {
+          "line": 45,
+          "declaration": "boolean checkIfNeedEscape(String columnName, TableMeta tableMeta)"
+        },
+        {
+          "line": 46,
+          "declaration": "default EscapeSymbol getEscapeSymbol()"
+        },
+        {
+          "line": 56,
+          "declaration": "default boolean containsEscape(String fieldOrTableName)"
+        },
+        {
+          "line": 59,
+          "declaration": "return fieldOrTableName.charAt(0) == escapeSymbol.getLeftSymbol()\n                && fieldOrTableName.charAt(fieldOrTableName.length() - 1) == escapeSymbol.getRightSymbol()"
+        },
+        {
+          "line": 68,
+          "declaration": "default String addColNameEscape(String colName)"
+        },
+        {
+          "line": 69,
+          "declaration": "return addColNameEscape(colName, null)"
+        },
+        {
+          "line": 78,
+          "declaration": "default String addColNameEscape(String colName, TableMeta tableMeta)"
+        },
+        {
+          "line": 80,
+          "declaration": "if (colName.contains(DOT))"
+        },
+        {
+          "line": 85,
+          "declaration": "if (!needEscape)"
+        },
+        {
+          "line": 89,
+          "declaration": "if (colName.contains(DOT))"
+        },
+        {
+          "line": 93,
+          "declaration": "if (dotIndex > -1)"
+        },
+        {
+          "line": 94,
+          "declaration": "return new StringBuilder()\n                        .append(colName.substring(0, dotIndex + str.length()))\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(dotIndex + str.length()))\n                        .append(escapeChar.getRightSymbol())\n                        .toString()"
+        },
+        {
+          "line": 104,
+          "declaration": "if (dotIndex > -1)"
+        },
+        {
+          "line": 105,
+          "declaration": "return new StringBuilder()\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(0, dotIndex))\n                        .append(escapeChar.getRightSymbol())\n                        .append(colName.substring(dotIndex))\n                        .toString()"
+        },
+        {
+          "line": 115,
+          "declaration": "if (dotIndex > -1)"
+        },
+        {
+          "line": 116,
+          "declaration": "return new StringBuilder()\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(0, dotIndex))\n                        .append(escapeChar.getRightSymbol())\n                        .append(DOT)\n                        .append(escapeChar.getLeftSymbol())\n                        .append(colName.substring(dotIndex + str.length()))\n                        .append(escapeChar.getRightSymbol())\n                        .toString()"
+        },
+        {
+          "line": 131,
+          "declaration": "colName.getChars(0, colName.length(), buf, 1)"
+        },
+        {
+          "line": 133,
+          "declaration": "return new String(buf).intern()"
+        },
+        {
+          "line": 145,
+          "declaration": "default String delColNameEscape(String colName)"
+        },
+        {
+          "line": 146,
+          "declaration": "if (StringUtils.isBlank(colName))"
+        },
+        {
+          "line": 150,
+          "declaration": "if (colName.charAt(0) == escapeChar.getLeftSymbol()\n                && colName.charAt(colName.length() - 1) == escapeChar.getRightSymbol())"
+        },
+        {
+          "line": 155,
+          "declaration": "if (index > -1)"
+        },
+        {
+          "line": 156,
+          "declaration": "return colName.substring(1, index)\n                        + DOT\n                        + colName.substring(index + str.length(), colName.length() - 1)"
+        },
+        {
+          "line": 160,
+          "declaration": "return colName.substring(1, colName.length() - 1)"
+        },
+        {
+          "line": 165,
+          "declaration": "if (index > -1 && colName.charAt(0) == escapeChar.getLeftSymbol())"
+        },
+        {
+          "line": 166,
+          "declaration": "return colName.substring(1, index) + DOT + colName.substring(index + str.length())"
+        },
+        {
+          "line": 171,
+          "declaration": "if (index > -1 && colName.charAt(colName.length() - 1) == escapeChar.getRightSymbol())"
+        },
+        {
+          "line": 172,
+          "declaration": "return colName.substring(0, index)\n                        + DOT\n                        + colName.substring(index + str.length(), colName.length() - 1)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/EscapeHandlerFactory.java",
+      "java_type": "org.apache.seata.sqlparser.EscapeHandlerFactory",
+      "rust": "crates/seata_sqlparser/src/escape_handler_factory.rs",
+      "rust_type": "EscapeHandlerFactory",
+      "sha256": "cfc566f521325a430d8564dfd71438eee217844ef5d078d8311933e744513a33",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport org.apache.seata.common.loader.EnhancedServiceLoader;\nimport org.apache.seata.common.util.CollectionUtils;\n\nimport java.util.Map;\nimport java.util.concurrent.ConcurrentHashMap;\n\n/**\n * The type Keyword checker factory.\n *\n */\npublic class EscapeHandlerFactory {\n\n    private static final Map<String, EscapeHandler> ESCAPE_HANDLER_MAP = new ConcurrentHashMap<>();\n\n    /**\n     * get keyword checker\n     *\n     * @param dbType the db type\n     * @return keyword checker\n     */\n    public static EscapeHandler getEscapeHandler(String dbType) {\n        return CollectionUtils.computeIfAbsent(\n                ESCAPE_HANDLER_MAP, dbType, key -> EnhancedServiceLoader.load(EscapeHandler.class, dbType));\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 39,
+          "declaration": "public static EscapeHandler getEscapeHandler(String dbType)"
+        },
+        {
+          "line": 40,
+          "declaration": "return CollectionUtils.computeIfAbsent(\n                ESCAPE_HANDLER_MAP, dbType, key -> EnhancedServiceLoader.load(EscapeHandler.class, dbType))"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/EscapeSymbol.java",
+      "java_type": "org.apache.seata.sqlparser.EscapeSymbol",
+      "rust": "crates/seata_sqlparser/src/escape_symbol.rs",
+      "rust_type": "EscapeSymbol",
+      "sha256": "8ba6a61eaeff80f61af85bc6c0a3502050d1fd9ac9e92e75c0abbb65a2117523",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\n/**\n * The escape symbol of keyword\n *\n */\npublic class EscapeSymbol {\n    private final char leftSymbol;\n    private final char rightSymbol;\n\n    public EscapeSymbol(char singleSymbol) {\n        this.leftSymbol = singleSymbol;\n        this.rightSymbol = singleSymbol;\n    }\n\n    public EscapeSymbol(char leftSymbol, char rightSymbol) {\n        this.leftSymbol = leftSymbol;\n        this.rightSymbol = rightSymbol;\n    }\n\n    public char getLeftSymbol() {\n        return leftSymbol;\n    }\n\n    public char getRightSymbol() {\n        return rightSymbol;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 26,
+          "declaration": "public EscapeSymbol(char singleSymbol)"
+        },
+        {
+          "line": 31,
+          "declaration": "public EscapeSymbol(char leftSymbol, char rightSymbol)"
+        },
+        {
+          "line": 36,
+          "declaration": "public char getLeftSymbol()"
+        },
+        {
+          "line": 40,
+          "declaration": "public char getRightSymbol()"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "3a2a33ac9303a6d9c1aaacd8616f8c0b9752567187e8ef6fe10ccbb35d4de565",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/JoinRecognizer.java",
+      "java_type": "org.apache.seata.sqlparser.JoinRecognizer",
+      "rust": "crates/seata_sqlparser/src/join_recognizer.rs",
+      "rust_type": "JoinRecognizer",
+      "sha256": "904eeef2e03acb1011bc792aae129dd0084711786262fb575bef4560105d8354",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/**\n * The interface Where recognizer.\n *\n */\npublic interface JoinRecognizer {\n    /**\n     * Gets join condition.\n     * @param parametersHolder the parameters holder\n     * @param paramAppenderList the param appender list\n     * @return the join condition\n     */\n    String getJoinCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList);\n}\n",
+      "declarations": [
+        {
+          "line": 33,
+          "declaration": "String getJoinCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/ParametersHolder.java",
+      "java_type": "org.apache.seata.sqlparser.ParametersHolder",
+      "rust": "crates/seata_sqlparser/src/parameters_holder.rs",
+      "rust_type": "ParametersHolder",
+      "sha256": "1540a3e454dbc7dfe90ed84a785c02e97c49da47f631f203182261f0d7880556",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport java.util.ArrayList;\nimport java.util.Map;\n\n/**\n * The interface Parameters holder.\n *\n */\npublic interface ParametersHolder {\n\n    /**\n     * Get parameters array list [ ].\n     *\n     * @return the array list [ ]\n     */\n    Map<Integer, ArrayList<Object>> getParameters();\n}\n",
+      "declarations": [
+        {
+          "line": 33,
+          "declaration": "Map<Integer, ArrayList<Object>> getParameters()"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLDeleteRecognizer.java",
+      "java_type": "org.apache.seata.sqlparser.SQLDeleteRecognizer",
+      "rust": "crates/seata_sqlparser/src/sql_delete_recognizer.rs",
+      "rust_type": "SQLDeleteRecognizer",
+      "sha256": "5ff8ffb2485799c4188f00fe8b0b9076908bfe43b24a440ae08170f94811f43b",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\n/**\n * The interface Sql delete recognizer.\n *\n */\npublic interface SQLDeleteRecognizer extends WhereRecognizer {}\n",
+      "declarations": [],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLInsertRecognizer.java",
+      "java_type": "org.apache.seata.sqlparser.SQLInsertRecognizer",
+      "rust": "crates/seata_sqlparser/src/sql_insert_recognizer.rs",
+      "rust_type": "SQLInsertRecognizer",
+      "sha256": "2e9967efd62f7a67723708c04a10e969db875d41dd9dca23a7d5bda9df77accc",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport java.util.Collection;\nimport java.util.List;\n\n/**\n * The interface Sql insert recognizer.\n *\n */\npublic interface SQLInsertRecognizer extends SQLRecognizer {\n\n    /**\n     * insert columns is empty.\n     * @return true: empty. false: not empty.\n     */\n    boolean insertColumnsIsEmpty();\n\n    /**\n     * Gets insert columns.\n     *\n     * @return the insert columns\n     */\n    List<String> getInsertColumns();\n\n    /**\n     * Gets insert rows.\n     *\n     * @param primaryKeyIndex insert sql primary key index.\n     * @return the insert rows\n     */\n    List<List<Object>> getInsertRows(Collection<Integer> primaryKeyIndex);\n\n    /**\n     * Gets insert\n     *\n     * @return  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)\n     */\n    List<String> getInsertParamsValue();\n\n    /**\n     * Gets DuplicateKey columns.\n     *\n     * @return the duplicateKey columns\n     */\n    List<String> getDuplicateKeyUpdate();\n\n    /**\n     * Gets insert columns is Simplified.\n     *\n     * @return (`a`, `b`, `c`)  ->  (a, b, c)\n     */\n    List<String> getInsertColumnsUnEscape();\n}\n",
+      "declarations": [
+        {
+          "line": 32,
+          "declaration": "boolean insertColumnsIsEmpty()"
+        },
+        {
+          "line": 39,
+          "declaration": "List<String> getInsertColumns()"
+        },
+        {
+          "line": 47,
+          "declaration": "List<List<Object>> getInsertRows(Collection<Integer> primaryKeyIndex)"
+        },
+        {
+          "line": 54,
+          "declaration": "List<String> getInsertParamsValue()"
+        },
+        {
+          "line": 61,
+          "declaration": "List<String> getDuplicateKeyUpdate()"
+        },
+        {
+          "line": 68,
+          "declaration": "List<String> getInsertColumnsUnEscape()"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SqlParserType.java",
+      "java_type": "org.apache.seata.sqlparser.SqlParserType",
+      "rust": "crates/seata_sqlparser/src/sql_parser_type.rs",
+      "rust_type": "SqlParserType",
+      "sha256": "f8c23b84cfe081f053362858e0e7d8e2c7a694ace88173e2e8a1baa4ad204935",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\npublic interface SqlParserType {\n    /**\n     * The constant SQL_PARSER_TYPE_DRUID.\n     */\n    String SQL_PARSER_TYPE_DRUID = \"druid\";\n\n    /**\n     * The constant SQL_PARSER_TYPE_ANTLR.\n     */\n    String SQL_PARSER_TYPE_ANTLR = \"antlr\";\n}\n",
+      "declarations": [],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "903bf17be9f9641e1bddc7ebdfcbbc1bb49bf922d35da864f808fb1219390338",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLParsingException.java",
+      "java_type": "org.apache.seata.sqlparser.SQLParsingException",
+      "rust": "crates/seata_sqlparser/src/sql_parsing_exception.rs",
+      "rust_type": "SQLParsingException",
+      "sha256": "a4ec9241c936ad059160b5e5e1ac7e539ad70022cde4c368f344c527697966af",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\n/**\n * The type Sql parsing exception.\n *\n */\npublic class SQLParsingException extends RuntimeException {\n    /**\n     * Instantiates a new Sql parsing exception.\n     *\n     * @param message the message\n     */\n    public SQLParsingException(String message) {\n        super(message);\n    }\n\n    /**\n     * Instantiates a new Sql parsing exception.\n     *\n     * @param message the message\n     * @param cause   the cause\n     */\n    public SQLParsingException(String message, Throwable cause) {\n        super(message, cause);\n    }\n\n    /**\n     * Instantiates a new Sql parsing exception.\n     *\n     * @param cause the cause\n     */\n    public SQLParsingException(Throwable cause) {\n        super(cause);\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 29,
+          "declaration": "public SQLParsingException(String message)"
+        },
+        {
+          "line": 30,
+          "declaration": "super(message)"
+        },
+        {
+          "line": 39,
+          "declaration": "public SQLParsingException(String message, Throwable cause)"
+        },
+        {
+          "line": 40,
+          "declaration": "super(message, cause)"
+        },
+        {
+          "line": 48,
+          "declaration": "public SQLParsingException(Throwable cause)"
+        },
+        {
+          "line": 49,
+          "declaration": "super(cause)"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "4c6f3cdcc9c9162da699fa333f254bb72d4332131476311412cf93845e678787",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLRecognizer.java",
+      "java_type": "org.apache.seata.sqlparser.SQLRecognizer",
+      "rust": "crates/seata_sqlparser/src/sql_recognizer.rs",
+      "rust_type": "SQLRecognizer",
+      "sha256": "424556599885864b3c8d50f44c8635f2ec5144a4df1ffc170818d47c28746460",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\n/**\n * The interface Sql recognizer.\n *\n */\npublic interface SQLRecognizer {\n\n    /**\n     * Type of the SQL. INSERT/UPDATE/DELETE ...\n     *\n     * @return sql type\n     */\n    SQLType getSQLType();\n\n    /**\n     * TableRecords source related in the SQL, including alias if any.\n     * SELECT id, name FROM user u WHERE ...\n     * Alias should be 'u' for this SQL.\n     *\n     * @return table source.\n     */\n    String getTableAlias();\n\n    /**\n     * TableRecords name related in the SQL.\n     * SELECT id, name FROM user u WHERE ...\n     * TableRecords name should be 'user' for this SQL, without alias 'u'.\n     *\n     * @return table name.\n     * @see #getTableAlias() #getTableAlias()#getTableAlias()\n     */\n    String getTableName();\n\n    /**\n     * Return the original SQL input by the upper application.\n     *\n     * @return The original SQL.\n     */\n    String getOriginalSQL();\n\n    /**\n     * check the sql syntax is supports\n     * @return isSupport:true\n     */\n    default boolean isSqlSyntaxSupports() {\n        return true;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 30,
+          "declaration": "SQLType getSQLType()"
+        },
+        {
+          "line": 39,
+          "declaration": "String getTableAlias()"
+        },
+        {
+          "line": 49,
+          "declaration": "String getTableName()"
+        },
+        {
+          "line": 56,
+          "declaration": "String getOriginalSQL()"
+        },
+        {
+          "line": 62,
+          "declaration": "default boolean isSqlSyntaxSupports()"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLRecognizerFactory.java",
+      "java_type": "org.apache.seata.sqlparser.SQLRecognizerFactory",
+      "rust": "crates/seata_sqlparser/src/sql_recognizer_factory.rs",
+      "rust_type": "SQLRecognizerFactory",
+      "sha256": "21def9030b165b917806c3ec1fab1fcd26ca8f8a1f7fae6c68c3ca32b24e3f17",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport java.util.List;\n\npublic interface SQLRecognizerFactory {\n    List<SQLRecognizer> create(String sql, String dbType);\n}\n",
+      "declarations": [
+        {
+          "line": 22,
+          "declaration": "List<SQLRecognizer> create(String sql, String dbType)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLSelectRecognizer.java",
+      "java_type": "org.apache.seata.sqlparser.SQLSelectRecognizer",
+      "rust": "crates/seata_sqlparser/src/sql_select_recognizer.rs",
+      "rust_type": "SQLSelectRecognizer",
+      "sha256": "b7c189585d0bae6dd08f4a039ef278e48a8e41a5009600fb98ce4c4a5dd25b5e",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\n/**\n * The interface Sql select recognizer.\n *\n */\npublic interface SQLSelectRecognizer extends WhereRecognizer {}\n",
+      "declarations": [],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLType.java",
+      "java_type": "org.apache.seata.sqlparser.SQLType",
+      "rust": "crates/seata_sqlparser/src/sql_type.rs",
+      "rust_type": "SQLType",
+      "sha256": "52dc42e06e54189d6556a7dd53046bcebd7760a3ce6a0fb1f4fa99cfefd6196f",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\n/**\n * The enum Sql type.\n *\n */\npublic enum SQLType {\n\n    /**\n     * Select sql type.\n     */\n    SELECT(0),\n    /**\n     * Insert sql type.\n     */\n    INSERT(1),\n    /**\n     * Update sql type.\n     */\n    UPDATE(2),\n    /**\n     * Delete sql type.\n     */\n    DELETE(3),\n    /**\n     * Select for update sql type.\n     */\n    SELECT_FOR_UPDATE(4),\n    /**\n     * Replace sql type.\n     */\n    REPLACE(5),\n    /**\n     * Truncate sql type.\n     */\n    TRUNCATE(6),\n    /**\n     * Create sql type.\n     */\n    CREATE(7),\n    /**\n     * Drop sql type.\n     */\n    DROP(8),\n    /**\n     * Load sql type.\n     */\n    LOAD(9),\n    /**\n     * Merge sql type.\n     */\n    MERGE(10),\n    /**\n     * Show sql type.\n     */\n    SHOW(11),\n    /**\n     * Alter sql type.\n     */\n    ALTER(12),\n    /**\n     * Rename sql type.\n     */\n    RENAME(13),\n    /**\n     * Dump sql type.\n     */\n    DUMP(14),\n    /**\n     * Debug sql type.\n     */\n    DEBUG(15),\n    /**\n     * Explain sql type.\n     */\n    EXPLAIN(16),\n    /**\n     * Stored procedure\n     */\n    PROCEDURE(17),\n    /**\n     * Desc sql type.\n     */\n    DESC(18),\n    /**\n     * Select last insert id\n     */\n    SELECT_LAST_INSERT_ID(19),\n    /**\n     * Select without table sql type.\n     */\n    SELECT_WITHOUT_TABLE(20),\n    /**\n     * Create sequence sql type.\n     */\n    CREATE_SEQUENCE(21),\n    /**\n     * Show sequences sql type.\n     */\n    SHOW_SEQUENCES(22),\n    /**\n     * Get sequence sql type.\n     */\n    GET_SEQUENCE(23),\n    /**\n     * Alter sequence sql type.\n     */\n    ALTER_SEQUENCE(24),\n    /**\n     * Drop sequence sql type.\n     */\n    DROP_SEQUENCE(25),\n    /**\n     * Tddl show sql type.\n     */\n    TDDL_SHOW(26),\n    /**\n     * Set sql type.\n     */\n    SET(27),\n    /**\n     * Reload sql type.\n     */\n    RELOAD(28),\n    /**\n     * Select union sql type.\n     */\n    SELECT_UNION(29),\n    /**\n     * Create table sql type.\n     */\n    CREATE_TABLE(30),\n    /**\n     * Drop table sql type.\n     */\n    DROP_TABLE(31),\n    /**\n     * Alter table sql type.\n     */\n    ALTER_TABLE(32),\n    /**\n     * Save point sql type.\n     */\n    SAVE_POINT(33),\n    /**\n     * Select from update sql type.\n     */\n    SELECT_FROM_UPDATE(34),\n    /**\n     * multi delete/update\n     */\n    MULTI_DELETE(35),\n    /**\n     * Multi update sql type.\n     */\n    MULTI_UPDATE(36),\n    /**\n     * Create index sql type.\n     */\n    CREATE_INDEX(37),\n    /**\n     * Drop index sql type.\n     */\n    DROP_INDEX(38),\n    /**\n     * Kill sql type.\n     */\n    KILL(39),\n    /**\n     * Release dblock sql type.\n     */\n    RELEASE_DBLOCK(40),\n    /**\n     * Lock tables sql type.\n     */\n    LOCK_TABLES(41),\n    /**\n     * Unlock tables sql type.\n     */\n    UNLOCK_TABLES(42),\n    /**\n     * Check table sql type.\n     */\n    CHECK_TABLE(43),\n\n    /**\n     * Select found rows.\n     */\n    SELECT_FOUND_ROWS(44),\n\n    /**\n     * Insert ignore sql type.\n     */\n    INSERT_IGNORE(101),\n    /**\n     * Insert on duplicate update sql type.\n     */\n    INSERT_ON_DUPLICATE_UPDATE(102),\n    /**\n     * update join sql type\n     */\n    UPDATE_JOIN(103);\n\n    private int i;\n\n    private SQLType(int i) {\n        this.i = i;\n    }\n\n    /**\n     * Value int.\n     *\n     * @return the int\n     */\n    public int value() {\n        return this.i;\n    }\n\n    /**\n     * Value of sql type.\n     *\n     * @param i the\n     * @return the sql type\n     */\n    public static SQLType valueOf(int i) {\n        for (SQLType t : values()) {\n            if (t.value() == i) {\n                return t;\n            }\n        }\n        throw new IllegalArgumentException(\"Invalid SQLType:\" + i);\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 28,
+          "declaration": "SELECT(0),\n    /**\n     * Insert sql type.\n     */\n    INSERT(1),\n    /**\n     * Update sql type.\n     */\n    UPDATE(2),\n    /**\n     * Delete sql type.\n     */\n    DELETE(3),\n    /**\n     * Select for update sql type.\n     */\n    SELECT_FOR_UPDATE(4),\n    /**\n     * Replace sql type.\n     */\n    REPLACE(5),\n    /**\n     * Truncate sql type.\n     */\n    TRUNCATE(6),\n    /**\n     * Create sql type.\n     */\n    CREATE(7),\n    /**\n     * Drop sql type.\n     */\n    DROP(8),\n    /**\n     * Load sql type.\n     */\n    LOAD(9),\n    /**\n     * Merge sql type.\n     */\n    MERGE(10),\n    /**\n     * Show sql type.\n     */\n    SHOW(11),\n    /**\n     * Alter sql type.\n     */\n    ALTER(12),\n    /**\n     * Rename sql type.\n     */\n    RENAME(13),\n    /**\n     * Dump sql type.\n     */\n    DUMP(14),\n    /**\n     * Debug sql type.\n     */\n    DEBUG(15),\n    /**\n     * Explain sql type.\n     */\n    EXPLAIN(16),\n    /**\n     * Stored procedure\n     */\n    PROCEDURE(17),\n    /**\n     * Desc sql type.\n     */\n    DESC(18),\n    /**\n     * Select last insert id\n     */\n    SELECT_LAST_INSERT_ID(19),\n    /**\n     * Select without table sql type.\n     */\n    SELECT_WITHOUT_TABLE(20),\n    /**\n     * Create sequence sql type.\n     */\n    CREATE_SEQUENCE(21),\n    /**\n     * Show sequences sql type.\n     */\n    SHOW_SEQUENCES(22),\n    /**\n     * Get sequence sql type.\n     */\n    GET_SEQUENCE(23),\n    /**\n     * Alter sequence sql type.\n     */\n    ALTER_SEQUENCE(24),\n    /**\n     * Drop sequence sql type.\n     */\n    DROP_SEQUENCE(25),\n    /**\n     * Tddl show sql type.\n     */\n    TDDL_SHOW(26),\n    /**\n     * Set sql type.\n     */\n    SET(27),\n    /**\n     * Reload sql type.\n     */\n    RELOAD(28),\n    /**\n     * Select union sql type.\n     */\n    SELECT_UNION(29),\n    /**\n     * Create table sql type.\n     */\n    CREATE_TABLE(30),\n    /**\n     * Drop table sql type.\n     */\n    DROP_TABLE(31),\n    /**\n     * Alter table sql type.\n     */\n    ALTER_TABLE(32),\n    /**\n     * Save point sql type.\n     */\n    SAVE_POINT(33),\n    /**\n     * Select from update sql type.\n     */\n    SELECT_FROM_UPDATE(34),\n    /**\n     * multi delete/update\n     */\n    MULTI_DELETE(35),\n    /**\n     * Multi update sql type.\n     */\n    MULTI_UPDATE(36),\n    /**\n     * Create index sql type.\n     */\n    CREATE_INDEX(37),\n    /**\n     * Drop index sql type.\n     */\n    DROP_INDEX(38),\n    /**\n     * Kill sql type.\n     */\n    KILL(39),\n    /**\n     * Release dblock sql type.\n     */\n    RELEASE_DBLOCK(40),\n    /**\n     * Lock tables sql type.\n     */\n    LOCK_TABLES(41),\n    /**\n     * Unlock tables sql type.\n     */\n    UNLOCK_TABLES(42),\n    /**\n     * Check table sql type.\n     */\n    CHECK_TABLE(43),\n\n    /**\n     * Select found rows.\n     */\n    SELECT_FOUND_ROWS(44),\n\n    /**\n     * Insert ignore sql type.\n     */\n    INSERT_IGNORE(101),\n    /**\n     * Insert on duplicate update sql type.\n     */\n    INSERT_ON_DUPLICATE_UPDATE(102),\n    /**\n     * update join sql type\n     */\n    UPDATE_JOIN(103)"
+        },
+        {
+          "line": 221,
+          "declaration": "private SQLType(int i)"
+        },
+        {
+          "line": 231,
+          "declaration": "public int value()"
+        },
+        {
+          "line": 241,
+          "declaration": "public static SQLType valueOf(int i)"
+        },
+        {
+          "line": 242,
+          "declaration": "for (SQLType t : values())"
+        },
+        {
+          "line": 243,
+          "declaration": "if (t.value() == i)"
+        },
+        {
+          "line": 247,
+          "declaration": "throw new IllegalArgumentException(\"Invalid SQLType:\" + i)"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "73dc1bb23a685cca8854f6e779042404e81db3f1142bf7404a48f5945b730271",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLUpdateRecognizer.java",
+      "java_type": "org.apache.seata.sqlparser.SQLUpdateRecognizer",
+      "rust": "crates/seata_sqlparser/src/sql_update_recognizer.rs",
+      "rust_type": "SQLUpdateRecognizer",
+      "sha256": "f5915acd09a735bab36dd079ea151e5cf95bc8c5a31ad4886e4c274d03646a2d",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport java.util.List;\n\n/**\n * The interface Sql update recognizer.\n *\n */\npublic interface SQLUpdateRecognizer extends WhereRecognizer {\n    String MULTI_TABLE_NAME_SEPERATOR = \"#\";\n\n    /**\n     * Gets update columns.\n     *\n     * @return the update columns\n     */\n    List<String> getUpdateColumns();\n\n    /**\n     * Gets update values.\n     *\n     * @return the update values\n     */\n    List<Object> getUpdateValues();\n\n    /**\n     * Gets update join item table name\n     * @param tableName the update join item table source name\n     * @return the update join item table alias name\n     */\n    default String getTableAlias(String tableName) {\n        return null;\n    }\n\n    /**\n     * Gets update columns is Simplified.\n     *\n     * @return (`a`, `b`, `c`)  ->  (a, b, c)\n     */\n    List<String> getUpdateColumnsUnEscape();\n}\n",
+      "declarations": [
+        {
+          "line": 33,
+          "declaration": "List<String> getUpdateColumns()"
+        },
+        {
+          "line": 40,
+          "declaration": "List<Object> getUpdateValues()"
+        },
+        {
+          "line": 47,
+          "declaration": "default String getTableAlias(String tableName)"
+        },
+        {
+          "line": 56,
+          "declaration": "List<String> getUpdateColumnsUnEscape()"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/ColumnMeta.java",
+      "java_type": "org.apache.seata.sqlparser.struct.ColumnMeta",
+      "rust": "crates/seata_sqlparser/src/struct/column_meta.rs",
+      "rust_type": "ColumnMeta",
+      "sha256": "aface32df2bbe6bba6c7f092f0a7e0932e8ff60cba0e7a9a84225808402be9df",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\nimport java.util.Objects;\n\n/**\n * The type Column meta.\n *\n */\npublic class ColumnMeta {\n    private String tableCat;\n    private String tableSchemaName;\n    private String tableName;\n    private String columnName;\n    private int dataType;\n    private String dataTypeName;\n    private int columnSize;\n    private int decimalDigits;\n    private int numPrecRadix;\n    private int nullAble;\n    private String remarks;\n    private String columnDef;\n    private int sqlDataType;\n    private int sqlDatetimeSub;\n    private Object charOctetLength;\n    private int ordinalPosition;\n    private String isNullAble;\n    private String isAutoincrement;\n    private boolean isOnUpdate;\n\n    private boolean isCaseSensitive;\n\n    /**\n     * Instantiates a new Column meta.\n     */\n    public ColumnMeta() {}\n\n    @Override\n    public String toString() {\n        final StringBuilder sb = new StringBuilder(\"ColumnMeta{\");\n        sb.append(\"tableCat='\").append(tableCat).append('\\'');\n        sb.append(\", tableSchemaName='\").append(tableSchemaName).append('\\'');\n        sb.append(\", tableName='\").append(tableName).append('\\'');\n        sb.append(\", columnName='\").append(columnName).append('\\'');\n        sb.append(\", dataType=\").append(dataType);\n        sb.append(\", dataTypeName='\").append(dataTypeName).append('\\'');\n        sb.append(\", columnSize=\").append(columnSize);\n        sb.append(\", decimalDigits=\").append(decimalDigits);\n        sb.append(\", numPrecRadix=\").append(numPrecRadix);\n        sb.append(\", nullAble=\").append(nullAble);\n        sb.append(\", remarks='\").append(remarks).append('\\'');\n        sb.append(\", columnDef='\").append(columnDef).append('\\'');\n        sb.append(\", sqlDataType=\").append(sqlDataType);\n        sb.append(\", sqlDatetimeSub=\").append(sqlDatetimeSub);\n        sb.append(\", charOctetLength=\").append(charOctetLength);\n        sb.append(\", ordinalPosition=\").append(ordinalPosition);\n        sb.append(\", isNullAble='\").append(isNullAble).append('\\'');\n        sb.append(\", isAutoincrement='\").append(isAutoincrement).append('\\'');\n        sb.append(\", isOnUpdate=\").append(isOnUpdate);\n        sb.append(\", isCaseSensitive=\").append(isCaseSensitive);\n        sb.append('}');\n        return sb.toString();\n    }\n\n    /**\n     * Is autoincrement boolean.\n     *\n     * @return the boolean\n     */\n    public boolean isAutoincrement() {\n        return \"YES\".equalsIgnoreCase(isAutoincrement);\n    }\n\n    /**\n     * Gets table cat.\n     *\n     * @return the table cat\n     */\n    public String getTableCat() {\n        return tableCat;\n    }\n\n    /**\n     * Sets table cat.\n     *\n     * @param tableCat the table cat\n     */\n    public void setTableCat(String tableCat) {\n        this.tableCat = tableCat;\n    }\n\n    /**\n     * Sets table schema name.\n     *\n     * @param tableSchemaName the table schema name\n     */\n    public void setTableSchemaName(String tableSchemaName) {\n        this.tableSchemaName = tableSchemaName;\n    }\n\n    /**\n     * Gets table schema name\n     *\n     * @return table schema name\n     */\n    protected String getTableSchemaName() {\n        return tableSchemaName;\n    }\n\n    /**\n     * Sets table name.\n     *\n     * @param tableName the table name\n     */\n    public void setTableName(String tableName) {\n        this.tableName = tableName;\n    }\n\n    /**\n     * Gets table name\n     *\n     * @return table name\n     */\n    protected String getTableName() {\n        return tableName;\n    }\n\n    /**\n     * Gets column name.\n     *\n     * @return the column name\n     */\n    public String getColumnName() {\n        return columnName;\n    }\n\n    /**\n     * Sets column name.\n     *\n     * @param columnName the column name\n     */\n    public void setColumnName(String columnName) {\n        this.columnName = columnName;\n    }\n\n    /**\n     * Gets data type.\n     *\n     * @return the data type\n     */\n    public int getDataType() {\n        return dataType;\n    }\n\n    /**\n     * Sets data type.\n     *\n     * @param dataType the data type\n     */\n    public void setDataType(int dataType) {\n        this.dataType = dataType;\n    }\n\n    /**\n     * Gets data type name.\n     *\n     * @return the data type name\n     */\n    public String getDataTypeName() {\n        return dataTypeName;\n    }\n\n    /**\n     * Sets data type name.\n     *\n     * @param dataTypeName the data type name\n     */\n    public void setDataTypeName(String dataTypeName) {\n        this.dataTypeName = dataTypeName;\n    }\n\n    /**\n     * Gets column size.\n     *\n     * @return the column size\n     */\n    public int getColumnSize() {\n        return columnSize;\n    }\n\n    /**\n     * Sets column size.\n     *\n     * @param columnSize the column size\n     */\n    public void setColumnSize(int columnSize) {\n        this.columnSize = columnSize;\n    }\n\n    /**\n     * Gets decimal digits.\n     *\n     * @return the decimal digits\n     */\n    public int getDecimalDigits() {\n        return decimalDigits;\n    }\n\n    /**\n     * Sets decimal digits.\n     *\n     * @param decimalDigits the decimal digits\n     */\n    public void setDecimalDigits(int decimalDigits) {\n        this.decimalDigits = decimalDigits;\n    }\n\n    /**\n     * Gets num prec radix.\n     *\n     * @return the num prec radix\n     */\n    public int getNumPrecRadix() {\n        return numPrecRadix;\n    }\n\n    /**\n     * Sets num prec radix.\n     *\n     * @param numPrecRadix the num prec radix\n     */\n    public void setNumPrecRadix(int numPrecRadix) {\n        this.numPrecRadix = numPrecRadix;\n    }\n\n    /**\n     * Gets null able.\n     *\n     * @return the null able\n     */\n    public int getNullAble() {\n        return nullAble;\n    }\n\n    /**\n     * Sets null able.\n     *\n     * @param nullAble the null able\n     */\n    public void setNullAble(int nullAble) {\n        this.nullAble = nullAble;\n    }\n\n    /**\n     * Gets remarks.\n     *\n     * @return the remarks\n     */\n    public String getRemarks() {\n        return remarks;\n    }\n\n    /**\n     * Sets remarks.\n     *\n     * @param remarks the remarks\n     */\n    public void setRemarks(String remarks) {\n        this.remarks = remarks;\n    }\n\n    /**\n     * Gets column def.\n     *\n     * @return the column def\n     */\n    public String getColumnDef() {\n        return columnDef;\n    }\n\n    /**\n     * Sets column def.\n     *\n     * @param columnDef the column def\n     */\n    public void setColumnDef(String columnDef) {\n        this.columnDef = columnDef;\n    }\n\n    /**\n     * Gets sql data type.\n     *\n     * @return the sql data type\n     */\n    public int getSqlDataType() {\n        return sqlDataType;\n    }\n\n    /**\n     * Sets sql data type.\n     *\n     * @param sqlDataType the sql data type\n     */\n    public void setSqlDataType(int sqlDataType) {\n        this.sqlDataType = sqlDataType;\n    }\n\n    /**\n     * Gets sql datetime sub.\n     *\n     * @return the sql datetime sub\n     */\n    public int getSqlDatetimeSub() {\n        return sqlDatetimeSub;\n    }\n\n    /**\n     * Sets sql datetime sub.\n     *\n     * @param sqlDatetimeSub the sql datetime sub\n     */\n    public void setSqlDatetimeSub(int sqlDatetimeSub) {\n        this.sqlDatetimeSub = sqlDatetimeSub;\n    }\n\n    /**\n     * Gets char octet length.\n     *\n     * @return the char octet length\n     */\n    public Object getCharOctetLength() {\n        return charOctetLength;\n    }\n\n    /**\n     * Sets char octet length.\n     *\n     * @param charOctetLength the char octet length\n     */\n    public void setCharOctetLength(Object charOctetLength) {\n        this.charOctetLength = charOctetLength;\n    }\n\n    /**\n     * Gets ordinal position.\n     *\n     * @return the ordinal position\n     */\n    public int getOrdinalPosition() {\n        return ordinalPosition;\n    }\n\n    /**\n     * Sets ordinal position.\n     *\n     * @param ordinalPosition the ordinal position\n     */\n    public void setOrdinalPosition(int ordinalPosition) {\n        this.ordinalPosition = ordinalPosition;\n    }\n\n    /**\n     * Gets is null able.\n     *\n     * @return the is null able\n     */\n    public String getIsNullAble() {\n        return isNullAble;\n    }\n\n    /**\n     * Sets is null able.\n     *\n     * @param isNullAble the is null able\n     */\n    public void setIsNullAble(String isNullAble) {\n        this.isNullAble = isNullAble;\n    }\n\n    /**\n     * Gets is autoincrement.\n     *\n     * @return the is autoincrement\n     */\n    public String getIsAutoincrement() {\n        return isAutoincrement;\n    }\n\n    /**\n     * Sets is autoincrement.\n     *\n     * @param isAutoincrement the is autoincrement\n     */\n    public void setIsAutoincrement(String isAutoincrement) {\n        this.isAutoincrement = isAutoincrement;\n    }\n\n    public boolean isOnUpdate() {\n        return isOnUpdate;\n    }\n\n    public void setOnUpdate(boolean onUpdate) {\n        isOnUpdate = onUpdate;\n    }\n\n    public boolean isCaseSensitive() {\n        return isCaseSensitive;\n    }\n\n    public void setCaseSensitive(boolean caseSensitive) {\n        isCaseSensitive = caseSensitive;\n    }\n\n    @Override\n    public boolean equals(Object o) {\n        if (this == o) {\n            return true;\n        }\n        if (!(o instanceof ColumnMeta)) {\n            return false;\n        }\n        ColumnMeta columnMeta = (ColumnMeta) o;\n        if (!Objects.equals(columnMeta.tableCat, this.tableCat)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.tableSchemaName, this.tableSchemaName)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.tableName, this.tableName)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.columnName, this.columnName)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.dataType, this.dataType)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.dataTypeName, this.dataTypeName)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.columnSize, this.columnSize)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.decimalDigits, this.decimalDigits)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.numPrecRadix, this.numPrecRadix)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.nullAble, this.nullAble)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.remarks, this.remarks)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.columnDef, this.columnDef)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.sqlDataType, this.sqlDataType)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.sqlDatetimeSub, this.sqlDatetimeSub)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.charOctetLength, this.charOctetLength)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.ordinalPosition, this.ordinalPosition)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.isNullAble, this.isNullAble)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.isAutoincrement, this.isAutoincrement)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.isOnUpdate, this.isOnUpdate)) {\n            return false;\n        }\n        if (!Objects.equals(columnMeta.isCaseSensitive, this.isCaseSensitive)) {\n            return false;\n        }\n        return true;\n    }\n\n    @Override\n    public int hashCode() {\n        int hash = Objects.hashCode(tableCat);\n        hash += Objects.hashCode(tableSchemaName);\n        hash += Objects.hashCode(tableName);\n        hash += Objects.hashCode(columnName);\n        hash += Objects.hashCode(dataType);\n        hash += Objects.hashCode(dataTypeName);\n        hash += Objects.hashCode(columnSize);\n        hash += Objects.hashCode(decimalDigits);\n        hash += Objects.hashCode(numPrecRadix);\n        hash += Objects.hashCode(nullAble);\n        hash += Objects.hashCode(remarks);\n        hash += Objects.hashCode(columnDef);\n        hash += Objects.hashCode(sqlDataType);\n        hash += Objects.hashCode(sqlDatetimeSub);\n        hash += Objects.hashCode(charOctetLength);\n        hash += Objects.hashCode(ordinalPosition);\n        hash += Objects.hashCode(isNullAble);\n        hash += Objects.hashCode(isAutoincrement);\n        hash += Objects.hashCode(isOnUpdate);\n        hash += Objects.hashCode(isCaseSensitive);\n        return hash;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 51,
+          "declaration": "public ColumnMeta()"
+        },
+        {
+          "line": 54,
+          "declaration": "public String toString()"
+        },
+        {
+          "line": 56,
+          "declaration": "sb.append(\"tableCat='\").append(tableCat).append('\\'')"
+        },
+        {
+          "line": 57,
+          "declaration": "sb.append(\", tableSchemaName='\").append(tableSchemaName).append('\\'')"
+        },
+        {
+          "line": 58,
+          "declaration": "sb.append(\", tableName='\").append(tableName).append('\\'')"
+        },
+        {
+          "line": 59,
+          "declaration": "sb.append(\", columnName='\").append(columnName).append('\\'')"
+        },
+        {
+          "line": 60,
+          "declaration": "sb.append(\", dataType=\").append(dataType)"
+        },
+        {
+          "line": 61,
+          "declaration": "sb.append(\", dataTypeName='\").append(dataTypeName).append('\\'')"
+        },
+        {
+          "line": 62,
+          "declaration": "sb.append(\", columnSize=\").append(columnSize)"
+        },
+        {
+          "line": 63,
+          "declaration": "sb.append(\", decimalDigits=\").append(decimalDigits)"
+        },
+        {
+          "line": 64,
+          "declaration": "sb.append(\", numPrecRadix=\").append(numPrecRadix)"
+        },
+        {
+          "line": 65,
+          "declaration": "sb.append(\", nullAble=\").append(nullAble)"
+        },
+        {
+          "line": 66,
+          "declaration": "sb.append(\", remarks='\").append(remarks).append('\\'')"
+        },
+        {
+          "line": 67,
+          "declaration": "sb.append(\", columnDef='\").append(columnDef).append('\\'')"
+        },
+        {
+          "line": 68,
+          "declaration": "sb.append(\", sqlDataType=\").append(sqlDataType)"
+        },
+        {
+          "line": 69,
+          "declaration": "sb.append(\", sqlDatetimeSub=\").append(sqlDatetimeSub)"
+        },
+        {
+          "line": 70,
+          "declaration": "sb.append(\", charOctetLength=\").append(charOctetLength)"
+        },
+        {
+          "line": 71,
+          "declaration": "sb.append(\", ordinalPosition=\").append(ordinalPosition)"
+        },
+        {
+          "line": 72,
+          "declaration": "sb.append(\", isNullAble='\").append(isNullAble).append('\\'')"
+        },
+        {
+          "line": 73,
+          "declaration": "sb.append(\", isAutoincrement='\").append(isAutoincrement).append('\\'')"
+        },
+        {
+          "line": 74,
+          "declaration": "sb.append(\", isOnUpdate=\").append(isOnUpdate)"
+        },
+        {
+          "line": 75,
+          "declaration": "sb.append(\", isCaseSensitive=\").append(isCaseSensitive)"
+        },
+        {
+          "line": 77,
+          "declaration": "return sb.toString()"
+        },
+        {
+          "line": 85,
+          "declaration": "public boolean isAutoincrement()"
+        },
+        {
+          "line": 94,
+          "declaration": "public String getTableCat()"
+        },
+        {
+          "line": 103,
+          "declaration": "public void setTableCat(String tableCat)"
+        },
+        {
+          "line": 112,
+          "declaration": "public void setTableSchemaName(String tableSchemaName)"
+        },
+        {
+          "line": 121,
+          "declaration": "protected String getTableSchemaName()"
+        },
+        {
+          "line": 130,
+          "declaration": "public void setTableName(String tableName)"
+        },
+        {
+          "line": 139,
+          "declaration": "protected String getTableName()"
+        },
+        {
+          "line": 148,
+          "declaration": "public String getColumnName()"
+        },
+        {
+          "line": 157,
+          "declaration": "public void setColumnName(String columnName)"
+        },
+        {
+          "line": 166,
+          "declaration": "public int getDataType()"
+        },
+        {
+          "line": 175,
+          "declaration": "public void setDataType(int dataType)"
+        },
+        {
+          "line": 184,
+          "declaration": "public String getDataTypeName()"
+        },
+        {
+          "line": 193,
+          "declaration": "public void setDataTypeName(String dataTypeName)"
+        },
+        {
+          "line": 202,
+          "declaration": "public int getColumnSize()"
+        },
+        {
+          "line": 211,
+          "declaration": "public void setColumnSize(int columnSize)"
+        },
+        {
+          "line": 220,
+          "declaration": "public int getDecimalDigits()"
+        },
+        {
+          "line": 229,
+          "declaration": "public void setDecimalDigits(int decimalDigits)"
+        },
+        {
+          "line": 238,
+          "declaration": "public int getNumPrecRadix()"
+        },
+        {
+          "line": 247,
+          "declaration": "public void setNumPrecRadix(int numPrecRadix)"
+        },
+        {
+          "line": 256,
+          "declaration": "public int getNullAble()"
+        },
+        {
+          "line": 265,
+          "declaration": "public void setNullAble(int nullAble)"
+        },
+        {
+          "line": 274,
+          "declaration": "public String getRemarks()"
+        },
+        {
+          "line": 283,
+          "declaration": "public void setRemarks(String remarks)"
+        },
+        {
+          "line": 292,
+          "declaration": "public String getColumnDef()"
+        },
+        {
+          "line": 301,
+          "declaration": "public void setColumnDef(String columnDef)"
+        },
+        {
+          "line": 310,
+          "declaration": "public int getSqlDataType()"
+        },
+        {
+          "line": 319,
+          "declaration": "public void setSqlDataType(int sqlDataType)"
+        },
+        {
+          "line": 328,
+          "declaration": "public int getSqlDatetimeSub()"
+        },
+        {
+          "line": 337,
+          "declaration": "public void setSqlDatetimeSub(int sqlDatetimeSub)"
+        },
+        {
+          "line": 346,
+          "declaration": "public Object getCharOctetLength()"
+        },
+        {
+          "line": 355,
+          "declaration": "public void setCharOctetLength(Object charOctetLength)"
+        },
+        {
+          "line": 364,
+          "declaration": "public int getOrdinalPosition()"
+        },
+        {
+          "line": 373,
+          "declaration": "public void setOrdinalPosition(int ordinalPosition)"
+        },
+        {
+          "line": 382,
+          "declaration": "public String getIsNullAble()"
+        },
+        {
+          "line": 391,
+          "declaration": "public void setIsNullAble(String isNullAble)"
+        },
+        {
+          "line": 400,
+          "declaration": "public String getIsAutoincrement()"
+        },
+        {
+          "line": 409,
+          "declaration": "public void setIsAutoincrement(String isAutoincrement)"
+        },
+        {
+          "line": 412,
+          "declaration": "public boolean isOnUpdate()"
+        },
+        {
+          "line": 416,
+          "declaration": "public void setOnUpdate(boolean onUpdate)"
+        },
+        {
+          "line": 420,
+          "declaration": "public boolean isCaseSensitive()"
+        },
+        {
+          "line": 424,
+          "declaration": "public void setCaseSensitive(boolean caseSensitive)"
+        },
+        {
+          "line": 430,
+          "declaration": "public boolean equals(Object o)"
+        },
+        {
+          "line": 431,
+          "declaration": "if (this == o)"
+        },
+        {
+          "line": 434,
+          "declaration": "if (!(o instanceof ColumnMeta))"
+        },
+        {
+          "line": 438,
+          "declaration": "if (!Objects.equals(columnMeta.tableCat, this.tableCat))"
+        },
+        {
+          "line": 441,
+          "declaration": "if (!Objects.equals(columnMeta.tableSchemaName, this.tableSchemaName))"
+        },
+        {
+          "line": 444,
+          "declaration": "if (!Objects.equals(columnMeta.tableName, this.tableName))"
+        },
+        {
+          "line": 447,
+          "declaration": "if (!Objects.equals(columnMeta.columnName, this.columnName))"
+        },
+        {
+          "line": 450,
+          "declaration": "if (!Objects.equals(columnMeta.dataType, this.dataType))"
+        },
+        {
+          "line": 453,
+          "declaration": "if (!Objects.equals(columnMeta.dataTypeName, this.dataTypeName))"
+        },
+        {
+          "line": 456,
+          "declaration": "if (!Objects.equals(columnMeta.columnSize, this.columnSize))"
+        },
+        {
+          "line": 459,
+          "declaration": "if (!Objects.equals(columnMeta.decimalDigits, this.decimalDigits))"
+        },
+        {
+          "line": 462,
+          "declaration": "if (!Objects.equals(columnMeta.numPrecRadix, this.numPrecRadix))"
+        },
+        {
+          "line": 465,
+          "declaration": "if (!Objects.equals(columnMeta.nullAble, this.nullAble))"
+        },
+        {
+          "line": 468,
+          "declaration": "if (!Objects.equals(columnMeta.remarks, this.remarks))"
+        },
+        {
+          "line": 471,
+          "declaration": "if (!Objects.equals(columnMeta.columnDef, this.columnDef))"
+        },
+        {
+          "line": 474,
+          "declaration": "if (!Objects.equals(columnMeta.sqlDataType, this.sqlDataType))"
+        },
+        {
+          "line": 477,
+          "declaration": "if (!Objects.equals(columnMeta.sqlDatetimeSub, this.sqlDatetimeSub))"
+        },
+        {
+          "line": 480,
+          "declaration": "if (!Objects.equals(columnMeta.charOctetLength, this.charOctetLength))"
+        },
+        {
+          "line": 483,
+          "declaration": "if (!Objects.equals(columnMeta.ordinalPosition, this.ordinalPosition))"
+        },
+        {
+          "line": 486,
+          "declaration": "if (!Objects.equals(columnMeta.isNullAble, this.isNullAble))"
+        },
+        {
+          "line": 489,
+          "declaration": "if (!Objects.equals(columnMeta.isAutoincrement, this.isAutoincrement))"
+        },
+        {
+          "line": 492,
+          "declaration": "if (!Objects.equals(columnMeta.isOnUpdate, this.isOnUpdate))"
+        },
+        {
+          "line": 495,
+          "declaration": "if (!Objects.equals(columnMeta.isCaseSensitive, this.isCaseSensitive))"
+        },
+        {
+          "line": 502,
+          "declaration": "public int hashCode()"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "rust_sha256": "296b7bfccaf81ea4aa71bf024339c3392aaad004b0300487bd01a67053b4718f",
+      "verification_level": "V3_GOLDEN_DIFF",
+      "evidence": "verification/locale-result.json"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/Defaultable.java",
+      "java_type": "org.apache.seata.sqlparser.struct.Defaultable",
+      "rust": "crates/seata_sqlparser/src/struct/defaultable.rs",
+      "rust_type": "Defaultable",
+      "sha256": "6fbc158cff00ced327447032d4eb5d9eb0e469019e5ef230108252615f5cd3d2",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\nimport java.sql.SQLException;\nimport java.util.List;\n\n/**\n * The default expr able.\n *\n */\npublic interface Defaultable {\n\n    /**\n     * get primary key values by default keyword.\n     *\n     * @return pk values by default\n     * @throws SQLException the sql exception\n     */\n    List<Object> getPkValuesByDefault() throws SQLException;\n\n    /**\n     * get primary key values by default keyword.\n     *\n     * @param pkKey the pk key\n     * @return pk values by default\n     * @throws SQLException the sql exception\n     */\n    List<Object> getPkValuesByDefault(String pkKey) throws SQLException;\n}\n",
+      "declarations": [
+        {
+          "line": 34,
+          "declaration": "List<Object> getPkValuesByDefault() throws SQLException"
+        },
+        {
+          "line": 43,
+          "declaration": "List<Object> getPkValuesByDefault(String pkKey) throws SQLException"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/IndexMeta.java",
+      "java_type": "org.apache.seata.sqlparser.struct.IndexMeta",
+      "rust": "crates/seata_sqlparser/src/struct/index_meta.rs",
+      "rust_type": "IndexMeta",
+      "sha256": "1873b2bd5f1cc9545f37cae943eea44929aa2148d87aaac65acededb8aa3e0ea",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\nimport org.apache.commons.lang3.ArrayUtils;\n\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Objects;\n\n/**\n * The type Index meta.\n *\n */\npublic class IndexMeta {\n    private List<ColumnMeta> values = new ArrayList<ColumnMeta>();\n\n    private boolean nonUnique;\n    private String indexQualifier;\n    private String indexName;\n    private short type;\n    private IndexType indextype;\n    private String ascOrDesc;\n    private long cardinality;\n    private int ordinalPosition;\n\n    /**\n     * Instantiates a new Index meta.\n     */\n    public IndexMeta() {}\n\n    /**\n     * Gets values.\n     *\n     * @return the values\n     */\n    public List<ColumnMeta> getValues() {\n        return values;\n    }\n\n    /**\n     * Sets values.\n     *\n     * @param values the values\n     */\n    public void setValues(List<ColumnMeta> values) {\n        this.values = values;\n    }\n\n    /**\n     * Is non unique boolean.\n     *\n     * @return the boolean\n     */\n    public boolean isNonUnique() {\n        return nonUnique;\n    }\n\n    /**\n     * Sets non unique.\n     *\n     * @param nonUnique the non unique\n     */\n    public void setNonUnique(boolean nonUnique) {\n        this.nonUnique = nonUnique;\n    }\n\n    /**\n     * Gets index qualifier.\n     *\n     * @return the index qualifier\n     */\n    public String getIndexQualifier() {\n        return indexQualifier;\n    }\n\n    /**\n     * Sets index qualifier.\n     *\n     * @param indexQualifier the index qualifier\n     */\n    public void setIndexQualifier(String indexQualifier) {\n        this.indexQualifier = indexQualifier;\n    }\n\n    /**\n     * Gets index name.\n     *\n     * @return the index name\n     */\n    public String getIndexName() {\n        return indexName;\n    }\n\n    /**\n     * Sets index name.\n     *\n     * @param indexName the index name\n     */\n    public void setIndexName(String indexName) {\n        this.indexName = indexName;\n    }\n\n    /**\n     * Gets type.\n     *\n     * @return the type\n     */\n    public short getType() {\n        return type;\n    }\n\n    /**\n     * Sets type.\n     *\n     * @param type the type\n     */\n    public void setType(short type) {\n        this.type = type;\n    }\n\n    /**\n     * Gets asc or desc.\n     *\n     * @return the asc or desc\n     */\n    public String getAscOrDesc() {\n        return ascOrDesc;\n    }\n\n    /**\n     * Sets asc or desc.\n     *\n     * @param ascOrDesc the asc or desc\n     */\n    public void setAscOrDesc(String ascOrDesc) {\n        this.ascOrDesc = ascOrDesc;\n    }\n\n    /**\n     * Gets cardinality.\n     *\n     * @return the cardinality\n     */\n    public long getCardinality() {\n        return cardinality;\n    }\n\n    /**\n     * Sets cardinality.\n     *\n     * @param cardinality the cardinality\n     */\n    public void setCardinality(long cardinality) {\n        this.cardinality = cardinality;\n    }\n\n    /**\n     * Gets ordinal position.\n     *\n     * @return the ordinal position\n     */\n    public int getOrdinalPosition() {\n        return ordinalPosition;\n    }\n\n    /**\n     * Sets ordinal position.\n     *\n     * @param ordinalPosition the ordinal position\n     */\n    public void setOrdinalPosition(int ordinalPosition) {\n        this.ordinalPosition = ordinalPosition;\n    }\n\n    /**\n     * Gets indextype.\n     *\n     * @return the indextype\n     */\n    public IndexType getIndextype() {\n        return indextype;\n    }\n\n    /**\n     * Sets indextype.\n     *\n     * @param indextype the indextype\n     */\n    public void setIndextype(IndexType indextype) {\n        this.indextype = indextype;\n    }\n\n    @Override\n    public boolean equals(Object o) {\n        if (this == o) {\n            return true;\n        }\n        if (!(o instanceof IndexMeta)) {\n            return false;\n        }\n        IndexMeta indexMeta = (IndexMeta) o;\n        if (!ArrayUtils.isEquals(indexMeta.values, this.values)) {\n            return false;\n        }\n        if (!Objects.equals(indexMeta.nonUnique, this.nonUnique)) {\n            return false;\n        }\n        if (!Objects.equals(indexMeta.indexQualifier, this.indexQualifier)) {\n            return false;\n        }\n        if (!Objects.equals(indexMeta.indexName, this.indexName)) {\n            return false;\n        }\n        if (!Objects.equals(indexMeta.type, this.type)) {\n            return false;\n        }\n        if (!Objects.equals(indexMeta.indextype.value(), this.indextype.value())) {\n            return false;\n        }\n        if (!Objects.equals(indexMeta.ascOrDesc, this.ascOrDesc)) {\n            return false;\n        }\n        if (!Objects.equals(indexMeta.ordinalPosition, this.ordinalPosition)) {\n            return false;\n        }\n        return true;\n    }\n\n    @Override\n    public int hashCode() {\n        int hash = Objects.hashCode(nonUnique);\n        hash += Objects.hashCode(indexQualifier);\n        hash += Objects.hashCode(indexName);\n        hash += Objects.hashCode(type);\n        hash += Objects.hashCode(indextype);\n        hash += Objects.hashCode(ascOrDesc);\n        hash += Objects.hashCode(ordinalPosition);\n        return hash;\n    }\n\n    @Override\n    public String toString() {\n        return \"indexName:\" + indexName + \"->\" + \"type:\" + type + \"->\" + \"values:\" + values;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 44,
+          "declaration": "public IndexMeta()"
+        },
+        {
+          "line": 51,
+          "declaration": "public List<ColumnMeta> getValues()"
+        },
+        {
+          "line": 60,
+          "declaration": "public void setValues(List<ColumnMeta> values)"
+        },
+        {
+          "line": 69,
+          "declaration": "public boolean isNonUnique()"
+        },
+        {
+          "line": 78,
+          "declaration": "public void setNonUnique(boolean nonUnique)"
+        },
+        {
+          "line": 87,
+          "declaration": "public String getIndexQualifier()"
+        },
+        {
+          "line": 96,
+          "declaration": "public void setIndexQualifier(String indexQualifier)"
+        },
+        {
+          "line": 105,
+          "declaration": "public String getIndexName()"
+        },
+        {
+          "line": 114,
+          "declaration": "public void setIndexName(String indexName)"
+        },
+        {
+          "line": 123,
+          "declaration": "public short getType()"
+        },
+        {
+          "line": 132,
+          "declaration": "public void setType(short type)"
+        },
+        {
+          "line": 141,
+          "declaration": "public String getAscOrDesc()"
+        },
+        {
+          "line": 150,
+          "declaration": "public void setAscOrDesc(String ascOrDesc)"
+        },
+        {
+          "line": 159,
+          "declaration": "public long getCardinality()"
+        },
+        {
+          "line": 168,
+          "declaration": "public void setCardinality(long cardinality)"
+        },
+        {
+          "line": 177,
+          "declaration": "public int getOrdinalPosition()"
+        },
+        {
+          "line": 186,
+          "declaration": "public void setOrdinalPosition(int ordinalPosition)"
+        },
+        {
+          "line": 195,
+          "declaration": "public IndexType getIndextype()"
+        },
+        {
+          "line": 204,
+          "declaration": "public void setIndextype(IndexType indextype)"
+        },
+        {
+          "line": 209,
+          "declaration": "public boolean equals(Object o)"
+        },
+        {
+          "line": 210,
+          "declaration": "if (this == o)"
+        },
+        {
+          "line": 213,
+          "declaration": "if (!(o instanceof IndexMeta))"
+        },
+        {
+          "line": 217,
+          "declaration": "if (!ArrayUtils.isEquals(indexMeta.values, this.values))"
+        },
+        {
+          "line": 220,
+          "declaration": "if (!Objects.equals(indexMeta.nonUnique, this.nonUnique))"
+        },
+        {
+          "line": 223,
+          "declaration": "if (!Objects.equals(indexMeta.indexQualifier, this.indexQualifier))"
+        },
+        {
+          "line": 226,
+          "declaration": "if (!Objects.equals(indexMeta.indexName, this.indexName))"
+        },
+        {
+          "line": 229,
+          "declaration": "if (!Objects.equals(indexMeta.type, this.type))"
+        },
+        {
+          "line": 232,
+          "declaration": "if (!Objects.equals(indexMeta.indextype.value(), this.indextype.value()))"
+        },
+        {
+          "line": 235,
+          "declaration": "if (!Objects.equals(indexMeta.ascOrDesc, this.ascOrDesc))"
+        },
+        {
+          "line": 238,
+          "declaration": "if (!Objects.equals(indexMeta.ordinalPosition, this.ordinalPosition))"
+        },
+        {
+          "line": 245,
+          "declaration": "public int hashCode()"
+        },
+        {
+          "line": 257,
+          "declaration": "public String toString()"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "rust_sha256": "70389d4b92a2f7d2cd3b37394fda7217dbe56f566499774bb1b6c3b9591eccdf",
+      "verification_level": "V3_GOLDEN_DIFF",
+      "evidence": "verification/locale-result.json"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/IndexType.java",
+      "java_type": "org.apache.seata.sqlparser.struct.IndexType",
+      "rust": "crates/seata_sqlparser/src/struct/index_type.rs",
+      "rust_type": "IndexType",
+      "sha256": "7309c12be7234e64b1a5b99cced35c295f3999213dd0de49e90d45a6a80bb1d0",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * The enum Index type.\n *\n */\npublic enum IndexType {\n    /**\n     * Primary index type.\n     */\n    PRIMARY(0),\n    /**\n     * Normal index type.\n     */\n    NORMAL(1),\n    /**\n     * Unique index type.\n     */\n    UNIQUE(2),\n    /**\n     * Full text index type.\n     */\n    FULL_TEXT(3);\n\n    private int i;\n\n    IndexType(int i) {\n        this.i = i;\n    }\n\n    /**\n     * Value int.\n     *\n     * @return the int\n     */\n    public int value() {\n        return this.i;\n    }\n\n    /**\n     * Value of index type.\n     *\n     * @param i the\n     * @return the index type\n     */\n    public static IndexType valueOf(int i) {\n        for (IndexType t : values()) {\n            if (t.value() == i) {\n                return t;\n            }\n        }\n        throw new IllegalArgumentException(\"Invalid IndexType:\" + i);\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 27,
+          "declaration": "PRIMARY(0),\n    /**\n     * Normal index type.\n     */\n    NORMAL(1),\n    /**\n     * Unique index type.\n     */\n    UNIQUE(2),\n    /**\n     * Full text index type.\n     */\n    FULL_TEXT(3)"
+        },
+        {
+          "line": 42,
+          "declaration": "IndexType(int i)"
+        },
+        {
+          "line": 52,
+          "declaration": "public int value()"
+        },
+        {
+          "line": 62,
+          "declaration": "public static IndexType valueOf(int i)"
+        },
+        {
+          "line": 63,
+          "declaration": "for (IndexType t : values())"
+        },
+        {
+          "line": 64,
+          "declaration": "if (t.value() == i)"
+        },
+        {
+          "line": 68,
+          "declaration": "throw new IllegalArgumentException(\"Invalid IndexType:\" + i)"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "153ead53be8628ce65dea1a456454e0d238691c8c36f9f6df0958cc888e464ea",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/NotPlaceholderExpr.java",
+      "java_type": "org.apache.seata.sqlparser.struct.NotPlaceholderExpr",
+      "rust": "crates/seata_sqlparser/src/struct/not_placeholder_expr.rs",
+      "rust_type": "NotPlaceholderExpr",
+      "sha256": "401639057dedb36b7ad3e85c178d5a1754518cfd46a1d20cccb2be3f2a766039",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * The not placeholder expression.\n */\npublic class NotPlaceholderExpr {\n\n    private static NotPlaceholderExpr instance = new NotPlaceholderExpr();\n\n    /**\n     * Get NotPlaceholder.\n     *\n     * @return the NotPlaceholder\n     */\n    public static NotPlaceholderExpr get() {\n        return instance;\n    }\n\n    private NotPlaceholderExpr() {}\n\n    @Override\n    public String toString() {\n        return \"NOT_PLACEHOLDER\";\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 31,
+          "declaration": "public static NotPlaceholderExpr get()"
+        },
+        {
+          "line": 34,
+          "declaration": "private NotPlaceholderExpr()"
+        },
+        {
+          "line": 38,
+          "declaration": "public String toString()"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "274cc04189e0ab47f7e355fcccebfcd8b9f20c6ec0ef6bf961d3ab903923fc29",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/Null.java",
+      "java_type": "org.apache.seata.sqlparser.struct.Null",
+      "rust": "crates/seata_sqlparser/src/struct/null.rs",
+      "rust_type": "Null",
+      "sha256": "09d3539ac781ffd7eb46be170063ca66bc6d3a0635f48db9f6f64c25e9b4754d",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * The type Null.\n *\n */\npublic class Null {\n    private static Null instance = new Null();\n\n    /**\n     * Get null.\n     *\n     * @return the null\n     */\n    public static Null get() {\n        return instance;\n    }\n\n    private Null() {}\n\n    @Override\n    public String toString() {\n        return \"NULL\";\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 31,
+          "declaration": "public static Null get()"
+        },
+        {
+          "line": 34,
+          "declaration": "private Null()"
+        },
+        {
+          "line": 38,
+          "declaration": "public String toString()"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "29fab71e58b5a6a7e98b334f874004d1fc90aa661a57da2b11234aa6e5a0100b",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/Sequenceable.java",
+      "java_type": "org.apache.seata.sqlparser.struct.Sequenceable",
+      "rust": "crates/seata_sqlparser/src/struct/sequenceable.rs",
+      "rust_type": "Sequenceable",
+      "sha256": "fa331f5dedd1eb4bb25693df7372d2545cd8e757f0a1e067d6ebfbd0f579eb62",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * The sequence able.\n *\n */\npublic interface Sequenceable {\n\n    /**\n     * get sequence sql.\n     *\n     * @param expr the expr\n     * @return sequence sql\n     */\n    String getSequenceSql(SqlSequenceExpr expr);\n}\n",
+      "declarations": [
+        {
+          "line": 31,
+          "declaration": "String getSequenceSql(SqlSequenceExpr expr)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/SqlDefaultExpr.java",
+      "java_type": "org.apache.seata.sqlparser.struct.SqlDefaultExpr",
+      "rust": "crates/seata_sqlparser/src/struct/sql_default_expr.rs",
+      "rust_type": "SqlDefaultExpr",
+      "sha256": "80091398c7d4e16cd9a2bbaddf56447f88c3a353537ad1b0457c5c59a83b2f71",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * sql default expression\n */\npublic class SqlDefaultExpr {\n\n    private static SqlDefaultExpr instance = new SqlDefaultExpr();\n\n    /**\n     * Get SqlDefaultExpr.\n     *\n     * @return the SqlDefaultExpr\n     */\n    public static SqlDefaultExpr get() {\n        return instance;\n    }\n\n    private SqlDefaultExpr() {}\n\n    @Override\n    public String toString() {\n        return \"DEFAULT\";\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 31,
+          "declaration": "public static SqlDefaultExpr get()"
+        },
+        {
+          "line": 34,
+          "declaration": "private SqlDefaultExpr()"
+        },
+        {
+          "line": 38,
+          "declaration": "public String toString()"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "f4897c6bae15058850d61c41b9cd4376a07bfa3e26f65a951f213382846ea8a6",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/SqlMethodExpr.java",
+      "java_type": "org.apache.seata.sqlparser.struct.SqlMethodExpr",
+      "rust": "crates/seata_sqlparser/src/struct/sql_method_expr.rs",
+      "rust_type": "SqlMethodExpr",
+      "sha256": "1787465450beb6bddd351a45061d8706951d71a9b73b8bb221900b64af60ae51",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * TODO\n * sql method invoke expression\n */\npublic class SqlMethodExpr {\n\n    private static final SqlMethodExpr INSTANCE = new SqlMethodExpr(0);\n\n    private final int placeholderCount;\n\n    /**\n     * Get SqlMethodExpr.\n     *\n     * @return the SqlMethodExpr\n     */\n    public static SqlMethodExpr get() {\n        return INSTANCE;\n    }\n\n    /**\n     * Instantiates a new SqlMethodExpr with a specific placeholder count.\n     *\n     * @param placeholderCount the number of placeholders inside the method\n     */\n    public SqlMethodExpr(int placeholderCount) {\n        this.placeholderCount = placeholderCount;\n    }\n\n    public int getPlaceholderCount() {\n        return placeholderCount;\n    }\n\n    @Override\n    public String toString() {\n        return \"SQL_METHOD\";\n    }\n\n    @Override\n    public boolean equals(Object obj) {\n        if (this == obj) {\n            return true;\n        }\n        if (!(obj instanceof SqlMethodExpr)) {\n            return false;\n        }\n        SqlMethodExpr other = (SqlMethodExpr) obj;\n        return placeholderCount == other.placeholderCount;\n    }\n\n    @Override\n    public int hashCode() {\n        return Integer.hashCode(placeholderCount);\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 34,
+          "declaration": "public static SqlMethodExpr get()"
+        },
+        {
+          "line": 43,
+          "declaration": "public SqlMethodExpr(int placeholderCount)"
+        },
+        {
+          "line": 46,
+          "declaration": "public int getPlaceholderCount()"
+        },
+        {
+          "line": 52,
+          "declaration": "public String toString()"
+        },
+        {
+          "line": 57,
+          "declaration": "public boolean equals(Object obj)"
+        },
+        {
+          "line": 58,
+          "declaration": "if (this == obj)"
+        },
+        {
+          "line": 61,
+          "declaration": "if (!(obj instanceof SqlMethodExpr))"
+        },
+        {
+          "line": 69,
+          "declaration": "public int hashCode()"
+        },
+        {
+          "line": 70,
+          "declaration": "return Integer.hashCode(placeholderCount)"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "b2fc5dd11cc9df0501bc79db4d43a56eb1233d68419974e473fe7284acf6e06d",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/SqlSequenceExpr.java",
+      "java_type": "org.apache.seata.sqlparser.struct.SqlSequenceExpr",
+      "rust": "crates/seata_sqlparser/src/struct/sql_sequence_expr.rs",
+      "rust_type": "SqlSequenceExpr",
+      "sha256": "4e982d2707cceaff0b485baf89a9a424019baa2e5e34104f5aa6a33a2fc9ef56",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * TODO\n * sql sequence expression\n */\npublic class SqlSequenceExpr {\n\n    private String sequence;\n    private String function;\n\n    public SqlSequenceExpr() {}\n\n    public SqlSequenceExpr(String sequence, String function) {\n        this.sequence = sequence;\n        this.function = function;\n    }\n\n    public String getSequence() {\n        return sequence;\n    }\n\n    public void setSequence(String sequence) {\n        this.sequence = sequence;\n    }\n\n    public String getFunction() {\n        return function;\n    }\n\n    public void setFunction(String function) {\n        this.function = function;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 27,
+          "declaration": "public SqlSequenceExpr()"
+        },
+        {
+          "line": 29,
+          "declaration": "public SqlSequenceExpr(String sequence, String function)"
+        },
+        {
+          "line": 34,
+          "declaration": "public String getSequence()"
+        },
+        {
+          "line": 38,
+          "declaration": "public void setSequence(String sequence)"
+        },
+        {
+          "line": 42,
+          "declaration": "public String getFunction()"
+        },
+        {
+          "line": 46,
+          "declaration": "public void setFunction(String function)"
+        }
+      ],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "3d345ae1402060fa50f513bcac247e111e77ef749c1a03669e1db26a6a6d635e",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/SqlServerTableMeta.java",
+      "java_type": "org.apache.seata.sqlparser.struct.SqlServerTableMeta",
+      "rust": "crates/seata_sqlparser/src/struct/sql_server_table_meta.rs",
+      "rust_type": "SqlServerTableMeta",
+      "sha256": "2692bc0028a3778437ada08e723a8102d87e477b3bebf6c18dc1df8461a517e4",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\n/**\n * The type Table meta of SqlServer.\n */\npublic class SqlServerTableMeta extends TableMeta {\n\n    /**\n     * Stands for whether there is a column of a SQLServer table with a \"IDENTITY\"\n     */\n    private boolean tableIdentifyExistence = false;\n\n    public boolean isTableIdentifyExistence() {\n        return tableIdentifyExistence;\n    }\n\n    public void setTableIdentifyExistence(boolean tableIdentifyExistence) {\n        this.tableIdentifyExistence = tableIdentifyExistence;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 28,
+          "declaration": "public boolean isTableIdentifyExistence()"
+        },
+        {
+          "line": 32,
+          "declaration": "public void setTableIdentifyExistence(boolean tableIdentifyExistence)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/TableMeta.java",
+      "java_type": "org.apache.seata.sqlparser.struct.TableMeta",
+      "rust": "crates/seata_sqlparser/src/struct/table_meta.rs",
+      "rust_type": "TableMeta",
+      "sha256": "d514dab9b1cc6ebe07dc4bf350ff23abd538a09c6c400cfd3edcb85ed9a7ca32",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\nimport org.apache.seata.common.exception.NotSupportYetException;\nimport org.apache.seata.common.util.CollectionUtils;\nimport org.apache.seata.common.util.LowerCaseLinkHashMap;\nimport org.apache.seata.sqlparser.util.ColumnUtils;\n\nimport java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.Map.Entry;\nimport java.util.Objects;\nimport java.util.Set;\nimport java.util.TreeSet;\nimport java.util.stream.Collectors;\n\n/**\n * The type Table meta.\n *\n */\npublic class TableMeta {\n    private String tableName;\n\n    private String originalTableName;\n\n    private boolean isCaseSensitive;\n\n    /**\n     * key: column name\n     */\n    private final Map<String, ColumnMeta> allColumns = new LowerCaseLinkHashMap<>();\n\n    /**\n     * key: index name\n     */\n    private final Map<String, IndexMeta> allIndexes = new LowerCaseLinkHashMap<>();\n\n    /**\n     * Gets table name.\n     *\n     * @return the table name\n     */\n    public String getTableName() {\n        return tableName;\n    }\n\n    /**\n     * Sets table name.\n     *\n     * @param tableName the table name\n     */\n    public void setTableName(String tableName) {\n        this.tableName = tableName;\n    }\n\n    /**\n     * Gets original table name.\n     *\n     * @return the table name\n     */\n    public String getOriginalTableName() {\n        return originalTableName;\n    }\n\n    /**\n     * Sets original table name.\n     *\n     * @param originalTableName the table name\n     */\n    public void setOriginalTableName(String originalTableName) {\n        this.originalTableName = originalTableName;\n    }\n\n    /**\n     * Gets column meta.\n     *\n     * @param colName the col name\n     * @return the column meta\n     */\n    public ColumnMeta getColumnMeta(String colName) {\n        return allColumns.get(colName);\n    }\n\n    /**\n     * Gets all columns.\n     *\n     * @return the all columns\n     */\n    public Map<String, ColumnMeta> getAllColumns() {\n        return allColumns;\n    }\n\n    /**\n     * Gets all indexes.\n     *\n     * @return the all indexes\n     */\n    public Map<String, IndexMeta> getAllIndexes() {\n        return allIndexes;\n    }\n\n    /**\n     * Is case sensitive boolean.\n     *\n     * @return the boolean\n     */\n    public boolean isCaseSensitive() {\n        return isCaseSensitive;\n    }\n\n    /**\n     * Sets case sensitive.\n     *\n     * @param caseSensitive the case sensitive\n     */\n    public void setCaseSensitive(boolean caseSensitive) {\n        isCaseSensitive = caseSensitive;\n    }\n\n    /**\n     * Gets auto increase column.\n     *\n     * @return the auto increase column\n     */\n    public ColumnMeta getAutoIncreaseColumn() {\n        // TODO: how about auto increment but not pk?\n        for (Entry<String, ColumnMeta> entry : allColumns.entrySet()) {\n            ColumnMeta col = entry.getValue();\n            if (\"YES\".equalsIgnoreCase(col.getIsAutoincrement())) {\n                return col;\n            }\n        }\n        return null;\n    }\n\n    /**\n     * Gets primary key map.\n     *\n     * @return the primary key map\n     */\n    public Map<String, ColumnMeta> getPrimaryKeyMap() {\n        Map<String, ColumnMeta> pk = new HashMap<>();\n        allIndexes.forEach((key, index) -> {\n            if (index.getIndextype().value() == IndexType.PRIMARY.value()) {\n                for (ColumnMeta col : index.getValues()) {\n                    pk.put(col.getColumnName(), col);\n                }\n            }\n        });\n\n        if (pk.size() < 1) {\n            throw new NotSupportYetException(String.format(\"%s needs to contain the primary key.\", tableName));\n        }\n\n        return pk;\n    }\n\n    /**\n     * Gets case-insensitive primary key set\n     *\n     * @return case-insensitive, unmodifiable primary key set\n     */\n    public Set<String> getCaseInsensitivePKs() {\n        Set<String> pks = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);\n        allIndexes.forEach((key, index) -> {\n            if (index.getIndextype().value() == IndexType.PRIMARY.value()) {\n                for (ColumnMeta col : index.getValues()) {\n                    pks.add(col.getColumnName());\n                }\n            }\n        });\n        if (pks.size() < 1) {\n            throw new NotSupportYetException(String.format(\"%s needs to contain the primary key.\", tableName));\n        }\n        return Collections.unmodifiableSet(pks);\n    }\n\n    /**\n     * Gets primary key only name.\n     *\n     * @return the primary key only name\n     */\n    @SuppressWarnings(\"serial\")\n    public List<String> getPrimaryKeyOnlyName() {\n        List<String> list = new ArrayList<>();\n        for (Entry<String, ColumnMeta> entry : getPrimaryKeyMap().entrySet()) {\n            list.add(entry.getKey());\n        }\n        return list;\n    }\n\n    /**\n     * Gets all the on update columns only name.\n     *\n     * @return all the on update columns only name\n     */\n    public List<String> getOnUpdateColumnsOnlyName() {\n        return allColumns.values().stream()\n                .filter(ColumnMeta::isOnUpdate)\n                .map(ColumnMeta::getColumnName)\n                .collect(Collectors.toList());\n    }\n\n    /**\n     * Gets add escape pk name.\n     *\n     * @param dbType the db type\n     * @return escape pk name list\n     */\n    public List<String> getEscapePkNameList(String dbType) {\n        return ColumnUtils.addEscape(getPrimaryKeyOnlyName(), dbType);\n    }\n\n    /**\n     * Contains pk boolean.\n     *\n     * @param cols the cols\n     * @return the boolean\n     */\n    public boolean containsPK(List<String> cols) {\n        if (cols == null) {\n            return false;\n        }\n\n        List<String> pk = getPrimaryKeyOnlyName();\n        if (pk.isEmpty()) {\n            return false;\n        }\n\n        // at least contain one pk\n        if (cols.containsAll(pk)) {\n            return true;\n        } else {\n            return CollectionUtils.toUpperList(cols).containsAll(CollectionUtils.toUpperList(pk));\n        }\n    }\n\n    @Override\n    public boolean equals(Object o) {\n        if (this == o) {\n            return true;\n        }\n        if (!(o instanceof TableMeta)) {\n            return false;\n        }\n        TableMeta tableMeta = (TableMeta) o;\n        if (!Objects.equals(tableMeta.tableName, this.tableName)) {\n            return false;\n        }\n        if (!Objects.equals(tableMeta.allColumns, this.allColumns)) {\n            return false;\n        }\n        if (!Objects.equals(tableMeta.allIndexes, this.allIndexes)) {\n            return false;\n        }\n        return true;\n    }\n\n    @Override\n    public int hashCode() {\n        int hash = Objects.hashCode(tableName);\n        hash += Objects.hashCode(allColumns);\n        hash += Objects.hashCode(allIndexes);\n        hash += Objects.hashCode(isCaseSensitive);\n        return hash;\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 61,
+          "declaration": "public String getTableName()"
+        },
+        {
+          "line": 70,
+          "declaration": "public void setTableName(String tableName)"
+        },
+        {
+          "line": 79,
+          "declaration": "public String getOriginalTableName()"
+        },
+        {
+          "line": 88,
+          "declaration": "public void setOriginalTableName(String originalTableName)"
+        },
+        {
+          "line": 98,
+          "declaration": "public ColumnMeta getColumnMeta(String colName)"
+        },
+        {
+          "line": 99,
+          "declaration": "return allColumns.get(colName)"
+        },
+        {
+          "line": 107,
+          "declaration": "public Map<String, ColumnMeta> getAllColumns()"
+        },
+        {
+          "line": 116,
+          "declaration": "public Map<String, IndexMeta> getAllIndexes()"
+        },
+        {
+          "line": 125,
+          "declaration": "public boolean isCaseSensitive()"
+        },
+        {
+          "line": 134,
+          "declaration": "public void setCaseSensitive(boolean caseSensitive)"
+        },
+        {
+          "line": 143,
+          "declaration": "public ColumnMeta getAutoIncreaseColumn()"
+        },
+        {
+          "line": 145,
+          "declaration": "for (Entry<String, ColumnMeta> entry : allColumns.entrySet())"
+        },
+        {
+          "line": 147,
+          "declaration": "if (\"YES\".equalsIgnoreCase(col.getIsAutoincrement()))"
+        },
+        {
+          "line": 159,
+          "declaration": "public Map<String, ColumnMeta> getPrimaryKeyMap()"
+        },
+        {
+          "line": 162,
+          "declaration": "if (index.getIndextype().value() == IndexType.PRIMARY.value())"
+        },
+        {
+          "line": 163,
+          "declaration": "for (ColumnMeta col : index.getValues())"
+        },
+        {
+          "line": 164,
+          "declaration": "pk.put(col.getColumnName(), col)"
+        },
+        {
+          "line": 168,
+          "declaration": "if (pk.size() < 1)"
+        },
+        {
+          "line": 170,
+          "declaration": "throw new NotSupportYetException(String.format(\"%s needs to contain the primary key.\", tableName))"
+        },
+        {
+          "line": 181,
+          "declaration": "public Set<String> getCaseInsensitivePKs()"
+        },
+        {
+          "line": 184,
+          "declaration": "if (index.getIndextype().value() == IndexType.PRIMARY.value())"
+        },
+        {
+          "line": 185,
+          "declaration": "for (ColumnMeta col : index.getValues())"
+        },
+        {
+          "line": 186,
+          "declaration": "pks.add(col.getColumnName())"
+        },
+        {
+          "line": 190,
+          "declaration": "if (pks.size() < 1)"
+        },
+        {
+          "line": 191,
+          "declaration": "throw new NotSupportYetException(String.format(\"%s needs to contain the primary key.\", tableName))"
+        },
+        {
+          "line": 193,
+          "declaration": "return Collections.unmodifiableSet(pks)"
+        },
+        {
+          "line": 202,
+          "declaration": "public List<String> getPrimaryKeyOnlyName()"
+        },
+        {
+          "line": 204,
+          "declaration": "for (Entry<String, ColumnMeta> entry : getPrimaryKeyMap().entrySet())"
+        },
+        {
+          "line": 205,
+          "declaration": "list.add(entry.getKey())"
+        },
+        {
+          "line": 215,
+          "declaration": "public List<String> getOnUpdateColumnsOnlyName()"
+        },
+        {
+          "line": 216,
+          "declaration": "return allColumns.values().stream()\n                .filter(ColumnMeta::isOnUpdate)\n                .map(ColumnMeta::getColumnName)\n                .collect(Collectors.toList())"
+        },
+        {
+          "line": 228,
+          "declaration": "public List<String> getEscapePkNameList(String dbType)"
+        },
+        {
+          "line": 229,
+          "declaration": "return ColumnUtils.addEscape(getPrimaryKeyOnlyName(), dbType)"
+        },
+        {
+          "line": 238,
+          "declaration": "public boolean containsPK(List<String> cols)"
+        },
+        {
+          "line": 239,
+          "declaration": "if (cols == null)"
+        },
+        {
+          "line": 244,
+          "declaration": "if (pk.isEmpty())"
+        },
+        {
+          "line": 249,
+          "declaration": "if (cols.containsAll(pk))"
+        },
+        {
+          "line": 252,
+          "declaration": "return CollectionUtils.toUpperList(cols).containsAll(CollectionUtils.toUpperList(pk))"
+        },
+        {
+          "line": 257,
+          "declaration": "public boolean equals(Object o)"
+        },
+        {
+          "line": 258,
+          "declaration": "if (this == o)"
+        },
+        {
+          "line": 261,
+          "declaration": "if (!(o instanceof TableMeta))"
+        },
+        {
+          "line": 265,
+          "declaration": "if (!Objects.equals(tableMeta.tableName, this.tableName))"
+        },
+        {
+          "line": 268,
+          "declaration": "if (!Objects.equals(tableMeta.allColumns, this.allColumns))"
+        },
+        {
+          "line": 271,
+          "declaration": "if (!Objects.equals(tableMeta.allIndexes, this.allIndexes))"
+        },
+        {
+          "line": 278,
+          "declaration": "public int hashCode()"
+        }
+      ],
+      "state": "PARTIAL",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "remaining_gap": "Default OS/process Locale bootstrap, getEscapePkNameList/SPI, SqlServer subtype equals and full Map views/default methods remain open;19 native mirrors locally passed, Java differential not yet qualified",
+      "verification_level": "LOCAL_UNQUALIFIED"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/TableMetaCache.java",
+      "java_type": "org.apache.seata.sqlparser.struct.TableMetaCache",
+      "rust": "crates/seata_sqlparser/src/struct/table_meta_cache.rs",
+      "rust_type": "TableMetaCache",
+      "sha256": "3a6ca805fb861dfaddb6c8621bfb430e784798bc67d32f2afa205e3052aab6da",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.struct;\n\nimport java.sql.Connection;\n\n/**\n * The type Table meta cache.\n *\n */\npublic interface TableMetaCache {\n\n    /**\n     * Gets table meta.\n     *\n     * @param connection the connection\n     * @param tableName  the table name\n     * @param resourceId the resource id\n     * @return the table meta\n     */\n    TableMeta getTableMeta(Connection connection, String tableName, String resourceId);\n\n    /**\n     * Clear the table meta cache\n     *\n     * @param connection the connection\n     * @param resourceId the resource id\n     */\n    void refresh(Connection connection, String resourceId);\n}\n",
+      "declarations": [
+        {
+          "line": 35,
+          "declaration": "TableMeta getTableMeta(Connection connection, String tableName, String resourceId)"
+        },
+        {
+          "line": 43,
+          "declaration": "void refresh(Connection connection, String resourceId)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/util/ColumnUtils.java",
+      "java_type": "org.apache.seata.sqlparser.util.ColumnUtils",
+      "rust": "crates/seata_sqlparser/src/util/column_utils.rs",
+      "rust_type": "ColumnUtils",
+      "sha256": "6e2b6e1060c0e598d4e93748d899332a4609cbf65c71d22073d705edea05a230",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.util;\n\nimport org.apache.seata.common.util.CollectionUtils;\nimport org.apache.seata.common.util.StringUtils;\nimport org.apache.seata.sqlparser.EscapeHandler;\nimport org.apache.seata.sqlparser.EscapeHandlerFactory;\nimport org.apache.seata.sqlparser.struct.TableMeta;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/**\n * column utils\n *\n */\npublic final class ColumnUtils {\n\n    /**\n     * del escape by db type\n     *\n     * @param cols   the cols\n     * @param dbType the db type\n     * @return list\n     */\n    public static List<String> delEscape(List<String> cols, String dbType) {\n        if (CollectionUtils.isEmpty(cols)) {\n            return cols;\n        }\n        List<String> newCols = new ArrayList<>(cols.size());\n        for (int i = 0, len = cols.size(); i < len; i++) {\n            String col = cols.get(i);\n            col = delEscape(col, dbType);\n            newCols.add(col);\n        }\n        return newCols;\n    }\n\n    /**\n     * del escape by escape\n     *\n     * @param colName the column name\n     * @param dbType  the dbType\n     * @return string string\n     */\n    public static String delEscape(String colName, String dbType) {\n        EscapeHandler escapeHandler = EscapeHandlerFactory.getEscapeHandler(dbType);\n        return escapeHandler.delColNameEscape(colName);\n    }\n\n    /**\n     * if necessary, add escape by db type\n     * <pre>\n     * mysql:\n     *   only deal with keyword.\n     * postgresql:\n     *   only deal with keyword, contains uppercase character.\n     * oracle:\n     *   only deal with keyword, not full uppercase character.\n     * </pre>\n     *\n     * @param cols   the column name list\n     * @param dbType the db type\n     * @return list list\n     */\n    public static List<String> addEscape(List<String> cols, String dbType) {\n        if (CollectionUtils.isEmpty(cols)) {\n            return cols;\n        }\n        List<String> newCols = new ArrayList<>(cols.size());\n        for (int i = 0, len = cols.size(); i < len; i++) {\n            String col = cols.get(i);\n            col = addEscape(col, dbType);\n            newCols.add(col);\n        }\n        return newCols;\n    }\n\n    /**\n     * if necessary, add escape\n     *\n     * @param colName the column name\n     * @param dbType  the dbType\n     * @return colName\n     */\n    public static String addEscape(String colName, String dbType) {\n        return addEscape(colName, dbType, null);\n    }\n\n    /**\n     * if necessary, add escape\n     *\n     * @param colName the column name\n     * @param dbType  the dbType\n     * @param tableMeta  the tableMeta\n     * @return colName\n     */\n    public static String addEscape(String colName, String dbType, TableMeta tableMeta) {\n        if (StringUtils.isBlank(colName)) {\n            return colName;\n        }\n        EscapeHandler escapeHandler = EscapeHandlerFactory.getEscapeHandler(dbType);\n        return escapeHandler.addColNameEscape(colName, tableMeta);\n    }\n}\n",
+      "declarations": [
+        {
+          "line": 41,
+          "declaration": "public static List<String> delEscape(List<String> cols, String dbType)"
+        },
+        {
+          "line": 42,
+          "declaration": "if (CollectionUtils.isEmpty(cols))"
+        },
+        {
+          "line": 46,
+          "declaration": "for (int i = 0, len = cols.size()"
+        },
+        {
+          "line": 49,
+          "declaration": "newCols.add(col)"
+        },
+        {
+          "line": 61,
+          "declaration": "public static String delEscape(String colName, String dbType)"
+        },
+        {
+          "line": 63,
+          "declaration": "return escapeHandler.delColNameEscape(colName)"
+        },
+        {
+          "line": 81,
+          "declaration": "public static List<String> addEscape(List<String> cols, String dbType)"
+        },
+        {
+          "line": 82,
+          "declaration": "if (CollectionUtils.isEmpty(cols))"
+        },
+        {
+          "line": 86,
+          "declaration": "for (int i = 0, len = cols.size()"
+        },
+        {
+          "line": 89,
+          "declaration": "newCols.add(col)"
+        },
+        {
+          "line": 101,
+          "declaration": "public static String addEscape(String colName, String dbType)"
+        },
+        {
+          "line": 102,
+          "declaration": "return addEscape(colName, dbType, null)"
+        },
+        {
+          "line": 113,
+          "declaration": "public static String addEscape(String colName, String dbType, TableMeta tableMeta)"
+        },
+        {
+          "line": 114,
+          "declaration": "if (StringUtils.isBlank(colName))"
+        },
+        {
+          "line": 118,
+          "declaration": "return escapeHandler.addColNameEscape(colName, tableMeta)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/util/DbTypeParser.java",
+      "java_type": "org.apache.seata.sqlparser.util.DbTypeParser",
+      "rust": "crates/seata_sqlparser/src/util/db_type_parser.rs",
+      "rust_type": "DbTypeParser",
+      "sha256": "f11ead82e613b2fd61d803773ec41fa1da0c8aa225e8ce7d41528b13caace7bb",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.util;\n\npublic interface DbTypeParser {\n    String parseFromJdbcUrl(String jdbcUrl);\n}\n",
+      "declarations": [
+        {
+          "line": 20,
+          "declaration": "String parseFromJdbcUrl(String jdbcUrl)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/util/JdbcConstants.java",
+      "java_type": "org.apache.seata.sqlparser.util.JdbcConstants",
+      "rust": "crates/seata_sqlparser/src/util/jdbc_constants.rs",
+      "rust_type": "JdbcConstants",
+      "sha256": "8e953e38dc6319650fc774887d2f83260e1bf7590fa730a3e85623e858e8a592",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser.util;\n\npublic interface JdbcConstants {\n\n    String ORACLE = \"oracle\";\n\n    String MYSQL = \"mysql\";\n\n    String DB2 = \"db2\";\n\n    String H2 = \"h2\";\n\n    String MARIADB = \"mariadb\";\n\n    String POSTGRESQL = \"postgresql\";\n\n    String SQLSERVER = \"sqlserver\";\n\n    String JTDS = \"jtds\";\n\n    String HSQL = \"hsql\";\n\n    String SYBASE = \"sybase\";\n\n    String DERBY = \"derby\";\n\n    String HBASE = \"hbase\";\n\n    String HIVE = \"hive\";\n\n    String DM = \"dm\";\n\n    String KINGBASE = \"kingbase\";\n\n    String GBASE = \"gbase\";\n\n    String XUGU = \"xugu\";\n\n    String OCEANBASE = \"oceanbase\";\n\n    String OCEANBASE_ORACLE = \"oceanbase_oracle\";\n\n    String INFORMIX = \"informix\";\n\n    String ODPS = \"odps\";\n\n    String TERADATA = \"teradata\";\n\n    String LOG4JDBC = \"log4jdbc\";\n\n    String PHOENIX = \"phoenix\";\n\n    String EDB = \"edb\";\n\n    String KYLIN = \"kylin\";\n\n    String SQLITE = \"sqlite\";\n\n    String PRESTO = \"presto\";\n\n    String ELASTIC_SEARCH = \"elastic_search\";\n\n    String CLICKHOUSE = \"clickhouse\";\n\n    String KDB = \"kdb\";\n\n    String POLARDB = \"polardb\";\n\n    String POLARDBX = \"polardb-x\";\n\n    String OSCAR = \"oscar\";\n}\n",
+      "declarations": [],
+      "state": "IMPLEMENTED",
+      "dependency_stage": "values",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof",
+      "evidence": "verification/locale-result.json",
+      "rust_sha256": "a522c56a92061f7399d95faa5925ee3620580913ac6f30d9b5df601a14f31c69",
+      "verification_level": "V3_GOLDEN_DIFF"
+    },
+    {
+      "java": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/WhereRecognizer.java",
+      "java_type": "org.apache.seata.sqlparser.WhereRecognizer",
+      "rust": "crates/seata_sqlparser/src/where_recognizer.rs",
+      "rust_type": "WhereRecognizer",
+      "sha256": "b53d5d62617b19b0ad8d45a5929e30ef68a5b10924e89e6b738fca73902eb643",
+      "source": "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.seata.sqlparser;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/**\n * The interface Where recognizer.\n *\n */\npublic interface WhereRecognizer extends SQLRecognizer {\n\n    /**\n     * Gets where condition.\n     *\n     * @param parametersHolder  the parameters holder\n     * @param paramAppenderList the param appender list\n     * @return the where condition\n     */\n    String getWhereCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList);\n\n    /**\n     * Gets where condition.\n     *\n     * @return the where condition\n     */\n    String getWhereCondition();\n\n    /**\n     * Gets limit condition\n     *\n     * @return the limit condition\n     */\n    String getLimitCondition();\n\n    /**\n     * Gets limit condition\n     * @param parametersHolder the parameters holder\n     * @param paramAppenderList the param appender list\n     * @return the limit condition\n     */\n    String getLimitCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList);\n\n    /**\n     * Gets order by condition.\n     *\n     * @return the order by condition\n     */\n    String getOrderByCondition();\n\n    /**\n     * Gets order by condition.\n     * @param parametersHolder the parameters holder\n     * @param paramAppenderList the param appender list\n     * @return the order by condition\n     */\n    String getOrderByCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList);\n}\n",
+      "declarations": [
+        {
+          "line": 35,
+          "declaration": "String getWhereCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList)"
+        },
+        {
+          "line": 42,
+          "declaration": "String getWhereCondition()"
+        },
+        {
+          "line": 49,
+          "declaration": "String getLimitCondition()"
+        },
+        {
+          "line": 57,
+          "declaration": "String getLimitCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList)"
+        },
+        {
+          "line": 64,
+          "declaration": "String getOrderByCondition()"
+        },
+        {
+          "line": 72,
+          "declaration": "String getOrderByCondition(ParametersHolder parametersHolder, ArrayList<List<Object>> paramAppenderList)"
+        }
+      ],
+      "state": "MISSING",
+      "dependency_stage": "remaining",
+      "reference_nullability": "Java references allow null; no @NonNull contract inferred",
+      "inventory_method": "lexical signatures plus complete literal source; not AST coverage proof"
+    }
+  ],
+  "cases": [
+    {
+      "id": "org.apache.seata.sqlparser.EscapeSymbolTest#testGetLeftSymbol",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/EscapeSymbolTest.java",
+      "source_sha256": "1a5391da243850c2e376aaf273bbe4911db308a02603e2a7b189b148d3a7c068",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/EscapeSymbolTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#escape_left_symbol",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.EscapeSymbolTest#testGetRightSymbol",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/EscapeSymbolTest.java",
+      "source_sha256": "1a5391da243850c2e376aaf273bbe4911db308a02603e2a7b189b148d3a7c068",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/EscapeSymbolTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#escape_right_symbol",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.SQLParsingExceptionTest#testConstructorWithMessage",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "source_sha256": "e570e08a1ef2058c5b88f76fd1e412ffc163c19ba84956da80fd1e1e259ba4d2",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#exception_message",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.SQLParsingExceptionTest#testConstructorWithMessageAndCause",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "source_sha256": "e570e08a1ef2058c5b88f76fd1e412ffc163c19ba84956da80fd1e1e259ba4d2",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#exception_message_and_cause",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.SQLParsingExceptionTest#testConstructorWithCause",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "source_sha256": "e570e08a1ef2058c5b88f76fd1e412ffc163c19ba84956da80fd1e1e259ba4d2",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#exception_cause",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.SQLTypeTest#testValue",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "source_sha256": "2e5d4c2341fd2730ae9fa3661f64ddc3683fd3a932675e2c4fb7bfa286ba2697",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#sql_type_value",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.SQLTypeTest#testValueOf",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "source_sha256": "2e5d4c2341fd2730ae9fa3661f64ddc3683fd3a932675e2c4fb7bfa286ba2697",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#sql_type_value_of",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.SQLTypeTest#testValueOfInvalid",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "source_sha256": "2e5d4c2341fd2730ae9fa3661f64ddc3683fd3a932675e2c4fb7bfa286ba2697",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#sql_type_invalid",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testEqualsAndHashCode",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#equals_and_hash_code",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testAutoincrement",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#autoincrement",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testGetTableCat",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#get_table_cat",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetColumnName",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_column_name",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetDataType",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_data_type",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetDataTypeName",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_data_type_name",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetColumnSize",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_column_size",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetDecimalDigits",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_decimal_digits",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetNumPrecRadix",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_num_prec_radix",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetNullAble",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_null_able",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetRemarks",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_remarks",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetColumnDef",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_column_def",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetSqlDataType",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_sql_data_type",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetSqlDatetimeSub",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_sql_datetime_sub",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetCharOctetLength",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_char_octet_length",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetOrdinalPosition",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_ordinal_position",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetIsOnUpdate",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_on_update",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.ColumnMetaTest#testSetGetIsCaseSensitive",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "source_sha256": "8de598f74999153e08dcfdb07d1369beb6bcdf484ca26aca732679fd66d5a44d",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/column_meta.rs#set_get_case_sensitive",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetValues",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_values",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testIsSetNonUnique",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#is_set_non_unique",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetIndexQualifier",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_index_qualifier",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetIndexName",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_index_name",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetType",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_type",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetAscOrDesc",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_asc_or_desc",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetCardinality",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_cardinality",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetOrdinalPosition",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_ordinal_position",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testGetSetIndextype",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#get_set_indextype",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testEqualsSameObject",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#equals_same_object",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testEqualsNullObject",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#equals_null_object",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testEqualsDifferentType",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#equals_different_type",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testEqualsIdenticalObjects",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#equals_identical_objects",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testEqualsDifferentObjects",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#equals_different_objects",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testHashCodeConsistency",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#hash_code_consistency_original_column_assertions",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexMetaTest#testHashCodeDifference",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "source_sha256": "1e00aae63b4752a75a5c8739b894b4ff09b9d15ff9f45ec8ff2f7c29a4b966fc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/index_meta.rs#hash_code_difference_original_column_assertions",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexTypeTest#testValue",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "source_sha256": "958aa4a8b6f249791d7c1f5d6d8a988e3f38d88e6376a43c97b131ca19b5a9bc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#index_type_value",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexTypeTest#testValueOf",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "source_sha256": "958aa4a8b6f249791d7c1f5d6d8a988e3f38d88e6376a43c97b131ca19b5a9bc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#index_type_value_of",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.IndexTypeTest#testInvalidValueOf",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "source_sha256": "958aa4a8b6f249791d7c1f5d6d8a988e3f38d88e6376a43c97b131ca19b5a9bc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#index_type_invalid",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.NotPlaceHolderExprTest#testGet",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java",
+      "source_sha256": "3223f807d9cf108b00bdeba1d39f5ff8cd0be48d8251fa0d54ee7af2a74c253a",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#not_placeholder_get",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.NotPlaceHolderExprTest#testToString",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java",
+      "source_sha256": "3223f807d9cf108b00bdeba1d39f5ff8cd0be48d8251fa0d54ee7af2a74c253a",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#not_placeholder_string",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.NullTest#testGet",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NullTest.java",
+      "source_sha256": "29ce65bd1867eeab1ff2325efe8f9028d7adf8fb8dc25d5765b6a9e3b8f7b3b8",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/NullTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#null_get",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.NullTest#testToString",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NullTest.java",
+      "source_sha256": "29ce65bd1867eeab1ff2325efe8f9028d7adf8fb8dc25d5765b6a9e3b8f7b3b8",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/NullTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#null_string",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlDefaultExprTest#testGet",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java",
+      "source_sha256": "270947c8a0580385f73d8c5d764a0ee527f8e349800762a5990676605dece109",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#default_get",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlDefaultExprTest#testToString",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java",
+      "source_sha256": "270947c8a0580385f73d8c5d764a0ee527f8e349800762a5990676605dece109",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#default_string",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlMethodExprTest#testGet",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java",
+      "source_sha256": "9dcc06c8ab8ce09f7d7ee91c38d9528017f3b19fb317bc009fa1996d7610802b",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#method_get",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlMethodExprTest#testToString",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java",
+      "source_sha256": "9dcc06c8ab8ce09f7d7ee91c38d9528017f3b19fb317bc009fa1996d7610802b",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#method_string",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlSequenceExprTest#testDefaultConstructor",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "source_sha256": "a9697c3189d127eb702ca2930422607769582d544babfb35b4313d6f445b9d22",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#sequence_default",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlSequenceExprTest#testParameterizedConstructor",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "source_sha256": "a9697c3189d127eb702ca2930422607769582d544babfb35b4313d6f445b9d22",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#sequence_constructor",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlSequenceExprTest#testSetGetSequence",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "source_sha256": "a9697c3189d127eb702ca2930422607769582d544babfb35b4313d6f445b9d22",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#sequence_set_sequence",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.SqlSequenceExprTest#testSetGetFunction",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "source_sha256": "a9697c3189d127eb702ca2930422607769582d544babfb35b4313d6f445b9d22",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "state": "MIRRORED",
+      "differential": "MATCH",
+      "target": "crates/seata_test/tests/core_values.rs#sequence_set_function",
+      "evidence": "verification/locale-source-diff.json"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testSetGetTableName",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testSetGetCaseSensitive",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetColumnMeta",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetAllColumns",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetAllIndexes",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetPrimaryKeyMap",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetPrimaryKeyMapNoPrimaryKey",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetCaseInsensitivePKs",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetCaseInsensitivePKsNoPrimaryKey",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetPrimaryKeyOnlyName",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetOnUpdateColumnsOnlyName",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testGetOnUpdateColumnsOnlyNameNoUpdates",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testContainsPKWithNullList",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testContainsPKWithNoPrimaryKey",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testContainsPKWithExactMatch",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testContainsPKWithCaseInsensitiveMatch",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testContainsPKWithNoMatch",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testEquals",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    },
+    {
+      "id": "org.apache.seata.sqlparser.struct.TableMetaTest#testHashCode",
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "source_sha256": "2433d8bb0d4bc08923563e958527203f9f9c7eb30430eb33bffcb95bf7bd71cc",
+      "immutable_copy": "crates/seata_test/tests/fixtures/sqlparser_core/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "state": "MISSING",
+      "differential": "NOT_RUN"
+    }
+  ],
+  "module_complete": false,
+  "object_states": {
+    "IMPLEMENTED": 13,
+    "PARTIAL": 1,
+    "MISSING": 17
+  },
+  "source_cases_MATCH": 57,
+  "source_cases_MISSING": 19,
+  "current_gate": "../evidence/sqlparser-locale-gate/run_20261118_052535_fb6c7ec8",
+  "current_catalog_sha256": "c411a512731f65f154c5767bbb3b015af1ee14156537497eed4c4ab232cb34e9",
+  "Rust_extensions": [
+    "JavaString",
+    "JavaThrowable",
+    "JavaObject",
+    "MetadataError",
+    "InvalidEnumValue",
+    "ColumnList",
+    "JavaObjectError",
+    "CaseInsensitivePkSet",
+    "JdkCasing"
+  ],
+  "compatibility_inputs": [
+    {
+      "path": "crates/seata_sqlparser/src/data/java17_character_case.bin",
+      "sha256": "697ffa430e952fc54bdb9c38d1408888152352ee328613c7cd1609e9aa21ef3a",
+      "records": 2799,
+      "role": "INPUT_NOT_RESULT",
+      "source": "JDK17.0.12 Character simple upper/lower; not Locale String casing"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/data/jdk17_string_casing_input.bin",
+      "sha256": "512f70e384a4dcfa9d90ea83be83da205aca262f2d85c7cd74cd9e76eb4e9c7f",
+      "role": "INPUT_NOT_RESULT",
+      "record_count": 5004,
+      "source": "Actual fixed JDK17.0.12, not host Rust Unicode"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/data/jdk17_word_root_input.bin",
+      "sha256": "4eae069b2c210af13da9e9a94982ee0f8d4e4fe59793619ab5574c4a0b6cdc2a",
+      "role": "INPUT_NOT_RESULT",
+      "record_count": null,
+      "source": "Actual fixed JDK17.0.12, not host Rust Unicode"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/data/jdk17_word_th_input.bin",
+      "sha256": "2d24dd58b86b098cd301c3b2416390b12ea498dcf2fb5786f0dfc088281f0ac0",
+      "role": "INPUT_NOT_RESULT",
+      "record_count": null,
+      "source": "Actual fixed JDK17.0.12, not host Rust Unicode"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/data/jdk17_word_th_dictionary_input.bin",
+      "sha256": "5568f8cd983c12a7d2f0da68526c7ee222821ea0839b7b0df53da1ef14dd9290",
+      "role": "INPUT_NOT_RESULT",
+      "record_count": null,
+      "source": "Actual fixed JDK17.0.12, not host Rust Unicode"
+    }
+  ],
+  "Rust_private_dependencies": [
+    "CompatibilityDataReader",
+    "JdkCharacterCategories",
+    "JdkWordDictionary",
+    "JdkWordProfile",
+    "Utf16Cursor"
+  ],
+  "implementation_in_progress": "TableMeta19 original mirrors locally green; source cases remain57 verified/19 MISSING until original Java differential gate"
+}

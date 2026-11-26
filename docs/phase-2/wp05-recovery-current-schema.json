@@ -1,0 +1,105 @@
+{
+  "status": "CURRENT_RECOVERY_SCHEMA_REVALIDATED_BEFORE_ARBITRATION_AND_CONTROL",
+  "mysql": "8.4.13",
+  "image": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+  "rust": {
+    "1.99": {
+      "workspace_passed": 635,
+      "ignored": 196,
+      "live_passed": {
+        "live_commit_preconditions": 13,
+        "live_first_phase_preparation": 11,
+        "live_rm_recovery": 11,
+        "live_commit_direction": 1
+      },
+      "strict_clippy": true
+    },
+    "1.85": {
+      "workspace_passed": 635,
+      "ignored": 196,
+      "live_passed": {
+        "live_commit_preconditions": 13,
+        "live_first_phase_preparation": 11,
+        "live_rm_recovery": 11,
+        "live_commit_direction": 1
+      },
+      "strict_clippy": true
+    }
+  },
+  "red": {
+    "business_after_rollback": 0,
+    "undo_after_rollback": 0,
+    "false_first_phase_witness": 1,
+    "phase": 0,
+    "terminal": 0,
+    "engine": "MyISAM"
+  },
+  "coverage": [
+    "Seven late unsafe recovery definitions rejected before writes; original receipt retained, business/Undo/witness/trigger side effect zero",
+    "Valid migration 003 to 004 after old snapshot rejected instead of changing prepared capability",
+    "Original MDL plus fresh same-authentication/TLS metadata transaction, UUID/schema equality, no user-data writes",
+    "Central commit precondition, recovery control and independent first-phase observation entrances guarded",
+    "Existing cancellation, deadline, callback ordering, recovery atomicity and child-process regressions retained"
+  ],
+  "limits": [
+    "One extra out-of-pool connection per active recovery validation",
+    "Queued DDL can cause safe original-deadline failure",
+    "Stable single-primary routing required",
+    "Controlled protocol peer tests do not replace real Java TC validation"
+  ],
+  "remaining": [
+    "Original WP05 and WP06/full plan gates",
+    "Public first-phase COMMIT and original TC lock safety"
+  ],
+  "sha256": {
+    "Cargo.lock": "21459760f5f3338182baa1feafe023d4b96a7c61303236a7ad8e7609d603ff97",
+    "crates/seata_db_mysql/src/connection_proxy.rs": "aed3fb3f32af4923e16632f9af1d4518908d8a4e2b15584251e5de277b37bd4a",
+    "crates/seata_db_mysql/src/current_table_constraints.rs": "e188ab8ee26c85f62c9dc08868f3da180d3e728ce9208320498e76fdbb152d98",
+    "crates/seata_db_mysql/src/data_source_manager.rs": "57ec1a7ec310618a70dee4960be95c2ff69d9a2c109e8a02f2aef12f22d810f8",
+    "crates/seata_db_mysql/src/rm_branch_store.rs": "adbef9d5162505a382f4b28e3b4d48e8dc7deb20363cfbd59ed5ecb021b1bfd6",
+    "crates/seata_db_mysql/tests/live_commit_preconditions.rs": "29e2dbfa902d6ff1ca72fbcab95e9d382a1d8e7ae9ac9da5846cbeaa6268ce22",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-child-build.log": "c14697f2a5b51311faa88e97ef0639f6b3c129e107f24fd184b69b02b349d6e4",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-clippy.log": "190764f9567c5f47589561de71698870a02c77979e2c9da60fbfbdb99da022f2",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-first-preparation-fixture-conflict.log": "8d426baa8785e77b1eb0ccf7fdb81821ee5207adf0dc688d875a8f00bd0e5b3d",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_commit_direction-output-path.txt": "3a0cfe1146c30b99461e0b0ffbf508e7dbce066ef5fe07ffeaabb34c625c99d6",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_commit_direction.log": "296c3f307702c997979f68a96847736eb1d10115944a4488d1a03b5686b5a0ac",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_commit_preconditions-output-path.txt": "9de0170695636ac31f002973bf083441c5f141d29ed9c5fc854990e5043c71c4",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_commit_preconditions.log": "a2b616cc30cbcb47acf1577c4646e83bb020d61b6e4feafa81aed7545e9c3c21",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_first_phase_preparation-output-path.txt": "157c189152f467455955347781ace1c315792d94ce9ee547d84ef48feefa61be",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_first_phase_preparation.log": "39d9d05ac03406e15388bae980650a2321a0b4b4a9a9af50f7bdd318c0df3955",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_rm_recovery-output-path.txt": "b3cc1024f121a9e07aba8d375b5ad6eab5ec01f67feb15bcbc9652393d59f271",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-live_rm_recovery.log": "d79fd844ab90d25185ae6fea88cdb161d79448711ba14cb3fff1e3edb7081d80",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.85-workspace.log": "cd1fc0296b27b23ca3289e89c34395a5503403b410765857d1e3a8ca628f8749",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-child-build.log": "47c30f2ae30ea54bb7cf02b1bb4425777989956303f22e8ddbf539092412d71a",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-clippy.log": "f29e547356aa74f6f0b728db0b5e3400fdb90c980771175afa1b7f1d176dec50",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_commit_direction-output-path.txt": "5342a11fad370400fa553aa0d1bca32c89ac717473447348091566c0bc8a861e",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_commit_direction.log": "84ff5ae27ed32cdf79191a3e263975963e66183adb9c0f88653cb081b1eaf5ce",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_commit_preconditions-output-path.txt": "2cd94db1768d4aa07be22b4d40f592375cf8951540cbd7459adc0c6fef24aa97",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_commit_preconditions.log": "6dfbab2e2a757120142678850ed5e45708284f7b2e2f98880ff111df446aaf5a",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_first_phase_preparation-output-path.txt": "9bfcc82fdc807f379512765e270693dfbdaf9bd7a60259a7a4e1cf2ffa14fe49",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_first_phase_preparation.log": "aa43d1623baa735ab7383c5b999935f94b51d74d175d47b26420d7efdb514892",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_rm_recovery-output-path.txt": "246a3df7ef3be18c1c5c7b9333acb73a305e1d04a6fd91a6d5264743cb530c70",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-live_rm_recovery.log": "3da3fd6d185348c4e9d26733488d8a5951e7e20ac69216fdff0c859d00bacb20",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-recovery.log": "d97ce0a7ed483a69919692b9bbe0ca7dc9b06ea65b515e827cd2b6b7b314c082",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/1.99-workspace.log": "e2d5005db4840f3997952c05c042383bafdfa02086256ec6e9f29a436a7a52b9",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/cleanup-runtime.sh": "e14600c17a9f0b800909769af056730d218865398dd0f6bd88e38650b1744fd7",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/cleanup.log": "06749cea718bb5365019ff169a3ec58ca993bd0170ef1a15e42d815eefbae969",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/cleanup.ps1": "98115729abf040d15302fc2bcdd52f2a3068572fb33afeb4bd3fc2ef589dff42",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/image.log": "b615e6c146eeb2eeb4d36e3af6d33278a8823d4f0a7e0ec0137dc5d9f85911f6",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/independent-server.log": "e8df30dbc7a412fb8849a2c17937047bc00752ae4a2da397156535754d395a15",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/README.md": "1cd2456acff9ad47339465f07001d34a04d7864e3e1260d776eb43fb3616a85b",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/red-database.log": "7b64c90d7ce28a6f1f4fa7892da5a07030e94f87cc030dbad5f09be08838c9b9",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/red.log": "625e7bf4748ce165f6b4152f9463b0e5bb6c62f0bcaab83bbf3f7f9d96fe43f1",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/reset-fixture-user.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/resume-msrv.ps1": "451df470c7972d7101b6f7cd095088fc90d3b2c44b88487134d0bab34a80f502",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/review.md": "cf29f9114d7ca6e83e974166335e18b6ebb4297a155675cef994300186077ca6",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/run-live.ps1": "821fc6c305ce542a936ebb3471f167d875e7f87a8b8a524a0c2fc3543292a418",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/run-workspace.ps1": "13f634f3acdd3eb0fad2afc113ea669460819bd4c26c56bf430f8052df835422",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/runtime.log": "a781b2f0228d3909952aeba5395e90932cb99327a7ef14364e7dc90a93cbb1e7",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/start-runtime.sh": "b4cefc399ecd6cd692ddd1719124a4017712ab8436c1da3c9f8cf286caa220f6",
+    "docs/phase-2/evidence/mysql-recovery-current-schema/verify.py": "f4ee316cf67b46a88ee1d5428338513094cb0387ff43b85746b233387128cf19",
+    "docs/phase-2/mysql-commit-preconditions-contract.md": "d155765f0afeea8ccb241c8ca64d9147735e92fab8edc8bab3a42a4107334c77"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "status": "FASTJSON2_INTERNAL_CONTROL_TRANSACTION_ROUTING_VERIFIED_OFFLINE",
+  "predecessor": "docs/phase-2/wp05-fastjson2-undo-physical.json",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "rust": {
+    "1.99": {
+      "ordinary": 588,
+      "ignored": 173,
+      "doc": 4,
+      "harnesses": 119,
+      "dispatch_tests": 2,
+      "strict_clippy": true,
+      "live_test": "compiled and ignored"
+    },
+    "1.85": {
+      "ordinary": 588,
+      "ignored": 173,
+      "doc": 4,
+      "harnesses": 119,
+      "dispatch_tests": 2,
+      "strict_clippy": true,
+      "live_test": "compiled and ignored"
+    }
+  },
+  "evidence_dir": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_fastjson2_control",
+  "evidence_sha256": {
+    "1.85-clippy.log": "8b5b4f4a565cb5e3ea97ace628bb9c5503a63abe665627a764d9b3e6ec9bf6d7",
+    "1.85-dispatch.log": "b02888ad4277cb9a5f97d61c00fd72c2f713dba9fcf858bf3ad904ed2f7922f2",
+    "1.85-doc.log": "968f6bc9cebb18e518371769fca4da230a3a897cea8b31e67401016e2e6d7126",
+    "1.85-lib-tests-list.log": "e73d039ad4e34855670acb90567a6ac354431f9cb4d0b27dbceacd331ad6f333",
+    "1.85-targeted.log": "19da7a47a01391c0c2fb7eb0d46c12e5fec29df36bcb9c6ffdb34366c86ee050",
+    "1.85-tests.log": "b48fc3ec4a5cd21acd156e403139c8a2cd795a45b3fb21ccfef961a86b3d0019",
+    "1.99-clippy.log": "a9e9fe02ec0d6dc2fc14fd22221b46a832eb2675428d2ec51c77987481c7f0a3",
+    "1.99-dispatch.log": "35ad6161e427b253d3fb24d84d13aa739d50b6d008c2c3e4752fc9f04b6b171f",
+    "1.99-doc.log": "e32a19745031a9f7f6abc3f872d4b116cab0a40057f4bcccf90cb1bd47e858e1",
+    "1.99-lib-tests-list.log": "fb0a9c6eccdf1de23c251df79d87c1756a6440abb00dae6a3b26ba66e89ed391",
+    "1.99-targeted.log": "2c2ce2031d1bccb6c3ef1ee7edb782e56727d88f56804f0d3e98dddd376b50c0",
+    "1.99-tests.log": "57b0cd5de6f16e8419696d76c7432642f983e654062735db52f40783361d6098",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335"
+  },
+  "source_inputs_sha256": {
+    "crates/seata_at/src/lib.rs": "786eb5b010e8e15b9a7145e875ef36f5e2c081d3ea3bc9d52c9518bfde4972b0",
+    "crates/seata_at/src/undo/mod.rs": "483eb5e1dc90cbed7ad9923f81fd26f1ee92009f604952601ec156b88e0328b7",
+    "crates/seata_at/src/undo/parser/mod.rs": "841f27674320eff47873732e924b8f82f978754b51fabc93d3f31c58c1989de1",
+    "crates/seata_at/src/undo/parser/fastjson2_undo_document.rs": "600eb76157e06e1fddeca3677f221636fe090bfff65f54a7f82b9cf261d5c551",
+    "crates/seata_at/src/undo/parser/fastjson2_undo_log_parser.rs": "b070ee176b732033d1fad497440a83d000687d82c3f87494d11a37d67a39dce1",
+    "crates/seata_at/tests/fastjson_undo_native.rs": "165f7f08447cb5632a0bde781d2982a9b980db7d64200f215274bff32ee8ca73",
+    "crates/seata_at/tests/fixtures/fastjson2_native_wire.bin": "8198f20319f0262f91b9ad7bcc20954dac709f4ae631c80e3922b98c87918b25",
+    "crates/seata_db_mysql/src/undo/undo_serializer.rs": "e7397d0c10acb142159e530019da6ae429fada24ab937982e9fcf9f6c77507e7",
+    "crates/seata_db_mysql/src/undo/rollback_undo_document.rs": "b935a6bd19874f9b93ef7a6d0c6cd2f97b0ffd645fe8737cf1f97bda245b9706",
+    "crates/seata_db_mysql/src/undo/rollback_undo_document_tests.rs": "bb65e61dd759b289eab5b1ce33d4854e5871cdadd3437d817e42af33163eb6f2",
+    "crates/seata_db_mysql/src/data_source_proxy_fastjson_tests.rs": "52251296d5f1f1e0ecf412abfca39db7b135c69c9d67c46d03591b757ca55cef",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "00579c185b0c8b7e28858004ef8b5025442ca865fef2294f8da6c8e45a262761",
+    "crates/seata_db_mysql/src/undo/abstract_undo_log_manager.rs": "357accda10ec139b94d27816a0ad268c753c913616c23c979925c52a4535e919",
+    "tools/formal-undo-rollback/live.py": "b25f666c7850df898ad4add4d679f5f4be68924284990e7d7b262ff559e06332"
+  },
+  "context": "serializer=fastjson2&compressorType=NONE",
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "docker_engine /v1.56/version returned HTTP 500",
+  "live_test_argv": [
+    "python",
+    "tools/formal-undo-rollback/live.py",
+    "--library",
+    "--case",
+    "data_source_proxy::fastjson_tests::fastjson2_split_undo_validates_all_logs_before_writes_and_then_cleans_up"
+  ],
+  "live_mysql_image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "production_default": "jackson",
+  "production_fastjson2_undo_load_enabled": false,
+  "wp05_closed": false
+}

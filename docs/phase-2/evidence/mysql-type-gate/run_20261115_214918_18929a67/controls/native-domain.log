@@ -1,0 +1,34 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling thiserror v2.0.21
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_mysql_type_20261115_214918_18929a67\native-domain\crates\seata_datasource)
+warning: unused variable: `valid`
+  --> crates\seata_datasource\src\struct\mysql_type.rs:50:13
+   |
+50 |         let valid = matches!(
+   |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_valid`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-datasource` (lib) generated 1 warning (run `cargo fix --lib -p seata-datasource` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.30s
+     Running tests\mysql_type_identity.rs (D:/cargo-target/seata-mysql-type-controls\debug\deps\mysql_type_identity-e3c015e0226c076b.exe)
+
+running 1 test
+
+thread 'integer_width_and_boolean_display_identity_remain_distinct' (80544) panicked at crates\seata_datasource\tests\mysql_type_identity.rs:43:9:
+assertion failed: integer(if bits == 8 { 16 } else { 8 }).with_mysql_type(kind).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test integer_width_and_boolean_display_identity_remain_distinct ... FAILED
+
+failures:
+
+failures:
+    integer_width_and_boolean_display_identity_remain_distinct
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-datasource --test mysql_type_identity`

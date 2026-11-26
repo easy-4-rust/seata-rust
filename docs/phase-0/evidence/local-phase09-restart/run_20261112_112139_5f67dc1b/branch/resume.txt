@@ -1,0 +1,8 @@
+PASS RegisterTM identified=true protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS RegisterRM identified=true resourceId=mysql://orders protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS live Java TC registration smoke: TM + RM
+RELOAD originalXid=198.18.0.1:28091:4045076317294448641 originalBranchId=4045076317294448642 observedStatus=1
+LockQuery recoveredXid=198.18.0.1:28091:4045076317294448641 contenderXid=198.18.0.1:28091:4045076317347397633 lockable=false expected=false
+RM callback acknowledged requestId=1 type=5 xid=198.18.0.1:28091:4045076317294448641 branchId=4045076317294448642 branchStatus=8
+LockQuery recoveredXid=198.18.0.1:28091:4045076317294448641 contenderXid=198.18.0.1:28091:4045076317347397634 lockable=true expected=true
+PASS recovered-restart xid=198.18.0.1:28091:4045076317294448641 branchId=4045076317294448642 rollbackStatus=11 finalStatus=15

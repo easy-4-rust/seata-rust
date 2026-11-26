@@ -1,0 +1,47 @@
+{
+  "status": "CURRENT_TRIGGER_AND_FOREIGN_KEY_CHECKED_WITH_FRESH_SESSION",
+  "mysql": "8.4.13",
+  "rust": {
+    "1.99": {
+      "ordinary_passed": 633,
+      "ignored": 183,
+      "live": 1,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary_passed": 633,
+      "ignored": 183,
+      "live": 1,
+      "strict_clippy": true
+    }
+  },
+  "scope": "Original business MDL plus fresh authenticated session and server UUID/schema identity check reject current triggers and incoming/outgoing foreign keys. Adds one temporary connection per active check; independent Undo compensation is outside this change.",
+  "remaining": [
+    "Post-check FK DDL locking schedule and independent Undo compensation constraint reads",
+    "Complete WP05/WP06"
+  ],
+  "sha256": {
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.85-clippy.log": "633823721c9b8f2e57304dc41d449189a67501be7f1fcedb5f6741fd39a0f6ef",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.85-ddl-regression.log": "d7e13d698105e1c6b5a4565624d478446682b86be78c01dd015ed82e58675a3b",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.85-live.log": "b1c2606b69585b71849eb4ba1ddaf1f512c18f01c51c229ce4bef0e050396bea",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.85-workspace.log": "65b9b80b58e74654aaa9bda3bc7d367244f52aa0712ec28b2ce621d770556e37",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.99-clippy.log": "c464e60a3df6392762eca183676cb7d09373c60de3bf09f3e9090b39c3661b96",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.99-ddl-regression.log": "0940c3723fc05babe50d158c21996e9f5be097a0e6d8690f8fd2aa7ce44b7031",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.99-live.log": "897bad570bdf15d73cc949789eda3fe957cc21ed8028dac93b7d2f36f82074c3",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/1.99-workspace.log": "c636b8486adb6f8bc9ecfa509cc6dace500283ea0078d5b60697dd367ed4adfa",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/cleanup.log": "73cea9e9b4eb93fa531e93415ad31f4a236b1f71aa66c70c8d4d8c879c5de707",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/red.log": "276415c12c6edbbef2ac490270a2c9ae137bacf548a9c9cb8d14539a4aafdca1",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/runtime.log": "383a982701490f6a8be3e6e83af298f9c91b871820601977c46be2e9c308d1e2",
+    "docs/phase-2/evidence/mysql-metadata-constraint-ddl/verify.py": "0f118ddf3d631e4789a14759e0b08c72db76c30acb37c927a613347eb212d23a",
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/current_table_constraints.rs": "7b5196546a116f0123a4dcc0e94f716b924aef654bd3b729c78b2b34389e78f8",
+    "crates/seata_db_mysql/src/connection_proxy.rs": "25fffe31e659b71d5f5ea0f452fbeb1c1d10fcf21f1b2ad426a0f355f4c4ad87",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "29c5847e53bca921c106ffdb6ac925612f8bd275ced8513af6467070c9f10b5a",
+    "crates/seata_db_mysql/src/lib.rs": "207b73a63fb8d37dac811883c5637f3f1177771b447124e622f04d9ac8ed7cfa",
+    "crates/seata_db_mysql/src/cache/mysql_table_meta_reader.rs": "5d5fa3f3372a448aadf21cfda628bda3f2fe8ecaaf9ff73503c3f9f508dbf3f6",
+    "crates/seata_db_mysql/tests/live_metadata.rs": "9434036ad8077f45ed6542747adb8c42d58d8cf1ab348e9d86c02f94bd0395a1",
+    "docs/phase-2/mysql-foundation-contract.md": "563a1f8a4ac1e76f39706cdfacadb87a3301db872db003d0033643ae9ed4e98b"
+  }
+}

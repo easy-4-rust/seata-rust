@@ -1,0 +1,162 @@
+[
+  {
+    "case": "normal",
+    "key": "t:1",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "1"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "empty",
+    "key": "t:",
+    "expected_rows": [],
+    "expected_backend_calls": 0
+  },
+  {
+    "case": "blank",
+    "key": "t: ",
+    "expected_rows": [],
+    "expected_backend_calls": 0
+  },
+  {
+    "case": "unicode-blank",
+    "key": "t: ",
+    "expected_rows": [],
+    "expected_backend_calls": 0
+  },
+  {
+    "case": "nonbreaking-space",
+    "key": "t: ",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": " "
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "broken-middle",
+    "key": "t:x;broken;later:2",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "x"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "broken-first",
+    "key": "broken;t:1",
+    "expected_rows": [],
+    "expected_backend_calls": 0
+  },
+  {
+    "case": "empty-first",
+    "key": "t:;later:2",
+    "expected_rows": [],
+    "expected_backend_calls": 0
+  },
+  {
+    "case": "injected-valid-group",
+    "key": "t:x;fake:y;later:2",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "x"
+      },
+      {
+        "table": "fake",
+        "pk": "y"
+      },
+      {
+        "table": "later",
+        "pk": "2"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "binary-a",
+    "key": "t:[0, -1]",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "[0"
+      },
+      {
+        "table": "t",
+        "pk": " -1]"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "binary-b",
+    "key": "t:[0, -2]",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "[0"
+      },
+      {
+        "table": "t",
+        "pk": " -2]"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "partial-empty-row",
+    "key": "t:,1",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "1"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "partial-blank-row",
+    "key": "t:1, ",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "1"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "trailing-delimiters",
+    "key": "t:1,,",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "1"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "normal-multi-table",
+    "key": "t:x;later:2",
+    "expected_rows": [
+      {
+        "table": "t",
+        "pk": "x"
+      },
+      {
+        "table": "later",
+        "pk": "2"
+      }
+    ],
+    "expected_backend_calls": 1
+  }
+]

@@ -1,0 +1,18 @@
+
+running 1 test
+test original_java_tc_cross_process_commit_child ... FAILED
+
+failures:
+
+---- original_java_tc_cross_process_commit_child stdout ----
+
+thread 'original_java_tc_cross_process_commit_child' (42428) panicked at crates\seata_db_mysql\tests\live_commit_check_java.rs:857:62:
+called `Result::unwrap()` on an `Err` value: Unknown { receipt: RegisteredBranch { identity: BranchIdentity { xid_bytes: 36, branch_id: 4045081150317916163, resource: ResourceKey { branch_type: At, resource_id_bytes: 84 }, application_data_bytes: None }, lock_key_bytes: Some(11), result_code: Success, .. }, source: Deadline { operation: "changed COMMIT" } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_java_tc_cross_process_commit_child
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 35 filtered out; finished in 3.26s
+

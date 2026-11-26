@@ -1,0 +1,26 @@
+   Compiling inventory v0.3.21
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-map-views-mutant\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-map-views-mutant\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.28s
+     Running tests\map_views_java.rs (D:/cargo-target/seata-map-views-mutant\debug\deps\map_views_java-8b405d7418bafeb3.exe)
+
+running 1 test
+test original_live_map_views_preserve_detached_entries_and_origin_side_effects ... FAILED
+
+failures:
+
+---- original_live_map_views_preserve_detached_entries_and_origin_side_effects stdout ----
+
+thread 'original_live_map_views_preserve_detached_entries_and_origin_side_effects' (36872) panicked at crates\seata_test\tests\map_views_java.rs:190:9:
+assertion `left == right` failed: entries-clear-target-only
+  left: Some("0:0")
+ right: Some("0:2")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_live_map_views_preserve_detached_entries_and_origin_side_effects
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test map_views_java`

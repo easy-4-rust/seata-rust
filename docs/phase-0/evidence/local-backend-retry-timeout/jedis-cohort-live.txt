@@ -1,0 +1,15 @@
+PASS backend restart/manual retry db cases=4
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\backend_recovery\run.py", line 253, in <module>
+    parser=argparse.ArgumentParser();parser.add_argument('--java-source',default='E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle');parser.add_argument('--java-build',default='D:/codex-builds/seata-java-exact-overlay-20261112');parser.add_argument('--runtime-base',default='D:/codex-builds/seata backend retry timeout');run(parser.parse_args())
+                                                                                                                                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\backend_recovery\run.py", line 175, in run
+    seed=fixture('seed')
+         ^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\backend_recovery\run.py", line 174, in fixture
+    return logged([JAVA,'@'+str(argfile)],directory,mode+'.log',30)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\backend_recovery\run.py", line 42, in logged
+    if result.returncode: raise RuntimeError(f'{name} failed, exit={result.returncode}')
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: seed.log failed, exit=1

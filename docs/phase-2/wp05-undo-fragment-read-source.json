@@ -1,0 +1,89 @@
+{
+  "status": "JAVA_ORIGINAL_UNDO_FRAGMENT_READ_MATCHES_PRODUCTION_SQLX_LOOPBACK",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-read-resources.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_optional_separator",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_original_cases_reexecuted": 3,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest]/[method:loadsFragmentsWithBoundIdentifiersAndClosesJdbcResources()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest",
+      "status": "MATCH",
+      "rust_tests": [
+        "mysql::undo_fragment_read_sqlx_tests::reads_original_child_ids_payloads_and_closes_the_batch_statement",
+        "mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan",
+        "mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children"
+      ]
+    }
+  ],
+  "verified": [
+    "Original branch 42/XID xid, subIds 101 and 102, and three child payload bytes",
+    "Child statement binds 101, 102 then xid; original trailing and nontrailing forms load",
+    "Child statement closes and complete result is consumed, before caller ROLLBACK",
+    "Absent child references for whitespace; numeric cause for invalid",
+    "Duplicate and orphan checks, declared-order reconstruction after unordered response"
+  ],
+  "differences": [
+    "Rust preflights exact identity, lengths and membership under control transaction locks before body reads",
+    "Rust API returns root and child bytes joined in declaration order; the fixed child boundaries are verified on the wire"
+  ],
+  "rust": {
+    "1.99": {
+      "ordinary": 620,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "read_wire_tests": 7,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 620,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "read_wire_tests": 7,
+      "strict_clippy": true
+    }
+  },
+  "mutation_controls": 3,
+  "independent_review": "Original assertions mapped to observable production SQLx operations; real InnoDB outside loopback scope",
+  "global_rust_source_MATCH": 152,
+  "global_rust_methods_match": 131,
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/db_error.rs": "9f5eb6afb334937a6ff242a55656b9540119ae32071c352b59c786393dde5711",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "fff5e24c56931c637b5c78639660d4d924971cd67c36b4d8cb4730a49c41ed9a",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_read_sqlx_tests.rs": "b66bae9c4bc030fa64ca22393dad08470e64e553d12c662024a1c8c1aa0ecb12",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "860299b9f81818e5969bddc4181ac54d8671419e85b94961403d4c5a820bf4a7"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "b3ba2a6acaf43ab9eba6f0e7f1aa617a3d9efe594f3123a5f1c313df0efa1a89",
+    "1.85-doc.log": "b629cd27662da646044d1ab885dd97ab1ec7bcf664625d5d3464852b32e800d7",
+    "1.85-targeted.log": "7e04995afbc985149e1c484b8007a871a9a7e2bc45b6743397234f4975866797",
+    "1.85-tests.log": "67c3b612339272801239c5f1b3ca59176d09cfbc9b505b22456ea0011dd69d18",
+    "1.99-clippy.log": "02695f64175955c223fccef9da32a8214b95cbd136d24d774acd3c95c9b446a3",
+    "1.99-doc.log": "f295c9088db4a73047df8c25ac59c364cbd17c678ea1554d7234bca0301e4e3a",
+    "1.99-targeted.log": "947cf3e91c04e1041a957133a019c87b4874e716f3c1efafbafbc352e147e10c",
+    "1.99-tests.log": "22505fffbb1571723cbf62371baf691039164fda35486ffc304960f9e10f888b",
+    "commands.json": "b691a09437c7937d47c8ba3462439be2748c1213865043b898a2ac9663893e17",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-omit-child-response-drain.stderr": "d3578b717ec47a6b917a3225f1a033a04cadfd57a5e7ac9dcb987f13469623e7",
+    "mutant-omit-child-response-drain.stdout": "96ab964fd80baf45d2eaad6cbf9674cfd622f10e70577c9612944c45fc798194",
+    "mutant-require-tail.stderr": "10741007b67bdd282d78d9f62ab1dd716e73727c1d26a3791df43395091f7baa",
+    "mutant-require-tail.stdout": "002d570d43b8557bb4272d381e3e74ba8414c61aa4e445554147c2c7e30ada1b",
+    "mutant-sort-child-output.stderr": "21e8b3b1671545e3031ba2a4a7d47778fd6b1514d663bf49de24ef28409a87e5",
+    "mutant-sort-child-output.stdout": "cfbbadf579b4c382cfb1e57e0cd509713bd81e21fba831d159dff0245acdc7a2",
+    "mysql-environment.log": "21b265507da1c962fac8abe46058a75e3e038590d1c0df306f11d3065c7af21a",
+    "MySQLUndoLogManagerBehaviorTest.java": "369e52c346830fefd6617c6843c7220dcede0e02cb95a867585910d41823d846",
+    "original-inputs.json": "1cdebefbdf5c185066eaf9bec3050cfc0072881527c78a2287a729f210ceb751",
+    "original-junit.jsonl": "39dcc3a469a229d8ae787287e1ebef79af5998a6adf98d6ebccfcf6e08c067ee",
+    "original-junit.log": "cdadaf3fcc4cd90f0ed928fb6a0ac1f9fca45242bfc58a151174005a39d8643e",
+    "pre-fix-red.log": "fede2896c3baa15c7cb82da111441f682e2a7c577c1702181a283f40a26649fa",
+    "runtime-mutation-controls.json": "b1c168491d4c654fd7085b61d216ba871593835bb5bd3fb979239b70f69f37db"
+  }
+}

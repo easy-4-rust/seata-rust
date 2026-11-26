@@ -1,8 +1,9 @@
 # ADR-0008: Preserve Wire-Level Optionality and Uncertain Transaction Outcomes
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-11-08
 - **Scope:** V1 protocol model, Rust TM API and error taxonomy
+- **Approval:** 2026-11-12, user explicitly selected “按 ADR-0008 实施（推荐）” in this delivery chat. Implementation uses the existing decision below; acceptance does not claim its tests or the overall plan are complete.
 
 ## Context
 

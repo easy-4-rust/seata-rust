@@ -1,0 +1,20 @@
+TIME	2025-01-15T10:30:45Z	1736937045	0	0	1736937045.000000000	1736937045	0	0
+TIME	1970-01-01T00:00:00Z	0	0	0	0.0	0	0	0
+TIME	1970-01-01T00:00:00.000000001Z	0	1	0	1E-9	0	1	0
+TIME	1969-12-31T23:59:59.999999999Z	-1	999999999	0	-1.999999999	-1	999999999	0
+TIME	1969-12-31T23:59:58.000000001Z	-2	1	0	-2.000000001	-2	1	0
+TIME	2025-01-15T10:30:45.123456789+05:30	1736917245	123456789	19800	1736917245.123456789	1736917245	123456789	0
+TIME	1970-01-01T00:00:00.001-00:00:01	1	1000000	-1	1.001000000	1	1000000	0
+TIME	-999999999-01-01T00:00:00Z	-31557014135596800	0	0	-31557014135596800.000000000	-31557014135596800	0	0
+TIME	+999999999-12-31T23:59:59.999999999Z	31556889832780799	999999999	0	31556889832780799.999999999	31556889832780799	999999999	0
+READ	0	0	0
+READ	1E-9	0	1
+READ	-1E-9	-1	999999999
+READ	1.1234567899	1	123456789
+READ	-1.1234567899	-1	123456789
+READ	0.0000000001	0	0
+READ	-0.0000000001	0	0
+REJECT	1e-2147483648	NumberFormatException
+REJECT	1.0e-2147483647	NumberFormatException
+UNDO	java.time.OffsetDateTime	{"@class":"org.apache.seata.rm.datasource.undo.BranchUndoLog","xid":"offset-native:2014","branchId":42,"sqlUndoLogs":["java.util.ArrayList",[{"@class":"org.apache.seata.rm.datasource.undo.SQLUndoLog","sqlType":"UPDATE","tableName":null,"beforeImage":null,"afterImage":{"@class":"org.apache.seata.rm.datasource.sql.struct.TableRecords","tableName":"table_records_test","rows":["java.util.ArrayList",[{"@class":"org.apache.seata.rm.datasource.sql.struct.Row","fields":["java.util.ArrayList",[{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"id","keyType":"NULL","type":4,"value":1},{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"time_col","keyType":"NULL","type":2014,"value":["java.time.OffsetDateTime",1736937045.000000000]}]]}]]}}]]}
+LIMITS	-31557014135596800	31556889832780799

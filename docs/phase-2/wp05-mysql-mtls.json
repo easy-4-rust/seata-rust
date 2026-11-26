@@ -1,0 +1,77 @@
+{
+  "status": "SELECTED_MYSQL_X509_CLIENT_AUTH_PROFILE_VERIFIED",
+  "mysql": "8.4.13",
+  "image": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+  "rust": {
+    "1.99": {
+      "workspace_passed": 635,
+      "ignored": 188,
+      "options_passed": 5,
+      "live_tls_passed": 2,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "workspace_passed": 635,
+      "ignored": 188,
+      "options_passed": 5,
+      "live_tls_passed": 2,
+      "strict_clippy": true
+    }
+  },
+  "coverage": [
+    "Bounded certificate/key PEM pair; disabled TLS mutually excluded; server VerifyIdentity retained",
+    "X509 account rejects missing client certificate, other CA client, mismatched private key and wrong password",
+    "Correct identity is retained by pool and auxiliary metadata sessions; business rollback independently observed",
+    "Native MySQL client verifies server identity, authenticates X509 account and records TLS 1.3; missing identity rejected with 1045",
+    "Dropping production identity settings fails intended positive authentication assertion; exact source restored"
+  ],
+  "limits": [
+    "Selected RSA/PEM profile only",
+    "First recognized private-key block follows fixed driver semantics",
+    "Raw key and driver copies have no zeroization guarantee",
+    "Encrypted private-key password not supported by this entry"
+  ],
+  "remaining": [
+    "Certificate lifecycle, rotation/revocation and further algorithm/chain profiles",
+    "Production least-privilege authentication and remaining original WP05/WP06/V1 plan gates"
+  ],
+  "sha256": {
+    "Cargo.lock": "21459760f5f3338182baa1feafe023d4b96a7c61303236a7ad8e7609d603ff97",
+    "crates/seata_db_mysql/src/mysql_options.rs": "ab4f492c6897bd69bb454ff4e3996917caee43f0d46aa45e8bf5b5ed882a7ed5",
+    "crates/seata_db_mysql/tests/live_tls.rs": "58402d0b464f70f34c4e02b485d1019fb30e0d954fa44e37679ef0927b8106d3",
+    "crates/seata_db_mysql/tests/options_contract.rs": "bc8bb87c68b5175b4fb1f054d85ace2f1ade55bd110fd7573439a7931683d93a",
+    "docs/phase-2/evidence/mysql-mtls/1.85-clippy.log": "633823721c9b8f2e57304dc41d449189a67501be7f1fcedb5f6741fd39a0f6ef",
+    "docs/phase-2/evidence/mysql-mtls/1.85-live.log": "690e9cae6b45455373120480384da39616a277db43055d92446a008ec9c3c088",
+    "docs/phase-2/evidence/mysql-mtls/1.85-options.log": "3cf1510ca837561bbbfb063d8de9b1f535b52e706adca58520c63c487f1e4587",
+    "docs/phase-2/evidence/mysql-mtls/1.85-workspace.log": "28af8e461b513a72d24d6930953049397bb95c14ac844ae655bf32be1b6c7600",
+    "docs/phase-2/evidence/mysql-mtls/1.99-clippy.log": "bdb5b3d9c452892ad987699d6cd3a23a4d2f91fadb9d1e41dcf58880bee278a0",
+    "docs/phase-2/evidence/mysql-mtls/1.99-live.log": "e17401bc1d75cccbf2410abd278c6cd86c0fd0dbbed58a352b7e02ee5004157a",
+    "docs/phase-2/evidence/mysql-mtls/1.99-options.log": "95c3e86a83ed786b0af6e4ecbd3cdd81e048c5df7a1972b0ede20349a2192352",
+    "docs/phase-2/evidence/mysql-mtls/1.99-workspace.log": "4b2227b7d1089863d9755a82302dcc0212afcb294da84f0f2d92f83d14c91169",
+    "docs/phase-2/evidence/mysql-mtls/ca.pem": "039aa313a8247ebe45caf48f076344310c533e4e65ae25ee044133aa67d1b769",
+    "docs/phase-2/evidence/mysql-mtls/cleanup-runtime.sh": "0064dd398cbe68b58e50c970a2cf4c5fb63b020d737fdb4a01a5b795c23d4e84",
+    "docs/phase-2/evidence/mysql-mtls/cleanup.log": "51aa30ceeead53b5e27d4a9a2187ab6e7146e623ce0b4001ebdd756bebed8be8",
+    "docs/phase-2/evidence/mysql-mtls/client.pem": "33c9eaa940a74f0e8532d9fe5ad313cfa188c7c02cae4b8b0b1c79063197060b",
+    "docs/phase-2/evidence/mysql-mtls/expired-debug-cache-removed.json": "c758e3fdaedac2676f8d224d4fc319785397557c949906b1abcc64fa1d29f3cb",
+    "docs/phase-2/evidence/mysql-mtls/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-mtls/image.log": "9becb9e62b680478823639c8b0d3b964fd416199a76044cb708f0842293187b2",
+    "docs/phase-2/evidence/mysql-mtls/independent-client.log": "0cc1310ab9aaf877cd7d1ade98832b05dea366b9ce94476f892768174eb63303",
+    "docs/phase-2/evidence/mysql-mtls/independent-missing-client.log": "0420aa6b87609b0b37622ef7b03f0dcf9c268f749cb6f23a2e2bc4767ee05928",
+    "docs/phase-2/evidence/mysql-mtls/mutation-drop-client-identity.log": "0b083373ffbac25b9fc27cea21ccc8a67f830728e708e5c0436f61bc770e2216",
+    "docs/phase-2/evidence/mysql-mtls/mutation-run.log": "f1376b545ab4f6add704f1ec03eae8a31c3d1bfdb54e8944dc905095eeeb18dc",
+    "docs/phase-2/evidence/mysql-mtls/other-ca.pem": "ff94da6215e73216574283a0757f1d62e2430d214844c29dbbb25773a8d2fea4",
+    "docs/phase-2/evidence/mysql-mtls/README.md": "47ec87858edc343ddecb143e51b6378cc15187f7962ad0ee1dd5c76cb659efc3",
+    "docs/phase-2/evidence/mysql-mtls/red.log": "9801515b4f29af191a723089ddb8751232e3b37382b24bcb63f54192261040c6",
+    "docs/phase-2/evidence/mysql-mtls/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-mtls/review.md": "d18b8f415d5f6f0af0193e2d2df3edd159234616c63507d08a3be17a7b60d6ba",
+    "docs/phase-2/evidence/mysql-mtls/run-control.py": "695572a4fb148943c3f0d996be90da84bc911d2e02cad60b32a5784b290e5140",
+    "docs/phase-2/evidence/mysql-mtls/run-live.ps1": "53c9096d3b268ca19e04fc8c78625e9453e3cf231f33d64073558407e085f9bf",
+    "docs/phase-2/evidence/mysql-mtls/run-workspace.ps1": "66635aac073ac749baef0984ab0f7b3497f54187056680b6e43234498067e1df",
+    "docs/phase-2/evidence/mysql-mtls/runtime.log": "2738b5361c2c544ed44e0dc82124cc6ea15151bf8fe89557ffc71fa97384674b",
+    "docs/phase-2/evidence/mysql-mtls/server.pem": "b640d9dd9136f0117ce7fc41d0cb501d5a90a0e1d6668f92c7e91bae3b0227cb",
+    "docs/phase-2/evidence/mysql-mtls/start-runtime.sh": "e784315c693f82423f4d16d6c3ff13389515f0e86040b394428a72fdf89325c2",
+    "docs/phase-2/evidence/mysql-mtls/untrusted-client.pem": "f5b0139c36470fce4e050d4ef9a625fd2a28d825ecfd5e1930f601e60260bd4b",
+    "docs/phase-2/evidence/mysql-mtls/verify.py": "9abd08b5d5817813d0b78b9948ab49504e3e8008be533abf4e97fb2b2717db41",
+    "docs/phase-2/mysql-foundation-contract.md": "ae211d46ba7cf55c9b6c6d46603d62b9cf5abede8acd00a979954c7c298fd72f"
+  }
+}

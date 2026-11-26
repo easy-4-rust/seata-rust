@@ -1,0 +1,36 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved imports `seata_at::JacksonUndoField`, `seata_at::JacksonUndoFieldValue`
+   --> crates\seata_at\tests\jackson_undo_source.rs:220:54
+    |
+220 |     use seata_at::{FastjsonUndoFieldValue as Common, JacksonUndoField, JacksonUndoFieldValue as V};
+    |                                                      ^^^^^^^^^^^^^^^^  ---------------------^^^^^
+    |                                                      |                 |
+    |                                                      |                 no `JacksonUndoFieldValue` in the root
+    |                                                      no `JacksonUndoField` in the root
+    |
+help: a similar name exists in the module
+    |
+220 -     use seata_at::{FastjsonUndoFieldValue as Common, JacksonUndoField, JacksonUndoFieldValue as V};
+220 +     use seata_at::{FastjsonUndoFieldValue as Common, FastjsonUndoField, JacksonUndoFieldValue as V};
+    |
+help: a similar name exists in the module
+    |
+220 -     use seata_at::{FastjsonUndoFieldValue as Common, JacksonUndoField, JacksonUndoFieldValue as V};
+220 +     use seata_at::{FastjsonUndoFieldValue as Common, JacksonUndoField, FastjsonUndoFieldValue as V};
+    |
+
+error[E0599]: no method named `encode_typed_field` found for struct `JacksonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:239:28
+    |
+239 |         let bytes = parser.encode_typed_field(&field).unwrap();
+    |                            ^^^^^^^^^^^^^^^^^^ method not found in `JacksonUndoLogParser`
+
+error[E0599]: no method named `decode_typed_field` found for struct `JacksonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:240:31
+    |
+240 |         let restored = parser.decode_typed_field(&bytes).unwrap();
+    |                               ^^^^^^^^^^^^^^^^^^ method not found in `JacksonUndoLogParser`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "jackson_undo_source") due to 3 previous errors

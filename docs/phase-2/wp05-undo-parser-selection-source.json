@@ -1,0 +1,111 @@
+{
+  "status": "THREE_UNDO_FACTORY_SPI_BRANCH_ORIGINAL_CASES_MATCH",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_factory",
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.UndoLogParserProviderTest]/[method:testLoad()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.UndoLogParserProviderTest",
+      "rust_test": "original_provider_test_load",
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.BranchUndoLogTest]/[method:testEncodeUndoLog()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BranchUndoLogTest",
+      "rust_test": "original_branch_encode_undo_log",
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.UndoLogParserFactoryTest]/[method:getInstance()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.UndoLogParserFactoryTest",
+      "rust_test": "original_factory_get_instance",
+      "status": "MATCH"
+    }
+  ],
+  "java_original_cases_reexecuted": 3,
+  "java_supplemental_selection_rows_matched": 36,
+  "branch_java_wire_sha256": "3066bb4b11d9338d75d9ad5308948ba2f9b424a78ed1e42265bc83b835a44bec",
+  "global_rust_source_MATCH": 144,
+  "global_rust_methods_match": 123,
+  "global_cases_remaining": 1183,
+  "global_methods_remaining": 1012,
+  "rust": {
+    "1.99": {
+      "ordinary": 592,
+      "ignored": 173,
+      "harnesses": 120,
+      "doc": 4,
+      "targeted": 4,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 592,
+      "ignored": 173,
+      "harnesses": 120,
+      "doc": 4,
+      "targeted": 4,
+      "strict_clippy": true
+    }
+  },
+  "unconfigured_default": "jackson",
+  "configured_access": "explicit named factory entry",
+  "independent_review": "Kelvin case folding red reproduced and fixed; original behaviors and scope inspected",
+  "live_mysql_executed": false,
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "4a6919a149228299625aa77afb71b85b1cb1820a13cfac0667613f8de05e83d2",
+    "crates/seata_at/Cargo.toml": "b8e5b95ebbf3af7fdaed8de789cb23b46d618bb42d84b14c175b4edef68d0c86",
+    "crates/seata_at/src/lib.rs": "c2c4f72366a596609f88da829610f5e697dcaab0bc3fe4ec1fe33eaa883c9760",
+    "crates/seata_at/src/undo/mod.rs": "06f3afa07dd4e8233544203ee5bebdee79206caf96b3a460a9cb915cdeb87ebb",
+    "crates/seata_at/src/undo/parser/mod.rs": "6b4ff2122af6cacf9ab06c7e89e1155ccd3a64b2ee64d07343991cd74ae26da4",
+    "crates/seata_at/tests/undo_log_parser_selection_source.rs": "2e4d662f194339bae3ffac7c06c587b0f19a4f03cc1f32ae3dc7a192391cfe46",
+    "crates/seata_at/tests/fixtures/undo_parser_selection.tsv": "3b88b9af4f9ca086299145e2a958f9b115f63eb19b1de20b02bc7b2dd0709e7a",
+    "crates/seata_at/tests/fixtures/branch_undo_java.json": "3066bb4b11d9338d75d9ad5308948ba2f9b424a78ed1e42265bc83b835a44bec",
+    "crates/seata_at/src/undo/parser/undo_log_parser.rs": "9ab794b24286dd01b86594bf08afadc55c49ee99fae736919ab3c76baab86275",
+    "crates/seata_at/src/undo/parser/undo_log_parser_registration.rs": "a265c5e13d798d1c9336ea96b0790d414a064718ce266a20505d93b5a47b7a05",
+    "crates/seata_at/src/undo/parser/undo_log_parser_factory.rs": "05d17b7da630c04b4cb63fa7af737e087674c1498fe7818a8e7a51628109f8fa",
+    "crates/seata_at/src/undo/parser/undo_log_parser_selection_error.rs": "7dae3a3887d2819737fa39c31e7f26e61c96f845f4785aa5c4fca68cf8b65f05"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "ece18ee945900bf1ebd69f523729c1baabe58908a9d902ad3dbadfa64749e1ff",
+    "1.85-doc.log": "b71450aa58f82213eee26c92efe024c1ea3cf735ac8b0b22e202482a905c40a7",
+    "1.85-targeted.log": "78df29e63ce689bad3b2723b0e26095d7d6b8771e6dd54ec147a0f20489465d4",
+    "1.85-tests.log": "4e6c74ace4df7b3ede0b3a65d9bb516112154fdbed44fb15b2aff0105a4fbc69",
+    "1.99-clippy.log": "6681403f89d1af21268839ddcb986a7eb1324a6684bc11008ebdf9a7b5365ab2",
+    "1.99-doc.log": "17cf28b3639f6aea469c4762420b7af9e7a330653bab57f1b0a77b1917edb473",
+    "1.99-targeted.log": "abd112c22607ed0eb0d360d8f26107edb6a687da35a9c8ecc9464452f22b44da",
+    "1.99-tests.log": "8b2182e9c3c3582706c1d1ad8901ad31482c31ea3d36df5cea995693cf93449e",
+    "branch-java.json": "3066bb4b11d9338d75d9ad5308948ba2f9b424a78ed1e42265bc83b835a44bec",
+    "BranchUndoLogTest.java": "5b6eaecc8082261b8fbcf97039e90a24c586e8436af7efda03f2d2357b5f744d",
+    "classpath-verification.json": "cdfc3fe16db4255499ea7e4723abf3ffacb813be0abe73fc2ca4a9137a1617c0",
+    "commands.json": "c25ea87fa8aab3dbeb21d282f8e7b53e870acbce7d43727ff86f333163a9f9e3",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compile-recorded.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java-spi-services.txt": "240cca9b2b74bc2578642eab0684706db52e55129ae52cb46518eec868c9ea66",
+    "mutant-ascii-only-spi.stderr": "bd0e3b43a35ea9a99cd5a04c52b94ed130c7ab0bd1dc00ebe38b0b6bee38ae11",
+    "mutant-ascii-only-spi.stdout": "bae8822865e3327aa2b6c4f9b9412e856005296580d0eb8b03d2cec2444249d0",
+    "mutant-change-default-parser.stderr": "990f4d658c5cf574429e0282c8472bf8e83d8eea796f95423a07cd7ed11b7b1d",
+    "mutant-change-default-parser.stdout": "971fc5b082df6656f91c1076bdb3ddd5bfbff199fece7f1bc22741d495a61b0c",
+    "mutant-drop-fury-alias.stderr": "48f57845b4261554e8ae62d56e86774493b59324f91e54d7b02be4c09f81b954",
+    "mutant-drop-fury-alias.stdout": "27588a0e115467083ad4642a8b2019db2b853086b0741991a1b680dd0c085cc0",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "original-inputs.json": "bb9400040a2df1b8c97ef5e93387d6d88f7f715345247bc80ffcd7297b30bef1",
+    "original-junit.jsonl": "5ed462a1ec5a5aa98c8fbda9bc68a7da2e24b009acaef0b32097657d5c56b8ce",
+    "original-junit.log": "d90820f6007c85723467816d6a5ef476f882e6f778bc0b925ba569b703922af0",
+    "recorded-BranchUndoLogTest.java": "18d7ab54ae8a2d4c1c217ec63c173d5cce80bb6033cbb528c383f49edff458ae",
+    "recorded-junit.jsonl": "3be99301da387ce8a3b59b5117fa5a34cf40fdf81f0e7df6f60617eeabd1d197",
+    "recorded-junit.stderr": "cf0f744b42966047acd81fed9255735f73de71b2162c4d551e3a576dc762862e",
+    "recorded-junit.stdout": "a4e365ac5d094c12bbb8f00b38b324d07b9fda63a2b2df44fbb1b4c20bc49c83",
+    "runtime-mutation-controls.json": "b7f4c1fffc23f5f0feffb60ff2a9bc641e5a18c02c36c20ba4084229b6ac1e13",
+    "rust-red.log": "c0b96b0ab68c05ed33cedc4c96f4c1ac1e17a1d6b81b3b104169d1bbf5dc6c98",
+    "selection-java.stderr": "cf0f744b42966047acd81fed9255735f73de71b2162c4d551e3a576dc762862e",
+    "selection-java.tsv": "3b88b9af4f9ca086299145e2a958f9b115f63eb19b1de20b02bc7b2dd0709e7a",
+    "supplemental-commands.json": "55ff37070f7a1b1f88b21f91ebc2b6154004e44c391fa1b28024f8f1de4a1b44",
+    "UndoLogParserFactoryTest.java": "e6a4ee19592a8fa652b5b4decfccecf3244b13182c69d5480c98d10b56acfd90",
+    "UndoLogParserProviderTest.java": "9d116c34e37624f89f0f4f9640697bdefc76d5fd7c7433bcd9b08fab66fbc6ff",
+    "UndoLogParserSelectionOracle.java": "1dc42dbe3c42b7ac2c725c5d03035c0c7a8c6ef3874be074c9a58609c37ae5aa",
+    "unicode-red.log": "2f277ecd882d3552610d3490c2f1800b89bf99fd0cc145017d8652249a2ef9f4"
+  }
+}

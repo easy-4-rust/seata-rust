@@ -1,0 +1,14 @@
+def audit_candidate(work):
+    length_manifest = json.loads((l.PATCH_DIR / 'manifest.json').read_bytes())
+    changes = {row['path']: row['patched_sha256'] for row in length_manifest['files']}
+    original = l.audit_cohort(work, changes, (ROOT / 'tools/go-java-v1-length-patch/java_v1_length_compat_test.go').read_bytes())
+    extra = json.loads(e.MANIFEST.read_bytes())['files'] + json.loads(MANIFEST.read_bytes())['files']
+    copies = {'pkg/protocol/codec/java_v1_length_compat_test.go': ROOT / 'tools/go-java-v1-length-patch/java_v1_length_compat_test.go', 'pkg/protocol/codec/java_v1_response_profile_test.go': e.HERE / 'java_v1_response_profile_test.go', 'pkg/protocol/codec/java_v1_message_profile_test.go': HERE / 'java_v1_message_profile_test.go', 'tools/seata-rust-golden/main.go': ROOT / 'tools/go-golden-vectors/main.go', 'tools/seata-rust-merge-profile/exception_common.go': e.HERE / 'common.go', 'tools/seata-rust-merge-profile/main.go': HERE / 'merge_main.go'}
+    for path, source in copies.items():
+        if (work / path).read_bytes() != source.read_bytes():
+            raise RuntimeError('Executed candidate test/harness drifted: ' + path)
+    expected = {row['path'] for row in original if row['path'].endswith('.go')} | {row['path'] for row in extra} | set(copies)
+    actual = {path.relative_to(work).as_posix() for path in work.rglob('*.go')}
+    if actual != expected:
+        raise RuntimeError('Unexpected/missing Go cohort source path')
+    return dict(original_members=original, profile_files=extra, executed_auxiliary=[dict(path=path, sha256=h.sha(work / path)) for path in sorted(copies)])

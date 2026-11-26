@@ -1,0 +1,12 @@
+    Checking seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+error: using `chunks_exact` with a constant chunk size
+  --> src\payload\control_tests.rs:15:10
+   |
+15 |         .chunks_exact(2)
+   |          ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks
+   = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: could not compile `seata-java-tc-it` (bin "seata-java-tc-it" test) due to 1 previous error

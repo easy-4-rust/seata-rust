@@ -1,0 +1,41 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved imports `seata_at::FastjsonSqlUndoLog`, `seata_at::FastjsonUndoField`, `seata_at::FastjsonUndoFieldValue`, `seata_at::FastjsonUndoRecords`
+   --> crates\seata_at\tests\fastjson_undo_native.rs:341:20
+    |
+341 |     use seata_at::{FastjsonSqlUndoLog, FastjsonUndoField, FastjsonUndoFieldValue, FastjsonUndoRecords};
+    |                    ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^ no `FastjsonUndoRecords` in the root
+    |                    |                   |                  |
+    |                    |                   |                  no `FastjsonUndoFieldValue` in the root
+    |                    |                   no `FastjsonUndoField` in the root
+    |                    no `FastjsonSqlUndoLog` in the root
+
+error[E0599]: no method named `encode_branch` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:355:24
+    |
+355 |     let bytes = parser.encode_branch(Some("xiddddddddddd"), 123456, Some(&[log])).unwrap();
+    |                        ^^^^^^^^^^^^^
+    |
+help: there is a method `decode_branch` with a similar name, but with different arguments
+   --> crates\seata_at\src\undo\parser\fastjson_undo_log_parser.rs:41:5
+    |
+ 41 | /     pub fn decode_branch(
+ 42 | |         &self,
+ 43 | |         bytes: &[u8],
+ 44 | |     ) -> Result<Option<FastjsonUndoBranch>, UndoCodecError> {
+    | |___________________________________________________________^
+
+error[E0599]: no method named `field_value_class` found for struct `FastjsonUndoBranch` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:360:23
+    |
+360 |     let long = branch.field_value_class(0, true, 0, 0) == Some("java.lang.Long");
+    |                       ^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoBranch`
+
+error[E0599]: no method named `field_value_class` found for struct `FastjsonUndoBranch` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:361:26
+    |
+361 |     let decimal = branch.field_value_class(0, true, 0, 1) == Some("java.math.BigDecimal");
+    |                          ^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoBranch`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "fastjson_undo_native") due to 4 previous errors

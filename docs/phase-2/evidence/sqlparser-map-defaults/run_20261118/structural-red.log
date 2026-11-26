@@ -1,0 +1,249 @@
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+error[E0599]: no method named `get_or_default` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:62:39
+   |
+62 |     record("default-null", render(map.get_or_default(Some(&null_key), value(9))?));
+   |                                       ^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<_>`
+
+error[E0599]: no method named `get_or_default` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:63:42
+   |
+63 |     record("default-missing", render(map.get_or_default(Some(&absent), value(9))?));
+   |                                          ^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<_>`
+
+error[E0599]: no method named `get_or_default` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:64:43
+   |
+64 |     record("default-null-key", render(map.get_or_default(None, value(9))?));
+   |                                           ^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<_>`
+
+error[E0599]: no method named `put_if_absent` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:65:41
+   |
+65 |     record("put-null-value", render(map.put_if_absent(Some(&null_key), value(4))?));
+   |                                         ^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<_>`
+
+error[E0599]: no method named `put_if_absent` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:66:39
+   |
+66 |     record("put-existing", render(map.put_if_absent(Some(&"NuLlKeY".into()), value(5))?));
+   |                                       ^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<_>`
+
+error[E0599]: no method named `replace` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:68:40
+   |
+68 |     record("replace-value", render(map.replace(Some(&null_key), value(6))?));
+   |                                        ^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `replace` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:69:42
+   |
+69 |     record("replace-missing", render(map.replace(Some(&absent), value(7))?));
+   |                                          ^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `replace_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:70:37
+   |
+70 |     record("replace-wrong", yes(map.replace_if_equal(Some(&null_key), Some(&Value(4)), value(8))?));
+   |                                     ^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `replace_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:71:37
+   |
+71 |     record("replace-match", yes(map.replace_if_equal(Some(&null_key), Some(&Value(6)), None)?));
+   |                                     ^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `replace_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:72:44
+   |
+72 |     record("replace-present-null", yes(map.replace_if_equal(Some(&null_key), None, value(9))?));
+   |                                            ^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute_if_absent` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:75:22
+   |
+75 |     let result = map.compute_if_absent(Some(&new), Some(|key: &JavaString| {
+   |                  ----^^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute_if_absent` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:80:53
+   |
+80 |     record("compute-absent-no-callback", render(map.compute_if_absent(Some(&new), Some(|_: &JavaString| Err(exception())))?));
+   |                                                     ^^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute_if_absent` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:81:22
+   |
+81 |     let result = map.compute_if_absent(Some(&drop_key), Some(|_: &JavaString| Ok(None)))?;
+   |                      ^^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute_if_present` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:84:22
+   |
+84 |     let result = map.compute_if_present(Some(&new), Some(|key: &JavaString, value: Arc<Value>| {
+   |                  ----^^^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute_if_present` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:90:22
+   |
+90 |     let result = map.compute_if_present(Some(&empty), Some(|_: &JavaString, _: Arc<Value>| Ok(value(5))))?;
+   |                      ^^^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:92:22
+   |
+92 |     let result = map.compute(Some(&empty), Some(|_: &JavaString, _: Nullable| Ok(None)))?;
+   |                      ^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:94:22
+   |
+94 |     let result = map.compute(Some(&side), Some(|key: &JavaString, _: Nullable| {
+   |                  ----^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_defaults_java.rs:99:22
+   |
+99 |     let result = map.compute(Some(&side), Some(|key: &JavaString, _: Nullable| {
+   |                  ----^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:104:64
+    |
+104 |     record("compute-null-key-callback-precedence", observe(map.compute(None, None::<Remap>), render));
+    |                                                                ^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:105:49
+    |
+105 |     record("compute-null-function", observe(map.compute(Some(&side), None::<Remap>), render));
+    |                                                 ^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:106:50
+    |
+106 |     record("compute-callback-error", observe(map.compute(Some(&side), Some(|_: &JavaString, _: Nullable| Err(exception()))), render));
+    |                                                  ^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `compute_if_absent` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:109:22
+    |
+109 |     let result = map.compute_if_absent(Some(&"I".into()), Some(|key: &JavaString| {
+    |                  ----^^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `merge` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:117:39
+    |
+117 |     record("merge-absent", render(map.merge(Some(&merge), value(11), Some(|_: Arc<Value>, _: Arc<Value>| Err(exception())))?));
+    |                                       ^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `merge` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:118:41
+    |
+118 |     record("merge-existing", render(map.merge(Some(&merge), value(4), Some(|a: Arc<Value>, b: Arc<Value>| Ok(value(a.0 * 10 + b.0))...
+    |                                         ^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `merge` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:119:22
+    |
+119 |     let result = map.merge(Some(&merge), value(9), Some(|_: Arc<Value>, _: Arc<Value>| Ok(None)))?;
+    |                      ^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `merge` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:121:44
+    |
+121 |     record("merge-null-value", observe(map.merge(Some(&new), None, Some(|_: Arc<Value>, _: Arc<Value>| Ok(value(1)))), render));
+    |                                            ^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `remove_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:122:36
+    |
+122 |     record("remove-wrong", yes(map.remove_if_equal(Some(&side), Some(&Value(8)))?));
+    |                                    ^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `remove_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:123:36
+    |
+123 |     record("remove-match", yes(map.remove_if_equal(Some(&side), Some(&Value(3)))?));
+    |                                    ^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `remove_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:124:43
+    |
+124 |     record("remove-missing-null", yes(map.remove_if_equal(Some(&absent), None)?));
+    |                                           ^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `remove_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:127:43
+    |
+127 |     record("remove-present-null", yes(map.remove_if_equal(Some(&nullable), None)?));
+    |                                           ^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: `LowerCaseLinkHashMap<Value>` is not an iterator
+   --> crates\seata_test\tests\map_defaults_java.rs:133:9
+    |
+133 |     map.for_each(Some(|key: &JavaString, current: Nullable| {
+    |     ----^^^^^^^^ `LowerCaseLinkHashMap<Value>` is not an iterator
+    |
+   ::: crates\seata_sqlparser\src\util\lower_case_link_hash_map.rs:12:1
+    |
+ 12 | pub struct LowerCaseLinkHashMap<V: MetadataMapValue> {
+    | ---------------------------------------------------- doesn't satisfy `LowerCaseLinkHashMap<Value>: Iterator`
+    |
+    = note: the following trait bounds were not satisfied:
+            `LowerCaseLinkHashMap<Value>: Iterator`
+            which is required by `&mut LowerCaseLinkHashMap<Value>: Iterator`
+
+error[E0599]: no method named `replace_all` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:139:9
+    |
+139 |     map.replace_all(Some(|key: &JavaString, current: Nullable| {
+    |     ----^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `replace_all` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:146:22
+    |
+146 |     let result = map.replace_all(Some(|_: &JavaString, current: Nullable| {
+    |                  ----^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `replace_all` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:153:13
+    |
+153 |         map.replace_all(Some(|_: &JavaString, _: Nullable| Err(exception()))), |()| "unexpected success".into()));
+    |             ^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: `LowerCaseLinkHashMap<Value>` is not an iterator
+   --> crates\seata_test\tests\map_defaults_java.rs:154:50
+    |
+154 |     record("for-each-null-callback", observe(map.for_each(None::<MapAction>), |()| "unexpected success".into()));
+    |                                                  ^^^^^^^^ `LowerCaseLinkHashMap<Value>` is not an iterator
+    |
+   ::: crates\seata_sqlparser\src\util\lower_case_link_hash_map.rs:12:1
+    |
+ 12 | pub struct LowerCaseLinkHashMap<V: MetadataMapValue> {
+    | ---------------------------------------------------- doesn't satisfy `LowerCaseLinkHashMap<Value>: Iterator`
+    |
+    = note: the following trait bounds were not satisfied:
+            `LowerCaseLinkHashMap<Value>: Iterator`
+            which is required by `&mut LowerCaseLinkHashMap<Value>: Iterator`
+
+error[E0599]: no method named `replace_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:159:57
+    |
+159 |     record("replace-equals-current-first", yes(directed.replace_if_equal(Some(&"X".into()), Some(&expected),
+    |                                                ---------^^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Directional>`
+
+error[E0599]: no method named `remove_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:161:56
+    |
+161 |     record("remove-equals-current-first", yes(directed.remove_if_equal(Some(&"X".into()), Some(&expected))?));
+    |                                                        ^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Directional>`
+
+error[E0599]: no method named `remove_if_equal` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+   --> crates\seata_test\tests\map_defaults_java.rs:164:29
+    |
+164 |     let removed = reentrant.remove_if_equal(Some(&"KEY".into()), Some(&expected))?;
+    |                             ^^^^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Directional>`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-test` (test "map_defaults_java") due to 38 previous errors

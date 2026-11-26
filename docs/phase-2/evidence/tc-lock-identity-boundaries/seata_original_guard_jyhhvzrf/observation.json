@@ -1,0 +1,94 @@
+{
+  "cases": [
+    {
+      "branch_id": 4045078482739871747,
+      "case": "alias-owner",
+      "exception": null,
+      "lock_key": "undo_work:1",
+      "lockable": null,
+      "pk": "1",
+      "resource": "jdbc:mysql://127.0.0.1:55818/undo_38ff538f9897",
+      "table": "undo_work",
+      "tuple": null,
+      "xid": "198.18.0.1:55819:4045078482739871745"
+    },
+    {
+      "branch_id": null,
+      "case": "alias-same-id",
+      "exception": 2,
+      "lock_key": "undo_work:1",
+      "lockable": false,
+      "pk": "1",
+      "resource": "jdbc:mysql://127.0.0.1:55818/undo_38ff538f9897",
+      "table": "undo_work",
+      "tuple": null,
+      "xid": "198.18.0.1:55819:4045078482739871748"
+    },
+    {
+      "branch_id": 4045078482739871753,
+      "case": "alias-other-id",
+      "exception": null,
+      "lock_key": "undo_work:1",
+      "lockable": true,
+      "pk": "1",
+      "resource": "jdbc:mysql://127.0.0.1:55822/undo_38ff538f9897",
+      "table": "undo_work",
+      "tuple": null,
+      "xid": "198.18.0.1:55819:4045078482739871751"
+    },
+    {
+      "branch_id": 4045078482739871759,
+      "case": "composite-owner",
+      "exception": null,
+      "lock_key": "identity_pair:a_b_c",
+      "lockable": null,
+      "pk": "a_b_c",
+      "resource": "jdbc:mysql://127.0.0.1:55818/undo_38ff538f9897",
+      "table": "identity_pair",
+      "tuple": [
+        "a_b",
+        "c"
+      ],
+      "xid": "198.18.0.1:55819:4045078482739871757"
+    },
+    {
+      "branch_id": null,
+      "case": "composite-collision",
+      "exception": 2,
+      "lock_key": "identity_pair:a_b_c",
+      "lockable": false,
+      "pk": "a_b_c",
+      "resource": "jdbc:mysql://127.0.0.1:55818/undo_38ff538f9897",
+      "table": "identity_pair",
+      "tuple": [
+        "a",
+        "b_c"
+      ],
+      "xid": "198.18.0.1:55819:4045078482739871760"
+    },
+    {
+      "branch_id": 4045078482739871765,
+      "case": "composite-distinct",
+      "exception": null,
+      "lock_key": "identity_pair:a_b_d",
+      "lockable": true,
+      "pk": "a_b_d",
+      "resource": "jdbc:mysql://127.0.0.1:55818/undo_38ff538f9897",
+      "table": "identity_pair",
+      "tuple": [
+        "a",
+        "b_d"
+      ],
+      "xid": "198.18.0.1:55819:4045078482739871763"
+    }
+  ],
+  "physical": {
+    "alias": "jdbc:mysql://127.0.0.1:55822/undo_38ff538f9897",
+    "distinct_composite_rows": 3,
+    "mysql_port": "3306",
+    "primary": "jdbc:mysql://127.0.0.1:55818/undo_38ff538f9897",
+    "schema": "undo_38ff538f9897",
+    "seed": "physical-seed",
+    "server_uuid": "2158a9ac-e317-11f1-8bab-52eb4e9431a2"
+  }
+}

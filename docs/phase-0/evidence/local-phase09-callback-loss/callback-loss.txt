@@ -1,0 +1,18 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.37s
+     Running `D:\cargo-target\seata-phase09\debug\seata-java-tc-it.exe --callback-loss`
+PASS RegisterTM identified=true protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS RegisterRM identified=true resourceId=mysql://orders protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS live Java TC registration smoke: TM + RM
+GlobalBegin xid=198.18.0.1:28091:4045076258168659969 scenario=branch-commit
+BranchRegister xid=198.18.0.1:28091:4045076258168659969 branchId=4045076258168659970 resource=mysql://orders
+INJECT drop-first-callback-response xid=198.18.0.1:28091:4045076258168659969 branchId=4045076258168659970 type=3 requestId=1 simulatedActions=1
+PASS TC redelivery xid=198.18.0.1:28091:4045076258168659969 branchId=4045076258168659970 type=3 firstRequestId=1 retryRequestId=2 deliveries=2 simulatedActions=1
+PASS branch-commit xid=198.18.0.1:28091:4045076258168659969 branchId=4045076258168659970 responseStatus=9 observedStatus=15 callbackLoss=true; simulated RM only
+GlobalBegin xid=198.18.0.1:28091:4045076258168659971 scenario=branch-rollback
+BranchRegister xid=198.18.0.1:28091:4045076258168659971 branchId=4045076258168659972 resource=mysql://orders
+INJECT drop-first-callback-response xid=198.18.0.1:28091:4045076258168659971 branchId=4045076258168659972 type=5 requestId=3 simulatedActions=1
+OBSERVE initial GlobalRollback FAILED xid=198.18.0.1:28091:4045076258168659971 errorCode=0 message=Some("TransactionException[org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:28091:4045076258168659971 branchId = 4045076258168659972]") status=RollbackRetrying(5); outcome pending, no replay
+PASS TC redelivery xid=198.18.0.1:28091:4045076258168659971 branchId=4045076258168659972 type=5 firstRequestId=3 retryRequestId=4 deliveries=2 simulatedActions=1
+PASS branch-rollback xid=198.18.0.1:28091:4045076258168659971 branchId=4045076258168659972 responseStatus=5 observedStatus=15 callbackLoss=true; simulated RM only
+PASS callback response-loss probe; process-local simulated actions only; durable/database idempotency NOT tested

@@ -1,0 +1,149 @@
+"""运行固定 JVM/Go 全局状态观察；仅向 D:/E: 写入独立结果目录。"""
+import argparse
+import datetime
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import uuid
+import xml.etree.ElementTree as ET
+from urllib.parse import unquote, urlparse
+
+ROOT = Path(__file__).resolve().parents[2]
+HERE = Path(__file__).resolve().parent
+ORACLE = ROOT.parent / 'seata-java-phase09-oracle'
+COHORT = Path('D:/codex-builds/sif_20261112_232026_e565657b')
+
+
+def module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    value = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(value)
+    return value
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def put(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('xb') as stream:
+        stream.write(value.encode('utf-8') if isinstance(value, str) else value)
+
+
+def save(path, value):
+    put(path, json.dumps(value, indent=2, ensure_ascii=False) + '\n')
+
+
+def command(args, cwd, env, log, timeout=120):
+    result = subprocess.run([str(value) for value in args], cwd=cwd, env=env,
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0), timeout=timeout)
+    put(log, result.stdout)
+    if result.returncode:
+        raise RuntimeError(f'Command failed ({result.returncode}): {log}')
+
+
+def freeze(out, paths):
+    rows = []
+    for path in sorted(set(paths)):
+        name = 'inputs/' + hashlib.sha256(str(path).encode()).hexdigest()[:20] + '.bin'
+        put(out / name, path.read_bytes())
+        rows.append(dict(path=str(path), snapshot=name, sha256=sha(path)))
+    save(out / 'input-audit.json', rows)
+    return rows
+
+
+def unchanged(rows):
+    for row in rows:
+        if sha(Path(row['path'])) != row['sha256']:
+            raise RuntimeError('Input changed: ' + row['path'])
+
+
+def run(capture_only=False):
+    audit = module('status_inflight_audit', ROOT / 'tools/go-java-v1-inflight/audit.py')
+    h = audit.sdk.h
+    deps = module('status_runtime_dependencies', ROOT / 'tools/java-retry-timeout-candidate/file_runtime.py')
+    stamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:8]
+    out = ROOT / 'docs/phase-0/evidence/local-global-status-contract' / ('run_' + stamp)
+    runtime = Path('D:/codex-builds') / ('status_' + stamp)
+    out.mkdir(parents=True)
+    runtime.mkdir()
+    print('STATUS_RUN ' + str(out), flush=True)
+    report = Path('D:/codex-builds/jret_20261113_010005_fe3b7eb3/server/target/surefire-reports/TEST-org.apache.seata.server.session.FileSessionManagerTest.xml')
+    suite = ET.parse(report).getroot()
+    cp = next(p.get('value') for p in suite.findall('properties/property') if p.get('name') == 'surefire.test.class.path').rstrip(';')
+    dependencies = deps.dependency_inventory(cp)
+    save(out / 'dependencies-before.json', dependencies)
+    put(out / 'effective-classpath.txt', cp)
+    native_audit = audit.sdk.c.audit_go()
+    profile_audit = audit.run(COHORT)
+    java_audit = h.audit_build(ORACLE, ORACLE)
+    save(out / 'go-original-before.json', native_audit)
+    save(out / 'go-profile-before.json', profile_audit)
+    save(out / 'java-source-before.json', java_audit)
+    inputs = list(HERE.glob('*.py')) + list(HERE.glob('*.go')) + list(HERE.glob('*.java'))
+    inputs += [ROOT / 'docs/phase-0/java-global-status-contract-plan.md', report]
+    # 冻结实际执行到的既有支持模块，避免仅冻结入口脚本。
+    inputs += [Path(m.__file__) for m in tuple(sys.modules.values())
+               if getattr(m, '__file__', None) and str(m.__file__).replace('\\', '/').startswith(str(ROOT).replace('\\', '/'))]
+    frozen = freeze(out, inputs)
+    classes = runtime / 'classes'
+    classes.mkdir()
+    args = ['-encoding', 'UTF-8', '-cp', cp, '-d', classes, HERE / 'GlobalStatusContractProbe.java']
+    argfile = runtime / 'compile.args'
+    put(argfile, '\n'.join(deps.quoted(value) for value in args) + '\n')
+    command([h.JAVA.parent / 'javac.exe', '@' + str(argfile)], ROOT, h.ENV, out / 'java-compile.log')
+    command([h.JAVA, '-Djava.io.tmpdir=D:/Temp', '-cp', str(classes) + ';' + cp,
+             'GlobalStatusContractProbe', out / 'java.json'], runtime, h.ENV, out / 'java.log')
+    java = json.loads((out / 'java.json').read_bytes())
+    class_rows = []
+    for origin in java['origins']:
+        relative = Path(*origin['class'].split('.')).with_suffix('.class')
+        location = unquote(urlparse(origin['location']).path).lstrip('/')
+        current = Path(location) / relative
+        matches = [p for p in ORACLE.rglob(relative.name)
+                   if '/target/classes/' in p.as_posix() and p.as_posix().endswith(relative.as_posix())]
+        if len(matches) != 1 or sha(current) != sha(matches[0]):
+            raise RuntimeError('Critical class differs from original target: ' + origin['class'])
+        class_rows.append(dict(**origin, path=str(current), sha256=sha(current), original=str(matches[0])))
+    save(out / 'critical-class-audit.json', class_rows)
+    for mode, work in [('native', audit.sdk.c.GO_ROOT), ('profile', COHORT)]:
+        binary = runtime / ('go-' + mode + '.exe')
+        command(['go', 'build', '-o', binary, HERE / 'common.go', HERE / (mode + '_main.go')], work,
+                audit.sdk.c.GO_ENV, out / ('go-' + mode + '-build.log'))
+        command([binary, out / 'java.json', out / ('go-' + mode + '.json')], runtime,
+                audit.sdk.c.GO_ENV, out / ('go-' + mode + '.log'))
+        save(out / ('go-' + mode + '-binary.json'), dict(path=str(binary), sha256=sha(binary)))
+    unchanged(frozen)
+    if native_audit != audit.sdk.c.audit_go() or profile_audit != audit.run(COHORT):
+        raise RuntimeError('Go closure changed during execution')
+    if java_audit != h.audit_build(ORACLE, ORACLE) or dependencies != deps.dependency_inventory(cp):
+        raise RuntimeError('Java source or dependency changed during execution')
+    save(out / 'post-run-audit.json', dict(inputs_unchanged=True, go_closures_unchanged=True,
+         java_source_unchanged=True, dependencies_unchanged=True, critical_classes=len(class_rows)))
+    if capture_only:
+        save(out / 'capture-only.json', dict(status='captured_not_accepted', runtime=str(runtime)))
+    else:
+        verifier = module('global_status_verifier', HERE / 'verify.py')
+        result = verifier.check(java, json.loads((out / 'go-native.json').read_bytes()),
+                                json.loads((out / 'go-profile.json').read_bytes()))
+        env = h.ENV.copy()
+        env['SEATA_STATUS_RUN'] = str(out)
+        command([sys.executable, '-m', 'unittest', 'discover', '-s', HERE, '-p', 'test_verify.py', '-v'], ROOT,
+                env, out / 'python-tests.log')
+        unchanged(frozen)
+        save(out / 'result.json', dict(**result, status='bounded_contract_verified', runtime=str(runtime)))
+    print('STATUS_DONE ' + str(out), flush=True)
+    return out
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--capture-only', action='store_true')
+    options = parser.parse_args()
+    run(options.capture_only)

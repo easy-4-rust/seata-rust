@@ -1,0 +1,250 @@
+{
+  "status": "JACKSON_THREE_INHERITED_ORIGINAL_JUNIT_CASES_MATCH",
+  "predecessor": "docs/phase-2/wp05-fastjson-undo-h2-source.json",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "original_source_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_jackson_junit_sluoxm05",
+  "original_source_catalog_sha256": "d454d3615e881734f00e15e3b55db1a79517b4a68932699891b6af98aa7ab4e0",
+  "original_java_cases_reexecuted": 9,
+  "original_jackson_cases_rust_match": 3,
+  "original_jackson_cases_rust_remaining": 6,
+  "fastjson_regression_java_leaves": 7,
+  "fastjson_regression_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_junit_nurz947n",
+  "fastjson_regression_sha256": {
+    "original-junit.jsonl": "f02343e0e62fd66ba90b8806af6fce17419d3e5d15b3ad31a6610fdb916b414f",
+    "recorded-junit.jsonl": "9bd250ed2c80bfd22372aac9169c398d5be90d80e519576befb193697f14ddda",
+    "h2-source-input.tsv": "ef91228a35b752f84a4e0826feca5fc7d8448a72398c7e331a55d53f15078f6b"
+  },
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest]/[method:testDecodeDefaultContent()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+      "java": [
+        "{}",
+        "true",
+        "true",
+        "0",
+        "true"
+      ],
+      "rust": {
+        "1.99": [
+          "{}",
+          "true",
+          "true",
+          "0",
+          "true"
+        ],
+        "1.85": [
+          "{}",
+          "true",
+          "true",
+          "0",
+          "true"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest]/[method:testEncodeAndDecode()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+      "java": [
+        "true",
+        "123456",
+        "xiddddddddddd",
+        "2",
+        "UPDATE",
+        "table_name",
+        "true",
+        "true",
+        "UPDATE",
+        "table_name",
+        "true",
+        "true",
+        "{\"@class\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"xid\":\"xiddddddddddd\",\"branchId\":123456,\"sqlUndoLogs\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}},{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}}]]}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "123456",
+          "xiddddddddddd",
+          "2",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"xid\":\"xiddddddddddd\",\"branchId\":123456,\"sqlUndoLogs\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}},{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}}]]}"
+        ],
+        "1.85": [
+          "true",
+          "123456",
+          "xiddddddddddd",
+          "2",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"xid\":\"xiddddddddddd\",\"branchId\":123456,\"sqlUndoLogs\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}},{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}}]]}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest]/[method:testPerformance()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+      "java": [
+        "100000",
+        "true",
+        "123456",
+        "{\"@class\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"xid\":\"xiddddddddddd\",\"branchId\":123456,\"sqlUndoLogs\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}},{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}}]]}"
+      ],
+      "rust": {
+        "1.99": [
+          "100000",
+          "true",
+          "123456",
+          "{\"@class\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"xid\":\"xiddddddddddd\",\"branchId\":123456,\"sqlUndoLogs\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}},{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}}]]}"
+        ],
+        "1.85": [
+          "100000",
+          "true",
+          "123456",
+          "{\"@class\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"xid\":\"xiddddddddddd\",\"branchId\":123456,\"sqlUndoLogs\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"aaa\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}},{\"@class\":\"org.apache.seata.rm.datasource.undo.SQLUndoLog\",\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\",\"beforeImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]},\"afterImage\":{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.TableRecords\",\"tableName\":\"table_name\",\"rows\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12345},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Row\",\"fields\":[\"java.util.ArrayList\",[{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"ID\",\"keyType\":\"NULL\",\"type\":4,\"value\":12346},{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"NAME\",\"keyType\":\"NULL\",\"type\":12,\"value\":\"xxx\"}]]}]]}}]]}"
+        ]
+      },
+      "status": "MATCH"
+    }
+  ],
+  "inherited_method_concrete_variants": 6,
+  "inherited_method_fully_migrated": false,
+  "global_methods_remaining": 1026,
+  "global_rust_methods_match": 109,
+  "global_cases_remaining": 1208,
+  "global_rust_source_MATCH": 119,
+  "rust": {
+    "1.99": {
+      "ordinary": 549,
+      "ignored": 164,
+      "harnesses": 115,
+      "doc": 4,
+      "original_junit_matches": 3,
+      "original_assertion_sites_match": 18,
+      "h2_performance_iterations": 100000
+    },
+    "1.85": {
+      "ordinary": 549,
+      "ignored": 164,
+      "harnesses": 115,
+      "doc": 4,
+      "original_junit_matches": 3,
+      "original_assertion_sites_match": 18,
+      "h2_performance_iterations": 100000
+    }
+  },
+  "rust_evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_jackson_source",
+  "runtime_controls": [
+    {
+      "label": "swap-jackson-original-images",
+      "target": "jackson_source_test_encode_and_decode",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_28req63m",
+      "mutated_file": "crates/seata_at/src/undo/parser/jackson_original_format.rs",
+      "original_sha256": "aeb5122d10a2f0e7fa2e31dc877009c245bb354a517f24501d376fcda3fcb653",
+      "mutant_sha256": "5ee295748475c6afee04e43ee482372200a764636e8e35cba7ad3e1152964a8a",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "jackson_undo_source",
+        "--",
+        "jackson_source_test_encode_and_decode",
+        "--exact",
+        "--nocapture",
+        "--include-ignored"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "drop-jackson-long-class",
+      "target": "jackson_original_scalar_types_and_output_budget_are_preserved",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_28req63m",
+      "mutated_file": "crates/seata_at/src/undo/parser/jackson_original_format.rs",
+      "original_sha256": "aeb5122d10a2f0e7fa2e31dc877009c245bb354a517f24501d376fcda3fcb653",
+      "mutant_sha256": "493555671584fae764ab9f609cb71fd7d03c79239fc1170a7825cd00b1dcbda9",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "jackson_undo_source",
+        "--",
+        "jackson_original_scalar_types_and_output_budget_are_preserved",
+        "--exact",
+        "--nocapture",
+        "--include-ignored"
+      ],
+      "exit": 101
+    }
+  ],
+  "evidence_sha256": {
+    "1.85-clippy.log": "10a2a592684dc89a8207e5db7af41eedd72185fd71b234543d7db44d78e65430",
+    "1.85-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-doc.log": "297a7b7f57dff2e2106e3d3aefb9349fa88434193e086f2be6cbaba1e5dc4a79",
+    "1.85-targeted.log": "fbdc80458b7f6f2fd68c3d61cff9071c59ffff427e3ddd8fb7a81c9a1477bb43",
+    "1.85-tests.log": "ae4ce0ee6c1b927a8f29e2076c32170ff7d160cfc2eb8824313683012bb1cb3e",
+    "1.99-clippy.log": "1a9f5242c5c414c753914abda9ee00e85048a357d1e78f40ec3c1aaa06965bf4",
+    "1.99-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-doc.log": "a2668e16ece1853a59ff28be771cf3428e48bd7196769b0dace0f0be204f8dfb",
+    "1.99-targeted.log": "c5251e9f68b3cabafdf2f11d6846256c5d323be7e7a6c60cef2ef9018d1ccb87",
+    "1.99-tests.log": "214f2fb76ef831310d577f762d0c02a378cfb9a398818d828456de61391d420a",
+    "api-red.log": "a551b21c725d18503ac3844d6e91e172235d81462de5d8a170d9f24b13cd007c",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "jackson-utf8.stderr": "cf0f744b42966047acd81fed9255735f73de71b2162c4d551e3a576dc762862e",
+    "jackson-utf8.stdout": "be9debe6eefdefbf48bfad2a5833e3ce7d3d404bd414100296840f05d6b78299",
+    "JacksonUtf8Oracle.java": "2c78c387dad602dd84ef2d0304720103b2224ca9bde4cbeafe3edc2a7af57543",
+    "mutant-drop-jackson-long-class.stderr": "40397c359f0529efe0076db9a1f589622339e824c5a46b1c19a1abf01ea10036",
+    "mutant-drop-jackson-long-class.stdout": "6d5a3b7935b0f157616183ad1a535cc2de50834458408b1cda24ed15644c3c3a",
+    "mutant-swap-jackson-original-images.stderr": "5cc5cc465118661632a08b31c7b8f249c8bd65cfed1463c4516c1153c2adbdeb",
+    "mutant-swap-jackson-original-images.stdout": "53a3a9336a45e886e6df9a083b72931f95c816dd1b9cbf7ac320efe11d7f3423",
+    "review-red.log": "d8001490b320782d2b58f81b7eaa7de8a96fb867115d41fdac982d72f60fc8e5",
+    "runtime-mutation-controls.json": "224c07cab3047af9d11d054f9bf4442bb55886f573dfb9b3e175ebf7189e4e95"
+  },
+  "source_inputs_sha256": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_at/src/undo/parser/mod.rs": "d1e78c8860c50539e0c491251f315587eb9b7c788d9959b9b8c00ae5d2af352a",
+    "crates/seata_at/src/undo/parser/jackson_original_format.rs": "aeb5122d10a2f0e7fa2e31dc877009c245bb354a517f24501d376fcda3fcb653",
+    "crates/seata_at/src/undo/parser/jackson_undo_log_parser.rs": "1df77393155a697179fada767e168673351b098bfc0ab553cd85cb640a36a527",
+    "crates/seata_at/src/undo/parser/undo_log_document.rs": "369fe5b06d10efa0816e29c49b3e12b93910b7ea3ad54b3ef942c1d166d53d1f",
+    "crates/seata_at/src/undo/parser/fastjson_undo_log_parser.rs": "0ebd6c5e3bb60adcfad84bb39a20234460422e950cc25b78381d05b8a3e2a857",
+    "crates/seata_at/src/undo/parser/bounded_output.rs": "06b2c407eb140949c5b7584ad8fc4047c9404bc416adff17560961107cf770df",
+    "crates/seata_at/src/undo/parser/strict_json.rs": "63f8c2d3b57e739fc6a28d9588440555991d6c21f9c3a4e679f74e055bba1588",
+    "crates/seata_at/src/undo/parser/restored_format.rs": "3329dccb0470dc070ebf7188da485863e24019375e6f2c03e8ac927b5b0a7e4d",
+    "crates/seata_at/src/undo/parser/fastjson_undo_field_value.rs": "3736b443101ba4a6d373984f2a4934fef1ea9292f39123ab96daacbb893f8375",
+    "crates/seata_at/tests/jackson_undo_source.rs": "d20d26dcd54cf2037be415719ed5cda2e311cabeae4c6116355dadf6402b1935",
+    "crates/seata_at/tests/support/undo_h2_input.rs": "dd4b7f42cdeee2b0c0c8af101e400457d4051346ef99c530f6953b8457dd8850",
+    "crates/seata_at/tests/support/fastjson_h2_source.rs": "777b71fcef295adcd99657500d95af6da646bbf5ca4f63bc3f5b75df0f2b078b",
+    "tools/formal-source-junit/fastjson_undo_source.py": "1458548b9f9f24d9e9135f43b84a2a21c57c7df8528d75c7c39aa0899013b5a3",
+    "tools/formal-source-junit/FastjsonUndoH2Observer.java": "de83358abb5f506f5abfbf6c001e156b521f59caa133e82661eb35eb29fd3eb9"
+  },
+  "h2_input": "docs/phase-2/evidence/fastjson-undo-native/seata_jackson_junit_sluoxm05/h2-source-input.tsv",
+  "h2_input_sha256": "ef91228a35b752f84a4e0826feca5fc7d8448a72398c7e331a55d53f15078f6b",
+  "full_h2_rows_and_wire_match": true,
+  "each_original_performance_run_iterations": 100000,
+  "benchmark_claim": false,
+  "live_mysql_rollback_verified_this_round": false,
+  "phase_05_complete": false,
+  "phase_06_complete": false,
+  "v1_complete": false
+}

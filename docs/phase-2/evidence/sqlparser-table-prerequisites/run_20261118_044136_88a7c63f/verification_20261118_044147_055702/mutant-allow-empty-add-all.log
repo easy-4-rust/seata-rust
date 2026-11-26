@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_metadata_case_20261118_044136_88a7c63f\mutants\verification_20261118_044147_055702\allow-empty-add-all\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_metadata_case_20261118_044136_88a7c63f\mutants\verification_20261118_044147_055702\allow-empty-add-all\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.82s
+     Running tests\table_primary_set.rs (D:/cargo-target/seata-table-set-mutants\debug\deps\table_primary_set-09028fad64b9dc13.exe)
+
+running 1 test
+test unmodifiable_empty_and_case_equality_keep_java_hash_inconsistency ... FAILED
+
+failures:
+
+---- unmodifiable_empty_and_case_equality_keep_java_hash_inconsistency stdout ----
+
+thread 'unmodifiable_empty_and_case_equality_keep_java_hash_inconsistency' (38348) panicked at crates\seata_test\tests\table_primary_set.rs:159:5:
+assertion `left == right` failed
+  left: ["false", "java.lang.UnsupportedOperationException", "java.lang.UnsupportedOperationException", "java.lang.UnsupportedOperationException", "false"]
+ right: ["false", "java.lang.UnsupportedOperationException", "java.lang.UnsupportedOperationException", "java.lang.UnsupportedOperationException", "java.lang.UnsupportedOperationException"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    unmodifiable_empty_and_case_equality_keep_java_hash_inconsistency
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test table_primary_set`

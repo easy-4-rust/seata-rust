@@ -1,0 +1,15 @@
+{
+  "issue": "JAVA-METRICS-RETRY-001",
+  "status": "OPEN",
+  "scope": "Original TC null endTime metrics subscriber re-entry; not repaired by this business recovery evidence",
+  "events": [
+    {
+      "stage": "operator_loss",
+      "line": "00:50:51.257 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@915d7c4 when dispatching event: GlobalTransactionEvent{id=4045076515947671553, role='tc', name='real-mixed-commit-timeout', applicationId='real-at-full-sdk', group='real_at', beginTime=1794502234504, endTime=null, status='CommitRetryTimeout', retryGlobal=true, retryBranch=false}"
+    },
+    {
+      "stage": "operator_replay",
+      "line": "00:51:04.704 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@915d7c4 when dispatching event: GlobalTransactionEvent{id=4045076515947671553, role='tc', name='real-mixed-commit-timeout', applicationId='real-at-full-sdk', group='real_at', beginTime=1794502234504, endTime=null, status='CommitRetryTimeout', retryGlobal=true, retryBranch=false}"
+    }
+  ]
+}

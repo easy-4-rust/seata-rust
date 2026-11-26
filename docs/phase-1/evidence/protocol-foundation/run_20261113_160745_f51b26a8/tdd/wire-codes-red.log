@@ -1,0 +1,28 @@
+     Locking 6 packages to highest compatible versions
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling thiserror v2.0.21
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+error[E0432]: unresolved imports `seata_protocol::BranchStatus`, `seata_protocol::BranchType`, `seata_protocol::CompressorType`, `seata_protocol::GlobalStatus`, `seata_protocol::MessageType`, `seata_protocol::ProtocolError`, `seata_protocol::RequestType`, `seata_protocol::ResultCode`, `seata_protocol::SerializerType`, `seata_protocol::TransactionExceptionCode`
+ --> crates\seata_protocol\tests\wire_codes.rs:3:5
+  |
+3 |     BranchStatus, BranchType, CompressorType, GlobalStatus, MessageType, ProtocolError,
+  |     ^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^ no `ProtocolError` in the root
+  |     |             |           |               |             |
+  |     |             |           |               |             no `MessageType` in the root
+  |     |             |           |               no `GlobalStatus` in the root
+  |     |             |           no `CompressorType` in the root
+  |     |             no `BranchType` in the root
+  |     no `BranchStatus` in the root
+4 |     RequestType, ResultCode, SerializerType, TransactionExceptionCode,
+  |     ^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^ no `TransactionExceptionCode` in the root
+  |     |            |           |
+  |     |            |           no `SerializerType` in the root
+  |     |            no `ResultCode` in the root
+  |     no `RequestType` in the root
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-protocol` (test "wire_codes") due to 1 previous error

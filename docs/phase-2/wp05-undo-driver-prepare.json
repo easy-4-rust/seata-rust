@@ -1,0 +1,92 @@
+{
+  "status": "UNDO_PREPARE_SERVER_AND_REDACTED_IO_DIAGNOSTICS_VERIFIED",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-fragment-read-source.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_driver_prepare",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_original_cases_reexecuted": 3,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest]/[method:driverFailuresAreConvertedWithoutLosingCause()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest",
+      "status": "PARTIAL",
+      "covered": [
+        "INSERT prepare rejection/disconnect with valid fragment data",
+        "Single child 101 prepare rejection for branch 42 and original XID"
+      ],
+      "remaining": [
+        "Java age-based delete",
+        "Java exception object identity",
+        "Java injected prepare failure with empty INSERT payload differs from Rust input preflight"
+      ]
+    }
+  ],
+  "verified": [
+    "Server PREPARE rejection keeps SQLSTATE 42000 and code 1142, with no attempted EXECUTE",
+    "Disconnected INSERT PREPARE retains UnexpectedEof in the error source chain",
+    "OS code retained and custom raw message removed from Debug, Display and source"
+  ],
+  "compatibility": "New public Driver.io_source field affects explicit construction and field patterns without ..",
+  "age_based_delete": "Fence lifetime contract requires proof all old attempts have terminated before GC",
+  "independent_review": "Partial source match; confirmed original server diagnostics and sanitized I/O cause handling",
+  "rust": {
+    "1.99": {
+      "ordinary": 624,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "undo_fragment_tests": 18,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 624,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "undo_fragment_tests": 18,
+      "strict_clippy": true
+    }
+  },
+  "mutation_controls": 2,
+  "global_rust_source_MATCH": 152,
+  "global_rust_methods_match": 131,
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/db_error.rs": "b61e298554f09eabfc49ecdae7e8e216bb37c8fbf8d50ef308b8eadbfe42bf8d",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "fff5e24c56931c637b5c78639660d4d924971cd67c36b4d8cb4730a49c41ed9a",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_read_sqlx_tests.rs": "1c3649bfc884a6f6f4ddeb39592a49a8d70230bf977705325b1c8ac5d7406806",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_sqlx_tests.rs": "8621c34bf30252bb5336d960b33a4ebb08bddf2eed9524fc121e039667b48ac2",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_cleanup_sqlx_tests.rs": "a4c3415b1ad98611aa81282b03201f4a1144cc29407d3cc33c5c9461dffa432f",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "860299b9f81818e5969bddc4181ac54d8671419e85b94961403d4c5a820bf4a7",
+    "crates/seata_db_mysql/src/data_source_proxy_rollback_sqlx_tests.rs": "24598c8dd80e3b5bc19bdf4085a3ba0cf89008c3c504196de75c59d121c83928",
+    "crates/seata_db_mysql/src/data_source_manager_rollback_sqlx_tests.rs": "022eff1710cf9def965d9eb2f368740a8605aa5f29f5f9590a9c8c5294cb0ff9",
+    "crates/seata_db_mysql/src/undo_rollback_attempt_tests.rs": "22ab8f4bfcf32b416605e04d98ffb3e86c574ec9c64513e95e9c644220b80133"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "917a7eb5ce4228953212743cdf68facee8ecb1687396ee3ef75927abd286409e",
+    "1.85-doc.log": "fa8c298bbf04494d59a584508987aa77143f8537c2a964f38d5368730a75efd5",
+    "1.85-targeted.log": "b94d41c278b4064466f5dca98b686b90b80cec40ddd1560d7c7d3a018f8942d8",
+    "1.85-tests.log": "bfc270e49a74051055e4a2dcbe7bc67feca2818c928addeb6f971089184b8c9a",
+    "1.99-clippy.log": "564a890dae0c6185a9fb36c14b1bea235d7a664001a98d7dda05964df332e2aa",
+    "1.99-doc.log": "2fdd212d04eefeb74c2c033be7c5bd5079401c880f99c45d5a6e37c6a4fb43cb",
+    "1.99-targeted.log": "eff14aaf05da5bfa7d308ecf632b6f156c9ebdec6b52e99f66f3c9fcbb5556a0",
+    "1.99-tests.log": "a1911ab24d6c0788f788648b129e16ae7cd032ed58b1bf063c933b1e3380ea1f",
+    "commands.json": "b3eec6c276dbc63daf32ad4aa4f8965903b1b7eb9c7519d3a3ee0ab8b5c2e9dc",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-discard-io-cause.stderr": "37709efb8d6c5db1315045a37fd60705767ace922ca624f703419886c3127cc8",
+    "mutant-discard-io-cause.stdout": "cf16261818b1b1c079c0abc9caec4897e9993015ff3f96d67cbca2d4afdff623",
+    "mutant-preserve-driver-message.stderr": "47a1a91c3b0e48f244e4cb09c6067f60c5027fd6b3ecf44f0fc597d504fcf6d3",
+    "mutant-preserve-driver-message.stdout": "934676be6d325544bebcd94b6a0bbebb81a28bb38cfe1c095b86b5d0c7795e39",
+    "mysql-environment.log": "21b265507da1c962fac8abe46058a75e3e038590d1c0df306f11d3065c7af21a",
+    "MySQLUndoLogManagerBehaviorTest.java": "369e52c346830fefd6617c6843c7220dcede0e02cb95a867585910d41823d846",
+    "original-inputs.json": "1cdebefbdf5c185066eaf9bec3050cfc0072881527c78a2287a729f210ceb751",
+    "original-junit.jsonl": "c54dc97bbeee8a746f041d997d885f44d48dacd6d60026cb700c6c9c01e6e82f",
+    "original-junit.log": "cdadaf3fcc4cd90f0ed928fb6a0ac1f9fca45242bfc58a151174005a39d8643e",
+    "pre-fix-red.log": "5ae84408abc26ca88a896155c45150c2a95ad36c677137f120e6d02b87b0c977",
+    "runtime-mutation-controls.json": "c4296087f323532103c1b87018295a6923515e003b4ae1db7b3948988d178e77"
+  }
+}

@@ -1,0 +1,17 @@
+MYSQL_UNDO_CODEC_RUN D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\live-reverse-binary\docs\phase-2\evidence\mysql-undo-codec\run_20261115_234405_a530d904
+Traceback (most recent call last):
+  File "D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\live-reverse-binary\tools\formal-undo-codec\live.py", line 192, in <module>
+    run(args.case,args.rust,args.suite)
+  File "D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\live-reverse-binary\tools\formal-undo-codec\live.py", line 156, in run
+    run_prepared_peer(out,runtime,env)
+  File "D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\live-reverse-binary\tools\formal-undo-format\prepared_peer.py", line 65, in run_prepared_peer
+    java('UndoDocumentPeer',['compare',work/'references',work/'comparison',manifest],'actual-JDBC-Rust-comparison',None)
+  File "D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\live-reverse-binary\tools\formal-undo-format\prepared_peer.py", line 54, in java
+    command(['D:/Java/jdk-17.0.12/bin/java.exe','-Djava.io.tmpdir=D:/Temp','-Duser.home='+str(work),
+  File "D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\live-reverse-binary\tools\formal-undo-format\prepared_peer.py", line 40, in command
+    put(name,value.stdout);need(value.returncode==0,name+' failed');return value.stdout
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\live-reverse-binary\tools\formal-undo-format\prepared_peer.py", line 17, in need
+    if not value:raise ValueError(message)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: actual-JDBC-Rust-comparison.stdout.log failed

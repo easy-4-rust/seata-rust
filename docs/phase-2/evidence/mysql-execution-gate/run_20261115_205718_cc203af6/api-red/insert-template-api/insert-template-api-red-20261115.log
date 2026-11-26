@@ -1,0 +1,29 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling thiserror v2.0.21
+   Compiling log v0.4.27
+   Compiling sqlparser v0.52.0
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0599]: no method named `insert_rows` found for struct `SqlRecognizer` in the current scope
+ --> crates\seata_at\tests\insert_value_templates.rs:8:60
+  |
+8 |     assert_eq!(parsed.parameter_count(),4);let rows=parsed.insert_rows();assert_eq!(rows.len(),2);
+  |                                                            ^^^^^^^^^^^ method not found in `SqlRecognizer`
+
+error[E0599]: no method named `insert_rows` found for struct `SqlRecognizer` in the current scope
+  --> crates\seata_at\tests\insert_value_templates.rs:16:63
+   |
+16 |         assert!(SqlRecognizerFactory::recognize(sql).unwrap().insert_rows().is_empty());
+   |                                                               ^^^^^^^^^^^ method not found in `SqlRecognizer`
+
+error[E0599]: no method named `insert_rows` found for struct `SqlRecognizer` in the current scope
+  --> crates\seata_at\tests\insert_value_templates.rs:22:36
+   |
+22 |     assert!(!format!("{:?}",parsed.insert_rows()).contains("private-cell-123"));
+   |                                    ^^^^^^^^^^^ method not found in `SqlRecognizer`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-at` (test "insert_value_templates") due to 3 previous errors

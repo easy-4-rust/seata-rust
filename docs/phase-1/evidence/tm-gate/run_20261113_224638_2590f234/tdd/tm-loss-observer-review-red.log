@@ -1,0 +1,58 @@
+test_begin_does_not_expose_observer_xid_or_construct_business (test_validate.ValidatorControls.test_begin_does_not_expose_observer_xid_or_construct_business) ... ok
+test_blind_second_begin_is_rejected (test_validate.ValidatorControls.test_blind_second_begin_is_rejected) ... ok
+test_callback_nonce_and_original_connection_cannot_be_substituted (test_validate.ValidatorControls.test_callback_nonce_and_original_connection_cannot_be_substituted) ... ok
+test_finished_cannot_be_rewritten_as_confirmed_commit_in_client_claim (test_validate.ValidatorControls.test_finished_cannot_be_rewritten_as_confirmed_commit_in_client_claim) ... ok
+test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) ... 
+  test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='commit') ... FAIL
+  test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='rollback') ... FAIL
+test_lock_occupation_and_release_use_original_resource_and_key (test_validate.ValidatorControls.test_lock_occupation_and_release_use_original_resource_and_key) ... ok
+test_only_successful_original_end_response_can_be_withheld (test_validate.ValidatorControls.test_only_successful_original_end_response_can_be_withheld) ... ok
+test_original_response_is_unique_and_not_also_forwarded (test_validate.ValidatorControls.test_original_response_is_unique_and_not_also_forwarded) ... 
+  test_original_response_is_unique_and_not_also_forwarded (test_validate.ValidatorControls.test_original_response_is_unique_and_not_also_forwarded) (mode='commit') ... FAIL
+  test_original_response_is_unique_and_not_also_forwarded (test_validate.ValidatorControls.test_original_response_is_unique_and_not_also_forwarded) (mode='rollback') ... FAIL
+test_positive_cases_preserve_exact_branch_id_and_status_dependent_recovery (test_validate.ValidatorControls.test_positive_cases_preserve_exact_branch_id_and_status_dependent_recovery) ... ok
+test_raw_reply_identity_and_registration_branch_are_bound (test_validate.ValidatorControls.test_raw_reply_identity_and_registration_branch_are_bound) ... ok
+test_retry_cannot_switch_the_original_operation (test_validate.ValidatorControls.test_retry_cannot_switch_the_original_operation) ... ok
+test_retry_requires_actual_status_between_original_and_duplicate (test_validate.ValidatorControls.test_retry_requires_actual_status_between_original_and_duplicate) ... ok
+test_rollback_keeps_business_error_and_native_identity_must_be_accepted (test_validate.ValidatorControls.test_rollback_keeps_business_error_and_native_identity_must_be_accepted) ... ok
+
+======================================================================
+FAIL: test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='commit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-tm-loss\test_validate.py", line 122, in test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation
+    with self.assertRaises(ValueError):validate(mode,text,rows,'n')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='rollback')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-tm-loss\test_validate.py", line 122, in test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation
+    with self.assertRaises(ValueError):validate(mode,text,rows,'n')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_original_response_is_unique_and_not_also_forwarded (test_validate.ValidatorControls.test_original_response_is_unique_and_not_also_forwarded) (mode='commit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-tm-loss\test_validate.py", line 115, in test_original_response_is_unique_and_not_also_forwarded
+    with self.assertRaises(ValueError):validate(mode,text,rows,'n')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_original_response_is_unique_and_not_also_forwarded (test_validate.ValidatorControls.test_original_response_is_unique_and_not_also_forwarded) (mode='rollback')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-tm-loss\test_validate.py", line 115, in test_original_response_is_unique_and_not_also_forwarded
+    with self.assertRaises(ValueError):validate(mode,text,rows,'n')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.005s
+
+FAILED (failures=4)

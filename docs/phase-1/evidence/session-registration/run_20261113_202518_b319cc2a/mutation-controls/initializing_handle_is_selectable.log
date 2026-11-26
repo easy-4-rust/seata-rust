@@ -1,0 +1,39 @@
+   Compiling seata-transport v0.1.0 (D:\codex-builds\seata-registration-controls-6d3e063ab7d7\crates\seata_transport)
+warning: unused variable: `revision`
+   --> crates\seata_transport\src\netty\pool_core.rs:125:13
+    |
+125 |         let revision = self
+    |             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_revision`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `slot`
+   --> crates\seata_transport\src\netty\pool_core.rs:132:17
+    |
+132 |             let slot = &state.snapshot.slots[index];
+    |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_slot`
+
+warning: `seata-transport` (lib) generated 2 warnings (run `cargo fix --lib -p seata-transport` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.52s
+     Running tests\registered_pool.rs (D:/cargo-target/seata-rust-registration-controls\debug\deps\registered_pool-103e1b087142c04f.exe)
+
+running 1 test
+test withheld_tm_identity_prevents_business_write_until_identified ... FAILED
+
+failures:
+
+---- withheld_tm_identity_prevents_business_write_until_identified stdout ----
+
+thread 'withheld_tm_identity_prevents_business_write_until_identified' (69144) panicked at crates\seata_transport\tests\registered_pool.rs:402:5:
+assertion failed: matches!(handle.acquire(Duration::from_millis(40)).await,
+    Err(CallError::LocalFailureBeforeSend
+    { reason: TransportError::PoolAcquireTimeout, .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    withheld_tm_identity_prevents_business_write_until_identified
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-transport --test registered_pool`

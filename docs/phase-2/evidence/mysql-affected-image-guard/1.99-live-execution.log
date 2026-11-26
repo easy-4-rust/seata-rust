@@ -1,0 +1,133 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.23s
+     Running tests\live_execution.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_execution-c287e63d70bb9de7.exe)
+
+running 17 tests
+test after_image_over_budget_is_not_published_and_the_business_effects_roll_back ... FAILED
+test decimal_text_primary_assignment_cannot_capture_an_adjacent_old_row ... FAILED
+test duplicate_key_failure_poisons_and_rollback_removes_all_prior_local_effects ... FAILED
+test execution_failures::business_table_matching_next_internal_name_is_not_shadowed_or_dropped ... FAILED
+test execution_failures::cancellation_after_business_before_after_image_releases_the_actual_write ... FAILED
+test execution_failures::cancellation_after_key_assignment_cleans_temp_and_rolls_back_prior_business ... FAILED
+test execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements ... FAILED
+test execution_failures::deadline_after_key_assignment_cleans_temp_and_rolls_back_prior_business ... FAILED
+test execution_failures::invalid_key_assignment_leaves_no_committed_effect_and_session_exit_cleans_temp ... FAILED
+test execution_failures::missing_temp_permission_poisons_without_committing_prior_business ... FAILED
+test insert_uses_explicit_composite_keys_and_native_exact_values_without_committing ... FAILED
+test key_assignment_staging_preserves_char_binary_decimal_and_does_not_commit_prior_work ... FAILED
+test local_parameter_rejection_preserves_the_scope_without_appending_undo ... FAILED
+test missing_explicit_insert_key_and_primary_key_update_fail_before_business_execution ... FAILED
+test no_match_and_noop_do_not_invent_rows_or_require_a_changed_row_count ... FAILED
+test pending_undo_record_limit_poisons_and_forces_full_rollback ... FAILED
+test update_after_image_uses_original_keys_when_the_where_column_changes_then_delete_is_empty ... FAILED
+
+failures:
+
+---- after_image_over_budget_is_not_published_and_the_business_effects_roll_back stdout ----
+
+thread 'after_image_over_budget_is_not_published_and_the_business_effects_roll_back' (31824) panicked at crates\seata_db_mysql\tests\live_execution.rs:246:5:
+assertion failed: matches!(result, Err(DbError::Image(ImageError::Budget { .. })))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- decimal_text_primary_assignment_cannot_capture_an_adjacent_old_row stdout ----
+
+thread 'decimal_text_primary_assignment_cannot_capture_an_adjacent_old_row' (15268) panicked at crates\seata_db_mysql\tests\live_execution.rs:292:14:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- duplicate_key_failure_poisons_and_rollback_removes_all_prior_local_effects stdout ----
+
+thread 'duplicate_key_failure_poisons_and_rollback_removes_all_prior_local_effects' (41832) panicked at crates\seata_db_mysql\tests\live_execution.rs:213:34:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- execution_failures::business_table_matching_next_internal_name_is_not_shadowed_or_dropped stdout ----
+
+thread 'execution_failures::business_table_matching_next_internal_name_is_not_shadowed_or_dropped' (13176) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:293:39:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- execution_failures::cancellation_after_business_before_after_image_releases_the_actual_write stdout ----
+
+thread 'execution_failures::cancellation_after_business_before_after_image_releases_the_actual_write' (40672) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:140:32:
+execution escaped its actual query barrier: Err(Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None })
+
+---- execution_failures::cancellation_after_key_assignment_cleans_temp_and_rolls_back_prior_business stdout ----
+
+thread 'execution_failures::cancellation_after_key_assignment_cleans_temp_and_rolls_back_prior_business' (4624) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:135:40:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements stdout ----
+
+thread 'execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements' (8768) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:362:14:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- execution_failures::deadline_after_key_assignment_cleans_temp_and_rolls_back_prior_business stdout ----
+
+thread 'execution_failures::deadline_after_key_assignment_cleans_temp_and_rolls_back_prior_business' (43832) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:135:40:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- execution_failures::invalid_key_assignment_leaves_no_committed_effect_and_session_exit_cleans_temp stdout ----
+
+thread 'execution_failures::invalid_key_assignment_leaves_no_committed_effect_and_session_exit_cleans_temp' (44264) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:68:36:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- execution_failures::missing_temp_permission_poisons_without_committing_prior_business stdout ----
+
+thread 'execution_failures::missing_temp_permission_poisons_without_committing_prior_business' (37484) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:30:53:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "connect", sql_state: Some("28000"), code: Some(1045), io_source: None }
+
+---- insert_uses_explicit_composite_keys_and_native_exact_values_without_committing stdout ----
+
+thread 'insert_uses_explicit_composite_keys_and_native_exact_values_without_committing' (44776) panicked at crates\seata_db_mysql\tests\live_execution.rs:40:52:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- key_assignment_staging_preserves_char_binary_decimal_and_does_not_commit_prior_work stdout ----
+
+thread 'key_assignment_staging_preserves_char_binary_decimal_and_does_not_commit_prior_work' (46124) panicked at crates\seata_db_mysql\tests\live_execution.rs:367:36:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- local_parameter_rejection_preserves_the_scope_without_appending_undo stdout ----
+
+thread 'local_parameter_rejection_preserves_the_scope_without_appending_undo' (28372) panicked at crates\seata_db_mysql\tests\live_execution.rs:276:43:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- missing_explicit_insert_key_and_primary_key_update_fail_before_business_execution stdout ----
+
+thread 'missing_explicit_insert_key_and_primary_key_update_fail_before_business_execution' (43284) panicked at crates\seata_db_mysql\tests\live_execution.rs:193:9:
+assertion failed: matches!(tx.execute(&sql, &[]).await, Err(DbError::Unsupported { .. }))
+
+---- no_match_and_noop_do_not_invent_rows_or_require_a_changed_row_count stdout ----
+
+thread 'no_match_and_noop_do_not_invent_rows_or_require_a_changed_row_count' (40808) panicked at crates\seata_db_mysql\tests\live_execution.rs:165:48:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- pending_undo_record_limit_poisons_and_forces_full_rollback stdout ----
+
+thread 'pending_undo_record_limit_poisons_and_forces_full_rollback' (47644) panicked at crates\seata_db_mysql\tests\live_execution.rs:334:37:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None }
+
+---- update_after_image_uses_original_keys_when_the_where_column_changes_then_delete_is_empty stdout ----
+
+thread 'update_after_image_uses_original_keys_when_the_where_column_changes_then_delete_is_empty' (40956) panicked at crates\seata_db_mysql\tests\live_execution.rs:118:5:
+after image must follow captured primary keys: Err(Driver { operation: "current constraints metadata lock", sql_state: Some("42S02"), code: Some(1146), io_source: None })
+
+
+failures:
+    after_image_over_budget_is_not_published_and_the_business_effects_roll_back
+    decimal_text_primary_assignment_cannot_capture_an_adjacent_old_row
+    duplicate_key_failure_poisons_and_rollback_removes_all_prior_local_effects
+    execution_failures::business_table_matching_next_internal_name_is_not_shadowed_or_dropped
+    execution_failures::cancellation_after_business_before_after_image_releases_the_actual_write
+    execution_failures::cancellation_after_key_assignment_cleans_temp_and_rolls_back_prior_business
+    execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements
+    execution_failures::deadline_after_key_assignment_cleans_temp_and_rolls_back_prior_business
+    execution_failures::invalid_key_assignment_leaves_no_committed_effect_and_session_exit_cleans_temp
+    execution_failures::missing_temp_permission_poisons_without_committing_prior_business
+    insert_uses_explicit_composite_keys_and_native_exact_values_without_committing
+    key_assignment_staging_preserves_char_binary_decimal_and_does_not_commit_prior_work
+    local_parameter_rejection_preserves_the_scope_without_appending_undo
+    missing_explicit_insert_key_and_primary_key_update_fail_before_business_execution
+    no_match_and_noop_do_not_invent_rows_or_require_a_changed_row_count
+    pending_undo_record_limit_poisons_and_forces_full_rollback
+    update_after_image_uses_original_keys_when_the_where_column_changes_then_delete_is_empty
+
+test result: FAILED. 0 passed; 17 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.09s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_execution`

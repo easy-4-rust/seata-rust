@@ -1,0 +1,25 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_jdbc_spi_mutant_0ni_kx0h\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.31s
+     Running tests\jdbc_parser_spi.rs (D:/cargo-target/seata-rust-production\debug\deps\jdbc_parser_spi-c15756d84734f7a8.exe)
+
+running 2 tests
+test equal_top_priority_without_a_link_order_is_rejected ... ok
+test rm_uses_the_highest_order_provider_with_the_druid_name ... FAILED
+
+failures:
+
+---- rm_uses_the_highest_order_provider_with_the_druid_name stdout ----
+
+thread 'rm_uses_the_highest_order_provider_with_the_druid_name' (19324) panicked at crates\seata_db_mysql\tests\jdbc_parser_spi.rs:48:5:
+assertion `left == right` failed
+  left: JavaString { units: [104, 50], utf8: Some("h2") }
+ right: JavaString { units: [99, 104, 111, 115, 101, 110], utf8: Some("chosen") }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    rm_uses_the_highest_order_provider_with_the_druid_name
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_parser_spi`

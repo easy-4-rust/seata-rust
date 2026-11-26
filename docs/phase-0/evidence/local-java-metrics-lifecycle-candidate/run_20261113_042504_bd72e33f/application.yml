@@ -1,0 +1,42 @@
+server:
+  port: 28091
+spring:
+  main:
+    web-application-type: none
+logging:
+  level:
+    org.apache.seata.server.metrics.MetricsSubscriber: DEBUG
+  file:
+    path: D:/codex-builds/mct_20261113_042504_bd72e33f/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28091
+    enable-check-auth: false
+    max-commit-retry-timeout: 5000
+    enable-parallel-handle-branch: false
+    rollback-retry-timeout-unlock-enable: false
+    rollback-failed-unlock-enable: false
+    retry-dead-threshold: 500
+    recovery:
+      committing-retry-period: 200
+      async-committing-retry-period: 200
+  store:
+    mode: file
+    session:
+      mode: file
+    lock:
+      mode: file
+    file:
+      dir: D:/codex-builds/mct_20261113_042504_bd72e33f/store
+      flush-disk-mode: sync
+  metrics:
+    enabled: true
+    registry-type: compact
+    exporter-list: prometheus
+    exporter-prometheus-port: 28094
+  transport:
+    rpc-tc-request-timeout: 750

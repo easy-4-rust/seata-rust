@@ -23,3 +23,24 @@ gofmt -w "$HARNESS_DIR/main.go"
   cd "$HARNESS_DIR"
   GOWORK=off go run .
 )
+
+# Use the original native Getty path; missing merge codecs remain an OPEN
+# diagnostic instead of registering a substitute codec in the reference.
+CONTROL_DIR="$TMP/seata-go/tools/seata-rust-control-envelopes"
+mkdir -p "$CONTROL_DIR"
+cp "$ROOT/tools/go-control-envelopes/main.go" "$CONTROL_DIR/main.go"
+(
+  cd "$CONTROL_DIR"
+  GOWORK=off go run . "$ROOT/tests/fixtures/protocol/v1/control_envelopes/vectors.json"
+)
+
+# Separate diagnostic matrix: known incompatibilities stay explicitly OPEN.
+FAILURE_DIR="$TMP/seata-go/tools/seata-rust-failure-variants"
+mkdir -p "$FAILURE_DIR"
+cp "$ROOT/tools/go-failure-variants/main.go" "$FAILURE_DIR/main.go"
+cp "$ROOT/tools/go-failure-variants/expected.json" "$FAILURE_DIR/expected.json"
+gofmt -w "$FAILURE_DIR/main.go"
+(
+  cd "$FAILURE_DIR"
+  GOWORK=off go run .
+)

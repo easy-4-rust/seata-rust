@@ -1,8 +1,8 @@
 # Phase 0.9 — Live Java TC Integration Validation Plan
 
-> **Current substage:** 0.9.2 — independent Rust registration client.
+> **Current substage:** 0.9.2 — independent Rust client; registration, simulated AT callbacks, callback redelivery, normal FILE restart and three externally lost-response scenarios verified locally through 2026-11-12.
 >
-> **Boundary:** no production Seata-Rust TM/RM implementation is added here. The standalone test client currently covers only V1 RegisterTM/RegisterRM; transaction lifecycle and phase-two callback handling remain separate gates.
+> **Boundary:** no production Seata-Rust TM/RM implementation is added here. Coverage includes callback/mutation-response loss, DB/Redis seeded recovery, bounded auth-hook/reconnect and real RAFT election/snapshot diagnostics. Finished alone retains uncertainty. Database/Undo Log compensation, arbitrary duplicate/reconnect, production authentication, safe RAFT timeout recovery/operator retry and broader recovery remain open. See [local validation results](phase09-local-validation-results.md).
 
 ## 1. Frozen runtime topology
 
@@ -78,18 +78,18 @@ This was a **TCP bootstrap smoke only**. No Seata message was exchanged in Run #
 | INT-ENV-004 | Reset isolated storage | Resets dedicated data directory while stopped | Verified by test, Run #15; refusal-while-running negative case pending |
 | INT-001 | RegisterTM over native V1 | Identified=true from live TC | Verified by test, Run #23; auth disabled |
 | INT-002 | RegisterRM over native V1 | Identified=true and resource association established | Verified by test, Run #23; auth disabled |
-| INT-003 | GlobalBegin | TC returns valid XID | Not implemented |
-| INT-004 | BranchRegister | TC returns BranchId and stores branch | Not implemented |
-| INT-005 | GlobalStatus | TC returns authoritative status | Not implemented |
-| INT-006 | GlobalCommit | TC issues BranchCommit to registered RM | Not implemented |
-| INT-007 | RM BranchCommit response | TC accepts response and advances branch/global state | Not implemented |
-| INT-008 | GlobalRollback | TC issues BranchRollback to registered RM | Not implemented |
-| INT-009 | RM BranchRollback response | TC accepts response and advances branch/global state | Not implemented |
-| INT-010 | Duplicate phase-2 instruction | RM callback and TC outcome are idempotent | Not implemented |
-| INT-011 | FILE restart after Begin | Persisted session behavior is observed | Not implemented |
-| INT-012 | FILE restart after BranchRegister | Global and branch records are observed after reload | Not implemented |
-| INT-013 | Response loss after BranchRegister | Unknown outcome reconciled without duplicate branch | Not implemented |
-| INT-014 | Response loss after Commit/Rollback | Query/retry follows TC authoritative state | Not implemented |
+| INT-003 | GlobalBegin | TC returns valid XID | Verified locally 2026-11-11, two independent empty transactions |
+| INT-004 | BranchRegister | TC returns BranchId and stores branch | Verified locally 2026-11-12, simulated AT branches; disk recovery not tested |
+| INT-005 | GlobalStatus | TC returns authoritative status | Verified locally 2026-11-11, Begin then Finished after successful empty commit/rollback |
+| INT-006 | GlobalCommit | TC issues BranchCommit to registered RM | Verified locally 2026-11-12, simulated AT branch |
+| INT-007 | RM BranchCommit response | TC accepts response and advances branch/global state | Verified locally 2026-11-12, PhaseTwo_Committed; server receipt/completion logs |
+| INT-008 | GlobalRollback | TC issues BranchRollback to registered RM | Verified locally 2026-11-12, simulated AT branch |
+| INT-009 | RM BranchRollback response | TC accepts response and advances branch/global state | Verified locally 2026-11-12, PhaseTwo_Rollbacked; server receipt/completion logs |
+| INT-010 | Duplicate phase-2 instruction | RM callback and TC outcome are idempotent | Partial: local 2026-11-12, one withheld response/redelivery per simulated AT branch; process-local success deduplication only |
+| INT-011 | FILE restart after Begin | Persisted session behavior is observed | Local 2026-11-12 passed: original XID Begin after forced TC process restart |
+| INT-012 | FILE restart after BranchRegister | Global and branch records are observed after reload | Local 2026-11-12 passed: original BranchId callback; lock false before/after restart, true after rollback |
+| INT-013 | Response loss after BranchRegister | Unknown outcome reconciled without duplicate branch | Local 2026-11-12 passed for one pending simulated branch: no resend; validated nonce callback learns original BranchId, rollback releases lock |
+| INT-014 | Response loss after Commit/Rollback | Query/retry follows TC authoritative state | Local 2026-11-12 passed for one external loss each: no end resend; Finished15 keeps outcome unknown; callback/lock cleanup independently verified |
 
 ## 5. Independent Rust test client
 
@@ -123,6 +123,16 @@ The client initially used the version string from the Go codec test fixture. It 
 
 ## 6. Evidence labels
 
+### Local increment — 2026-11-11
+
+The existing isolated Rust probe now supports `--lifecycle`. A pinned Java TC built successfully with a temporary Maven Central configuration and completed two separate no-branch transactions on port 28091: Begin → Status(Begin) → Commit(Committed=9) → Status(Finished=15), and Begin → Status(Begin) → Rollback(Rollbacked=11) → Status(Finished=15). TM and RM both registered using client version `1.1.0`. See [raw evidence](evidence/local-phase09-live/README.md).
+
+This extends the earlier registration-only implementation described above. It does not close INT-006–009: those gates specifically require real RM phase-two callbacks. Windows process termination released the port, but was forced; graceful shutdown and durable FILE recovery remain unverified.
+
+### Local increment — 2026-11-12
+
+`--branches` now registers two simulated AT branches in distinct TC-issued XIDs, services the real TC callbacks concurrently with TM end requests, returns matching response IDs and branch statuses, then queries Finished. Both paths passed with the same pinned TC JAR, and TC logs show receipt plus successful processing of the branch responses. [Evidence](evidence/local-phase09-branches/README.md). INT-004 and INT-006–009 pass for this simulated-resource scope; no database AT/Undo Log or recovery claim follows. Final Rust suite: 21 tests passed; fmt and Clippy exit 0.
+
 - **Verified in source:** pinned Java source/configuration path confirms behavior.
 - **Verified by test:** GitHub Actions or local command passed and run ID is recorded.
 - **TCP smoke only:** process starts and socket accepts connections; no Seata message exchanged.
@@ -132,6 +142,24 @@ A successful INT-ENV smoke does not close transaction lifecycle gates INT-003–
 
 ## 7. Exit gate to WP-01
 
+### Callback response-loss increment — 2026-11-12
+
+`--callback-loss` withholds the first successful simulated RM response and requires real TC redelivery with a new RPC ID. Commit and rollback passed, with two deliveries and one simulated action per branch. The rollback initial response was Failed/RollbackRetrying=5; the probe logs that outcome without replay and continues only in this explicit fault mode. Later status queries return Finished and TC logs confirm successful branch response processing. [Evidence and limits](evidence/local-phase09-callback-loss/README.md). INT-010 is partially covered; this is not TM/BranchRegister response-loss or durable idempotency evidence.
+
 Phase 0.9.1 bootstrap gates INT-ENV-001–003 passed in Run #15; the stopped-state storage reset ran successfully. The negative reset-while-running case remains pending. REG-001/REG-002 passed in Run #23 with auth disabled.
 
-Phase 0.9 as a whole remains open until live RegisterTM/RegisterRM, global transaction lifecycle, RM callbacks and at least FILE restart behavior are tested. Only then should WP-01 be treated as unblocked by live-TC evidence.
+### External mutation-response loss increment — 2026-11-12
+
+The owned proxy discards a complete successful type12/8/10 response in three separate live cases. Client requests are sent once; original BranchId is learned from a validated callback after registration loss. For lost Commit/Rollback the only later observed end status is Finished15, so uncertainty is retained, as required by approved ADR-0008. Observer traffic is never supplied to the client. Both default and spaced runtime paths passed; final Rust93/93, Python5/5. [Evidence and reproduction](evidence/local-phase09-response-loss/README.md). INT-013–014 pass for this bounded same-connection simulated scope; business outcome resolution from Finished is not claimed.
+
+Phase 0.9 remains open. Normal FILE Begin/Registered records have process-restart evidence in [local-phase09-restart](evidence/local-phase09-restart/README.md). Broader loss/reconnect, retry-timeout and store-specific recovery remain distinct gates. This does not prove the full Phase 0–7 plan or production components complete.
+
+### Native authentication and cached-resource reconnect — 2026-11-12
+
+Three fresh pinned TC processes pass the default-permissive, external-test-checker-enabled and checker-bypassed controls. The enabled fixture rejects16 requests across TM/RM credentials, identity/group and RM resource boundaries; every same-channel transaction stimulus closes without allocating FILE global data. A valid client creates two original branches, closes its old RM, authenticates a fresh RM with both cached resource IDs, and services the original commit/rollback callbacks. The runner first observes the old-channel removal; both callbacks and TC completion logs match, followed by Finished. Rust103 tests and focused Java7 pass. [Evidence](evidence/local-auth-registration/README.md); [reproduction](../../tools/java-tc-integration/auth_validation/README.md).
+
+REG-003–006 pass only within this simulated-resource scope. The fixed public checker does not establish a production policy. The default provider still allows all, and original registration logs expose extraData; [production boundaries](auth-runtime-boundaries.md) remain explicit.
+
+### Real RAFT leader/snapshot diagnostics — 2026-11-12
+
+Three fresh three-node cohorts complete six real leader transitions and three fresh-process snapshot reloads. Original16/17 records/branches/locks remain queryable through the actual console and TM-only native V1 probe, but four current-transition JFR stacks prove failed original async reload. Begin controls queue rollback/complete as documented. Java4, Rust106 and Python3 pass as diagnostic checks; safe recovery acceptance remains open. [Evidence](evidence/local-raft-retry-timeout/README.md), [runtime findings](raft-reload-runtime-findings.md), [reproduction](../../tools/java-tc-integration/raft_recovery/README.md). No original mutation replay, natural deadline or real RM compensation is claimed.

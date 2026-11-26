@@ -1,0 +1,25 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.55s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test branch_probe::tests::branch_lifecycle_services_rm_before_tm_end_can_finish ... FAILED
+
+failures:
+
+---- branch_probe::tests::branch_lifecycle_services_rm_before_tm_end_can_finish stdout ----
+
+thread '<unnamed>' (22968) panicked at src\branch_probe.rs:119:67:
+called `Result::unwrap()` on an `Err` value: Error { kind: UnexpectedEof, message: "failed to fill whole buffer" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'branch_probe::tests::branch_lifecycle_services_rm_before_tm_end_can_finish' (58764) panicked at src\branch_probe.rs:170:9:
+Err(Custom { kind: InvalidData, error: "branch lifecycle probe is not implemented" })
+
+
+failures:
+    branch_probe::tests::branch_lifecycle_services_rm_before_tm_end_can_finish
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

@@ -1,0 +1,65 @@
+2026-11-13 07:45:42.749 	[34mINFO[0m	getty/listener.go:58                         	Open new getty session 
+2026-11-13 07:45:42.760 	[34mINFO[0m	getty/getty_remoting.go:105                  	send async message: {message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:2, Type:0x2, Codec:0x1, Compressor:0x0, HeadMap:map[string]string(nil), Body:message.RegisterTMRequest{AbstractIdentifyRequest:message.AbstractIdentifyRequest{Version:"1.1.0", ApplicationId:"real-at-full-sdk", TransactionServiceGroup:"real_at", ExtraData:[]uint8(nil)}}}}
+2026-11-13 07:45:42.763 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:2, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.RegisterTMResponse{AbstractIdentifyResponse:message.AbstractIdentifyResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x0, Msg:""}, Version:"2.8.0-SNAPSHOT", ExtraData:[]uint8(nil), Identified:true}}} from tc server.
+2026-11-13 07:45:42.764 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:3, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.RegisterRMResponse{AbstractIdentifyResponse:message.AbstractIdentifyResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x0, Msg:""}, Version:"2.8.0-SNAPSHOT", ExtraData:[]uint8(nil), Identified:true}}} from tc server.
+2026-11-13 07:45:42.764 	[34mINFO[0m	getty/rm_remoting.go:155                     	register RM success. response: message.RegisterRMResponse{AbstractIdentifyResponse:message.AbstractIdentifyResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x0, Msg:""}, Version:"2.8.0-SNAPSHOT", ExtraData:[]uint8(nil), Identified:true}}
+2026-11-13 07:45:42.856 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:1, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.RegisterRMResponse{AbstractIdentifyResponse:message.AbstractIdentifyResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x0, Msg:""}, Version:"2.8.0-SNAPSHOT", ExtraData:[]uint8(nil), Identified:true}}} from tc server.
+2026-11-13 07:45:42.856 	[34mINFO[0m	getty/rm_remoting.go:155                     	register RM success. response: message.RegisterRMResponse{AbstractIdentifyResponse:message.AbstractIdentifyResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x0, Msg:""}, Version:"2.8.0-SNAPSHOT", ExtraData:[]uint8(nil), Identified:true}}
+2026-11-13 07:45:42.863 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:4, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.GlobalBeginResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x1, Msg:""}, TransactionErrorCode:0}, Xid:"198.18.0.1:28091:4045076617962663939", ExtraData:[]uint8{}}} from tc server.
+2026-11-13 07:45:42.863 	[34mINFO[0m	getty/getty_global_transaction.go:71         	GlobalBeginRequest success, res {{{1 } 0} 198.18.0.1:28091:4045076617962663939 []}
+2026-11-13 07:45:42.974 	[34mINFO[0m	at/update_executor.go:386                    	build select sql by update sourceQuery, sql {SELECT SQL_NO_CACHE balance,id FROM accounts WHERE id=1 FOR UPDATE}
+2026-11-13 07:45:42.978 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:5, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.BranchRegisterResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x0, Msg:"TransactionException[Global lock acquire failed xid = 198.18.0.1:28091:4045076617962663939 branchId = 4045076617962663940]"}, TransactionErrorCode:2}, BranchId:0}} from tc server.
+2026-11-13 07:45:42.978 	[31mERROR[0m	sql/tx.go:218                                	Failed to register branch: Response TransactionException[Global lock acquire failed xid = 198.18.0.1:28091:4045076617962663939 branchId = 4045076617962663940]
+seata.apache.org/seata-go/v2/pkg/datasource/sql.(*Tx).register
+	D:/codex-builds/aid_20261113_071933_3b7e8ade/pkg/datasource/sql/tx.go:218
+seata.apache.org/seata-go/v2/pkg/datasource/sql.(*ATTx).doCommit
+	D:/codex-builds/aid_20261113_071933_3b7e8ade/pkg/datasource/sql/tx_at.go:102
+seata.apache.org/seata-go/v2/pkg/datasource/sql.(*ATTx).Commit
+	D:/codex-builds/aid_20261113_071933_3b7e8ade/pkg/datasource/sql/tx_at.go:73
+seata.apache.org/seata-go/v2/pkg/datasource/sql.(*ATConn).createTxAndExecIfNeeded
+	D:/codex-builds/aid_20261113_071933_3b7e8ade/pkg/datasource/sql/conn_at.go:275
+seata.apache.org/seata-go/v2/pkg/datasource/sql.(*ATConn).ExecContext
+	D:/codex-builds/aid_20261113_071933_3b7e8ade/pkg/datasource/sql/conn_at.go:109
+database/sql.ctxDriverExec
+	C:/Program Files/Go/src/database/sql/ctxutil.go:31
+database/sql.(*DB).execDC.func2
+	C:/Program Files/Go/src/database/sql/sql.go:1713
+database/sql.withLock
+	C:/Program Files/Go/src/database/sql/sql.go:3572
+database/sql.(*DB).execDC
+	C:/Program Files/Go/src/database/sql/sql.go:1708
+database/sql.(*DB).exec
+	C:/Program Files/Go/src/database/sql/sql.go:1693
+database/sql.(*DB).ExecContext.func1
+	C:/Program Files/Go/src/database/sql/sql.go:1672
+database/sql.(*DB).retry
+	C:/Program Files/Go/src/database/sql/sql.go:1576
+database/sql.(*DB).ExecContext
+	C:/Program Files/Go/src/database/sql/sql.go:1671
+main.main.func1
+	E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/tools/java-go-at-shared-lock-candidate/main.go:80
+seata.apache.org/seata-go/v2/pkg/tm.WithGlobalTx
+	D:/codex-builds/aid_20261113_071933_3b7e8ade/pkg/tm/transaction_executor.go:97
+main.main
+	E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/tools/java-go-at-shared-lock-candidate/main.go:76
+runtime.main
+	C:/Program Files/Go/src/runtime/proc.go:285
+2026-11-13 07:45:42.991 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:6, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.GlobalRollbackResponse{AbstractGlobalEndResponse:message.AbstractGlobalEndResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x1, Msg:""}, TransactionErrorCode:0}, GlobalStatus:0xb}}} from tc server.
+2026-11-13 07:45:42.991 	[34mINFO[0m	getty/getty_global_transaction.go:190        	GlobalRollbackRequest rollback success, xid 198.18.0.1:28091:4045076617962663939,
+2026-11-13 07:45:44.014 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:7, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.GlobalBeginResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x1, Msg:""}, TransactionErrorCode:0}, Xid:"198.18.0.1:28091:4045076617962663941", ExtraData:[]uint8{}}} from tc server.
+2026-11-13 07:45:44.014 	[34mINFO[0m	getty/getty_global_transaction.go:71         	GlobalBeginRequest success, res {{{1 } 0} 198.18.0.1:28091:4045076617962663941 []}
+2026-11-13 07:45:44.016 	[34mINFO[0m	at/update_executor.go:386                    	build select sql by update sourceQuery, sql {SELECT SQL_NO_CACHE balance,id FROM accounts WHERE id=1 FOR UPDATE}
+2026-11-13 07:45:44.020 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:8, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.BranchRegisterResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x1, Msg:""}, TransactionErrorCode:0}, BranchId:4045076617962663942}} from tc server.
+2026-11-13 07:45:44.021 	[34mINFO[0m	base/undo.go:176                             	begin to insert undo log, xid 198.18.0.1:28091:4045076617962663941, branch id 4045076617962663942
+2026-11-13 07:45:44.031 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:9, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.BranchReportResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x1, Msg:""}, TransactionErrorCode:0}}} from tc server.
+2026-11-13 07:45:44.403 	[34mINFO[0m	client/client_on_response_processor.go:84    	the rm client received  clientOnResponse msg message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:10, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string{}, Body:message.GlobalCommitResponse{AbstractGlobalEndResponse:message.AbstractGlobalEndResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x1, Msg:""}, TransactionErrorCode:0}, GlobalStatus:0x9}}} from tc server.
+2026-11-13 07:45:44.403 	[34mINFO[0m	getty/getty_global_transaction.go:136        	send global commit request success, xid 198.18.0.1:28091:4045076617962663941
+2026-11-13 07:45:44.517 	[34mINFO[0m	client/rm_branch_commit_processor.go:54      	the rm client received rmBranchCommit message: id=2, type=0
+2026-11-13 07:45:44.517 	[34mINFO[0m	client/rm_branch_commit_processor.go:123     	Branch committing: xid 198.18.0.1:28091:4045076617962663941, branchID 4045076617962663942, resourceID jdbc:mysql://127.0.0.1:28093/seata_shared_ddffda7e, applicationDataSize 0
+2026-11-13 07:45:44.517 	[34mINFO[0m	client/rm_branch_commit_processor.go:140     	branch commit success: xid 198.18.0.1:28091:4045076617962663941, branchID 4045076617962663942, resourceID jdbc:mysql://127.0.0.1:28093/seata_shared_ddffda7e, applicationDataSize 0
+2026-11-13 07:45:44.517 	[34mINFO[0m	getty/getty_remoting.go:105                  	send async message: {message.RpcMessage{HeaderEntries:[]message.JavaV1HeaderEntry(nil), ID:2, Type:0x1, Codec:0x1, Compressor:0x0, HeadMap:map[string]string(nil), Body:message.BranchCommitResponse{AbstractBranchEndResponse:message.AbstractBranchEndResponse{AbstractTransactionResponse:message.AbstractTransactionResponse{AbstractResultMessage:message.AbstractResultMessage{ResultCode:0x1, Msg:""}, TransactionErrorCode:0}, Xid:"198.18.0.1:28091:4045076617962663941", BranchId:4045076617962663942, BranchStatus:5}}}}
+2026-11-13 07:45:44.517 	[34mINFO[0m	client/rm_branch_commit_processor.go:164     	send branch commit response success: xid 198.18.0.1:28091:4045076617962663941, branchID 4045076617962663942, resourceID jdbc:mysql://127.0.0.1:28093/seata_shared_ddffda7e, applicationDataSize 0
+2026-11-13 07:45:46.153 	[34mINFO[0m	dubbo-getty@v1.5.0/session.go:614            	{client:TCP_CLIENT:1:127.0.0.1:64924<->127.0.0.1:28092}, session.conn read EOF, client send over, session exit
+2026-11-13 07:45:46.153 	[34mINFO[0m	dubbo-getty@v1.5.0/session.go:622            	{client:TCP_CLIENT:1:127.0.0.1:64924<->127.0.0.1:28092}, [session.handlePackage] gr will exit now, left gr num 0
+2026-11-13 07:45:46.153 	[34mINFO[0m	getty/listener.go:94                         	session{session session-closed, Read Bytes: 796, Write Bytes: 1083, Read Pkgs: 24, Write Pkgs: 24} is closing......
+2026-11-13 07:45:46.153 	[34mINFO[0m	dubbo-getty@v1.5.0/client.go:468             	session-closed closed now. its current gr num is 0

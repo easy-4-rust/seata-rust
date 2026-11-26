@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_column_metadata_20261118_024925_550591f9\mutants\verification_20261118_025807_344089\lossy-surrogate-storage\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_column_metadata_20261118_024925_550591f9\mutants\verification_20261118_025807_344089\lossy-surrogate-storage\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.49s
+     Running tests\core_utf16.rs (D:/cargo-target/seata-column-mutants\debug\deps\core_utf16-a867b89bf7fb8906.exe)
+
+running 1 test
+test sequence_raw_getters_and_mutations_retain_unpaired_surrogates ... FAILED
+
+failures:
+
+---- sequence_raw_getters_and_mutations_retain_unpaired_surrogates stdout ----
+
+thread 'sequence_raw_getters_and_mutations_retain_unpaired_surrogates' (49876) panicked at crates\seata_test\tests\core_utf16.rs:54:5:
+assertion `left == right` failed
+  left: Some([65533])
+ right: Some([55296])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    sequence_raw_getters_and_mutations_retain_unpaired_surrogates
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test core_utf16`

@@ -1,0 +1,31 @@
+
+running 7 tests
+test actual_recovery_lock_wait_deadline_and_cancellation_consume_original_scope ... 
+thread 'actual_recovery_lock_wait_deadline_and_cancellation_consume_original_scope' (27672) panicked at crates\seata_db_mysql\tests\live_commit_preconditions.rs:135:58:
+called `Result::unwrap()` on an `Err` value: Database(MySqlDatabaseError { code: Some("HY000"), number: 1295, message: "This command is not supported in the prepared statement protocol yet" })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test callback_bound_before_check_never_allows_check_even_during_undo_lock_cycle ... 
+thread 'callback_bound_before_check_never_allows_check_even_during_undo_lock_cycle' (14484) panicked at crates\seata_db_mysql\tests\live_commit_preconditions.rs:329:5:
+assertion failed: first == (ResultCode::Success, BranchStatus::PhaseTwoRollbacked) ||
+    first ==
+        (ResultCode::Failed, BranchStatus::PhaseTwoRollbackFailedRetryable)
+FAILED
+test changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration ... 
+thread 'changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration' (47704) panicked at crates\seata_db_mysql\tests\live_commit_preconditions.rs:107:13:
+assertion failed: matches!(error.database_error(), DbError::Unsupported { .. })
+FAILED
+test checked_drop_and_unpolled_check_drop_roll_back_and_release_all_original_locks ... ok
+test no_change_checks_do_not_require_recovery_or_undo_tables_or_register_a_branch ... ok
+test original_callback_after_local_check_waits_then_finishes_after_local_rollback ... ok
+test original_transaction_holds_commit_arbitration_until_whole_rollback ... ok
+
+failures:
+
+failures:
+    actual_recovery_lock_wait_deadline_and_cancellation_consume_original_scope
+    callback_bound_before_check_never_allows_check_even_during_undo_lock_cycle
+    changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration
+
+test result: FAILED. 4 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.38s
+

@@ -1,0 +1,23 @@
+
+running 1 test
+test original_java_tc_durable_tm_lost_rollback_reply_never_replays ... FAILED
+
+failures:
+
+---- original_java_tc_durable_tm_lost_rollback_reply_never_replays stdout ----
+
+thread 'original_java_tc_durable_tm_lost_rollback_reply_never_replays' (43188) panicked at crates\seata_db_mysql\tests\live_tm_launcher_java.rs:135:5:
+assertion failed: if rollback {
+    matches!(observed, GlobalStatus::Rollbacked | GlobalStatus::Finished)
+} else {
+    matches!(observed, GlobalStatus::AsyncCommitting | GlobalStatus::Committed
+        | GlobalStatus::Finished)
+}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_java_tc_durable_tm_lost_rollback_reply_never_replays
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.34s
+

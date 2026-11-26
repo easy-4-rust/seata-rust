@@ -1,0 +1,11 @@
+{
+  "reviewer": "/root/control_envelope_review",
+  "mode": "Read-only static review; no edits or execution",
+  "initial_result": "No actionable codec/frame/Go-classification defect found",
+  "finding": "P2: source input was captured after Maven rather than at copy time",
+  "resolution": "Before Maven, freeze and save copied bytes; input hash derives only from frozen bytes. ROOT edits during build reject validation. Executed source snapshot/hash remains separate; new control canonical identity is mandatory.",
+  "regression": "One expected failing mid-build-edit test followed by all five collector/provenance tests passing",
+  "final_actionable_findings": [],
+  "outside_scope": ["Production protocol API", "Arbitrary business variants", "Compression and V2", "Live network batching/capability negotiation", "Full Phase0–7 completion"],
+  "runtime_claim": "None by reviewer; root run and report/source checks establish execution separately"
+}

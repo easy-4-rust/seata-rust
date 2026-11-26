@@ -1,0 +1,20 @@
+
+running 1 test
+test mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause ... FAILED
+
+failures:
+
+---- mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause stdout ----
+
+thread 'mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause' (31936) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:123:13:
+assertion `left == right` failed: lost INSERT PREPARE I/O cause: Driver { operation: "Undo insert", sql_state: None, code: None, io_source: None }
+  left: None
+ right: Some(UnexpectedEof)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 33 filtered out; finished in 0.01s
+

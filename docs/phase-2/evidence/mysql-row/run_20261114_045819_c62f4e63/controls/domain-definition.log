@@ -1,0 +1,28 @@
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_mysql_row_20261114_045819_c62f4e63\domain-definition\crates\seata_datasource)
+warning: unused variable: `bits`
+  --> crates\seata_datasource\src\struct\column_domain.rs:38:29
+   |
+38 |             Self::Integer { bits, unsigned } => {
+   |                             ^^^^ help: try ignoring the field: `bits: _`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-datasource` (lib) generated 1 warning (run `cargo fix --lib -p seata-datasource` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.74s
+     Running tests\column_domain_contract.rs (D:/cargo-target/seata-mysql-row-controls\debug\deps\column_domain_contract-560dcd12ef10ab24.exe)
+
+running 1 test
+
+thread 'inconsistent_domain_metadata_is_rejected' (71748) panicked at crates\seata_datasource\tests\column_domain_contract.rs:148:9:
+assertion failed: col(ColumnType::SignedInteger, None).with_domain(domain).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test inconsistent_domain_metadata_is_rejected ... FAILED
+
+failures:
+
+failures:
+    inconsistent_domain_metadata_is_rejected
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-datasource --test column_domain_contract`

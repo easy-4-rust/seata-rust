@@ -1,0 +1,22 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.72s
+     Running tests\live_commit_preconditions.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_commit_preconditions-2c114a7b4e4bd198.exe)
+
+running 1 test
+test first_phase_witness_is_written_in_the_original_transaction_and_rolls_back_with_it ... FAILED
+
+failures:
+
+---- first_phase_witness_is_written_in_the_original_transaction_and_rolls_back_with_it stdout ----
+
+thread 'first_phase_witness_is_written_in_the_original_transaction_and_rolls_back_with_it' (39584) panicked at crates\seata_db_mysql\tests\live_commit_preconditions.rs:44:12:
+called `Result::unwrap()` on an `Err` value: Enrollment { receipt: RegisteredBranch { identity: BranchIdentity { xid_bytes: 20, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: Some(19) }, lock_key_bytes: Some(11), result_code: Success, .. }, source: BeforeCommit { identity: BranchIdentity { xid_bytes: 20, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: Some(19) }, source: Unsupported { feature: "RM recovery exact versioned columns" } } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    first_phase_witness_is_written_in_the_original_transaction_and_rolls_back_with_it
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.48s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_commit_preconditions`

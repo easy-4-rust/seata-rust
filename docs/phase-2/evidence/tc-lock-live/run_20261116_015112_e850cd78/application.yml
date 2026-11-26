@@ -1,0 +1,33 @@
+server:
+  port: 60882
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/seata_tc_lock_live_20261116_015112_e850cd78/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 60882
+    enable-check-auth: true
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:60881/tc_locks_8b9ca8a56bbf?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      user: root
+      password: seata-mysql-fixture-only
+      min-conn: 1
+      max-conn: 4
+  metrics:
+    enabled: false

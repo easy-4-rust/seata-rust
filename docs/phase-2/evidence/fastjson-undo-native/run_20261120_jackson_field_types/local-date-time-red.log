@@ -1,0 +1,23 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.71s
+     Running tests\jackson_undo_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jackson_undo_source-56cc2896bd07c42c.exe)
+
+running 1 test
+test jackson_local_date_time_preserves_millis_when_submillis_is_separate ... FAILED
+
+failures:
+
+---- jackson_local_date_time_preserves_millis_when_submillis_is_separate stdout ----
+
+thread 'jackson_local_date_time_preserves_millis_when_submillis_is_separate' (56176) panicked at crates\seata_at\tests\jackson_undo_source.rs:295:5:
+assertion failed: local.value() ==
+    &V::LocalDateTimeUtc { epoch_seconds: -2, nanos: 877_222_333 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    jackson_local_date_time_preserves_millis_when_submillis_is_separate
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test jackson_undo_source`

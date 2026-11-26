@@ -1,0 +1,112 @@
+{
+  "status": "MYSQL_FIRST_PHASE_WITNESS_STAGING_AND_OBSERVATION_VERIFIED_COMMIT_GATE_OPEN",
+  "evidence": "docs/phase-2/evidence/mysql-first-phase-witness/run_20261118",
+  "spec": "docs/phase-2/mysql-commit-preconditions-contract.md",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "previous_rust_catalog_sha256": "70266af872af0d239c7409dd500e52fbfcc0b2414419f4b0a8086985ce9c4d6d",
+  "mysql_image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "mysql_runtime": "8.4.13",
+  "container_cleaned": true,
+  "physical_migration": "004",
+  "logical_row_version": 3,
+  "witness_staging_visible_only_as_uncommitted_before_rollback": true,
+  "actual_observer_waited_for_existing_record_lock": true,
+  "old_table_observation_rejected": true,
+  "positive_sample": "owned_fixture_admin_transaction",
+  "callback_protocol_peer": "controlled native TCP test peer",
+  "original_java_tc_executed": false,
+  "witness_preserved_after_phase_two_commit_cleanup": true,
+  "runtime_negative_controls": 1,
+  "rust": {
+    "1.99": {
+      "ordinary": 509,
+      "ignored": 145,
+      "harnesses": 110,
+      "doc": 4,
+      "owned_mysql": 10,
+      "witness_cases": 2,
+      "original_java_core_MATCH": 76,
+      "original_rm_jdbc_MATCH": 10
+    },
+    "1.85": {
+      "ordinary": 509,
+      "ignored": 145,
+      "harnesses": 110,
+      "doc": 4,
+      "owned_mysql": 10,
+      "witness_cases": 2,
+      "original_java_core_MATCH": 76,
+      "original_rm_jdbc_MATCH": 10
+    }
+  },
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "independent_status": "COMPLETE",
+    "cohesion_review": "RmBranchStore 502 lines, metadata validation, identity locking and state changes share one owned transaction",
+    "evidence": "docs/phase-2/evidence/mysql-first-phase-witness/readonly-review-20261118.json",
+    "sha256": "0ee4a79f374922646020d44bcceccaf42c379fa56ca12810047f01b86175d57e",
+    "remaining_P1": 0,
+    "remaining_P2": 0
+  },
+  "verified_inputs": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "0bf91d9822a18f580eb2ff0d6aad88c50bb8865574fbd966e37e8c0f39355c15"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "docs/phase-2/mysql-commit-preconditions-contract.md",
+      "sha256": "5bb3a83bd048cb08b20552bf3de6522ea8e58e846cc647dfac5b8486cbb694e5"
+    },
+    {
+      "path": "crates/seata_db_mysql/migrations/004_seata_rs_at_first_phase_witness.sql",
+      "sha256": "7bcb3cbca20e378a27bd8995fbc8bb8bf536052022d6883be2161728833c093e"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/connection_proxy.rs",
+      "sha256": "fd56bdf527c54355a86b3db1b33d00d1d7e10d0efedfb03fd066ff2cbff90a7d"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/data_source_manager.rs",
+      "sha256": "3201a2c0c4f89fd2417b4175634bd9d652d8d0c56c12319e510ca202ae61f0ff"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_prepared_transaction.rs",
+      "sha256": "b985cd1cc22be56dab3ed5dfb9056555ca6263e356e80f1c9469fec895abf1e1"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/recovery_schema.rs",
+      "sha256": "07cd7be1510ebe87adf27e3310346d164e244b6eafb810f2d0a58cb7be9a385a"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/rm_branch_record.rs",
+      "sha256": "d7b33768893d1ee9338f344e2ebb65918f2d04d6014e4275a3446a5aa31dd6d9"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/rm_branch_store.rs",
+      "sha256": "03d49536ccd8b265a43a9023ac5ed13dbf345bb7fda6bd4f6718081f152c2a0e"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/live_commit_preconditions.rs",
+      "sha256": "44c616c83a0b22cc2993a38dfb67fd35795da44137e163bf0b9ecaa591dab6d7"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/support/first_phase_witness_cases.rs",
+      "sha256": "2d0bd0d44f44ddc9ecb9bc9176e6f3ec81fe58c779ae4a3a528f7b087d2b600c"
+    }
+  ],
+  "public_first_phase_business_COMMIT_available": false,
+  "first_phase_SQL_Undo_commit_atomicity_verified": false,
+  "all_old_first_phase_attempts_fenced": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "catalog_sha256": "8777249b4c4520cd2a4b5ec111d4e008302339a71e3e52d48c440886c7f240ed",
+  "catalog_members": 72
+}

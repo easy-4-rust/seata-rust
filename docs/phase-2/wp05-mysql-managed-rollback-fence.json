@@ -1,0 +1,103 @@
+{
+  "status": "MANAGED_ROLLBACK_RETAINS_CONSUMED_NORMAL_UNDO_FENCE_WITH_004",
+  "spec": "docs/phase-2/mysql-undo-fence-contract.md",
+  "rust": {
+    "1.99": {
+      "target_after_restart": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fence/seata_managed_rollback_pqm7hinh",
+        "catalog_sha256": "5d753c6f0da0c4af6fca9555a691dfca933c07e1418d69c0da1b7edfadd64ae0",
+        "catalog_members": 13
+      },
+      "live_suite": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fence/seata_managed_rollback_2w82pdjp",
+        "catalog_sha256": "0053e21e4118531140b0e12f19ff3a6fef01ccdfc4273b28cec7fb222c996a37",
+        "catalog_members": 22
+      },
+      "workspace": {
+        "ordinary": 509,
+        "ignored": 148,
+        "doc": 4,
+        "harnesses": 110
+      },
+      "checked_live_cases": 11,
+      "core_source_MATCH": 76,
+      "rm_jdbc_source_MATCH": 10
+    },
+    "1.85": {
+      "target_after_restart": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fence/seata_managed_rollback_5evu588c",
+        "catalog_sha256": "3c9e59f2031dfb948f88624fb04855d64287f8cd593594a6a657dd32fdb66970",
+        "catalog_members": 13
+      },
+      "live_suite": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fence/seata_managed_rollback_kjnc2se1",
+        "catalog_sha256": "86ed5457663c53ad9d6258418f4da540da2e5f7bc5d3c6af4222794070fd1f09",
+        "catalog_members": 22
+      },
+      "workspace": {
+        "ordinary": 509,
+        "ignored": 148,
+        "doc": 4,
+        "harnesses": 110
+      },
+      "checked_live_cases": 11,
+      "core_source_MATCH": 76,
+      "rm_jdbc_source_MATCH": 10
+    }
+  },
+  "behavior_red": {
+    "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fence/seata_managed_rollback_fqqcqd8o",
+    "catalog_sha256": "c72dc54a51709e63f67f4553e0819ea36c35b546cc4e56096aa2905f5ba5cf4b",
+    "catalog_members": 9,
+    "pre_fix_production_sha256": {
+      "crates/seata_db_mysql/src/data_source_manager.rs": "3201a2c0c4f89fd2417b4175634bd9d652d8d0c56c12319e510ca202ae61f0ff",
+      "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "15a14d593f467fa0e869d4b3d3a8c20e7c1d7fadc822153bb2fc225ca32a47a8"
+    }
+  },
+  "mysql_version": "8.4.13",
+  "mysql_image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "network_peer": "controlled TCP original rollback protocol",
+  "guarded_identity": "exact original XID and branch ID",
+  "source_parity": {
+    "matched": 86,
+    "remaining_methods": 1049,
+    "remaining_cases": 1241
+  },
+  "workspace_evidence": "docs/phase-2/evidence/mysql-managed-rollback-fence/final_workspace_20261118",
+  "workspace_artifacts": {
+    "1.85-qualified-clippy.log": "16e460e2639e3ddeaa0c6eb6e6b46783a2e6594c9b724fa2e10f28b134e3c428",
+    "1.85-qualified-doc.log": "711fed729e517c1d76a43d71a6596b9ae329e90fed3b1eaf358a323e05168acd",
+    "1.85-qualified-jdbc-source.log": "6484da217c33c15fb9597119b4510fe688a9141921781a59af0ba8ab6b81ce35",
+    "1.85-qualified-source.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-qualified-tests.log": "2c5321aad22b22c2b90957dc17b24d31e0f78044f1df100fd1b789fc1d2b041d",
+    "1.85-qualified-version.log": "f15055932aed6f9cbeda9e4eda89c3a898e84cbb3a6c5f19489b929fec84b2de",
+    "1.99-qualified-clippy.log": "4b34ea19a3df0f5afc824560c7648c68cda862a9193045c3534e135d33b2f78b",
+    "1.99-qualified-doc.log": "f2e44f3e45678fd02be3524e33af61fde228a949f0e664ba1797f5cb3954347c",
+    "1.99-qualified-jdbc-source.log": "9d0e296a93e1c70b556217f44b0c9b0ad4ceeac38e3bc16c770e3ae1b82ca103",
+    "1.99-qualified-source.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-qualified-tests.log": "03b23660c2f42c152078b2f7b6f6a81ad9abd2b5f36871598577335c82801904",
+    "1.99-qualified-version.log": "b871c86bb07dd7f9f441fcaada9d078da35d4cfd779b90f3dc63cccbbf72d337",
+    "fmt-qualified.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "verified_inputs": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_db_mysql/src/data_source_manager.rs": "64cf0b6d2ec31ed6fd0d182670c78625da87b9f1e23be0e86855c1dce88b7de1",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "d7c08abab029210b2c2773fee27e4fcd3941f054e00ec02c747f0417196f9997",
+    "crates/seata_db_mysql/tests/live_commit_preconditions.rs": "daaf7dd5f2df798a8a8e9ddeaddffb3b8b83872c16ae1b856f1156ba80953928",
+    "crates/seata_db_mysql/tests/support/managed_rollback_fence_cases.rs": "1c5d65b9d770644c6ab254752b730164e8cb784cb29b88a4c00360632f42abdd",
+    "crates/seata_db_mysql/migrations/004_seata_rs_at_first_phase_witness.sql": "7bcb3cbca20e378a27bd8995fbc8bb8bf536052022d6883be2161728833c093e",
+    "tools/formal-commit-preconditions/managed_rollback_fence.py": "5870658fcaec0a707fb4d7343e4b3c135dca36297edfe3de124ea29d0e2ce2a7"
+  },
+  "review": {
+    "status": "READ_ONLY_REVIEW_NO_BLOCKING_FINDINGS",
+    "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fence/readonly-review-20261118.json"
+  },
+  "historical_terminals_backfilled": false,
+  "actual_rust_business_commit": false,
+  "full_TC_gate": false,
+  "external_TC_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user",
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false
+}

@@ -1,0 +1,22 @@
+{
+  "reviewer": "/root/go_merge_profile_review",
+  "mode": "Read-only static review; no test execution",
+  "core_findings": [
+    "P2: unsigned native timeout changed Java signed meaning",
+    "P2: absent registration version lacked explicit Java default meaning"
+  ],
+  "core_resolutions": "Explicit int32 timeout conversion with real RED/GREEN; JavaV1VersionInfo wire option/contextual getter plus ReportStatus presence. Eight boundary Java cases added.",
+  "driver_findings": [
+    "P2: Rust controls not bound to fresh capture",
+    "P2: inherited candidate source not audited after final run"
+  ],
+  "driver_resolutions": "Fresh control env passed; final714+all patches/tests/harnesses/exact Go path audit. Both fixes statically confirmed.",
+  "regression": "Removing inherited profile hash guard misses an actually changed0002 file and causes one expected test failure; real seven tests pass",
+  "final_actionable_findings": [],
+  "outside_scope": [
+    "Getty/native frame integration remains required",
+    "Stable native registry prerequisite",
+    "Production Rust/full clients",
+    "New Linux/current-head CI"
+  ]
+}

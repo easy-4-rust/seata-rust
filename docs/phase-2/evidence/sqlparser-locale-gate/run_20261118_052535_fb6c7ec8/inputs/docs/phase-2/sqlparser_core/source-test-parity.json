@@ -1,0 +1,1313 @@
+{
+  "schema": 1,
+  "java_baseline": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "rust_baseline": "130ad634279cef10cd2998fc3bfae82996224d66",
+  "acceptance_module": {
+    "package": "seata-test",
+    "manifest": "crates/seata_test/Cargo.toml",
+    "publish": false,
+    "components": [
+      "seata-sqlparser"
+    ],
+    "command": "cargo test --offline --locked -p seata-test --all-features",
+    "status": "PARTIAL",
+    "failed": 0,
+    "skipped": 0,
+    "not_run": 19,
+    "artifact": "verification/table-set-acceptance-package.log",
+    "scoped_test_execution": {
+      "status": "PASS",
+      "ordinary_passed": 98,
+      "failed": 0,
+      "skipped": 0
+    },
+    "scope": "98 package tests=57 original cases+41 Rust obligations; TableMeta19 cases and18 source objects remain MISSING"
+  },
+  "source_tests": [
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/EscapeSymbolTest.java#testGetLeftSymbol",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#escape_left_symbol"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/EscapeSymbolTest.java#testGetRightSymbol",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#escape_right_symbol"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java#testConstructorWithMessage",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#exception_message"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java#testConstructorWithMessageAndCause",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#exception_message_and_cause"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java#testConstructorWithCause",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#exception_cause"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java#testValue",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#sql_type_value"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java#testValueOf",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#sql_type_value_of"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java#testValueOfInvalid",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#sql_type_invalid"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testEqualsAndHashCode",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#equals_and_hash_code"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testAutoincrement",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#autoincrement"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testGetTableCat",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#get_table_cat"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetColumnName",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_column_name"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetDataType",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_data_type"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetDataTypeName",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_data_type_name"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetColumnSize",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_column_size"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetDecimalDigits",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_decimal_digits"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetNumPrecRadix",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_num_prec_radix"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetNullAble",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_null_able"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetRemarks",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_remarks"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetColumnDef",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_column_def"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetSqlDataType",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_sql_data_type"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetSqlDatetimeSub",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_sql_datetime_sub"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetCharOctetLength",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_char_octet_length"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetOrdinalPosition",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_ordinal_position"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetIsOnUpdate",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_on_update"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java#testSetGetIsCaseSensitive",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/column_meta.rs#set_get_case_sensitive"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetValues",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_values"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testIsSetNonUnique",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#is_set_non_unique"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetIndexQualifier",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_index_qualifier"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetIndexName",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_index_name"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetType",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_type"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetAscOrDesc",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_asc_or_desc"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetCardinality",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_cardinality"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetOrdinalPosition",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_ordinal_position"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testGetSetIndextype",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#get_set_indextype"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testEqualsSameObject",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#equals_same_object"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testEqualsNullObject",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#equals_null_object"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testEqualsDifferentType",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#equals_different_type"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testEqualsIdenticalObjects",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#equals_identical_objects"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testEqualsDifferentObjects",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#equals_different_objects"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testHashCodeConsistency",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#hash_code_consistency_original_column_assertions"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java#testHashCodeDifference",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/index_meta.rs#hash_code_difference_original_column_assertions"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java#testValue",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#index_type_value"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java#testValueOf",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#index_type_value_of"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java#testInvalidValueOf",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#index_type_invalid"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java#testGet",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#not_placeholder_get"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java#testToString",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#not_placeholder_string"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/NullTest.java#testGet",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#null_get"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/NullTest.java#testToString",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#null_string"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java#testGet",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#default_get"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java#testToString",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#default_string"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java#testGet",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#method_get"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java#testToString",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#method_string"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java#testDefaultConstructor",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#sequence_default"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java#testParameterizedConstructor",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#sequence_constructor"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java#testSetGetSequence",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#sequence_set_sequence"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java#testSetGetFunction",
+      "case_id": "default",
+      "targets": [
+        "crates/seata_test/tests/core_values.rs#sequence_set_function"
+      ],
+      "disposition": "MIRRORED",
+      "result_parity": "MATCH",
+      "contract_preserved": true,
+      "inputs_preserved": true,
+      "assertions_preserved": true,
+      "fixture_state_preserved": true,
+      "cleanup_preserved": true,
+      "case_expansion_complete": true,
+      "evidence": "verification/table-set-source-diff.json"
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testSetGetTableName",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testSetGetCaseSensitive",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetColumnMeta",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetAllColumns",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetAllIndexes",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetPrimaryKeyMap",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetPrimaryKeyMapNoPrimaryKey",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetCaseInsensitivePKs",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetCaseInsensitivePKsNoPrimaryKey",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetPrimaryKeyOnlyName",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetOnUpdateColumnsOnlyName",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testGetOnUpdateColumnsOnlyNameNoUpdates",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testContainsPKWithNullList",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testContainsPKWithNoPrimaryKey",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testContainsPKWithExactMatch",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testContainsPKWithCaseInsensitiveMatch",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testContainsPKWithNoMatch",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testEquals",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    },
+    {
+      "source": "src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java#testHashCode",
+      "case_id": "default",
+      "targets": [],
+      "disposition": "MISSING",
+      "result_parity": "NOT_RUN",
+      "contract_preserved": false,
+      "inputs_preserved": false,
+      "assertions_preserved": false,
+      "fixture_state_preserved": false,
+      "cleanup_preserved": false,
+      "case_expansion_complete": false
+    }
+  ],
+  "assets": [],
+  "original_source_assets": 0,
+  "copied_original_test_sources": 12,
+  "generated_Rust_oracle_assets": [
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/java-constants.tsv",
+      "sha256": "1c3fb782aae25ba6617d3eda48adc6363af30f0adbe729028d771269e3f3ba98",
+      "source": "verification/java-constants.tsv"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/column-edges-java-v2.tsv",
+      "sha256": "1e5a1f2bf64c3e3c9fb66e6fd37158c264a52be3877eff141887de0694f1a612",
+      "source": "docs\\phase-2\\evidence\\sqlparser-column-gate\\run_20261118_030159_4362448c\\oracle\\edges-java.tsv",
+      "purpose": "21 additional observations; not source JUnit cases"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/index-edges-java.tsv",
+      "sha256": "43e471d7a9240ae49cd19845efdb6060c7fd8ff4ab3b4803b5b81990d996a099",
+      "source": "docs/phase-2/evidence/sqlparser-index-gate/run_20261118_042124_511b04b6/oracle/index-edges-java.tsv",
+      "purpose": "144 computed observations plus4 same-JVM identity inputs; neither expands original source cases"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/java17-comparisons.tsv",
+      "sha256": "231448f06fa7d72a7b7555196691b95685f7aaf7994eadd7cf59203a2ad4c0ff",
+      "source": "docs/phase-2/evidence/sqlparser-table-prerequisites-gate/run_20261118_044535_5f39165d/oracle/java17-comparisons.tsv",
+      "computed_observations": 22492,
+      "purpose": "Supplementary computed JDK/original TableMeta observations; not source JUnit cases"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/table-primary-sets-v2.tsv",
+      "sha256": "851055cd4547f702b5e50dd2ff068125121df3173712c2d1175e2497770ea867",
+      "source": "docs/phase-2/evidence/sqlparser-table-prerequisites-gate/run_20261118_044535_5f39165d/oracle/table-primary-sets.tsv",
+      "computed_observations": 878,
+      "purpose": "Supplementary computed JDK/original TableMeta observations; not source JUnit cases"
+    }
+  ],
+  "runs": {
+    "java": {
+      "command": "Original SourceJUnitRunner and three peers; exact argv in index-java-commands.json",
+      "status": "PASS",
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "artifact": "verification/index-java-commands.json"
+    },
+    "rust": {
+      "command": "22 actual dual-toolchain and runtime-mutant commands; partial source floor unchanged",
+      "status": "PARTIAL",
+      "failed": 0,
+      "skipped": 143,
+      "not_run": 19,
+      "artifact": "verification/table-set-commands.json"
+    },
+    "differential": {
+      "command": "python tools/formal-sqlparser-core/verify_table_set.py --oracle E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-table-prerequisites\\run_20261118_044136_88a7c63f",
+      "status": "PARTIAL",
+      "matched": 57,
+      "mismatched": 0,
+      "harness_failures": 0,
+      "not_run": 19,
+      "artifact": "verification/table-set-source-diff.json"
+    }
+  },
+  "policy_overrides": [
+    "User requires snake_case directory seata_test; Cargo package is seata-test"
+  ],
+  "rust_obligation": {
+    "new_test_count": 3,
+    "prior_test_count": 38,
+    "targets": [
+      "crates/seata_test/tests/table_primary_set.rs"
+    ],
+    "extra_original_observations": 23370,
+    "compatibility_input_records_not_MATCH": 2799,
+    "artifact": "verification/table-set-diff.json",
+    "obligations": [
+      "Original JDK17 compareToIgnoreCase including raw UTF16 and supplementary lookbehind",
+      "Original nontransitive comparator tree insertion/color/rotation, iteration and root-path membership",
+      "First spelling, immutable collection failure, null lookup, native set equals/hash quirks"
+    ]
+  },
+  "Rust_callback_API_change": "JavaObject methods and JavaThrowable text/from_java_cause now return Result to preserve original thrown failures",
+  "inherited_original_JUnit_76_not_rerun": true,
+  "dependency_obligation_history": [
+    {
+      "new_test_count": 19,
+      "prior_test_count": 7,
+      "targets": [
+        "crates/seata_test/tests/core_utf16.rs",
+        "crates/seata_test/tests/column_meta_obligations.rs",
+        "crates/seata_test/tests/column_java_diff.rs"
+      ],
+      "obligations": [
+        "All65536 UTF16 code units retain raw values",
+        "Java String.hashCode overflow",
+        "Raw message/cause text and cause identity",
+        "Shared column identity and null resets",
+        "Dynamic Object preserves boxed types",
+        "User Drop and Debug cannot deadlock on held metadata lock",
+        "equals/hash/toString callback read order",
+        "196608 YES ignore-case candidates match original JDK17"
+      ],
+      "extra_original_observations": 21,
+      "artifact": "verification/column-edge-diff.json"
+    },
+    {
+      "new_test_count": 12,
+      "prior_test_count": 26,
+      "targets": [
+        "crates/seata_test/tests/index_meta_obligations.rs",
+        "crates/seata_test/tests/index_java_diff.rs",
+        "crates/seata_test/tests/object_callback_errors.rs"
+      ],
+      "obligations": [
+        "Nullable/shared IndexMeta list, fixed Arrays.asList and mutable ArrayList behavior",
+        "108 list equals and18 live iteration observations from original JDK17",
+        "Original callback failure class/rawUTF16/Arc identity preserved",
+        "Index scalar read order, ignored cardinality and null indextype failure",
+        "Enum identity values are explicit inputs, separate from144 computed results"
+      ],
+      "extra_original_observations": 144,
+      "prior_original_observations": 21,
+      "JVM_identity_inputs_not_MATCH": 4,
+      "artifact": "verification/index-edge-diff.json"
+    }
+  ]
+}

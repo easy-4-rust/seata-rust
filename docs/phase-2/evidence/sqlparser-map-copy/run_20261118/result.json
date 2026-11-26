@@ -1,0 +1,74 @@
+{
+  "status": "MAP_BULK_WRITE_AND_SHALLOW_COPY_VERIFIED_WITH_REMAINING_COLLECTION_GAPS",
+  "evidence": "docs/phase-2/evidence/sqlparser-map-copy/run_20261118",
+  "previous_catalog_sha256": "b293024b1c3b2ec7c8916791bb680b70249352dd01267051bcaa9ac8a3577d2b",
+  "original_object_states": {
+    "PARTIAL": 5,
+    "IMPLEMENTED": 13,
+    "MISSING": 13
+  },
+  "original_cases_MATCH": 76,
+  "original_JUnit_run_inherited": true,
+  "java_copy_and_bulk_observations_MATCH": 25,
+  "inherited_default_method_observations_MATCH": 40,
+  "inherited_view_observations_MATCH": 35,
+  "inherited_entry_set_reentry_MISMATCH": 1,
+  "mutation_second_pass_origin_write_rejected": true,
+  "rust_toolchains": [
+    "1.99",
+    "1.85"
+  ],
+  "workspace_passed_per_toolchain": 484,
+  "workspace_ignored_per_toolchain": 143,
+  "doc_tests_per_toolchain": 4,
+  "harness_per_toolchain": 103,
+  "registry_dependencies_changed": false,
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "new_P1": 0,
+    "new_P2": 0,
+    "prior_open_P2": 1
+  },
+  "remaining": [
+    "Remaining Collection surface, constructor capacity behavior and tree-bin entry identity",
+    "EntrySet.remove structural equality reentry corruption mismatch",
+    "Default process Locale and full SPI"
+  ],
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "ad8c590b5174a079567f4b8538f49db8ae09ad7e7ada2c0989766adf650b5d45"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_map_source.rs",
+      "sha256": "d3fb96ad58367ef03fc5bb1ca37aac1e3b05df98ed25bbe9c7fce9ac8b8f3951"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/util/lower_case_link_hash_map.rs",
+      "sha256": "3831cdc71af874cc8152af42d7598f24302fede044907f2d8f2981906839112b"
+    },
+    {
+      "path": "crates/seata_test/tests/map_copy_java.rs",
+      "sha256": "f64b411e6f8b1ce8c1ea098a32b51e1c204ab84b7f14a8a8ce7a7217c0eaa4dd"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/MapCopyOracle.java",
+      "sha256": "84664d2dcd18c5c36fce1ee4f19b7f4b2b4d9ba86cb4b994d03c9a78b58c7c89"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/map-copy-java.tsv",
+      "sha256": "07b604eaef050626ced42ce1412c8974cac10d2b99c8bb6f2f35b2db655f51aa"
+    }
+  ],
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

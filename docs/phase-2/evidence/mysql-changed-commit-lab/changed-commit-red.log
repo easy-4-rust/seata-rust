@@ -1,0 +1,15 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0599]: no method named `commit_changed` found for struct `MySqlCommitCheckedTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_commit_preconditions.rs:47:27
+   |
+47 |     let receipt = checked.commit_changed(&h.adapter).await.unwrap();
+   |                           ^^^^^^^^^^^^^^
+   |
+help: there is a method `commit_no_change` with a similar name, but with different arguments
+  --> crates\seata_db_mysql\src\mysql_commit_checked_transaction.rs:51:5
+   |
+51 |     pub async fn commit_no_change(self) -> Result<(), MySqlNoChangeCommitError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "live_commit_preconditions") due to 1 previous error

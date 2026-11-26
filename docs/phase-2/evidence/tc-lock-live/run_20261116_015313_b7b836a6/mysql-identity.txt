@@ -1,0 +1,21 @@
+8.4.13	2	REPEATABLE-READ
+t	CREATE TABLE `t` (
+  `id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+lock_table	CREATE TABLE `lock_table` (
+  `row_key` varchar(128) NOT NULL,
+  `xid` varchar(128) DEFAULT NULL,
+  `transaction_id` bigint DEFAULT NULL,
+  `branch_id` bigint NOT NULL,
+  `resource_id` varchar(256) DEFAULT NULL,
+  `table_name` varchar(32) DEFAULT NULL,
+  `pk` varchar(36) DEFAULT NULL,
+  `status` tinyint NOT NULL DEFAULT '0' COMMENT '0:locked ,1:rollbacking',
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`row_key`),
+  KEY `idx_status` (`status`),
+  KEY `idx_branch_id` (`branch_id`),
+  KEY `idx_xid` (`xid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

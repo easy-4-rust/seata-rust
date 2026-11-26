@@ -1,0 +1,92 @@
+{
+  "status": "RM_JDBC_DRIVER_DISPATCH_AND_ERROR_PROPAGATION_VERIFIED",
+  "evidence": "docs/phase-2/evidence/sqlparser-rm-load-driver/run_20261118",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "prior_spi_catalog_sha256": "bb7484fc46bf6f9c9bb3904e0a5e0177ddcb2e959af81e96ce2d6c6edb63a004",
+  "java_test_classpath_catalog_sha256": "42eb747c3ae8bbcff58739f5b73980cb19d0dfbf37e3bb290823082c0630193d",
+  "java_driver_profiles": 17,
+  "rust_driver_dispatch_profiles_MATCH": 17,
+  "host_supplied_class_and_constructor_results": true,
+  "jvm_driver_host_implemented": false,
+  "driver_source_cases_migrated": 0,
+  "driver_source_cases_missing": 4,
+  "rm_jdbc_source_MATCH": 10,
+  "sqlparser_core_source_MATCH": 76,
+  "global_rust_source_MATCH": 86,
+  "global_methods_remaining": 1049,
+  "global_cases_remaining": 1241,
+  "native_sqlx_connection_path_changed": false,
+  "new_registry_dependencies": false,
+  "rust": {
+    "1.99": {
+      "ordinary": 505,
+      "harnesses": 109,
+      "ignored": 143,
+      "doc": 4,
+      "core_source_MATCH": 76,
+      "rm_jdbc_source_MATCH": 10,
+      "driver_dispatch_profiles_MATCH": 17
+    },
+    "1.85": {
+      "ordinary": 505,
+      "harnesses": 109,
+      "ignored": 143,
+      "doc": 4,
+      "core_source_MATCH": 76,
+      "rm_jdbc_source_MATCH": 10,
+      "driver_dispatch_profiles_MATCH": 17
+    }
+  },
+  "runtime_negative_controls": 2,
+  "clean_target_directories_verified": true,
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "new_P1": 0,
+    "new_P2": 0
+  },
+  "remaining": [
+    "Concrete JVM driver host and four loadDriver source cases",
+    "Ordinary JDBC and XA data source initialization and registration"
+  ],
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/lib.rs",
+      "sha256": "279fe09a19cf175e36f2a48f78986ff9b7b35322d268cadc525bd7e11ba05a53"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/mod.rs",
+      "sha256": "abac8e642a44ec8931ed01488e8f88065e9aea7d59095956074e3973d6564860"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/jdbc_driver_loader.rs",
+      "sha256": "c0ddfc7d9552961531bd17722432341de57b0bfd0b91860c45f6739f3d8ec44b"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+      "sha256": "1a6cbf02924dc1c012fbca21d5b0503b430d14b8a70c316a6d2f2f336cc9c3b0"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/jdbc_load_driver.rs",
+      "sha256": "2a9be2351e4dc67710b37e408d112f615fdd7ceaef5e0b1dd57408332778b948"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/fixtures/jdbc-load-driver-java.tsv",
+      "sha256": "7d63f121477974ca6df811e40ca3a698639545dda17d149e6ed4457fe295fb3d"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/JdbcRmDriverLoadOracle.java",
+      "sha256": "c4ac763d22d837b7c2c5b6cea2f926743cbfcf4fdc7f298e6e094a0b7dcc9f42"
+    }
+  ],
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

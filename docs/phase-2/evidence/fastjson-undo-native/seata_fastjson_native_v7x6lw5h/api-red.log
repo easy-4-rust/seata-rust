@@ -1,0 +1,36 @@
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling memchr v2.8.3
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling thiserror v2.0.21
+   Compiling seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+   Compiling serde_json v1.0.140
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved import `seata_at::FastjsonUndoLogParser`
+ --> crates\seata_at\tests\fastjson_undo_native.rs:3:16
+  |
+3 | use seata_at::{FastjsonUndoLogParser, MySqlJdbcProfile, SqlType, UndoCodecLimits};
+  |                ^^^^^^^^^^^^^^^^^^^^^ no `FastjsonUndoLogParser` in the root
+  |
+help: a similar name exists in the module
+  |
+3 - use seata_at::{FastjsonUndoLogParser, MySqlJdbcProfile, SqlType, UndoCodecLimits};
+3 + use seata_at::{JacksonUndoLogParser, MySqlJdbcProfile, SqlType, UndoCodecLimits};
+  |
+
+error[E0599]: no variant, associated function, or constant named `Utf8mb4` found for enum `CharacterSet` in the current scope
+  --> crates\seata_at\tests\fastjson_undo_native.rs:30:40
+   |
+30 |                 charset: CharacterSet::Utf8mb4,
+   |                                        ^^^^^^^ variant, associated function, or constant not found in `CharacterSet`
+   |
+help: there is a variant with a similar name
+   |
+30 -                 charset: CharacterSet::Utf8mb4,
+30 +                 charset: CharacterSet::Utf8Mb4,
+   |
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "fastjson_undo_native") due to 2 previous errors

@@ -1,0 +1,50 @@
+[
+  {
+    "label": "skip-empty-record-return",
+    "target": "records_source::records_compare_null_empty_and_missing_metadata_in_order",
+    "scratch": "D:\\codex-builds\\seata_compare_mutants_30kd19c3",
+    "mutated_file": "crates/seata_db_mysql/src/data_compare_utils.rs",
+    "original_sha256": "2a882ff6f1e85fb09c76340d94b01ff06e73881c9ee23c02b66f6283fb7fc17f",
+    "expected_stderr": "Error: NullReference(\"DataCompareUtils.beforeImage.tableMeta\")",
+    "mutant_sha256": "c749710ebd6aa250c18680d34a7b97dc159a65d6d4fe3e108394e5aeb3eb164c",
+    "cmd": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "data_compare_source",
+      "--",
+      "records_source::records_compare_null_empty_and_missing_metadata_in_order",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit": 101
+  },
+  {
+    "label": "use-right-record-metadata",
+    "target": "records_source::records_use_left_keys_then_update_the_original_fields",
+    "scratch": "D:\\codex-builds\\seata_compare_mutants_30kd19c3",
+    "mutated_file": "crates/seata_db_mysql/src/data_compare_utils.rs",
+    "original_sha256": "2a882ff6f1e85fb09c76340d94b01ff06e73881c9ee23c02b66f6283fb7fc17f",
+    "expected_stderr": "assertion failed: !unequal",
+    "mutant_sha256": "2035613407b843f2b065ec9f5386202d5a017644bc53fc38a5eb110d6e4a2e4c",
+    "cmd": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "data_compare_source",
+      "--",
+      "records_source::records_use_left_keys_then_update_the_original_fields",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit": 101
+  }
+]

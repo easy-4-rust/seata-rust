@@ -1,0 +1,23 @@
+   Compiling num-bigint v0.4.8
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_compare_mutants_4m20ptcf\crates\seata_datasource)
+   Compiling bigdecimal v0.4.10
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_compare_mutants_4m20ptcf\crates\seata_at)
+   Compiling sqlx-core v0.8.6
+   Compiling sqlx-mysql v0.8.6
+   Compiling sqlx v0.8.6
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_compare_mutants_4m20ptcf\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.90s
+     Running unittests src\lib.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\seata_db_mysql-0eae6d12f56bc15e.exe)
+
+thread 'undo_rollback_attempt_tests::acquired_read_failure_survives_timeout_while_rolling_back' (49068) panicked at crates\seata_db_mysql\src\undo_rollback_attempt_tests.rs:68:5:
+assertion failed: matches!(attempt.finish(XID, 42, result.ok(), true),
+    Err(UndoRollbackError::BeforeCommit
+    {
+        source: DbError::Driver
+        {
+            operation: "Undo locked read", code: Some(1213), sql_state:
+            Some(state)
+        }, ..
+    }) if state == "40001")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

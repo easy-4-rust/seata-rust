@@ -1,0 +1,114 @@
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+error[E0432]: unresolved import `seata_transport::ConnectionIdleConfig`
+ --> crates\seata_transport\tests\heartbeat_idle.rs:7:34
+  |
+7 | use seata_transport::{CallError, ConnectionIdleConfig, TcpConnection, TransportError};
+  |                                  ^^^^^^^^^^^^^^^^^^^^ no `ConnectionIdleConfig` in the root
+  |
+help: a similar name exists in the module
+  |
+7 - use seata_transport::{CallError, ConnectionIdleConfig, TcpConnection, TransportError};
+7 + use seata_transport::{CallError, ConnectionConfig, TcpConnection, TransportError};
+  |
+
+error[E0599]: no method named `with_idle` found for struct `ConnectionConfig` in the current scope
+  --> crates\seata_transport\tests\heartbeat_idle.rs:14:15
+   |
+14 |     config(2).with_idle(ConnectionIdleConfig::new(Duration::from_millis(40),Duration::from_millis(240)).unwrap())
+   |               ^^^^^^^^^ method not found in `ConnectionConfig`
+
+error[E0599]: no method named `idle_config` found for struct `ConnectionConfig` in the current scope
+  --> crates\seata_transport\tests\heartbeat_idle.rs:22:23
+   |
+22 |     assert!(config(1).idle_config().is_none());
+   |                       ^^^^^^^^^^^ method not found in `ConnectionConfig`
+
+error[E0599]: no method named `with_idle` found for struct `ConnectionConfig` in the current scope
+  --> crates\seata_transport\tests\heartbeat_idle.rs:26:26
+   |
+26 |     assert_eq!(config(1).with_idle(idle).idle_config(),Some(idle));
+   |                          ^^^^^^^^^ method not found in `ConnectionConfig`
+
+error[E0609]: no field `heartbeat_requests_sent` on type `ConnectionStats`
+  --> crates\seata_transport\tests\heartbeat_idle.rs:44:31
+   |
+44 |     assert!(handle.snapshot().heartbeat_requests_sent>=1);assert_eq!(handle.snapshot().completed,1);
+   |                               ^^^^^^^^^^^^^^^^^^^^^^^ unknown field
+   |
+   = note: available fields are: `generation`, `pending`, `write_attempted`, `completed`, `timed_out_before_send` ... and 8 others
+
+error[E0609]: no field `heartbeat_requests_sent` on type `ConnectionStats`
+  --> crates\seata_transport\tests\heartbeat_idle.rs:61:106
+   |
+61 |     assert!(!handle.snapshot().closed);assert_eq!(handle.snapshot().pending,0);assert!(handle.snapshot().heartbeat_requests_sent>=9);
+   |                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^ unknown field
+   |
+   = note: available fields are: `generation`, `pending`, `write_attempted`, `completed`, `timed_out_before_send` ... and 8 others
+
+error[E0599]: no variant, associated function, or constant named `ReadIdleTimeout` found for enum `TransportError` in the current scope
+  --> crates\seata_transport\tests\heartbeat_idle.rs:77:140
+   |
+77 | ...ason:TransportError::ReadIdleTimeout,..})));
+   |                         ^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `TransportError`
+   |
+help: there is a variant with a similar name
+   |
+77 -     assert!(matches!(handle.request(begin("no-replay"),Duration::from_secs(2)).await,Err(CallError::UnknownOutcome {reason:TransportError::ReadIdleTimeout,..})));
+77 +     assert!(matches!(handle.request(begin("no-replay"),Duration::from_secs(2)).await,Err(CallError::UnknownOutcome {reason:TransportError::ResponseTimeout,..})));
+   |
+
+error[E0609]: no field `read_idle_expirations` on type `ConnectionStats`
+  --> crates\seata_transport\tests\heartbeat_idle.rs:78:108
+   |
+78 | ...shot().pending,0);assert_eq!(handle.snapshot().read_idle_expirations,1);assert_eq!(handle.snapshot().write_attempted,1);
+   |                                                   ^^^^^^^^^^^^^^^^^^^^^ unknown field
+   |
+   = note: available fields are: `generation`, `pending`, `write_attempted`, `completed`, `timed_out_before_send` ... and 8 others
+
+error[E0599]: no variant, associated function, or constant named `ReadIdleTimeout` found for enum `TransportError` in the current scope
+  --> crates\seata_transport\tests\heartbeat_idle.rs:94:138
+   |
+94 | ...ason:TransportError::ReadIdleTimeout,..})));
+   |                         ^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `TransportError`
+   |
+help: there is a variant with a similar name
+   |
+94 -     assert!(matches!(handle.request(begin("partial"),Duration::from_secs(2)).await,Err(CallError::UnknownOutcome {reason:TransportError::ReadIdleTimeout,..})));
+94 +     assert!(matches!(handle.request(begin("partial"),Duration::from_secs(2)).await,Err(CallError::UnknownOutcome {reason:TransportError::ResponseTimeout,..})));
+   |
+
+error[E0609]: no field `read_idle_expirations` on type `ConnectionStats`
+  --> crates\seata_transport\tests\heartbeat_idle.rs:95:86
+   |
+95 |     assert_eq!(handle.snapshot().heartbeats_received,0);assert_eq!(handle.snapshot().read_idle_expirations,1);connection.shutdown()....
+   |                                                                                      ^^^^^^^^^^^^^^^^^^^^^ unknown field
+   |
+   = note: available fields are: `generation`, `pending`, `write_attempted`, `completed`, `timed_out_before_send` ... and 8 others
+
+error[E0609]: no field `heartbeat_requests_sent` on type `ConnectionStats`
+   --> crates\seata_transport\tests\heartbeat_idle.rs:108:34
+    |
+108 |     assert_eq!(handle.snapshot().heartbeat_requests_sent,2);assert_eq!(handle.snapshot().pending,0);assert_eq!(handle.snapshot().wr...
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `generation`, `pending`, `write_attempted`, `completed`, `timed_out_before_send` ... and 8 others
+
+error[E0609]: no field `heartbeat_requests_sent` on type `ConnectionStats`
+   --> crates\seata_transport\tests\heartbeat_idle.rs:120:64
+    |
+120 |         assert_eq!(handle.snapshot(),before);assert_eq!(before.heartbeat_requests_sent,0);assert_eq!(before.read_idle_expirations,0);
+    |                                                                ^^^^^^^^^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `generation`, `pending`, `write_attempted`, `completed`, `timed_out_before_send` ... and 8 others
+
+error[E0609]: no field `read_idle_expirations` on type `ConnectionStats`
+   --> crates\seata_transport\tests\heartbeat_idle.rs:120:109
+    |
+120 |         assert_eq!(handle.snapshot(),before);assert_eq!(before.heartbeat_requests_sent,0);assert_eq!(before.read_idle_expirations,0);
+    |                                                                                                             ^^^^^^^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `generation`, `pending`, `write_attempted`, `completed`, `timed_out_before_send` ... and 8 others
+
+Some errors have detailed explanations: E0432, E0599, E0609.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-transport` (test "heartbeat_idle") due to 13 previous errors

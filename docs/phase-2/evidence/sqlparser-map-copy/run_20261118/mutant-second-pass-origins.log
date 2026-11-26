@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-map-copy-mutant\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-map-copy-mutant\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.81s
+     Running tests\map_copy_java.rs (D:/cargo-target/seata-map-views-mutant\debug\deps\map_copy_java-f7b309980c91ef25.exe)
+
+running 1 test
+test java_bulk_write_and_shallow_copy_follow_original_two_pass_semantics ... FAILED
+
+failures:
+
+---- java_bulk_write_and_shallow_copy_follow_original_two_pass_semantics stdout ----
+
+thread 'java_bulk_write_and_shallow_copy_follow_original_two_pass_semantics' (44592) panicked at crates\seata_test\tests\map_copy_java.rs:324:9:
+assertion `left == right` failed: two-visits-origins
+  left: Some("true:true")
+ right: Some("true:false")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    java_bulk_write_and_shallow_copy_follow_original_two_pass_semantics
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-test --test map_copy_java`

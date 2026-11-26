@@ -1,0 +1,35 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling thiserror v2.0.21
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.140
+   Compiling memchr v2.8.3
+   Compiling log v0.4.27
+   Compiling itoa v1.0.19
+   Compiling ryu v1.0.23
+   Compiling base64 v0.22.1
+   Compiling sqlparser v0.52.0
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\default-budget\crates\seata_datasource)
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\default-budget\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.21s
+     Running tests\undo_jackson_document.rs (D:/cargo-target/seata-undo-codec-controls\debug\deps\undo_jackson_document-7bab5d47f301e7aa.exe)
+
+running 1 test
+
+thread 'default_branch_obeys_structure_limits_while_its_input_remains_two_bytes' (74312) panicked at crates\seata_at\tests\undo_jackson_document.rs:205:29:
+called `Result::unwrap_err()` on an `Ok` value: Some(UndoLogDocument { has_xid: false, sql_logs: None, .. })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test default_branch_obeys_structure_limits_while_its_input_remains_two_bytes ... FAILED
+
+failures:
+
+failures:
+    default_branch_obeys_structure_limits_while_its_input_remains_two_bytes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test undo_jackson_document`

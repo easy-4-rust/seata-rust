@@ -1,0 +1,30 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_lock_key_gate_20261116_011215_dc9906b8\collision-tree\crates\seata_at)
+warning: unused variable: `previous_length`
+  --> crates\seata_at\src\exec\java_primary_key_order.rs:52:21
+   |
+52 |                 let previous_length = map.buckets[bucket].chain.len();
+   |                     ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_previous_length`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-at` (lib) generated 1 warning (run `cargo fix --lib -p seata-at` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.86s
+     Running tests\global_lock_key_order.rs (D:/cargo-target/seata-lock-key-controls\debug\deps\global_lock_key_order-8fc3488751829b8f.exe)
+
+running 1 test
+
+thread 'original_java_order_corpus_covers_resize_tree_collisions_and_split_iteration' (87972) panicked at crates\seata_at\tests\global_lock_key_order.rs:123:9:
+assertion `left == right` failed: original Java order case "collision-11"
+  left: Some("lock_fixture:1_2_3_4_5_6_7_8_9_10_11")
+ right: Some("lock_fixture:4_1_2_3_5_6_7_8_9_10_11")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test original_java_order_corpus_covers_resize_tree_collisions_and_split_iteration ... FAILED
+
+failures:
+
+failures:
+    original_java_order_corpus_covers_resize_tree_collisions_and_split_iteration
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.11s
+
+error: test failed, to rerun pass `-p seata-at --test global_lock_key_order`

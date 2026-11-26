@@ -1,0 +1,8 @@
+{
+  "upstream_port": 43318,
+  "rm_port": 64974,
+  "mode": "hold_commit",
+  "terminal_sql": "INSERT INTO undo_log (branch_id,xid,context,rollback_info,log_status,log_created,log_modified) VALUES (?,?,?,?,0,now(6),now(6))",
+  "in_flight": false,
+  "follow_up_drop_ok_sql": "INSERT INTO undo_log (branch_id,xid,context,rollback_info,log_status,log_created,log_modified) VALUES (?,?,?,?,1,now(6),now(6))"
+}

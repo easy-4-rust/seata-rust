@@ -1,0 +1,149 @@
+test_control (test_evidence.NamespaceGuards.test_control) ... ok
+test_final_lock_not_released (test_evidence.NamespaceGuards.test_final_lock_not_released) ... FAIL
+test_final_undo_not_clean (test_evidence.NamespaceGuards.test_final_undo_not_clean) ... FAIL
+test_go_lock_not_held_after_phase_one (test_evidence.NamespaceGuards.test_go_lock_not_held_after_phase_one) ... FAIL
+test_java_lock_was_never_held (test_evidence.NamespaceGuards.test_java_lock_was_never_held) ... FAIL
+test_other_resource_not_independently_free (test_evidence.NamespaceGuards.test_other_resource_not_independently_free) ... FAIL
+test_same_resource_cannot_prove_resource_namespace_divergence (test_evidence.NamespaceGuards.test_same_resource_cannot_prove_resource_namespace_divergence) ... FAIL
+test_same_xid_cannot_prove_shared_mutex_failure (test_evidence.NamespaceGuards.test_same_xid_cannot_prove_shared_mutex_failure) ... FAIL
+test_second_at_did_not_commit (test_evidence.NamespaceGuards.test_second_at_did_not_commit) ... FAIL
+test_second_begin_hides_retry (test_evidence.NamespaceGuards.test_second_begin_hides_retry) ... FAIL
+test_second_undo_not_persisted (test_evidence.NamespaceGuards.test_second_undo_not_persisted) ... FAIL
+test_unaccepted_branch_not_real_business (test_evidence.NamespaceGuards.test_unaccepted_branch_not_real_business) ... FAIL
+
+======================================================================
+FAIL: test_final_lock_not_released (test_evidence.NamespaceGuards.test_final_lock_not_released)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 18, in test_final_lock_not_released
+    def test_final_lock_not_released(self):self.bad(lambda v:v['final'].update({'go-go':False}))
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_final_undo_not_clean (test_evidence.NamespaceGuards.test_final_undo_not_clean)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 16, in test_final_undo_not_clean
+    def test_final_undo_not_clean(self):self.bad(lambda v:v.update(final_undo_rows=1))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_go_lock_not_held_after_phase_one (test_evidence.NamespaceGuards.test_go_lock_not_held_after_phase_one)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 17, in test_go_lock_not_held_after_phase_one
+    def test_go_lock_not_held_after_phase_one(self):self.bad(lambda v:v['after'].update({'go-go':True}))
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_java_lock_was_never_held (test_evidence.NamespaceGuards.test_java_lock_was_never_held)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 12, in test_java_lock_was_never_held
+    def test_java_lock_was_never_held(self):self.bad(lambda v:v['before'].update({'java-java':True}))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_other_resource_not_independently_free (test_evidence.NamespaceGuards.test_other_resource_not_independently_free)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 13, in test_other_resource_not_independently_free
+    def test_other_resource_not_independently_free(self):self.bad(lambda v:v['before'].update({'go-java':False}))
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_same_resource_cannot_prove_resource_namespace_divergence (test_evidence.NamespaceGuards.test_same_resource_cannot_prove_resource_namespace_divergence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 11, in test_same_resource_cannot_prove_resource_namespace_divergence
+    def test_same_resource_cannot_prove_resource_namespace_divergence(self):self.bad(lambda v:v.update(go_resource=v['java_resource']))
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_same_xid_cannot_prove_shared_mutex_failure (test_evidence.NamespaceGuards.test_same_xid_cannot_prove_shared_mutex_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 10, in test_same_xid_cannot_prove_shared_mutex_failure
+    def test_same_xid_cannot_prove_shared_mutex_failure(self):self.bad(lambda v:v.update(go_xid=v['java_xid']))
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_second_at_did_not_commit (test_evidence.NamespaceGuards.test_second_at_did_not_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 14, in test_second_at_did_not_commit
+    def test_second_at_did_not_commit(self):self.bad(lambda v:v.update(both_balance=900))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_second_begin_hides_retry (test_evidence.NamespaceGuards.test_second_begin_hides_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 20, in test_second_begin_hides_retry
+    def test_second_begin_hides_retry(self):self.bad(lambda v:v['tm_counts'].update(go=[2,1,0]))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_second_undo_not_persisted (test_evidence.NamespaceGuards.test_second_undo_not_persisted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 15, in test_second_undo_not_persisted
+    def test_second_undo_not_persisted(self):self.bad(lambda v:v.update(both_undo_branches=[11]))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_unaccepted_branch_not_real_business (test_evidence.NamespaceGuards.test_unaccepted_branch_not_real_business)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 19, in test_unaccepted_branch_not_real_business
+    def test_unaccepted_branch_not_real_business(self):self.bad(lambda v:v.update(original_accepted_branches=False))
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-go-at-shared-lock\test_evidence.py", line 9, in bad
+    with self.assertRaises(RuntimeError):verify_namespace(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.003s
+
+FAILED (failures=11)

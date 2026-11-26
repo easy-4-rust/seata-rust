@@ -1,0 +1,37 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0599]: no method named `commit_changed_and_report` found for struct `MySqlCommitCheckedTransaction` in the current scope
+   --> crates\seata_db_mysql\tests\live_commit_preconditions.rs:258:10
+    |
+257 |       let receipt = checked
+    |  ___________________-
+258 | |         .commit_changed_and_report(&h.adapter, &h.rm.client())
+    | |_________-^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `commit_changed` with a similar name, but with different arguments
+   --> crates\seata_db_mysql\src\mysql_commit_checked_transaction.rs:72:5
+    |
+ 72 | /     pub async fn commit_changed(
+ 73 | |         self,
+ 74 | |         observer: &MySqlDataSourceManager,
+ 75 | |     ) -> Result<RegisteredBranch, MySqlChangedCommitError> {
+    | |__________________________________________________________^
+
+error[E0599]: no method named `commit_changed_and_report` found for struct `MySqlCommitCheckedTransaction` in the current scope
+   --> crates\seata_db_mysql\tests\live_commit_preconditions.rs:295:10
+    |
+294 |       let error = checked
+    |  _________________-
+295 | |         .commit_changed_and_report(&h.adapter, &h.rm.client())
+    | |_________-^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `commit_changed` with a similar name, but with different arguments
+   --> crates\seata_db_mysql\src\mysql_commit_checked_transaction.rs:72:5
+    |
+ 72 | /     pub async fn commit_changed(
+ 73 | |         self,
+ 74 | |         observer: &MySqlDataSourceManager,
+ 75 | |     ) -> Result<RegisteredBranch, MySqlChangedCommitError> {
+    | |__________________________________________________________^
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "live_commit_preconditions") due to 2 previous errors

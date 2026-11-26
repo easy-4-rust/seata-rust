@@ -1,0 +1,24 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized] target(s) in 1.08s
+     Running tests\live_mysql_physical_identity.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\live_mysql_physical_identity-5c263668476b6fbe.exe)
+
+running 1 test
+test different_mysql_servers_cannot_share_a_preparation_or_pool ... FAILED
+
+failures:
+
+---- different_mysql_servers_cannot_share_a_preparation_or_pool stdout ----
+
+thread 'different_mysql_servers_cannot_share_a_preparation_or_pool' (42332) panicked at crates\seata_db_mysql\tests\live_mysql_physical_identity.rs:196:5:
+assertion `left == right` failed
+  left: (false, false, true)
+ right: (true, true, false)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    different_mysql_servers_cannot_share_a_preparation_or_pool
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.12s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_mysql_physical_identity`

@@ -1,0 +1,186 @@
+test_business_accepted_wrong_token (test_updated_context.UpdatedContextGuards.test_business_accepted_wrong_token) ... FAIL
+test_control (test_updated_context.UpdatedContextGuards.test_control) ... ok
+test_durable_token_mismatch (test_updated_context.UpdatedContextGuards.test_durable_token_mismatch) ... FAIL
+test_elected_callback_loses_update (test_updated_context.UpdatedContextGuards.test_elected_callback_loses_update) ... FAIL
+test_missing_callback_observation (test_updated_context.UpdatedContextGuards.test_missing_callback_observation) ... FAIL
+test_missing_final_sql_row (test_updated_context.UpdatedContextGuards.test_missing_final_sql_row) ... FAIL
+test_missing_replay_acceptance (test_updated_context.UpdatedContextGuards.test_missing_replay_acceptance) ... FAIL
+test_missing_replica_observation (test_updated_context.UpdatedContextGuards.test_missing_replica_observation) ... FAIL
+test_missing_report_rejected (test_updated_context.UpdatedContextGuards.test_missing_report_rejected) ... FAIL
+test_old_context_on_all_replicas_rejected (test_updated_context.UpdatedContextGuards.test_old_context_on_all_replicas_rejected) ... FAIL
+test_one_replica_loses_update (test_updated_context.UpdatedContextGuards.test_one_replica_loses_update) ... FAIL
+test_replayed_callback_loses_update (test_updated_context.UpdatedContextGuards.test_replayed_callback_loses_update) ... FAIL
+test_report_missing_actual_generated_key (test_updated_context.UpdatedContextGuards.test_report_missing_actual_generated_key) ... FAIL
+test_report_wrong_prepared_branch (test_updated_context.UpdatedContextGuards.test_report_wrong_prepared_branch) ... FAIL
+test_unchanged_prepare_context_rejected (test_updated_context.UpdatedContextGuards.test_unchanged_prepare_context_rejected) ... FAIL
+
+======================================================================
+FAIL: test_business_accepted_wrong_token (test_updated_context.UpdatedContextGuards.test_business_accepted_wrong_token)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 23, in test_business_accepted_wrong_token
+    def test_business_accepted_wrong_token(self):self.bad(lambda v:v['accepted'].__setitem__(0,'0'*64))
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_durable_token_mismatch (test_updated_context.UpdatedContextGuards.test_durable_token_mismatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 21, in test_durable_token_mismatch
+    def test_durable_token_mismatch(self):self.bad(lambda v:v['prepared'].__setitem__(0,[v['phase']['xid'],'8','10','0'*64]))
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_elected_callback_loses_update (test_updated_context.UpdatedContextGuards.test_elected_callback_loses_update)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 17, in test_elected_callback_loses_update
+    def test_elected_callback_loses_update(self):self.bad(lambda v:v['callbacks'].__setitem__(1,v['registered']))
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_missing_callback_observation (test_updated_context.UpdatedContextGuards.test_missing_callback_observation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 20, in test_missing_callback_observation
+    def test_missing_callback_observation(self):self.bad(lambda v:v.update(callbacks=v['callbacks'][:-1]))
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_missing_final_sql_row (test_updated_context.UpdatedContextGuards.test_missing_final_sql_row)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 22, in test_missing_final_sql_row
+    def test_missing_final_sql_row(self):self.bad(lambda v:v.update(prepared=v['prepared'][:-1]))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_missing_replay_acceptance (test_updated_context.UpdatedContextGuards.test_missing_replay_acceptance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 24, in test_missing_replay_acceptance
+    def test_missing_replay_acceptance(self):self.bad(lambda v:v.update(accepted=v['accepted'][:1]))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_missing_replica_observation (test_updated_context.UpdatedContextGuards.test_missing_replica_observation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 19, in test_missing_replica_observation
+    def test_missing_replica_observation(self):self.bad(lambda v:v.update(replicas=v['replicas'][:-1]))
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_missing_report_rejected (test_updated_context.UpdatedContextGuards.test_missing_report_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 14, in test_missing_report_rejected
+    def test_missing_report_rejected(self):self.bad(lambda v:v.update(reported=None))
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_old_context_on_all_replicas_rejected (test_updated_context.UpdatedContextGuards.test_old_context_on_all_replicas_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 15, in test_old_context_on_all_replicas_rejected
+    def test_old_context_on_all_replicas_rejected(self):self.bad(lambda v:v.update(replicas=[v['registered']]*12))
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_one_replica_loses_update (test_updated_context.UpdatedContextGuards.test_one_replica_loses_update)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 16, in test_one_replica_loses_update
+    def test_one_replica_loses_update(self):self.bad(lambda v:v['replicas'].__setitem__(0,v['registered']))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_replayed_callback_loses_update (test_updated_context.UpdatedContextGuards.test_replayed_callback_loses_update)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 18, in test_replayed_callback_loses_update
+    def test_replayed_callback_loses_update(self):self.bad(lambda v:v['callbacks'].__setitem__(2,v['registered']))
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_report_missing_actual_generated_key (test_updated_context.UpdatedContextGuards.test_report_missing_actual_generated_key)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 28, in test_report_missing_actual_generated_key
+    self.bad(action)
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_report_wrong_prepared_branch (test_updated_context.UpdatedContextGuards.test_report_wrong_prepared_branch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 32, in test_report_wrong_prepared_branch
+    self.bad(action)
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_unchanged_prepare_context_rejected (test_updated_context.UpdatedContextGuards.test_unchanged_prepare_context_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 13, in test_unchanged_prepare_context_rejected
+    def test_unchanged_prepare_context_rejected(self):self.bad(lambda v:v.update(registered=v['reported']))
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Temp\context-guard-pair-gcgzpjuv\red\test_updated_context.py", line 12, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.002s
+
+FAILED (failures=14)

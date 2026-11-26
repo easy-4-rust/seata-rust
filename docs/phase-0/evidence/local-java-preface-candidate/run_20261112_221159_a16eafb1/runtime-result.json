@@ -1,0 +1,177 @@
+{
+  "succeeded": true,
+  "profiles": [
+    {
+      "profile": "original",
+      "succeeded": true,
+      "tc_pid": 15588,
+      "runtime_directory": "D:\\codex-builds\\preface-live-20261112_222028-a16eafb1\\original",
+      "ports_released": true,
+      "original_jar_sha256": "aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5",
+      "proof": {
+        "original_rejection_reproduced": true,
+        "native": [
+          {
+            "name": "complete-first-frame-control",
+            "request_hex": "dada0100000010001003010010203040",
+            "response_hex": "dada0100000010001004010010203040"
+          },
+          {
+            "name": "first-byte-rejected",
+            "fragment_hex": "da",
+            "closed": true
+          }
+        ]
+      }
+    },
+    {
+      "profile": "candidate",
+      "succeeded": true,
+      "tc_pid": 63400,
+      "runtime_directory": "D:\\codex-builds\\preface-live-20261112_222028-a16eafb1\\candidate",
+      "ports_released": true,
+      "original_jar_sha256": "aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5",
+      "proof": {
+        "native": [
+          {
+            "name": "complete-first-frame-control",
+            "request_hex": "dada0100000010001003010010203040",
+            "response_hex": "dada0100000010001004010010203040"
+          },
+          {
+            "name": "first-and-second-magic-byte-wait",
+            "request_hex": "dada0100000010001003010000000017",
+            "response_hex": "dada0100000010001004010000000017"
+          },
+          {
+            "name": "two-coalesced-frames",
+            "responses": [
+              "dada010000001000100401000000001f",
+              "dada0100000010001004010000000020"
+            ]
+          },
+          {
+            "name": "unknown-prefix-rejected",
+            "closed": true
+          }
+        ],
+        "http": {
+          "http1_no_controller_status": 404,
+          "http1_response_hex": "485454502f312e3120343034204e6f7420466f756e640d0a0d0a",
+          "http2_server_settings_hex": "000006040000000000000600002000",
+          "scope": "Protocol selection/normal404 and HTTP2 SETTINGS only; not business HTTP/gRPC certification."
+        },
+        "sdk": {
+          "captured_profile_choice": true,
+          "finished_queries": 2,
+          "foreign_outer_id_ignored": true,
+          "mixed_result_order": true,
+          "original_begin_queries": 4,
+          "owned_future_ids_checked": 128,
+          "owned_futures_remaining": 0,
+          "real_getty_loop": true,
+          "reconnects": 1,
+          "rollbacks": 2,
+          "transaction_resends": 0,
+          "typed_unknown_replies": 5,
+          "xids": [
+            "198.18.0.1:28091:4045076479099961346",
+            "198.18.0.1:28091:4045076479099961345"
+          ]
+        },
+        "sdk_wire": {
+          "requests": 17,
+          "responses": 17,
+          "connections": 2,
+          "heartbeats_on_both_connections": true,
+          "duplicates_coalesced": 11,
+          "late_valid_replies": 5,
+          "injected_cases": 6,
+          "transaction_resends": 0
+        },
+        "class_sources": [
+          {
+            "class_name": "org.apache.seata.core.rpc.netty.ProtocolDetectHandler",
+            "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+          },
+          {
+            "class_name": "org.apache.seata.core.protocol.detector.SeataDetector",
+            "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+          },
+          {
+            "class_name": "org.apache.seata.core.protocol.detector.HttpDetector",
+            "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+          },
+          {
+            "class_name": "org.apache.seata.core.protocol.detector.Http2Detector",
+            "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+          },
+          {
+            "class_name": "org.apache.seata.core.protocol.detector.IncrementalProtocolDetector",
+            "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+          }
+        ],
+        "sdk_binary_sha256": "7235decc362b8eea5b985b5f71c03f51210188f916b1002966c704e46985ffd9",
+        "original_proxy_sha256": "4e58fb430ea8d2e12bdfb627b9e88359691002865ad3c8468393f53f9036d7e3",
+        "derived_proxy_sha256": "2826531de3af16c5a4c3880eed8da1006953597181a7652a5e056e039c800339",
+        "forced_fragment_directions": [
+          "sdk-to-tc",
+          "tc-to-sdk"
+        ]
+      }
+    }
+  ],
+  "overlay": [
+    {
+      "path": "org/apache/seata/core/rpc/netty/ProtocolDetectHandler.class",
+      "sha256": "abdfeed9e5ce9229ef8e27d9e39937f0d9d4a64000906541c2115509804db6aa",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\rpc\\netty\\ProtocolDetectHandler.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/SeataDetector.class",
+      "sha256": "a341a7c940eb2fe8a14dbf8137100845165de2f02a105a050eb00115a5559f4e",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\SeataDetector.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/HttpDetector.class",
+      "sha256": "80517427a2d3ad874927ff05faf0636b82edd63a428a27b5ebbf36e225a99d49",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\HttpDetector.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/HttpDetector$1.class",
+      "sha256": "4df027699858856d2eb50e310ce96d2ee838308cd6250685698795cda04e84ce",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\HttpDetector$1.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/HttpDetector$2.class",
+      "sha256": "94486a4a63dfa539f48e87df8752ac64b3431577f8e6068543d316c6a5d7e1e6",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\HttpDetector$2.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/HttpDetector$3.class",
+      "sha256": "93fd20a9dfba774ac2a78e8088eea4bb69b4085cfe062d59f0174633f426948b",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\HttpDetector$3.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/Http2Detector.class",
+      "sha256": "31185446f39db2c3c12dbe843cc756027237ad69f9cb0929fc709caf97ee7874",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\Http2Detector.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/Http2Detector$1.class",
+      "sha256": "1c79562d6dfae91753dba20aa5a3cded9f9be5097f48a6a6643210a985513ea7",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\Http2Detector$1.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/Http2Detector$Http2SelectorHandler.class",
+      "sha256": "f7c6b349dffd994396e37b259d010304bdac9febe61b0ecf0e537e478e59aa19",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\Http2Detector$Http2SelectorHandler.class"
+    },
+    {
+      "path": "org/apache/seata/core/protocol/detector/IncrementalProtocolDetector.class",
+      "sha256": "532961a097d5a68853193c9a17fafc69b3493a543a0a7d95f5f38c35c33d83e9",
+      "compiled_from": "D:\\codex-builds\\sjpref_20261112_221159_a16eafb1\\core\\target\\classes\\org\\apache\\seata\\core\\protocol\\detector\\IncrementalProtocolDetector.class"
+    }
+  ],
+  "scope": "Original negative control plus independent overlay positive evidence; original artifact remains unfixed."
+}

@@ -1,0 +1,50 @@
+{
+  "case": "reconnect-rollback",
+  "xid": "198.18.0.1:38091:4045076885097840641",
+  "branch_id": 4045076885097840643,
+  "contender": "198.18.0.1:38091:4045076885097840642",
+  "apply_calls": 1,
+  "effects": 1,
+  "recover_calls": 0,
+  "native_RM_registrations": 3,
+  "actual_TC_callbacks": 2,
+  "actual_RM_replies": 2,
+  "duplicate_deliveries": 2,
+  "frames": 20,
+  "journal_records": [
+    {
+      "sequence": 1,
+      "state": 1
+    },
+    {
+      "sequence": 2,
+      "state": 3
+    }
+  ],
+  "original_branch_replayed": false,
+  "end_unknown": true,
+  "resource_fixture_only": true,
+  "SQL_Undo_verified": false,
+  "independent_TM": {
+    "global_begins": 2,
+    "global_end_requests": 2,
+    "target_end_requests": 1,
+    "contender_rollback_requests": 1,
+    "status_observations": 103,
+    "target_end_response_status": 5,
+    "target_end_result_code": 0,
+    "target_end_exception_code": 0,
+    "target_end_message": "TransactionException[org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:38091:4045076885097840641 branchId = 4045076885097840643]",
+    "contender_rollback_observed_status": 11,
+    "client_reported_end_unknown": true,
+    "unknown_timing_not_independently_claimed": true,
+    "observed_end_status_bound_to_wire": false,
+    "TC_original_request_logs_bound": true,
+    "TM_wire_frames": 216,
+    "Finished_only_cleanup_observation": true
+  },
+  "tc_pid": 79220,
+  "proxy_pid": 76556,
+  "nonce": "9b9c70918bbd4b9b8b5f1cd38817c729",
+  "class_origins": 9
+}

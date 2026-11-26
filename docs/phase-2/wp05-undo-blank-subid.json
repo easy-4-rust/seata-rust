@@ -1,0 +1,83 @@
+{
+  "status": "UNDO_BLANK_SUBID_JAVA_SEMANTICS_AND_ORPHAN_GUARD_VERIFIED",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-fragment-read-sqlx.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_blank_subid",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_original_cases_reexecuted": 3,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest]/[method:loadsFragmentsWithBoundIdentifiersAndClosesJdbcResources()]",
+      "status": "PARTIAL",
+      "matched_assertion": "Blank subIds declare zero fragments",
+      "remaining": "JDBC statement/result closure and original numeric cause assertion"
+    }
+  ],
+  "verified": [
+    "Root-only read with blank, empty, and Java-only whitespace markers",
+    "Orphan membership returns an error before body reads",
+    "NBSP stays malformed and rejected before member and body queries"
+  ],
+  "fixture_scope": "SQLx 0.8.6 with a loopback peer, production locked reader and caller rollback",
+  "independent_review": "Exact Java blank set and unchanged strict nonblank / membership handling",
+  "whitespace_differential": {
+    "java": "D:/Java/jdk-17.0.12",
+    "utf16_units_compared": 65536,
+    "matching_whitespace_units": 25,
+    "mismatches": 0
+  },
+  "rust": {
+    "1.99": {
+      "ordinary": 618,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "read_wire_tests": 5,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 618,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "read_wire_tests": 5,
+      "strict_clippy": true
+    }
+  },
+  "mutation_controls": 1,
+  "global_rust_source_MATCH": 151,
+  "global_rust_methods_match": 130,
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "860299b9f81818e5969bddc4181ac54d8671419e85b94961403d4c5a820bf4a7",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "26deb9516ba76b9afde672001c7c694ae210f69c6390df8e727b3684c8e7d1ee",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_read_sqlx_tests.rs": "3343d0ec6d64446d78cab2f22ced3d285f92868fb1ef2678796a768ebd4bd58d"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "2d8035a61b96233d076b68f5f19e28f09ad8305a0f142a29f12638c91fc8cd75",
+    "1.85-doc.log": "da6c56c0738c3e14533ce8a64b1dfa0c1109307642528719f23da10e90993e4f",
+    "1.85-targeted.log": "3776b722346b8282a2e6f0c73a86f8f0a16bb20f08df48ae44d568acf1cd301a",
+    "1.85-tests.log": "0414cfd1f3485fc7b6f3f15b8f28d345ad9bedefdd3ec683790c5247b0cc7475",
+    "1.99-clippy.log": "4c85eaf5c49ed8f95b59b20fdab7ef6b32a497b3681699bce692a39db67ebb2f",
+    "1.99-doc.log": "6f53cf4a7c03960bb915f42c8e0b9d57ebac01f0f1c500b3dfca50ec0a3fc5d5",
+    "1.99-targeted.log": "01139db35d6c04c425f25e65cb773618cbcc5fbcf88a4b295b92370171c21858",
+    "1.99-tests.log": "ea0799ecb5a2d1271108a31c206a2b5d46de681902cb5218636bf3bc473db90c",
+    "commands.json": "6418f3c8de4c6407100db5d471991fd7f734dfc20b83d069eb7549c870ec4533",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "jdk17-whitespace.txt": "3734c9cc642c51417b07829be53df93ec739d2be5699e6d90eb8681a05e4b4ae",
+    "mysql-environment.log": "21b265507da1c962fac8abe46058a75e3e038590d1c0df306f11d3065c7af21a",
+    "MySQLUndoLogManagerBehaviorTest.java": "369e52c346830fefd6617c6843c7220dcede0e02cb95a867585910d41823d846",
+    "original-inputs.json": "1cdebefbdf5c185066eaf9bec3050cfc0072881527c78a2287a729f210ceb751",
+    "original-junit.jsonl": "e0e5b1a4b33e7429544b07c596a3878ba8f86ff9713c79a913070fc958fcfafe",
+    "original-junit.log": "cdadaf3fcc4cd90f0ed928fb6a0ac1f9fca45242bfc58a151174005a39d8643e",
+    "pre-fix-red.log": "0255b06983d5a4f321fc82ba0e0deb98dd0217472aab216c25ec16932e81e9ce",
+    "runtime-mutation-control.json": "0c7fecf8011f4a3d4dc5071448a2f87249734086d5c60e6f34c4df0275a54900",
+    "rust-whitespace-mutant.stderr": "b22a479291e248615d75a7c8343b59f4d2e07280e02083c052ae47d6249f23b7",
+    "rust-whitespace-mutant.stdout": "ddee6bd19a4865e5b544cc576b8fcefd7b493ba6b9c836804c6b29fc0c518309",
+    "whitespace-differential.json": "6bb1d978c432dcc5ff52bbea8448b0456aec8e5fe9d6f2e3611e0824e68f788b"
+  }
+}

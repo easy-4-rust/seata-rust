@@ -1,0 +1,36 @@
+   Compiling seata-transport v0.1.0 (D:\codex-builds\seata-loss-controls-dab17a53eb61\crates\seata_transport)
+warning: associated function `reply_identity_matches` is never used
+  --> crates\seata_transport\src\netty\response_expectation.rs:73:19
+   |
+11 | impl ResponseExpectation {
+   | ------------------------ associated function in this implementation
+...
+73 |     pub(crate) fn reply_identity_matches(request: &Message, response: &Message) -> bool {
+   |                   ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-transport` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.07s
+     Running tests\inbound_response.rs (D:/cargo-target/seata-rust-loss-controls\debug\deps\inbound_response-403954c11a4476a9.exe)
+
+running 1 test
+test wrong_family_or_branch_identity_is_rejected_without_writing ... FAILED
+
+failures:
+
+---- wrong_family_or_branch_identity_is_rejected_without_writing stdout ----
+
+thread 'wrong_family_or_branch_identity_is_rejected_without_writing' (74892) panicked at crates\seata_transport\tests\inbound_response.rs:216:9:
+assertion failed: matches!(inbound.respond(body, Duration::from_secs(1)).await,
+    Err(CallError::LocalFailureBeforeSend
+    { reason: TransportError::UnexpectedResponse { .. }, .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    wrong_family_or_branch_identity_is_rejected_without_writing
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-transport --test inbound_response`

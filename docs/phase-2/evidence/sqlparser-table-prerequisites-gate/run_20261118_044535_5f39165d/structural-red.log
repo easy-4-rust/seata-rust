@@ -1,0 +1,16 @@
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+error[E0432]: unresolved import `seata_sqlparser::CaseInsensitivePkSet`
+ --> crates\seata_test\tests\table_primary_set.rs:2:23
+  |
+2 | use seata_sqlparser::{CaseInsensitivePkSet, JavaString, MetadataError};
+  |                       ^^^^^^^^^^^^^^^^^^^^ no `CaseInsensitivePkSet` in the root
+
+error[E0599]: no method named `java_compare_to_ignore_case` found for struct `JavaString` in the current scope
+  --> crates\seata_test\tests\table_primary_set.rs:36:41
+   |
+36 |         let actual = decode(fields[0])?.java_compare_to_ignore_case(&decode(fields[1])?);
+   |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `JavaString`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-test` (test "table_primary_set") due to 2 previous errors

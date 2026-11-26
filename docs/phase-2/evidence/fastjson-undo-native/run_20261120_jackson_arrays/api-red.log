@@ -1,0 +1,32 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0599]: no method named `encode_original_field` found for struct `JacksonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:158:23
+    |
+158 |     let wire = parser.encode_original_field(&field).unwrap();
+    |                       ^^^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `encode_original` with a similar name, but with different arguments
+   --> crates\seata_at\src\undo\parser\jackson_undo_log_parser.rs:84:5
+    |
+ 84 | /     pub fn encode_original(
+ 85 | |         &self,
+ 86 | |         xid: Option<&str>,
+ 87 | |         branch_id: i64,
+ 88 | |         logs: Option<&[FastjsonSqlUndoLog]>,
+ 89 | |     ) -> Result<Vec<u8>, UndoCodecError> {
+    | |________________________________________^
+
+error[E0599]: no method named `decode_original_field` found for struct `JacksonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:159:26
+    |
+159 |     let decoded = parser.decode_original_field(&wire).unwrap();
+    |                          ^^^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `decode_original_logs` with a similar name
+    |
+159 -     let decoded = parser.decode_original_field(&wire).unwrap();
+159 +     let decoded = parser.decode_original_logs(&wire).unwrap();
+    |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-at` (test "jackson_undo_source") due to 2 previous errors

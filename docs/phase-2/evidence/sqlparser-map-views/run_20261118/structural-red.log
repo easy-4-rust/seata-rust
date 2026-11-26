@@ -1,0 +1,75 @@
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+error[E0599]: no method named `entry_set` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:31:23
+   |
+31 |     let entries = map.entry_set();
+   |                       ^^^^^^^^^
+   |
+help: there is a method `entries` with a similar name
+   |
+31 -     let entries = map.entry_set();
+31 +     let entries = map.entries();
+   |
+
+error[E0599]: no method named `values` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:32:22
+   |
+32 |     let values = map.values();
+   |                      ^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:33:20
+   |
+33 |     let keys = map.key_snapshot()?;
+   |                    ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:59:28
+   |
+59 |     let current_keys = map.key_snapshot()?;
+   |                            ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:64:105
+   |
+64 | ...ey(Some(&"second".into()))?, map.key_snapshot()?.contains(&"SECOND".into())));
+   |                                     ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:67:78
+   |
+67 |     record("entries-clear-target-only", format!("{}:{}", entries.len()?, map.key_snapshot()?.len()));
+   |                                                                              ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:77:44
+   |
+77 |     record("null-key-origin-retained", map.key_snapshot()?.contains(&"THIRD".into()).to_string());
+   |                                            ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:79:50
+   |
+79 |     record("entries-remove-origin-retained", map.key_snapshot()?.contains(&"fourth".into()).to_string());
+   |                                                  ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:82:76
+   |
+82 |     record("values-clear-target-only", format!("{}:{}", values.len()?, map.key_snapshot()?.contains(&"values-Clear".into())));
+   |                                                                            ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:84:66
+   |
+84 |     record("map-clear-both", format!("{}:{}", values.len()?, map.key_snapshot()?.len()));
+   |                                                                  ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+error[E0599]: no method named `key_snapshot` found for struct `LowerCaseLinkHashMap<V>` in the current scope
+  --> crates\seata_test\tests\map_views_java.rs:90:56
+   |
+90 |         record(&format!("snapshot-order/{count}"), map.key_snapshot()?.iter().map(ToString::to_string).collect::<Vec<_>>().join(","));
+   |                                                        ^^^^^^^^^^^^ method not found in `LowerCaseLinkHashMap<Value>`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-test` (test "map_views_java") due to 11 previous errors

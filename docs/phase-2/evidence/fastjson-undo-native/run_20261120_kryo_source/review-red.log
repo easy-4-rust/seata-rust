@@ -1,0 +1,23 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.10s
+     Running tests\kryo_undo_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\kryo_undo_source-d60f23af703a8d78.exe)
+
+running 1 test
+test kryo_counts_numeric_payload_in_single_and_total_scalar_budgets ... FAILED
+
+failures:
+
+---- kryo_counts_numeric_payload_in_single_and_total_scalar_budgets stdout ----
+
+thread 'kryo_counts_numeric_payload_in_single_and_total_scalar_budgets' (54536) panicked at crates\seata_at\tests\kryo_undo_source.rs:201:5:
+assertion failed: matches!(KryoUndoLogParser::new(caps).decode_branch(&wire),
+    Err(UndoCodecError::Budget { limit: "Kryo scalar bytes" }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    kryo_counts_numeric_payload_in_single_and_total_scalar_budgets
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.05s
+
+error: test failed, to rerun pass `-p seata-at --test kryo_undo_source`

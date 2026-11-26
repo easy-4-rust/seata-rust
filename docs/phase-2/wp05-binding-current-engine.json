@@ -1,0 +1,94 @@
+{
+  "status": "CURRENT_RESOURCE_BINDING_ENGINE_REQUIRED_BEFORE_REGISTRATION",
+  "mysql": "8.4.13",
+  "image": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+  "rust": {
+    "1.99": {
+      "workspace_passed": 635,
+      "ignored": 197,
+      "preparation_live_passed": 12,
+      "preconditions_live_passed": 13,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "workspace_passed": 635,
+      "ignored": 197,
+      "preparation_live_passed": 12,
+      "preconditions_live_passed": 13,
+      "strict_clippy": true
+    }
+  },
+  "red": {
+    "registered_before_unsafe_engine_rejection": true,
+    "binding_changed_while_prepared": 1,
+    "business_after_rollback": 0,
+    "undo_after_rollback": 0,
+    "recovery_registration": 1
+  },
+  "coverage": [
+    "Late MyISAM and view replacement rejected with exact current-engine error before BranchRegister",
+    "No receipt or unknown registration; business, Undo and recovery state zero",
+    "Original MDL and shared row lock retained for supported InnoDB; same connection/deadline",
+    "Existing correct binding, held-lock and full preparation/precondition regressions retained"
+  ],
+  "limits": [
+    "Existing opt-in binding policy; full binding schema certification not claimed",
+    "Stable single-primary routing and unified original JDBC resource ID remain deployment requirements"
+  ],
+  "remaining": [
+    "Original TC lock safety and public first-phase COMMIT",
+    "WP05/WP06 and all remaining full-plan gates"
+  ],
+  "sha256": {
+    "Cargo.lock": "21459760f5f3338182baa1feafe023d4b96a7c61303236a7ad8e7609d603ff97",
+    "crates/seata_db_mysql/migrations/005_seata_rs_at_resource_binding.sql": "9be854fe42e874bd347fff48aacbcfc675729754a961039b953ade933d297ac9",
+    "crates/seata_db_mysql/src/cache/mysql_table_meta_reader.rs": "39767622a15bd5d99f074431610c60a29697cadd19a29b95a362cb7fe3b10132",
+    "crates/seata_db_mysql/src/connection_proxy.rs": "aed3fb3f32af4923e16632f9af1d4518908d8a4e2b15584251e5de277b37bd4a",
+    "crates/seata_db_mysql/src/mysql_resource_binding.rs": "688158436ffe9ae26a41d19144477f0481305b436c2fec76329b586a6306902d",
+    "crates/seata_db_mysql/src/mysql_transaction_preparer.rs": "e2139c5a63082da104249a2ab1313186795acff2af7aa5973a1ac63778007a41",
+    "crates/seata_db_mysql/tests/live_commit_preconditions.rs": "29e2dbfa902d6ff1ca72fbcab95e9d382a1d8e7ae9ac9da5846cbeaa6268ce22",
+    "crates/seata_db_mysql/tests/live_first_phase_preparation.rs": "ec164ae35767a25df1c563551149027783e300cfb8d039939253d0df11efe53e",
+    "crates/seata_db_mysql/tests/support/first_phase_fixture.rs": "9315d6d60ea9b763528fec1d6b2439edcedba4919dd899caed2af8ea3f9154f5",
+    "crates/seata_db_mysql/tests/support/owned_mysql.rs": "92a5c58da5deea1715b71fe31d13cc611daa4f5ba7d87f03e4d13ba3f737c67d",
+    "crates/seata_db_mysql/tests/support/registration_guard_cases.rs": "9b3f1e39022f9f2d6100238fa81d22b9b186458884eca2915f3d8199c5ec4443",
+    "crates/seata_db_mysql/tests/support/undo_store_fixture.rs": "43285f27ab1e00216d23498ab89febb8220f950e395792b9279aa1932ce1ff74",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-child-build.log": "f89064b5f791a78ccd9ac1e7f4027f729ee14b6bff7df653fb871a0e31dddf71",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-clippy.log": "cf06f7f4d02a2e9a98cad555a854a5f5eac989ab8a06b3e1edeccfb4b730cdb4",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-late-binding-engine.json": "784bb2a9756e8c3ce5d0a4fd59283737164ad9bd61df5484e894f1863ced908b",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-live_commit_preconditions-output-path.txt": "50f5f6977dd8fd39f5f0203e9312d50e3e60e2423e99c8aa3d822079d85957a9",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-live_commit_preconditions.log": "92a274e4984c9917783e38f3303aef46d77ca751751729c33af61e469ab725f0",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-live_first_phase_preparation-output-path.txt": "f493ccd0270cae72406c05e4ea9381c6bb974e1df1f37a3d7d6d5328cc0e28ac",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-live_first_phase_preparation.log": "59e5b660dbfcb30a208dafef5576757d2b75281d23493da5a9bf23ceff6fdf53",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.85-workspace.log": "1104a608b35ecdcd16aed16459b657045a29c40ed6f267a531659f1a1915d714",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-child-build.log": "dfc43c64a538cf95a14c8baa6ca5b9f40b26dc0580dcb063d11481ba257b6f38",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-clippy.log": "8f1c06cb1c55fbbd472d8d05c8d35736e3a5b656f03dc5379af2e177b6c4bbfe",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-late-binding-engine.json": "784bb2a9756e8c3ce5d0a4fd59283737164ad9bd61df5484e894f1863ced908b",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-link-disk-pressure.log": "f25e463ace63f8685b9289297668c7e331dbecb7b1be63a60e1ca09a7d53f81a",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-live_commit_preconditions-output-path.txt": "eafbe09b756c0d90564edd0862251b6f418a0ea7b45214660080bc2784ecae7d",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-live_commit_preconditions.log": "5b2dacd8a13210acb37390abb5b6d7b5e3568e5183953d0477ad13049e60b23e",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-live_first_phase_preparation-output-path.txt": "ecaa76e85fcbdc5f5d5f6ca9b650adf9a6cd889db4ea11570da34e177dc23413",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-live_first_phase_preparation.log": "57884ab6c48820951ed2ccdb1abc176cd77d552b1e33ffba1dc055f4c1a72138",
+    "docs/phase-2/evidence/mysql-binding-current-engine/1.99-workspace.log": "c0bd31d7f84f5443e1910ca0468c467a2434e0f800f81d115d9451fdaca714ee",
+    "docs/phase-2/evidence/mysql-binding-current-engine/cleanup-runtime.sh": "04fb9143007ae72cfbcb556ef3f1536eb74d34d16d138c480ca58b678bcda23f",
+    "docs/phase-2/evidence/mysql-binding-current-engine/cleanup.log": "ffb8993fddee9aaa6f78cd1efd2e1bbd00a25c5abe0a6a9ca204950ee561364d",
+    "docs/phase-2/evidence/mysql-binding-current-engine/cleanup.ps1": "8372b1c51d61ab865d3f6474739250375ddcd49265bbf2f53c20900ce5b0a366",
+    "docs/phase-2/evidence/mysql-binding-current-engine/expired-pdb-cleanup.csv": "8ff47137f8b9dc7d7c9e406921625cb19f626c5d267a3ea7c460d54e816e37b5",
+    "docs/phase-2/evidence/mysql-binding-current-engine/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-binding-current-engine/image.log": "9720b2a5c35b244e5a89c72841d56e064142da9b517380719014faa47dc6cf83",
+    "docs/phase-2/evidence/mysql-binding-current-engine/independent-server.log": "e8df30dbc7a412fb8849a2c17937047bc00752ae4a2da397156535754d395a15",
+    "docs/phase-2/evidence/mysql-binding-current-engine/interrupted-link.json": "55142fe98293685a373ef87fedfe0fc9422de4726179f3cbbc6c1e15cd33e1fe",
+    "docs/phase-2/evidence/mysql-binding-current-engine/interrupted-pdb.json": "34a579423e91067deb9a1284b5b0c3c38881340148d3c200e6f1b496eb9f33d5",
+    "docs/phase-2/evidence/mysql-binding-current-engine/README.md": "a5a7147833703a76d603205a7e082a55de1e8e27358324c5560802c93fd9ea15",
+    "docs/phase-2/evidence/mysql-binding-current-engine/red-database.log": "a74a8b1922197044a1f6f69633b31873cd7eacad2ca0a04af03072b567e6c928",
+    "docs/phase-2/evidence/mysql-binding-current-engine/red-observation.json": "f9c52cc720f2331ff20a998f3da3e1d3c64b8b39b8e34064894ebd3fe4b5f73e",
+    "docs/phase-2/evidence/mysql-binding-current-engine/red.log": "72a1b3c627c9a61e780f11fe0cfa621e13b09a5f0459465b2de1d31375780aaa",
+    "docs/phase-2/evidence/mysql-binding-current-engine/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-binding-current-engine/review.md": "31e78d51026265d1d2f3e76d97fc4ddc0eec3e75ec6b4c6b837a2d8be8188057",
+    "docs/phase-2/evidence/mysql-binding-current-engine/run-live.ps1": "50f487b540842c2c7c961edbb0243407fa52dbd8479bd9911995248100cc665e",
+    "docs/phase-2/evidence/mysql-binding-current-engine/run-workspace.ps1": "678df4d44c02704cbc77ef22c08845539394d6dbda763999ee2197079be4df02",
+    "docs/phase-2/evidence/mysql-binding-current-engine/runtime.log": "e508ce893cb3c5c4fa03f66c68887c1d839a3a263f1841a60de45137fce4a8b0",
+    "docs/phase-2/evidence/mysql-binding-current-engine/start-runtime.sh": "64fa940859b7fb96250ca995295e423ec5282467f22bebbdb68bf70f4d57692c",
+    "docs/phase-2/evidence/mysql-binding-current-engine/verify.py": "3c1b7c855c231017a8b456daa7aac755422d59f87e2e7d12fbd8c3386e8980f5",
+    "docs/phase-2/tc-lock-coverage-contract.md": "6a45e3f733078e542835212d0ae7cf5b6d30ea010e90300cf012189cf1a9df74"
+  }
+}

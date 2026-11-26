@@ -1,0 +1,47 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.11s
+     Running tests\data_compare_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\data_compare_source-c8efdef8a45bc224.exe)
+
+running 15 tests
+test decimal_row_keys_follow_big_decimal_to_string ... FAILED
+test fastjson_date_only_spaces_throws_before_parsing ... FAILED
+test fastjson_source::fastjson_bigint ... ok
+test fastjson_source::fastjson_date ... ignored, requires the pinned JDK temporal fixture
+test fastjson_source::fastjson_decimal ... ok
+test fastjson_source::fastjson_local_date_time_and_null_values ... ignored, requires the pinned JDK temporal fixture
+test fastjson_source::fastjson_time ... ignored, requires the pinned JDK temporal fixture
+test fastjson_source::fastjson_timestamp ... ignored, requires the pinned JDK temporal fixture
+test is_field_equals ... ok
+test is_records_equals ... ok
+test is_rows_equals ... ok
+test java_map_preserves_original_duplicate_and_collision_behavior ... ok
+test rows_match_by_composite_key_and_report_missing_columns_or_rows ... ok
+test test_row_list_to_map_with_multip_pk ... ok
+test test_row_list_to_map_with_single_pk ... ok
+
+failures:
+
+---- decimal_row_keys_follow_big_decimal_to_string stdout ----
+SEATA_COMPARE_EXTRA	decimal_key_0.0000010	0.0000010
+
+thread 'decimal_row_keys_follow_big_decimal_to_string' (53296) panicked at crates\seata_db_mysql\tests\data_compare_source.rs:281:9:
+assertion `left == right` failed: 0.0000001
+  left: JavaString { units: [48, 46, 48, 48, 48, 48, 48, 48, 49], utf8: Some("0.0000001") }
+ right: JavaString { units: [49, 69, 45, 55], utf8: Some("1E-7") }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- fastjson_date_only_spaces_throws_before_parsing stdout ----
+
+thread 'fastjson_date_only_spaces_throws_before_parsing' (38988) panicked at crates\seata_db_mysql\tests\data_compare_source.rs:239:5:
+assertion `left == right` failed
+  left: Ok(true)
+ right: Err(ListIndexOutOfBounds { index: 0, size: 0, array: true })
+
+
+failures:
+    decimal_row_keys_follow_big_decimal_to_string
+    fastjson_date_only_spaces_throws_before_parsing
+
+test result: FAILED. 9 passed; 2 failed; 4 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test data_compare_source`

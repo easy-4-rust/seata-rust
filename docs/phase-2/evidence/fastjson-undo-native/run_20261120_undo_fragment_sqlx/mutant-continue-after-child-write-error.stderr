@@ -1,0 +1,16 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_compare_mutants_edf_a1fh\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.61s
+     Running unittests src\lib.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\seata_db_mysql-0eae6d12f56bc15e.exe)
+
+thread 'mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement' (52512) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:107:5:
+assertion `left == right` failed
+  left: Some([22, 73, 78, 83, 69, 82, 84, 32, 73, 78, 84, 79, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 40, 98, 114, 97, 110, 99, 104, 95, 105, 100, 44, 120, 105, 100, 44, 99, 111, 110, 116, 101, 120, 116, 44, 114, 111, 108, 108, 98, 97, 99, 107, 95, 105, 110, 102, 111, 44, 108, 111, 103, 95, 115, 116, 97, 116, 117, 115, 44, 108, 111, 103, 95, 99, 114, 101, 97, 116, 101, 100, 44, 108, 111, 103, 95, 109, 111, 100, 105, 102, 105, 101, 100, 41, 32, 86, 65, 76, 85, 69, 83, 32, 40, 63, 44, 63, 44, 63, 44, 63, 44, 48, 44, 110, 111, 119, 40, 54, 41, 44, 110, 111, 119, 40, 54, 41, 41])
+ right: Some([3, 82, 79, 76, 76, 66, 65, 67, 75])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement' (52512) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:46:9:
+assertion failed: matches!(result,
+    Err(DbError::Driver
+    { operation: "Undo insert", code: Some(1062), sql_state: Some(state) }) if
+    state == "23000")
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

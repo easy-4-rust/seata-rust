@@ -1,0 +1,22 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.91s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-production\debug\deps\seata_sqlparser-06762bdc215f2970.exe)
+
+running 1 test
+test escape_provider_instance::tests::existing_waiter_gets_outer_while_new_lookup_can_see_published_inner ... FAILED
+
+failures:
+
+---- escape_provider_instance::tests::existing_waiter_gets_outer_while_new_lookup_can_see_published_inner stdout ----
+
+thread 'escape_provider_instance::tests::existing_waiter_gets_outer_while_new_lookup_can_see_published_inner' (5260) panicked at crates\seata_sqlparser\src\escape_provider_instance.rs:193:9:
+assertion failed: matches!(waiting, Err(mpsc::RecvTimeoutError::Timeout))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    escape_provider_instance::tests::existing_waiter_gets_outer_while_new_lookup_can_see_published_inner
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-sqlparser --lib`

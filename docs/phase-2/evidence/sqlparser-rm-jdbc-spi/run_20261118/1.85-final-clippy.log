@@ -1,0 +1,19 @@
+    Checking seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+error: `if` chain can be rewritten with `match`
+  --> crates\seata_sqlparser\src\util\db_type_parser_registration.rs:34:13
+   |
+34 | /             if candidate.order > selected.order {
+35 | |                 selected = candidate;
+36 | |                 tied = false;
+37 | |             } else if candidate.order == selected.order {
+38 | |                 tied = true;
+39 | |             }
+   | |_____________^ help: consider rewriting the `if` chain with `match`: `match candidate.order.cmp(&selected.order) {...}`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#comparison_chain
+   = note: `-D clippy::comparison-chain` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::comparison_chain)]`
+
+error: could not compile `seata-sqlparser` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `seata-sqlparser` (lib) due to 1 previous error

@@ -1,0 +1,33 @@
+--- a/docs/phase-0/v1-implementation-acceptance-checklist.md
++++ b/docs/phase-0/v1-implementation-acceptance-checklist.md
+@@ -73,11 +73,29 @@
+ 
+ **Control envelope increment:** nine fresh Java cases and typed Rust probe checks now cover heartbeat and59/60 merges. Three heartbeat frames match original Go Getty bytes; six merge cases expose missing Go codecs (GO-V1-MERGE-001), not interoperability. Selected Java163/Rust114/Python5 passed; [evidence](evidence/local-control-envelopes/README.md). New fixture hashes/case classifications are separate from the original29/six-frame corpus. [Freeze-readiness audit](wp00-freeze-readiness-audit.md) records remaining dependencies without changing this gate.
+ 
++#### WP-00-P — Protocol evidence required to start implementation
++
++This is an implementation prerequisite, not a waiver of any original WP-00 or release requirement. All original WP-00 tasks and its Gate still apply to overall completion.
++
++- [ ] Record pinned Java/Go versions, per-message authority, certified fields/bytes, unresolved divergences and explicit unsupported inputs.
++- [ ] Freeze original and supplemental fixtures with source/execution hashes; never relabel diagnostics as interoperable golden vectors.
++- [ ] Apply Accepted ADR-0003/0007/0008 to the planned domain/wire conversions, message-specific optionality and typed outcome taxonomy.
++- [ ] Link observable success/failure/malformed cases for the target API; keep every original WP-01 acceptance item unchanged.
++- [ ] Record the initial peer profile explicitly: Java authority, with validated adapters where required; preserve full Go compatibility as an outstanding final requirement, without silent dialect guessing or exemptions.
++
++**Start gate:** WP-00-P must be verified before WP-01 starts. Completing P does not complete WP-00, certify production behavior or authorize release.
++
++#### WP-00-R — Remaining runtime and full compatibility evidence
++
++All original unresolved WP-00 requirements remain here: supplemental Go failures/merges and full candidate coverage, reference FILE/RAFT defects, status/null-report/metrics/authentication boundaries, and actual production Rust resource atomicity, Undo, durable replay and fault matrices. Each original acceptance condition must be met or receive a separate explicit decision; this split grants no exceptions.
++
++Original investigation results retain their actual scopes. Reference Go/Java evidence is not production Rust evidence. Deferred shared-lock work remains incomplete. WP-00 is complete only after both P and R and every original WP-00 requirement are satisfied; WP-01–07 and the full architecture roadmap remain required.
++
+ **Gate:** no implementation task may call a source-derived candidate vector “golden” until the pinned Go/Java runtime has generated or accepted it.
+ 
+ ### WP-01 — Protocol domain and wire model
+ 
+-**Depends on:** WP-00.
++**Depends on:** WP-00-P. Full WP-00 and release acceptance remain required.
+ 
+ - [ ] Define domain enums independent from Java ordinal values.
+ - [ ] Define explicit conversion tables for MessageType, RequestType, SerializerType, CompressorType, BranchType, BranchStatus, GlobalStatus, ResultCode and TransactionExceptionCode.

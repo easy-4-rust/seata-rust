@@ -1,0 +1,38 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling windows-link v0.2.1
+   Compiling thiserror v2.0.21
+   Compiling pin-project-lite v0.2.17
+   Compiling bytes v1.12.1
+   Compiling windows-sys v0.61.2
+   Compiling socket2 v0.6.5
+   Compiling mio v1.2.4
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling tokio-macros v2.7.2
+   Compiling tokio v1.54.1
+   Compiling seata-protocol v0.1.0 (D:\codex-builds\seata-tm-controls-dcaf30dedc09\crates\seata_protocol)
+   Compiling seata-transport v0.1.0 (D:\codex-builds\seata-tm-controls-dcaf30dedc09\crates\seata_transport)
+   Compiling seata-tm v0.1.0 (D:\codex-builds\seata-tm-controls-dcaf30dedc09\crates\seata_tm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.21s
+     Running tests\manager_calls.rs (D:/cargo-target/seata-rust-tm-controls\debug\deps\manager_calls-21e9a59b86a61e42.exe)
+
+running 1 test
+test lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin ... FAILED
+
+failures:
+
+---- lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin stdout ----
+
+thread 'lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin' (77236) panicked at crates\seata_tm\tests\manager_calls.rs:156:5:
+assertion failed: matches!(error, TmError::UnknownOutcome { operation: TmOperation::Begin, .. })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.10s
+
+error: test failed, to rerun pass `-p seata-tm --test manager_calls`

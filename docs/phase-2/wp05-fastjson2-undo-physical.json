@@ -1,0 +1,102 @@
+{
+  "status": "FASTJSON2_NATIVE_MYSQL_PHYSICAL_BINDING_VERIFIED_OFFLINE",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-fastjson2-undo-source.json",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_fastjson2": "2.0.52",
+  "java_classpath_authority": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson2_junit_rfpu27ie/commands.json",
+  "java_fixtures": [
+    {
+      "preset": "fastjson2",
+      "bytes": 1348,
+      "input": "crates/seata_at/tests/fixtures/fastjson2_native_wire.bin",
+      "input_sha256": "8198f20319f0262f91b9ad7bcc20954dac709f4ae631c80e3922b98c87918b25",
+      "observed": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_fastjson2_physical/java-observed.tsv",
+      "logs": 3,
+      "images": 6,
+      "fields": 36
+    },
+    {
+      "preset": "fastjson2-wide",
+      "bytes": 1420,
+      "input": "crates/seata_at/tests/fixtures/fastjson2_native_wide.bin",
+      "input_sha256": "a014e841fcfa5cec194a672bcaee8906443e314a393ce1b3e70acf33dd866a6f",
+      "observed": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_fastjson2_physical/java-wide-observed.tsv",
+      "logs": 3,
+      "images": 6,
+      "fields": 36
+    }
+  ],
+  "rust": {
+    "1.99": {
+      "ordinary": 587.0,
+      "ignored": 172.0,
+      "harnesses": 119,
+      "doc": 4.0,
+      "fastjson2_new_cases": 8,
+      "fastjson2_fixed_h2_matches": [
+        "testEncodeAndDecode",
+        "testPerformance"
+      ],
+      "clippy_workspace_all_targets_strict": true
+    },
+    "1.85": {
+      "ordinary": 587.0,
+      "ignored": 172.0,
+      "harnesses": 119,
+      "doc": 4.0,
+      "fastjson2_new_cases": 8,
+      "fastjson2_fixed_h2_matches": [
+        "testEncodeAndDecode",
+        "testPerformance"
+      ],
+      "clippy_workspace_all_targets_strict": true
+    }
+  },
+  "evidence_dir": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_fastjson2_physical",
+  "evidence_sha256": {
+    "1.85-clippy.log": "a9203a257cd57a319ff842cddee14da2310a937beb45c55aa444cecd9c487065",
+    "1.85-doc.log": "430e1b546a8f20b7ea28c707498144bfc827db1d5243bf9091961cce5ed7eae0",
+    "1.85-h2.log": "ac92a79873cb7af152a78742720a482b95cb8cd53257aae781482e2c1d5ad3c1",
+    "1.85-targeted.log": "0bb80254b1ef31e9a7e5c293ec9991d3df56a9d507faeee4496960ef61d64c39",
+    "1.85-tests.log": "a8d9c1cce3a6ba1881cd02bc46a2631c1d6f99bd0065d9dd104ae35d5db13d70",
+    "1.99-clippy.log": "8b5b4f4a565cb5e3ea97ace628bb9c5503a63abe665627a764d9b3e6ec9bf6d7",
+    "1.99-doc.log": "29d13c4c4c293447fc12fb698cc1b3e9004fc332416b2f352f36a921e814f6a2",
+    "1.99-h2.log": "42b54295e4ca4950b1560ef218db519351551504c0f6997cb27b81dccce074fc",
+    "1.99-targeted.log": "df57dfab0070be0c310aea183790b0b76484bf7093c56e46c3dfc116dac44cc6",
+    "1.99-tests.log": "3589a2f16cfd5b125c494ba24d00ced35e44a7cab3b0993f966ae9248958678a",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java-observed.tsv": "df506ab8b3e0a231b24a9de18c0cc407d18e20a07449aeee7619111fb20b4fb8",
+    "java-wide-observed.tsv": "22df9d07bba1ffdd574d7a7ea11bd9fe424346e33535bda4d4ebe72e9fbf601d",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "mysql-api-1.41.log": "0f17a83efd80383187c5f6a0462197b46b5c38ea7580943a575d3ad23b1ebf8b",
+    "java-fastjson-control.tsv": "df506ab8b3e0a231b24a9de18c0cc407d18e20a07449aeee7619111fb20b4fb8"
+  },
+  "source_inputs_sha256": {
+    "Cargo.lock": "d3426367187e8c5863fcdb899b909573c1eeaff1fca7129ed80ef241546de377",
+    "crates/seata_at/Cargo.toml": "659b138cf3f56d40fe451d1cd2f4f656d95966d1757600649d38acd9b056b6e2",
+    "crates/seata_at/src/undo/parser/fastjson2_undo_log_parser.rs": "aec914007ef4b2c16ee559ce297887a18857bcbf0b27b24ee3af5ac1fe862d90",
+    "crates/seata_at/src/undo/parser/jsonb_reader.rs": "d9d3f073759c43a9bb40db137a2c817c57dfb8233448d023b870748bc923305b",
+    "crates/seata_at/src/undo/parser/jsonb_value.rs": "d87883c7b7d4f05aae3b2b3222ceb98149eeb3161c69a7aa7bb66bc9344d8574",
+    "crates/seata_at/src/undo/parser/jsonb_writer.rs": "2e9a0df4c4578db55c696e613d069411e9f5a26e4db9975199f05bbed0c753f5",
+    "crates/seata_at/src/undo/parser/restored_format.rs": "51c0b094c4337df040255dd6985488530461b89789387aeda7284a8656b7a785",
+    "crates/seata_at/src/undo/parser/prepared_format.rs": "5239df7f7029653f7f1d34f64882cbdfcb9595dc470dbac755b90af6220be0e6",
+    "crates/seata_at/tests/fastjson_undo_native.rs": "25b9c5c98854438256591e628566d0cb26fc0aa2f6e5d450fc8ffcfb29bb989f",
+    "tools/formal-source-junit/FastjsonUndoNativeOracle.java": "77d785239f2aa3ee16fab883de08da50cae125b0ed08f1472c2919da7924135d"
+  },
+  "content": [
+    "raw JSONB byte round-trip",
+    "exact Java boxed classes",
+    "unsigned BIGINT",
+    "DECIMAL(65,30)",
+    "all-image preflight",
+    "direct JDBC metadata binding",
+    "original encoded and numeric scalar budget limits"
+  ],
+  "new_original_junit_cases_matched": 0,
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "docker_engine /version returned HTTP 500 on API 1.56 and 1.41",
+  "production_fastjson2_undo_load_enabled": false,
+  "wp05_closed": false,
+  "legacy_fastjson_oracle_bytes_unchanged": true
+}

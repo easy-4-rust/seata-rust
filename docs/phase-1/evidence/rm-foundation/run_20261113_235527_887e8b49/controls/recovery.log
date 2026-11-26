@@ -1,0 +1,24 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_foundation_20261113_235527_887e8b49\recovery\crates\seata_rm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.68s
+     Running tests\dispatch.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\dispatch-2f34bd745731b6e6.exe)
+
+running 1 test
+test pending_unknown_is_queried_without_action_and_authoritative_applied_finishes_without_replay ... FAILED
+
+failures:
+
+---- pending_unknown_is_queried_without_action_and_authoritative_applied_finishes_without_replay stdout ----
+
+thread 'pending_unknown_is_queried_without_action_and_authoritative_applied_finishes_without_replay' (69672) panicked at crates\seata_rm\tests\dispatch.rs:164:5:
+assertion `left == right` failed
+  left: PhaseTwoRollbacked
+ right: PhaseTwoRollbackFailedRetryable
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    pending_unknown_is_queried_without_action_and_authoritative_applied_finishes_without_replay
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p seata-rm --test dispatch`

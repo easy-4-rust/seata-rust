@@ -1,0 +1,117 @@
+{
+  "status": "ORIGINAL_TC_NATIVE_REGISTRATION_LOCK_LIFECYCLE_VERIFIED",
+  "spec": "docs/phase-2/tc-lock-coverage-contract.md",
+  "prior_registration_guard_catalog_sha256": "ff3106740dc1a3a6568e610180a706c9a469b176e6981ef7a066425b712a299f",
+  "rust": {
+    "1.99": {
+      "evidence": "docs/phase-2/evidence/tc-lock-native-registration/seata_original_guard_mxnkxddd",
+      "catalog_sha256": "d3b95d1591cc95c612f65a38492688156e3a21b5652e2a6913b11f8f754de25c",
+      "catalog_members": 29,
+      "network": {
+        "branch_registrations": 2,
+        "successful": 1,
+        "conflict": 1,
+        "lock_queries": 1,
+        "original_rollback_callbacks": 1,
+        "global_rollbacks": 2
+      },
+      "two_original_begin_replies": true,
+      "two_original_rollbacked_replies": true,
+      "both_finished_observed": true,
+      "prewire_rejections": 2,
+      "independent_lock_snapshots": 2,
+      "rust_regression": {
+        "ordinary": 509,
+        "ignored": 147,
+        "harnesses": 110,
+        "doc": 4,
+        "core_source_MATCH": 76,
+        "rm_jdbc_source_MATCH": 10
+      }
+    },
+    "1.85": {
+      "evidence": "docs/phase-2/evidence/tc-lock-native-registration/seata_original_guard_3izezh_r",
+      "catalog_sha256": "89e0f4f27827cec83d29b4003679fbc51a58cb137e8396bdb3087080bf759957",
+      "catalog_members": 29,
+      "network": {
+        "branch_registrations": 2,
+        "successful": 1,
+        "conflict": 1,
+        "lock_queries": 1,
+        "original_rollback_callbacks": 1,
+        "global_rollbacks": 2
+      },
+      "two_original_begin_replies": true,
+      "two_original_rollbacked_replies": true,
+      "both_finished_observed": true,
+      "prewire_rejections": 2,
+      "independent_lock_snapshots": 2,
+      "rust_regression": {
+        "ordinary": 509,
+        "ignored": 147,
+        "harnesses": 110,
+        "doc": 4,
+        "core_source_MATCH": 76,
+        "rm_jdbc_source_MATCH": 10
+      }
+    }
+  },
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "jar_sha256": "aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5",
+  "jdbc_sha256": "e2a3b2fc726a1ac64e998585db86b30fa8bf3f706195b78bb77c5f99bf877bd9",
+  "mysql_image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "local_auth_fixture": "rebuilt from repository sources; historical class bytes were not reused",
+  "workspace": "docs/phase-2/evidence/tc-lock-native-registration/final_workspace_20261118",
+  "workspace_artifacts": {
+    "1.85-qualified-clippy.log": "a1ccfe1dc512982e7bd22feb2c06be1f04f8fa22462507e6463bb07090af66f1",
+    "1.85-qualified-doc.log": "6fd55216abbb11e9d65f215437a305d4c20058045dfca1db6ab24c436bb7defe",
+    "1.85-qualified-jdbc-source.log": "110d5248bbf73bf6932a7b9af2578817c28000b3990ab65cb45910aa94354aec",
+    "1.85-qualified-source.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-qualified-tests.log": "d8e46a74df60a77119c0501b3e2af23962c7fba2805d0b6291e9723b3ca2dfed",
+    "1.85-qualified-version.log": "f15055932aed6f9cbeda9e4eda89c3a898e84cbb3a6c5f19489b929fec84b2de",
+    "1.99-qualified-clippy.log": "b4f3d1dc6d733d5de5ec56d6a3a1a1c8033096b5d07b900b128787482040bbb6",
+    "1.99-qualified-doc.log": "085f243d0bd04c62f72a3dbf870947b2aea5aa526710f22417f4278a62125704",
+    "1.99-qualified-jdbc-source.log": "572a7dc4547aaafc8df3b046a4c7a1ef3278d82694e00bcddbc88b4a867156c0",
+    "1.99-qualified-source.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-qualified-tests.log": "b310fcc2b182326134011af8537bb82bdfa0f119984deec945122e646676f765",
+    "1.99-qualified-version.log": "b871c86bb07dd7f9f441fcaada9d078da35d4cfd779b90f3dc63cccbbf72d337",
+    "fmt-qualified.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "verified_inputs": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_db_mysql/tests/live_commit_direction_java.rs": "6e127d0520c725bd8a4b2818f416ab3dc421fdb576c5c49f15ed15139311efd7",
+    "crates/seata_db_mysql/tests/support/java_lock_guard_cases.rs": "809c47324498c00a7283558969940cf89719fa28b76ff3ed23bcb1ef04dd5107",
+    "crates/seata_db_mysql/src/connection_proxy.rs": "243d4a75f82c28adccb07f6e5470cea1707444df83f4cff57239374efddae04c",
+    "tools/formal-tc-lock-coverage/live_guard.py": "261351db568745115ca9a07e1242321dfdcc7bfbf7d8d85d32ea8e45a3c3cf61",
+    "tools/formal-tc-lock-coverage/live.py": "0575ae47a0bd0e6036690aeb41e3b8856cdf50053fff00aa648ecffd556621ec",
+    "tools/formal-tc-lock-coverage/proxy.py": "61349b01d109a2b28464c94ae87e0ce83d1c1acf719f8e8d66d87b6f3aa09f1f",
+    "tools/formal-transport-loss/live.py": "8e8f552a22d598b4525eb175e39de9958bb8f06ce08052a9991e789b8c508eb8",
+    "tools/java-v1-golden/Phase0CredentialCheckAuthHandler.java": "11aefc7205fc73b1350729792e54947205d8951a82297b9c7dcb21672c17366f",
+    "tools/formal-commit-direction/CallbackOwnershipAuthHandler.java": "64d633d5ac9000743b42675e25b67f842f2813ee80a9ec620c25703781f9532d"
+  },
+  "source_parity": {
+    "matched": 86,
+    "remaining_methods": 1049,
+    "remaining_cases": 1241
+  },
+  "cleanup_negative_control": {
+    "evidence": "docs/phase-2/evidence/tc-lock-native-registration/seata_original_guard_qv4m491q",
+    "catalog_sha256": "93d61b5d2a15c41962e611ad8e48ad11a66131e5cc7c23021f51eff2eb5a6ac7",
+    "catalog_members": 11,
+    "input": "successful create result suppressed",
+    "owned_container_removed": true
+  },
+  "review": {
+    "mode": "read_only",
+    "status": "READ_ONLY_REVIEW_NO_BLOCKING_FINDINGS",
+    "evidence": "docs/phase-2/evidence/tc-lock-native-registration/readonly-review-20261118.json"
+  },
+  "public_first_phase_business_COMMIT_available": false,
+  "actual_rust_business_commit": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user",
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false
+}

@@ -1,0 +1,24 @@
+// Test-only scheduler barrier: injected into an owned D: build and never shipped in0006.
+package getty
+import("sync";"testing";"time";"seata.apache.org/seata-go/v2/pkg/protocol/message")
+var phase0BindEntered,phase0BindRelease chan struct{}
+var phase0BindOnce sync.Once
+func phase0PauseBind(){phase0BindOnce.Do(func(){close(phase0BindEntered);<-phase0BindRelease})}
+func TestJavaV1GuardBindingInterleaving(t *testing.T){
+ c,h:=inflightSetup(t);rpcRequestTimeout=time.Second
+ phase0BindEntered=make(chan struct{});phase0BindRelease=make(chan struct{});phase0BindOnce=sync.Once{}
+ var release sync.Once;defer release.Do(func(){close(phase0BindRelease)})
+ a:=&inflightTestSession{address:"old-foreign"};b:=&inflightTestSession{address:"new-owner"};processed:=make(chan struct{})
+ go func(){defer close(processed);h.OnMessage(a,inflightReply(86,"old"))}()
+ select{case <-phase0BindEntered:case <-time.After(time.Second):t.Fatal("scheduler barrier was not reached")}
+ written:=make(chan struct{});b.write=func(message.RpcMessage)(int,int,error){close(written);return 16,1,nil}
+ type result struct{value interface{};err error};done:=make(chan result,1)
+ go func(){v,e:=c.gettyRemoting.SendSync(inflightRequest(86),b,c.syncCallback);done<-result{v,e}}()
+ wrote:=false;select{case <-written:wrote=true;case <-time.After(20*time.Millisecond):}
+ release.Do(func(){close(phase0BindRelease)})
+ select{case <-processed:case <-time.After(time.Second):t.Fatal("old binder remained blocked")}
+ if !wrote{select{case <-written:case <-time.After(time.Second):t.Fatal("new request did not write after snapshot")}}
+ h.OnMessage(b,inflightReply(86,"new"));got:=<-done
+ if got.err!=nil||got.value.(message.GlobalBeginResponse).Xid!="new"{t.Errorf("binder fallback captured foreign future: %v %v",got.value,got.err)}
+ inflightClean(t,c,86)
+}

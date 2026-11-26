@@ -1,0 +1,15 @@
+
+running 1 test
+test changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration ... 
+thread 'changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration' (38812) panicked at crates\seata_db_mysql\tests\live_commit_preconditions.rs:107:13:
+schema rejection: MySqlCommitCheckError { receipt: Some(RegisteredBranch { identity: BranchIdentity { xid_bytes: 19, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: Some(19) }, lock_key_bytes: Some(11), result_code: Success, .. }), source: Driver { operation: "RM recovery identity lock", sql_state: Some("HY000"), code: Some(1412) } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 4.24s
+

@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_escape_handler_20261118\first-dot-mutant\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_escape_handler_20261118\first-dot-mutant\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.17s
+     Running tests\escape_handler.rs (D:/cargo-target/seata-escape-mutant\debug\deps\escape_handler-afbb016d3a647d82.exe)
+
+running 1 test
+test original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks ... FAILED
+
+failures:
+
+---- original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks stdout ----
+
+thread 'original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks' (34460) panicked at crates\seata_test\tests\escape_handler.rs:110:13:
+assertion `left == right` failed: "0\ttrue\t006f006e0065002e00740077006f002e00740068007200650065\tadd\t0022006f006e00650022002e002200740077006f002e007400680072006500650022\tfalse\tneed:00740068007200650065:true;symbol;"
+  left: "0022006f006e00650022002e002200740077006f002e007400680072006500650022\tfalse\tneed:00740077006f002e00740068007200650065:true;symbol;"
+ right: "0022006f006e00650022002e002200740077006f002e007400680072006500650022\tfalse\tneed:00740068007200650065:true;symbol;"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test escape_handler`

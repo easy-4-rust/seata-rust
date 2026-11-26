@@ -1,0 +1,45 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_locale_20261118_045646_08aaa78a\mutants\verification_20261118_052302_225325\host-unicode-uppercase\crates\seata_sqlparser)
+warning: unused variable: `language`
+   --> crates\seata_sqlparser\src\jdk_casing.rs:174:43
+    |
+174 |     pub fn upper_case(value: &JavaString, language: &str) -> Result<JavaString, MetadataError> {Ok(JavaString::from(String::from_ut...
+    |                                           ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_language`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `upper` is never read
+  --> crates\seata_sqlparser\src\jdk_casing.rs:18:5
+   |
+13 | struct CaseRecord {
+   |        ---------- field in this struct
+...
+18 |     upper: Vec<u16>,
+   |     ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-sqlparser` (lib) generated 2 warnings (run `cargo fix --lib -p seata-sqlparser` to apply 1 suggestion)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_locale_20261118_045646_08aaa78a\mutants\verification_20261118_052302_225325\host-unicode-uppercase\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.70s
+     Running tests\locale_casing.rs (D:/cargo-target/seata-locale-mutants\debug\deps\locale_casing-734947b3a23a8a25.exe)
+
+running 1 test
+test contextual_string_lower_and_upper_match_original_jdk17 ... FAILED
+
+failures:
+
+---- contextual_string_lower_and_upper_match_original_jdk17 stdout ----
+
+thread 'contextual_string_lower_and_upper_match_original_jdk17' (51032) panicked at crates\seata_test\tests\locale_casing.rs:54:9:
+assertion `left == right` failed: case//29 input d800004103a3dc00
+  left: ["d800006103c2dc00", "fffd004103a3fffd"]
+ right: ["d800006103c2dc00", "d800004103a3dc00"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    contextual_string_lower_and_upper_match_original_jdk17
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test locale_casing`

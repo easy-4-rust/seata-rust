@@ -1,0 +1,22 @@
+{
+  "reviewer": "/root/inflight_review",
+  "mode": "Read-only source, patch regeneration/hash, log and live.verify review; no separate full suite",
+  "findings": [
+    "Legitimate TC-to-RM request IDs were filtered as responses",
+    "Processor paused after session check could complete a reused request ID",
+    "Pending-not-found to future lookup allowed unchecked owner capture",
+    "Concurrent late frame/heartbeat proxy sends could interleave fragments"
+  ],
+  "resolutions": [
+    "Filter response envelope/response-shaped bodies only, preserve independent inbound request space",
+    "Capture exact future/legacy batch identities in incoming context and complete those objects",
+    "Unified short state mutex covers registration/snapshot/cleanup, no network/processor wait under lock",
+    "Per-connection/per-direction whole-frame send locks, independent from close lock; negative test and fresh live replay"
+  ],
+  "additional_regressions": [
+    "Legacy nil context continues original processor path",
+    "Three legacy child-batch identity/invalid-shape controls added",
+    "Business rejection preserved as authoritative response"
+  ],
+  "scope": "Independent explicit synchronous SDK outcomes/session correlation candidate. Original/default behavior, async/business-client lifecycle, full RM/Undo, Begin idempotency, production Rust and WP00 remain open."
+}

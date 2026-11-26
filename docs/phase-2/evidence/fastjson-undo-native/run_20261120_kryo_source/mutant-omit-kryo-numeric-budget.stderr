@@ -1,0 +1,9 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_compare_mutants_osek19lz\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.92s
+     Running tests\kryo_undo_source.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\kryo_undo_source-23d66242c18879cd.exe)
+
+thread 'kryo_counts_numeric_payload_in_single_and_total_scalar_budgets' (57648) panicked at crates\seata_at\tests\kryo_undo_source.rs:200:5:
+assertion failed: matches!(KryoUndoLogParser::new(caps).decode_branch(&wire),
+    Err(UndoCodecError::Budget { limit: "Kryo scalar bytes" }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-at --test kryo_undo_source`

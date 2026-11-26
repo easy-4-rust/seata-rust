@@ -1,0 +1,48 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.79s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-5c4f14d17b638a06.exe)
+
+running 40 tests
+test connection_proxy::tests::ready_undo_publication_after_deadline_keeps_poison_and_rolls_back_original_transaction ... ignored, requires owned real MySQL fixture
+test data_source_proxy::fastjson_tests::fastjson2_split_undo_validates_all_logs_before_writes_and_then_cleans_up ... ignored, requires owned real MySQL with original undo_log schema
+test data_source_proxy::fastjson_tests::fastjson_split_undo_validates_all_logs_before_writes_and_then_cleans_up ... ignored, requires owned real MySQL with original undo_log schema
+test mysql::mysql_undo_log_manager::tests::older_control_snapshot_reads_the_later_committed_guard ... ignored, requires owned real MySQL fixture
+test java_tc_mysql_lock_limits::tests::each_group_and_row_gets_its_own_budget_including_pk_colons ... ok
+test mysql::undo_fragment_layout_tests::layout_withholds_rows_until_every_child_identity_is_known_and_valid ... ok
+test mysql::undo_fragment_layout_tests::layout_preserves_exact_packet_boundary_and_rejects_empty_or_unrepresentable_payloads ... ok
+test data_compare_utils::tests::records_equal_rejects_a_repeated_key_in_either_image ... ok
+test data_compare_utils::tests::records_equal_consumes_distinct_composite_keys_in_any_order ... ok
+test mysql::undo_fragment_layout_tests::original_oversized_log_has_java_fragments_and_exact_root_references ... ok
+test mysql::undo_fragment_sqlx_tests::driver_error_preserves_os_code_and_excludes_custom_message ... ok
+test mysql_image_reader::tests::oversized_parameters_are_rejected_before_native_argument_encoding ... ok
+test undo::rollback_undo_document_tests::fastjson2_requires_exact_locked_context_and_preflights_jsonb_before_table_lookup ... ok
+test mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause ... ok
+test mysql::undo_fragment_sqlx_tests::insert_prepare_rejection_preserves_server_diagnostics ... ok
+test undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup ... ok
+test mysql::undo_fragment_cleanup_sqlx_tests::deletes_children_then_root_with_exact_xid_and_parent ... ok
+test mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement ... ok
+test mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement ... ok
+test data_source_manager::rollback_sqlx_tests::managed_sqlx_preserves_metadata_failure_after_rollback_error ... ok
+test undo_rollback_attempt_tests::acquire_failure_and_late_commit_remain_distinguishable ... ok
+test data_source_proxy::rollback_sqlx_tests::sqlx_closes_failed_rollback_connection_after_error_reply ... ok
+test undo_rollback_attempt_tests::dirty_failure_survives_explicit_rollback_error ... ok
+test mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete ... ok
+test mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body ... ok
+test mysql::undo_fragment_read_sqlx_tests::child_batch_prepare_rejection_preserves_server_diagnostics ... ok
+test undo_rollback_attempt_tests::acquired_read_failure_survives_timeout_while_rolling_back ... ok
+test mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads ... ok
+test mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children ... ok
+test mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads ... ok
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_authentication_rejection_keeps_original_identity_and_diagnostics ... ok
+test data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending ... ok
+test mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order ... ok
+test mysql::undo_fragment_read_sqlx_tests::reads_original_child_ids_payloads_and_closes_the_batch_statement ... ok
+test data_source_manager::rollback_sqlx_tests::managed_acquisition_timeout_preserves_phase_before_begin ... ok
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_pool_deadline_is_reported_before_begin ... ok
+test mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan ... ok
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_obeys_shorter_operation_deadline ... ok
+test data_source_proxy::rollback_sqlx_tests::sqlx_closes_failed_rollback_connection_without_reply ... ok
+test data_source_manager::rollback_sqlx_tests::managed_sqlx_preserves_metadata_failure_after_rollback_timeout ... ok
+
+test result: ok. 36 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; finished in 1.52s
+

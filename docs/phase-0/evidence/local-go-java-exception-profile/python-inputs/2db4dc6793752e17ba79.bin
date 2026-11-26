@@ -1,0 +1,114 @@
+"""Fresh pinned Java control capture, original Go Getty classification and independent Rust checks."""
+import datetime
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import tarfile
+import uuid
+import xml.etree.ElementTree as ET
+import collect
+
+ROOT=Path(__file__).resolve().parents[2]
+spec=importlib.util.spec_from_file_location('control_support',ROOT/'tools/java-tc-integration/backend_recovery/run.py')
+h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
+BUILD=Path('D:/codex-builds/seata-java-exact-overlay-20261112')
+ORACLE=Path('E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle')
+GO_ROOT=Path('D:/codex-builds/seata-go-exact-20261112')
+ARCHIVE=Path('D:/codex-builds/seata-go-exact-20261112.tar.gz')
+GO_ENV=h.ENV.copy();GO_ENV.update(GOCACHE='D:/codex-builds/seata-go-cache',GOPATH='D:/codex-builds/seata-go-path',GOMODCACHE='D:/codex-builds/seata-go-path/pkg/mod',GOTMPDIR='D:/Temp',GOTOOLCHAIN='local',GOWORK='off',CGO_ENABLED='0')
+TESTS={'PayloadGoldenCorpusTest':29,'PayloadOptionalityTest':3,'FailureVariantCompatibilityTest':7,'ProtocolV1GoldenFrameTest':6,'AbstractTCInboundHandlerExceptionTest':8,'TCInboundFailureMatrixTest':72,'RegistrationProcessorAuthTest':7,'SessionHolderRetryTimeoutRecoveryTest':3,'FileRetryTimeoutProcessTest':5,'BackendRetryTimeoutProbeTest':3,'Phase0CredentialCheckAuthHandlerTest':7,'RaftRetryTimeoutControlTest':4,'ProtocolV1ControlEnvelopeTest':9,'GoErrorLengthCompatibilityTest':24,'TransactionExceptionProfileTest':250}
+
+def verify_input_unchanged(source,copied_bytes):
+    if source.read_bytes()!=copied_bytes:raise RuntimeError('ROOT overlay changed during build; do not certify uncompiled input: '+source.name)
+
+def audit_go():
+    if h.sha(ARCHIVE)!='a2876b1118b267ffbf7d73db8e0ef8f18477ae4d2b700944ebcca11871b6db1f':raise RuntimeError('Pinned Go archive differs')
+    rows=[]
+    with tarfile.open(ARCHIVE,'r:gz') as source:
+        for entry in source:
+            relative='/'.join(entry.name.split('/')[1:])
+            if not entry.isfile() or not (relative.endswith('.go') or relative in ['go.mod','go.sum']):continue
+            expected=source.extractfile(entry).read();actual=(GO_ROOT/relative).read_bytes()
+            if expected!=actual:raise RuntimeError('Original Go source/module drift: '+relative)
+            rows.append(dict(path=relative,sha256=hashlib.sha256(actual).hexdigest()))
+    if len(rows)<100:raise RuntimeError('Go source audit incomplete')
+    return rows
+
+def run():
+    if h.command(['git','-C',ORACLE,'rev-parse','HEAD']).stdout.decode().strip()!=h.PIN:raise RuntimeError('Original Java pin differs')
+    if h.sha(ORACLE/'server/target/seata-server.jar')!=h.JAR_HASH:raise RuntimeError('Original Java artifact drift')
+    stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8]
+    out=ROOT/'docs/phase-0/evidence/local-control-envelopes'/('run_'+stamp);out.mkdir(parents=True,exist_ok=False)
+    test=BUILD/'test-suite/test-new-version';sources=test/'src/test/java'
+    before=h.audit_build(ORACLE,BUILD);go_before=audit_go()
+    overlays=[];inputs=out/'overlay-inputs';inputs.mkdir()
+    for source in sorted((ROOT/'tools/java-v1-golden').glob('*.java')):
+        matches=list(sources.rglob(source.name))
+        if len(matches)>1:raise RuntimeError('Duplicate owned Java overlay: '+source.name)
+        target=matches[0] if matches else sources/'org/apache/seata/server'/source.name
+        copied_bytes=source.read_bytes();target.write_bytes(copied_bytes);h.write(inputs/source.name,copied_bytes)
+        overlays.append((source,target,copied_bytes))
+    leaf=test/'target/test-classes/org/apache/seata/core/rpc/netty/v1/ProtocolV1ControlEnvelopeTest.class'
+    if leaf.exists():leaf.unlink()
+    for name in TESTS:
+        for old in (test/'target/surefire-reports').glob('TEST-*.'+name+'.xml'):old.unlink()
+    with (out/'java-tests.log').open('xb') as log:
+        process=subprocess.run([str(h.MAVEN),'-B','-ntp','-s',str(h.SETTINGS),'-f',str(BUILD/'pom.xml'),'-pl','test-suite/test-new-version','-am',
+            '-Dtest='+','.join(TESTS),'-Dsurefire.failIfNoSpecifiedTests=false','-Djava.io.tmpdir=D:/Temp','test'],env=h.ENV,stdout=log,stderr=subprocess.STDOUT,creationflags=h.FLAGS,timeout=360)
+    if process.returncode:raise RuntimeError('Fresh Java selected suite failed')
+    after=h.audit_build(ORACLE,BUILD)
+    h.write(out/'java-production-source-audit.json',json.dumps(dict(pin=h.PIN,before=before,after=after,normalization='CRLF to LF only'),indent=2)+'\n')
+    reports=out/'reports';reports.mkdir()
+    for name,count in TESTS.items():
+        paths=list((test/'target/surefire-reports').glob('TEST-*.'+name+'.xml'))
+        if len(paths)!=1:raise RuntimeError('Missing fresh report: '+name)
+        suite=ET.parse(paths[0]).getroot()
+        if int(suite.get('tests','0'))!=count or any(int(suite.get(k,'0')) for k in ['failures','errors','skipped']):raise RuntimeError('Fresh selected report differs: '+name)
+        h.write(reports/paths[0].name,paths[0].read_bytes())
+    executed=out/'overlay-executed';executed.mkdir();overlay_rows=[]
+    for source,target,copied_bytes in overlays:
+        verify_input_unchanged(source,copied_bytes)
+        same=copied_bytes==target.read_bytes()
+        if source.name=='ProtocolV1ControlEnvelopeTest.java' and not same:raise RuntimeError('Reconcile new control-test formatter output before capture')
+        h.write(executed/source.name,target.read_bytes())
+        overlay_rows.append(dict(source=source.relative_to(ROOT).as_posix(),executed=str(target),input_sha256=hashlib.sha256(copied_bytes).hexdigest(),executed_sha256=h.sha(target),byte_identical=same,
+            normalization='none' if same else 'Original pinned Maven Spotless formatting; exact input/executed sources retained, no byte-identity claim'))
+    h.write(out/'overlay-audit.json',json.dumps(overlay_rows,indent=2)+'\n')
+    rows=collect.read_rows(out/'java-tests.log');capture=out/'capture';collect.export(rows,capture)
+    committed=ROOT/'tests/fixtures/protocol/v1/control_envelopes'
+    if not committed.exists():collect.export(rows,committed)
+    else:
+        for path in capture.iterdir():
+            if not (committed/path.name).is_file() or path.read_bytes()!=(committed/path.name).read_bytes():raise RuntimeError('Refusing fixture overwrite/drift: '+path.name)
+    go_dir=GO_ROOT/'tools/seata-rust-control-envelopes';go_dir.mkdir(parents=True,exist_ok=True)
+    go_source=ROOT/'tools/go-control-envelopes/main.go';(go_dir/'main.go').write_bytes(go_source.read_bytes())
+    binary=out/'seata-control-envelopes.exe'
+    with (out/'go-build.log').open('xb') as log:
+        result=subprocess.run(['go','build','-o',str(binary),'./tools/seata-rust-control-envelopes'],cwd=GO_ROOT,env=GO_ENV,stdout=log,stderr=subprocess.STDOUT,creationflags=h.FLAGS,timeout=120)
+    if result.returncode:raise RuntimeError('Original Go Getty harness build failed')
+    result=subprocess.run([str(binary),str(capture/'vectors.json')],cwd=go_dir,env=GO_ENV,capture_output=True,creationflags=h.FLAGS,timeout=30)
+    h.write(out/'go-output.log',result.stdout+result.stderr)
+    go_rows=[json.loads(line.split(b'SEATA_GO_CONTROL ',1)[1]) for line in result.stdout.splitlines() if line.startswith(b'SEATA_GO_CONTROL ')]
+    if result.returncode or len(go_rows)!=9 or {r['name'] for r in go_rows}!=set(collect.NAMES):raise RuntimeError('Actual Go control classification incomplete')
+    if sum(r['classification']=='byte-compatible' for r in go_rows)!=3 or sum(r['classification']=='unsupported-pinned-go-codec' for r in go_rows)!=6:raise RuntimeError('Go actual codec inventory/classification changed')
+    go_after=audit_go();h.write(out/'go-source-audit.json',json.dumps(dict(pin='82570d905919c1c66bb025a3a5979f25390de498',archive_sha256=h.sha(ARCHIVE),before=go_before,after=go_after),indent=2)+'\n')
+    rust_env=h.ENV.copy();rust_env['SEATA_IT_CONTROL_WIRE_DIR']=str(capture)
+    for label,command in [('rust-tests',['cargo','test']),('rust-clippy',['cargo','clippy']),('rust-fmt',['cargo','fmt'])]:
+        command+=['--manifest-path',str(ROOT/'tools/java-tc-integration/rust-client/Cargo.toml')]
+        if label=='rust-clippy':command+=['--all-targets','--','-D','warnings']
+        if label=='rust-fmt':command+=['--','--check']
+        with (out/(label+'.log')).open('xb') as log:result=subprocess.run(command,cwd=ROOT,env=rust_env,stdout=log,stderr=subprocess.STDOUT,creationflags=h.FLAGS,timeout=120)
+        if result.returncode:raise RuntimeError('Current Rust check failed: '+label)
+    if b'test result: ok. 116 passed; 0 failed;' not in (out/'rust-tests.log').read_bytes():raise RuntimeError('Fresh full Rust test inventory differs')
+    summary=dict(executed_at=datetime.datetime.now().astimezone().isoformat(),succeeded=True,java_selected_tests=sum(TESTS.values()),java_control_tests=9,rust_tests=116,java_control_frames=9,go_compatible_heartbeats=3,go_unsupported_merge_cases=6,
+        issue='GO-V1-MERGE-001',java_pin=h.PIN,original_jar_sha256=h.sha(ORACLE/'server/target/seata-server.jar'),go_binary_sha256=h.sha(binary),
+        scope='Original Java9 control envelopes and strict test-only Rust model; pinned Go native Getty3 heartbeat byte passes, merge59/60 codecs absent (diagnostic only). Not a production Rust protocol or full interoperability pass.')
+    h.write(out/'summary.json',json.dumps(summary,indent=2)+'\n')
+    (out.parent/'latest_run.json').write_text(json.dumps(dict(evidence_directory=str(out),succeeded=True),indent=2)+'\n',encoding='utf-8')
+    print(json.dumps(summary))
+
+if __name__=='__main__':run()

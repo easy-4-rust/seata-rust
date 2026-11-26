@@ -1,0 +1,18 @@
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.28s
+     Running tests\manager_calls.rs (D:/cargo-target/seata-rust-production\debug\deps\manager_calls-21e9a59b86a61e42.exe)
+
+running 10 tests
+test successful_begin_without_xid_is_protocol_uncertainty_never_a_usable_launcher ... ok
+test malformed_end_response_is_protocol_failure_with_retained_xid_and_possible_effect ... ok
+test failed_commit_preserves_exception_optional_message_and_authoritative_status ... ok
+test native_tm_begin_binds_only_lexical_scope_and_end_preserves_exact_xid ... ok
+test cancelled_end_keeps_original_operation_until_authoritative_reconciliation ... ok
+test participant_never_sends_global_begin_commit_or_rollback ... ok
+test connection_unavailable_is_local_pre_send_not_tc_rejection_or_unknown ... ok
+test lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin ... ok
+test failed_duplicate_with_finished_does_not_erase_original_commit_uncertainty ... ok
+test lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+

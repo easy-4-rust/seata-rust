@@ -1,0 +1,722 @@
+{
+  "format": "seata_v1_java_handler_runtime_v1",
+  "java_source": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "go_source": "82570d905919c1c66bb025a3a5979f25390de498",
+  "protocol_version": 1,
+  "serializer_id": 1,
+  "compressor_id": 0,
+  "source_log_sha256": "11533d3bb2a5cb1901ca4050e6f2d7c40ce94c6cfc793e2f51c58b210e38b659",
+  "case_count": 79,
+  "sample_count": 78,
+  "unencodable_cases": [
+    {
+      "case_id": "report/null_failure",
+      "issue": "JAVA-V1-REPORT-NULL-001"
+    }
+  ],
+  "samples": [
+    {
+      "case_id": "auth/RM/ALLOW",
+      "file": "auth_rm_allow.bin",
+      "expectation": "auth_rm_allow.expect",
+      "type_id": 104,
+      "bytes": 19,
+      "sha256": "dd518d517f18d1155668ad7955ab458020dabe925ae35c12aa58b0c416001ac4",
+      "expectation_sha256": "36ef0d7e3c2d448d3ab6b9d23d1cfdbe4b7e1b8a552ab57fce8120f808d640db"
+    },
+    {
+      "case_id": "auth/RM/DENY",
+      "file": "auth_rm_deny.bin",
+      "expectation": "auth_rm_deny.expect",
+      "type_id": 104,
+      "bytes": 19,
+      "sha256": "3efa70290a475d33702e08128ecd08c50718f434c9e94874c0c21d5d7ee2ff84",
+      "expectation_sha256": "d1f893290a26ccbfe9f903843e5bd9fc4e776849c6b92a4fdbe0e2ff75a368b0"
+    },
+    {
+      "case_id": "auth/RM/DENY_CLOSED",
+      "file": "auth_rm_deny_closed.bin",
+      "expectation": "auth_rm_deny_closed.expect",
+      "type_id": 104,
+      "bytes": 19,
+      "sha256": "3efa70290a475d33702e08128ecd08c50718f434c9e94874c0c21d5d7ee2ff84",
+      "expectation_sha256": "d1f893290a26ccbfe9f903843e5bd9fc4e776849c6b92a4fdbe0e2ff75a368b0"
+    },
+    {
+      "case_id": "auth/RM/THROW",
+      "file": "auth_rm_throw.bin",
+      "expectation": "auth_rm_throw.expect",
+      "type_id": 104,
+      "bytes": 19,
+      "sha256": "3efa70290a475d33702e08128ecd08c50718f434c9e94874c0c21d5d7ee2ff84",
+      "expectation_sha256": "d1f893290a26ccbfe9f903843e5bd9fc4e776849c6b92a4fdbe0e2ff75a368b0"
+    },
+    {
+      "case_id": "auth/TM/ALLOW",
+      "file": "auth_tm_allow.bin",
+      "expectation": "auth_tm_allow.expect",
+      "type_id": 102,
+      "bytes": 19,
+      "sha256": "3a19879dd0ad18f2e41966ad8201bab1e3958a65f48a9bae7aad38b6c663259a",
+      "expectation_sha256": "9e488ee61526d625f8a232230029a598fa160db7995b7eafe42e0b92c233dbf5"
+    },
+    {
+      "case_id": "auth/TM/DENY",
+      "file": "auth_tm_deny.bin",
+      "expectation": "auth_tm_deny.expect",
+      "type_id": 102,
+      "bytes": 19,
+      "sha256": "ad8d352b49e0cbba0264c1633dc56beec73d116652827c435cffd34a360c0c70",
+      "expectation_sha256": "27617ce76362cea6d30c65d3ac4498d77b74b94a463d48e87283d7eb966659c2"
+    },
+    {
+      "case_id": "auth/TM/THROW",
+      "file": "auth_tm_throw.bin",
+      "expectation": "auth_tm_throw.expect",
+      "type_id": 102,
+      "bytes": 19,
+      "sha256": "ad8d352b49e0cbba0264c1633dc56beec73d116652827c435cffd34a360c0c70",
+      "expectation_sha256": "27617ce76362cea6d30c65d3ac4498d77b74b94a463d48e87283d7eb966659c2"
+    },
+    {
+      "case_id": "conflict/LockKeyConflict",
+      "file": "conflict_lockkeyconflict.bin",
+      "expectation": "conflict_lockkeyconflict.expect",
+      "type_id": 12,
+      "bytes": 47,
+      "sha256": "b95360c86537af684a9dbb599448b429c7ee2afa130146dc491ecc9f3c5d425e",
+      "expectation_sha256": "07991da2bf7bf060f74e3c3dc70c1ce49dd5125cf986a799b3476d2ea41ee83d"
+    },
+    {
+      "case_id": "conflict/LockKeyConflictFailFast",
+      "file": "conflict_lockkeyconflictfailfast.bin",
+      "expectation": "conflict_lockkeyconflictfailfast.expect",
+      "type_id": 12,
+      "bytes": 47,
+      "sha256": "6e986f7a81a47935df0cacda7a4f95583f65a701f39b538a7e5520fdc95a2e65",
+      "expectation_sha256": "54e47202a8dd0ec098fd2729b80b028b7a003c1a26ff7f24ffc51ad0c0893253"
+    },
+    {
+      "case_id": "fallback/COMMIT/RUNTIME/ABSENT",
+      "file": "fallback_commit_runtime_absent.bin",
+      "expectation": "fallback_commit_runtime_absent.expect",
+      "type_id": 8,
+      "bytes": 36,
+      "sha256": "f472dbfdfc1eebc2037e5c8729449af29dad25394bc0a3b4e92465252293edc1",
+      "expectation_sha256": "c1a3271e493007d97e2a32d68f72570bf05eef2782366da3d8317b748dca874b"
+    },
+    {
+      "case_id": "fallback/COMMIT/RUNTIME/GETTER_THROWS",
+      "file": "fallback_commit_runtime_getter_throws.bin",
+      "expectation": "fallback_commit_runtime_getter_throws.expect",
+      "type_id": 8,
+      "bytes": 36,
+      "sha256": "9d3f02056958d281a1c08cb5e118e61afdbc923996f9e0e773c7393db22b0ac4",
+      "expectation_sha256": "ee8374dd8e4f9d29f5ac289b18a555f5198898f29a22707d940cdeba7628668f"
+    },
+    {
+      "case_id": "fallback/COMMIT/RUNTIME/MUTATED_THEN_THROWS",
+      "file": "fallback_commit_runtime_mutated_then_throws.bin",
+      "expectation": "fallback_commit_runtime_mutated_then_throws.expect",
+      "type_id": 8,
+      "bytes": 36,
+      "sha256": "d106d6a7006cbbe83f00cdce7eb10f01e61d412e1097464953c8728948bc1f2b",
+      "expectation_sha256": "eb1eaafde46f2cdb77697b3ae7662ec05423803ee565a57cafdfd7858502ed7d"
+    },
+    {
+      "case_id": "fallback/COMMIT/RUNTIME/THROWS",
+      "file": "fallback_commit_runtime_throws.bin",
+      "expectation": "fallback_commit_runtime_throws.expect",
+      "type_id": 8,
+      "bytes": 36,
+      "sha256": "9d3f02056958d281a1c08cb5e118e61afdbc923996f9e0e773c7393db22b0ac4",
+      "expectation_sha256": "ee8374dd8e4f9d29f5ac289b18a555f5198898f29a22707d940cdeba7628668f"
+    },
+    {
+      "case_id": "fallback/COMMIT/STORE/ABSENT",
+      "file": "fallback_commit_store_absent.bin",
+      "expectation": "fallback_commit_store_absent.expect",
+      "type_id": 8,
+      "bytes": 97,
+      "sha256": "20d5ee6832d0de9cbf7b7b36d53ed4798dde3e9b3fae0a8f5221bc6742fe72d8",
+      "expectation_sha256": "424479679f367cfc3380a8b9a1c1811e8548f02a9e6f7449baf615e43e537e8c"
+    },
+    {
+      "case_id": "fallback/COMMIT/STORE/GETTER_THROWS",
+      "file": "fallback_commit_store_getter_throws.bin",
+      "expectation": "fallback_commit_store_getter_throws.expect",
+      "type_id": 8,
+      "bytes": 97,
+      "sha256": "f3d0578fa771ccf616e710bdc3ae91b9c82d9cfc2d24e4418b6df38b9985c77c",
+      "expectation_sha256": "a3187050638b190041f5117e66c71b1a94412cf31d3ab587138a293141add78d"
+    },
+    {
+      "case_id": "fallback/COMMIT/STORE/MUTATED_THEN_THROWS",
+      "file": "fallback_commit_store_mutated_then_throws.bin",
+      "expectation": "fallback_commit_store_mutated_then_throws.expect",
+      "type_id": 8,
+      "bytes": 97,
+      "sha256": "ce400becd0c7e0754b9c789471c1b7463a09cd179e0e37a59715a1c26516c03f",
+      "expectation_sha256": "1b02029d283ffc74d390b639863e61cebdf0ccacdfee303700ffc06b507c2c3a"
+    },
+    {
+      "case_id": "fallback/COMMIT/STORE/THROWS",
+      "file": "fallback_commit_store_throws.bin",
+      "expectation": "fallback_commit_store_throws.expect",
+      "type_id": 8,
+      "bytes": 97,
+      "sha256": "f3d0578fa771ccf616e710bdc3ae91b9c82d9cfc2d24e4418b6df38b9985c77c",
+      "expectation_sha256": "a3187050638b190041f5117e66c71b1a94412cf31d3ab587138a293141add78d"
+    },
+    {
+      "case_id": "fallback/COMMIT/TRANSACTION/ABSENT",
+      "file": "fallback_commit_transaction_absent.bin",
+      "expectation": "fallback_commit_transaction_absent.expect",
+      "type_id": 8,
+      "bytes": 40,
+      "sha256": "2403cd2ff5c183b2c079197fef87c133709f7bafe95b3678018ab34ebc08d354",
+      "expectation_sha256": "b36ef9f31a2ea932431548cb8cc9368647f31eb2b6fb3035e0419be4e526a760"
+    },
+    {
+      "case_id": "fallback/COMMIT/TRANSACTION/GETTER_THROWS",
+      "file": "fallback_commit_transaction_getter_throws.bin",
+      "expectation": "fallback_commit_transaction_getter_throws.expect",
+      "type_id": 8,
+      "bytes": 40,
+      "sha256": "9722b57283cc8e0ed870778f23c74672923c76419d1daa4de498dc21f162977c",
+      "expectation_sha256": "92a3744a603acb2cbdfc40626867cfc5a100742a197873676c56effaf7e7c15c"
+    },
+    {
+      "case_id": "fallback/COMMIT/TRANSACTION/MUTATED_THEN_THROWS",
+      "file": "fallback_commit_transaction_mutated_then_throws.bin",
+      "expectation": "fallback_commit_transaction_mutated_then_throws.expect",
+      "type_id": 8,
+      "bytes": 40,
+      "sha256": "02ffe1724884ec6aed081ffb3b1455ea0ad583cc3811a335b3495ae176a1623c",
+      "expectation_sha256": "3b547e7b9735bb53aeb028cec8dea570cfdeeb014a561676384422c1d27aab63"
+    },
+    {
+      "case_id": "fallback/COMMIT/TRANSACTION/THROWS",
+      "file": "fallback_commit_transaction_throws.bin",
+      "expectation": "fallback_commit_transaction_throws.expect",
+      "type_id": 8,
+      "bytes": 40,
+      "sha256": "9722b57283cc8e0ed870778f23c74672923c76419d1daa4de498dc21f162977c",
+      "expectation_sha256": "92a3744a603acb2cbdfc40626867cfc5a100742a197873676c56effaf7e7c15c"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/RUNTIME/ABSENT",
+      "file": "fallback_rollback_runtime_absent.bin",
+      "expectation": "fallback_rollback_runtime_absent.expect",
+      "type_id": 10,
+      "bytes": 36,
+      "sha256": "e1b8f4ae8ce7ce582414c6eacc323d72a4def860824303d23fd0eb9d1aaffb37",
+      "expectation_sha256": "439f80584440a8174001d54a5ad3a26dfcffa696b1648c8f469bf77259cbff26"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/RUNTIME/GETTER_THROWS",
+      "file": "fallback_rollback_runtime_getter_throws.bin",
+      "expectation": "fallback_rollback_runtime_getter_throws.expect",
+      "type_id": 10,
+      "bytes": 36,
+      "sha256": "7eb5afb9a68068569f5fa70d0f6adaafe3257387bb54fd004b1cfc38145db83b",
+      "expectation_sha256": "41a97a60dca874cda063d8f302a87e99477a69a2557bc63acb13e8b56b8cb23f"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/RUNTIME/MUTATED_THEN_THROWS",
+      "file": "fallback_rollback_runtime_mutated_then_throws.bin",
+      "expectation": "fallback_rollback_runtime_mutated_then_throws.expect",
+      "type_id": 10,
+      "bytes": 36,
+      "sha256": "80a54b18221a04a6d18e28dbd591ce74e7dd556621d34c4c5b43a06d148e779c",
+      "expectation_sha256": "e9bb37910db790a340d9b022be5fb1e74800206896ece7e5986d7cfda985da8a"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/RUNTIME/THROWS",
+      "file": "fallback_rollback_runtime_throws.bin",
+      "expectation": "fallback_rollback_runtime_throws.expect",
+      "type_id": 10,
+      "bytes": 36,
+      "sha256": "7eb5afb9a68068569f5fa70d0f6adaafe3257387bb54fd004b1cfc38145db83b",
+      "expectation_sha256": "41a97a60dca874cda063d8f302a87e99477a69a2557bc63acb13e8b56b8cb23f"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/STORE/ABSENT",
+      "file": "fallback_rollback_store_absent.bin",
+      "expectation": "fallback_rollback_store_absent.expect",
+      "type_id": 10,
+      "bytes": 99,
+      "sha256": "e21b888a536856ce85fbadcb40471b57fc7952cd667349781a3272cfad0efb64",
+      "expectation_sha256": "3dc4767fa72830e436f0c98367fbc1f5cf91e46da8eea12b0af81cf59a0e40ef"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/STORE/GETTER_THROWS",
+      "file": "fallback_rollback_store_getter_throws.bin",
+      "expectation": "fallback_rollback_store_getter_throws.expect",
+      "type_id": 10,
+      "bytes": 99,
+      "sha256": "aaf2d2650fc2e219f6d0f7b77094a054cfeb71916f3c218247d223289e8802f8",
+      "expectation_sha256": "1068b7f2cf7f2dc54398159b6796d9f129ec3cf1b1ffbd8c36581cfe2c399898"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/STORE/MUTATED_THEN_THROWS",
+      "file": "fallback_rollback_store_mutated_then_throws.bin",
+      "expectation": "fallback_rollback_store_mutated_then_throws.expect",
+      "type_id": 10,
+      "bytes": 99,
+      "sha256": "064403db9790b9780f7f70b9df37ab7d95d0fd4663938653695ec103a471846f",
+      "expectation_sha256": "14940a1778e6784ca4961cf31b5b1973029ca247877101fb7e5690cf59c3453d"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/STORE/THROWS",
+      "file": "fallback_rollback_store_throws.bin",
+      "expectation": "fallback_rollback_store_throws.expect",
+      "type_id": 10,
+      "bytes": 99,
+      "sha256": "aaf2d2650fc2e219f6d0f7b77094a054cfeb71916f3c218247d223289e8802f8",
+      "expectation_sha256": "1068b7f2cf7f2dc54398159b6796d9f129ec3cf1b1ffbd8c36581cfe2c399898"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/TRANSACTION/ABSENT",
+      "file": "fallback_rollback_transaction_absent.bin",
+      "expectation": "fallback_rollback_transaction_absent.expect",
+      "type_id": 10,
+      "bytes": 40,
+      "sha256": "57558fba56ac6e98a1bbb89290c398ba98429da8baca75101b4c114c49eb81ff",
+      "expectation_sha256": "b26fe8e07db34e85fa13ebd0f3d5b746acb24fc6d4d30bd26e451530a67cfe3b"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/TRANSACTION/GETTER_THROWS",
+      "file": "fallback_rollback_transaction_getter_throws.bin",
+      "expectation": "fallback_rollback_transaction_getter_throws.expect",
+      "type_id": 10,
+      "bytes": 40,
+      "sha256": "ab18d7abc9fa3453610c18dc73ef787af93e88867b35bb048b57ca9f7c2b6785",
+      "expectation_sha256": "18a715675afaaeccca22a6ca8e4af82f1a771da92845be962c21d43825d73ef1"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/TRANSACTION/MUTATED_THEN_THROWS",
+      "file": "fallback_rollback_transaction_mutated_then_throws.bin",
+      "expectation": "fallback_rollback_transaction_mutated_then_throws.expect",
+      "type_id": 10,
+      "bytes": 40,
+      "sha256": "c04472a39ce55fea4a69e633938a325b106c833205086abcbf8d208b598001bc",
+      "expectation_sha256": "73652cc754946e772ddadf3958e1273552bbcee0c6e92daec775202d131a6578"
+    },
+    {
+      "case_id": "fallback/ROLLBACK/TRANSACTION/THROWS",
+      "file": "fallback_rollback_transaction_throws.bin",
+      "expectation": "fallback_rollback_transaction_throws.expect",
+      "type_id": 10,
+      "bytes": 40,
+      "sha256": "ab18d7abc9fa3453610c18dc73ef787af93e88867b35bb048b57ca9f7c2b6785",
+      "expectation_sha256": "18a715675afaaeccca22a6ca8e4af82f1a771da92845be962c21d43825d73ef1"
+    },
+    {
+      "case_id": "fallback/STATUS/RUNTIME/ABSENT",
+      "file": "fallback_status_runtime_absent.bin",
+      "expectation": "fallback_status_runtime_absent.expect",
+      "type_id": 16,
+      "bytes": 36,
+      "sha256": "354ffea83de90e86a599fd268b674594075283596a29948e64a241497d8d46bd",
+      "expectation_sha256": "fa5f9b06ea3d2943e50286b77b1d7aabe6e364d435a201c0709173056ed24a87"
+    },
+    {
+      "case_id": "fallback/STATUS/RUNTIME/GETTER_THROWS",
+      "file": "fallback_status_runtime_getter_throws.bin",
+      "expectation": "fallback_status_runtime_getter_throws.expect",
+      "type_id": 16,
+      "bytes": 36,
+      "sha256": "57e7a07d9305e102026db56d94beb3bc637cc38421d31a9c44f7f56915c29a70",
+      "expectation_sha256": "6848a8879ad96c1e045b3eef7fe61dde8551822563a08ab734c12ced327d581e"
+    },
+    {
+      "case_id": "fallback/STATUS/RUNTIME/MUTATED_THEN_THROWS",
+      "file": "fallback_status_runtime_mutated_then_throws.bin",
+      "expectation": "fallback_status_runtime_mutated_then_throws.expect",
+      "type_id": 16,
+      "bytes": 36,
+      "sha256": "e2235836ab13e59c32e395d192c6d6c21dc660b917c2a1690fedf55bff7241e9",
+      "expectation_sha256": "8ff936d14c46a17cfaa9dfa6dab716e1d872b6af608803e16ec156fc0bfd2e69"
+    },
+    {
+      "case_id": "fallback/STATUS/RUNTIME/THROWS",
+      "file": "fallback_status_runtime_throws.bin",
+      "expectation": "fallback_status_runtime_throws.expect",
+      "type_id": 16,
+      "bytes": 36,
+      "sha256": "57e7a07d9305e102026db56d94beb3bc637cc38421d31a9c44f7f56915c29a70",
+      "expectation_sha256": "6848a8879ad96c1e045b3eef7fe61dde8551822563a08ab734c12ced327d581e"
+    },
+    {
+      "case_id": "fallback/STATUS/STORE/ABSENT",
+      "file": "fallback_status_store_absent.bin",
+      "expectation": "fallback_status_store_absent.expect",
+      "type_id": 16,
+      "bytes": 97,
+      "sha256": "f9829bcc34d2ea1334e38309e4c4dd0608212b9933087347d901d8db012a0b15",
+      "expectation_sha256": "e51be2f4e9ee8568ead4fd8e79b070d574e6dbc94a752b0c824c5082705c969e"
+    },
+    {
+      "case_id": "fallback/STATUS/STORE/GETTER_THROWS",
+      "file": "fallback_status_store_getter_throws.bin",
+      "expectation": "fallback_status_store_getter_throws.expect",
+      "type_id": 16,
+      "bytes": 97,
+      "sha256": "1396683fc4877d8e4e835bc633fdb38350a72bfa019ef052d953d6010ec276dc",
+      "expectation_sha256": "40397aee46ae03331a4691b3b074a591381010bd8928d97fbbf0de7c5ed6a9d3"
+    },
+    {
+      "case_id": "fallback/STATUS/STORE/MUTATED_THEN_THROWS",
+      "file": "fallback_status_store_mutated_then_throws.bin",
+      "expectation": "fallback_status_store_mutated_then_throws.expect",
+      "type_id": 16,
+      "bytes": 97,
+      "sha256": "c7db69a9b874e8f771a7e78b5714e95225258d7974f6bba122e8d968823f3d15",
+      "expectation_sha256": "88da170cdf07dccd469cd202aa6dfab99ecc1fc8f474be9791e15552431b1087"
+    },
+    {
+      "case_id": "fallback/STATUS/STORE/THROWS",
+      "file": "fallback_status_store_throws.bin",
+      "expectation": "fallback_status_store_throws.expect",
+      "type_id": 16,
+      "bytes": 97,
+      "sha256": "1396683fc4877d8e4e835bc633fdb38350a72bfa019ef052d953d6010ec276dc",
+      "expectation_sha256": "40397aee46ae03331a4691b3b074a591381010bd8928d97fbbf0de7c5ed6a9d3"
+    },
+    {
+      "case_id": "fallback/STATUS/TRANSACTION/ABSENT",
+      "file": "fallback_status_transaction_absent.bin",
+      "expectation": "fallback_status_transaction_absent.expect",
+      "type_id": 16,
+      "bytes": 40,
+      "sha256": "b40430a6ef373e46557ca97175e509d7bc8a57ff653c650755f43ca72f211fa9",
+      "expectation_sha256": "d6675d2a5d8e42dc508969fac07eaf7a82771680365dd52a185b35fbd62dadb8"
+    },
+    {
+      "case_id": "fallback/STATUS/TRANSACTION/GETTER_THROWS",
+      "file": "fallback_status_transaction_getter_throws.bin",
+      "expectation": "fallback_status_transaction_getter_throws.expect",
+      "type_id": 16,
+      "bytes": 40,
+      "sha256": "e22b8e6ba384167fca5bb7a045c8b558bb74770b18fb636323d3d80491279dd0",
+      "expectation_sha256": "6d0cfb6170a4246def1b9221600b438d58be4ca492d84905a4db63192844e104"
+    },
+    {
+      "case_id": "fallback/STATUS/TRANSACTION/MUTATED_THEN_THROWS",
+      "file": "fallback_status_transaction_mutated_then_throws.bin",
+      "expectation": "fallback_status_transaction_mutated_then_throws.expect",
+      "type_id": 16,
+      "bytes": 40,
+      "sha256": "08f54cf2930f826e6728325512ab60bb312a480f73794ec313082dbc5f4853f3",
+      "expectation_sha256": "c52b3b81080215c03edaca987188d3929c6ab77e13e7047b3b6150663c91af8e"
+    },
+    {
+      "case_id": "fallback/STATUS/TRANSACTION/THROWS",
+      "file": "fallback_status_transaction_throws.bin",
+      "expectation": "fallback_status_transaction_throws.expect",
+      "type_id": 16,
+      "bytes": 40,
+      "sha256": "e22b8e6ba384167fca5bb7a045c8b558bb74770b18fb636323d3d80491279dd0",
+      "expectation_sha256": "6d0cfb6170a4246def1b9221600b438d58be4ca492d84905a4db63192844e104"
+    },
+    {
+      "case_id": "lock/success_false",
+      "file": "lock_success_false.bin",
+      "expectation": "lock_success_false.expect",
+      "type_id": 22,
+      "bytes": 6,
+      "sha256": "528b6868d669a0f3a68f5e881a217821e8049684447121c9ea8a549bbf9a44cc",
+      "expectation_sha256": "d07a471bfeac1480d93b4340d858dd50bb2935a7fa0264dd3b75fe5fbff4c668"
+    },
+    {
+      "case_id": "matrix/BEGIN/NONE",
+      "file": "matrix_begin_none.bin",
+      "expectation": "matrix_begin_none.expect",
+      "type_id": 2,
+      "bytes": 24,
+      "sha256": "d3bb7de4b06317b21e0b99687d63b2b6f9f007a20ce75a1508e25db0581e0627",
+      "expectation_sha256": "7fe60ff39b2af049a2d620ffc5eb7c96b8e6b8662c251edaf19b9a655e1e1186"
+    },
+    {
+      "case_id": "matrix/BEGIN/RUNTIME",
+      "file": "matrix_begin_runtime.bin",
+      "expectation": "matrix_begin_runtime.expect",
+      "type_id": 2,
+      "bytes": 39,
+      "sha256": "63690df07ede87e3fe86c774e26fc41d2946ebd7a8cb2d9cef571c535fb68f1d",
+      "expectation_sha256": "17f2297883ce1571c34ee2ba4504d22cfa2009b9ecb0d4bfbb922865ad203585"
+    },
+    {
+      "case_id": "matrix/BEGIN/STORE",
+      "file": "matrix_begin_store.bin",
+      "expectation": "matrix_begin_store.expect",
+      "type_id": 2,
+      "bytes": 87,
+      "sha256": "ca6d17577d4e543cd471e55c32cab101c9e2b433eb6a113def402f2ad6cf0c52",
+      "expectation_sha256": "d4bcd6ec6e14a28d62404a1098574fc735c5379bdfca2d156061d5ee22054349"
+    },
+    {
+      "case_id": "matrix/BEGIN/TRANSACTION",
+      "file": "matrix_begin_transaction.bin",
+      "expectation": "matrix_begin_transaction.expect",
+      "type_id": 2,
+      "bytes": 43,
+      "sha256": "ebcb70369114dbbab0e9ad6a178e378cdef65685a06d15eca40d3b8b9384b6b3",
+      "expectation_sha256": "50cf2520fcd1585af03206c1545fdcd50518a4bb0a43786004cfd175bed13315"
+    },
+    {
+      "case_id": "matrix/BRANCH_REPORT/NONE",
+      "file": "matrix_branch_report_none.bin",
+      "expectation": "matrix_branch_report_none.expect",
+      "type_id": 14,
+      "bytes": 4,
+      "sha256": "027e593cc88805be568b28ae53bea28144f59d227abe7eab338da72a4d6d5e70",
+      "expectation_sha256": "b6c73b0a31945748587abf9ae8cb37dd6238f4fee97b03641aabfa50d75e05cc"
+    },
+    {
+      "case_id": "matrix/BRANCH_REPORT/RUNTIME",
+      "file": "matrix_branch_report_runtime.bin",
+      "expectation": "matrix_branch_report_runtime.expect",
+      "type_id": 14,
+      "bytes": 35,
+      "sha256": "ce82f9085621af80308afeeebb6719c962d7215627cd863350dd22899847f0de",
+      "expectation_sha256": "aa0e068ad23e2aef4ca3400dffe5d894a62080313fe67fe583bcc198751530c6"
+    },
+    {
+      "case_id": "matrix/BRANCH_REPORT/STORE",
+      "file": "matrix_branch_report_store.bin",
+      "expectation": "matrix_branch_report_store.expect",
+      "type_id": 14,
+      "bytes": 124,
+      "sha256": "da9cd947f5b8e006faf05dc49b835e475213bc6d03c14c28e5e679e8e36d37df",
+      "expectation_sha256": "9c78c4bd10b0a80caf71f7920046a12dfd47bc432978e88651b8059e66e31a31"
+    },
+    {
+      "case_id": "matrix/BRANCH_REPORT/TRANSACTION",
+      "file": "matrix_branch_report_transaction.bin",
+      "expectation": "matrix_branch_report_transaction.expect",
+      "type_id": 14,
+      "bytes": 39,
+      "sha256": "ec92638dbd97691ef322a4bce5b4fd3f27b9fb13f0c1f987e0490d32762a5c7f",
+      "expectation_sha256": "cd314e2b89cd7dd5de00f306b9edb957cc65337c4058cd95f83054653158f673"
+    },
+    {
+      "case_id": "matrix/COMMIT/NONE",
+      "file": "matrix_commit_none.bin",
+      "expectation": "matrix_commit_none.expect",
+      "type_id": 8,
+      "bytes": 5,
+      "sha256": "deb6f54cfdab097e7ccded848e7fefa0127b1ef75f38c465c3df4cf2ed926f15",
+      "expectation_sha256": "350a3a39d6d65a52aeb20f20235a0f4dd843da7503a470911da2545c6c87c3f8"
+    },
+    {
+      "case_id": "matrix/COMMIT/RUNTIME",
+      "file": "matrix_commit_runtime.bin",
+      "expectation": "matrix_commit_runtime.expect",
+      "type_id": 8,
+      "bytes": 36,
+      "sha256": "25490309dfe30498448e14961310c82c1bfc2412f2774a5c64b3fcf84dc0ec41",
+      "expectation_sha256": "621c12b7d85ebb8c68ce10d27b44a849181cca4adef827f91cc0cf52a13f29b3"
+    },
+    {
+      "case_id": "matrix/COMMIT/STORE",
+      "file": "matrix_commit_store.bin",
+      "expectation": "matrix_commit_store.expect",
+      "type_id": 8,
+      "bytes": 97,
+      "sha256": "90d0f99e0f0b7f6892c810da62f0bf732fdf553d78faba0ffe5d63f80e857b6b",
+      "expectation_sha256": "c48bc78fc28a42907a8a01a1b7bb19862c2faa79b9e518541c82662487b2a71d"
+    },
+    {
+      "case_id": "matrix/COMMIT/TRANSACTION",
+      "file": "matrix_commit_transaction.bin",
+      "expectation": "matrix_commit_transaction.expect",
+      "type_id": 8,
+      "bytes": 40,
+      "sha256": "8bfb03f3806880c9178df1aba80d02c65ed030eb9fdc8f519823114c87ade13a",
+      "expectation_sha256": "8949f6849448b2bad7b98afbf0032a7bd8b7ad505dbe469bbd864e58491b556b"
+    },
+    {
+      "case_id": "matrix/LOCK/NONE",
+      "file": "matrix_lock_none.bin",
+      "expectation": "matrix_lock_none.expect",
+      "type_id": 22,
+      "bytes": 6,
+      "sha256": "f5ccd8e6ca3e0126596388a189f4239219a81d9fad68cfb447ae626352b68048",
+      "expectation_sha256": "3910735bbaf928363cbf2fb64eb0c72981c541f567839dd1fb85dfa6cb7d7caa"
+    },
+    {
+      "case_id": "matrix/LOCK/RUNTIME",
+      "file": "matrix_lock_runtime.bin",
+      "expectation": "matrix_lock_runtime.expect",
+      "type_id": 22,
+      "bytes": 37,
+      "sha256": "4b5a6384ececfcf4dc3ebe70aae6c1db694d198d8f7d26d97b8d137e64466926",
+      "expectation_sha256": "4787edf553dec9c63d25443f0388ff42702bd22aa25763ec82091244c8264082"
+    },
+    {
+      "case_id": "matrix/LOCK/STORE",
+      "file": "matrix_lock_store.bin",
+      "expectation": "matrix_lock_store.expect",
+      "type_id": 22,
+      "bytes": 102,
+      "sha256": "eb24af7518bedbc3d866b63aa6cc9a51aac4e63a26ff0b0b0a94cfb162fbfe4d",
+      "expectation_sha256": "090b58a155a1b70463a613b4f0e27f6dea94f189f20d98c0452de6dea814c60a"
+    },
+    {
+      "case_id": "matrix/LOCK/TRANSACTION",
+      "file": "matrix_lock_transaction.bin",
+      "expectation": "matrix_lock_transaction.expect",
+      "type_id": 22,
+      "bytes": 41,
+      "sha256": "bb49e01c739be22121f48caf06de47df890c9bcce1222dbd5af61e96d76d5500",
+      "expectation_sha256": "d60e4ad918c77a7548082a9e70f8ff53bd5a00b3374e895a7c4f5d0bf842d7e7"
+    },
+    {
+      "case_id": "matrix/REGISTER/NONE",
+      "file": "matrix_register_none.bin",
+      "expectation": "matrix_register_none.expect",
+      "type_id": 12,
+      "bytes": 12,
+      "sha256": "5a0cb7686607e77f8033f085474c02caaab68850162d4f252107a50926b0d1e6",
+      "expectation_sha256": "ce8a3b8edba68205bd7524e9c8526fc6f5c2c431f451aba02aad3aa6ed74facc"
+    },
+    {
+      "case_id": "matrix/REGISTER/RUNTIME",
+      "file": "matrix_register_runtime.bin",
+      "expectation": "matrix_register_runtime.expect",
+      "type_id": 12,
+      "bytes": 43,
+      "sha256": "8c413a8f1ef3dce11819e85214538f06394e14f8a553f70e5fb6e5dc7a56b620",
+      "expectation_sha256": "ef084c213ae8cc9d00dcd9cecc4324132ab8d08fdb2e827845bac23d735b167d"
+    },
+    {
+      "case_id": "matrix/REGISTER/STORE",
+      "file": "matrix_register_store.bin",
+      "expectation": "matrix_register_store.expect",
+      "type_id": 12,
+      "bytes": 106,
+      "sha256": "9f1e0548ad42d91a44268500e8cff6683b18317bcb7e98e94c94c82d63bbdb53",
+      "expectation_sha256": "8dda2d9a58c6ccabe0ae7b28601757dd989324fd1eb09765bf6686f3f48cc6af"
+    },
+    {
+      "case_id": "matrix/REGISTER/TRANSACTION",
+      "file": "matrix_register_transaction.bin",
+      "expectation": "matrix_register_transaction.expect",
+      "type_id": 12,
+      "bytes": 47,
+      "sha256": "8a1277df58cb21b9d63e33229d12023b5b951c3b92643f785c1786a8685a13bb",
+      "expectation_sha256": "3b935103f781919c05d7035a576fb0a87557412b4a6a5833ddc908173f036336"
+    },
+    {
+      "case_id": "matrix/REPORT/NONE",
+      "file": "matrix_report_none.bin",
+      "expectation": "matrix_report_none.expect",
+      "type_id": 18,
+      "bytes": 5,
+      "sha256": "144a0dfb47b00b78379f0c19b028e69ca2779a4868acb8fd4e132549bebe45b9",
+      "expectation_sha256": "3ffca92612976b07a90a0e45097f6c78fb124e29b16c24ba1eebc33ccb55a077"
+    },
+    {
+      "case_id": "matrix/REPORT/RUNTIME",
+      "file": "matrix_report_runtime.bin",
+      "expectation": "matrix_report_runtime.expect",
+      "type_id": 18,
+      "bytes": 36,
+      "sha256": "ee93ed212aa53b00a32dc18dd2e1ca942acf47f6d977a34d626d8fed7462f3ae",
+      "expectation_sha256": "b96f53b1182f6600953fb57fb3ebab3889b48aa41a011e993a93705622b3f896"
+    },
+    {
+      "case_id": "matrix/REPORT/STORE",
+      "file": "matrix_report_store.bin",
+      "expectation": "matrix_report_store.expect",
+      "type_id": 18,
+      "bytes": 37,
+      "sha256": "7ec2ba76f4af583841f5f05f67b50d76278727eebe8dd1f0c94d0b473be5d8a3",
+      "expectation_sha256": "63187cf8b202fc4484d10c791d1b470ca06a03df8dae4717b22cd269b8216a89"
+    },
+    {
+      "case_id": "matrix/REPORT/TRANSACTION",
+      "file": "matrix_report_transaction.bin",
+      "expectation": "matrix_report_transaction.expect",
+      "type_id": 18,
+      "bytes": 40,
+      "sha256": "7f2a107a5e2000d937c27da4480a256e5d9424fd040f6c888c9bc93e28ec0538",
+      "expectation_sha256": "b47b78d0d93fc3caf401cefbeeffe37fba1a8be08a72d0091b452c4ba1e48b2d"
+    },
+    {
+      "case_id": "matrix/ROLLBACK/NONE",
+      "file": "matrix_rollback_none.bin",
+      "expectation": "matrix_rollback_none.expect",
+      "type_id": 10,
+      "bytes": 5,
+      "sha256": "1b6db1aeb72d460c8430f0b146571b67e5b4571be3d31ee9df8c4b70b5714b4a",
+      "expectation_sha256": "89008201aa6655ff9c0ef5bb6abfe5d6974bea338ff4a6372bb5a66910c1771d"
+    },
+    {
+      "case_id": "matrix/ROLLBACK/RUNTIME",
+      "file": "matrix_rollback_runtime.bin",
+      "expectation": "matrix_rollback_runtime.expect",
+      "type_id": 10,
+      "bytes": 36,
+      "sha256": "784d3314249947b28f32c0c63e8d9ad2559f7802612e9d9e8ca6f3f3ae2d71b0",
+      "expectation_sha256": "9f9ae74368f0cd499d42326cb9912e87488d0e79ecdbae1a882e374252108f45"
+    },
+    {
+      "case_id": "matrix/ROLLBACK/STORE",
+      "file": "matrix_rollback_store.bin",
+      "expectation": "matrix_rollback_store.expect",
+      "type_id": 10,
+      "bytes": 99,
+      "sha256": "1f413dd2a83c0c0b45bca6787c7d9924e181cfee578f1f7406e6ce54a38cdb36",
+      "expectation_sha256": "329b8e94fa62be578b335c40d44bed51cf3ebcf462dd472780a01c702a849101"
+    },
+    {
+      "case_id": "matrix/ROLLBACK/TRANSACTION",
+      "file": "matrix_rollback_transaction.bin",
+      "expectation": "matrix_rollback_transaction.expect",
+      "type_id": 10,
+      "bytes": 40,
+      "sha256": "8ec32dd5a4f0e44d3d25e82ccc22631d77e1cfed096700198cd87f703042d4b9",
+      "expectation_sha256": "f62f67231b78b96cc23a72a617c77d75b773d5a28a0a956d93bd583079bc1301"
+    },
+    {
+      "case_id": "matrix/STATUS/NONE",
+      "file": "matrix_status_none.bin",
+      "expectation": "matrix_status_none.expect",
+      "type_id": 16,
+      "bytes": 5,
+      "sha256": "49caf777cf35a3415544709d5abb096b0038b4f1d2475f95be94b00115eb0c22",
+      "expectation_sha256": "0bfc1561651a4522f08c1b1ae58b24e56f3bd560184070d7878b591e37992bf2"
+    },
+    {
+      "case_id": "matrix/STATUS/RUNTIME",
+      "file": "matrix_status_runtime.bin",
+      "expectation": "matrix_status_runtime.expect",
+      "type_id": 16,
+      "bytes": 36,
+      "sha256": "eedc6a2e46001547be80756abff27708691e262586f0d9c8e3fb7d38397441f0",
+      "expectation_sha256": "67d29f78378b6489a71e2ddc0ff3cca1f2f4815bb52f431f5b7e40cf3a06f280"
+    },
+    {
+      "case_id": "matrix/STATUS/STORE",
+      "file": "matrix_status_store.bin",
+      "expectation": "matrix_status_store.expect",
+      "type_id": 16,
+      "bytes": 97,
+      "sha256": "ce2ffe0cac50b285beaa8fcef6773b5d2764f37a61ce2eb6d9d3bfb05ea9b5c3",
+      "expectation_sha256": "a4012eaa1d82a610b947665ed29b902658a4d0f8be264fae614c0809c48ce1e4"
+    },
+    {
+      "case_id": "matrix/STATUS/TRANSACTION",
+      "file": "matrix_status_transaction.bin",
+      "expectation": "matrix_status_transaction.expect",
+      "type_id": 16,
+      "bytes": 40,
+      "sha256": "8508ec0eaac6f6ae904e0df0cbffbcf1b2d29d29df82d63faf8638ea517b8ac5",
+      "expectation_sha256": "0b71a56b159c2b758f162d479b44285ad577cbd1d02d705d3fad6c8ffa918962"
+    }
+  ],
+  "boundary": "Capture from a successful selected135 Java test run; export is not Go/Rust certification"
+}

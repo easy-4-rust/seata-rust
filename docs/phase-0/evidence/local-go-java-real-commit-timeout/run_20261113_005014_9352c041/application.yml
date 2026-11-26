@@ -1,0 +1,41 @@
+server:
+  port: 28091
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/rct_20261113_005014_9352c041/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28091
+    enable-check-auth: false
+    max-commit-retry-timeout: 5000
+    enable-parallel-handle-branch: false
+    rollback-retry-timeout-unlock-enable: false
+    rollback-failed-unlock-enable: false
+    retry-dead-threshold: 500
+    recovery:
+      committing-retry-period: 200
+      async-committing-retry-period: 200
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:28093/seata_commit_081194ed?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      user: root
+      password: seata_commit_fixture_only
+      min-conn: 1
+      max-conn: 4
+  transport:
+    rpc-tc-request-timeout: 750

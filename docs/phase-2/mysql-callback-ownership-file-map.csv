@@ -1,0 +1,10 @@
+java_source,rust_source,state,scope
+org.apache.seata.rm.AbstractRMHandler,crates/seata_rm/src/manager/callback_handler.rs,PARTIAL,整批校验后构造原连接回调能力；未声明完整源对象完成
+org.apache.seata.rm.DefaultResourceManager,crates/seata_rm/src/manager/branch_dispatcher.rs,PARTIAL,Pending之后的可选回调观察；手工分派不能创建能力
+org.apache.seata.rm.datasource.DataSourceManager,crates/seata_db_mysql/src/data_source_manager.rs,PARTIAL,原回调登记交接与受管理回滚；一阶段COMMIT及提交方向仍未认证
+RUST_EXTENSION,crates/seata_rm/src/model/branch_callback_receipt.rs,RUST_EXTENSION,仅校验后回调入口可构造的原身份与方向；不包含锁键
+RUST_EXTENSION,crates/seata_rm/src/resource/branch_callback_observer.rs,RUST_EXTENSION,资源可选的持久回调归属观察接口
+RUST_EXTENSION,crates/seata_db_mysql/src/registration_origin.rs,RUST_EXTENSION,区分已知注册锁键和回调未知锁键
+RUST_EXTENSION,crates/seata_db_mysql/src/recovery_schema.rs,RUST_EXTENSION,精确区分旧11列和扩展12列物理形状
+RUST_EXTENSION,crates/seata_db_mysql/src/rm_branch_record.rs,RUST_EXTENSION,校验来源和方向及终态组合
+RUST_EXTENSION,crates/seata_db_mysql/src/rm_branch_store.rs,RUST_EXTENSION,持久来源与方向同事务仲裁并阻止迟到回执覆盖

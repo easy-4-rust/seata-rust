@@ -1,0 +1,125 @@
+{
+  "status": "ORIGINAL_TC_DB_LOCK_IDENTITY_BOUNDARIES_OBSERVED",
+  "spec": "docs/phase-2/tc-lock-coverage-contract.md",
+  "rust": {
+    "1.99": {
+      "evidence": "docs/phase-2/evidence/tc-lock-identity-boundaries/seata_original_guard_jyhhvzrf",
+      "catalog_sha256": "8041cac967776cd9bfdc69d06d7dda58a80a6e125d6dc561cd6922283dabb83b",
+      "catalog_members": 41,
+      "network": {
+        "branch_registrations": 6,
+        "successful": 4,
+        "rejected": 2,
+        "lock_queries": 4,
+        "original_rollback_callbacks": 5,
+        "original_rollback_retries": 1,
+        "global_rollbacks": 6
+      },
+      "workspace": {
+        "ordinary": 509,
+        "ignored": 147,
+        "doc": 4,
+        "harnesses": 110,
+        "core_source_MATCH": 76,
+        "rm_jdbc_source_MATCH": 10
+      }
+    },
+    "1.85": {
+      "evidence": "docs/phase-2/evidence/tc-lock-identity-boundaries/seata_original_guard_cy3htl6y",
+      "catalog_sha256": "3c7c9507716da781dc4588487fbddc500e175aa4018bf248418d9ed8f6bacc2e",
+      "catalog_members": 41,
+      "network": {
+        "branch_registrations": 6,
+        "successful": 4,
+        "rejected": 2,
+        "lock_queries": 4,
+        "original_rollback_callbacks": 5,
+        "original_rollback_retries": 1,
+        "global_rollbacks": 6
+      },
+      "workspace": {
+        "ordinary": 509,
+        "ignored": 147,
+        "doc": 4,
+        "harnesses": 110,
+        "core_source_MATCH": 76,
+        "rm_jdbc_source_MATCH": 10
+      }
+    }
+  },
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "jar_sha256": "aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5",
+  "jdbc_sha256": "e2a3b2fc726a1ac64e998585db86b30fa8bf3f706195b78bb77c5f99bf877bd9",
+  "mysql_image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "mysql_version": "8.4.13",
+  "alias_scope": "two loopback ports, one owned MySQL instance, one schema and seeded row",
+  "alias_duplicate_exclusive_lock_observed": true,
+  "composite_distinct_tuple_false_conflict_observed": true,
+  "previous_storage_gate": "docs/phase-2/wp05-tc-lock-storage-boundaries.json",
+  "previous_storage_gate_sha256": "4e4450114a2ed923ef37fe60b1754888bb92ccf0519003039c8bb0d63891a946",
+  "verifier_regression": {
+    "evidence": "docs/phase-2/evidence/tc-lock-identity-boundaries/verifier-regression-20261118.json",
+    "sha256": "2f3c5c341c2e3a7af2782c9df074d55832ae95d8cbfc3bba6997444e2cfed544",
+    "controls": 3
+  },
+  "workspace_evidence": "docs/phase-2/evidence/tc-lock-identity-boundaries/final_workspace_20261118",
+  "workspace_artifacts": {
+    "1.85-qualified-clippy.log": "917a7eb5ce4228953212743cdf68facee8ecb1687396ee3ef75927abd286409e",
+    "1.85-qualified-doc.log": "02e39403652a963b90e5ef9a6e390015c86379f0c9d61ffd78a96c0e45e08e65",
+    "1.85-qualified-jdbc-source.log": "cad24de69bc2b49b2e913a4205c78c1fecc590243ce7a63f7f66ffd132014c13",
+    "1.85-qualified-source.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-qualified-tests.log": "efb27bb989807eb2c6ca230756ad8dd812d965e791c42a6b5143c4294df7b859",
+    "1.85-qualified-version.log": "f15055932aed6f9cbeda9e4eda89c3a898e84cbb3a6c5f19489b929fec84b2de",
+    "1.99-qualified-clippy.log": "ddc7eabb3f433c7553251846919d51f00a7c0f8b8763c98f878a7553e598eff6",
+    "1.99-qualified-doc.log": "30c2fa3fa3bf1f1a99c7c9b33ab039c690f037163a3514806d51fad6c5b957c9",
+    "1.99-qualified-jdbc-source.log": "8535abbb1e54780a9f639d4fdda3659dd3e0e55931a9918332a6f9a08aef684d",
+    "1.99-qualified-source.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-qualified-tests.log": "1f7c287d29adf50e8bf0f2f39ec2a21384c784c7f7b531541f3eff21d84bb75a",
+    "1.99-qualified-version.log": "b871c86bb07dd7f9f441fcaada9d078da35d4cfd779b90f3dc63cccbbf72d337",
+    "fmt-qualified.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "verified_inputs": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_db_mysql/tests/live_commit_direction_java.rs": "bb2d6dc6de58614bb3475cf91376cfde85e08a22df5c9a4b5854e2abdcb0bd8a",
+    "crates/seata_db_mysql/tests/support/java_lock_identity_cases.rs": "d28dac377290da8c20f91b9c4c79c4c34f5a7872c2ed17a82798184d8e9ca682",
+    "crates/seata_db_mysql/tests/support/java_lock_guard_cases.rs": "3c17b4751ba82b67b24e99ffa1d87894c216be1b6760491c2db00ecbdeba687c",
+    "crates/seata_db_mysql/tests/support/owned_mysql.rs": "92a5c58da5deea1715b71fe31d13cc611daa4f5ba7d87f03e4d13ba3f737c67d",
+    "crates/seata_db_mysql/src/connection_proxy.rs": "243d4a75f82c28adccb07f6e5470cea1707444df83f4cff57239374efddae04c",
+    "tools/formal-tc-lock-coverage/live_guard.py": "b61afe8aa77c5493316bc8413ed86c5f63d8ea7b25346da91274974a11f58071",
+    "tools/formal-tc-lock-coverage/identity_boundaries.py": "b5cd10bd72a7f68c2d60a5a320af1a7f0d8e87374a04ad70b26c835e65085d97",
+    "tools/formal-tc-lock-coverage/storage_boundaries.py": "ad7894f2a730f2f45c950f74d58db7937265f774568a553c2712d42a60bd66e0",
+    "tools/formal-tc-lock-coverage/ResourceAliasAuthHandler.java": "d888330d9fceb30386e81fc792a49a6129a03eb4adcb97c1a560d809483d2ad4",
+    "tools/formal-tc-lock-coverage/proxy.py": "61349b01d109a2b28464c94ae87e0ce83d1c1acf719f8e8d66d87b6f3aa09f1f",
+    "tools/formal-transport-loss/live.py": "8e8f552a22d598b4525eb175e39de9958bb8f06ce08052a9991e789b8c508eb8"
+  },
+  "source_parity": {
+    "matched": 86,
+    "remaining_methods": 1049,
+    "remaining_cases": 1241
+  },
+  "review": {
+    "status": "READ_ONLY_REVIEW_NO_BLOCKING_FINDINGS",
+    "evidence": "docs/phase-2/evidence/tc-lock-identity-boundaries/readonly-review-20261118.json"
+  },
+  "production_behavior_changed": false,
+  "actual_rust_business_commit": false,
+  "public_first_phase_business_COMMIT_available": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user",
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "default_profile_recheck": {
+    "1.99": {
+      "evidence": "docs/phase-2/evidence/tc-lock-native-registration/seata_original_guard_z8xuwbw4",
+      "catalog_sha256": "621b1c0caac822e41c382fbf831fd771604ef7972edfd2bf4dd19b004b2db6ca",
+      "catalog_members": 29
+    },
+    "1.85": {
+      "evidence": "docs/phase-2/evidence/tc-lock-native-registration/seata_original_guard_tlue0565",
+      "catalog_sha256": "7d94825e4d8ebd233a4816a6ef428ae6f7ef787fb1a7e77c7d764cf1eefeb822",
+      "catalog_members": 29
+    }
+  }
+}

@@ -1,0 +1,20 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_mysql_execution_20261115_205718_cc203af6\undo-duplicate\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.41s
+     Running tests\sql_undo_image_contract.rs (D:/cargo-target/seata-mysql-execution-controls\debug\deps\sql_undo_image_contract-f992495841c8899a.exe)
+
+running 1 test
+
+thread 'duplicate_raw_primary_identities_are_rejected' (58972) panicked at crates\seata_at\tests\sql_undo_image_contract.rs:126:5:
+assertion failed: SqlUndoLog::new(SqlType::Insert, records(&table, &[]),
+        records(&table, &[(1, "x"), (1, "y")])).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test duplicate_raw_primary_identities_are_rejected ... FAILED
+
+failures:
+
+failures:
+    duplicate_raw_primary_identities_are_rejected
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test sql_undo_image_contract`

@@ -1,0 +1,1 @@
+INSERT INTO mysql_native_identity(id,t8,t1,u8,s16,m24,b64,d,c,v,tt,t,mt,lt,b,vb,tb,bl,mb,lb) VALUES(1,-128,1,255,-32768,-8388608,-9223372036854775808,999.99,'x ','🦀','tiny','text','medium','long',?,?,?,?,?,?)

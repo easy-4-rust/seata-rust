@@ -1,0 +1,20 @@
+
+running 1 test
+test payload::tests::golden_global_begin_request ... FAILED
+
+failures:
+
+---- payload::tests::golden_global_begin_request stdout ----
+
+thread 'payload::tests::golden_global_begin_request' (76664) panicked at src\payload\tests.rs:107:1:
+assertion `left == right` failed: independent semantic contract: GlobalBeginRequest
+  left: GlobalBeginRequest(GlobalBeginRequest { timeout: 2001, transaction_name: Some("SeataGoTransaction") })
+ right: GlobalBeginRequest(GlobalBeginRequest { timeout: 2000, transaction_name: Some("SeataGoTransaction") })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    payload::tests::golden_global_begin_request
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 116 filtered out; finished in 0.00s
+

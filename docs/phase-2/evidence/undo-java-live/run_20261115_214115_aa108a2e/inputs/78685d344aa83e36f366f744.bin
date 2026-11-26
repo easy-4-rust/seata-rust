@@ -1,0 +1,148 @@
+"""Read original JDBC/Undo shapes on one owned MySQL instance; preserve unsuccessful driver profiles."""
+import argparse
+import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import socket
+import subprocess
+import time
+import uuid
+from runtime_binding import RuntimeBinding
+
+ROOT=Path(__file__).resolve().parents[2]
+JAVA=ROOT.parent/'seata-java-phase09-oracle'
+IMAGE='sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902'
+PASSWORD='seata-mysql-fixture-only'
+
+
+def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def read(path):return json.loads(path.read_text('utf-8'))
+def need(value,message):
+    if not value:raise ValueError(message)
+
+
+def run(build_dir):
+    build_dir=build_dir.resolve();build=read(build_dir/'build.json')
+    for row in read(build_dir/'catalog.json')['members']:
+        need(sha(build_dir/row['path'])==row['sha256'],'Original build archive differs')
+    runtime_build=Path(build['runtime'])
+    binding=RuntimeBinding(build_dir,JAVA)
+    for row in build['compiled_classes']:
+        need(sha(Path(row['path']))==row['sha256'],'Compiled original class differs')
+    for row in build['libraries']:
+        need(sha(Path(row['path']))==row['sha256'],'Runtime library differs')
+    originals=read(build_dir/'source-inputs.json')
+    for index,name in enumerate(['rm-datasource','sqlparser/seata-sqlparser-core']):
+        original_root=JAVA/name/'target/classes';target=runtime_build/('fallback-'+str(index))
+        expected={Path(x['path']).relative_to(original_root):x['sha256'] for x in originals if Path(x['path']).is_relative_to(original_root)}
+        need(set(expected)=={p.relative_to(target) for p in target.rglob('*') if p.is_file()},'Fallback file set differs')
+        for relative,digest in expected.items():need(sha(target/relative)==digest,'Fallback copied bytes differ')
+    stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8]
+    out=ROOT/'docs/phase-2/evidence/undo-java-live'/('run_'+stamp)
+    runtime=Path('D:/codex-builds')/('seata_undo_mysql_'+stamp)
+    out.mkdir(parents=True);(runtime/'data').mkdir(parents=True);(runtime/'init').mkdir()
+    env=os.environ|dict(TEMP='D:/Temp',TMP='D:/Temp',DOCKER_CONFIG='D:/Temp/seata-docker-config',PYTHONUTF8='1',PYTHONDONTWRITEBYTECODE='1')
+    for name in ['JAVA_TOOL_OPTIONS','JDK_JAVA_OPTIONS','_JAVA_OPTIONS']:env.pop(name,None)
+    def put(name,data):
+        path=out/name;path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_bytes(data.encode('utf-8') if isinstance(data,str) else data)
+    def save(name,value):put(name,json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+    def command(args,name,check=True,timeout=90):
+        value=subprocess.run([str(x) for x in args],cwd=ROOT,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
+            creationflags=subprocess.CREATE_NO_WINDOW,timeout=timeout)
+        put(name,value.stdout)
+        if check:need(value.returncode==0,name+' failed')
+        return value
+    owner=uuid.uuid4().hex;database='undo_'+owner[:12];name='seata-undo-'+stamp.replace('_','-')
+    with socket.socket() as reserved:
+        reserved.bind(('127.0.0.1',0));port=reserved.getsockname()[1]
+    print('UNDO_JAVA_LIVE '+str(out),flush=True)
+    need(json.loads(command(['docker','image','inspect',IMAGE],'image.json').stdout)[0]['Id']==IMAGE,'Cached image differs')
+    schema=(Path(__file__).with_name('schema.sql')).read_text('utf-8').replace('__DATABASE__',database)
+    original=JAVA/'script/client/at/db/mysql.sql'
+    (runtime/'init/00-original-undo.sql').write_bytes(original.read_bytes())
+    (runtime/'init/01-oracle.sql').write_text(schema,encoding='utf-8')
+    put('original-undo.sql',original.read_bytes());put('fixture.sql',schema)
+    paths={Path(__file__),Path(__file__).with_name('runtime_binding.py'),Path(__file__).with_name('schema.sql'),original,ROOT/'docs/phase-2/mysql-undo-format-contract.md'}
+    frozen=[]
+    for path in sorted(paths):
+        snapshot='inputs/'+hashlib.sha256(str(path).encode()).hexdigest()[:24]+'.bin'
+        put(snapshot,path.read_bytes());frozen.append(dict(path=str(path),sha256=sha(path),snapshot=snapshot))
+    save('source-inputs.json',frozen)
+    save('runtime-inputs.json',binding.manifest())
+    save('build-binding.json',dict(path=str(build_dir),catalog_sha256=sha(build_dir/'catalog.json'),
+        selected_original_sources=len(build['explicit_sources'])-1,compiled_classes=len(build['compiled_classes']),
+        runtime_copies_verified=True,fallback_bytes_frozen_not_recompiled=True))
+    container=None;profiles=[];cleanup=[]
+    env.update(SEATA_MYSQL_PORT=str(port),SEATA_MYSQL_PASSWORD=PASSWORD,SEATA_MYSQL_DATABASE=database)
+    try:
+        container=command(['docker','create','--pull=never','--name',name,'--label','seata-rust-owner='+owner,
+            '--mount','type=bind,source='+(runtime/'data').as_posix()+',target=/var/lib/mysql',
+            '--mount','type=bind,source='+(runtime/'init').as_posix()+',target=/docker-entrypoint-initdb.d,readonly',
+            '-p','127.0.0.1:'+str(port)+':3306','-e','MYSQL_ROOT_PASSWORD='+PASSWORD,'-e','MYSQL_DATABASE='+database,
+            IMAGE,'--mysql-native-password=ON'],'create.log').stdout.decode().strip()
+        save('owned-runtime.json',dict(container=container,owner=owner,image=IMAGE,port=port,database=database,runtime=str(runtime),
+            native_password_enabled_for_legacy_oracle_only=True,shared_database=False))
+        command(['docker','start',container],'start.log')
+        mysql=['docker','exec',container,'mysql','--protocol=TCP','-h127.0.0.1','--default-character-set=utf8mb4','-uroot','-p'+PASSWORD,database,'-N','-e']
+        deadline=time.monotonic()+120
+        while True:
+            value=subprocess.run(mysql+['SELECT COUNT(*) FROM undo_integer_types'],env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
+                creationflags=subprocess.CREATE_NO_WINDOW,timeout=10)
+            if value.returncode==0 and value.stdout.rstrip().endswith(b'3'):break
+            need(time.monotonic()<deadline,'Owned oracle database not ready');time.sleep(.25)
+        command(mysql+["SELECT VERSION(),@@lower_case_table_names; SELECT PLUGIN_NAME,PLUGIN_STATUS FROM information_schema.PLUGINS WHERE PLUGIN_NAME='mysql_native_password';"],'server-before.log')
+        command(['D:/Java/jdk-17.0.12/bin/java.exe','-version'],'java-version.log')
+        for driver in ['5.1.42','8.0.27']:
+            dependency=binding.drivers[driver]
+            for profile in ['default','numeric_tinyint']:
+                label=driver+'-'+profile;where=runtime/label;where.mkdir()
+                binding.verify()
+                logging=where/'class-loading.log'
+                args=['D:/Java/jdk-17.0.12/bin/java.exe','-Djava.io.tmpdir=D:/Temp','-Duser.home='+str(where),
+                    '-Dlogback.configurationFile='+str(runtime_build/'console.xml'),'-Xlog:class+load=info:file='+logging.as_posix(),
+                    '-cp',build['classpath']+os.pathsep+str(dependency),
+                    'org.apache.seata.rm.datasource.sql.struct.cache.UndoFormatOracle',where,driver,profile]
+                value=command(args,label+'/stdout.log',check=False,timeout=60)
+                binding.verify()
+                for path in where.rglob('*'):
+                    if path.is_file():put(label+'/'+path.relative_to(where).as_posix(),path.read_bytes())
+                success=value.returncode==0
+                loaded=binding.loaded(logging,driver)
+                save(label+'/loaded-origin-binding.json',loaded)
+                if success:
+                    observed=read(where/'observations.json')
+                    need(observed['jackson']=='2.18.3' and len(observed['cases'])==6 and observed['driver'].find(driver)>=0,'Wrong original driver/parser profile')
+                    log=logging.read_text('utf-8')
+                    for typename in ['org.apache.seata.rm.datasource.sql.struct.TableRecords','org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParser',
+                        'org.apache.seata.rm.datasource.sql.struct.cache.MysqlTableMetaCache']:
+                        need(any(typename+' source: file:' in line and '/classes/' in line for line in log.splitlines()),'Selected exact original class not loaded from compiled output')
+                profiles.append(dict(driver=driver,profile=profile,succeeded=success,exit_code=value.returncode,
+                    original_cases=6 if success else 0,driver_sha256=sha(dependency),log=label+'/stdout.log'))
+                print('ORIGINAL_JAVA_PROFILE '+label+' '+('passed' if success else 'failed'),flush=True)
+        command(mysql+['SELECT COUNT(*) FROM undo_integer_types; SELECT COUNT(*) FROM undo_log;'],'server-after.log')
+    finally:
+        if container:
+            inspect=json.loads(command(['docker','inspect',container],'container-before-cleanup.json').stdout)[0]
+            need(inspect['Image']==IMAGE and inspect['Config']['Labels']['seata-rust-owner']==owner,'Refusing cleanup of unowned container')
+            command(['docker','logs',container],'container.log',check=False)
+            command(['docker','stop','-t','10',container],'stop.log',timeout=30)
+            inspect=json.loads(command(['docker','inspect',container],'container-stopped.json').stdout)[0]
+            if inspect['State']['Running']:cleanup.append('owned container remains running')
+            command(['docker','rm',container],'remove.log')
+        save('result.json',dict(profiles=profiles,actual_owned_containers=1,cleanup_errors=cleanup,
+            Rust_interop_verified=False,Java_source_case_parity_complete=False,SQL_Undo_atomicity_verified=False,WP05_complete=False))
+    need(not cleanup,'Owned container cleanup incomplete')
+    binding.verify()
+    for row in frozen:need(sha(Path(row['path']))==row['sha256'],'Live source drift')
+    members=[dict(path=p.relative_to(out).as_posix(),sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()]
+    save('catalog.json',dict(members=members))
+    print(json.dumps(dict(run=str(out),catalog_sha256=sha(out/'catalog.json'),profiles_passed=sum(x['succeeded'] for x in profiles))))
+
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--build',required=True,type=Path)
+    run(parser.parse_args().build)

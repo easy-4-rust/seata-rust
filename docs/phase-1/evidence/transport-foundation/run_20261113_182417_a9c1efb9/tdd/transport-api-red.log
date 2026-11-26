@@ -1,0 +1,36 @@
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+error[E0432]: unresolved import `seata_transport`
+ --> crates\seata_transport\tests\stream_and_ids.rs:6:5
+  |
+6 | use seata_transport::{FrameDecoder,RequestIdAllocator,TransportError};
+  |     ^^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `seata_transport`
+  |
+  = help: if you wanted to use a crate named `seata_transport`, use `cargo add seata_transport` to add it to your `Cargo.toml`
+
+error[E0599]: no method named `frame_length` found for struct `ProtocolDecoderV1` in the current scope
+  --> crates\seata_transport\tests\stream_and_ids.rs:80:34
+   |
+80 |     for n in 0..16 {assert_eq!(p.frame_length(&frame[..n]).unwrap(),None);}
+   |                                  ^^^^^^^^^^^^ method not found in `ProtocolDecoderV1`
+
+error[E0599]: no method named `frame_length` found for struct `ProtocolDecoderV1` in the current scope
+  --> crates\seata_transport\tests\stream_and_ids.rs:81:18
+   |
+81 |     assert_eq!(p.frame_length(&frame[..16]).unwrap(),Some(frame.len()));
+   |                  ^^^^^^^^^^^^ method not found in `ProtocolDecoderV1`
+
+error[E0599]: no method named `frame_length` found for struct `ProtocolDecoderV1` in the current scope
+  --> crates\seata_transport\tests\stream_and_ids.rs:83:15
+   |
+83 |     assert!(p.frame_length(&big[..7]).is_err());
+   |               ^^^^^^^^^^^^ method not found in `ProtocolDecoderV1`
+
+error[E0599]: no method named `frame_length` found for struct `ProtocolDecoderV1` in the current scope
+  --> crates\seata_transport\tests\stream_and_ids.rs:89:19
+   |
+89 |         assert!(p.frame_length(&bad[..index+1]).is_err(),"index {index}");
+   |                   ^^^^^^^^^^^^ method not found in `ProtocolDecoderV1`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-transport` (test "stream_and_ids") due to 5 previous errors

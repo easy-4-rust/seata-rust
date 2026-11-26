@@ -1,0 +1,109 @@
+{
+  "status": "JDBC_DB_TYPE_PARSER_AND_RM_ENTRY_VERIFIED",
+  "evidence": "docs/phase-2/evidence/sqlparser-jdbc-db-type/run_20261118",
+  "previous_catalog_sha256": "05e6b4dd3a9facd1cfadd049927e7c452f5847e4f8a80e2cb8801eb1c5cf46d5",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "druid_version": "1.2.28",
+  "original_object_states": {
+    "IMPLEMENTED": 14,
+    "PARTIAL": 5,
+    "MISSING": 12
+  },
+  "original_cases_MATCH": 76,
+  "original_JUnit_run_inherited": true,
+  "original_url_inputs": 557,
+  "parser_observations_MATCH": 557,
+  "rm_entry_observations_MATCH": 557,
+  "druid_prefixes": 77,
+  "raw_unknown_null_count": 303,
+  "rm_null_exception_count": 303,
+  "mutation_generic_polardb_prefix_before_specific_variants_rejected": true,
+  "rust_toolchains": [
+    "1.99",
+    "1.85"
+  ],
+  "workspace_passed_per_toolchain": 486,
+  "workspace_ignored_per_toolchain": 143,
+  "doc_tests_per_toolchain": 4,
+  "harness_per_toolchain": 105,
+  "registry_dependencies_changed": false,
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "new_P1": 0,
+    "new_P2": 0
+  },
+  "remaining": [
+    "Original JVM classloader isolation, missing-Druid exception and parser discovery lifecycle",
+    "JdbcUtils resource registration and driver name APIs",
+    "Default process Locale and remaining collection behavior, including EntrySet.remove structural reentry"
+  ],
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "3517d58c2f9b158283626458993950cc2585fe7d695c9ca85b941fcbe46337e7"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/util/mod.rs",
+      "sha256": "b98f5b5aae740dfa23232593428b0ea42f83908c939c57a686b4889733455408"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/util/db_type_parser.rs",
+      "sha256": "e61c5d4c07f7de041d6513786969d848a660742e75fba05274d94673a31bac14"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/mod.rs",
+      "sha256": "d5d69c94fc8a1cb6f60fd4b8dcb85184509b492eefc0791139881bd187f4df5a"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/druid_db_type_parser_impl.rs",
+      "sha256": "0e30c8bc73b91b48349cca73ab9d738d3d4a288f5bf98edb2ba17390b5aebbf2"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/lib.rs",
+      "sha256": "420000ca6d7e0e9dd3d45458b7ddfef4cf406703dc19212886e8410be23c16f2"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/mod.rs",
+      "sha256": "b03099cf32b6cfd365090221c7287f5cd61c6ad2a30ec0d5069907ba30523f92"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+      "sha256": "899bbb47549deb95a3c276db5c0bc24e214407965f09df09eeba14b180c058f7"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/jdbc_rm_type_java.rs",
+      "sha256": "4cb7edb021f04e98c7be21ad5bc912d2d7afd33401cf48f5477cc33d6664b138"
+    },
+    {
+      "path": "crates/seata_test/tests/jdbc_db_type_java.rs",
+      "sha256": "d63907cd1c6287790014d74815c4dd89e5982a402755d11139b5b2c29ba88b31"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/jdbc-db-type-java.tsv",
+      "sha256": "b27f2e8d09cdbb0f7341700729f530ad7254c5c3545e77309f878883f8b0ec55"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/fixtures/jdbc-rm-db-type-java.tsv",
+      "sha256": "1c9e284cd587daa1a9f8fd3e1ae59768b6ca7977b40b630048abf970378a3f20"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/JdbcDbTypeOracle.java",
+      "sha256": "945ee382114883caf20effec4ad3f0af7ee8958bd615644efb4aa69e3db41dc1"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/JdbcRmTypeOracle.java",
+      "sha256": "d4b7a6b24fd9b9fc49c086073353d18cb4048ea73e2a8ae3d2873f5dc08a0d90"
+    }
+  ],
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

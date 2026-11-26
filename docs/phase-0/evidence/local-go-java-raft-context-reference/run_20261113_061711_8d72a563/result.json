@@ -1,0 +1,100 @@
+{
+  "succeeded": true,
+  "container": "7c0bca51da59a4720e47dc955ecbc2b1eb2746f201900acbc0c0a9c1642ba07e",
+  "container_state": "exited",
+  "ports_released": true,
+  "runtime": "D:\\codex-builds\\rcx_20261113_061711_8d72a563",
+  "proof": {
+    "expected_defect_reproduced": true,
+    "recovery_certified": false,
+    "registered_tcc_context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}",
+    "acknowledged_report_tcc_context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"prepared-branch\":\"9851330216697858\",\"prepared-token\":\"176cc31dd80a141e29a193cbf5025011d00ff51b1aecdf4ee850bf53f76c3074\",\"prepared-units\":\"10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}",
+    "new_context_values": {
+      "prepared-units": "10",
+      "prepared-branch": "9851330216697858",
+      "prepared-token": "176cc31dd80a141e29a193cbf5025011d00ff51b1aecdf4ee850bf53f76c3074"
+    },
+    "original_replica_observations": [
+      {
+        "stage": "timeout",
+        "node": 0,
+        "pid": 74576,
+        "matches_report": true,
+        "matches_registration": false,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"prepared-branch\":\"9851330216697858\",\"prepared-token\":\"176cc31dd80a141e29a193cbf5025011d00ff51b1aecdf4ee850bf53f76c3074\",\"prepared-units\":\"10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      },
+      {
+        "stage": "timeout",
+        "node": 1,
+        "pid": 45632,
+        "matches_report": false,
+        "matches_registration": true,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      },
+      {
+        "stage": "timeout",
+        "node": 2,
+        "pid": 73032,
+        "matches_report": false,
+        "matches_registration": true,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      },
+      {
+        "stage": "election_one",
+        "node": 1,
+        "pid": 45632,
+        "matches_report": false,
+        "matches_registration": true,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      },
+      {
+        "stage": "election_one",
+        "node": 2,
+        "pid": 73032,
+        "matches_report": false,
+        "matches_registration": true,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      },
+      {
+        "stage": "restored",
+        "node": 0,
+        "pid": 65120,
+        "matches_report": true,
+        "matches_registration": false,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"prepared-branch\":\"9851330216697858\",\"prepared-token\":\"176cc31dd80a141e29a193cbf5025011d00ff51b1aecdf4ee850bf53f76c3074\",\"prepared-units\":\"10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      },
+      {
+        "stage": "restored",
+        "node": 1,
+        "pid": 45632,
+        "matches_report": false,
+        "matches_registration": true,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      },
+      {
+        "stage": "restored",
+        "node": 2,
+        "pid": 73032,
+        "matches_report": false,
+        "matches_registration": true,
+        "context": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}"
+      }
+    ],
+    "rejected_original_tcc_replies": [
+      {
+        "result": 0,
+        "status": 6,
+        "id": 1,
+        "connection": 1
+      }
+    ],
+    "tm_begin_commit_rollback": [
+      1,
+      1,
+      0
+    ],
+    "real_business_confirmed": 0,
+    "real_business_effect_count": 0,
+    "scope": "Observed original status-only replication loses actual updated Prepare context after election; real callback rejects absent context. Not successful recovery."
+  }
+}

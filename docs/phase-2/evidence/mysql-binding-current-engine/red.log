@@ -1,0 +1,19 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.19s
+     Running tests\live_first_phase_preparation.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_first_phase_preparation-0fe345d211724850.exe)
+
+running 1 test
+
+thread 'late_nontransactional_resource_binding_is_rejected_before_registration' (42160) panicked at crates\seata_db_mysql\tests\live_first_phase_preparation.rs:81:13:
+late unsafe binding registered and its claimed shared lock allowed administrative update: ALTER TABLE seata_rs_at_resource_binding ENGINE=MyISAM
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test late_nontransactional_resource_binding_is_rejected_before_registration ... FAILED
+
+failures:
+
+failures:
+    late_nontransactional_resource_binding_is_rejected_before_registration
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 1.30s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_first_phase_preparation`

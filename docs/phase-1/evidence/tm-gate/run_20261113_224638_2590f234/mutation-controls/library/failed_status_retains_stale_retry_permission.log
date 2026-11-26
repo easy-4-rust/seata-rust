@@ -1,0 +1,27 @@
+   Compiling seata-tm v0.1.0 (D:\codex-builds\seata-tm-controls-18a695f50a99\crates\seata_tm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.59s
+     Running tests\manager_calls.rs (D:/cargo-target/seata-rust-tm-controls\debug\deps\manager_calls-21e9a59b86a61e42.exe)
+
+running 1 test
+test failed_status_retry_timeout_revokes_prior_same_operation_retry_permission ... FAILED
+
+failures:
+
+---- failed_status_retry_timeout_revokes_prior_same_operation_retry_permission stdout ----
+
+thread 'failed_status_retry_timeout_revokes_prior_same_operation_retry_permission' (72184) panicked at crates\seata_tm\tests\support\..\..\..\seata_transport\tests\support\session_peer.rs:116:5:
+assertion `left == right` failed
+  left: 1
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'failed_status_retry_timeout_revokes_prior_same_operation_retry_permission' (72184) panicked at crates\seata_tm\tests\manager_calls.rs:493:5:
+Failed status cannot leave the previous retry permission active
+
+
+failures:
+    failed_status_retry_timeout_revokes_prior_same_operation_retry_permission
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.10s
+
+error: test failed, to rerun pass `-p seata-tm --test manager_calls`

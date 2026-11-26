@@ -1,0 +1,35 @@
+test_crlf_metadata_remains_byte_identical (test_prepare_candidate.CandidateArtifactGuards.test_crlf_metadata_remains_byte_identical) ... ERROR
+test_current_patch_reproduces_exactly (test_prepare_candidate.CandidateArtifactGuards.test_current_patch_reproduces_exactly) ... ERROR
+test_different_metadata_is_not_overwritten (test_prepare_candidate.CandidateArtifactGuards.test_different_metadata_is_not_overwritten) ... ok
+
+======================================================================
+ERROR: test_crlf_metadata_remains_byte_identical (test_prepare_candidate.CandidateArtifactGuards.test_crlf_metadata_remains_byte_identical)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-retry-timeout-candidate\test_prepare_candidate.py", line 9, in test_crlf_metadata_remains_byte_identical
+    path=Path(directory)/'manifest.json';before=b'{\r\n  "a": 1\r\n}\r\n';path.write_bytes(before);put(path,b'{\n  "a": 1\n}\n');self.assertEqual(path.read_bytes(),before)
+                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-retry-timeout-candidate\prepare_candidate.py", line 10, in put
+    if path.read_bytes()!=data:raise RuntimeError('Existing candidate artifact differs; reconcile explicitly: '+str(path))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Existing candidate artifact differs; reconcile explicitly: D:\Temp\retention-metadata-sfb8ve34\manifest.json
+
+======================================================================
+ERROR: test_current_patch_reproduces_exactly (test_prepare_candidate.CandidateArtifactGuards.test_current_patch_reproduces_exactly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-retry-timeout-candidate\test_prepare_candidate.py", line 15, in test_current_patch_reproduces_exactly
+    def test_current_patch_reproduces_exactly(self):self.assertEqual(len(run()['files']),3)
+                                                                         ^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-retry-timeout-candidate\prepare_candidate.py", line 17, in run
+    patch=''.join(parts).encode();put(DEST/'0002-retain-retry-timeout-sessions.patch',patch);manifest=dict(java_pin=PIN,patch='0002-retain-retry-timeout-sessions.patch',patch_sha256=sha(patch),files=rows,scope='Independent FILE/RAFT operator-retention candidate sharing original coordinator startup lock policy; original source/JAR and Rust TC policy unchanged.');put(DEST/'retry-timeout-manifest.json',(json.dumps(manifest,indent=2)+'\n').encode());return manifest
+                                                                                                                                                                                                                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-retry-timeout-candidate\prepare_candidate.py", line 10, in put
+    if path.read_bytes()!=data:raise RuntimeError('Existing candidate artifact differs; reconcile explicitly: '+str(path))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Existing candidate artifact differs; reconcile explicitly: E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\compatibility\seata-java\cba73e180fd8896a99df6415b859d275122feaa7\retry-timeout-manifest.json
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.181s
+
+FAILED (errors=2)

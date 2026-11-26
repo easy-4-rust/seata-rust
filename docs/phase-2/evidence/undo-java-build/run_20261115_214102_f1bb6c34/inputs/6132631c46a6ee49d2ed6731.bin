@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.apache.seata</groupId>
+        <artifactId>seata-build</artifactId>
+        <version>${revision}</version>
+        <relativePath>./build/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>seata-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>Seata Parent POM ${project.version}</name>
+    <description>parent for Seata built with Maven</description>
+
+    <modules>
+        <module>build</module>
+        <module>all</module>
+        <module>bom</module>
+        <module>common</module>
+        <module>config</module>
+        <module>threadpool</module>
+<!--        <module>console</module>-->
+        <module>core</module>
+        <module>compatible</module>
+        <module>dependencies</module>
+        <module>discovery</module>
+        <module>extensions</module>
+        <module>rm</module>
+        <module>rm-datasource</module>
+        <module>spring</module>
+        <module>tcc</module>
+        <module>mock-server</module>
+        <module>tm</module>
+        <module>metrics</module>
+        <module>serializer</module>
+        <module>compressor</module>
+        <module>saga</module>
+        <module>sqlparser</module>
+        <!--<module>server</module>-->
+        <module>integration-tx-api</module>
+<!--        <module>namingserver</module>-->
+        <!--<module>test-suite/test-new-version</module>-->
+        <module>test-suite/test-old-version</module>
+        <module>test-suite/seata-benchmark-cli</module>
+        <module>json-common</module>
+        <!--<module>seata-plugin</module>-->
+    </modules>
+
+    <!--test-->
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.seata</groupId>
+                <artifactId>seata-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <!-- profile: onlyBuildOnJDK17+ -->
+        <profile>
+            <id>JDK17Plus</id>
+            <activation>
+                <jdk>[17,)</jdk>
+            </activation>
+            <modules>
+                <module>server</module>
+                <module>test-suite/test-new-version</module>
+            </modules>
+        </profile>
+        <!-- profile: onlyBuildOnJDK21+ -->
+        <profile>
+            <id>JDK21Plus</id>
+            <activation>
+                <jdk>[21,)</jdk>
+            </activation>
+            <modules>
+                <module>threadpool-loom</module>
+            </modules>
+        </profile>
+        <!-- profile: onlyBuildOnJDK25+ -->
+        <profile>
+            <id>JDK25Plus</id>
+            <activation>
+                <jdk>[25,)</jdk>
+            </activation>
+            <modules>
+                <module>namingserver</module>
+                <module>console</module>
+            </modules>
+        </profile>
+        <!-- profile: licenseCheck -->
+        <profile>
+            <id>licenseCheck</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>license-check</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-third-party</goal>
+                                </goals>
+                                <configuration>
+                                    <includeOptional>false</includeOptional>
+                                    <useMissingFile>false</useMissingFile>
+                                    <failOnMissing>false</failOnMissing>
+                                    <licenseMerges>
+                                        <licenseMerge>Apache License, Version 2.0|The Apache Software License, Version
+                                            2.0|ASF 2.0|Apache 2|Apache-2.0|Apache 2.0 License|Apache 2.0|Apache License v2.0|Apache License 2.0|The Apache License, Version 2.0|The Apache Software License, Version 2.0
+                                        </licenseMerge>
+                                        <licenseMerge>The MIT License|MIT License</licenseMerge>
+                                        <licenseMerge>The 3-Clause BSD License|New BSD License|3-Clause BSD
+                                            License|BSD|3-Clause BSD License|The New BSD License
+                                        </licenseMerge>
+                                    </licenseMerges>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- profile: image -->
+        <profile>
+            <id>image</id>
+            <properties>
+                <image.publish.skip>false</image.publish.skip>
+                <dependencies.copy.skip>false</dependencies.copy.skip>
+                <mysql.copy.skip>false</mysql.copy.skip>
+                <mysql.jdbc.version>5.1.42</mysql.jdbc.version>
+                <mysql8.jdbc.version>8.0.27</mysql8.jdbc.version>
+                <maven.git-commit-id.skip>false</maven.git-commit-id.skip>
+            </properties>
+        </profile>
+        <!-- profile: release-image-based-on-java8 -->
+        <profile>
+            <id>release-image-based-on-java8</id>
+            <properties>
+                <image.tags>${project.version},latest</image.tags>
+                <maven.git-commit-id.skip>false</maven.git-commit-id.skip>
+            </properties>
+        </profile>
+        <!-- profile: release-image-based-on-java17 -->
+        <profile>
+            <id>release-image-based-on-java17</id>
+            <properties>
+                <image.tags>${project.version}.jdk17</image.tags>
+                <maven.git-commit-id.skip>false</maven.git-commit-id.skip>
+            </properties>
+        </profile>
+        <!-- profile: release-image-based-on-java21 -->
+        <profile>
+            <id>release-image-based-on-java21</id>
+            <properties>
+                <image.tags>${project.version}.jdk21</image.tags>
+                <maven.git-commit-id.skip>false</maven.git-commit-id.skip>
+            </properties>
+        </profile>
+        <!-- profile: release-image-based-on-java25 -->
+        <profile>
+            <id>release-image-based-on-java25</id>
+            <properties>
+                <image.tags>${project.version}.jdk25</image.tags>
+                <maven.git-commit-id.skip>false</maven.git-commit-id.skip>
+            </properties>
+        </profile>
+        <!-- profile: dependency-check -->
+        <profile>
+            <id>dependency-check</id>
+            <build>
+                <plugins>
+                    <!-- dependency-check-maven -->
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>${dependency-check-maven.version}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- profile: spotless -->
+        <profile>
+            <id>jdk17-spotless</id>
+            <activation>
+                <jdk>[17,)</jdk>
+            </activation>
+            <properties>
+                <palantirJavaFormat.version>2.74.0</palantirJavaFormat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>java17+</id>
+            <activation>
+                <jdk>[17,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <version>${spotless-maven-plugin.version}</version>
+                        <configuration>
+                            <java>
+                                <excludes>
+                                    <exclude>**/script/**</exclude>
+                                    <exclude>**/generated/**</exclude>
+                                    <exclude>**/antlr/mysql/parser/*.*</exclude>
+                                    <exclude>**/antlr/mysql/antlr/*.*</exclude>
+                                    <exclude>**/antlr/mysql/stream/ANTLRNoCaseStringStream.java</exclude>
+                                </excludes>
+                                <palantirJavaFormat>
+                                    <version>${palantirJavaFormat.version}</version>
+                                </palantirJavaFormat>
+                                <removeUnusedImports/>
+                                <trimTrailingWhitespace/>
+                                <endWithNewline/>
+                                <importOrder>
+                                    <order>,javax|java,\#</order>
+                                </importOrder>
+                            </java>
+                            <json>
+                                <includes>
+                                    <include>src/main/resources/META-INF/native-image/*.json</include>
+                                </includes>
+                                <jackson/>
+                            </json>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>apply</goal>
+                                </goals>
+                                <phase>process-sources</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- profile: source-release -->
+        <profile>
+            <id>source-release</id>
+            <modules>
+                <module>build</module>
+                <module>all</module>
+                <module>bom</module>
+                <module>common</module>
+                <module>config</module>
+                <module>console</module>
+                <module>core</module>
+                <module>compatible</module>
+                <module>dependencies</module>
+                <module>discovery</module>
+                <module>rm</module>
+                <module>rm-datasource</module>
+                <module>spring</module>
+                <module>tcc</module>
+                <module>mock-server</module>
+                <module>tm</module>
+                <module>metrics</module>
+                <module>serializer</module>
+                <module>compressor</module>
+                <module>saga</module>
+                <module>sqlparser</module>
+                <module>server</module>
+                <module>integration-tx-api</module>
+                <module>namingserver</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>distribution/source-release.xml</descriptor>
+                            </descriptors>
+                            <finalName>apache-seata-${project.version}-incubating-src</finalName>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-source-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>include-test-modules</id>
+            <activation>
+                <file>
+                    <exists>test-suite/test-new-version/pom.xml</exists>
+                </file>
+                <property>
+                    <name>!excludeTestModules</name>
+                </property>
+            </activation>
+            <modules>
+                <module>distribution</module>
+                <!--<module>test-suite/test-new-version</module>-->
+                <module>test-suite/test-old-version</module>
+            </modules>
+        </profile>
+
+        <!-- profile: native -->
+        <profile>
+            <id>test-native-namingserver</id>
+            <modules>
+                <module>test-suite/test-native-namingserver</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>test-native-metadata-merge</id>
+            <modules>
+                <module>test-suite/test-native-metadata-merge</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>native-linux-amd64</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>linux-amd64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native-linux-aarch64</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>linux-arm64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native-darwin-aarch64</id>
+            <activation>
+                <os>
+                    <name>mac os x</name>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>darwin-arm64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native-windows-amd64</id>
+            <activation>
+                <os>
+                    <name>windows</name>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>windows-amd64</native.platform>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>${os-maven-plugin.version}</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <!-- Source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.java.template</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <configuration>
+                    <configLocation>style/checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <detail>true</detail>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <skip>${checkstyle.skip}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>verify-style</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- JaCoCo -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/test/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <goals>
+                            <goal>report</goal>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- SureFire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>@{argLine} ${maven.surefire.argLine}</argLine>
+                    <excludes>${maven.surefire.excludes}</excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

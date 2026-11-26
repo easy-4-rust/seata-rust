@@ -1,0 +1,18 @@
+
+running 1 test
+test mysql::undo_fragment_sqlx_tests::driver_error_preserves_os_code_and_excludes_custom_message ... FAILED
+
+failures:
+
+---- mysql::undo_fragment_sqlx_tests::driver_error_preserves_os_code_and_excludes_custom_message stdout ----
+
+thread 'mysql::undo_fragment_sqlx_tests::driver_error_preserves_os_code_and_excludes_custom_message' (58384) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:77:5:
+assertion failed: !format!("{error:?} {error} {cause:?} {cause}").contains("hidden peer detail")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    mysql::undo_fragment_sqlx_tests::driver_error_preserves_os_code_and_excludes_custom_message
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 33 filtered out; finished in 0.00s
+

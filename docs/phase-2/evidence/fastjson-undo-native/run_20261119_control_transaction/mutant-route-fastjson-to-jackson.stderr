@@ -1,0 +1,17 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_compare_mutants_15w94maz\crates\seata_db_mysql)
+warning: unused variable: `format`
+  --> crates\seata_db_mysql\src\undo\rollback_undo_document.rs:19:9
+   |
+19 |         format: UndoSerializer,
+   |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_format`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-db-mysql` (lib test) generated 1 warning (run `cargo fix --lib -p seata-db-mysql --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.60s
+     Running unittests src\lib.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\seata_db_mysql-96120218282556ab.exe)
+
+thread 'undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup' (51400) panicked at crates\seata_db_mysql\src\undo\rollback_undo_document_tests.rs:30:90:
+called `Result::unwrap()` on an `Err` value: UndoCodec(Syntax)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

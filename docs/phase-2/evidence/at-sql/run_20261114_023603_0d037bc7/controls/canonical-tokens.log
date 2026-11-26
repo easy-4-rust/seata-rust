@@ -1,0 +1,31 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_at_sql_20261114_023603_0d037bc7\canonical-tokens\crates\seata_at)
+warning: associated function `verify_ast_tokens` is never used
+  --> crates\seata_at\src\sql_recognizer_factory.rs:70:8
+   |
+12 | impl SqlRecognizerFactory {
+   | ------------------------- associated function in this implementation
+...
+70 |     fn verify_ast_tokens(
+   |        ^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-at` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.87s
+     Running tests\mysql_sql_recognition.rs (D:/cargo-target/seata-at-controls\debug\deps\mysql_sql_recognition-02986bf229d8be6e.exe)
+
+running 1 test
+
+thread 'parser_consumed_modifiers_cannot_disappear_from_the_executable_contract' (77844) panicked at crates\seata_at\tests\mysql_sql_recognition.rs:299:9:
+silently accepted INSERT LOCAL accounts(id) VALUES(?)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test parser_consumed_modifiers_cannot_disappear_from_the_executable_contract ... FAILED
+
+failures:
+
+failures:
+    parser_consumed_modifiers_cannot_disappear_from_the_executable_contract
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test mysql_sql_recognition`

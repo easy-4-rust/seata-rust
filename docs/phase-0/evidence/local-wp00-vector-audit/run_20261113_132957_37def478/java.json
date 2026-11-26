@@ -1,0 +1,472 @@
+{
+  "execution_kind" : "direct_existing_assertion_bodies_without_junit_engine",
+  "checks" : [ {
+    "name" : "GlobalBeginRequest",
+    "passed" : true
+  }, {
+    "name" : "GlobalBeginResponse",
+    "passed" : true
+  }, {
+    "name" : "BranchCommitRequest",
+    "passed" : true
+  }, {
+    "name" : "BranchCommitResponse",
+    "passed" : true
+  }, {
+    "name" : "BranchRollbackRequest",
+    "passed" : true
+  }, {
+    "name" : "BranchRollbackResponse",
+    "passed" : true
+  }, {
+    "name" : "GlobalCommitRequest",
+    "passed" : true
+  }, {
+    "name" : "GlobalCommitResponse",
+    "passed" : true
+  }, {
+    "name" : "GlobalRollbackRequest",
+    "passed" : true
+  }, {
+    "name" : "GlobalRollbackResponse",
+    "passed" : true
+  }, {
+    "name" : "BranchRegisterRequest",
+    "passed" : true
+  }, {
+    "name" : "BranchRegisterResponse",
+    "passed" : true
+  }, {
+    "name" : "BranchReportRequest",
+    "passed" : true
+  }, {
+    "name" : "BranchReportResponse",
+    "passed" : true
+  }, {
+    "name" : "GlobalStatusRequest",
+    "passed" : true
+  }, {
+    "name" : "GlobalStatusResponse",
+    "passed" : true
+  }, {
+    "name" : "GlobalReportRequest",
+    "passed" : true
+  }, {
+    "name" : "GlobalReportResponse",
+    "passed" : true
+  }, {
+    "name" : "GlobalLockQueryRequest",
+    "passed" : true
+  }, {
+    "name" : "GlobalLockQueryResponse",
+    "passed" : true
+  }, {
+    "name" : "RegisterTMRequest",
+    "passed" : true
+  }, {
+    "name" : "RegisterTMResponse",
+    "passed" : true
+  }, {
+    "name" : "RegisterRMRequest",
+    "passed" : true
+  }, {
+    "name" : "RegisterRMResponse",
+    "passed" : true
+  }, {
+    "name" : "UndoLogDeleteRequest",
+    "passed" : true
+  }, {
+    "name" : "GlobalBeginResponseFailed",
+    "passed" : true
+  }, {
+    "name" : "GlobalCommitResponseFailed",
+    "passed" : true
+  }, {
+    "name" : "BranchRegisterResponseFailed",
+    "passed" : true
+  }, {
+    "name" : "BranchCommitResponseFailed",
+    "passed" : true
+  }, {
+    "name" : "decodesAndReencodesGoGoldenRegisterRMRequestFrame",
+    "passed" : false,
+    "error" : "java.lang.ExceptionInInitializerError"
+  }, {
+    "name" : "decodesAndReencodesGoGoldenGlobalBeginRequestFrame",
+    "passed" : false,
+    "error" : "java.lang.NoClassDefFoundError: Could not initialize class org.apache.seata.core.serializer.SerializerServiceLoader"
+  }, {
+    "name" : "decodesAndReencodesGoGoldenRegisterTMRequestFrame",
+    "passed" : false,
+    "error" : "java.lang.NoClassDefFoundError: Could not initialize class org.apache.seata.core.serializer.SerializerServiceLoader"
+  }, {
+    "name" : "decodesAndReencodesGoGoldenFailedGlobalBeginResponseFrame",
+    "passed" : false,
+    "error" : "java.lang.NoClassDefFoundError: Could not initialize class org.apache.seata.core.serializer.SerializerServiceLoader"
+  }, {
+    "name" : "decodesAndReencodesGoGoldenGlobalBeginResponseFrame",
+    "passed" : false,
+    "error" : "java.lang.NoClassDefFoundError: Could not initialize class org.apache.seata.core.serializer.SerializerServiceLoader"
+  }, {
+    "name" : "decodesAndReencodesGoGoldenGlobalBeginRequestWithHeadMapFrame",
+    "passed" : false,
+    "error" : "java.lang.NoClassDefFoundError: Could not initialize class org.apache.seata.core.serializer.SerializerServiceLoader"
+  } ],
+  "payloads" : [ {
+    "name" : "GlobalBeginRequest",
+    "type_id" : 1,
+    "serialized_hex" : "0001000007d000125365617461476f5472616e73616374696f6e",
+    "body_hex" : "000007d000125365617461476f5472616e73616374696f6e",
+    "fields" : {
+      "timeout" : 2000,
+      "transactionName" : "SeataGoTransaction",
+      "typeCode" : 1
+    }
+  }, {
+    "name" : "GlobalBeginResponse",
+    "type_id" : 2,
+    "serialized_hex" : "0002010000103132372e302e302e313a383039313a310000",
+    "body_hex" : "010000103132372e302e302e313a383039313a310000",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "xid" : "127.0.0.1:8091:1",
+      "extraData" : null,
+      "typeCode" : 2
+    }
+  }, {
+    "name" : "BranchCommitRequest",
+    "type_id" : 3,
+    "serialized_hex" : "000300103132372e302e302e313a383039313a31010203040506070800000e6d7973716c3a2f2f6f726465727300000000",
+    "body_hex" : "00103132372e302e302e313a383039313a31010203040506070800000e6d7973716c3a2f2f6f726465727300000000",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "branchId" : 72623859790382856,
+      "branchType" : "AT",
+      "resourceId" : "mysql://orders",
+      "applicationData" : null,
+      "typeCode" : 3
+    }
+  }, {
+    "name" : "BranchCommitResponse",
+    "type_id" : 4,
+    "serialized_hex" : "0004010000103132372e302e302e313a383039313a31010203040506070805",
+    "body_hex" : "010000103132372e302e302e313a383039313a31010203040506070805",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "xid" : "127.0.0.1:8091:1",
+      "branchId" : 72623859790382856,
+      "branchStatus" : "PhaseTwo_Committed",
+      "typeCode" : 4
+    }
+  }, {
+    "name" : "BranchRollbackRequest",
+    "type_id" : 5,
+    "serialized_hex" : "000500103132372e302e302e313a383039313a31010203040506070800000e6d7973716c3a2f2f6f726465727300000000",
+    "body_hex" : "00103132372e302e302e313a383039313a31010203040506070800000e6d7973716c3a2f2f6f726465727300000000",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "branchId" : 72623859790382856,
+      "branchType" : "AT",
+      "resourceId" : "mysql://orders",
+      "applicationData" : null,
+      "typeCode" : 5
+    }
+  }, {
+    "name" : "BranchRollbackResponse",
+    "type_id" : 6,
+    "serialized_hex" : "0006010000103132372e302e302e313a383039313a31010203040506070808",
+    "body_hex" : "010000103132372e302e302e313a383039313a31010203040506070808",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "xid" : "127.0.0.1:8091:1",
+      "branchId" : 72623859790382856,
+      "branchStatus" : "PhaseTwo_Rollbacked",
+      "typeCode" : 6
+    }
+  }, {
+    "name" : "GlobalCommitRequest",
+    "type_id" : 7,
+    "serialized_hex" : "000700103132372e302e302e313a383039313a310000",
+    "body_hex" : "00103132372e302e302e313a383039313a310000",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "extraData" : null,
+      "typeCode" : 7
+    }
+  }, {
+    "name" : "GlobalCommitResponse",
+    "type_id" : 8,
+    "serialized_hex" : "0008010009",
+    "body_hex" : "010009",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "globalStatus" : "Committed",
+      "typeCode" : 8
+    }
+  }, {
+    "name" : "GlobalRollbackRequest",
+    "type_id" : 9,
+    "serialized_hex" : "000900103132372e302e302e313a383039313a310000",
+    "body_hex" : "00103132372e302e302e313a383039313a310000",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "extraData" : null,
+      "typeCode" : 9
+    }
+  }, {
+    "name" : "GlobalRollbackResponse",
+    "type_id" : 10,
+    "serialized_hex" : "000a01000b",
+    "body_hex" : "01000b",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "globalStatus" : "Rollbacked",
+      "typeCode" : 10
+    }
+  }, {
+    "name" : "BranchRegisterRequest",
+    "type_id" : 11,
+    "serialized_hex" : "000b00103132372e302e302e313a383039313a3100000e6d7973716c3a2f2f6f7264657273000000096f72646572733a343200000000",
+    "body_hex" : "00103132372e302e302e313a383039313a3100000e6d7973716c3a2f2f6f7264657273000000096f72646572733a343200000000",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "branchType" : "AT",
+      "resourceId" : "mysql://orders",
+      "lockKey" : "orders:42",
+      "applicationData" : null,
+      "typeCode" : 11
+    }
+  }, {
+    "name" : "BranchRegisterResponse",
+    "type_id" : 12,
+    "serialized_hex" : "000c01000102030405060708",
+    "body_hex" : "01000102030405060708",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "branchId" : 72623859790382856,
+      "typeCode" : 12
+    }
+  }, {
+    "name" : "BranchReportRequest",
+    "type_id" : 13,
+    "serialized_hex" : "000d00103132372e302e302e313a383039313a31010203040506070802000e6d7973716c3a2f2f6f72646572730000000974726163653d61626300",
+    "body_hex" : "00103132372e302e302e313a383039313a31010203040506070802000e6d7973716c3a2f2f6f72646572730000000974726163653d61626300",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "branchId" : 72623859790382856,
+      "resourceId" : "mysql://orders",
+      "status" : "PhaseOne_Done",
+      "applicationData" : "trace=abc",
+      "branchType" : "AT",
+      "typeCode" : 13
+    }
+  }, {
+    "name" : "BranchReportResponse",
+    "type_id" : 14,
+    "serialized_hex" : "000e0100",
+    "body_hex" : "0100",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "typeCode" : 14
+    }
+  }, {
+    "name" : "GlobalStatusRequest",
+    "type_id" : 15,
+    "serialized_hex" : "000f00103132372e302e302e313a383039313a310000",
+    "body_hex" : "00103132372e302e302e313a383039313a310000",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "extraData" : null,
+      "typeCode" : 15
+    }
+  }, {
+    "name" : "GlobalStatusResponse",
+    "type_id" : 16,
+    "serialized_hex" : "0010010009",
+    "body_hex" : "010009",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "globalStatus" : "Committed",
+      "typeCode" : 16
+    }
+  }, {
+    "name" : "GlobalReportRequest",
+    "type_id" : 17,
+    "serialized_hex" : "001100103132372e302e302e313a383039313a31000001",
+    "body_hex" : "00103132372e302e302e313a383039313a31000001",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "extraData" : null,
+      "globalStatus" : "Begin",
+      "typeCode" : 17
+    }
+  }, {
+    "name" : "GlobalReportResponse",
+    "type_id" : 18,
+    "serialized_hex" : "0012010001",
+    "body_hex" : "010001",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "globalStatus" : "Begin",
+      "typeCode" : 18
+    }
+  }, {
+    "name" : "GlobalLockQueryRequest",
+    "type_id" : 21,
+    "serialized_hex" : "001500103132372e302e302e313a383039313a3100000e6d7973716c3a2f2f6f7264657273000000096f72646572733a343200000000",
+    "body_hex" : "00103132372e302e302e313a383039313a3100000e6d7973716c3a2f2f6f7264657273000000096f72646572733a343200000000",
+    "fields" : {
+      "xid" : "127.0.0.1:8091:1",
+      "branchType" : "AT",
+      "resourceId" : "mysql://orders",
+      "lockKey" : "orders:42",
+      "applicationData" : null,
+      "typeCode" : 21
+    }
+  }, {
+    "name" : "GlobalLockQueryResponse",
+    "type_id" : 22,
+    "serialized_hex" : "001601000001",
+    "body_hex" : "01000001",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "transactionExceptionCode" : "Unknown",
+      "lockable" : true,
+      "typeCode" : 22
+    }
+  }, {
+    "name" : "RegisterTMRequest",
+    "type_id" : 101,
+    "serialized_hex" : "0065000456312c30000b6f72646572732d72757374001064656661756c745f74785f67726f75700000",
+    "body_hex" : "000456312c30000b6f72646572732d72757374001064656661756c745f74785f67726f75700000",
+    "fields" : {
+      "version" : "V1,0",
+      "applicationId" : "orders-rust",
+      "transactionServiceGroup" : "default_tx_group",
+      "extraData" : "",
+      "typeCode" : 101
+    }
+  }, {
+    "name" : "RegisterTMResponse",
+    "type_id" : 102,
+    "serialized_hex" : "006601000456312c30",
+    "body_hex" : "01000456312c30",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "version" : "V1,0",
+      "extraData" : null,
+      "identified" : true,
+      "typeCode" : 102
+    }
+  }, {
+    "name" : "RegisterRMRequest",
+    "type_id" : 103,
+    "serialized_hex" : "0067000456312c30000b6f72646572732d72757374001064656661756c745f74785f67726f757000000000000e6d7973716c3a2f2f6f7264657273",
+    "body_hex" : "000456312c30000b6f72646572732d72757374001064656661756c745f74785f67726f757000000000000e6d7973716c3a2f2f6f7264657273",
+    "fields" : {
+      "version" : "V1,0",
+      "applicationId" : "orders-rust",
+      "transactionServiceGroup" : "default_tx_group",
+      "extraData" : null,
+      "resourceIds" : "mysql://orders",
+      "typeCode" : 103
+    }
+  }, {
+    "name" : "RegisterRMResponse",
+    "type_id" : 104,
+    "serialized_hex" : "006801000456312c30",
+    "body_hex" : "01000456312c30",
+    "fields" : {
+      "resultCode" : "Success",
+      "msg" : null,
+      "version" : "V1,0",
+      "extraData" : null,
+      "identified" : true,
+      "typeCode" : 104
+    }
+  }, {
+    "name" : "UndoLogDeleteRequest",
+    "type_id" : 111,
+    "serialized_hex" : "006f00000e6d7973716c3a2f2f6f72646572730007",
+    "body_hex" : "00000e6d7973716c3a2f2f6f72646572730007",
+    "fields" : {
+      "resourceId" : "mysql://orders",
+      "saveDays" : 7,
+      "branchType" : "AT",
+      "typeCode" : 111
+    }
+  }, {
+    "name" : "GlobalBeginResponseFailed",
+    "type_id" : 2,
+    "serialized_hex" : "000200000c626567696e2064656e6965640100000000",
+    "body_hex" : "00000c626567696e2064656e6965640100000000",
+    "fields" : {
+      "resultCode" : "Failed",
+      "msg" : "begin denied",
+      "transactionExceptionCode" : "BeginFailed",
+      "xid" : null,
+      "extraData" : null,
+      "typeCode" : 2
+    }
+  }, {
+    "name" : "GlobalCommitResponseFailed",
+    "type_id" : 8,
+    "serialized_hex" : "000800000e636f6d6d69742070656e64696e670302",
+    "body_hex" : "00000e636f6d6d69742070656e64696e670302",
+    "fields" : {
+      "resultCode" : "Failed",
+      "msg" : "commit pending",
+      "transactionExceptionCode" : "IO",
+      "globalStatus" : "Committing",
+      "typeCode" : 8
+    }
+  }, {
+    "name" : "BranchRegisterResponseFailed",
+    "type_id" : 12,
+    "serialized_hex" : "000c00000d6c6f636b20636f6e666c696374020000000000000000",
+    "body_hex" : "00000d6c6f636b20636f6e666c696374020000000000000000",
+    "fields" : {
+      "resultCode" : "Failed",
+      "msg" : "lock conflict",
+      "transactionExceptionCode" : "LockKeyConflict",
+      "branchId" : 0,
+      "typeCode" : 12
+    }
+  }, {
+    "name" : "BranchCommitResponseFailed",
+    "type_id" : 4,
+    "serialized_hex" : "000400000c6272616e63682072657472790300103132372e302e302e313a383039313a31010203040506070806",
+    "body_hex" : "00000c6272616e63682072657472790300103132372e302e302e313a383039313a31010203040506070806",
+    "fields" : {
+      "resultCode" : "Failed",
+      "msg" : "branch retry",
+      "transactionExceptionCode" : "IO",
+      "xid" : "127.0.0.1:8091:1",
+      "branchId" : 72623859790382856,
+      "branchStatus" : "PhaseTwo_CommitFailed_Retryable",
+      "typeCode" : 4
+    }
+  } ],
+  "passed" : 29,
+  "failed" : 6
+}

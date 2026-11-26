@@ -1,0 +1,45 @@
+server:
+  port: 28291
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/rcx_20261113_061711_8d72a563/node_0/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28291
+    enable-check-auth: false
+    max-commit-retry-timeout: 5000
+    enable-parallel-handle-branch: false
+    rollback-retry-timeout-unlock-enable: false
+    rollback-failed-unlock-enable: false
+    retry-dead-threshold: 500
+    recovery:
+      committing-retry-period: 200
+      async-committing-retry-period: 200
+    raft:
+      group: default
+      server-addr: 192.168.1.10:28292,192.168.1.10:28294,192.168.1.10:28296
+      sync: true
+      snapshot-interval: 600
+      election-timeout-ms: 3000
+      reporter-enabled: false
+      serialization: jackson
+      compressor: none
+  store:
+    mode: raft
+    session:
+      mode: raft
+    lock:
+      mode: raft
+    file:
+      dir: D:/codex-builds/rcx_20261113_061711_8d72a563/node_0/store
+  metrics:
+    enabled: false
+  transport:
+    rpc-tc-request-timeout: 750

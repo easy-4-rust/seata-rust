@@ -1,0 +1,114 @@
+"""Bind actual Java classpath files and class-load provenance to an immutable build packet."""
+import hashlib
+import json
+from pathlib import Path
+import re
+from urllib.parse import unquote, urlparse
+
+
+def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def read(path):return json.loads(path.read_text('utf-8'))
+def need(value,message):
+    if not value:raise ValueError(message)
+
+
+class RuntimeBinding:
+    def __init__(self,build_dir,java_source):
+        self.build_dir=build_dir.resolve()
+        self.build=read(build_dir/'build.json')
+        self.root=Path(self.build['runtime']).resolve()
+        self.files={};self.roots=[self.root/'classes']
+        self.selected=set()
+        inputs=read(build_dir/'source-inputs.json')
+        frozen={Path(x['path']).resolve():x for x in inputs}
+        def add(path,digest,snapshot,role):
+            path=Path(path).resolve()
+            need(sha(snapshot)==digest,'Build archive differs for runtime copy')
+            self.files[path]=dict(sha256=digest,archive=str(snapshot),role=role)
+        for row in self.build['compiled_classes']:
+            add(row['path'],row['sha256'],build_dir/row['snapshot'],'selected_compiled_class')
+            self.selected.add(Path(row['path']).resolve().relative_to(self.root/'classes').as_posix())
+        need({p.resolve() for p in (self.root/'classes').rglob('*') if p.is_file()}==set(self.files),'Extra/missing compiled output')
+        for row in self.build['libraries']:
+            matching=next(x for x in inputs if Path(x['path']).name==Path(row['path']).name and x['sha256']==row['sha256'])
+            add(row['path'],row['sha256'],build_dir/matching['snapshot'],'explicit_library')
+        for index,name in enumerate(['rm-datasource','sqlparser/seata-sqlparser-core']):
+            original=(java_source/name/'target/classes').resolve();target=self.root/('fallback-'+str(index));self.roots.append(target)
+            expected=set()
+            for path,row in frozen.items():
+                if path.is_relative_to(original):
+                    destination=target/path.relative_to(original);expected.add(destination.resolve())
+                    add(destination,row['sha256'],build_dir/row['snapshot'],'frozen_fallback_file')
+            need(expected=={p.resolve() for p in target.rglob('*') if p.is_file()},'Fallback copied file set differs')
+        self.drivers={}
+        for row in self.build['driver_libraries']:
+            path=Path(row['path']).resolve();source=frozen[path]
+            need(row['sha256']==source['sha256'],'Driver is not the build-frozen artifact')
+            add(path,source['sha256'],build_dir/source['snapshot'],'driver_'+row['version'])
+            self.drivers[row['version']]=path
+        manifest=next(x for x in inputs if Path(x['path']).name=='manifest.json')
+        add(manifest['path'],manifest['sha256'],build_dir/manifest['snapshot'],'dependency_manifest')
+        console=next(x for x in read(build_dir/'catalog.json')['members'] if x['path']=='console.xml')
+        add(self.root/'console.xml',console['sha256'],build_dir/'console.xml','logging_configuration')
+        self.verify()
+
+    def verify(self):
+        for path,row in self.files.items():need(path.is_file() and sha(path)==row['sha256'],'Runtime input drift: '+str(path))
+        for directory in self.roots:
+            expected={p for p in self.files if p.is_relative_to(directory)}
+            need(expected=={p.resolve() for p in directory.rglob('*') if p.is_file()},'Runtime classpath file set drift')
+
+    def loaded(self,path,driver,complete,family='undo'):
+        origins={};generated=[];file_classes=0
+        for line in path.read_text('utf-8').splitlines():
+            match=re.search(r'\[class,load\] (\S+) source: (.*)$',line)
+            if not match:continue
+            name,source=match.groups()
+            if source.startswith('file:'):
+                value=unquote(urlparse(source).path)
+                if re.match(r'^/[A-Za-z]:/',value):value=value[1:]
+                origin=Path(value).resolve()
+                if origin.is_dir():
+                    need(origin in self.roots,'Unbound loaded class directory')
+                    actual=origin/(name.replace('.','/')+'.class')
+                else:actual=origin
+                need(actual in self.files,'Loaded class outside frozen classpath: '+name)
+                if self.files[actual]['role'].startswith('driver_'):need(driver is not None and actual==self.drivers[driver],'Unexpected second JDBC driver')
+                if name.startswith('org.apache.seata.') and name.replace('.','/')+'.class' in self.selected:
+                    need(actual.is_relative_to(self.root/'classes'),'Selected original class shadowed by fallback/library')
+                origins[name]=dict(origin=str(origin),actual_file=str(actual),sha256=self.files[actual]['sha256'])
+                file_classes+=1
+            elif name.startswith('org.apache.seata.'):
+                owner=name.split('$$Lambda',1)[0]
+                need('$$Lambda' in name and owner in origins and source in [owner,'__JVM_LookupDefineClass__'],'Unbound dynamically loaded Seata class')
+                generated.append(dict(name=name,owner=owner,owner_file=origins[owner]['actual_file']))
+        need(family in ['undo','lock','tc_lock','undo_store','undo_rollback'],'Unknown required Java oracle family')
+        required=['com.fasterxml.jackson.databind.ObjectMapper']
+        if family=='undo':required.append('org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParser')
+        elif family=='lock':required.extend(['org.apache.seata.rm.datasource.exec.BaseTransactionalExecutor',
+            'org.apache.seata.rm.datasource.ConnectionContext','org.apache.seata.common.util.ArrayUtils',
+            'org.apache.seata.sqlparser.struct.TableMeta'])
+        elif family=='tc_lock':required.extend(['org.apache.seata.server.lock.AbstractLockManager',
+            'org.apache.seata.server.session.BranchSession','org.apache.seata.core.lock.RowLock'])
+        elif family=='undo_rollback':required.extend(['org.apache.seata.rm.datasource.undo.AbstractUndoLogManager',
+            'org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManager','org.apache.seata.rm.datasource.undo.AbstractUndoExecutor',
+            'org.apache.seata.rm.datasource.undo.mysql.MySQLUndoInsertExecutor','org.apache.seata.rm.datasource.undo.mysql.MySQLUndoUpdateExecutor',
+            'org.apache.seata.rm.datasource.undo.mysql.MySQLUndoDeleteExecutor','org.apache.seata.rm.datasource.DataCompareUtils',
+            'org.apache.seata.rm.datasource.ConnectionProxy','org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParser'])
+        else:required.extend(['org.apache.seata.rm.datasource.undo.AbstractUndoLogManager',
+            'org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManager','org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParser'])
+        if driver is not None:
+            if family!='undo_store':required.append('org.apache.seata.rm.datasource.sql.struct.cache.MysqlTableMetaCache')
+            required.append('com.mysql.jdbc.Driver' if driver.startswith('5.') else 'com.mysql.cj.jdbc.Driver')
+        if complete:required.append('org.apache.seata.rm.datasource.sql.struct.TableRecords')
+        for name in required:
+            need(name in origins,'Required runtime class missing: '+name)
+        need(Path(origins['com.fasterxml.jackson.databind.ObjectMapper']['actual_file']).name=='jackson-databind-2.18.3.jar','Wrong Jackson source')
+        if driver is not None:
+            driver_name='com.mysql.jdbc.Driver' if driver.startswith('5.') else 'com.mysql.cj.jdbc.Driver'
+            need(Path(origins[driver_name]['actual_file'])==self.drivers[driver],'Wrong actual JDBC source')
+        return dict(file_classes=file_classes,selected_class_files=len(self.selected),bound_origins=origins,
+            generated_Seata_lambdas=generated,all_file_origins_bound=True)
+
+    def manifest(self):
+        return [dict(path=str(p),**v) for p,v in sorted(self.files.items())]

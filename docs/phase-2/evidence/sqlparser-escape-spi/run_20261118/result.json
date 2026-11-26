@@ -1,0 +1,126 @@
+{
+  "status": "MYSQL_LINKED_SPI_VERIFIED",
+  "evidence": "docs/phase-2/evidence/sqlparser-escape-spi/run_20261118",
+  "preceding_catalog_sha256": "45d8b369dd64b684b61431d07adbc68d8a0ae57a25515648248d87856e6e9514",
+  "original_object_states": {
+    "PARTIAL": 5,
+    "IMPLEMENTED": 13,
+    "MISSING": 13
+  },
+  "original_cases_MATCH": 76,
+  "original_JUnit_run_inherited": true,
+  "java_spi_observations_MATCH": 12,
+  "reentrant_observations_MATCH": 5,
+  "mysql_escape_observations_regression_MATCH": 280,
+  "rust_waiter_behavior_red_green": true,
+  "provenance_recovery": "Old D export unavailable after original Java runtime executions. Reverified 31 pinned Git blobs from E checkout; copied Java peers and raw outcomes are retained.",
+  "cargo_home": "E:/workspaces/workspace-github-easy-4-rust/.seata-cargo-cache",
+  "workspace_passed_per_toolchain": 480,
+  "workspace_ignored_per_toolchain": 143,
+  "doc_tests_per_toolchain": 4,
+  "harness_per_toolchain": 99,
+  "rust_toolchains": [
+    "1.99",
+    "1.85"
+  ],
+  "dependencies": {
+    "inventory": {
+      "name": "inventory",
+      "version": "0.3.21",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "bc61209c082fbeb19919bee74b176221b27223e27b65d781eb91af24eb1fb46e",
+      "dependencies": [
+        "rustversion"
+      ]
+    },
+    "rustversion": {
+      "name": "rustversion",
+      "version": "1.0.23",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
+    },
+    "msrv": "1.62",
+    "inventory_license": "MIT OR Apache-2.0",
+    "rustversion_scope": "WASM only; Windows dual toolchain qualified",
+    "metadata_source": "https://github.com/dtolnay/inventory/blob/0.3.21/Cargo.toml"
+  },
+  "adaptations": [
+    "Factory-scoped service instances",
+    "Reject equal highest priorities because link order is unspecified"
+  ],
+  "remaining": [
+    "Other dialect providers",
+    "JVM compatible namespace, classloader and load/unload mapping",
+    "Default process Locale and full collection contracts"
+  ],
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "remaining_P1": 0,
+    "remaining_P2": 0
+  },
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_sqlparser/Cargo.toml",
+      "sha256": "325c3a1bfee7db291f7eed9e7dd4fff3d892d49e9c744edde38e978fee1455e8"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "bc7455a728d49bb697a3915f46ae6691cc5fa97f62744a950a830f85a81851d6"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/escape_handler_factory.rs",
+      "sha256": "fdb794f5bbe197593294c6575312d23fc770dca6dfabe38b951026ecf4b945f2"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/escape_handler_registration.rs",
+      "sha256": "b9792d0a197d4275366631b229bfcb14514306cbde28d224675a7c7f75f8ebd9"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/escape_handler_scope.rs",
+      "sha256": "4c287d46e204113e5f384c9f2d7a33f40a115682edd2a6ada61574dfeca73433"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/escape_provider_instance.rs",
+      "sha256": "a76f0c6b90df973c623b780b3637d35a09335a43e91e42b4f7159d275d2e3a33"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql/mysql_escape_handler.rs",
+      "sha256": "99581100773a3be5129ccaab2fce79e9e2cc3deb4a3b6846b0ecdc475f303c7b"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/escape_spi.rs",
+      "sha256": "5bb7e4f5f1796c0a49d3c170f097339c9e5d53a28c11c42fc038719acedcee06"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/escape_pk_java.rs",
+      "sha256": "8b3a2de1bdd72653a5ef57f04220d085975a4cfaa37a49f2747dc0c24ba92ccd"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/fixtures/escape-spi-java.tsv",
+      "sha256": "37562eb066db951d58e7d1f56216e0d1333ebcb67095949ae458dfce40d9d789"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/fixtures/escape-spi-reentry-java.tsv",
+      "sha256": "7e55cc68fd67ce38d66c38789e0ae2f0ba3a6dd31be0b625c84286122f3de9b5"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/EscapeSpiOracle.java",
+      "sha256": "22165ded2c8092c773a4152f4792d50c0d7c9cce6c8fce0102def89de28155ea"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/EscapeSpiReentryOracle.java",
+      "sha256": "179faaf2fb1b3559e62fcccab13020ba3356cabf7d85715953fefd0b035b3a3b"
+    }
+  ],
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

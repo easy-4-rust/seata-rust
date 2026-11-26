@@ -1,0 +1,18 @@
+# Seata V1 binary payload fixtures
+
+The 29 `.bin` files contain `uint16_be(message_type) || codec_body`, exactly as recorded in `tools/go-golden-vectors/expected.json`. These are serialized payloads, **not complete TCP frames**. They cover 25 base message types and four selected failure variants.
+
+Supplemental [failure_variants](failure_variants/README.md) holds seven separate Go/Java pairs: four compatible, three OPEN mismatches. Those 14 files are outside the original29 corpus and never overwrite it.
+
+The separate [handler_matrix](handler_matrix/README.md) records78 actual Java handler/auth outputs with independent normalized field expectations from a fresh135-test run. One unencodable case remains diagnostic-only; Go differences/state gaps are not counted as compatible. Original29 hashes are unchanged.
+
+`manifest.json` records pinned Java/Go commits, protocol version, serializer/compressor, message codec, typed fixture input reference/body bytes, file lengths and SHA-256 values. Its source JSON hash normalizes CRLF checkout line endings to LF; runtime evidence preserves the raw input hash separately. Payload bytes are never normalized.
+
+From repository root:
+
+```text
+python tools/go-golden-vectors/export_payload_fixtures.py
+python -m unittest discover -s tools/go-golden-vectors -p test_export_payload_fixtures.py -v
+```
+
+The exporter validates the full input/destination set first and refuses to overwrite different files. Same-byte exports are repeatable, including across CRLF/LF checkouts. Generation is not runtime certification: [Java evidence](../../../../docs/phase-0/evidence/local-java-payloads-20261112/README.md), [Rust evidence](../../../../docs/phase-0/evidence/local-rust-payloads-20261112/README.md) and [validation ledger](../../../../docs/phase-0/validation-ledger.md) describe tested scope. All 29 samples now pass independent Rust test codecs, with bounded malformed-input checks; formal production protocol and full-variant certification remain open.

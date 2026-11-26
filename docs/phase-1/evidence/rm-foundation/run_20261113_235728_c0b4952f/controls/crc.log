@@ -1,0 +1,31 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_foundation_20261113_235728_c0b4952f\crc\crates\seata_rm)
+warning: unused variable: `expected`
+   --> crates\seata_rm\src\store\file_branch_store.rs:239:17
+    |
+239 |             let expected =
+    |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_expected`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-rm` (lib) generated 1 warning (run `cargo fix --lib -p seata-rm` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.34s
+     Running tests\journal.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\journal-056ec008a226e2bc.exe)
+
+running 1 test
+test damaged_version_checksum_or_partial_tail_is_never_silently_truncated ... FAILED
+
+failures:
+
+---- damaged_version_checksum_or_partial_tail_is_never_silently_truncated stdout ----
+
+thread 'damaged_version_checksum_or_partial_tail_is_never_silently_truncated' (75404) panicked at crates\seata_rm\tests\journal.rs:262:9:
+assertion failed: FileBranchStore::open(file.clone(), options()).await.is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    damaged_version_checksum_or_partial_tail_is_never_silently_truncated
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p seata-rm --test journal`

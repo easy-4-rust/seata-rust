@@ -1,0 +1,6 @@
+Independent read-only review: /root/rust_payload_review, precise-context fork without parent history.
+Scope: new test-only payload codecs, cfg(test) include, later Java optionality test and runner changes.
+Initial findings: P2 nullable GlobalReport status sentinel 0xff omitted; P2 registration zero-length version incorrectly equated with Java null.
+Resolution: observed failing regressions for both; Option<GlobalStatus> special case only0xff; wire_version explicitly separates bytes from java_version(default) constructor semantics; independent pinned Java oracle3cases passed.
+Recheck: both P2 resolved; no new correctness findings. No files changed or builds/tests run by reviewer.
+Nonblocking strengthening: exact nullable-report expected object and rejection21..254. Both added; present-version override and absent-wire preservation also asserted. Final primary-agent full Rust73tests passed, fmt/Clippy0.

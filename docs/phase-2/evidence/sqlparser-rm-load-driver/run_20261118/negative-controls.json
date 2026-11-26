@@ -1,0 +1,46 @@
+[
+  {
+    "name": "fallback-on-any-context-error",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_load_driver",
+      "unrelated_errors_stop_the_current_stage_without_wrapping",
+      "--",
+      "--exact"
+    ],
+    "cwd": "D:\\codex-builds\\seata_jdbc_load_driver_mutant_hka4v2_2",
+    "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+    "baseline_sha256": "1a6cbf02924dc1c012fbca21d5b0503b430d14b8a70c316a6d2f2f336cc9c3b0",
+    "mutant_sha256": "43459921a344041a5437757cd886dd2110336a4ba540c58a52da81150190ea8c",
+    "target": "unrelated_errors_stop_the_current_stage_without_wrapping",
+    "exit_code": 101
+  },
+  {
+    "name": "lose-access-subclass",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_load_driver",
+      "loader_dispatch_matches_original_java_profiles",
+      "--",
+      "--exact"
+    ],
+    "cwd": "D:\\codex-builds\\seata_jdbc_load_driver_mutant_hka4v2_2",
+    "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+    "baseline_sha256": "1a6cbf02924dc1c012fbca21d5b0503b430d14b8a70c316a6d2f2f336cc9c3b0",
+    "mutant_sha256": "ed25afcbe334fa1c8e5630c36429ff272dabfacb0953250b6e9eefa42c312ee7",
+    "target": "loader_dispatch_matches_original_java_profiles",
+    "exit_code": 101
+  }
+]

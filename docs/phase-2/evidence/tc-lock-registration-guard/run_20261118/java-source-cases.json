@@ -1,0 +1,66 @@
+[
+  {
+    "case": "empty",
+    "key": "lock_text:",
+    "expected_rows": [],
+    "expected_backend_calls": 0
+  },
+  {
+    "case": "jdk-whitespace",
+    "key": "lock_text: ",
+    "expected_rows": [],
+    "expected_backend_calls": 0
+  },
+  {
+    "case": "mixed-blank",
+    "key": "lock_text:,valid",
+    "expected_rows": [
+      {
+        "table": "lock_text",
+        "pk": "valid"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "semicolon",
+    "key": "lock_text:a;b",
+    "expected_rows": [
+      {
+        "table": "lock_text",
+        "pk": "a"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "binary-list",
+    "key": "lock_binary:[0, -1]",
+    "expected_rows": [
+      {
+        "table": "lock_binary",
+        "pk": "[0"
+      },
+      {
+        "table": "lock_binary",
+        "pk": " -1]"
+      }
+    ],
+    "expected_backend_calls": 1
+  },
+  {
+    "case": "safe",
+    "key": "lock_binary:[-1];lock_text: ",
+    "expected_rows": [
+      {
+        "table": "lock_binary",
+        "pk": "[-1]"
+      },
+      {
+        "table": "lock_text",
+        "pk": " "
+      }
+    ],
+    "expected_backend_calls": 1
+  }
+]

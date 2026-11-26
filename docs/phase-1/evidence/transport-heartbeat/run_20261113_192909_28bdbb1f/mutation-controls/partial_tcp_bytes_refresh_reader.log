@@ -1,0 +1,39 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling windows-link v0.2.1
+   Compiling thiserror v2.0.21
+   Compiling bytes v1.12.1
+   Compiling pin-project-lite v0.2.17
+   Compiling windows-sys v0.61.2
+   Compiling syn v3.0.10
+   Compiling socket2 v0.6.5
+   Compiling mio v1.2.4
+   Compiling thiserror-impl v2.0.21
+   Compiling tokio-macros v2.7.2
+   Compiling tokio v1.54.1
+   Compiling seata-protocol v0.1.0 (D:\codex-builds\seata-heartbeat-controls-86048c230a7f\crates\seata_protocol)
+   Compiling seata-transport v0.1.0 (D:\codex-builds\seata-heartbeat-controls-86048c230a7f\crates\seata_transport)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.05s
+     Running tests\heartbeat_idle.rs (D:/cargo-target/seata-rust-heartbeat-controls\debug\deps\heartbeat_idle-741cbec2b4dcf3fd.exe)
+
+running 1 test
+test partial_frame_drips_cannot_keep_a_generation_alive ... FAILED
+
+failures:
+
+---- partial_frame_drips_cannot_keep_a_generation_alive stdout ----
+
+thread 'partial_frame_drips_cannot_keep_a_generation_alive' (34356) panicked at crates\seata_transport\tests\heartbeat_idle.rs:315:5:
+assertion failed: matches!(handle.request(begin("partial"), Duration::from_secs(2)).await,
+    Err(CallError::UnknownOutcome
+    { reason: TransportError::ReadIdleTimeout, .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    partial_frame_drips_cannot_keep_a_generation_alive
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 2.01s
+
+error: test failed, to rerun pass `-p seata-transport --test heartbeat_idle`

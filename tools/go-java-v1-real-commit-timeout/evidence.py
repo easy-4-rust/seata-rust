@@ -1,0 +1,102 @@
+"""Bind real mixed-mode branches, persisted effects, operator boundaries and lost frames."""
+import importlib.util,json,re
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2]
+spec=importlib.util.spec_from_file_location('commit_actual_wire',ROOT/'tools/go-java-v1-real-at/verify.py');wire=importlib.util.module_from_spec(spec);spec.loader.exec_module(wire)
+ACTION='owned-real-commit-action'
+
+def snapshot(path,phase):
+ rows=[line.split('\t') for line in Path(path).read_text(encoding='utf-8').splitlines()];names=['business','undo','global','branch','lock','commit_account','reservation'];groups={name:[row[1:] for row in rows if row[0]==name] for name in names}
+ widths={'business':2,'undo':4,'global':3,'branch':5,'lock':6,'commit_account':3,'reservation':4}
+ if any(len(row)!=widths[name] for name,values in groups.items() for row in values):raise RuntimeError('Malformed tagged SQL row')
+ if not rows or len(rows)!=sum(map(len,groups.values())) or groups['business']!=[['1','900']] or len(groups['commit_account'])!=1 or len(groups['reservation'])!=1:raise RuntimeError('Independent mixed business snapshot missing')
+ if len(groups['global'])>1 or len(groups['undo'])>1 or len(groups['branch'])>2:raise RuntimeError('Unexpected mixed persisted record count')
+ xid=phase['xid'];at=phase['branch_id'];tcc=phase['tcc_branch_id']
+ for name in ['undo','global','branch','lock','reservation']:
+  if any(row[0]!=xid for row in groups[name]):raise RuntimeError('Persisted original XID changed')
+ branch_ids={}
+ for row in groups['branch']:
+  kind=row[4]
+  if kind not in ['AT','TCC'] or kind in branch_ids:raise RuntimeError('Stored branch type ambiguous')
+  branch_ids[kind]=int(row[1])
+ if groups['undo'] and int(groups['undo'][0][1])!=at:raise RuntimeError('Stored AT Undo branch changed')
+ reservation=groups['reservation'][0];account=groups['commit_account'][0]
+ if len(account)!=3 or account[0]!='1' or len(reservation)!=4:raise RuntimeError('Persistent TCC business shape differs')
+ return dict(xid=xid,balance=900,status=int(groups['global'][0][1]) if groups['global'] else None,at_branch=branch_ids.get('AT'),tcc_branch=branch_ids.get('TCC'),locks=len(groups['lock']),undo_hex=groups['undo'][0][3] if groups['undo'] else None,undo_status=int(groups['undo'][0][2]) if groups['undo'] else None,reserved=int(account[1]),confirmed=int(account[2]),effect_count=int(reservation[3]),tcc_phase=reservation[2],tcc_xid=reservation[0],tcc_effect_branch=int(reservation[1]),stored=groups)
+
+def derive(directory):
+ directory=Path(directory);phase=json.loads((directory/'phase-one.json').read_bytes());snapshots={name:snapshot(directory/(name+'.tsv'),phase) for name in ['timeout','restart','lost','second_restart','final']}
+ ids={0:phase['branch_id'],1:phase['tcc_branch_id']};branch_types={value:kind for kind,value in ids.items()};resources={};stage_report=[];registrations=[];errors=[];begins=commits=rollbacks=withheld=lost=0;all_callbacks=[];correlations=True
+ for name in ['timeout','restart','lost','second_restart','final']:
+  body=json.loads((directory/('console-'+name.replace('_','-')+'.json')).read_bytes());before=name in ['timeout','restart'];final=name=='final';data=body.get('data',[])
+  if str(body.get('code'))!='200' or body.get('total')!=(0 if final else 1) or len(data)!=(0 if final else 1):raise RuntimeError('Actual console session count differs')
+  if not final:
+   row=data[0];branches=row.get('branchSessionVOs') or [];expected=set(ids.values()) if before else {ids[1]}
+   if row.get('xid')!=phase['xid'] or row.get('status')!=16 or {int(b['branchId']) for b in branches}!=expected or len(branches)!=len(expected):raise RuntimeError('Actual console original16 branches differ')
+ if ('The Global session '+phase['xid']+' has changed the status to CommitRetryTimeout, need to be handled it manually.').encode() not in (directory/'initial/tc-stdout.log').read_bytes():raise RuntimeError('Natural16 scheduler transition missing')
+ for name in ['initial','operator_loss','operator_replay']:
+  stage=directory/name;events=json.loads((stage/'proxy-events.json').read_bytes());state=json.loads((stage/'proxy-result.json').read_bytes());errors+=state['errors']
+  if state['faults'] or state['fragmented_directions']!=['sdk-to-tc','tc-to-sdk']:raise RuntimeError('Unexpected mixed proxy mutation')
+  if [e['sequence'] for e in events]!=list(range(1,len(events)+1)) or any(e['event'] not in ['connected','wire','operator-command-start','commit-request-withheld','successful-tcc-response-lost'] for e in events):raise RuntimeError('Ambiguous actual proxy ordering/control')
+  rows=[(event,wire.decode(event)) for event in events if event['event']=='wire'];regs={};accepted=[];branches={};callbacks=[];replies=[];commands=[e for e in events if e['event']=='operator-command-start']
+  if name!='initial' and (len(commands)!=1 or commands[0]['xid']!=phase['xid']):raise RuntimeError('Operator boundary missing')
+  for event,value in rows:
+   code=value['code'];key=(value['connection'],value['id']);to_tc=event['direction']=='sdk-to-tc'
+   expected={1:(True,0),2:(False,1),3:(False,0),4:(True,1),7:(True,0),8:(False,1),11:(True,0),12:(False,1),13:(True,0),14:(False,1),101:(True,2),102:(False,1),103:(True,0),104:(False,1)}
+   if code in [5,6] or (code in expected and (to_tc,value['kind'])!=expected[code]):raise RuntimeError('Actual mixed protocol direction/envelope differs')
+   if to_tc and code==1:begins+=1
+   if to_tc and code==7:commits+=1
+   if to_tc and code==9:rollbacks+=1
+   if to_tc and code==103:regs[key]=value
+   if not to_tc and code==104:
+    if key not in regs or not value['identified']:raise RuntimeError('Rejected/unmatched real RM registration')
+    accepted.append(dict(resource=regs[key]['resource'],connection=value['connection'],sequence=value['sequence']))
+   if to_tc and code==11:branches[key]=value
+   if not to_tc and code==12:
+    if key not in branches or value['result']!=1:raise RuntimeError('Actual branch registration rejected/unmatched')
+    branch=branches[key];kind=branch['branch_type']
+    if kind not in ids or value['branch_id']!=ids[kind] or branch['xid']!=phase['xid'] or branch['lock_key']!=('ACCOUNTS:1;' if kind==0 else '') or kind in resources:raise RuntimeError('Original mixed branch/lock mapping differs')
+    resources[kind]=branch['resource']
+   if not to_tc and code==3:
+    kind=value['branch_type']
+    if kind not in ids or (value['xid'],value['branch_id'])!=(phase['xid'],ids[kind]):raise RuntimeError('Commit callback original branch/type differs')
+    if name!='initial' and event['sequence']<=commands[0]['sequence']:raise RuntimeError('Retry16 replayed before operator command')
+    if not any(reg['connection']==value['connection'] and reg['resource']==value['resource'] and reg['sequence']<value['sequence'] for reg in accepted):raise RuntimeError('Callback precedes actual resource identification')
+    callbacks.append(value);all_callbacks.append(value)
+   if to_tc and code==4:
+    matched=[request for request in callbacks if (request['connection'],request['id'])==key]
+    if len(matched)!=1 or (value['xid'],value['branch_id'],value['result'],value['status'])!=(phase['xid'],matched[0]['branch_id'],1,5):raise RuntimeError('Actual successful Commit response correlation differs')
+    replies.append(value)
+  drops={kind:[e for e in events if e['event']==kind] for kind in ['commit-request-withheld','successful-tcc-response-lost']}
+  if name=='initial':
+   if not callbacks or replies or len(drops['commit-request-withheld'])!=len(callbacks) or drops['successful-tcc-response-lost']:raise RuntimeError('Initial real Commit requests not fully withheld')
+   if {v['branch_type'] for v in callbacks}!={0,1}:raise RuntimeError('Both actual AT/TCC commit paths must be blocked')
+  elif name=='operator_loss':
+   if len(callbacks)!=2 or {v['branch_type'] for v in callbacks}!={0,1} or len(replies)!=2 or drops['commit-request-withheld'] or len(drops['successful-tcc-response-lost'])!=1:raise RuntimeError('First operator must lose only one TCC success and complete real AT')
+   if {reply['branch_id'] for reply in replies}!=set(ids.values()):raise RuntimeError('First operator requires one AT and one TCC success response')
+  elif len(callbacks)!=1 or callbacks[0]['branch_type']!=1 or len(replies)!=1 or any(drops.values()):raise RuntimeError('Final original TCC replay must be delivered successfully')
+  for event in drops['commit-request-withheld']+drops['successful-tcc-response-lost']:
+   value=wire.decode(event);code=3 if event['event']=='commit-request-withheld' else 4;actual=[r for _,r in rows if (r['frame'],r['connection'],r['id'],r['code'])==(value['frame'],value['connection'],value['id'],code)]
+   if len(actual)!=1 or event['sequence']<=actual[0]['sequence']:raise RuntimeError('Dropped frame is not actual preceding original wire')
+   if code==4 and value['branch_id']!=ids[1]:raise RuntimeError('Only actual TCC response may be lost')
+   withheld+=code==3;lost+=code==4
+  for request in callbacks:
+   if name!='initial' and sum((reply['connection'],reply['id'],reply['branch_id'])==(request['connection'],request['id'],request['branch_id']) for reply in replies)!=1:raise RuntimeError('Each operator callback requires one original success response')
+   if name=='initial' and sum(e['frame_hex']==request['frame'].hex() and (e['connection'],e['id'])==(request['connection'],request['id']) for e in drops['commit-request-withheld'])!=1:raise RuntimeError('Each initial Commit request must be withheld once')
+  registrations.append({r['resource'] for r in accepted}.issuperset(set(resources.values())) and len(resources)==2);stage_report.append(dict(stage=name,registrations=len(accepted),callbacks=len(callbacks),success_responses=len(replies),connections=state['connections']))
+ if set(resources)!={0,1} or resources[1]!=ACTION or resources[0]==resources[1]:raise RuntimeError('Two distinct real resources missing')
+ for callback in all_callbacks:
+  if callback['resource']!=resources[callback['branch_type']]:raise RuntimeError('Callback changed original resource')
+ for snapshot_value in snapshots.values():
+  for row in snapshot_value['stored']['branch']:
+   kind=branch_types[int(row[1])]
+   if row[3:]!=[resources[kind],'AT' if kind==0 else 'TCC']:raise RuntimeError('Stored resource/type differs')
+ runtime=json.loads((directory/'runtime.json').read_bytes());operators=[json.loads((directory/name/'operator.json').read_bytes()) for name in ['operator_loss','operator_replay']];results=[(o['http_status'],str(json.loads(o['body']).get('code'))) for o in operators]
+ for index,name in enumerate(['initial','operator_loss','operator_replay']):
+  raw=(directory/name/'sdk-stdout.log').read_bytes();pid=str(runtime['sdk_pids'][index]).encode();mode=b'prepare' if index==0 else b'serve'
+  if b'REAL_COMMIT_PROCESS '+mode+b' '+pid not in raw or b'REAL_COMMIT_SERVING '+pid not in raw:raise RuntimeError('Actual complete SDK process identity differs')
+  if index>0 and ('REAL_TCC_FINISHED '+phase['xid']+' '+str(ids[1])+' committed 1 '+str(runtime['sdk_pids'][index])).encode() not in raw:raise RuntimeError('Real TCC business confirmation proof missing')
+ if phase['process_id']!=runtime['sdk_pids'][0]:raise RuntimeError('Original phase-one process differs')
+ loss_log=(directory/'operator_loss/tc-stdout.log').read_bytes();target=("request:BranchCommitRequest{xid='"+phase['xid']+"', branchId="+str(ids[1])+", branchType=TCC").encode()
+ if not any(b'wait response error:' in line and target in line for line in loss_log.splitlines()) or ('Committing global transaction is NOT done, xid = '+phase['xid']).encode() not in loss_log or ('Commit branch transaction successfully, xid = '+phase['xid']+' branchId = '+str(ids[0])).encode() not in loss_log:raise RuntimeError('First operator lacks exact original TCC response timeout and real AT completion logs')
+ return dict(phase=phase,snapshots=snapshots,sdk_pids=runtime['sdk_pids'],tc_pids=runtime['tc_pids'],database_starts=runtime['database_starts'],withheld=withheld,lost=lost,tm_begins=begins,tm_commits=commits,tm_rollbacks=rollbacks,stages_registered=registrations,callback_correlations=correlations,original_branches=len(resources)==2,operator_results=results,proxy_errors=errors,stages=stage_report)

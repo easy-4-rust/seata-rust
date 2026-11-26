@@ -1,0 +1,72 @@
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+error[E0432]: unresolved imports `seata_protocol::protocol::MergeResultMessage`, `seata_protocol::protocol::MergedWarpMessage`
+ --> crates\seata_protocol\tests\merge_payloads.rs:3:32
+  |
+3 | use seata_protocol::protocol::{MergeResultMessage, MergedWarpMessage};
+  |                                ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^ no `MergedWarpMessage` in `protocol`
+  |                                |
+  |                                no `MergeResultMessage` in `protocol`
+
+error[E0432]: unresolved import `seata_protocol::PayloadLimits`
+ --> crates\seata_protocol\tests\merge_payloads.rs:9:42
+  |
+9 |     GlobalStatus, Message, PayloadCodec, PayloadLimits, ProtocolError, ResultCode,
+  |                                          ^^^^^^^^^^^^^ no `PayloadLimits` in the root
+
+error[E0599]: no associated function or constant named `with_limits` found for struct `PayloadCodec` in the current scope
+  --> crates\seata_protocol\tests\merge_payloads.rs:14:19
+   |
+14 |     PayloadCodec::with_limits(PayloadLimits::new(64 * 1024, 512, 1024, 16).unwrap())
+   |                   ^^^^^^^^^^^ associated function or constant not found in `PayloadCodec`
+   |
+note: if you're trying to build a new `PayloadCodec`, consider using `PayloadCodec::new` which returns `Result<PayloadCodec, ProtocolError>`
+  --> crates\seata_protocol\src\serializer\payload_codec.rs:11:5
+   |
+11 |     pub fn new(maximum_payload_length: usize) -> Result<Self, ProtocolError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no variant, associated function, or constant named `MergedWarpMessage` found for enum `Message` in the current scope
+  --> crates\seata_protocol\tests\merge_payloads.rs:22:14
+   |
+22 |     Message::MergedWarpMessage(MergedWarpMessage { msgs, msg_ids })
+   |              ^^^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `Message`
+
+error[E0599]: no variant, associated function, or constant named `MergeResultMessage` found for enum `Message` in the current scope
+  --> crates\seata_protocol\tests\merge_payloads.rs:25:14
+   |
+25 |     Message::MergeResultMessage(MergeResultMessage { msgs: Some(msgs) })
+   |              ^^^^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `Message`
+
+error[E0599]: no variant, associated function, or constant named `MergeResultMessage` found for enum `Message` in the current scope
+  --> crates\seata_protocol\tests\merge_payloads.rs:64:18
+   |
+64 |         Message::MergeResultMessage(MergeResultMessage { msgs:None })] {
+   |                  ^^^^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `Message`
+
+error[E0599]: no associated function or constant named `with_limits` found for struct `PayloadCodec` in the current scope
+  --> crates\seata_protocol\tests\merge_payloads.rs:87:35
+   |
+87 |         let limited=PayloadCodec::with_limits(limits);
+   |                                   ^^^^^^^^^^^ associated function or constant not found in `PayloadCodec`
+   |
+note: if you're trying to build a new `PayloadCodec`, consider using `PayloadCodec::new` which returns `Result<PayloadCodec, ProtocolError>`
+  --> crates\seata_protocol\src\serializer\payload_codec.rs:11:5
+   |
+11 |     pub fn new(maximum_payload_length: usize) -> Result<Self, ProtocolError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `with_limits` found for struct `PayloadCodec` in the current scope
+  --> crates\seata_protocol\tests\merge_payloads.rs:91:29
+   |
+91 |     let exact=PayloadCodec::with_limits(PayloadLimits::new(bytes.len(),2,4,2).unwrap());
+   |                             ^^^^^^^^^^^ associated function or constant not found in `PayloadCodec`
+   |
+note: if you're trying to build a new `PayloadCodec`, consider using `PayloadCodec::new` which returns `Result<PayloadCodec, ProtocolError>`
+  --> crates\seata_protocol\src\serializer\payload_codec.rs:11:5
+   |
+11 |     pub fn new(maximum_payload_length: usize) -> Result<Self, ProtocolError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-protocol` (test "merge_payloads") due to 8 previous errors

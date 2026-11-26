@@ -1,0 +1,39 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0599]: no method named `with_tls_client_identity_pem` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\tests\options_contract.rs:16:33
+   |
+16 |     ] { assert!(options.clone().with_tls_client_identity_pem(cert,private).is_err()); }
+   |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `with_tls_ca_pem` with a similar name, but with different arguments
+  --> crates\seata_db_mysql\src\mysql_options.rs:84:5
+   |
+84 |     pub fn with_tls_ca_pem(mut self, certificate: Vec<u8>) -> Result<Self, DbError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `with_tls_client_identity_pem` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\tests\options_contract.rs:17:33
+   |
+17 |     let secured=options.clone().with_tls_client_identity_pem(certificate.clone(),key.clone()).unwrap();
+   |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `with_tls_ca_pem` with a similar name, but with different arguments
+  --> crates\seata_db_mysql\src\mysql_options.rs:84:5
+   |
+84 |     pub fn with_tls_ca_pem(mut self, certificate: Vec<u8>) -> Result<Self, DbError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `with_tls_client_identity_pem` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\tests\options_contract.rs:21:59
+   |
+21 |     assert!(options.with_insecure_loopback_tls().unwrap().with_tls_client_identity_pem(certificate,key).is_err());
+   |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `with_tls_ca_pem` with a similar name, but with different arguments
+  --> crates\seata_db_mysql\src\mysql_options.rs:84:5
+   |
+84 |     pub fn with_tls_ca_pem(mut self, certificate: Vec<u8>) -> Result<Self, DbError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "options_contract") due to 3 previous errors

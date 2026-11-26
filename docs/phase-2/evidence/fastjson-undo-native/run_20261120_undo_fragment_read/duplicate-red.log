@@ -1,0 +1,31 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.03s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 3 tests
+test mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order ... ok
+test mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads ... ok
+
+failures:
+
+---- mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads stdout ----
+
+thread 'mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads' (55608) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:155:5:
+assertion `left == right` failed
+  left: Some([22, 83, 69, 76, 69, 67, 84, 32, 114, 111, 108, 108, 98, 97, 99, 107, 95, 105, 110, 102, 111, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 61, 63, 32, 70, 79, 82, 32, 85, 80, 68, 65, 84, 69])
+ right: Some([3, 82, 79, 76, 76, 66, 65, 67, 75])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads' (55608) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:69:9:
+assertion failed: matches!(result,
+    Err(DbError::Unsupported
+    { feature: "Undo orphan/missing child membership" }))
+
+
+failures:
+    mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

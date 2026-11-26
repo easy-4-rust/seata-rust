@@ -1,0 +1,11 @@
+MYSQL_UNDO_FENCE_RUN E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\docs\phase-2\evidence\mysql-undo-fence\run_20261116_044238_b3c0212f
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-undo-fence\live.py", line 129, in <module>
+    parser=argparse.ArgumentParser();parser.add_argument('--rust',choices=['1.99','1.85'],default='1.99');parser.add_argument('--case');parser.add_argument('--red',action='store_true');parser.add_argument('--library',action='store_true');parser.add_argument('--red-reason',default='Undo fence persistence');parser.add_argument('--fault',choices=['drop_ok','block_commit','delay_ok']);parser.add_argument('--cleanup-control',action='store_true');args=parser.parse_args();run(args.rust,args.case,args.red,args.red_reason,args.library,args.fault,args.cleanup_control)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-undo-fence\live.py", line 118, in run
+    need(observer_error is None,'Observer cleanup failed after owned container cleanup')
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-undo-fence\live.py", line 22, in need
+    if not value:raise ValueError(reason)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Observer cleanup failed after owned container cleanup

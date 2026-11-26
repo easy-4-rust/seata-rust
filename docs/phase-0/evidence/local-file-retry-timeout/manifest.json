@@ -1,0 +1,673 @@
+{
+  "scope": "Seeded FILE diagnostic only; recovered failures are NOT acceptance passes",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "jar_sha256": "aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5",
+  "rust_probe_sha256": "6c9812dd8b232c497ba40bed014c437dcd69e3eb425bc4e6f5a2152b047ddf09",
+  "fixture_class_sha256": "dc0f7e0b8700053deaddb1cab04844d5ed1fdf0872df6e159710d5121178ad84",
+  "rust_tests": 96,
+  "initial_combined_java_tests": 140,
+  "final_fresh_java_tests": 5,
+  "reports": [
+    {
+      "suite": "org.apache.seata.serializer.seata.PayloadGoldenCorpusTest",
+      "tests": 29,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.serializer.seata.PayloadOptionalityTest",
+      "tests": 3,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.serializer.seata.FailureVariantCompatibilityTest",
+      "tests": 7,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.core.rpc.netty.v1.ProtocolV1GoldenFrameTest",
+      "tests": 6,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.server.AbstractTCInboundHandlerExceptionTest",
+      "tests": 8,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.server.TCInboundFailureMatrixTest",
+      "tests": 72,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.core.rpc.processor.server.RegistrationProcessorAuthTest",
+      "tests": 7,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.server.session.SessionHolderRetryTimeoutRecoveryTest",
+      "tests": 3,
+      "timestamp": null,
+      "origin": "initial combined140 run"
+    },
+    {
+      "suite": "org.apache.seata.server.session.FileRetryTimeoutProcessTest",
+      "tests": 5,
+      "timestamp": null,
+      "origin": "final focused run"
+    }
+  ],
+  "production_source_audit": [
+    {
+      "path": "server/src/main/java/org/apache/seata/server/storage/file/session/FileSessionManager.java",
+      "raw_sha256": "a32957ff246a6c403de7392b6a1d90a9afd4931ba16d9448a86b444428d9d8dd",
+      "lf_sha256": "b13d4fcdbbfa0fd57a8835091a4ca7541cb874aaaf8468506bffa86a7de8664c",
+      "pinned_blob": "0836432f0484823f38a399d455707cac5106ff7d"
+    },
+    {
+      "path": "server/src/main/java/org/apache/seata/server/storage/file/store/FileTransactionStoreManager.java",
+      "raw_sha256": "4edac1802e2531ef3338eee9aff37de2a3568754be049cefa394f04b33f1d258",
+      "lf_sha256": "1636fa5e1f81a6a1cd074ab8b45735419e596c39d53c9d53315828cd435e6270",
+      "pinned_blob": "56be68d0c1e3d13e6501800b28b7ea24d6384799"
+    },
+    {
+      "path": "server/src/main/java/org/apache/seata/server/session/GlobalSession.java",
+      "raw_sha256": "44d0693da24fc61c2f2d7ba6fda75544592ead80641d28b82d75a47f6230222d",
+      "lf_sha256": "cb66c88e716d218b022e33d0841631952a8e016e43d8bdd1c83c06f1fdee69f4",
+      "pinned_blob": "6768b013e88e0ecb2f74cff2087fb897a30f9659"
+    },
+    {
+      "path": "server/src/main/java/org/apache/seata/server/session/BranchSession.java",
+      "raw_sha256": "6f85b01c21f19e35d358428bd1a3c95d8333808e54c0faabf026c390f45d4da0",
+      "lf_sha256": "40c528207c07edc060eeedc1a15859eee556022d984dd8fc7d3e2cf598fb0615",
+      "pinned_blob": "422b31f4cc54fdd7abddaca1f3d745a76e4ccd08"
+    },
+    {
+      "path": "server/src/main/java/org/apache/seata/server/session/SessionHolder.java",
+      "raw_sha256": "be31cedff1f30a9d27ac98f296a45d7424751e02963060d169527c76ad2df5dc",
+      "lf_sha256": "43c5c9f02cdba170a1d461ad0f30c4d6503c6b7a2f8f7495062eed70ff0483a0",
+      "pinned_blob": "32baf181503a3c7bd5235a3fbfc2c094ef3eec8d"
+    }
+  ],
+  "runs": [
+    {
+      "run": "run_20261112_141507_7ff0e651",
+      "diagnostic_cases": 3,
+      "recovery_acceptance": "only Begin control; retry-timeout acceptance remains open"
+    },
+    {
+      "run": "run_20261112_141913_1d63f1a8",
+      "diagnostic_cases": 3,
+      "recovery_acceptance": "only Begin control; retry-timeout acceptance remains open"
+    }
+  ],
+  "unverified": [
+    "naturally scheduled retry-timeout",
+    "abrupt writer crash",
+    "console/manual retry",
+    "DB/Redis/RAFT",
+    "real RM/Undo compensation"
+  ],
+  "source_files": [
+    {
+      "path": "tools/java-tc-integration/config/application.yml",
+      "sha256": "042de4f4ac1916dc4a1c5f1a4d96fc87c8221e5716611487dee23f0ece087094"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/Cargo.lock",
+      "sha256": "ae19b75f9f07744e338dec9c0206fc08186a7b4bf59e6280be921070417e98d7"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/Cargo.toml",
+      "sha256": "fcfdd14e59403555a5efe11ff3323e0799855b4a27e034e1dbad708d0580e365"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/branch_callback_state.rs",
+      "sha256": "c95e12f19868d313cca22fbb011a2ec0687f0cb166e9904b4051bdc33b2e0db8"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/branch_end_request.rs",
+      "sha256": "aeb9f289dfe2c851274fa3c1a1569e46f9d142914b0b822be19dc630b945a815"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/branch_probe.rs",
+      "sha256": "b82f1e6c4935addecfbd10fe7bf392496445e0d8976997cf69dd282bc1a49caa"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/file_timeout_probe.rs",
+      "sha256": "ab3e1db8d7181896c1523f0eb337afb4a47aade0afd9a56f09a10fca2b36ca62"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/main.rs",
+      "sha256": "b45ff8018127be1668e6ab3d5923bc68e35742555926a50968451401548eef3e"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/abstract_transaction_response.rs",
+      "sha256": "1d9d6202a5df2f6c049b1e52f5c7515bea84c030505d0f0075181568e5de8b9f"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_commit_request.rs",
+      "sha256": "12c71e4155558ab751f1fad867d8b39c00fcccb5611e332f13852df799bc7114"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_commit_response.rs",
+      "sha256": "fe7c2fbf30a5f0a7fd70d82ddcd9dcef93f405d9d96d284fd88ea1b39bf6678b"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_register_request.rs",
+      "sha256": "684668921863915185a4719974e00f91f0ccc8a534726d65153a53c3e9e7bd28"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_register_response.rs",
+      "sha256": "065b0a7870e537f182c19e9171bb1537271e14f768c2fb2bab3d597e2b456a78"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_report_request.rs",
+      "sha256": "5354f9deeb8eeff2f9ab90639673a2e333532db8f56ca76c5db39b2868dbca9d"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_report_response.rs",
+      "sha256": "83bdb57921f2e245037890ccefd8443393a3e1c0afd27b27e983685b7136b20b"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_rollback_request.rs",
+      "sha256": "2b863013963b9e3081457d0bfb094665e7acf8a8ce7d0e6b8fc5a473874c8890"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_rollback_response.rs",
+      "sha256": "0ddd2d656428999f0c5f90deb5c83a10b066d6d0f01a8bec127d564c7d76b57d"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_status.rs",
+      "sha256": "141d981cf1440289d5f9f765e5bfff0ede293378d840786d1b9de631c15df743"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/branch_type.rs",
+      "sha256": "02d8a5d2964f5fe2abd6c1cb14fea7813975ff55c5da1b661589111dc5b38ca3"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/failure_variant_tests.rs",
+      "sha256": "db30ac1e017c5e1e684731ea93babbc1237d3973c6de414f86f11b0ae5bdaab5"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_begin_request.rs",
+      "sha256": "dda74af1059ae83730beaec2334f9c43689378a82f9f206d05a0a3b491d246a0"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_begin_response.rs",
+      "sha256": "ad24675741c3c35a65b513abde2160d9f763151a695908817aeabf7a4b3611f2"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_commit_request.rs",
+      "sha256": "c4d5910ae2735ea19f7f3d24ce45320f4e1a4dea078f649cd906044e29e1277c"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_commit_response.rs",
+      "sha256": "94afa694473c2772b651a64f42aae525204304c886a0d40a5e1787858ebaaf54"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_lock_query_request.rs",
+      "sha256": "c73fd62fd5add57d568579dba7a56f4ce9614ba6490a80097c04f106ec664890"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_lock_query_response.rs",
+      "sha256": "b4670ccf3b803043fa43e5c0f103fac97cce8829d7bea54da6ab1443a27035b2"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_report_request.rs",
+      "sha256": "5e785571ab90aaa31332e4ade031383ba23fadf0a937e05a8bc97472a169f7f8"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_report_response.rs",
+      "sha256": "f381c22b75ab21f06c937787c7a4588d213f818d6de977b923059261f979fcf2"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_rollback_request.rs",
+      "sha256": "3d632512b11cff9b996db0234c425ca2872cdc541b7e75d97408b18edf788814"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_rollback_response.rs",
+      "sha256": "596442d2909a3f0b57f8bdf2755b98c5aa644c6e6147cf1f25c901c54ccb36be"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_status.rs",
+      "sha256": "60f43dee33e9f412607131d370ebf92b699944bf578ff6605ab911adcd371451"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_status_request.rs",
+      "sha256": "73c2ee117b5f6d4527da98bd9882ef7126cf77ae630b64a41df0dce03f517de6"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/global_status_response.rs",
+      "sha256": "f7b0f782026ff62f25c07130ed2e1daf249bdf530f6d89f260a252bf6d04e90e"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/handler_runtime_tests.rs",
+      "sha256": "451d8678cac937cfd7fe286a81fda01ee8f77b51660f7b46fdd964a7bdc7d0c0"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/mod.rs",
+      "sha256": "564106c89cb82c33cfb3d02d335e719b8316af4dc3e3cbd7c3a9064d8664d549"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/payload_message.rs",
+      "sha256": "3e5e0394ef78017e4bd17345de473382ebde573eaeae4991559ff49bdb94fe4c"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/register_rm_request.rs",
+      "sha256": "a6581adac6da067ac0c71ce03418cfe97d5c83cc1e105ecb63cad3b72bac20ea"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/register_rm_response.rs",
+      "sha256": "c4a7fad23658bd6889f6776be75624776a9ad5c0b75836567c6a80f3f0d8af98"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/register_tm_request.rs",
+      "sha256": "82eb70c0b70cb153eea54643eab9080cbeec827ffea5dced2f73dc7caf45aa24"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/register_tm_response.rs",
+      "sha256": "5cc31ad0641f220032bdc7e96e94d9c30ed60943cfccec89016322e7e0053fe7"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/result_code.rs",
+      "sha256": "7f93bb58b69ed9754b1feec863413003543eb0127429db7a12c0b3a3753fe9aa"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/tests.rs",
+      "sha256": "2999fdaa39b2afd308299ed5be5daef80fa527461aa1e2219b468bbcf0d16067"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/transaction_exception_code.rs",
+      "sha256": "55055c8490a5f67db01020cf932d24d5169bd3207675f609aa41ada235e9f72d"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/undo_log_delete_request.rs",
+      "sha256": "3b94c57ebd7c1f008e877aa9ee5f48ec893d85567f31101b0b4650a610666171"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/wire_reader.rs",
+      "sha256": "b21405475e84f6fa427ba00acbbdb4165b031d44d98e0db33db639aee3348753"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/payload/wire_writer.rs",
+      "sha256": "51ea29124d304f18f5a6735322ce00e92e7b36f005008d2faece00725a642992"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/pending_branch.rs",
+      "sha256": "f9ab3f9c72e4c38146132351229b6a3e8539d3d2019ae3f7b1c029991b1897e5"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/response_loss_probe.rs",
+      "sha256": "04e458897e544f24eb57ad5735f1bd29be590b2e14be9bde5baf4a5cee39a3d1"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/restart_probe.rs",
+      "sha256": "81f195db832e2a2396e23b4182cb57d1d7f89b9bfb5cc4d62195b830ad82f5d3"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/restart_record.rs",
+      "sha256": "7ea858cd18aec7c16205b0c7ac875b7001174ea5179158a1c6f69a2ef27b897d"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/transaction.rs",
+      "sha256": "9d5ed5835d28236ea43aaf8d5bdfcbd4bc81e13a41263475fcf11cc70a459b4d"
+    },
+    {
+      "path": "tools/java-tc-integration/rust-client/src/unknown_outcome.rs",
+      "sha256": "6d97f86bd5a0c5283c3b953659da4d25f521914f258335a05df2b803df0b7ba1"
+    },
+    {
+      "path": "tools/java-tc-integration/scripts/run-file-retry-timeout.ps1",
+      "sha256": "c0461d7d1afd657c9e0fc420b09d5e3946a7716c3aa068ea8964ac1613ccd6ac"
+    },
+    {
+      "path": "tools/java-v1-golden/FileRetryTimeoutProcessTest.java",
+      "sha256": "44a3c219575a621bdd156684c22b676b0e2354bc3d4273790eb8a5fc5adeaf19"
+    },
+    {
+      "path": "tools/java-v1-golden/FileRetryTimeoutStoreProbe.java",
+      "sha256": "41068422c88027f8891424651cd3c4b75ee5de7cdaea1410a55e46891a8eb4f7"
+    },
+    {
+      "path": "tools/java-v1-golden/verify.sh",
+      "sha256": "75d3eec18e5332409e8e6bbe52b52bcdc8c36e5d7b5791b3c52a3683c0e21a90"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "5a84a0422e2a832c3375cb26b12d3f572815bf89edb451be08bf530a950403fb"
+    },
+    {
+      "path": "clippy.txt",
+      "sha256": "42971a72ad8da04e89c0b51876f0c7237e267bcf09ac6096bb89854c0c1ecc84"
+    },
+    {
+      "path": "diff-check.txt",
+      "sha256": "6b8c15dc922e7749340a65485ba4e9e8af5f2552ba9172d5fa67e015e0a83a9f"
+    },
+    {
+      "path": "fmt.txt",
+      "sha256": "8ba2bb8dd60036fb4ac6ef0602ced5ef1a786b5830d76ac5e5eb526133985ba8"
+    },
+    {
+      "path": "java-initial-combined.txt",
+      "sha256": "0df7802e402be3966248621c326c56d02718e3b0110d04a7a9ccef45f118053c"
+    },
+    {
+      "path": "java-red.txt",
+      "sha256": "e9a80e0b63e2fbb0ccb19139fb130b8080e38aac6915f952201f286e40326e09"
+    },
+    {
+      "path": "latest_run.json",
+      "sha256": "c49a76e2b0dfea3f78d7ff2111dc23d10137755d3985b5c17709858516f20860"
+    },
+    {
+      "path": "live-final.txt",
+      "sha256": "c200dea22f5db4c6a0aababf3ffa3e7d20e2d19d577fb850258f337003cad1bc"
+    },
+    {
+      "path": "live-initial.txt",
+      "sha256": "32984132a7f8048c2ac019c6eb457ee81e25d2023e4918ba474e015fbe08290e"
+    },
+    {
+      "path": "preflight-crlf-negative.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8bf446c9a20fc8544bcc5dd554813be28746fad4ea97e6deab628bfb2070d065"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.core.rpc.netty.v1.ProtocolV1GoldenFrameTest.xml",
+      "sha256": "8f33db87c008c9fa9258f874bed46b50fc885ccd58ec37aa8aff78caf4410a26"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.core.rpc.processor.server.RegistrationProcessorAuthTest.xml",
+      "sha256": "ac275e579a5205978b4fa2958b2819fde61f59e3c7688fc31ab9ed7ac77f1192"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.serializer.seata.FailureVariantCompatibilityTest.xml",
+      "sha256": "70da3b5a71200ea7a253c48e10ba8db1655ff284f5a09a5e6b99bb2288ed8b44"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.serializer.seata.PayloadGoldenCorpusTest.xml",
+      "sha256": "f8bd74d5e52bf43360cebb46749245bc279712edb8de40dbe580fa2a1b8b8685"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.serializer.seata.PayloadOptionalityTest.xml",
+      "sha256": "cf395dfad7fcb27d5bbdbda6a08c2fb97cae7d5c6e81bc88b6488846deab1580"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.server.AbstractTCInboundHandlerExceptionTest.xml",
+      "sha256": "55c80047d39bb900a8a85ba1e66cefc7c5530a78b2d31671ebf516e53043ff91"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.server.session.FileRetryTimeoutProcessTest.xml",
+      "sha256": "8a446f287372b615caf78ab96fe28b1bee237ee92079c177ce0d36df32ba239d"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.server.session.SessionHolderRetryTimeoutRecoveryTest.xml",
+      "sha256": "90110bc205e15f69afe2dc4277ad63eeab26d3a943bb1ab80424203176926b9f"
+    },
+    {
+      "path": "reports/TEST-org.apache.seata.server.TCInboundFailureMatrixTest.xml",
+      "sha256": "793f94d43089a0a2eb65c430a100f56cd1645a026986f4343c477199323b1438"
+    },
+    {
+      "path": "review.json",
+      "sha256": "8f835ae19afa842618f73c43d4a630f51dceab494b5dcfa495917bea290f625a"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/build.txt",
+      "sha256": "cf32bda6b63afcf3fbea6bdd793dc51315ad9fc2612dd9649014a2b286949abf"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/result.json",
+      "sha256": "b88683676a8a881a05e6bc6f16f3396e171cee5ee1e7bcce05f87bda0af10a2c"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/application.yml",
+      "sha256": "52059fd9de844f4acecb52738b844e1ce4c33ca1c2e599a2a2ca4fa94d9ac108"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/client.txt",
+      "sha256": "e0d72b85225a5c26ce85cfa32d75cd7cb3f36654afc68de8abf6a13210d52c0e"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/inspect-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/inspect-stdout.log",
+      "sha256": "ac6cc188727888b847a6efc57471ea5c8fcf89c7e16227ab90ea7be5a6a26a83"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/seed-root.data",
+      "sha256": "d6c6a29700e09cc7cce8691b8d6e7e3f4a4208adece7b05076fecf8faf5a96ad"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/seed-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/seed-stdout.log",
+      "sha256": "3270852507c4f3578acd9e7a18672c6dd0c82fc447c95c1e1c32d3a792b0d4f6"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/tc-stderr.log",
+      "sha256": "21d74635a7684401847d7acc4f39b4315b961975c5ce3d44d7e04fae16c2c79f"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_1/tc-stdout.log",
+      "sha256": "3b94c41d163d586aa3f59193395daa8f5ef955d1e98ab549737a339e33e41516"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/application.yml",
+      "sha256": "52059fd9de844f4acecb52738b844e1ce4c33ca1c2e599a2a2ca4fa94d9ac108"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/inspect-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/inspect-stdout.log",
+      "sha256": "a8718e90b7f2c8911b84b56bdfd515d2d81655ff577957cc73693f38cf23494b"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/seed-root.data",
+      "sha256": "633cd77eead970d7a45470ddd76fe7b9af55f7d2a7cfcbb2238622d8cc248aaf"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/seed-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/seed-stdout.log",
+      "sha256": "a978f7bcaa8716789904b818ad3aece4414d634073bff0337fa2a919a1e25bfb"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/tc-stderr.log",
+      "sha256": "81d93b61d497e5d8985ec46a539e567801dc543417dcc9ef641f8063033433f4"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_16/tc-stdout.log",
+      "sha256": "f5c7265b86733ece6103196b9d237e488d6779adb802f63c2278f92c5138eab9"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/application.yml",
+      "sha256": "52059fd9de844f4acecb52738b844e1ce4c33ca1c2e599a2a2ca4fa94d9ac108"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/client.txt",
+      "sha256": "c861388b4b9dc9d49c8989109b7fb65ae234eeee7b58aee7f9f37bdd79d83bd5"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/inspect-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/inspect-stdout.log",
+      "sha256": "9e05813701ecbcff070016abf358080331b7b43f4b15b9c27ddd5c023452065d"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/seed-root.data",
+      "sha256": "6963b461c18ace4f4a5108e15d5a5eda0933c1f2a78b992147b280622e9b277e"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/seed-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/seed-stdout.log",
+      "sha256": "2c0413dd113928d9a117fec854e16f927477b29799406b3ff7efe6e94fe3abca"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/tc-stderr.log",
+      "sha256": "5619392034cd72c58156a3723a8b6eb7c5da014d8c1136d6964dc30beecb6df5"
+    },
+    {
+      "path": "run_20261112_141507_7ff0e651/status_17/tc-stdout.log",
+      "sha256": "6419b2dbf7a02416932e9b2c1b03752c374808a7ca7b50da8860dfbcba0596b2"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/build.txt",
+      "sha256": "9b9b43417c9de6d4da87ce028dc0349737cd9c88b2a6b14a4ba96fefbe1ff817"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/java-process-report.xml",
+      "sha256": "8a446f287372b615caf78ab96fe28b1bee237ee92079c177ce0d36df32ba239d"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/java-process-tests.log",
+      "sha256": "9c7a4953a389bf6d8673d2fce35520be403f806adde44d1467fcfb12769e2918"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/result.json",
+      "sha256": "354daa18f0337b6903247d2765a3bae97edde013bc44600f1fe016cfab1fb32e"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/application.yml",
+      "sha256": "52059fd9de844f4acecb52738b844e1ce4c33ca1c2e599a2a2ca4fa94d9ac108"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/client.txt",
+      "sha256": "0e8544598bbb91bac13838f3d4f670d7ada7b2129677b857129685c96119ce76"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/inspect-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/inspect-stdout.log",
+      "sha256": "cfa18ebd099af18f463e146275d9a4e5f6692d1bbfb85feac11d8d74eeacb317"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/seed-root.data",
+      "sha256": "b054ada32550db8095181f492a45e404abe577be868b978833a584030fce83fb"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/seed-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/seed-stdout.log",
+      "sha256": "03ed3b75d88192bb1086270eb26212e2102019c910aef5b1b65e2110ac86d7df"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/tc-stderr.log",
+      "sha256": "c49d3145d4e7249fa6c50f968fd9ec3cd6fca77b244453678d8b491809bc5fe1"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_1/tc-stdout.log",
+      "sha256": "dc801700cfc74c10c2ab015f4b324075f039271fd75c5c9e02a96ba7804ca373"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/application.yml",
+      "sha256": "52059fd9de844f4acecb52738b844e1ce4c33ca1c2e599a2a2ca4fa94d9ac108"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/inspect-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/inspect-stdout.log",
+      "sha256": "84b229800c1b49cf7206913d63dbf892df7b15723fc05128905b49f4460b6c26"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/seed-root.data",
+      "sha256": "01492c3c0f86e791d4f55ab317606facd87f33121f9077e1d8fd866cf55b7b9a"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/seed-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/seed-stdout.log",
+      "sha256": "68ae43f534f2cf13e8cdda84108ae128dd6576f43ce625e71312bc8e064d6a24"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/tc-stderr.log",
+      "sha256": "f29f0aa3b87293da5a4e3d3f6196a3d296ccce44693e6ebad01e9ee1aadaf660"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_16/tc-stdout.log",
+      "sha256": "59229bbf271b09c576f7ce4dd1aec66b2bf926adb414c1aa7355f5a97b6c74ab"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/application.yml",
+      "sha256": "52059fd9de844f4acecb52738b844e1ce4c33ca1c2e599a2a2ca4fa94d9ac108"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/client.txt",
+      "sha256": "a4381a2f8b0511d410cb6b1cd22cf7c73e5573465faaa13c4948e8dc14025c97"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/inspect-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/inspect-stdout.log",
+      "sha256": "8457ec24899727af811cb888b515d3e65c2320c67cfced81dfd9b0662c3fe053"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/seed-root.data",
+      "sha256": "aecf17078b1915e49be5d53a8ae47d41013ced76f04eb504dc0ec3f5f0048965"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/seed-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/seed-stdout.log",
+      "sha256": "a6fb4001fa4a1a26e0128097a0812738fb522f016e6392c236c24d6b9e4d1d39"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/tc-stderr.log",
+      "sha256": "d30f9d58e5c6aa0d6d8ac9f478b1367ce85d4ea9e4493d7a7ca727ca9ed6a8ce"
+    },
+    {
+      "path": "run_20261112_141913_1d63f1a8/status_17/tc-stdout.log",
+      "sha256": "aa6ff39dec19aa1e093e9abbb18a2fd8b16c1bd9c50fa4959aa94768685e3621"
+    },
+    {
+      "path": "rust-red.txt",
+      "sha256": "c77ccb90864a3ec423c2831bfe1c072e23669d198ffac51517d545a255a10a99"
+    },
+    {
+      "path": "rust-tests.txt",
+      "sha256": "40137e5c7e0ea76d422f1bfab278aa8b8880290bcd9cb284479f5d775d7cbded"
+    },
+    {
+      "path": "wrapper-syntax.txt",
+      "sha256": "b2bea9de65ae38d472b1d7cf0f46c29b00bc76559b4618ecf51f762242e1b02a"
+    }
+  ]
+}

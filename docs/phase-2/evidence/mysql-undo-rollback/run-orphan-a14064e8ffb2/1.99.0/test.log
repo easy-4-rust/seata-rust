@@ -1,0 +1,18 @@
+    Finished `test` profile [unoptimized] target(s) in 0.23s
+     Running tests\live_undo_rollback.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\live_undo_rollback-97052eb0bc91c9f5.exe)
+
+running 1 test
+
+thread 'orphan_undo_children_prevent_empty_rollback_with_or_without_guard' (45064) panicked at crates\seata_db_mysql\tests\live_undo_rollback.rs:260:5:
+rollback must leave both orphan branches unresolved: [Ok(Fenced { inserted: true }), Ok(Fenced { inserted: false })]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test orphan_undo_children_prevent_empty_rollback_with_or_without_guard ... FAILED
+
+failures:
+
+failures:
+    orphan_undo_children_prevent_empty_rollback_with_or_without_guard
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.24s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_undo_rollback`

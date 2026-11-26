@@ -1,0 +1,40 @@
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+error[E0432]: unresolved imports `seata_protocol::Message`, `seata_protocol::PayloadCodec`
+ --> crates\seata_protocol\tests\payload_golden.rs:3:95
+  |
+3 | use seata_protocol::{BranchStatus,BranchType,GlobalStatus,ResultCode,TransactionExceptionCode,Message,PayloadCodec};
+  |                                                                                               ^^^^^^^ ^^^^^^^^^^^^ no `PayloadCodec` in the root
+  |                                                                                               |
+  |                                                                                               no `Message` in the root
+
+error[E0432]: unresolved imports `seata_protocol::protocol::RegisterTMRequest`, `seata_protocol::protocol::RegisterTMResponse`, `seata_protocol::protocol::RegisterRMRequest`, `seata_protocol::protocol::RegisterRMResponse`
+ --> crates\seata_protocol\tests\payload_golden.rs:4:32
+  |
+4 | use seata_protocol::protocol::{RegisterTMRequest,RegisterTMResponse,RegisterRMRequest,RegisterRMResponse};
+  |                                ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ no `RegisterRMResponse` in `protocol`
+  |                                |                 |                  |
+  |                                |                 |                  no `RegisterRMRequest` in `protocol`
+  |                                |                 no `RegisterTMResponse` in `protocol`
+  |                                no `RegisterTMRequest` in `protocol`
+
+error[E0432]: unresolved import `seata_protocol::transaction`
+ --> crates\seata_protocol\tests\payload_golden.rs:5:21
+  |
+5 | use seata_protocol::transaction::{AbstractTransactionResponse,GlobalBeginRequest,GlobalBeginResponse,GlobalCommitRequest,GlobalCommit...
+  |                     ^^^^^^^^^^^ could not find `transaction` in `seata_protocol`
+
+error[E0603]: module `protocol` is private
+  --> crates\seata_protocol\tests\payload_golden.rs:4:21
+   |
+ 4 | use seata_protocol::protocol::{RegisterTMRequest,RegisterTMResponse,RegisterRMRequest,RegisterRMResponse};
+   |                     ^^^^^^^^ private module
+   |
+note: the module `protocol` is defined here
+  --> crates\seata_protocol\src\lib.rs:10:1
+   |
+10 | mod protocol;
+   | ^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0432, E0603.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-protocol` (test "payload_golden") due to 4 previous errors

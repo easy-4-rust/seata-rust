@@ -1,0 +1,46 @@
+[
+  {
+    "name": "skip-xa-close-after-body-error",
+    "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+    "stage": "D:\\codex-builds\\seata_jdbc_resource_init_mutant_mdesls7r",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_resource_init",
+      "jdbc_and_xa_initialization_match_original_close_and_registration_order",
+      "--",
+      "--exact"
+    ],
+    "source_sha256": "e1774c3a035af75460cb63a0963f14c327942b6ef4c454e59d835ce5775713a9",
+    "mutant_sha256": "ab79453f5e50a313fae26a33ca666f4ce26f0a076c4264ca4650a1d912384edd",
+    "failed_case": "xa-inner-acquire-sql",
+    "exit_code": 101
+  },
+  {
+    "name": "drop-inner-close-error",
+    "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+    "stage": "D:\\codex-builds\\seata_jdbc_resource_init_mutant_mdesls7r",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_resource_init",
+      "jdbc_and_xa_initialization_match_original_close_and_registration_order",
+      "--",
+      "--exact"
+    ],
+    "source_sha256": "e1774c3a035af75460cb63a0963f14c327942b6ef4c454e59d835ce5775713a9",
+    "mutant_sha256": "f31349ceda3d98e003a7f23ba08f6c627c1af26c1c62c1a43a2bbd7b110b4727",
+    "failed_case": "jdbc-metadata-and-close-sql",
+    "exit_code": 101
+  }
+]

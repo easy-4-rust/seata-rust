@@ -1,3 +1,20 @@
+mod auth_probe;
+mod backend_timeout_probe;
+mod branch_callback_state;
+mod branch_end_request;
+mod branch_probe;
+mod file_timeout_probe;
+mod pending_branch;
+mod raft_timeout_probe;
+mod response_loss_probe;
+mod restart_probe;
+mod restart_record;
+mod transaction;
+mod unknown_outcome;
+
+#[cfg(test)]
+mod payload;
+
 use std::env;
 use std::io::{self, Read, Write};
 use std::net::{TcpStream, ToSocketAddrs};
@@ -98,10 +115,16 @@ fn read_identify_response(
     stream.read_exact(&mut header)?;
 
     if header[0..2] != MAGIC {
-        return Err(invalid(format!("bad response magic: {:02x?}", &header[0..2])));
+        return Err(invalid(format!(
+            "bad response magic: {:02x?}",
+            &header[0..2]
+        )));
     }
     if header[2] != PROTOCOL_V1 {
-        return Err(invalid(format!("TC selected protocol version {}, expected V1", header[2])));
+        return Err(invalid(format!(
+            "TC selected protocol version {}, expected V1",
+            header[2]
+        )));
     }
 
     let full_len = u32::from_be_bytes(header[3..7].try_into().unwrap()) as usize;
@@ -111,14 +134,16 @@ fn read_identify_response(
     let compressor = header[11];
     let request_id = u32::from_be_bytes(header[12..16].try_into().unwrap());
 
-    if full_len < HEADER_LEN || full_len > MAX_FRAME_LEN {
+    if !(HEADER_LEN..=MAX_FRAME_LEN).contains(&full_len) {
         return Err(invalid(format!("invalid response fullLength: {full_len}")));
     }
     if head_len < HEADER_LEN || head_len > full_len {
         return Err(invalid(format!("invalid response headLength: {head_len}")));
     }
     if message_type != RESPONSE {
-        return Err(invalid(format!("unexpected RPC message type: {message_type}")));
+        return Err(invalid(format!(
+            "unexpected RPC message type: {message_type}"
+        )));
     }
     if serializer != SERIALIZER_SEATA || compressor != COMPRESSOR_NONE {
         return Err(invalid(format!(
@@ -165,7 +190,10 @@ fn read_identify_response(
         )));
     }
 
-    Ok(IdentifyResponse { identified, version })
+    Ok(IdentifyResponse {
+        identified,
+        version,
+    })
 }
 
 fn connect(host: &str, port: u16) -> io::Result<TcpStream> {
@@ -180,12 +208,7 @@ fn connect(host: &str, port: u16) -> io::Result<TcpStream> {
     Ok(stream)
 }
 
-fn register_tm(
-    host: &str,
-    port: u16,
-    app_id: &str,
-    tx_group: &str,
-) -> io::Result<TcpStream> {
+fn register_tm(host: &str, port: u16, app_id: &str, tx_group: &str) -> io::Result<TcpStream> {
     let mut body = Vec::new();
     write_string16(CLIENT_VERSION, &mut body)?;
     write_string16(app_id, &mut body)?;
@@ -198,7 +221,10 @@ fn register_tm(
     stream.write_all(&frame)?;
     let response = read_identify_response(&mut stream, request_id, TYPE_REGISTER_TM_RESULT)?;
     if !response.identified {
-        return Err(invalid(format!("Java TC rejected RegisterTM (version={})", response.version)));
+        return Err(invalid(format!(
+            "Java TC rejected RegisterTM (version={})",
+            response.version
+        )));
     }
     println!(
         "PASS RegisterTM identified=true protocol=V1 serverVersion={}",
@@ -215,7 +241,7 @@ fn register_rm(
     resource_id: &str,
 ) -> io::Result<TcpStream> {
     let mut body = Vec::new();
-    write_string16("V1,0", &mut body)?;
+    write_string16(CLIENT_VERSION, &mut body)?;
     write_string16(app_id, &mut body)?;
     write_string16(tx_group, &mut body)?;
     write_string16("", &mut body)?;
@@ -227,7 +253,10 @@ fn register_rm(
     stream.write_all(&frame)?;
     let response = read_identify_response(&mut stream, request_id, TYPE_REGISTER_RM_RESULT)?;
     if !response.identified {
-        return Err(invalid(format!("Java TC rejected RegisterRM (version={})", response.version)));
+        return Err(invalid(format!(
+            "Java TC rejected RegisterRM (version={})",
+            response.version
+        )));
     }
     println!(
         "PASS RegisterRM identified=true resourceId={} protocol=V1 serverVersion={}",
@@ -237,10 +266,30 @@ fn register_rm(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let args: Vec<String> = env::args().skip(1).collect();
+    let mode = match args.as_slice() {
+        [] => "registration",
+        [flag]
+            if matches!(
+                flag.as_str(),
+                "--lifecycle" | "--branches" | "--callback-loss" | "--prepare-restart-begin" | "--prepare-restart-branch" | "--resume-restart" | "--lost-branch-register-response" | "--lost-commit-response" | "--lost-rollback-response" | "--query-file-timeout" | "--backend-retry-timeout" | "--auth-default" | "--auth-denied" | "--auth-accepted" | "--auth-bypass" | "--query-raft-timeout"
+            ) =>
+        {
+            flag.as_str()
+        }
+        _ => {
+            return Err(
+                invalid("usage: seata-java-tc-it [--lifecycle|--branches|--callback-loss|--prepare-restart-begin|--prepare-restart-branch|--resume-restart|--lost-branch-register-response|--lost-commit-response|--lost-rollback-response|--query-file-timeout|--backend-retry-timeout|--auth-default|--auth-denied|--auth-accepted|--auth-bypass]").into(),
+            )
+        }
+    };
     let host = env::var("SEATA_TC_HOST").unwrap_or_else(|_| "127.0.0.1".to_owned());
     let port = env::var("SEATA_TC_PORT")
         .unwrap_or_else(|_| "18091".to_owned())
         .parse::<u16>()?;
+    if mode.starts_with("--auth-") {
+        return auth_probe::run(&host, port, mode).map_err(Into::into);
+    }
     let app_id = env::var("SEATA_IT_APP_ID").unwrap_or_else(|_| "orders-rust".to_owned());
     let tx_group = env::var("SEATA_IT_TX_GROUP").unwrap_or_else(|_| "default_tx_group".to_owned());
     let resource_id =
@@ -249,12 +298,81 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap_or_else(|_| "1000".to_owned())
         .parse::<u64>()?;
 
-    let _tm_channel = register_tm(&host, port, &app_id, &tx_group)?;
-    let _rm_channel = register_rm(&host, port, &app_id, &tx_group, &resource_id)?;
+    let mut tm_channel = register_tm(&host, port, &app_id, &tx_group)?;
+    if mode == "--query-raft-timeout" {
+        let xids = env::var("SEATA_IT_RAFT_XIDS")?;
+        let statuses = env::var("SEATA_IT_RAFT_STATUSES")?
+            .split(',')
+            .map(str::parse::<u8>)
+            .collect::<Result<Vec<_>, _>>()?;
+        return raft_timeout_probe::verify(
+            &mut tm_channel,
+            &xids.split(',').collect::<Vec<_>>(),
+            &statuses,
+        )
+        .map_err(Into::into);
+    }
+    let mut rm_channel = register_rm(&host, port, &app_id, &tx_group, &resource_id)?;
 
     println!("PASS live Java TC registration smoke: TM + RM");
-    // Keep both identified channels alive briefly. Later Phase 0.9 work will
-    // replace this delay with the RM inbound callback loop.
+    if mode == "--backend-retry-timeout" {
+        backend_timeout_probe::run(
+            &mut tm_channel,
+            &mut rm_channel,
+            &env::var("SEATA_IT_RETRY_XID")?,
+            &resource_id,
+            env::var("SEATA_IT_RETRY_STATUS")?.parse()?,
+            env::var("SEATA_IT_RETRY_BRANCH_ID")?.parse()?,
+            std::path::Path::new(&env::var("SEATA_IT_RETRY_READY")?),
+        )?;
+    }
+    if mode == "--query-file-timeout" {
+        file_timeout_probe::verify(
+            &mut tm_channel,
+            &mut rm_channel,
+            &env::var("SEATA_IT_TIMEOUT_XID")?,
+            &resource_id,
+            env::var("SEATA_IT_TIMEOUT_EXPECT_STATUS")?.parse()?,
+        )?;
+    }
+    if mode.starts_with("--lost-") {
+        let operation = match mode {
+            "--lost-branch-register-response" => 11,
+            "--lost-commit-response" => 7,
+            _ => 9,
+        };
+        response_loss_probe::verify(&mut tm_channel, &mut rm_channel, &resource_id, operation)?;
+    }
+    if mode == "--lifecycle" {
+        transaction::verify_empty_transactions(&mut tm_channel)?;
+        println!("PASS no-branch global lifecycle smoke; AT and RM callbacks NOT tested");
+    }
+    if mode == "--branches" {
+        branch_probe::verify_branch_transactions(&mut tm_channel, &mut rm_channel, &resource_id)?;
+        println!(
+            "PASS simulated branch lifecycle; database/Undo Log, retry and restart NOT tested"
+        );
+    }
+    if mode == "--callback-loss" {
+        branch_probe::verify_callback_loss(&mut tm_channel, &mut rm_channel, &resource_id)?;
+        println!("PASS callback response-loss probe; process-local simulated actions only; durable/database idempotency NOT tested");
+    }
+    if mode.starts_with("--prepare-restart-") || mode == "--resume-restart" {
+        let path = std::path::PathBuf::from(env::var("SEATA_IT_RESTART_RECORD")?);
+        if mode == "--resume-restart" {
+            restart_probe::resume(&mut tm_channel, &mut rm_channel, &resource_id, &path)?;
+        } else {
+            restart_probe::prepare(
+                &mut tm_channel,
+                &mut rm_channel,
+                &resource_id,
+                mode == "--prepare-restart-branch",
+                &path,
+            )?;
+        }
+    }
+    // Retain the existing registration hold period after any selected probe.
+    // The branch probe services one expected callback per transaction, not a long-lived RM.
     thread::sleep(Duration::from_millis(hold_ms));
     Ok(())
 }
@@ -262,6 +380,42 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn live_registration_roles_use_the_same_numeric_client_version() {
+        for rm in [false, true] {
+            let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+            let port = listener.local_addr().unwrap().port();
+            let server = std::thread::spawn(move || {
+                let (mut socket, _) = listener.accept().unwrap();
+                socket
+                    .set_read_timeout(Some(Duration::from_secs(3)))
+                    .unwrap();
+                let mut header = [0; HEADER_LEN];
+                socket.read_exact(&mut header).unwrap();
+                let length = u32::from_be_bytes(header[3..7].try_into().unwrap()) as usize;
+                let id = u32::from_be_bytes(header[12..16].try_into().unwrap());
+                let mut body = vec![0; length - HEADER_LEN];
+                socket.read_exact(&mut body).unwrap();
+                let mut at = 2;
+                let version = read_string16(&body, &mut at).unwrap();
+                let mut response = vec![1];
+                write_string16("2.8.0", &mut response).unwrap();
+                let mut frame =
+                    build_v1_request(if rm { 104 } else { 102 }, id, &response).unwrap();
+                frame[9] = RESPONSE;
+                socket.write_all(&frame).unwrap();
+                version
+            });
+            let channel = if rm {
+                register_rm("127.0.0.1", port, "it-app", "it-group", "mysql://it")
+            } else {
+                register_tm("127.0.0.1", port, "it-app", "it-group")
+            };
+            channel.unwrap();
+            assert_eq!(server.join().unwrap(), CLIENT_VERSION, "RM={rm}");
+        }
+    }
 
     #[test]
     fn tm_frame_has_v1_header_and_type_101() {
@@ -272,7 +426,10 @@ mod tests {
         write_string16("", &mut body).unwrap();
         let frame = build_v1_request(TYPE_REGISTER_TM, 1, &body).unwrap();
         assert_eq!(&frame[0..3], &[0xda, 0xda, 1]);
-        assert_eq!(u32::from_be_bytes(frame[3..7].try_into().unwrap()) as usize, frame.len());
+        assert_eq!(
+            u32::from_be_bytes(frame[3..7].try_into().unwrap()) as usize,
+            frame.len()
+        );
         assert_eq!(u16::from_be_bytes([frame[7], frame[8]]), 16);
         assert_eq!(frame[9], REQUEST_SYNC);
         assert_eq!(u16::from_be_bytes([frame[16], frame[17]]), TYPE_REGISTER_TM);
@@ -288,6 +445,9 @@ mod tests {
         write_string32("mysql://orders", &mut body).unwrap();
         let frame = build_v1_request(TYPE_REGISTER_RM, 2, &body).unwrap();
         assert_eq!(u16::from_be_bytes([frame[16], frame[17]]), TYPE_REGISTER_RM);
-        assert_eq!(&frame[frame.len() - 18..frame.len() - 14], &14u32.to_be_bytes());
+        assert_eq!(
+            &frame[frame.len() - 18..frame.len() - 14],
+            &14u32.to_be_bytes()
+        );
     }
 }

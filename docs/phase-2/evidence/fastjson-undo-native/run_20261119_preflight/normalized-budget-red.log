@@ -1,0 +1,23 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s
+     Running tests\fastjson_undo_native.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\fastjson_undo_native-a1fb763394f09940.exe)
+
+running 1 test
+test fastjson_preflight_authorizes_table_lookup_before_physical_binding ... FAILED
+
+failures:
+
+---- fastjson_preflight_authorizes_table_lookup_before_physical_binding stdout ----
+
+thread 'fastjson_preflight_authorizes_table_lookup_before_physical_binding' (54348) panicked at crates\seata_at\tests\fastjson_undo_native.rs:260:5:
+assertion failed: parser_with_wire_only_budget.restore_document(&decoded, XID, 42, &[schema()],
+        PROFILE).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    fastjson_preflight_authorizes_table_lookup_before_physical_binding
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test fastjson_undo_native`

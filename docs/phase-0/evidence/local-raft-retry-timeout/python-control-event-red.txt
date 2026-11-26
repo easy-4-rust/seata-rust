@@ -1,0 +1,22 @@
+test_leader_transition_requires_another_node_later_term_and_replicated_index (test_checks.EvidenceGateTest.test_leader_transition_requires_another_node_later_term_and_replicated_index) ... ok
+test_only_exact_exception_status_and_original_async_reload_stack_are_evidence (test_checks.EvidenceGateTest.test_only_exact_exception_status_and_original_async_reload_stack_are_evidence) ... FAIL
+test_original_identity_status_branch_and_lock_must_all_match (test_checks.EvidenceGateTest.test_original_identity_status_branch_and_lock_must_all_match) ... ok
+
+======================================================================
+FAIL: test_only_exact_exception_status_and_original_async_reload_stack_are_evidence (test_checks.EvidenceGateTest.test_only_exact_exception_status_and_original_async_reload_stack_are_evidence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\raft_recovery\test_checks.py", line 38, in test_only_exact_exception_status_and_original_async_reload_stack_are_evidence
+    self.assertEqual(checks.reload_exceptions([event],1,'2026-11-12T08:00:00Z'),[event])
+AssertionError: Lists differ: [] != [{'type': 'jdk.JavaExceptionThrow', 'value[431 chars]]}}}]
+
+Second list contains 1 additional elements.
+First extra element 0:
+{'type': 'jdk.JavaExceptionThrow', 'values': {'startTime': '2026-11-12T08:00:01Z', 'thrownClass': {'name': 'org/apache/seata/common/exception/ShouldNeverHappenException'}, 'message': 'NOT properly handled CommitRetryTimeout', 'stackTrace': {'frames': [{'method': {'type': {'name': 'org/apache/seata/server/session/SessionHolder'}, 'name': 'reload'}}, {'method': {'type': {'name': 'org/apache/seata/server/cluster/raft/RaftStateMachine'}, 'name': 'lambda$onLeaderStart$0'}}]}}}
+
+Diff is 682 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+FAILED (failures=1)

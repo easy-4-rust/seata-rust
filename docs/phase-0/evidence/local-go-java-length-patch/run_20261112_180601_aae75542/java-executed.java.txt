@@ -1,0 +1,108 @@
+/*
+ * Copyright 2026 Seata-Rust contributors.
+ * Licensed under the Apache License, Version 2.0.
+ */
+package org.apache.seata.serializer.seata;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.seata.common.util.StringUtils;
+import org.apache.seata.core.exception.TransactionExceptionCode;
+import org.apache.seata.core.protocol.ResultCode;
+import org.apache.seata.core.protocol.transaction.AbstractTransactionResponse;
+import org.apache.seata.core.protocol.transaction.BranchReportResponse;
+import org.apache.seata.core.protocol.transaction.GlobalLockQueryResponse;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+/** Java失败响应文本长度与实际字段的独立对照，对应Java：AbstractResultMessageCodec。 */
+class GoErrorLengthCompatibilityTest {
+    private static final ObjectMapper JSON = new ObjectMapper();
+
+    @TestFactory
+    List<DynamicTest> javaErrorLengthBoundaryCases() {
+        String[][] inputs = {
+            {"Empty", ""},
+            {"AsciiOne", "x"},
+            {"Ascii127", "x".repeat(127)},
+            {"Ascii128", "x".repeat(128)},
+            {"Ascii255", "x".repeat(255)},
+            {"Ascii256", "x".repeat(256)},
+            {"Ascii32767", "x".repeat(32767)},
+            {"Ascii32768", "x".repeat(32768)},
+            {"Utf8Short", "报错".repeat(22)},
+            {"Utf8Boundary", "错".repeat(10922)}
+        };
+        List<DynamicTest> tests = new ArrayList<>();
+        for (String[] input : inputs) {
+            tests.add(test("Branch_" + input[0], input[1], false, false, false));
+            tests.add(test("Lock_" + input[0], input[1], true, false, false));
+        }
+        tests.add(test("Branch_Success", "", false, false, true));
+        tests.add(test("Lock_SuccessFalse", "", true, false, true));
+        tests.add(test("Lock_SuccessTrue", "", true, true, true));
+        tests.add(test("Lock_FailedTrue", "报错", true, true, false));
+        assertEquals(24, tests.size());
+        return tests;
+    }
+
+    private DynamicTest test(String name, String text, boolean lock, boolean lockable, boolean success) {
+        return DynamicTest.dynamicTest(name, () -> {
+            AbstractTransactionResponse response = lock ? new GlobalLockQueryResponse() : new BranchReportResponse();
+            response.setResultCode(success ? ResultCode.Success : ResultCode.Failed);
+            response.setTransactionExceptionCode(
+                    success
+                            ? TransactionExceptionCode.Unknown
+                            : lock
+                                    ? TransactionExceptionCode.LockableCheckFailed
+                                    : TransactionExceptionCode.BranchReportFailed);
+            response.setMsg(text);
+            if (lock) {
+                ((GlobalLockQueryResponse) response).setLockable(lockable);
+            }
+            SeataSerializer serializer = new SeataSerializer((byte) 1);
+            byte[] wire = serializer.serialize(response);
+            AbstractTransactionResponse decoded = serializer.deserialize(wire);
+            assertEquals(response.getTypeCode(), decoded.getTypeCode());
+            assertEquals(response.getResultCode(), decoded.getResultCode());
+            assertEquals(response.getTransactionExceptionCode(), decoded.getTransactionExceptionCode());
+            if (StringUtils.isEmpty(text) || success) {
+                assertNull(decoded.getMsg());
+            } else {
+                assertEquals(text.substring(0, Math.min(text.length(), Short.MAX_VALUE)), decoded.getMsg());
+            }
+            if (lock) {
+                assertEquals(lockable, ((GlobalLockQueryResponse) decoded).isLockable());
+            }
+            assertArrayEquals(wire, serializer.serialize(decoded));
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("name", name);
+            row.put("type_id", response.getTypeCode());
+            row.put("result_code", decoded.getResultCode().ordinal());
+            row.put("error_code", decoded.getTransactionExceptionCode().ordinal());
+            row.put("message", decoded.getMsg());
+            row.put("lockable", lock && ((GlobalLockQueryResponse) decoded).isLockable());
+            row.put("serialized_hex", hex(wire));
+            System.out.println("SEATA_GO_LENGTH " + JSON.writeValueAsString(row));
+        });
+    }
+
+    private static String hex(byte[] bytes) {
+        char[] digits = "0123456789abcdef".toCharArray();
+        char[] out = new char[bytes.length * 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int value = bytes[i] & 0xff;
+            out[i * 2] = digits[value >>> 4];
+            out[i * 2 + 1] = digits[value & 15];
+        }
+        return new String(out);
+    }
+}

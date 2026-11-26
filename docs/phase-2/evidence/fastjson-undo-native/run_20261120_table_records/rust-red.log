@@ -1,0 +1,137 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0433]: cannot find module or crate `seata_sqlparser` in this scope
+ --> crates\seata_at\tests\table_records_source.rs:6:5
+  |
+6 | use seata_sqlparser::{r#struct::IndexType, ColumnMeta, IndexMeta, MetadataLocale, TableMeta};
+  |     ^^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `seata_sqlparser`
+  |
+  = help: if you wanted to use a crate named `seata_sqlparser`, use `cargo add seata_sqlparser` to add it to your `Cargo.toml`
+
+error[E0432]: unresolved import `seata_at::TableRecordsError`
+ --> crates\seata_at\tests\table_records_source.rs:4:5
+  |
+4 |     TableRecordsError,
+  |     ^^^^^^^^^^^^^^^^^ no `TableRecordsError` in the root
+
+error[E0432]: unresolved import `seata_sqlparser`
+ --> crates\seata_at\tests\table_records_source.rs:6:5
+  |
+6 | use seata_sqlparser::{r#struct::IndexType, ColumnMeta, IndexMeta, MetadataLocale, TableMeta};
+  |     ^^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `seata_sqlparser`
+  |
+  = help: if you wanted to use a crate named `seata_sqlparser`, use `cargo add seata_sqlparser` to add it to your `Cargo.toml`
+
+error[E0599]: no method named `set_table_meta` found for struct `JacksonUndoRecords` in the current scope
+  --> crates\seata_at\tests\table_records_source.rs:47:13
+   |
+47 |     records.set_table_meta(TableMeta::new(MetadataLocale::default()))?;
+   |             ^^^^^^^^^^^^^^ method not found in `JacksonUndoRecords`
+
+error[E0599]: no method named `set_table_meta` found for struct `JacksonUndoRecords` in the current scope
+  --> crates\seata_at\tests\table_records_source.rs:49:17
+   |
+49 |         records.set_table_meta(TableMeta::new(MetadataLocale::default())),
+   |                 ^^^^^^^^^^^^^^ method not found in `JacksonUndoRecords`
+
+error[E0599]: no method named `size` found for struct `JacksonUndoRecords` in the current scope
+  --> crates\seata_at\tests\table_records_source.rs:52:24
+   |
+52 |     assert_eq!(records.size(), 0);
+   |                        ^^^^ method not found in `JacksonUndoRecords`
+
+error[E0599]: no associated function or constant named `build_records` found for struct `JacksonUndoRecords` in the current scope
+  --> crates\seata_at\tests\table_records_source.rs:58:39
+   |
+58 |     let records = JacksonUndoRecords::build_records(meta()?, LABELS, original_rows())?;
+   |                                       ^^^^^^^^^^^^^ associated function or constant not found in `JacksonUndoRecords`
+   |
+note: if you're trying to build a new `JacksonUndoRecords` consider using one of the following associated functions:
+      JacksonUndoRecords::new
+      JacksonUndoRecords::empty
+  --> crates\seata_at\src\undo\parser\jackson_undo_records.rs:14:5
+   |
+14 |     pub fn new(table: Option<String>, rows: Vec<Vec<JacksonUndoField>>) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+23 |     pub fn empty(table: Option<String>) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `build_records` found for struct `JacksonUndoRecords` in the current scope
+  --> crates\seata_at\tests\table_records_source.rs:87:39
+   |
+87 |     let records = JacksonUndoRecords::build_records(meta()?, LABELS, original_rows())?;
+   |                                       ^^^^^^^^^^^^^ associated function or constant not found in `JacksonUndoRecords`
+   |
+note: if you're trying to build a new `JacksonUndoRecords` consider using one of the following associated functions:
+      JacksonUndoRecords::new
+      JacksonUndoRecords::empty
+  --> crates\seata_at\src\undo\parser\jackson_undo_records.rs:14:5
+   |
+14 |     pub fn new(table: Option<String>, rows: Vec<Vec<JacksonUndoField>>) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+23 |     pub fn empty(table: Option<String>) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `build_records` found for struct `JacksonUndoRecords` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:101:29
+    |
+101 |         JacksonUndoRecords::build_records(meta()?, &labels, rows),
+    |                             ^^^^^^^^^^^^^ associated function or constant not found in `JacksonUndoRecords`
+    |
+note: if you're trying to build a new `JacksonUndoRecords` consider using one of the following associated functions:
+      JacksonUndoRecords::new
+      JacksonUndoRecords::empty
+   --> crates\seata_at\src\undo\parser\jackson_undo_records.rs:14:5
+    |
+ 14 |     pub fn new(table: Option<String>, rows: Vec<Vec<JacksonUndoField>>) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 23 |     pub fn empty(table: Option<String>) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `size` found for struct `JacksonUndoRecords` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:109:48
+    |
+109 |     assert_eq!(JacksonUndoRecords::empty(None).size(), 0);
+    |                                                ^^^^ method not found in `JacksonUndoRecords`
+
+error[E0599]: no method named `set_table_meta` found for struct `JacksonUndoRecords` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:111:11
+    |
+111 |     empty.set_table_meta(TableMeta::new(MetadataLocale::default()))?;
+    |           ^^^^^^^^^^^^^^ method not found in `JacksonUndoRecords`
+
+error[E0599]: no method named `size` found for struct `JacksonUndoRecords` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:112:22
+    |
+112 |     assert_eq!(empty.size(), 0);
+    |                      ^^^^ method not found in `JacksonUndoRecords`
+
+error[E0599]: no method named `pk_rows` found for struct `JacksonUndoRecords` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:114:19
+    |
+114 |     assert!(empty.pk_rows()?.is_empty());
+    |                   ^^^^^^^
+    |
+help: there is a method `rows` with a similar name
+    |
+114 -     assert!(empty.pk_rows()?.is_empty());
+114 +     assert!(empty.rows()?.is_empty());
+    |
+
+error[E0599]: no method named `add` found for struct `JacksonUndoRecords` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:115:28
+    |
+115 |     assert!(matches!(empty.add(Vec::new()), Err(TableRecordsError::EmptyRecords)));
+    |                            ^^^ method not found in `JacksonUndoRecords`
+
+error[E0599]: no method named `table_meta` found for struct `JacksonUndoRecords` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:116:28
+    |
+116 |     assert!(matches!(empty.table_meta(), Err(TableRecordsError::EmptyRecords)));
+    |                            ^^^^^^^^^^ method not found in `JacksonUndoRecords`
+
+Some errors have detailed explanations: E0432, E0433, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "table_records_source") due to 15 previous errors

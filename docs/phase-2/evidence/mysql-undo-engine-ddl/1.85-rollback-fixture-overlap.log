@@ -1,0 +1,34 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.30s
+     Running tests\live_undo_rollback.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_rollback-e832afc5feba4e40.exe)
+
+running 16 tests
+test already_restored_and_equal_images_skip_dml_then_follow_original_missing_log_fence ... ok
+test binary_collation_text_keeps_utf8_keys_and_restores_the_original_row ... ok
+test cancellation_during_original_undo_lock_wait_publishes_no_partial_restoration ... ok
+test changed_or_unsafe_schema_and_unknown_compression_do_not_consume_undo ... ok
+test concurrent_duplicate_rollback_has_one_normal_consumer_and_preserves_original_missing_log_semantics ... ok
+test corrupted_or_missing_subrows_keep_business_and_every_remaining_original_byte ... ok
+test deadline_during_original_undo_lock_wait_publishes_no_partial_restoration ... ok
+test foreign_keys_committed_after_undo_dictionary_snapshot_cannot_affect_compensation ... ok
+test jdbc_profile_or_original_document_identity_mismatch_never_changes_business ... ok
+test later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes ... ok
+test mixed_logs_run_in_reverse_and_consume_only_original_branch ... ok
+test numeric_tinyint_profile_restores_physical_integer_two_without_boolean_loss ... ok
+test real_packet_chunks_are_validated_reassembled_and_deleted_with_their_original_root ... ok
+test stored_insert_undo_restores_business_and_consumes_original_row_atomically ... ok
+
+thread 'trigger_committed_after_undo_dictionary_snapshot_cannot_execute_during_compensation' panicked at crates\seata_db_mysql\tests\support\undo_rollback_fixture.rs:62:54:
+called `Result::unwrap()` on an `Err` value: Database(MySqlDatabaseError { code: Some("42S02"), number: 1146, message: "Table 'undo_engine_ddl.undo_work' doesn't exist" })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test trigger_committed_after_undo_dictionary_snapshot_cannot_execute_during_compensation ... FAILED
+test update_and_delete_restore_original_values_without_pk_cartesian_products ... ok
+
+failures:
+
+failures:
+    trigger_committed_after_undo_dictionary_snapshot_cannot_execute_during_compensation
+
+test result: FAILED. 15 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 84.42s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_undo_rollback`

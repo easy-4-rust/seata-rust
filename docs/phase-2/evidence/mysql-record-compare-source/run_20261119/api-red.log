@@ -1,0 +1,19 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0432]: unresolved imports `seata_db_mysql::DataCompareUtils`, `seata_db_mysql::JavaCompareField`, `seata_db_mysql::JavaCompareRecords`, `seata_db_mysql::JavaCompareValue`
+ --> crates\seata_db_mysql\tests\data_compare_source.rs:2:22
+  |
+2 | use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareRecords, JavaCompareValue};
+  |                      ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^ no `JavaCompareValue` in the root
+  |                      |                 |                 |
+  |                      |                 |                 no `JavaCompareRecords` in the root
+  |                      |                 no `JavaCompareField` in the root
+  |                      no `DataCompareUtils` in the root
+  |
+help: a similar name exists in the module
+  |
+2 - use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareRecords, JavaCompareValue};
+2 + use seata_db_mysql::{data_compare_utils, JavaCompareField, JavaCompareRecords, JavaCompareValue};
+  |
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-db-mysql` (test "data_compare_source") due to 1 previous error

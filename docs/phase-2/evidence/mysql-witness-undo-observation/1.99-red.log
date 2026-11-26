@@ -1,0 +1,20 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.01s
+     Running tests\live_commit_preconditions.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_commit_preconditions-79ae7a84eac27336.exe)
+
+running 1 test
+
+thread 'witness_cases::first_phase_witness_observation_preserves_legacy_and_survives_real_callback_cleanup' (45128) panicked at crates\seata_db_mysql\tests\support\first_phase_witness_cases.rs:155:5:
+assertion failed: matches!(h.adapter.first_phase_commit_observed(&receipt).await,
+    Err(DbError::RecoveryConflict))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test witness_cases::first_phase_witness_observation_preserves_legacy_and_survives_real_callback_cleanup ... FAILED
+
+failures:
+
+failures:
+    witness_cases::first_phase_witness_observation_preserves_legacy_and_survives_real_callback_cleanup
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 16 filtered out; finished in 1.98s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_commit_preconditions`

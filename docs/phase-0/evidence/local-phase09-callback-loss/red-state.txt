@@ -1,0 +1,62 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+warning: fields `kind`, `xid`, `branch_id`, `resource`, and `completed` are never read
+  --> src\branch_callback_state.rs:7:5
+   |
+ 6 | pub(super) struct BranchCallbackState {
+   |                   ------------------- fields in this struct
+ 7 |     kind: u16,
+   |     ^^^^
+ 8 |     xid: String,
+   |     ^^^
+ 9 |     branch_id: i64,
+   |     ^^^^^^^^^
+10 |     resource: String,
+   |     ^^^^^^^^
+11 |     completed: bool,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-java-tc-it` (bin "seata-java-tc-it" test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.31s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 4 tests
+test branch_callback_state::tests::duplicate_rollback_preserves_terminal_outcome_for_same_or_new_rpc_id ... FAILED
+test branch_callback_state::tests::duplicate_commit_replies_to_new_rpc_id_without_reapplying_action ... FAILED
+test branch_callback_state::tests::conflicting_redelivery_is_rejected_before_applying_or_returning_cached_success ... FAILED
+test branch_callback_state::tests::failed_simulated_action_is_not_cached_as_success ... FAILED
+
+failures:
+
+---- branch_callback_state::tests::duplicate_rollback_preserves_terminal_outcome_for_same_or_new_rpc_id stdout ----
+
+thread 'branch_callback_state::tests::duplicate_rollback_preserves_terminal_outcome_for_same_or_new_rpc_id' (63656) panicked at src\branch_callback_state.rs:52:73:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "callback deduplication is not implemented" }
+
+---- branch_callback_state::tests::duplicate_commit_replies_to_new_rpc_id_without_reapplying_action stdout ----
+
+thread 'branch_callback_state::tests::duplicate_commit_replies_to_new_rpc_id_without_reapplying_action' (14388) panicked at src\branch_callback_state.rs:41:69:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "callback deduplication is not implemented" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- branch_callback_state::tests::conflicting_redelivery_is_rejected_before_applying_or_returning_cached_success stdout ----
+
+thread 'branch_callback_state::tests::conflicting_redelivery_is_rejected_before_applying_or_returning_cached_success' (58316) panicked at src\branch_callback_state.rs:61:46:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "callback deduplication is not implemented" }
+
+---- branch_callback_state::tests::failed_simulated_action_is_not_cached_as_success stdout ----
+
+thread 'branch_callback_state::tests::failed_simulated_action_is_not_cached_as_success' (39240) panicked at src\branch_callback_state.rs:78:61:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "callback deduplication is not implemented" }
+
+
+failures:
+    branch_callback_state::tests::conflicting_redelivery_is_rejected_before_applying_or_returning_cached_success
+    branch_callback_state::tests::duplicate_commit_replies_to_new_rpc_id_without_reapplying_action
+    branch_callback_state::tests::duplicate_rollback_preserves_terminal_outcome_for_same_or_new_rpc_id
+    branch_callback_state::tests::failed_simulated_action_is_not_cached_as_success
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

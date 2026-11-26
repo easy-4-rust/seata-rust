@@ -1,0 +1,31 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_jdbc_source_mutant_0hjqm3py\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.61s
+     Running tests\jdbc_utils_source.rs (D:/cargo-target/seata-rust-production\debug\deps\jdbc_utils_source-ce9fdd575009d43f.exe)
+
+running 8 tests
+test test_build_resource_id_with_empty_query_string ... ok
+test test_build_resource_id_with_multiple_question_marks ... FAILED
+test test_build_resource_id_with_query_string ... ok
+test test_build_resource_id_without_query_string ... ok
+test test_get_db_type_with_h2_url ... ok
+test test_get_db_type_with_mysql_url ... ok
+test test_get_db_type_with_oracle_url ... ok
+test test_get_db_type_with_postgresql_url ... ok
+
+failures:
+
+---- test_build_resource_id_with_multiple_question_marks stdout ----
+
+thread 'test_build_resource_id_with_multiple_question_marks' (41820) panicked at crates\seata_db_mysql\tests\jdbc_utils_source.rs:22:5:
+assertion `left == right` failed: testBuildResourceIdWithMultipleQuestionMarks
+  left: JavaString { units: [106, 100, 98, 99, 58, 109, 121, 115, 113, 108, 58, 47, 47, 108, 111, 99, 97, 108, 104, 111, 115, 116, 58, 51, 51, 48, 54, 47, 116, 101, 115, 116, 63, 112, 97, 114, 97, 109, 49, 61, 118, 97, 108, 117, 101, 49], utf8: Some("jdbc:mysql://localhost:3306/test?param1=value1") }
+ right: JavaString { units: [106, 100, 98, 99, 58, 109, 121, 115, 113, 108, 58, 47, 47, 108, 111, 99, 97, 108, 104, 111, 115, 116, 58, 51, 51, 48, 54, 47, 116, 101, 115, 116], utf8: Some("jdbc:mysql://localhost:3306/test") }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    test_build_resource_id_with_multiple_question_marks
+
+test result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_utils_source`

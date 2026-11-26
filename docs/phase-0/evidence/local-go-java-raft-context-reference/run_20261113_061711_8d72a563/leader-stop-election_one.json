@@ -1,0 +1,69 @@
+{
+  "node": 0,
+  "pid": 74576,
+  "boundary": "2026-11-12T22:17:52.315837+00:00",
+  "stopped_at": "2026-11-12T22:17:52.339221+00:00",
+  "returncode": 1,
+  "before": {
+    "term_before": 1,
+    "raft_term_before": 1,
+    "raft_leader_before": true,
+    "raft_leader_id_before": "192.168.1.10:28292",
+    "raft_peer_id": "192.168.1.10:28292",
+    "pid": 74576,
+    "leader": true,
+    "leader_id": "192.168.1.10:28292",
+    "node_id": "<default/192.168.1.10:28292>",
+    "term": 1,
+    "reload_complete_term": 1,
+    "committed": 15,
+    "applied": 15,
+    "node_state": "STATE_LEADER",
+    "all_sessions": 1,
+    "lockable": true,
+    "records": [
+      {
+        "xid": "192.168.1.10:28291:9851330216697857",
+        "status": 16,
+        "active": false,
+        "begin_time": 1794521865476,
+        "application_id": "real-at-full-sdk",
+        "transaction_name": "real-mixed-commit-timeout",
+        "transaction_service_group": "real_at",
+        "application_data": null,
+        "branches": [
+          {
+            "branch_id": 9851330216697858,
+            "xid": "192.168.1.10:28291:9851330216697857",
+            "type": 1,
+            "status": 1,
+            "resource": "owned-real-commit-action",
+            "lock_key": null,
+            "application_data": "{\"actionContext\":{\"action-start-time\":1794521865506,\"actionName\":\"owned-real-commit-action\",\"host-name\":\"192.168.1.10\",\"prepared-branch\":\"9851330216697858\",\"prepared-token\":\"176cc31dd80a141e29a193cbf5025011d00ff51b1aecdf4ee850bf53f76c3074\",\"prepared-units\":\"10\",\"sys::commit\":\"Commit\",\"sys::prepare\":\"Prepare\",\"sys::rollback\":\"Rollback\"}}",
+            "client_id": "real-at-full-sdk:127.0.0.1:49422"
+          },
+          {
+            "branch_id": 9851330216697859,
+            "xid": "192.168.1.10:28291:9851330216697857",
+            "type": 0,
+            "status": 2,
+            "resource": "root:seata_raft_fixture_only@tcp(127.0.0.1:28093)/seata_raft_49375e50",
+            "lock_key": "ACCOUNTS:1;",
+            "application_data": null,
+            "client_id": "real-at-full-sdk:127.0.0.1:49422"
+          }
+        ]
+      }
+    ],
+    "snapshot": {
+      "directory": "D:\\codex-builds\\rcx_20261113_061711_8d72a563\\node_0\\store\\raft\\28292\\default\\snapshot\\snapshot_15",
+      "index": 15,
+      "term": 1
+    },
+    "term_after": 1,
+    "raft_term_after": 1,
+    "raft_leader_after": true,
+    "raft_leader_id_after": "192.168.1.10:28292"
+  },
+  "process_file": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-0\\evidence\\local-go-java-raft-context-reference\\run_20261113_061711_8d72a563\\node_0_generation_0\\process.json"
+}

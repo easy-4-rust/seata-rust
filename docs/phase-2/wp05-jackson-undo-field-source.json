@@ -1,0 +1,310 @@
+{
+  "status": "JACKSON_FIELD_ENCODE_ORIGINAL_JUNIT_CASE_MATCH",
+  "predecessor": "docs/phase-2/wp05-jackson-undo-serial-array-source.json",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "original_source_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_jackson_junit_pz8ck_5h",
+  "trace": "docs/phase-2/evidence/fastjson-undo-native/seata_jackson_timestamp_trace_2fllzl5_",
+  "trace_catalog_sha256": "fc028454405c25ddaab1bd77039c586068795e4d71f87b8f2b055e3049f66e75",
+  "original_assertions": 9,
+  "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest]/[method:encode()]",
+  "declaring_class": "org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest",
+  "java_observations": [
+    [
+      "1",
+      "java.lang.Long",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"bigint_type\",\"keyType\":\"NULL\",\"type\":-5,\"value\":[\"java.lang.Long\",9223372036854775807]}"
+    ],
+    [
+      "2",
+      "java.math.BigDecimal",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"decimal_type\",\"keyType\":\"NULL\",\"type\":3,\"value\":[\"java.math.BigDecimal\",55555555555555555555.55555555555555555555]}"
+    ],
+    [
+      "3",
+      "java.lang.Double",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"double_type\",\"keyType\":\"NULL\",\"type\":8,\"value\":999999.999999999}"
+    ],
+    [
+      "4",
+      "java.sql.Timestamp",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"java.sql.Timestamp\",1621358602111]}"
+    ],
+    [
+      "5",
+      "java.sql.Timestamp",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"java.sql.Timestamp\",[1565434166926,926554000]]}"
+    ],
+    [
+      "6",
+      "javax.sql.rowset.serial.SerialBlob",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"blob_type\",\"keyType\":\"NULL\",\"type\":2004,\"value\":[\"javax.sql.rowset.serial.SerialBlob\",\"aGVsbG8=\"]}"
+    ],
+    [
+      "7",
+      "javax.sql.rowset.serial.SerialClob",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"clob_type\",\"keyType\":\"NULL\",\"type\":2005,\"value\":[\"javax.sql.rowset.serial.SerialClob\",\"hello\"]}"
+    ],
+    [
+      "8",
+      "java.time.LocalDateTime",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"localdatetime_type\",\"keyType\":\"NULL\",\"type\":91,\"value\":[\"java.time.LocalDateTime\",1621358602111]}"
+    ],
+    [
+      "9",
+      "java.time.LocalDateTime",
+      "true",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"localdatetime_type2\",\"keyType\":\"NULL\",\"type\":91,\"value\":[\"java.time.LocalDateTime\",[1621358602222,222333000]]}"
+    ]
+  ],
+  "original_jackson_cases_rust_match": 6,
+  "original_jackson_cases_rust_remaining": 3,
+  "global_methods_remaining": 1023,
+  "global_rust_methods_match": 112,
+  "global_cases_remaining": 1205,
+  "global_rust_source_MATCH": 122,
+  "rust": {
+    "1.99": {
+      "ordinary": 554,
+      "ignored": 164,
+      "harnesses": 115,
+      "doc": 4,
+      "observations": [
+        [
+          "1",
+          "java.lang.Long",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"bigint_type\",\"keyType\":\"NULL\",\"type\":-5,\"value\":[\"java.lang.Long\",9223372036854775807]}"
+        ],
+        [
+          "2",
+          "java.math.BigDecimal",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"decimal_type\",\"keyType\":\"NULL\",\"type\":3,\"value\":[\"java.math.BigDecimal\",55555555555555555555.55555555555555555555]}"
+        ],
+        [
+          "3",
+          "java.lang.Double",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"double_type\",\"keyType\":\"NULL\",\"type\":8,\"value\":999999.999999999}"
+        ],
+        [
+          "4",
+          "java.sql.Timestamp",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"java.sql.Timestamp\",1621358602111]}"
+        ],
+        [
+          "5",
+          "java.sql.Timestamp",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"java.sql.Timestamp\",[1565434166926,926554000]]}"
+        ],
+        [
+          "6",
+          "javax.sql.rowset.serial.SerialBlob",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"blob_type\",\"keyType\":\"NULL\",\"type\":2004,\"value\":[\"javax.sql.rowset.serial.SerialBlob\",\"aGVsbG8=\"]}"
+        ],
+        [
+          "7",
+          "javax.sql.rowset.serial.SerialClob",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"clob_type\",\"keyType\":\"NULL\",\"type\":2005,\"value\":[\"javax.sql.rowset.serial.SerialClob\",\"hello\"]}"
+        ],
+        [
+          "8",
+          "java.time.LocalDateTime",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"localdatetime_type\",\"keyType\":\"NULL\",\"type\":91,\"value\":[\"java.time.LocalDateTime\",1621358602111]}"
+        ],
+        [
+          "9",
+          "java.time.LocalDateTime",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"localdatetime_type2\",\"keyType\":\"NULL\",\"type\":91,\"value\":[\"java.time.LocalDateTime\",[1621358602222,222333000]]}"
+        ]
+      ]
+    },
+    "1.85": {
+      "ordinary": 554,
+      "ignored": 164,
+      "harnesses": 115,
+      "doc": 4,
+      "observations": [
+        [
+          "1",
+          "java.lang.Long",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"bigint_type\",\"keyType\":\"NULL\",\"type\":-5,\"value\":[\"java.lang.Long\",9223372036854775807]}"
+        ],
+        [
+          "2",
+          "java.math.BigDecimal",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"decimal_type\",\"keyType\":\"NULL\",\"type\":3,\"value\":[\"java.math.BigDecimal\",55555555555555555555.55555555555555555555]}"
+        ],
+        [
+          "3",
+          "java.lang.Double",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"double_type\",\"keyType\":\"NULL\",\"type\":8,\"value\":999999.999999999}"
+        ],
+        [
+          "4",
+          "java.sql.Timestamp",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"java.sql.Timestamp\",1621358602111]}"
+        ],
+        [
+          "5",
+          "java.sql.Timestamp",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"java.sql.Timestamp\",[1565434166926,926554000]]}"
+        ],
+        [
+          "6",
+          "javax.sql.rowset.serial.SerialBlob",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"blob_type\",\"keyType\":\"NULL\",\"type\":2004,\"value\":[\"javax.sql.rowset.serial.SerialBlob\",\"aGVsbG8=\"]}"
+        ],
+        [
+          "7",
+          "javax.sql.rowset.serial.SerialClob",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"clob_type\",\"keyType\":\"NULL\",\"type\":2005,\"value\":[\"javax.sql.rowset.serial.SerialClob\",\"hello\"]}"
+        ],
+        [
+          "8",
+          "java.time.LocalDateTime",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"localdatetime_type\",\"keyType\":\"NULL\",\"type\":91,\"value\":[\"java.time.LocalDateTime\",1621358602111]}"
+        ],
+        [
+          "9",
+          "java.time.LocalDateTime",
+          "true",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"localdatetime_type2\",\"keyType\":\"NULL\",\"type\":91,\"value\":[\"java.time.LocalDateTime\",[1621358602222,222333000]]}"
+        ]
+      ]
+    }
+  },
+  "rust_evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_jackson_field_types",
+  "java_boundary_observations": {
+    "local": [
+      "-2",
+      "877222333"
+    ],
+    "timestamp": [
+      "-2",
+      "777222333"
+    ],
+    "empty-blob": [
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"empty_blob\",\"keyType\":\"NULL\",\"type\":2004,\"value\":[\"javax.sql.rowset.serial.SerialBlob\"]}"
+    ],
+    "double": [
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"large_double\",\"keyType\":\"NULL\",\"type\":8,\"value\":1.0E7}"
+    ]
+  },
+  "runtime_controls": [
+    {
+      "label": "drop-submillisecond",
+      "target": "jackson_local_date_time_preserves_millis_when_submillis_is_separate",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_8y87ethz",
+      "mutated_file": "crates/seata_at/src/undo/parser/jackson_original_format.rs",
+      "original_sha256": "ea9d151ae97e8ced10480cadc0196082bcd7acaa896bcc503c498d18f16463e6",
+      "mutant_sha256": "29ddc7e90bb2edb5305f709d5f77375d5a0ab2d7117feb62316b7009da9e5e12",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "jackson_undo_source",
+        "--",
+        "jackson_local_date_time_preserves_millis_when_submillis_is_separate",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "collapse-double-zero",
+      "target": "jackson_rejects_empty_serial_blob_encoder_and_preserves_signed_double_zero",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_8y87ethz",
+      "mutated_file": "crates/seata_at/src/undo/parser/jackson_undo_field_value.rs",
+      "original_sha256": "354bf35ca60e36181c43281964113add8c69d3f0cc8a297ecd651a61d49156f5",
+      "mutant_sha256": "8488edae578f864b5218ed552ff0d6513333f30f28f874857ee8aa12d2ccc43c",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "jackson_undo_source",
+        "--",
+        "jackson_rejects_empty_serial_blob_encoder_and_preserves_signed_double_zero",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    }
+  ],
+  "evidence_sha256": {
+    "1.85-clippy.log": "d2c2bf1571007d9fe2386238cc8af5277b2eccf6d9523c26d9d3b60c5972decf",
+    "1.85-core.tsv": "5dfbc4a33d027daa1c708c6006435e743f4d5154babd5eb56dd2595c070ecdef",
+    "1.85-doc.log": "fd538d67c93fbde9412038c3c8f0974c8393db92abcae1edc3bdb59b4616250f",
+    "1.85-source.log": "0acab96eadfab3e9598c19e87c3c8302a7e4de667b6553a02efeacfa8b1d8655",
+    "1.85-targeted.log": "aa3e57970fd3328e0c198d5893efe1de86b8548428b788bc6da95c1907f77bc5",
+    "1.85-tests.log": "f4726a3879d48d5d982a1a61a7df7a289e0046628c28f13c7f1848576f0ef478",
+    "1.99-clippy.log": "d5012554d7cfb1864bb0b42ea8884a489b4e321cdee141762ebbb603c2050024",
+    "1.99-core.tsv": "5dfbc4a33d027daa1c708c6006435e743f4d5154babd5eb56dd2595c070ecdef",
+    "1.99-doc.log": "a8937be968e4f04aa9f30a8785f2e547a9ad3ecf39029335618204c7a7c69084",
+    "1.99-source.log": "d7142567dabe5e64995df98cf05734234e1de78114bbd9c0d665343985dd2535",
+    "1.99-targeted.log": "724c38ba9fadd8558dbe1aef3d5df3d4fd626c75b306d52d55d4e44ff228d5db",
+    "1.99-tests.log": "14691d4341746676b01bd00e1e071973d22e24ccc5a6af5c50908b79a0467cbc",
+    "api-red.log": "73f860e0871ffe7ed113ccb25fc8cd62004fff4ef1141f33d7d18f2adb03a702",
+    "blob-double-red.log": "0cc9c8ec982114c7df8d311a82ed34497b986f593896add013a45dc93a78f809",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "JacksonFieldBoundaryOracle.java": "407e4ad59c83e42c803b19e261f411f54974029f46b7e88a7701e61f130a2814",
+    "java-boundary.stderr": "cf0f744b42966047acd81fed9255735f73de71b2162c4d551e3a576dc762862e",
+    "java-boundary.stdout": "504224343e2cd9dff00e877fc0a145a23db24902e3495ea07ed97cd2c14be5f8",
+    "local-date-time-red.log": "47bf00d4e5fcc69a20cee0aa492b717d9a122d7b923ae95d8d9922fb9c8f9a95",
+    "mutant-collapse-double-zero.stderr": "0970e054b929cc380c727ed8b987a20a19d72f193395b1582e175647cc05e7f4",
+    "mutant-collapse-double-zero.stdout": "e750e0150a8af7105708352bb0ca6762901e40d1f4aa54d9cf906e0d363c806c",
+    "mutant-drop-submillisecond.stderr": "1ad413d892ba697c3c904ecfb20e0df1087e1eb6452fd8be6ae754ea2984ed9e",
+    "mutant-drop-submillisecond.stdout": "e608411150afdf0376a1f9dca94f9ff99697e8cbff58ee8e2c8635e55f6ae71b",
+    "runtime-mutation-controls.json": "a0e233fcfe0b9313d8b211bbda1ef51e7aab228f14f7a1158dd591d44adbfc5d"
+  },
+  "source_inputs_sha256": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_at/src/lib.rs": "60b29d523b7244bda227d429ac47230513bad75622e06c1b6ba13af33159d68c",
+    "crates/seata_at/src/undo/mod.rs": "6455ad2272b811920da35d135580c788f100a524c60a4aadc258941170f0a750",
+    "crates/seata_at/src/undo/parser/mod.rs": "54c273570ee5893d07a8fba430ebd5d364ad8136067c035e06cc4b64498fd352",
+    "crates/seata_at/src/undo/parser/jackson_original_format.rs": "ea9d151ae97e8ced10480cadc0196082bcd7acaa896bcc503c498d18f16463e6",
+    "crates/seata_at/src/undo/parser/jackson_undo_log_parser.rs": "1b5375003c8f3b852df3c341c2ce8b7d8cfb079858567dce563aef4be23a0ad9",
+    "crates/seata_at/src/undo/parser/jackson_undo_field.rs": "4b6ba1f273944946c01911d8aef4884273bee455eded192ac406ca2cff92c7bd",
+    "crates/seata_at/src/undo/parser/jackson_undo_field_value.rs": "354bf35ca60e36181c43281964113add8c69d3f0cc8a297ecd651a61d49156f5",
+    "crates/seata_at/src/undo/parser/value_format.rs": "dca411fe1e69bfcb17bb40ec9d966ee6373fe930d4c959b7dbba7dc6bf6a7da9",
+    "crates/seata_at/src/undo/parser/strict_json.rs": "63f8c2d3b57e739fc6a28d9588440555991d6c21f9c3a4e679f74e055bba1588",
+    "crates/seata_at/src/undo/parser/bounded_output.rs": "06b2c407eb140949c5b7584ad8fc4047c9404bc416adff17560961107cf770df",
+    "crates/seata_at/tests/jackson_undo_source.rs": "2e19116646240defcda160fc69416c2ed15f6f2739a708b7720627dc88924dbd"
+  },
+  "universal_double_text_equivalence": false,
+  "local_date_time_zone": "UTC",
+  "live_mysql_rollback_verified_this_round": false,
+  "phase_05_complete": false,
+  "phase_06_complete": false,
+  "v1_complete": false
+}

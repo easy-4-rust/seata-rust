@@ -1,0 +1,56 @@
+[
+  {
+    "label": "discard-managed-acquisition-stage",
+    "source": "crates/seata_db_mysql/src/data_source_manager.rs",
+    "test": "managed_acquisition_timeout_preserves_phase_before_begin",
+    "exit": 101,
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-db-mysql",
+      "--lib",
+      "managed_acquisition_timeout_preserves_phase_before_begin"
+    ],
+    "original_sha256": "7974e93eea45c13e1a17f0a8264393b598d612d1037e21558dd21830941b1f85",
+    "mutant_sha256": "880cd2af8743a08ddb776a38416ecab1311397ea43177052c47b0fde69811323"
+  },
+  {
+    "label": "reply-unretryable",
+    "source": "crates/seata_rm/src/manager/callback_handler.rs",
+    "test": "managed_acquisition_failure_replies_retryable_and_keeps_durable_pending",
+    "exit": 101,
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-db-mysql",
+      "--lib",
+      "managed_acquisition_failure_replies_retryable_and_keeps_durable_pending"
+    ],
+    "original_sha256": "8f47aba7e5a3ed866cf59f1eebfb0c6e099304df36233e143098cd64a017dede",
+    "mutant_sha256": "4422a0ce7c513972237d65d8d6eb0dfa3ea14fc9a7f242cc4e86bd712257379e"
+  },
+  {
+    "label": "skip-pending",
+    "source": "crates/seata_rm/src/manager/branch_dispatcher.rs",
+    "test": "managed_acquisition_failure_replies_retryable_and_keeps_durable_pending",
+    "exit": 101,
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-db-mysql",
+      "--lib",
+      "managed_acquisition_failure_replies_retryable_and_keeps_durable_pending"
+    ],
+    "original_sha256": "de9d08f8f45c77b1020f9122c3dd31f0a8b0012dcfcdaf34391fe6e914aebb57",
+    "mutant_sha256": "b57502cf40a9f416ceff2878b14ef18bacb670d7beec5a2c5c0fee0402ca48e5"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "reviewer": "/root/file_timeout_review",
+  "mode": "read-only; reviewer did not edit files or execute tests",
+  "initial_findings": [
+    {
+      "severity": "P2",
+      "file": "tools/java-tc-integration/scripts/run-file-retry-timeout.ps1",
+      "finding": "Existing passing XML and matching source copies could accept stale helper classes without a fresh test run."
+    }
+  ],
+  "resolution": "Every live run now removes only its two owned generated helper .class files, rebuilds/runs focused5 process tests, checks source equality after formatting and archives fresh report/hash before launching fixture or TC.",
+  "follow_up": "Reviewer confirmed P2 resolved; no additional actionable findings.",
+  "final_root_verification": "run_20261112_141913_1d63f1a8 fresh5 tests and three full-JAR scenarios completed as documented."
+}

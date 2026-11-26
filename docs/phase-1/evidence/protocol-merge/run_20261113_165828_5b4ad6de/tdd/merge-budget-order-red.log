@@ -1,0 +1,23 @@
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s
+     Running tests\merge_payloads.rs (D:/cargo-target/seata-rust-production\debug\deps\merge_payloads-caa6dd840c52362b.exe)
+
+running 1 test
+test result_child_budget_is_checked_before_scanning_child_types ... FAILED
+
+failures:
+
+---- result_child_budget_is_checked_before_scanning_child_types stdout ----
+
+thread 'result_child_budget_is_checked_before_scanning_child_types' (18600) panicked at crates\seata_protocol\tests\merge_payloads.rs:428:5:
+assertion failed: matches!(limited.encode(&invalid),
+    Err(ProtocolError::LimitExceeded { limit: "batch children", .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    result_child_budget_is_checked_before_scanning_child_types
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test merge_payloads`

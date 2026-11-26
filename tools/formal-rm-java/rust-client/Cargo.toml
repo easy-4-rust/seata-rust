@@ -1,0 +1,24 @@
+[package]
+name = "seata-rm-live-validation"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+publish = false
+
+[workspace]
+resolver = "2"
+
+[dependencies]
+seata-protocol = { path = "../../../crates/seata_protocol" }
+seata-transport = { path = "../../../crates/seata_transport" }
+seata-tm = { path = "../../../crates/seata_tm" }
+seata-rm = { path = "../../../crates/seata_rm" }
+tokio = { version = "=1.54.1", features = ["macros", "rt-multi-thread", "time"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"

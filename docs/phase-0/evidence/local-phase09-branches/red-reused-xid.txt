@@ -1,0 +1,32 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.33s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test branch_probe::tests::rejects_reused_xid_before_registering_the_second_branch ... FAILED
+
+failures:
+
+---- branch_probe::tests::rejects_reused_xid_before_registering_the_second_branch stdout ----
+GlobalBegin xid=x scenario=branch-commit
+BranchRegister xid=x branchId=42 resource=r
+RM callback acknowledged requestId=77 type=3 xid=x branchId=42 branchStatus=5
+PASS branch-commit xid=x branchId=42 responseStatus=9 observedStatus=15; simulated RM only
+GlobalBegin xid=x scenario=branch-rollback
+
+thread '<unnamed>' (36984) panicked at src\branch_probe.rs:283:21:
+assertion `left == right` failed
+  left: 1
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'branch_probe::tests::rejects_reused_xid_before_registering_the_second_branch' (57380) panicked at src\branch_probe.rs:319:23:
+called `Result::unwrap()` on an `Err` value: Any { .. }
+
+
+failures:
+    branch_probe::tests::rejects_reused_xid_before_registering_the_second_branch
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

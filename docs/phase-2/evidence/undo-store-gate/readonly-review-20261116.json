@@ -1,0 +1,66 @@
+{
+  "status": "READ_ONLY_REVIEW_PASSED",
+  "updated_local": "2026-11-16T03:42:04",
+  "reviewer": "/root/inflight_review",
+  "remaining_P1_P2": [],
+  "gate": "docs/phase-2/evidence/undo-store-gate/run_20261116_032443_ec53c018",
+  "catalog_sha256": "fa6199466c5eb6e81b24907532509f0024b0b23aa43b19a8b19847aeb83b8314",
+  "source_inputs": 7350,
+  "gate_members": 7524,
+  "source_path": "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs",
+  "toolchains": [
+    "1.99",
+    "1.85"
+  ],
+  "ordinary": {
+    "1.99": {
+      "passed": 331,
+      "existing_lib_integration_tests": 325,
+      "existing_example_tests": 6,
+      "test_artifacts": 56,
+      "compiled_registry_packages": 150,
+      "actual_RM_children": 6
+    },
+    "1.85": {
+      "passed": 331,
+      "existing_lib_integration_tests": 325,
+      "existing_example_tests": 6,
+      "test_artifacts": 56,
+      "compiled_registry_packages": 150,
+      "actual_RM_children": 6
+    }
+  },
+  "fresh_DB_cases": {
+    "1.99": {
+      "store": 10,
+      "ready_handoff": 1,
+      "legacy": 38,
+      "native_codec_locks": 1
+    },
+    "1.85": {
+      "store": 10,
+      "ready_handoff": 1,
+      "legacy": 38,
+      "native_codec_locks": 1
+    }
+  },
+  "actual_test_artifacts": 112,
+  "actual_RM_recovery_children": 12,
+  "actual_owned_DB_containers": 16,
+  "source_manager_comparisons_per_toolchain": 4,
+  "child_identity_negative_controls_per_toolchain": 2,
+  "evidence_role_negative_controls": 10,
+  "fixed_findings": [
+    "入向FK检查",
+    "Ready结果发布前复核期限",
+    "每个子片XID/状态/时间完整采样且Java不修复原行身份",
+    "Store/Ready/legacy/RED/native证据角色严格绑定",
+    "按原末级mysql包落位与PARTIAL映射"
+  ],
+  "scope": "选定Undo同事务写入和回滚及原manager选定方法，不是原完整flush入口或JUnit迁移",
+  "SQL_Undo_commit_atomicity_verified": false,
+  "TC_registration_gate_passed": false,
+  "public_COMMIT_available": false,
+  "WP05_complete": false,
+  "external_tc_risk_accepted": false
+}

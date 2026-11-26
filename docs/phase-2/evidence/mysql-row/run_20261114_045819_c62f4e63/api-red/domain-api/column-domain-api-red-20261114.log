@@ -1,0 +1,90 @@
+   Compiling seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+error[E0432]: unresolved imports `seata_datasource::CharacterSet`, `seata_datasource::ColumnDomain`
+ --> crates\seata_datasource\tests\column_domain_contract.rs:3:24
+  |
+3 | use seata_datasource::{CharacterSet,ColumnDomain,ColumnMeta,ColumnType,DecimalValue,Field,FieldValue};
+  |                        ^^^^^^^^^^^^ ^^^^^^^^^^^^ no `ColumnDomain` in the root
+  |                        |
+  |                        no `CharacterSet` in the root
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:10:51
+   |
+10 |         let c=col(ColumnType::SignedInteger,None).with_domain(ColumnDomain::Integer{bits,unsigned:false}).unwrap();
+   |                                                   ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:19:53
+   |
+19 |         let c=col(ColumnType::UnsignedInteger,None).with_domain(ColumnDomain::Integer{bits,unsigned:true}).unwrap();
+   |                                                     ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:27:41
+   |
+27 |     let c=col(ColumnType::Text,Some(4)).with_domain(ColumnDomain::Text{charset:CharacterSet::Utf8Mb4,character_limit:Some(1),fixed_w...
+   |                                         ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:33:45
+   |
+33 |     let ascii=col(ColumnType::Text,Some(8)).with_domain(ColumnDomain::Text{charset:CharacterSet::Ascii,character_limit:Some(8),fixed...
+   |                                             ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:36:43
+   |
+36 |     let mb3=col(ColumnType::Text,Some(6)).with_domain(ColumnDomain::Text{charset:CharacterSet::Utf8Mb3,character_limit:Some(2),fixed...
+   |                                           ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:42:44
+   |
+42 |     let text=col(ColumnType::Text,Some(4)).with_domain(ColumnDomain::Text{charset:CharacterSet::Utf8Mb4,character_limit:None,fixed_w...
+   |                                            ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:44:48
+   |
+44 |     let binary=col(ColumnType::Binary,Some(4)).with_domain(ColumnDomain::Binary{fixed_width:true}).unwrap();
+   |                                                ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:51:41
+   |
+51 |     let c=col(ColumnType::Decimal,None).with_domain(ColumnDomain::Decimal{unsigned:true}).unwrap();
+   |                                         ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:58:53
+   |
+58 |         assert!(col(ColumnType::SignedInteger,None).with_domain(domain).is_err());
+   |                                                     ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:61:47
+   |
+61 |         assert!(col(ColumnType::Text,Some(4)).with_domain(domain).is_err());
+   |                                               ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:66:57
+   |
+66 |     let c=col(ColumnType::SignedInteger,None);assert!(c.domain().is_none());
+   |                                                         ^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:68:24
+   |
+68 |     let tiny=c.clone().with_domain(ColumnDomain::Integer{bits:8,unsigned:false}).unwrap();
+   |                        ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_domain` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\column_domain_contract.rs:69:16
+   |
+69 |     let wide=c.with_domain(ColumnDomain::Integer{bits:64,unsigned:false}).unwrap();assert_ne!(tiny,wide);
+   |                ^^^^^^^^^^^ method not found in `ColumnMeta`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-datasource` (test "column_domain_contract") due to 14 previous errors

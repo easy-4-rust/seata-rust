@@ -1,0 +1,22 @@
+   Compiling seata-transport v0.1.0 (D:\codex-builds\seata-pool-controls-6c97078fb568\crates\seata_transport)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.64s
+     Running tests\connection_pool.rs (D:/cargo-target/seata-rust-pool-controls\debug\deps\connection_pool-44d5c33506ab0419.exe)
+
+running 1 test
+test owner_drop_closes_active_requests_and_all_pool_handles ... FAILED
+
+failures:
+
+---- owner_drop_closes_active_requests_and_all_pool_handles stdout ----
+
+thread 'owner_drop_closes_active_requests_and_all_pool_handles' (49296) panicked at crates\seata_transport\tests\connection_pool.rs:357:5:
+assertion failed: handle.snapshot().closed
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    owner_drop_closes_active_requests_and_all_pool_handles
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-transport --test connection_pool`

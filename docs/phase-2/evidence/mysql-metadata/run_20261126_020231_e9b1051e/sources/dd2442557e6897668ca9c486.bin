@@ -1,0 +1,164 @@
+use crate::DbError;
+use seata_datasource::TableMeta;
+use sqlx::mysql::MySqlConnectOptions;
+use sqlx::{Connection, MySql, MySqlConnection, Row, Transaction};
+
+/// 在业务连接持有 MDL 时，用同身份新会话读取当前触发器和外键。
+/// 对应 Java: 无直接对象；Rust 事务字典快照一致性检查。
+pub(crate) struct CurrentTableConstraints;
+impl CurrentTableConstraints {
+    /// 参数为原事务、原连接配置及表身份；返回约束校验结果，由调用方绝对期限覆盖全部检查。
+    pub(crate) async fn verify(
+        transaction: &mut Transaction<'static, MySql>,
+        options: &MySqlConnectOptions,
+        database: &str,
+        table: &str,
+    ) -> Result<(), DbError> {
+        let mut connection = Self::connect_current(transaction, options, database, table).await?;
+        let (has_trigger, has_foreign_key) = Self::read(&mut connection, database, table).await?;
+        connection
+            .close()
+            .await
+            .map_err(|error| DbError::driver("current constraints close", error))?;
+        if has_trigger {
+            return Err(DbError::Unsupported {
+                feature: "table trigger",
+            });
+        }
+        if has_foreign_key {
+            return Err(DbError::Unsupported {
+                feature: "inbound/outbound foreign key",
+            });
+        }
+        Ok(())
+    }
+
+    /// 参数为持锁连接、schema 与目标表；返回触发器、跨库双向外键的存在标志。
+    pub(crate) async fn read(
+        connection: &mut MySqlConnection,
+        database: &str,
+        table: &str,
+    ) -> Result<(bool, bool), DbError> {
+        let grants = sqlx::query("SHOW GRANTS")
+            .fetch_all(&mut *connection)
+            .await
+            .map_err(|e| DbError::driver("metadata visibility", e))?;
+        let mut trigger = false;
+        let mut process = false;
+        let mut execute = false;
+        let quoted_database = TableMeta::quote_identifier(database)?;
+        let schema_scope = format!("{quoted_database}.*");
+        let table_scope = format!("{quoted_database}.{}", TableMeta::quote_identifier(table)?);
+        let routine = format!("{quoted_database}.`seata_rs_at_constraint_flags_v1`");
+        let routine_scope = format!("FUNCTION {routine}");
+        for row in grants {
+            let grant: String = row
+                .try_get(0)
+                .map_err(|e| DbError::driver("grant metadata", e))?;
+            if grant.starts_with("REVOKE ") {
+                return Err(DbError::Unsupported {
+                    feature: "partial metadata privilege revocation",
+                });
+            }
+            let Some(text) = grant.strip_prefix("GRANT ") else {
+                continue;
+            };
+            let Some((privileges, rest)) = text.split_once(" ON ") else {
+                continue;
+            };
+            let Some((scope, _)) = rest.split_once(" TO ") else {
+                continue;
+            };
+            let all = privileges.split(',').any(|p| p.trim() == "ALL PRIVILEGES");
+            if scope == "*.*" || scope == schema_scope || scope == table_scope {
+                trigger |= all || privileges.split(',').any(|p| p.trim() == "TRIGGER");
+            }
+            if scope == routine_scope {
+                execute |= privileges.split(',').any(|p| p.trim() == "EXECUTE");
+            }
+            if scope == "*.*" {
+                process |= all || privileges.split(',').any(|p| p.trim() == "PROCESS");
+            }
+        }
+        if trigger && process {
+            let triggers: i64 = sqlx::query_scalar(
+                "SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA=? AND EVENT_OBJECT_TABLE=?",
+            ).bind(database).bind(table).fetch_one(&mut *connection).await
+                .map_err(|error| DbError::driver("current triggers", error))?;
+            let foreign: i64 = sqlx::query_scalar(
+                "SELECT COUNT(*) FROM information_schema.INNODB_FOREIGN WHERE FOR_NAME=CONCAT(?,'/',?) OR REF_NAME=CONCAT(?,'/',?)",
+            ).bind(database).bind(table).bind(database).bind(table).fetch_one(&mut *connection).await
+                .map_err(|error| DbError::driver("current foreign keys", error))?;
+            return Ok((triggers != 0, foreign != 0));
+        }
+        if execute {
+            // 仅接受部署端显式授予的固定函数，防止把会话内自定义对象视为可信字典。
+            let declared: i64 = sqlx::query_scalar(
+                "SELECT COUNT(*) FROM information_schema.ROUTINES WHERE BINARY ROUTINE_SCHEMA=BINARY ?                  AND BINARY ROUTINE_NAME='seata_rs_at_constraint_flags_v1' AND ROUTINE_TYPE='FUNCTION'                  AND SECURITY_TYPE='DEFINER' AND SQL_DATA_ACCESS='READS SQL DATA'",
+            )
+            .bind(database)
+            .fetch_one(&mut *connection)
+            .await
+            .map_err(|error| DbError::driver("constraint routine definition", error))?;
+            if declared != 1 {
+                return Err(DbError::Unsupported {
+                    feature: "metadata constraint routine definition",
+                });
+            }
+            let flags: Option<i64> =
+                sqlx::query_scalar(&format!("SELECT CAST({routine}(?) AS SIGNED)"))
+                    .bind(table)
+                    .fetch_one(&mut *connection)
+                    .await
+                    .map_err(|error| DbError::driver("constraint routine result", error))?;
+            let flags =
+                flags
+                    .filter(|value| (0..=3).contains(value))
+                    .ok_or(DbError::Unsupported {
+                        feature: "metadata constraint routine result",
+                    })?;
+            return Ok((flags & 1 != 0, flags & 2 != 0));
+        }
+        if !trigger {
+            return Err(DbError::Unsupported {
+                feature: "metadata trigger visibility",
+            });
+        }
+        Err(DbError::Unsupported {
+            feature: "metadata foreign-key visibility",
+        })
+    }
+
+    /// 参数为持锁原事务、连接配置、schema 与表名；返回已核对实例/schema 的同身份新连接。
+    /// 原 MDL 由调用方事务持续持有，返回连接的使用及关闭必须处于原操作期限内。
+    pub(crate) async fn connect_current(
+        transaction: &mut Transaction<'static, MySql>,
+        options: &MySqlConnectOptions,
+        database: &str,
+        table: &str,
+    ) -> Result<MySqlConnection, DbError> {
+        let quoted = TableMeta::quote_identifier(table)?;
+        sqlx::query(&format!("SELECT 1 FROM {quoted} LIMIT 0 FOR UPDATE"))
+            .execute(&mut **transaction)
+            .await
+            .map_err(|error| DbError::driver("current constraints metadata lock", error))?;
+        let mut connection = MySqlConnection::connect_with(options)
+            .await
+            .map_err(|error| DbError::driver("current constraints connection", error))?;
+        // 配置可能经代理解析到不同后端。辅助查询必须确认是原实例和原 schema。
+        let original: (String, String) = sqlx::query_as("SELECT @@server_uuid,DATABASE()")
+            .fetch_one(&mut **transaction)
+            .await
+            .map_err(|error| DbError::driver("original constraint server identity", error))?;
+        let current: (String, String) = sqlx::query_as("SELECT @@server_uuid,DATABASE()")
+            .fetch_one(&mut connection)
+            .await
+            .map_err(|error| DbError::driver("current constraint server identity", error))?;
+        if original != current || original.1 != database {
+            return Err(DbError::Unsupported {
+                feature: "current constraints require the original physical MySQL schema",
+            });
+        }
+        Ok(connection)
+    }
+}

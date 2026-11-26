@@ -1,0 +1,22 @@
+   Compiling seata-tm v0.1.0 (D:\codex-builds\seata-tm-controls-18a695f50a99\crates\seata_tm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.90s
+     Running tests\manager_calls.rs (D:/cargo-target/seata-rust-tm-controls\debug\deps\manager_calls-21e9a59b86a61e42.exe)
+
+running 1 test
+test lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin ... FAILED
+
+failures:
+
+---- lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin stdout ----
+
+thread 'lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin' (18704) panicked at crates\seata_tm\tests\manager_calls.rs:156:5:
+assertion failed: matches!(error, TmError::UnknownOutcome { operation: TmOperation::Begin, .. })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.09s
+
+error: test failed, to rerun pass `-p seata-tm --test manager_calls`

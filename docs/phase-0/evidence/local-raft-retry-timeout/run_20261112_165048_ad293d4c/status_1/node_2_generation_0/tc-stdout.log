@@ -1,0 +1,777 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+16:52:51.742  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+16:52:51.807  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+16:52:51.846  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 74956 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2)
+16:52:51.847  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+16:52:52.542  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+16:52:52.552  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: raft
+16:52:52.677  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 1.802 seconds (process running for 3.269)
+16:52:52.898  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: raft
+16:52:52.929  WARN --- [                     main] [cluster.raft.RaftServerManager] [                init]  [] : raft mode and raft cluster is an experimental feature
+16:52:53.006  INFO --- [                     main] [.jraft.util.JRaftServiceLoader] [         newProvider]  [] : SPI service [com.alipay.sofa.jraft.rpc.RaftRpcFactory - com.alipay.sofa.jraft.rpc.impl.BoltRaftRpcFactory] loading.
+Sofa-Middleware-Log SLF4J : Actual binding is of type [ com.alipay.remoting Logback ]
+16:52:53.109  INFO --- [                     main] [com.alipay.sofa.common.log    ] [              report]  [] : Sofa-Middleware-Log SLF4J : Actual binding is of type [ com.alipay.remoting Logback ]
+16:52:53.112 ERROR --- [                     main] [com.alipay.sofa.common.log    ] [         reportError]  [] : Sofa-Middleware-Log SLF4J Error: Build ILoggerFactory error! Default app logger will be used.
+16:52:53.149  INFO --- [                     main] [.jraft.util.JRaftServiceLoader] [         newProvider]  [] : SPI service [com.alipay.sofa.jraft.JRaftServiceFactory - com.alipay.sofa.jraft.core.DefaultJRaftServiceFactory] loading.
+16:52:53.183  INFO --- [                     main] [.jraft.util.JRaftServiceLoader] [         newProvider]  [] : SPI service [com.alipay.sofa.jraft.util.timer.RaftTimerFactory - com.alipay.sofa.jraft.util.timer.DefaultRaftTimerFactory] loading.
+16:52:53.191  INFO --- [                     main] [lipay.sofa.jraft.core.NodeImpl] [              <init>]  [] : The number of active nodes increment to 1.
+16:52:53.420  INFO --- [                     main] [.sofa.jraft.core.FSMCallerImpl] [                init]  [] : Starts FSMCaller successfully.
+16:52:53.426  WARN --- [                     main] [hot.local.LocalSnapshotStorage] [                open]  [] : No data for snapshot reader D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/data/sessionStore\raft\28096\default\snapshot.
+16:52:53.451  WARN --- [                     main] [com.alipay.sofa.common.log    ] [WriteBufferWaterMark]  [] : [client side] bolt netty low water mark is 262144 bytes, high water mark is 524288 bytes
+16:52:53.481  WARN --- [                     main] [com.alipay.sofa.common.log    ] [             startup]  [] : Switch on reconnect manager
+16:52:53.487  INFO --- [                     main] [lipay.sofa.jraft.core.NodeImpl] [                init]  [] : Node <default/192.168.1.10:28096> init, term=0, lastLogId=LogId [index=0, term=0], conf=192.168.1.10:28092,192.168.1.10:28094,192.168.1.10:28096, oldConf=.
+16:52:53.490  WARN --- [                     main] [ay.sofa.jraft.RaftGroupService] [               start]  [] : RPC server is not started in RaftGroupService.
+16:52:53.490  INFO --- [                     main] [ay.sofa.jraft.RaftGroupService] [               start]  [] : Start the RaftGroupService successfully.
+16:52:53.491  INFO --- [                     main] [cluster.raft.RaftServerManager] [      lambda$start$0]  [] : started seata server raft cluster, group: default 
+16:52:53.503  WARN --- [                     main] [com.alipay.sofa.common.log    ] [WriteBufferWaterMark]  [] : [server side] bolt netty low water mark is 262144 bytes, high water mark is 524288 bytes
+16:52:53.505  WARN --- [                     main] [com.alipay.sofa.common.log    ] [             startup]  [] : Prepare to start server on port 28096 
+16:52:53.593  WARN --- [                     main] [com.alipay.sofa.common.log    ] [             startup]  [] : Server started on port 28096
+16:52:53.604  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 28095
+16:52:53.605  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/logs.
+16:52:53.605  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 925 millSeconds
+RAFT_CONTROL_READY pid=74956 port=28103
+16:52:54.763  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:28096], remote[192.168.1.10:52848], event: CONNECT
+16:52:54.764  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: 192.168.1.10:52848
+16:52:54.764  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:52848
+16:52:54.813  INFO --- [fault-executor-6-thread-2] [lipay.sofa.jraft.core.NodeImpl] [handlePreVoteRequest]  [] : Node <default/192.168.1.10:28096> received PreVoteRequest from 192.168.1.10:28092, term=1, currTerm=0, granted=true, requestLastLogId=LogId [index=0, term=0], lastLogId=LogId [index=0, term=0].
+16:52:54.863  INFO --- [fault-executor-6-thread-3] [lipay.sofa.jraft.core.NodeImpl] [leRequestVoteRequest]  [] : Node <default/192.168.1.10:28096> received RequestVoteRequest from 192.168.1.10:28092, term=1, currTerm=0.
+16:52:54.876  WARN --- [fault-executor-6-thread-3] [m.alipay.sofa.jraft.util.Utils] [               fsync]  [] : Unable to fsync directory D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2\data\sessionStore\raft\28096\default\raft_meta on windows.
+16:52:54.876  INFO --- [fault-executor-6-thread-3] [rage.impl.LocalRaftMetaStorage] [                save]  [] : Save raft meta, path=D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/data/sessionStore\raft\28096\default\raft_meta, term=1, votedFor=0.0.0.0:0, cost time=11 ms
+16:52:54.881  WARN --- [fault-executor-6-thread-3] [m.alipay.sofa.jraft.util.Utils] [               fsync]  [] : Unable to fsync directory D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2\data\sessionStore\raft\28096\default\raft_meta on windows.
+16:52:54.881  INFO --- [fault-executor-6-thread-3] [rage.impl.LocalRaftMetaStorage] [                save]  [] : Save raft meta, path=D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/data/sessionStore\raft\28096\default\raft_meta, term=1, votedFor=192.168.1.10:28092, cost time=5 ms
+16:52:54.893  WARN --- [-server-worker-1-thread-1] [ft.rpc.impl.BoltRaftRpcFactory] [      ensurePipeline]  [] : JRaft SET bolt.rpc.dispatch-msg-list-in-default-executor to be false for replicator pipeline optimistic.
+16:52:54.897  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [    onStartFollowing]  [] : groupId: default, onStartFollowing: LeaderChangeContext [leaderId=192.168.1.10:28092, term=1, status=Status[ENEWLEADER<10011>: Follower receives message from new leader with the same term.]].
+16:52:54.910  INFO --- [092]-AppendEntriesThread0] [ipay.sofa.jraft.util.Recyclers] [            <clinit>]  [] : -Djraft.recyclers.maxCapacityPerThread: 4096.
+16:52:55.059  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [freshClusterMetadata]  [] : groupId: default, refresh cluster metadata: RaftClusterMetadata(leader=Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28091), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28091), internal=Endpoint(host="192.168.1.10", protocol=null, port=28092), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.LEADER, version="2.8.0-SNAPSHOT", metadata={}), followers=[], learner=[], term=1)
+16:52:55.061  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [freshClusterMetadata]  [] : groupId: default, refresh cluster metadata: RaftClusterMetadata(leader=Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28091), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28091), internal=Endpoint(host="192.168.1.10", protocol=null, port=28092), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.LEADER, version="2.8.0-SNAPSHOT", metadata={}), followers=[], learner=[], term=1)
+16:52:55.061  INFO --- [                   task-3] [.manager.ClusterWatcherManager] [       onChangeEvent]  [] : Discarding outdated event with term 1 for group default, current term is 1
+16:52:55.262  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:55.478  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:55.628  INFO --- [aft-FSMCaller-Disruptor-0] [ot.session.SessionSnapshotFile] [                save]  [] : groupId: default, global session size: 2
+16:52:55.632  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [      onSnapshotSave]  [] : groupId: default, onSnapshotSave cost: 26 ms.
+16:52:55.651  WARN --- [-Group-Default-Executor-0] [m.alipay.sofa.jraft.util.Utils] [               fsync]  [] : Unable to fsync directory D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2\data\sessionStore\raft\28096\default\snapshot\temp on windows.
+16:52:55.651  INFO --- [-Group-Default-Executor-0] [hot.local.LocalSnapshotStorage] [     destroySnapshot]  [] : Deleting snapshot D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/data/sessionStore\raft\28096\default\snapshot\snapshot_8.
+16:52:55.651  INFO --- [-Group-Default-Executor-0] [hot.local.LocalSnapshotStorage] [               close]  [] : Renaming D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2\data\sessionStore\raft\28096\default\snapshot\temp to D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/data/sessionStore\raft\28096\default\snapshot\snapshot_8.
+16:52:55.652  WARN --- [-Group-Default-Executor-0] [m.alipay.sofa.jraft.util.Utils] [               fsync]  [] : Unable to fsync directory D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2\data\sessionStore\raft\28096\default\snapshot on windows.
+16:52:55.652  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:55.695  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:55.701  WARN --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [     exceptionCaught]  [] : ExceptionCaught in connection: local[192.168.1.10:28096], remote[192.168.1.10:52848], close the connection! Cause[SocketException:Connection reset]
+16:52:55.701  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:52848
+16:52:55.706  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:52848
+16:52:55.706  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [   operationComplete]  [] : Close the connection to remote address=192.168.1.10:52848, result=true, cause=null
+16:52:55.706  WARN --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [              remove]  [] : Remove and close the last connection in ConnectionPool with poolKey 192.168.1.10:52848
+16:52:55.706  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel inactive: 192.168.1.10:52848
+16:52:55.706  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:28096], remote[192.168.1.10:52848], event: CLOSE
+16:52:55.706  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:52848
+16:52:55.707  INFO --- [vent-executor-10-thread-1] [.jraft.rpc.RpcRequestProcessor] [             destroy]  [] : Destroyed peer request context for default/PeerPair[192.168.1.10:28096 -> 192.168.1.10:28092]
+16:52:55.717  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:55.920  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:56.123  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:56.349  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:56.551  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:52:56.612  INFO --- [ault/192.168.1.10:28096>0] [lipay.sofa.jraft.core.NodeImpl] [             preVote]  [] : Node <default/192.168.1.10:28096> term 1 start preVote.
+16:52:56.612  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [     onStopFollowing]  [] : groupId: default, onStopFollowing: LeaderChangeContext [leaderId=192.168.1.10:28092, term=1, status=Status[ERAFTTIMEDOUT<10001>: Lost connection from leader 192.168.1.10:28092.]].
+16:52:56.613  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.core.NodeImpl.preVote(NodeImpl.java:2699)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleElectionTimeout(NodeImpl.java:638)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1300(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$2.onTrigger(NodeImpl.java:941)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:52:56.618  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:52:56.618  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:52:57.620  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:52:57.620  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:52:57.620  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:52:57.620 ERROR --- [ault/192.168.1.10:28096>0] [rpc.impl.AbstractClientService] [             connect]  [] : Fail to connect 192.168.1.10:28092, remoting exception: com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092.
+16:52:57.620  WARN --- [ault/192.168.1.10:28096>0] [lipay.sofa.jraft.core.NodeImpl] [             preVote]  [] : Node <default/192.168.1.10:28096> channel init failed, address=192.168.1.10:28092.
+16:52:57.620  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28094, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.core.NodeImpl.preVote(NodeImpl.java:2699)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleElectionTimeout(NodeImpl.java:638)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1300(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$2.onTrigger(NodeImpl.java:941)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:52:57.621  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:52:57.621  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28094
+16:52:57.623  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:28094
+16:52:57.623  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:52890], remote[192.168.1.10:28094], event: CONNECT
+16:52:57.623  INFO --- [event-executor-5-thread-1] [erviceConnectionEventProcessor] [             onEvent]  [] : Peer 192.168.1.10:28094 is connected
+16:52:57.640  INFO --- [    JRaft-RPC-Processor-0] [lipay.sofa.jraft.core.NodeImpl] [andlePreVoteResponse]  [] : Node <default/192.168.1.10:28096> received PreVoteResponse from 192.168.1.10:28094, term=1, granted=true.
+16:52:57.640  INFO --- [    JRaft-RPC-Processor-0] [lipay.sofa.jraft.core.NodeImpl] [           electSelf]  [] : Node <default/192.168.1.10:28096> start vote and grant vote self, term=1.
+16:52:57.641  WARN --- [    JRaft-RPC-Processor-0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.core.NodeImpl.electSelf(NodeImpl.java:1169)
+	at com.alipay.sofa.jraft.core.NodeImpl.handlePreVoteResponse(NodeImpl.java:2629)
+	at com.alipay.sofa.jraft.core.NodeImpl$OnPreVoteRpcDone.run(NodeImpl.java:2659)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService$1.complete(AbstractClientService.java:240)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient$BoltCallback.onResponse(BoltRpcClient.java:172)
+	at com.alipay.remoting.rpc.RpcInvokeCallbackListener$CallbackTask.run(RpcInvokeCallbackListener.java:182)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:52:57.642  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:52:57.642  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:52:58.112  INFO --- [-server-worker-1-thread-2] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:28096], remote[192.168.1.10:52895], event: CONNECT
+16:52:58.112  INFO --- [-server-worker-1-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: 192.168.1.10:52895
+16:52:58.112  INFO --- [-server-worker-1-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:52895
+16:52:58.643  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:52:58.643  WARN --- [    JRaft-RPC-Processor-0] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:52:58.643 ERROR --- [    JRaft-RPC-Processor-0] [rpc.impl.AbstractClientService] [             connect]  [] : Fail to connect 192.168.1.10:28092, remoting exception: com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092.
+16:52:58.643  WARN --- [    JRaft-RPC-Processor-0] [lipay.sofa.jraft.core.NodeImpl] [           electSelf]  [] : Node <default/192.168.1.10:28096> channel init failed, address=192.168.1.10:28092.
+16:52:58.643  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:52:58.647  WARN --- [    JRaft-RPC-Processor-0] [m.alipay.sofa.jraft.util.Utils] [               fsync]  [] : Unable to fsync directory D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2\data\sessionStore\raft\28096\default\raft_meta on windows.
+16:52:58.647  INFO --- [    JRaft-RPC-Processor-0] [rage.impl.LocalRaftMetaStorage] [                save]  [] : Save raft meta, path=D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/data/sessionStore\raft\28096\default\raft_meta, term=2, votedFor=192.168.1.10:28096, cost time=3 ms
+16:52:58.647  INFO --- [fault-executor-6-thread-7] [lipay.sofa.jraft.core.NodeImpl] [handlePreVoteRequest]  [] : Node <default/192.168.1.10:28096> received PreVoteRequest from 192.168.1.10:28094, term=2, currTerm=2, granted=true, requestLastLogId=LogId [index=8, term=1], lastLogId=LogId [index=8, term=1].
+16:52:58.998  WARN --- [ault/192.168.1.10:28096>0] [lipay.sofa.jraft.core.NodeImpl] [   handleVoteTimeout]  [] : Candidate node <default/192.168.1.10:28096> term 2 steps down when election reaching vote timeout: fail to get quorum vote-granted.
+16:52:58.998  INFO --- [ault/192.168.1.10:28096>0] [lipay.sofa.jraft.core.NodeImpl] [             preVote]  [] : Node <default/192.168.1.10:28096> term 2 start preVote.
+16:52:58.998  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.core.NodeImpl.preVote(NodeImpl.java:2699)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleVoteTimeout(NodeImpl.java:2741)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1100(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$1.onTrigger(NodeImpl.java:927)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:52:58.998  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:52:58.998  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:52:59.999  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:52:59.999  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:52:59.999 ERROR --- [ault/192.168.1.10:28096>0] [rpc.impl.AbstractClientService] [             connect]  [] : Fail to connect 192.168.1.10:28092, remoting exception: com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092.
+16:52:59.999  WARN --- [ault/192.168.1.10:28096>0] [lipay.sofa.jraft.core.NodeImpl] [             preVote]  [] : Node <default/192.168.1.10:28096> channel init failed, address=192.168.1.10:28092.
+16:52:59.999  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:52:59.999  WARN --- [    JRaft-RPC-Processor-1] [lipay.sofa.jraft.core.NodeImpl] [eRequestVoteResponse]  [] : Node <default/192.168.1.10:28096> received invalid RequestVoteResponse from 192.168.1.10:28094, state not in STATE_CANDIDATE but STATE_FOLLOWER.
+16:53:00.001  INFO --- [    JRaft-RPC-Processor-2] [lipay.sofa.jraft.core.NodeImpl] [andlePreVoteResponse]  [] : Node <default/192.168.1.10:28096> received PreVoteResponse from 192.168.1.10:28094, term=2, granted=true.
+16:53:00.002  INFO --- [    JRaft-RPC-Processor-2] [lipay.sofa.jraft.core.NodeImpl] [           electSelf]  [] : Node <default/192.168.1.10:28096> start vote and grant vote self, term=2.
+16:53:00.002  WARN --- [    JRaft-RPC-Processor-2] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.core.NodeImpl.electSelf(NodeImpl.java:1169)
+	at com.alipay.sofa.jraft.core.NodeImpl.handlePreVoteResponse(NodeImpl.java:2629)
+	at com.alipay.sofa.jraft.core.NodeImpl$OnPreVoteRpcDone.run(NodeImpl.java:2659)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService$1.complete(AbstractClientService.java:240)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient$BoltCallback.onResponse(BoltRpcClient.java:172)
+	at com.alipay.remoting.rpc.RpcInvokeCallbackListener$CallbackTask.run(RpcInvokeCallbackListener.java:182)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:00.002  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:00.002  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:01.003  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:53:01.003  WARN --- [    JRaft-RPC-Processor-2] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:53:01.003 ERROR --- [    JRaft-RPC-Processor-2] [rpc.impl.AbstractClientService] [             connect]  [] : Fail to connect 192.168.1.10:28092, remoting exception: com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092.
+16:53:01.003  WARN --- [    JRaft-RPC-Processor-2] [lipay.sofa.jraft.core.NodeImpl] [           electSelf]  [] : Node <default/192.168.1.10:28096> channel init failed, address=192.168.1.10:28092.
+16:53:01.003  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:53:01.007  WARN --- [    JRaft-RPC-Processor-2] [m.alipay.sofa.jraft.util.Utils] [               fsync]  [] : Unable to fsync directory D:\codex-builds\seata raft retry timeout\20261112_165048_ad293d4c\status_1\node_2\data\sessionStore\raft\28096\default\raft_meta on windows.
+16:53:01.007  INFO --- [    JRaft-RPC-Processor-2] [rage.impl.LocalRaftMetaStorage] [                save]  [] : Save raft meta, path=D:/codex-builds/seata raft retry timeout/20261112_165048_ad293d4c/status_1/node_2/data/sessionStore\raft\28096\default\raft_meta, term=3, votedFor=192.168.1.10:28096, cost time=3 ms
+16:53:01.007  INFO --- [ault-executor-6-thread-10] [lipay.sofa.jraft.core.NodeImpl] [handlePreVoteRequest]  [] : Node <default/192.168.1.10:28096> received PreVoteRequest from 192.168.1.10:28094, term=3, currTerm=3, granted=true, requestLastLogId=LogId [index=8, term=1], lastLogId=LogId [index=8, term=1].
+16:53:01.543  INFO --- [    JRaft-RPC-Processor-3] [lipay.sofa.jraft.core.NodeImpl] [        becomeLeader]  [] : Node <default/192.168.1.10:28096> become leader of group, term=3, conf=192.168.1.10:28092,192.168.1.10:28094,192.168.1.10:28096, oldConf=.
+16:53:01.548  WARN --- [    JRaft-RPC-Processor-3] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.core.Replicator.start(Replicator.java:895)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:131)
+	at com.alipay.sofa.jraft.ReplicatorGroup.addReplicator(ReplicatorGroup.java:73)
+	at com.alipay.sofa.jraft.ReplicatorGroup.addReplicator(ReplicatorGroup.java:57)
+	at com.alipay.sofa.jraft.core.NodeImpl.becomeLeader(NodeImpl.java:1244)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleRequestVoteResponse(NodeImpl.java:2566)
+	at com.alipay.sofa.jraft.core.NodeImpl$OnRequestVoteRpcDone.run(NodeImpl.java:2596)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService$1.complete(AbstractClientService.java:240)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient$BoltCallback.onResponse(BoltRpcClient.java:172)
+	at com.alipay.remoting.rpc.RpcInvokeCallbackListener$CallbackTask.run(RpcInvokeCallbackListener.java:182)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:01.549  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:01.549  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:02.550  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:53:02.550  WARN --- [    JRaft-RPC-Processor-3] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:53:02.550 ERROR --- [    JRaft-RPC-Processor-3] [rpc.impl.AbstractClientService] [             connect]  [] : Fail to connect 192.168.1.10:28092, remoting exception: com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092.
+16:53:02.550  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:53:02.550 ERROR --- [    JRaft-RPC-Processor-3] [pay.sofa.jraft.core.Replicator] [               start]  [] : Fail to init sending channel to 192.168.1.10:28092, group: default.
+16:53:02.550 ERROR --- [    JRaft-RPC-Processor-3] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to start replicator to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:02.550 ERROR --- [    JRaft-RPC-Processor-3] [lipay.sofa.jraft.core.NodeImpl] [        becomeLeader]  [] : Fail to add a replicator, peer=192.168.1.10:28092.
+16:53:02.551  INFO --- [    JRaft-RPC-Processor-3] [pay.sofa.jraft.core.Replicator] [               start]  [] : Replicator [group: default, peer: 192.168.1.10:28094, type: Follower] is started
+16:53:02.563  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [       onLeaderStart]  [] : groupId: default, onLeaderStart: term=3.
+16:53:02.563  INFO --- [-server-worker-1-thread-3] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:28096], remote[192.168.1.10:49391], event: CONNECT
+16:53:02.563  INFO --- [-server-worker-1-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: 192.168.1.10:49391
+16:53:02.563  INFO --- [-server-worker-1-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:49391
+16:53:02.567  INFO --- [                Thread-25] [.cluster.raft.RaftStateMachine] [mbda$onLeaderStart$2]  [] : reload session, groupId: default, session map size: 2 
+16:53:02.574  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [freshClusterMetadata]  [] : groupId: default, refresh cluster metadata: RaftClusterMetadata(leader=Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28095), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28095), internal=Endpoint(host="192.168.1.10", protocol=null, port=28096), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.LEADER, version="2.8.0-SNAPSHOT", metadata={}), followers=[Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28093), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28093), internal=Endpoint(host="192.168.1.10", protocol=null, port=28094), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={})], learner=[], term=3)
+16:53:02.575  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [freshClusterMetadata]  [] : groupId: default, refresh cluster metadata: RaftClusterMetadata(leader=Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28095), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28095), internal=Endpoint(host="192.168.1.10", protocol=null, port=28096), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.LEADER, version="2.8.0-SNAPSHOT", metadata={}), followers=[Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28093), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28093), internal=Endpoint(host="192.168.1.10", protocol=null, port=28094), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={})], learner=[], term=3)
+16:53:02.575  INFO --- [                   task-7] [.manager.ClusterWatcherManager] [       onChangeEvent]  [] : Discarding outdated event with term 3 for group default, current term is 3
+16:53:02.575  INFO --- [                   task-7] [.manager.ClusterWatcherManager] [       onChangeEvent]  [] : Discarding outdated event with term 3 for group default, current term is 3
+16:53:02.575  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [freshClusterMetadata]  [] : groupId: default, refresh cluster metadata: RaftClusterMetadata(leader=Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28095), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28095), internal=Endpoint(host="192.168.1.10", protocol=null, port=28096), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.LEADER, version="2.8.0-SNAPSHOT", metadata={}), followers=[Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28093), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28093), internal=Endpoint(host="192.168.1.10", protocol=null, port=28094), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={})], learner=[], term=3)
+16:53:02.576  INFO --- [                Thread-25] [a.server.session.SessionHolder] [              reload]  [] : change global status: RollbackRetrying, xid: 192.168.1.10:28091:940001
+16:53:02.580  INFO --- [                Thread-25] [a.server.session.SessionHolder] [              reload]  [] : change global status: RollbackRetrying, xid: 192.168.1.10:28091:940000
+16:53:02.588  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:53:02.615  INFO --- [     RetryRollbacking_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [192.168.1.10:28091:940000] : No channel is available for resource[mysql://raft-retry-0]
+16:53:02.615 ERROR --- [     RetryRollbacking_1_1] [server.coordinator.DefaultCore] [               error]  [192.168.1.10:28091:940000] : Rollback branch transaction exception, xid = 192.168.1.10:28091:940000 ,branchId = 950000 ,retrying=true ,exception = Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000, global rollback failed
+16:53:02.615 ERROR --- [     RetryRollbacking_1_1] [coordinator.DefaultCoordinator] [leRetryRollbacking$2]  [192.168.1.10:28091:940000] : Failed to retry rollbacking [192.168.1.10:28091:940000] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000
+16:53:02.627  INFO --- [nPool.commonPool-worker-1] [server.coordinator.DefaultCore] [    doGlobalRollback]  [192.168.1.10:28091:940001] : Rollback global transaction successfully, xid = 192.168.1.10:28091:940001.
+16:53:02.790  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:53:02.918  INFO --- [ettyServerNIOWorker_1_3_4] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='raft-read-only', transactionServiceGroup='default_tx_group', extraData=''},channel:[id: 0xd0511697, L:/127.0.0.1:28095 - R:/127.0.0.1:51436],client version:1.1.0,client protocol-version:null
+16:53:02.923  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='192.168.1.10:28091:940000', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+16:53:02.930  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetrying, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+16:53:02.933  INFO --- [ettyServerNIOWorker_1_3_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:51436 to server channel inactive.
+16:53:02.933  INFO --- [ettyServerNIOWorker_1_3_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xd0511697, L:/127.0.0.1:28095 ! R:/127.0.0.1:51436]context:RpcContext{applicationId='raft-read-only', transactionServiceGroup='default_tx_group', clientId='raft-read-only:127.0.0.1:51436', channel=[id: 0xd0511697, L:/127.0.0.1:28095 ! R:/127.0.0.1:51436], resourceSets=null}
+16:53:02.936  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='192.168.1.10:28091:940001', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+16:53:02.936  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+16:53:02.956  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:53:03.056  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:03.058 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:03.058  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:03.059  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:03.162  WARN --- [   reSyncMetadataPool_1_1] [com.alipay.sofa.common.log    ] [WriteBufferWaterMark]  [] : [client side] bolt netty low water mark is 262144 bytes, high water mark is 524288 bytes
+16:53:03.163  WARN --- [   reSyncMetadataPool_1_1] [com.alipay.sofa.common.log    ] [             startup]  [] : Switch on reconnect manager
+16:53:03.163  WARN --- [   reSyncMetadataPool_1_1] [com.alipay.sofa.common.log    ] [WriteBufferWaterMark]  [] : [client side] bolt netty low water mark is 262144 bytes, high water mark is 524288 bytes
+16:53:03.163  WARN --- [   reSyncMetadataPool_1_1] [com.alipay.sofa.common.log    ] [             startup]  [] : Switch on reconnect manager
+16:53:03.164  WARN --- [   reSyncMetadataPool_1_1] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.RouteTable.refreshLeader(RouteTable.java:242)
+	at org.apache.seata.server.cluster.raft.RaftStateMachine.syncCurrentNodeInfo(RaftStateMachine.java:412)
+	at org.apache.seata.server.cluster.raft.RaftStateMachine.lambda$new$1(RaftStateMachine.java:166)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:03.164  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:03.165  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:03.559  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:03.559 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:03.596  INFO --- [     RetryRollbacking_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [192.168.1.10:28091:940000] : No channel is available for resource[mysql://raft-retry-0]
+16:53:03.596 ERROR --- [     RetryRollbacking_1_1] [server.coordinator.DefaultCore] [               error]  [192.168.1.10:28091:940000] : Rollback branch transaction exception, xid = 192.168.1.10:28091:940000 ,branchId = 950000 ,retrying=true ,exception = Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000, global rollback failed
+16:53:03.596 ERROR --- [     RetryRollbacking_1_1] [coordinator.DefaultCoordinator] [leRetryRollbacking$2]  [192.168.1.10:28091:940000] : Failed to retry rollbacking [192.168.1.10:28091:940000] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000
+16:53:04.059  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:53:04.059  WARN --- [armup-executor-4-thread-1] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:53:04.059 ERROR --- [armup-executor-4-thread-1] [com.alipay.sofa.common.log    ] [                 run]  [] : Exception occurred in async create connection thread for 192.168.1.10:28092, taskName ConnectionPoolCall
+==> 
+com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:479)
+	at com.alipay.remoting.DefaultConnectionManager$1.run(DefaultConnectionManager.java:799)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.Exception: Create connection to 192.168.1.10:28092 error!
+	at com.alipay.remoting.connection.AbstractConnectionFactory.doCreateConnection(AbstractConnectionFactory.java:338)
+	at com.alipay.remoting.connection.AbstractConnectionFactory.createConnection(AbstractConnectionFactory.java:186)
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:476)
+	... 4 common frames omitted
+Caused by: io.netty.channel.ConnectTimeoutException: connection timed out after 1000 ms: /192.168.1.10:28092
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:308)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:160)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:535)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:201)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1195)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	... 1 common frames omitted
+ <==
+16:53:04.059  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:53:04.060  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:04.060 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:04.060  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:04.060  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:04.166  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:53:04.166  WARN --- [   reSyncMetadataPool_1_1] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:53:04.166 ERROR --- [   reSyncMetadataPool_1_1] [rpc.impl.AbstractClientService] [             connect]  [] : Fail to connect 192.168.1.10:28092, remoting exception: com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092.
+16:53:04.166  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:53:04.166  WARN --- [   reSyncMetadataPool_1_1] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28094, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:438)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:433)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:73)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.isConnected(AbstractClientService.java:81)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.connect(AbstractClientService.java:142)
+	at com.alipay.sofa.jraft.RouteTable.refreshLeader(RouteTable.java:242)
+	at org.apache.seata.server.cluster.raft.RaftStateMachine.syncCurrentNodeInfo(RaftStateMachine.java:412)
+	at org.apache.seata.server.cluster.raft.RaftStateMachine.lambda$new$1(RaftStateMachine.java:166)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:04.166  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:04.166  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28094
+16:53:04.167  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:28094
+16:53:04.167  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:51448], remote[192.168.1.10:28094], event: CONNECT
+16:53:04.176  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:04.176  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28096
+16:53:04.178  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:28096
+16:53:04.178  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:51449], remote[192.168.1.10:28096], event: CONNECT
+16:53:04.178  INFO --- [-server-worker-1-thread-4] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:28096], remote[192.168.1.10:51449], event: CONNECT
+16:53:04.178  INFO --- [-server-worker-1-thread-4] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: 192.168.1.10:51449
+16:53:04.178  INFO --- [-server-worker-1-thread-4] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:51449
+16:53:04.182 ERROR --- [ault-executor-6-thread-19] [com.alipay.sofa.common.log    ] [                 run]  [] : CodecException caught on when deserialize response in RpcInvokeCallbackListener. The address is 192.168.1.10:28096.
+==> 
+com.alipay.remoting.exception.DeserializationException: Exception caught when deserialize content of rpc response command!
+	at com.alipay.remoting.rpc.protocol.RpcResponseCommand.deserializeContent(RpcResponseCommand.java:140)
+	at com.alipay.remoting.rpc.RpcCommand.deserialize(RpcCommand.java:117)
+	at com.alipay.remoting.rpc.RpcInvokeCallbackListener$CallbackTask.run(RpcInvokeCallbackListener.java:180)
+	at com.alipay.remoting.rpc.RpcInvokeCallbackListener.onResponse(RpcInvokeCallbackListener.java:85)
+	at com.alipay.remoting.rpc.DefaultInvokeFuture.executeInvokeCallback(DefaultInvokeFuture.java:164)
+	at com.alipay.remoting.rpc.protocol.RpcResponseProcessor.doProcess(RpcResponseProcessor.java:73)
+	at com.alipay.remoting.AbstractRemotingProcessor$ProcessTask.run(AbstractRemotingProcessor.java:145)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: com.alipay.remoting.exception.CodecException: Failed to deserialize data
+	at org.apache.seata.server.cluster.raft.serializer.JacksonBoltSerializer.deserialize(JacksonBoltSerializer.java:44)
+	at com.alipay.remoting.rpc.protocol.RpcResponseCommand.deserializeContent(RpcResponseCommand.java:135)
+	... 9 common frames omitted
+Caused by: java.lang.RuntimeException: com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot construct instance of `org.apache.seata.server.cluster.raft.processor.response.PutNodeMetadataResponse` (although at least one Creator exists): cannot deserialize from Object value (no delegate- or property-based Creator)
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 2]
+	at org.apache.seata.server.cluster.raft.serializer.JacksonSerializer.deserialize(JacksonSerializer.java:56)
+	at org.apache.seata.server.cluster.raft.serializer.JacksonBoltSerializer.deserialize(JacksonBoltSerializer.java:42)
+	... 10 common frames omitted
+Caused by: com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot construct instance of `org.apache.seata.server.cluster.raft.processor.response.PutNodeMetadataResponse` (although at least one Creator exists): cannot deserialize from Object value (no delegate- or property-based Creator)
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 2]
+	at com.fasterxml.jackson.databind.exc.MismatchedInputException.from(MismatchedInputException.java:76)
+	at com.fasterxml.jackson.databind.DeserializationContext.reportInputMismatch(DeserializationContext.java:1801)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleMissingInstantiator(DeserializationContext.java:1426)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1514)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:340)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:5052)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:4015)
+	at org.apache.seata.server.cluster.raft.serializer.JacksonSerializer.deserialize(JacksonSerializer.java:54)
+	... 11 common frames omitted
+ <==
+16:53:04.184  INFO --- [                   task-3] [.manager.ClusterWatcherManager] [       onChangeEvent]  [] : Discarding outdated event with term 3 for group default, current term is 3
+16:53:04.184  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [freshClusterMetadata]  [] : groupId: default, refresh cluster metadata: RaftClusterMetadata(leader=Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28095), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28095), internal=Endpoint(host="192.168.1.10", protocol=null, port=28096), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.LEADER, version="2.8.0-SNAPSHOT", metadata={}), followers=[Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28093), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28093), internal=Endpoint(host="192.168.1.10", protocol=null, port=28094), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={}), Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28095), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28095), internal=Endpoint(host="192.168.1.10", protocol=null, port=28096), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={})], learner=[], term=3)
+16:53:04.562  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:04.562 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:04.595  INFO --- [     RetryRollbacking_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [192.168.1.10:28091:940000] : No channel is available for resource[mysql://raft-retry-0]
+16:53:04.595 ERROR --- [     RetryRollbacking_1_1] [server.coordinator.DefaultCore] [               error]  [192.168.1.10:28091:940000] : Rollback branch transaction exception, xid = 192.168.1.10:28091:940000 ,branchId = 950000 ,retrying=true ,exception = Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000, global rollback failed
+16:53:04.595 ERROR --- [     RetryRollbacking_1_1] [coordinator.DefaultCoordinator] [leRetryRollbacking$2]  [192.168.1.10:28091:940000] : Failed to retry rollbacking [192.168.1.10:28091:940000] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000
+16:53:05.061  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:53:05.061  WARN --- [armup-executor-4-thread-2] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:53:05.061 ERROR --- [armup-executor-4-thread-2] [com.alipay.sofa.common.log    ] [                 run]  [] : Exception occurred in async create connection thread for 192.168.1.10:28092, taskName ConnectionPoolCall
+==> 
+com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:479)
+	at com.alipay.remoting.DefaultConnectionManager$1.run(DefaultConnectionManager.java:799)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.Exception: Create connection to 192.168.1.10:28092 error!
+	at com.alipay.remoting.connection.AbstractConnectionFactory.doCreateConnection(AbstractConnectionFactory.java:338)
+	at com.alipay.remoting.connection.AbstractConnectionFactory.createConnection(AbstractConnectionFactory.java:186)
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:476)
+	... 4 common frames omitted
+Caused by: io.netty.channel.ConnectTimeoutException: connection timed out after 1000 ms: /192.168.1.10:28092
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:308)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:160)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:535)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:201)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1195)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	... 1 common frames omitted
+ <==
+16:53:05.061  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:53:05.064  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:05.064 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:05.064  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:05.064  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:05.565  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:05.565 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:05.595  INFO --- [     RetryRollbacking_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [192.168.1.10:28091:940000] : No channel is available for resource[mysql://raft-retry-0]
+16:53:05.595 ERROR --- [     RetryRollbacking_1_1] [server.coordinator.DefaultCore] [               error]  [192.168.1.10:28091:940000] : Rollback branch transaction exception, xid = 192.168.1.10:28091:940000 ,branchId = 950000 ,retrying=true ,exception = Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000, global rollback failed
+16:53:05.595 ERROR --- [     RetryRollbacking_1_1] [coordinator.DefaultCoordinator] [leRetryRollbacking$2]  [192.168.1.10:28091:940000] : Failed to retry rollbacking [192.168.1.10:28091:940000] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000
+16:53:06.065  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:53:06.065  WARN --- [armup-executor-4-thread-3] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:53:06.065  INFO --- [-client-worker-3-thread-3] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:53:06.065 ERROR --- [armup-executor-4-thread-3] [com.alipay.sofa.common.log    ] [                 run]  [] : Exception occurred in async create connection thread for 192.168.1.10:28092, taskName ConnectionPoolCall
+==> 
+com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:479)
+	at com.alipay.remoting.DefaultConnectionManager$1.run(DefaultConnectionManager.java:799)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.Exception: Create connection to 192.168.1.10:28092 error!
+	at com.alipay.remoting.connection.AbstractConnectionFactory.doCreateConnection(AbstractConnectionFactory.java:338)
+	at com.alipay.remoting.connection.AbstractConnectionFactory.createConnection(AbstractConnectionFactory.java:186)
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:476)
+	... 4 common frames omitted
+Caused by: io.netty.channel.ConnectTimeoutException: connection timed out after 1000 ms: /192.168.1.10:28092
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:308)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:160)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:535)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:201)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1195)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	... 1 common frames omitted
+ <==
+16:53:06.067  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:06.067 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:06.067  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:06.067  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:06.569  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:06.569 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:06.596  INFO --- [     RetryRollbacking_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [192.168.1.10:28091:940000] : No channel is available for resource[mysql://raft-retry-0]
+16:53:06.596 ERROR --- [     RetryRollbacking_1_1] [server.coordinator.DefaultCore] [               error]  [192.168.1.10:28091:940000] : Rollback branch transaction exception, xid = 192.168.1.10:28091:940000 ,branchId = 950000 ,retrying=true ,exception = Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000, global rollback failed
+16:53:06.596 ERROR --- [     RetryRollbacking_1_1] [coordinator.DefaultCoordinator] [leRetryRollbacking$2]  [192.168.1.10:28091:940000] : Failed to retry rollbacking [192.168.1.10:28091:940000] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000
+16:53:07.069  WARN --- [armup-executor-4-thread-1] [com.alipay.sofa.common.log    ] [  doCreateConnection]  [] : Create connection to 192.168.1.10:28092 error!
+16:53:07.069  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection closed: 192.168.1.10:28092
+16:53:07.069 ERROR --- [armup-executor-4-thread-1] [com.alipay.sofa.common.log    ] [                 run]  [] : Exception occurred in async create connection thread for 192.168.1.10:28092, taskName ConnectionPoolCall
+==> 
+com.alipay.remoting.exception.RemotingException: Create connection failed. The address is 192.168.1.10:28092
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:479)
+	at com.alipay.remoting.DefaultConnectionManager$1.run(DefaultConnectionManager.java:799)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.Exception: Create connection to 192.168.1.10:28092 error!
+	at com.alipay.remoting.connection.AbstractConnectionFactory.doCreateConnection(AbstractConnectionFactory.java:338)
+	at com.alipay.remoting.connection.AbstractConnectionFactory.createConnection(AbstractConnectionFactory.java:186)
+	at com.alipay.remoting.DefaultConnectionManager.create(DefaultConnectionManager.java:476)
+	... 4 common frames omitted
+Caused by: io.netty.channel.ConnectTimeoutException: connection timed out after 1000 ms: /192.168.1.10:28092
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe$1.run(AbstractNioChannel.java:308)
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98)
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:160)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:535)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:201)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1195)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	... 1 common frames omitted
+ <==
+16:53:07.069  INFO --- [-client-worker-3-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel unregistered: 192.168.1.10:28092
+16:53:07.071  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:07.071 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:07.071  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: UNKNOWN-ADDR
+16:53:07.071  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             connect]  [] : Try connect to 192.168.1.10:28092
+16:53:07.574  WARN --- [ault/192.168.1.10:28096>0] [com.alipay.sofa.common.log    ] [     checkConnection]  [] : check failed. address: 192.168.1.10:28092, connection: null
+==> 
+com.alipay.remoting.exception.RemotingException: Connection is null when do check!
+	at com.alipay.remoting.DefaultConnectionManager.check(DefaultConnectionManager.java:354)
+	at com.alipay.remoting.rpc.RpcClient.checkConnection(RpcClient.java:447)
+	at com.alipay.sofa.jraft.rpc.impl.BoltRpcClient.checkConnection(BoltRpcClient.java:79)
+	at com.alipay.sofa.jraft.rpc.impl.AbstractClientService.checkConnection(AbstractClientService.java:90)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.addReplicator(ReplicatorGroupImpl.java:124)
+	at com.alipay.sofa.jraft.core.ReplicatorGroupImpl.checkReplicator(ReplicatorGroupImpl.java:190)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkReplicator(NodeImpl.java:1753)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes0(NodeImpl.java:2241)
+	at com.alipay.sofa.jraft.core.NodeImpl.checkDeadNodes(NodeImpl.java:2216)
+	at com.alipay.sofa.jraft.core.NodeImpl.handleStepDownTimeout(NodeImpl.java:2289)
+	at com.alipay.sofa.jraft.core.NodeImpl.access$1400(NodeImpl.java:141)
+	at com.alipay.sofa.jraft.core.NodeImpl$3.onTrigger(NodeImpl.java:955)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.run(RepeatedTimer.java:86)
+	at com.alipay.sofa.jraft.util.RepeatedTimer.lambda$schedule$0(RepeatedTimer.java:182)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelTimeout.expire(HashedWheelTimer.java:613)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$HashedWheelBucket.expireTimeouts(HashedWheelTimer.java:681)
+	at com.alipay.sofa.jraft.util.timer.HashedWheelTimer$Worker.run(HashedWheelTimer.java:399)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+16:53:07.574 ERROR --- [ault/192.168.1.10:28096>0] [jraft.core.ReplicatorGroupImpl] [       addReplicator]  [] : Fail to check replicator connection to peer=192.168.1.10:28092, replicatorType=Follower, groupId=default.
+16:53:07.584  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:28092
+16:53:07.584  INFO --- [-client-worker-3-thread-2] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:51506], remote[192.168.1.10:28092], event: CONNECT
+16:53:07.584  INFO --- [event-executor-5-thread-1] [erviceConnectionEventProcessor] [             onEvent]  [] : Peer 192.168.1.10:28092 is connected
+16:53:07.584  INFO --- [event-executor-5-thread-1] [pay.sofa.jraft.core.Replicator] [               start]  [] : Replicator [group: default, peer: 192.168.1.10:28092, type: Follower] is started
+16:53:07.596  INFO --- [     RetryRollbacking_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [192.168.1.10:28091:940000] : No channel is available for resource[mysql://raft-retry-0]
+16:53:07.596 ERROR --- [     RetryRollbacking_1_1] [server.coordinator.DefaultCore] [               error]  [192.168.1.10:28091:940000] : Rollback branch transaction exception, xid = 192.168.1.10:28091:940000 ,branchId = 950000 ,retrying=true ,exception = Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000, global rollback failed
+16:53:07.596 ERROR --- [     RetryRollbacking_1_1] [coordinator.DefaultCoordinator] [leRetryRollbacking$2]  [192.168.1.10:28091:940000] : Failed to retry rollbacking [192.168.1.10:28091:940000] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 192.168.1.10:28091:940000 branchId = 950000
+16:53:07.645  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [  userEventTriggered]  [] : trigger user event, local[192.168.1.10:28096], remote[192.168.1.10:51507], event: CONNECT
+16:53:07.645  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel registered: 192.168.1.10:51507
+16:53:07.645  INFO --- [-server-worker-1-thread-1] [com.alipay.sofa.common.log    ] [             infoLog]  [] : Connection channel active: 192.168.1.10:51507
+16:53:07.684  INFO --- [                   task-5] [.manager.ClusterWatcherManager] [       onChangeEvent]  [] : Discarding outdated event with term 3 for group default, current term is 3
+16:53:07.684  INFO --- [aft-FSMCaller-Disruptor-0] [.cluster.raft.RaftStateMachine] [freshClusterMetadata]  [] : groupId: default, refresh cluster metadata: RaftClusterMetadata(leader=Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28095), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28095), internal=Endpoint(host="192.168.1.10", protocol=null, port=28096), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.LEADER, version="2.8.0-SNAPSHOT", metadata={}), followers=[Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28093), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28093), internal=Endpoint(host="192.168.1.10", protocol=null, port=28094), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={}), Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28095), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28095), internal=Endpoint(host="192.168.1.10", protocol=null, port=28096), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={}), Node(control=Endpoint(host="192.168.1.10", protocol=null, port=28091), transaction=Endpoint(host="192.168.1.10", protocol=null, port=28091), internal=Endpoint(host="192.168.1.10", protocol=null, port=28092), weight=1.0, healthy=true, timeStamp=0, group="default", role=ClusterRole.FOLLOWER, version="2.8.0-SNAPSHOT", metadata={})], learner=[], term=3)
+16:53:07.802  INFO --- [          HTTP-Dispatcher] [seata.core.lock.AbstractLocker] [          isLockable]  [] : Global lock on [orders:1] is holding by 940000
+16:53:07.852  INFO --- [ettyServerNIOWorker_1_2_4] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='raft-read-only', transactionServiceGroup='default_tx_group', extraData=''},channel:[id: 0x1dd79102, L:/127.0.0.1:28095 - R:/127.0.0.1:51513],client version:1.1.0,client protocol-version:null
+16:53:07.853  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='192.168.1.10:28091:940000', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+16:53:07.853  INFO --- [ettyServerNIOWorker_1_2_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:51513 to server channel inactive.
+16:53:07.853  INFO --- [ettyServerNIOWorker_1_2_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x1dd79102, L:/127.0.0.1:28095 ! R:/127.0.0.1:51513]context:RpcContext{applicationId='raft-read-only', transactionServiceGroup='default_tx_group', clientId='raft-read-only:127.0.0.1:51513', channel=[id: 0x1dd79102, L:/127.0.0.1:28095 ! R:/127.0.0.1:51513], resourceSets=null}

@@ -1,0 +1,30 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.71s
+     Running tests\live_undo_store.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_store-c2e834baa9aef6f0.exe)
+
+running 12 tests
+test absolute_deadline_during_actual_unique_key_wait_discards_owned_transaction ... ok
+test cancelling_actual_unique_key_wait_discards_owned_transaction ... ok
+test empty_flush_writes_nothing_and_successful_flush_seals_all_mutations ... ok
+test existing_normal_and_global_finished_rows_are_not_overwritten ... ok
+test inbound_foreign_key_on_undo_table_rejects_flush_and_rolls_back_business ... ok
+test invalid_original_identity_poisoned_before_any_undo_insert ... ok
+test missing_unsafe_or_incomplete_undo_table_never_commits_business ... ok
+test original_undo_row_and_business_share_one_uncommitted_transaction_then_rollback ... ok
+test oversized_sub_id_context_never_publishes_partial_undo ... ok
+test packet_splits_original_bytes_and_root_context_reassembles_exactly ... ok
+test undo_current_schema_rejects_late_constraints_columns_and_identity_index_changes ... late Undo schema rejected without writes or side effects: CREATE TRIGGER late_undo_log AFTER INSERT ON undo_log FOR EACH ROW INSERT INTO undo_side_effect VALUES(NEW.branch_id)
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log DROP INDEX ux_undo_log
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log MODIFY xid VARCHAR(129) NOT NULL
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log ADD COLUMN hidden_value INT NULL INVISIBLE
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log MODIFY log_status INT UNSIGNED NOT NULL
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log ADD CONSTRAINT late_undo_fk FOREIGN KEY(xid) REFERENCES undo_parent(xid)
+late Undo schema rejected without writes or side effects: CREATE TABLE undo_child(xid VARCHAR(128) NOT NULL,branch_id BIGINT NOT NULL,FOREIGN KEY(xid,branch_id) REFERENCES undo_log(xid,branch_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+ok
+test undo_engine_change_after_business_metadata_snapshot_is_rejected_before_flush ... old snapshot engine rejected and fresh InnoDB flush rolled back: "ALTER TABLE undo_log ENGINE=MyISAM"
+old snapshot engine rejected and fresh InnoDB flush rolled back: "ALTER TABLE undo_log ENGINE=MyISAM, MODIFY xid VARCHAR(128) NOT NULL COMMENT 'fake\n) ENGINE=InnoDB '"
+old snapshot engine rejected and fresh InnoDB flush rolled back: "ALTER TABLE undo_log ENGINE=MyISAM, COMMENT='fake\n) ENGINE=InnoDB '"
+ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 99.27s
+

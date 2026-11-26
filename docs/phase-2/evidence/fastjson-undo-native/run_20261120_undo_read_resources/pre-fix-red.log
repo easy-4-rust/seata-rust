@@ -1,0 +1,55 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.70s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 6 tests
+test mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads ... ok
+test mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads ... ok
+
+failures:
+
+---- mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children stdout ----
+
+thread 'mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children' (62760) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:182:13:
+assertion `left == right` failed: missing parse cause: Unsupported { feature: "Undo subId trailing separator" }
+  left: None
+ right: Some(InvalidDigit)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body stdout ----
+
+thread 'mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body' (45176) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:182:13:
+assertion `left == right` failed: missing parse cause: Unsupported { feature: "Undo subId trailing separator" }
+  left: None
+ right: Some(InvalidDigit)
+
+---- mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan stdout ----
+
+thread 'mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan' (39484) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:279:5:
+assertion `left == right` failed
+  left: Some([3, 82, 79, 76, 76, 66, 65, 67, 75])
+ right: Some([25, 3, 0, 0, 0])
+Error: Io(Custom { kind: UnexpectedEof, error: "expected to read 4 bytes, got 0 bytes at EOF" })
+
+---- mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order stdout ----
+
+thread 'mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order' (62820) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:279:5:
+assertion `left == right` failed
+  left: Some([23, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 253, 0, 8, 0, 3, 120, 105, 100, 102, 0, 0, 0, 0, 0, 0, 0])
+ right: Some([25, 3, 0, 0, 0])
+Error: Driver { operation: "Undo current body", sql_state: None, code: None }
+
+
+failures:
+    mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan
+    mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order
+    mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children
+    mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body
+
+test result: FAILED. 2 passed; 4 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

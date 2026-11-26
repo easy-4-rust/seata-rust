@@ -1,0 +1,763 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Detecting the operating system and CPU architecture
+[INFO] ------------------------------------------------------------------------
+[INFO] os.detected.name: windows
+[INFO] os.detected.arch: x86_64
+[INFO] os.detected.version: 10.0
+[INFO] os.detected.version.major: 10
+[INFO] os.detected.version.minor: 0
+[INFO] os.detected.classifier: windows-x86_64
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Seata Build 2.8.0-SNAPSHOT                                         [pom]
+[INFO] Seata Parent POM 2.8.0-SNAPSHOT                                    [pom]
+[INFO] seata-common 2.8.0-SNAPSHOT                                        [jar]
+[INFO] seata-config 2.8.0-SNAPSHOT                                        [pom]
+[INFO] seata-config-core 2.8.0-SNAPSHOT                                   [jar]
+[INFO] seata-threadpool 2.8.0-SNAPSHOT                                    [jar]
+[INFO] seata-discovery 2.8.0-SNAPSHOT                                     [pom]
+[INFO] seata-discovery-core 2.8.0-SNAPSHOT                                [jar]
+[INFO] seata-core 2.8.0-SNAPSHOT                                          [jar]
+[INFO] 
+[INFO] --------------------< org.apache.seata:seata-build >--------------------
+[INFO] Building Seata Build 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT                 [1/9]
+[INFO]   from build\pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-build ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-build ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-build ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-build ---
+[INFO] 
+[INFO] -------------------< org.apache.seata:seata-parent >--------------------
+[INFO] Building Seata Parent POM 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT            [2/9]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-parent ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-parent ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-parent ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-parent ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-parent ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-parent ---
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-parent ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ seata-parent ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-aggregate) @ seata-parent ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report-aggregate (report-aggregate) @ seata-parent ---
+[INFO] 
+[INFO] -------------------< org.apache.seata:seata-common >--------------------
+[INFO] Building seata-common 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT                [3/9]
+[INFO]   from common\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-common ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-common ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-common ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-common ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\common\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-common ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] Spotless.Java is keeping 180 files clean - 0 were changed to be clean, 180 were already clean, 0 were skipped because caching determined they were already clean
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-common ---
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ seata-common ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ seata-common ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 93 source files with javac [debug parameters target 1.8] to target\classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[WARNING] /D:/codex-builds/sjpref_20261112/common/src/main/java/org/apache/seata/common/thread/NamedThreadFactory.java:[49,9] java.lang 中的 java.lang.SecurityManager 已过时, 且标记为待删除
+[WARNING] /D:/codex-builds/sjpref_20261112/common/src/main/java/org/apache/seata/common/thread/NamedThreadFactory.java:[49,49] java.lang.System 中的 getSecurityManager() 已过时, 且标记为待删除
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/main/java/org/apache/seata/common/exception/FrameworkException.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/main/java/org/apache/seata/common/exception/FrameworkException.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/main/java/org/apache/seata/common/loader/EnhancedServiceLoader.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/main/java/org/apache/seata/common/loader/EnhancedServiceLoader.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-common ---
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ seata-common ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 9 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ seata-common ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 87 source files with javac [debug parameters target 1.8] to target\test-classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/test/java/org/apache/seata/common/exception/DataAccessExceptionTest.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/test/java/org/apache/seata/common/exception/DataAccessExceptionTest.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/test/java/org/apache/seata/common/loader/EnhancedServiceLoaderTest.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/common/src/test/java/org/apache/seata/common/loader/EnhancedServiceLoaderTest.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- surefire:3.0.0-M5:test (default-test) @ seata-common ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ seata-common ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-aggregate) @ seata-common ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report-aggregate (report-aggregate) @ seata-common ---
+[INFO] 
+[INFO] -------------------< org.apache.seata:seata-config >--------------------
+[INFO] Building seata-config 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT                [4/9]
+[INFO]   from config\pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-config ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-config ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-config ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-config ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\config\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-config ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-config ---
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-config ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ seata-config ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-aggregate) @ seata-config ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report-aggregate (report-aggregate) @ seata-config ---
+[INFO] 
+[INFO] -----------------< org.apache.seata:seata-config-core >-----------------
+[INFO] Building seata-config-core 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT           [5/9]
+[INFO]   from config\seata-config-core\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-config-core ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-config-core ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-config-core ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-config-core ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\config\\seata-config-core\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-config-core ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] Spotless.Java is keeping 57 files clean - 0 were changed to be clean, 57 were already clean, 0 were skipped because caching determined they were already clean
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-config-core ---
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ seata-config-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 2 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ seata-config-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 35 source files with javac [debug parameters target 1.8] to target\classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[WARNING] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/main/java/org/apache/seata/config/exception/ConfigNotFoundException.java:[30,36] 最后一个参数使用了不准确的变量类型的 varargs 方法的非 varargs 调用; 
+  对于 varargs 调用, 应使用 java.lang.Object
+  对于非 varargs 调用, 应使用 java.lang.Object[], 这样也可以抑制此警告
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/main/java/org/apache/seata/config/processor/ConfigProcessor.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/main/java/org/apache/seata/config/processor/ConfigProcessor.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/main/java/org/apache/seata/config/ConfigurationFactory.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/main/java/org/apache/seata/config/ConfigurationFactory.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-config-core ---
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ seata-config-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 8 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ seata-config-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 22 source files with javac [debug parameters target 1.8] to target\test-classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/test/java/org/apache/seata/config/ConfigurationFactoryTest.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/test/java/org/apache/seata/config/ConfigurationFactoryTest.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/test/java/org/apache/seata/config/ConfigFutureTest.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/config/seata-config-core/src/test/java/org/apache/seata/config/ConfigFutureTest.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- surefire:3.0.0-M5:test (default-test) @ seata-config-core ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ seata-config-core ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-aggregate) @ seata-config-core ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report-aggregate (report-aggregate) @ seata-config-core ---
+[INFO] Analyzed bundle 'seata-common' with 94 classes
+[INFO] 
+[INFO] -----------------< org.apache.seata:seata-threadpool >------------------
+[INFO] Building seata-threadpool 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT            [6/9]
+[INFO]   from threadpool\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-threadpool ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-threadpool ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-threadpool ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-threadpool ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\threadpool\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-threadpool ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] Spotless.Java is keeping 8 files clean - 0 were changed to be clean, 8 were already clean, 0 were skipped because caching determined they were already clean
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-threadpool ---
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ seata-threadpool ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ seata-threadpool ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 7 source files with javac [debug parameters target 1.8] to target\classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-threadpool ---
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ seata-threadpool ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory D:\codex-builds\sjpref_20261112\threadpool\src\test\resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ seata-threadpool ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters target 1.8] to target\test-classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] 
+[INFO] --- surefire:3.0.0-M5:test (default-test) @ seata-threadpool ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ seata-threadpool ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-aggregate) @ seata-threadpool ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report-aggregate (report-aggregate) @ seata-threadpool ---
+[INFO] Analyzed bundle 'seata-common' with 94 classes
+[INFO] Analyzed bundle 'seata-config-core' with 34 classes
+[INFO] 
+[INFO] ------------------< org.apache.seata:seata-discovery >------------------
+[INFO] Building seata-discovery 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT             [7/9]
+[INFO]   from discovery\pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-discovery ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-discovery ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-discovery ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-discovery ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\discovery\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-discovery ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-discovery ---
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-discovery ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ seata-discovery ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-aggregate) @ seata-discovery ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report-aggregate (report-aggregate) @ seata-discovery ---
+[INFO] 
+[INFO] ---------------< org.apache.seata:seata-discovery-core >----------------
+[INFO] Building seata-discovery-core 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT        [8/9]
+[INFO]   from discovery\seata-discovery-core\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-discovery-core ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-discovery-core ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-discovery-core ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-discovery-core ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\discovery\\seata-discovery-core\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-discovery-core ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] Spotless.Java is keeping 22 files clean - 0 were changed to be clean, 22 were already clean, 0 were skipped because caching determined they were already clean
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-discovery-core ---
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ seata-discovery-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 2 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ seata-discovery-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 15 source files with javac [debug parameters target 1.8] to target\classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/main/java/org/apache/seata/discovery/registry/RegistryFactory.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/main/java/org/apache/seata/discovery/registry/RegistryFactory.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/main/java/org/apache/seata/discovery/loadbalance/XIDLoadBalance.java: D:\codex-builds\sjpref_20261112\discovery\seata-discovery-core\src\main\java\org\apache\seata\discovery\loadbalance\XIDLoadBalance.java使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/main/java/org/apache/seata/discovery/loadbalance/XIDLoadBalance.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-discovery-core ---
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ seata-discovery-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 4 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ seata-discovery-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 7 source files with javac [debug parameters target 1.8] to target\test-classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/test/java/org/apache/seata/discovery/loadbalance/LoadBalanceFactoryTest.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/test/java/org/apache/seata/discovery/loadbalance/LoadBalanceFactoryTest.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/test/java/org/apache/seata/discovery/loadbalance/LoadBalanceFactoryTest.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/discovery/seata-discovery-core/src/test/java/org/apache/seata/discovery/loadbalance/LoadBalanceFactoryTest.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- surefire:3.0.0-M5:test (default-test) @ seata-discovery-core ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report) @ seata-discovery-core ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-aggregate) @ seata-discovery-core ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.14:report-aggregate (report-aggregate) @ seata-discovery-core ---
+[INFO] Analyzed bundle 'seata-config-core' with 34 classes
+[INFO] Analyzed bundle 'seata-threadpool' with 6 classes
+[INFO] 
+[INFO] --------------------< org.apache.seata:seata-core >---------------------
+[INFO] Building seata-core 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT                  [9/9]
+[INFO]   from core\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven-version) @ seata-core ---
+[INFO] 
+[INFO] --- enforcer:3.0.0-M3:enforce (enforce-maven) @ seata-core ---
+[INFO] 
+[INFO] --- git-commit-id:4.9.10:revision (get-the-git-infos) @ seata-core ---
+[INFO] skip is enabled, skipping execution!
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ seata-core ---
+[INFO] argLine set to -javaagent:E:\\Java\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=D:\\codex-builds\\sjpref_20261112\\core\\target\\jacoco.exec,excludes=**/test/**
+[INFO] 
+[INFO] --- protobuf:0.6.1:compile (default) @ seata-core ---
+[INFO] Compiling 1 proto file(s) to D:\codex-builds\sjpref_20261112\core\target\generated-sources\protobuf\java
+[INFO] 
+[INFO] --- spotless:2.44.3:apply (default) @ seata-core ---
+[INFO] Index file does not exist. Fallback to an empty index
+[INFO] clean file: D:\codex-builds\sjpref_20261112\core\src\test\java\org\apache\seata\core\rpc\netty\ProtocolPrefaceFragmentationTest.java
+[INFO] Spotless.Java is keeping 372 files clean - 1 were changed to be clean, 371 were already clean, 0 were skipped because caching determined they were already clean
+[INFO] 
+[INFO] --- remote-resources:1.5:process (process-resource-bundles) @ seata-core ---
+[INFO] 
+[INFO] --- easyj:1.1.5:replace-java (generate-java-by-template) @ seata-core ---
+[INFO] Generate java file: VersionInfo.java.template -> D:\codex-builds\sjpref_20261112\core\target\generated-sources\easyj-maven-plugin_replace-java\java\org\apache\seata\core\protocol\VersionInfo.java
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ seata-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 7 resources
+[INFO] Copying 1 resource
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ seata-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 247 source files with javac [debug parameters target 1.8] to target\classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/main/java/org/apache/seata/core/exception/AbstractExceptionHandler.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/main/java/org/apache/seata/core/exception/AbstractExceptionHandler.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/main/java/org/apache/seata/core/model/Result.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/main/java/org/apache/seata/core/model/Result.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (verify-style) @ seata-core ---
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ seata-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 3 resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ seata-core ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 129 source files with javac [debug parameters target 1.8] to target\test-classes
+[WARNING] 未与 -source 8 一起设置引导类路径
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/test/java/org/apache/seata/core/rpc/netty/NettyRemotingBehaviorTest.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/test/java/org/apache/seata/core/rpc/netty/NettyRemotingBehaviorTest.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/test/java/org/apache/seata/core/rpc/netty/ChannelManagerTest.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/codex-builds/sjpref_20261112/core/src/test/java/org/apache/seata/core/rpc/netty/ChannelManagerTest.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- surefire:3.0.0-M5:test (default-test) @ seata-core ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest
+21:34:30.878 [main] DEBUG io.netty.util.internal.logging.InternalLoggerFactory -- Using SLF4J as the default logging framework
+21:34:30.881 [main] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+21:34:30.881 [main] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+21:34:30.949 [main] DEBUG io.netty.util.ResourceLeakDetector -- -Dio.netty.leakDetection.level: simple
+21:34:30.949 [main] DEBUG io.netty.util.ResourceLeakDetector -- -Dio.netty.leakDetection.targetRecords: 4
+21:34:31.012 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- -Dio.netty.noUnsafe: false
+21:34:31.013 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- Java version: 17
+21:34:31.017 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.theUnsafe: available
+21:34:31.019 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.copyMemory: available
+21:34:31.020 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.storeFence: available
+21:34:31.021 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.Buffer.address: available
+21:34:31.023 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- direct buffer constructor: unavailable: Reflective setAccessible(true) disabled
+21:34:31.026 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.Bits.unaligned: available, true
+21:34:31.028 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable: class io.netty.util.internal.PlatformDependent0$7 cannot access class jdk.internal.misc.Unsafe (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @2b546384
+21:34:31.030 [main] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.DirectByteBuffer.<init>(long, {int,long}): unavailable
+21:34:31.030 [main] DEBUG io.netty.util.internal.PlatformDependent -- sun.misc.Unsafe: available
+21:34:31.030 [main] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.tmpdir: D:\Temp (java.io.tmpdir)
+21:34:31.030 [main] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.bitMode: 64 (sun.arch.data.model)
+21:34:31.032 [main] DEBUG io.netty.util.internal.PlatformDependent -- Platform: Windows
+21:34:31.034 [main] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.maxDirectMemory: -1 bytes
+21:34:31.034 [main] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.uninitializedArrayAllocationThreshold: -1
+21:34:31.036 [main] DEBUG io.netty.util.internal.CleanerJava9 -- java.nio.ByteBuffer.cleaner(): available
+21:34:31.037 [main] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.noPreferDirect: false
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.numHeapArenas: 48
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.numDirectArenas: 48
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.pageSize: 8192
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.maxOrder: 9
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.chunkSize: 4194304
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.smallCacheSize: 256
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.normalCacheSize: 64
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.cacheTrimInterval: 8192
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.cacheTrimIntervalMillis: 0
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.useCacheForAllThreads: false
+21:34:31.075 [main] DEBUG io.netty.buffer.PooledByteBufAllocator -- -Dio.netty.allocator.maxCachedByteBuffersPerChunk: 1023
+21:34:31.110 [main] DEBUG io.netty.buffer.ByteBufUtil -- -Dio.netty.allocator.type: pooled
+21:34:31.110 [main] DEBUG io.netty.buffer.ByteBufUtil -- -Dio.netty.threadLocalDirectBufferSize: 0
+21:34:31.110 [main] DEBUG io.netty.buffer.ByteBufUtil -- -Dio.netty.maxThreadLocalCharBufferSize: 16384
+21:34:31.155 [main] DEBUG io.netty.buffer.AbstractByteBuf -- -Dio.netty.buffer.checkAccessible: true
+21:34:31.155 [main] DEBUG io.netty.buffer.AbstractByteBuf -- -Dio.netty.buffer.checkBounds: true
+21:34:31.156 [main] DEBUG io.netty.util.ResourceLeakDetectorFactory -- Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@31da6b2e
+21:34:31.162 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [127, -38, -38, 1, 0, 0, 0, 16, 0, 16, 3, 1, 0, 16, 32, 48, 64]
+21:34:31.191 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [127]
+21:34:31.318 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.file.FileConfig] class fail: no service files found in 'META-INF/seata/'.
+21:34:31.416 [main] DEBUG org.apache.seata.config.FileConfiguration -- The file name of the operation is registry
+21:34:31.418 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.ExtConfigurationProvider] class fail: no service files found in 'META-INF/services/'.
+21:34:31.418 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.ExtConfigurationProvider] class fail: no service files found in 'META-INF/seata/'.
+21:34:31.418 [main] INFO org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+21:34:31.419 [main] DEBUG org.apache.seata.config.ConfigurationFactory -- failed to load extConfiguration: not found service provider for : org.apache.seata.config.ExtConfigurationProvider
+org.apache.seata.common.loader.EnhancedServiceNotFoundException: not found service provider for : org.apache.seata.config.ExtConfigurationProvider
+21:34:31.437 [main] DEBUG org.apache.seata.config.FileConfiguration -- The file name of the operation is file.conf
+21:34:31.438 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [io.seata.config.ConfigurationProvider] class fail: no service files found in 'META-INF/services/'.
+21:34:31.438 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [io.seata.config.ConfigurationProvider] class fail: no service files found in 'META-INF/seata/'.
+21:34:31.438 [main] INFO org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load compatible class io.seata.config.ConfigurationProvider
+21:34:31.438 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [io.seata.config.ConfigurationProvider] class fail: no service files found in 'META-INF/services/'.
+21:34:31.439 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [io.seata.config.ConfigurationProvider] class fail: no service files found in 'META-INF/seata/'.
+21:34:31.439 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.ConfigurationProvider] class fail: no service files found in 'META-INF/services/'.
+21:34:31.439 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.ConfigurationProvider] class fail: no service files found in 'META-INF/seata/'.
+21:34:31.439 [main] DEBUG org.apache.seata.config.ConfigurationFactory -- No optional file configuration provider found; using FileConfiguration
+21:34:31.450 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.serialization, try to use default value instead. exception:No configuration setting found for key 'transport.serialization'
+21:34:31.452 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.serialization, try to use default value instead. exception:No configuration setting found for key 'transport.serialization'
+21:34:31.470 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.compressor, try to use default value instead. exception:No configuration setting found for key 'transport.compressor'
+21:34:31.470 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.compressor, try to use default value instead. exception:No configuration setting found for key 'transport.compressor'
+21:34:31.746 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.bossThreadPrefix, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.748 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.bossThreadPrefix, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.748 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.workerThreadPrefix, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.748 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.workerThreadPrefix, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.748 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.shareBossWorker, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.749 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.shareBossWorker, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.749 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.workerThreadSize, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.749 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadFactory.workerThreadSize, try to use default value instead. exception:No configuration setting found for key 'transport.threadFactory'
+21:34:31.757 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.heartbeat, try to use default value instead. exception:No configuration setting found for key 'transport.heartbeat'
+21:34:31.757 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.heartbeat, try to use default value instead. exception:No configuration setting found for key 'transport.heartbeat'
+21:34:31.757 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.rpcTcRequestTimeout, try to use default value instead. exception:No configuration setting found for key 'transport.rpcTcRequestTimeout'
+21:34:31.757 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.rpcTcRequestTimeout, try to use default value instead. exception:No configuration setting found for key 'transport.rpcTcRequestTimeout'
+21:34:31.757 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.enableTcServerBatchSendResponse, try to use default value instead. exception:No configuration setting found for key 'transport.enableTcServerBatchSendResponse'
+21:34:31.757 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.enableTcServerBatchSendResponse, try to use default value instead. exception:No configuration setting found for key 'transport.enableTcServerBatchSendResponse'
+21:34:31.757 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.minServerPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.minServerPoolSize'
+21:34:31.759 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.minServerPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.minServerPoolSize'
+21:34:31.759 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxServerPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxServerPoolSize'
+21:34:31.759 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxServerPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxServerPoolSize'
+21:34:31.759 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxTaskQueueSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxTaskQueueSize'
+21:34:31.759 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxTaskQueueSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxTaskQueueSize'
+21:34:31.760 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.keepAliveTime, try to use default value instead. exception:No configuration setting found for key 'transport.keepAliveTime'
+21:34:31.760 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.keepAliveTime, try to use default value instead. exception:No configuration setting found for key 'transport.keepAliveTime'
+21:34:31.760 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.minHttpPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.minHttpPoolSize'
+21:34:31.760 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.minHttpPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.minHttpPoolSize'
+21:34:31.760 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxHttpPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxHttpPoolSize'
+21:34:31.761 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxHttpPoolSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxHttpPoolSize'
+21:34:31.761 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxHttpTaskQueueSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxHttpTaskQueueSize'
+21:34:31.761 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.maxHttpTaskQueueSize, try to use default value instead. exception:No configuration setting found for key 'transport.maxHttpTaskQueueSize'
+21:34:31.761 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.httpPoolKeepAliveTime, try to use default value instead. exception:No configuration setting found for key 'transport.httpPoolKeepAliveTime'
+21:34:31.761 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.httpPoolKeepAliveTime, try to use default value instead. exception:No configuration setting found for key 'transport.httpPoolKeepAliveTime'
+21:34:31.763 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadpool, try to use default value instead. exception:No configuration setting found for key 'transport.threadpool'
+21:34:31.763 [configOperate_2_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property transport.threadpool, try to use default value instead. exception:No configuration setting found for key 'transport.threadpool'
+21:34:31.765 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.common.thread.ThreadPoolProvider] class fail: no service files found in 'META-INF/seata/'.
+21:34:31.765 [main] WARN org.apache.seata.common.thread.ThreadPoolExecutorFactory -- Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+21:34:31.834 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.maxCapacityPerThread: 4096
+21:34:31.834 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.ratio: 8
+21:34:31.834 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.chunkSize: 32
+21:34:31.834 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.blocking: false
+21:34:31.834 [main] DEBUG io.netty.util.Recycler -- -Dio.netty.recycler.batchFastThreadLocalOnly: true
+21:34:31.842 [main] DEBUG io.netty.util.internal.PlatformDependent -- org.jctools-core.MpscChunkedArrayQueue: available
+21:34:31.855 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [0]
+21:34:31.856 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [127]
+21:34:31.857 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [-38, 0]
+21:34:31.860 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80, 88]
+21:34:31.860 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [71, 70]
+21:34:31.863 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Packet size 8388609 exceeds maximum 8388608, closing connection from embedded
+21:34:31.863 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Packet size 8388609 exceeds maximum 8388608, closing connection from embedded
+21:34:31.863 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Packet size 8388609 exceeds maximum 8388608, closing connection from embedded
+21:34:31.867 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [-38]
+21:34:31.868 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [71]
+21:34:31.871 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+21:34:31.872 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+21:34:31.874 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [68]
+21:34:31.876 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [72]
+21:34:31.878 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [79]
+21:34:31.879 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+21:34:31.881 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+21:34:31.899 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [-38]
+21:34:31.902 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [71]
+21:34:31.903 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+21:34:31.905 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+21:34:31.906 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [68]
+21:34:31.908 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [72]
+21:34:31.910 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [79]
+21:34:31.913 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+21:34:31.916 [main] ERROR org.apache.seata.core.rpc.netty.ProtocolDetectHandler -- Can not recognize protocol from remote embedded, preface = [80]
+[ERROR] Tests run: 48, Failures: 29, Errors: 0, Skipped: 0, Time elapsed: 1.278 s <<< FAILURE! - in org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.handlerPreservesNonzeroReadableOffset  Time elapsed: 0.521 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <1> but was: <0>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.recognized(ProtocolPrefaceFragmentationTest.java:76)
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.handlerPreservesNonzeroReadableOffset(ProtocolPrefaceFragmentationTest.java:240)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[1]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[2]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[3]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[4]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[5]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[6]  Time elapsed: 0.002 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[7]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[8]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(String)[9]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid bytewise prefix closed ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.byteByByte(ProtocolPrefaceFragmentationTest.java:144)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[1]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[2]  Time elapsed: 0 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[3]  Time elapsed: 0 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[4]  Time elapsed: 0 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[5]  Time elapsed: 0 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[6]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[7]  Time elapsed: 0 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[8]  Time elapsed: 0 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(String)[9]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset(ProtocolPrefaceFragmentationTest.java:225)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.legacyMutatingDetectorCannotConsumeOriginalBytes  Time elapsed: 0.002 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: array lengths differ, expected: <3> but was: <2>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.legacyMutatingDetectorCannotConsumeOriginalBytes(ProtocolPrefaceFragmentationTest.java:274)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[1]  Time elapsed: 0.002 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[2]  Time elapsed: 0 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[3]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[4]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[5]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[6]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[7]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[8]  Time elapsed: 0.001 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[ERROR] org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(String)[9]  Time elapsed: 0.002 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+	at org.apache.seata.core.rpc.netty.ProtocolPrefaceFragmentationTest.everyFragmentBoundary(ProtocolPrefaceFragmentationTest.java:116)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.byteByByte:144 valid bytewise prefix closed ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.detectorsUseReadableOffset:225 detector read absolute0 instead of readable offset ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.everyFragmentBoundary:116 valid partial prefix closed at 1 ==> expected: <true> but was: <false>
+[ERROR]   ProtocolPrefaceFragmentationTest.handlerPreservesNonzeroReadableOffset:240->recognized:76 expected: <1> but was: <0>
+[ERROR]   ProtocolPrefaceFragmentationTest.legacyMutatingDetectorCannotConsumeOriginalBytes:274 array lengths differ, expected: <3> but was: <2>
+[INFO] 
+[ERROR] Tests run: 48, Failures: 29, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Seata Parent POM 2.8.0-SNAPSHOT 2.8.0-SNAPSHOT:
+[INFO] 
+[INFO] Seata Build 2.8.0-SNAPSHOT ......................... SUCCESS [  0.824 s]
+[INFO] Seata Parent POM 2.8.0-SNAPSHOT .................... SUCCESS [  1.593 s]
+[INFO] seata-common 2.8.0-SNAPSHOT ........................ SUCCESS [  7.344 s]
+[INFO] seata-config 2.8.0-SNAPSHOT ........................ SUCCESS [  0.076 s]
+[INFO] seata-config-core 2.8.0-SNAPSHOT ................... SUCCESS [  1.866 s]
+[INFO] seata-threadpool 2.8.0-SNAPSHOT .................... SUCCESS [  0.979 s]
+[INFO] seata-discovery 2.8.0-SNAPSHOT ..................... SUCCESS [  0.061 s]
+[INFO] seata-discovery-core 2.8.0-SNAPSHOT ................ SUCCESS [  1.005 s]
+[INFO] seata-core 2.8.0-SNAPSHOT .......................... FAILURE [  7.307 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  22.107 s
+[INFO] Finished at: 2026-11-12T21:34:32+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M5:test (default-test) on project seata-core: There are test failures.
+[ERROR] 
+[ERROR] Please refer to D:\codex-builds\sjpref_20261112\core\target\surefire-reports for the individual test results.
+[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :seata-core

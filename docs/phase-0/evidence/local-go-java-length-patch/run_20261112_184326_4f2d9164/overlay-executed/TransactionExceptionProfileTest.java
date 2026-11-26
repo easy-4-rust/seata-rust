@@ -1,0 +1,159 @@
+/* Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0. */
+package org.apache.seata.serializer.seata;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.seata.core.exception.TransactionExceptionCode;
+import org.apache.seata.core.model.BranchStatus;
+import org.apache.seata.core.model.GlobalStatus;
+import org.apache.seata.core.protocol.ResultCode;
+import org.apache.seata.core.protocol.transaction.AbstractBranchEndResponse;
+import org.apache.seata.core.protocol.transaction.AbstractGlobalEndResponse;
+import org.apache.seata.core.protocol.transaction.AbstractTransactionResponse;
+import org.apache.seata.core.protocol.transaction.BranchCommitResponse;
+import org.apache.seata.core.protocol.transaction.BranchRegisterResponse;
+import org.apache.seata.core.protocol.transaction.BranchReportResponse;
+import org.apache.seata.core.protocol.transaction.BranchRollbackResponse;
+import org.apache.seata.core.protocol.transaction.GlobalBeginResponse;
+import org.apache.seata.core.protocol.transaction.GlobalCommitResponse;
+import org.apache.seata.core.protocol.transaction.GlobalLockQueryResponse;
+import org.apache.seata.core.protocol.transaction.GlobalReportResponse;
+import org.apache.seata.core.protocol.transaction.GlobalRollbackResponse;
+import org.apache.seata.core.protocol.transaction.GlobalStatusResponse;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/** Java异常码的完整响应样例，对应Java：TransactionExceptionCode及事务响应codec。 */
+class TransactionExceptionProfileTest {
+    private static final ObjectMapper JSON = new ObjectMapper();
+    private static final String[] NAMES = {
+        "Unknown",
+        "BeginFailed",
+        "LockKeyConflict",
+        "IO",
+        "BranchRollbackFailed_Retriable",
+        "BranchRollbackFailed_Unretriable",
+        "BranchRegisterFailed",
+        "BranchReportFailed",
+        "LockableCheckFailed",
+        "BranchTransactionNotExist",
+        "GlobalTransactionNotExist",
+        "GlobalTransactionNotActive",
+        "GlobalTransactionStatusInvalid",
+        "FailedToSendBranchCommitRequest",
+        "FailedToSendBranchRollbackRequest",
+        "FailedToAddBranch",
+        "FailedLockGlobalTransaction",
+        "FailedWriteSession",
+        "FailedStore",
+        "NotRaftLeader",
+        "LockKeyConflictFailFast",
+        "TransactionTimeout",
+        "CommitHeuristic",
+        "Broken",
+        "BranchPrepareFailed"
+    };
+
+    @TestFactory
+    List<DynamicTest> everyExceptionCodeInEveryResponseFamily() {
+        assertEquals(25, TransactionExceptionCode.values().length);
+        List<DynamicTest> tests = new ArrayList<>();
+        for (int type : new int[] {2, 4, 6, 8, 10, 12, 14, 16, 18, 22}) {
+            for (int code = 0; code < NAMES.length; code++) {
+                final int error = code;
+                tests.add(DynamicTest.dynamicTest(type + "_" + NAMES[code], () -> verify(type, error)));
+            }
+        }
+        assertEquals(250, tests.size());
+        return tests;
+    }
+
+    private static void verify(int type, int code) throws Exception {
+        TransactionExceptionCode error = TransactionExceptionCode.get(code);
+        assertEquals(NAMES[code], error.name());
+        AbstractTransactionResponse response = response(type);
+        response.setResultCode(ResultCode.Failed);
+        response.setTransactionExceptionCode(error);
+        response.setMsg("wire:" + NAMES[code]);
+        SeataSerializer serializer = new SeataSerializer((byte) 1);
+        byte[] wire = serializer.serialize(response);
+        AbstractTransactionResponse decoded = serializer.deserialize(wire);
+        assertEquals(JSON.valueToTree(response), JSON.valueToTree(decoded));
+        assertEquals(NAMES[code], decoded.getTransactionExceptionCode().name());
+        assertArrayEquals(wire, serializer.serialize(decoded));
+        Map<String, Object> row = new LinkedHashMap<>();
+        row.put("name", type + "_" + NAMES[code]);
+        row.put("type_id", type);
+        row.put("error_code", code);
+        row.put("error_name", NAMES[code]);
+        row.put("serialized_hex", hex(wire));
+        System.out.println("SEATA_EXCEPTION_PROFILE " + JSON.writeValueAsString(row));
+    }
+
+    private static AbstractTransactionResponse response(int type) {
+        switch (type) {
+            case 2:
+                GlobalBeginResponse begin = new GlobalBeginResponse();
+                begin.setXid("127.0.0.1:8091:33");
+                begin.setExtraData("meta");
+                return begin;
+            case 4:
+                BranchCommitResponse commit = new BranchCommitResponse();
+                branch(commit, BranchStatus.PhaseTwo_CommitFailed_Retryable);
+                return commit;
+            case 6:
+                BranchRollbackResponse rollback = new BranchRollbackResponse();
+                branch(rollback, BranchStatus.PhaseTwo_RollbackFailed_Retryable);
+                return rollback;
+            case 8:
+                return global(new GlobalCommitResponse());
+            case 10:
+                return global(new GlobalRollbackResponse());
+            case 12:
+                BranchRegisterResponse register = new BranchRegisterResponse();
+                register.setBranchId(0x0102030405060708L);
+                return register;
+            case 14:
+                return new BranchReportResponse();
+            case 16:
+                return global(new GlobalStatusResponse());
+            case 18:
+                return global(new GlobalReportResponse());
+            case 22:
+                GlobalLockQueryResponse lock = new GlobalLockQueryResponse();
+                lock.setLockable(false);
+                return lock;
+            default:
+                throw new IllegalArgumentException("Unsupported fixture type " + type);
+        }
+    }
+
+    private static void branch(AbstractBranchEndResponse response, BranchStatus status) {
+        response.setXid("127.0.0.1:8091:33");
+        response.setBranchId(0x0102030405060708L);
+        response.setBranchStatus(status);
+    }
+
+    private static AbstractGlobalEndResponse global(AbstractGlobalEndResponse response) {
+        response.setGlobalStatus(GlobalStatus.RollbackRetrying);
+        return response;
+    }
+
+    private static String hex(byte[] bytes) {
+        char[] digits = "0123456789abcdef".toCharArray();
+        char[] out = new char[bytes.length * 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int value = bytes[i] & 0xff;
+            out[i * 2] = digits[value >>> 4];
+            out[i * 2 + 1] = digits[value & 15];
+        }
+        return new String(out);
+    }
+}

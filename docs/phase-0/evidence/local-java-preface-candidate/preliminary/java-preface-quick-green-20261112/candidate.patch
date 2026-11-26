@@ -1,0 +1,265 @@
+diff --git a/core/src/main/java/org/apache/seata/core/rpc/netty/ProtocolDetectHandler.java b/core/src/main/java/org/apache/seata/core/rpc/netty/ProtocolDetectHandler.java
+--- a/core/src/main/java/org/apache/seata/core/rpc/netty/ProtocolDetectHandler.java
++++ b/core/src/main/java/org/apache/seata/core/rpc/netty/ProtocolDetectHandler.java
+@@ -21,51 +21,48 @@
+ import io.netty.channel.ChannelHandlerContext;
+ import io.netty.handler.codec.ByteToMessageDecoder;
+ import org.apache.seata.core.protocol.detector.ProtocolDetector;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++import lombok.extern.slf4j.Slf4j;
++import org.apache.seata.core.protocol.detector.IncrementalProtocolDetector;
+ 
+ import java.util.List;
+ 
+ import static org.apache.seata.core.protocol.ProtocolConstants.MAX_FRAME_LENGTH;
+ 
++/** 按实际可读区探测协议；有效但不足的前缀等待后续TCP片，不消费原输入。 */
++@Slf4j
+ public class ProtocolDetectHandler extends ByteToMessageDecoder {
+-    private static final Logger LOGGER = LoggerFactory.getLogger(ProtocolDetectHandler.class);
+     private ProtocolDetector[] supportedProtocolDetectors;
+ 
+     public ProtocolDetectHandler(ProtocolDetector[] supportedProtocolDetectors) {
+         this.supportedProtocolDetectors = supportedProtocolDetectors;
+     }
+ 
++    /** 为每次探测创建只读独立索引视图；匹配后由Netty交付尚未消费的数据。 */
+     @Override
+     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+         if (in.readableBytes() > MAX_FRAME_LENGTH) {
+-            LOGGER.error(
+-                    "Packet size {} exceeds maximum {}, closing connection from {}",
+-                    in.readableBytes(),
+-                    MAX_FRAME_LENGTH,
+-                    ctx.channel().remoteAddress());
+-            ctx.close(); // Close the channel if the frame length exceeds the maximum allowed length
++            log.error("Packet size {} exceeds maximum {}, closing connection from {}", in.readableBytes(), MAX_FRAME_LENGTH, ctx.channel().remoteAddress());
++            ctx.close();
+             return;
+         }
+-        for (ProtocolDetector protocolDetector : supportedProtocolDetectors) {
+-            if (protocolDetector.detect(in)) {
+-                ChannelHandler[] protocolHandlers = protocolDetector.getHandlers();
+-                ctx.pipeline().addLast(protocolHandlers);
++        boolean pending = false;
++        for (ProtocolDetector detector : supportedProtocolDetectors) {
++            // 旧boolean扩展即使读取或标记自己的视图，也不能改变原buffer的readerIndex/mark。
++            ByteBuf probe = in.slice(in.readerIndex(), in.readableBytes()).asReadOnly();
++            if (detector.detect(probe)) {
++                ChannelHandler[] handlers = detector.getHandlers();
++                ctx.pipeline().addLast(handlers);
+                 ctx.pipeline().remove(this);
+-
+-                in.resetReaderIndex();
+                 return;
+             }
+-
+-            in.resetReaderIndex();
++            if (detector instanceof IncrementalProtocolDetector) {
++                ByteBuf prefix = in.slice(in.readerIndex(), in.readableBytes()).asReadOnly();
++                pending |= ((IncrementalProtocolDetector) detector).needsMoreData(prefix);
++            }
+         }
+-
+-        byte[] preface = new byte[in.readableBytes()];
+-        in.readBytes(preface);
+-        LOGGER.error(
+-                "Can not recognize protocol from remote {}, preface = {}",
+-                ctx.channel().remoteAddress(),
+-                preface);
++        if (pending) return;
++        // 未知输入可能包含任意业务内容，仅记录长度，不输出完整或截断后的原始载荷。
++        log.error("Can not recognize protocol from remote {}, buffered bytes = {}", ctx.channel().remoteAddress(), in.readableBytes());
+         in.clear();
+         ctx.close();
+     }
+diff --git a/core/src/main/java/org/apache/seata/core/protocol/detector/SeataDetector.java b/core/src/main/java/org/apache/seata/core/protocol/detector/SeataDetector.java
+--- a/core/src/main/java/org/apache/seata/core/protocol/detector/SeataDetector.java
++++ b/core/src/main/java/org/apache/seata/core/protocol/detector/SeataDetector.java
+@@ -20,7 +20,8 @@
+ import io.netty.channel.ChannelHandler;
+ import org.apache.seata.core.rpc.netty.MultiProtocolDecoder;
+ 
+-public class SeataDetector implements ProtocolDetector {
++/** 识别Seata magic，支持非零可读起点与尚未完整的前缀。 */
++public class SeataDetector implements IncrementalProtocolDetector {
+     private static final byte[] MAGIC_CODE_BYTES = {(byte) 0xda, (byte) 0xda};
+     private ChannelHandler[] serverHandlers;
+ 
+@@ -34,9 +35,19 @@
+             return false;
+         }
+         for (int i = 0; i < MAGIC_CODE_BYTES.length; i++) {
+-            if (in.getByte(i) != MAGIC_CODE_BYTES[i]) {
++            if (in.getByte(in.readerIndex() + i) != MAGIC_CODE_BYTES[i]) {
+                 return false;
+             }
++        }
++        return true;
++    }
++
++    /** 仅当不足完整magic且已到达字节均匹配时等待；未知前缀立即拒绝。 */
++    @Override
++    public boolean needsMoreData(ByteBuf in) {
++        if (in.readableBytes() >= MAGIC_CODE_BYTES.length) return false;
++        for (int i = 0; i < in.readableBytes(); i++) {
++            if (in.getByte(in.readerIndex() + i) != MAGIC_CODE_BYTES[i]) return false;
+         }
+         return true;
+     }
+diff --git a/core/src/main/java/org/apache/seata/core/protocol/detector/HttpDetector.java b/core/src/main/java/org/apache/seata/core/protocol/detector/HttpDetector.java
+--- a/core/src/main/java/org/apache/seata/core/protocol/detector/HttpDetector.java
++++ b/core/src/main/java/org/apache/seata/core/protocol/detector/HttpDetector.java
+@@ -33,11 +33,11 @@
+ import io.netty.util.AsciiString;
+ import org.apache.seata.core.rpc.netty.http.Http2HttpHandler;
+ import org.apache.seata.core.rpc.netty.http.HttpDispatchHandler;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++import lombok.extern.slf4j.Slf4j;
+ 
+-public class HttpDetector implements ProtocolDetector {
+-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpDetector.class);
++/** 保持原八字节HTTP识别规则，同时允许七种原方法的前缀分片。 */
++@Slf4j
++public class HttpDetector implements IncrementalProtocolDetector {
+     private static final String[] HTTP_METHODS = {"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"};
+ 
+     @Override
+@@ -55,9 +55,23 @@
+         return false;
+     }
+ 
++    /** 不足原识别阈值时，只有匹配至少一个原HTTP方法的前缀才继续等待。 */
++    @Override
++    public boolean needsMoreData(ByteBuf in) {
++        if (in.readableBytes() >= 8) return false;
++        for (String method : HTTP_METHODS) {
++            boolean matches = true;
++            for (int i = 0; i < Math.min(in.readableBytes(), method.length()); i++) {
++                if (in.getByte(in.readerIndex() + i) != (byte) method.charAt(i)) { matches = false; break; }
++            }
++            if (matches) return true;
++        }
++        return false;
++    }
++
+     private boolean startsWith(ByteBuf buffer, String prefix) {
+         for (int i = 0; i < prefix.length(); i++) {
+-            if (buffer.getByte(i) != (byte) prefix.charAt(i)) {
++            if (buffer.getByte(buffer.readerIndex() + i) != (byte) prefix.charAt(i)) {
+                 return false;
+             }
+         }
+@@ -86,9 +100,9 @@
+             @Override
+             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                 if (cause instanceof java.io.IOException) {
+-                    LOGGER.trace("Connection closed by client: {}", cause.getMessage());
++                    log.trace("Connection closed by client: {}", cause.getMessage());
+                 } else {
+-                    LOGGER.error("Exception caught in HTTP pipeline: ", cause);
++                    log.error("Exception caught in HTTP pipeline: ", cause);
+                 }
+                 ctx.close();
+             }
+diff --git a/core/src/main/java/org/apache/seata/core/protocol/detector/Http2Detector.java b/core/src/main/java/org/apache/seata/core/protocol/detector/Http2Detector.java
+--- a/core/src/main/java/org/apache/seata/core/protocol/detector/Http2Detector.java
++++ b/core/src/main/java/org/apache/seata/core/protocol/detector/Http2Detector.java
+@@ -28,11 +28,13 @@
+ import io.netty.handler.codec.http2.Http2MultiplexHandler;
+ import io.netty.handler.codec.http2.Http2StreamChannel;
+ import io.netty.util.CharsetUtil;
++import java.util.Objects;
+ import org.apache.seata.core.rpc.netty.grpc.GrpcDecoder;
+ import org.apache.seata.core.rpc.netty.grpc.GrpcEncoder;
+ import org.apache.seata.core.rpc.netty.http.Http2HttpHandler;
+ 
+-public class Http2Detector implements ProtocolDetector {
++/** 识别完整HTTP/2连接前言，并保留合法分片前缀。 */
++public class Http2Detector implements IncrementalProtocolDetector {
+     // HTTP/2 connection preface for detecting h2c (plaintext HTTP/2, not encrypted HTTPS)
+     private static final byte[] HTTP2_PREFIX_BYTES = "PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n".getBytes(CharsetUtil.UTF_8);
+     private final ChannelHandler[] serverHandlers;
+@@ -47,9 +49,19 @@
+             return false;
+         }
+         for (int i = 0; i < HTTP2_PREFIX_BYTES.length; i++) {
+-            if (in.getByte(i) != HTTP2_PREFIX_BYTES[i]) {
++            if (in.getByte(in.readerIndex() + i) != HTTP2_PREFIX_BYTES[i]) {
+                 return false;
+             }
++        }
++        return true;
++    }
++
++    /** 只有24字节前言的真实前缀才继续等待，不延迟拒绝已不匹配的数据。 */
++    @Override
++    public boolean needsMoreData(ByteBuf in) {
++        if (in.readableBytes() >= HTTP2_PREFIX_BYTES.length) return false;
++        for (int i = 0; i < in.readableBytes(); i++) {
++            if (in.getByte(in.readerIndex() + i) != HTTP2_PREFIX_BYTES[i]) return false;
+         }
+         return true;
+     }
+@@ -74,7 +86,7 @@
+                 Http2HeadersFrame headersFrame = (Http2HeadersFrame) msg;
+                 CharSequence contentType = headersFrame.headers().get(HttpHeaderNames.CONTENT_TYPE);
+                 final ChannelPipeline p = ctx.pipeline();
+-                if (contentType != null && contentType.toString().endsWith("grpc")) {
++                if (Objects.nonNull(contentType) && contentType.toString().endsWith("grpc")) {
+                     p.addLast(new GrpcDecoder());
+                     p.addLast(new GrpcEncoder());
+                     p.addLast(serverHandlers);
+diff --git a/core/src/main/java/org/apache/seata/core/protocol/detector/IncrementalProtocolDetector.java b/core/src/main/java/org/apache/seata/core/protocol/detector/IncrementalProtocolDetector.java
+new file mode 100644
+--- /dev/null
++++ b/core/src/main/java/org/apache/seata/core/protocol/detector/IncrementalProtocolDetector.java
+@@ -0,0 +1,28 @@
++/*
++ * Licensed to the Apache Software Foundation (ASF) under one or more
++ * contributor license agreements.  See the NOTICE file distributed with
++ * this work for additional information regarding copyright ownership.
++ * The ASF licenses this file to You under the Apache License, Version 2.0
++ * (the "License"); you may not use this file except in compliance with
++ * the License.  You may obtain a copy of the License at
++ *
++ *     http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package org.apache.seata.core.protocol.detector;
++
++import io.netty.buffer.ByteBuf;
++
++/**
++ * 可选的分片探测能力，保留原ProtocolDetector二进制/源码接口。
++ * 仅当当前可读区仍是合法协议前缀但不足识别时返回true；不得释放传入buffer。
++ */
++public interface IncrementalProtocolDetector extends ProtocolDetector {
++    /** 判断是否应保留当前前缀等待后续数据；输入为独立索引只读视图。 */
++    boolean needsMoreData(ByteBuf in);
++}
+diff --git a/core/pom.xml b/core/pom.xml
+--- a/core/pom.xml
++++ b/core/pom.xml
+@@ -32,6 +32,14 @@
+     <description>core for Seata built with Maven</description>
+ 
+     <dependencies>
++        <!-- Compile-only Lombok for SLF4J annotations; no runtime dependency. -->
++        <dependency>
++            <groupId>org.projectlombok</groupId>
++            <artifactId>lombok</artifactId>
++            <version>1.18.36</version>
++            <scope>provided</scope>
++            <optional>true</optional>
++        </dependency>
+         <dependency>
+             <groupId>${project.groupId}</groupId>
+             <artifactId>seata-common</artifactId>

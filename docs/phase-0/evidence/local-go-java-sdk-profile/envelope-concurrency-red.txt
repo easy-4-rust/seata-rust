@@ -1,0 +1,26 @@
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchCommit
+ERROR: This message type 4 has no processor.
+    java_v1_sdk_dispatch_test.go:42: valid inconsistent reply was dropped before unknown-outcome validation
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchRollback
+ERROR: This message type 6 has no processor.
+    java_v1_sdk_dispatch_test.go:42: valid inconsistent reply was dropped before unknown-outcome validation
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/requestKindWithReplyBody
+    java_v1_sdk_dispatch_test.go:47: inconsistent envelope/type returned success or generic error <nil>
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/onewayKindWithReplyBody
+    java_v1_sdk_dispatch_test.go:47: inconsistent envelope/type returned success or generic error <nil>
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/replyKindWithRequestBody
+ERROR: This message type 15 has no processor.
+    java_v1_sdk_dispatch_test.go:42: valid inconsistent reply was dropped before unknown-outcome validation
+--- FAIL: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType (0.00s)
+    --- FAIL: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchCommit (0.00s)
+    --- FAIL: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchRollback (0.00s)
+    --- FAIL: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/requestKindWithReplyBody (0.00s)
+    --- FAIL: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/onewayKindWithReplyBody (0.00s)
+    --- FAIL: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/replyKindWithRequestBody (0.00s)
+=== RUN   TestJavaV1SDKConcurrentMergeRepliesCannotMixChildren
+    java_v1_sdk_dispatch_test.go:87: children came from different duplicate containers
+--- FAIL: TestJavaV1SDKConcurrentMergeRepliesCannotMixChildren (0.04s)
+FAIL
+FAIL	seata.apache.org/seata-go/v2/pkg/remoting/getty	1.825s
+FAIL

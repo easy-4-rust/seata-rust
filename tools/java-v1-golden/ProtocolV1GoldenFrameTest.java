@@ -17,6 +17,7 @@
 package org.apache.seata.core.rpc.netty.v1;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import org.apache.seata.core.compressor.CompressorType;
 import org.apache.seata.core.protocol.RegisterRMRequest;
@@ -59,7 +60,12 @@ class ProtocolV1GoldenFrameTest {
             new ProtocolEncoderV1().encode(decoded, output);
             byte[] actual = new byte[output.readableBytes()];
             output.readBytes(actual);
-            assertArrayEquals(expected, actual, "Java V1 decoder/encoder must preserve the complete frame");
+            assertArrayEquals(
+                    expected,
+                    actual,
+                    "Java V1 decoder/encoder must preserve the complete frame; decoded=" + decoded.getBody()
+                            + "; expectedHex=" + ByteBufUtil.hexDump(expected)
+                            + "; actualHex=" + ByteBufUtil.hexDump(actual));
         } finally {
             output.release();
         }

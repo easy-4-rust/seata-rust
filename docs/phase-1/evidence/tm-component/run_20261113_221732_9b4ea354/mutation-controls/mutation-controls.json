@@ -1,0 +1,152 @@
+[
+  {
+    "name": "written_timeout_falsely_local",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "exception/tm_error.rs",
+    "source_sha256": "836997a1f489bbe9384313a657cb85966ac4ebc30064bc4f6df5da4da59ed072",
+    "patch": {
+      "old": "        } else if may_have_effect {\n            Self::UnknownOutcome {\n                operation,\n                xid,\n                source: Box::new(source),\n                recovery: None,\n            }\n",
+      "new": "        } else if may_have_effect {\n            Self::LocalFailureBeforeSend {\n                operation,\n                xid,\n                source: Box::new(source),\n            }\n"
+    },
+    "target": "manager_calls",
+    "test": "lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "participant_sends_global_second_phase",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "api/global_transaction.rs",
+    "source_sha256": "e2b7e1ff654b6972a432aab8e080a2e97f61328a119723067c407e691cb061f8",
+    "patch": {
+      "old": "if self.role == GlobalTransactionRole::Participant {",
+      "new": "if false && self.role == GlobalTransactionRole::Participant {"
+    },
+    "target": "manager_calls",
+    "test": "participant_never_sends_global_begin_commit_or_rollback",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "failed_status_retains_stale_retry_permission",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "api/global_transaction.rs",
+    "source_sha256": "4a1b2e1c714d978aed09c6d7c054a7e9db92afd29886864c0983ebe166e767a3",
+    "patch": {
+      "old": "        // 每次查询先撤销上次一次性重试许可；查询失败或future取消均不得沿用旧许可。\n        if let EndState::Uncertain { operation, .. } = self.state {\n            self.state = EndState::Uncertain {\n                operation,\n                reconciled: false,\n            };\n        }\n        let outcome = match self.manager.get_status(&self.xid).await {\n            Ok(outcome) => outcome,\n            Err(error) => {\n                if let TmError::DefiniteRejected {\n                    status: Some(status),\n                    ..\n                } = &error\n                {\n                    self.last_status = *status;\n                }\n                return Err(error);\n            }\n        };\n",
+      "new": "        let outcome = self.manager.get_status(&self.xid).await?;\n"
+    },
+    "target": "manager_calls",
+    "test": "failed_status_retry_timeout_revokes_prior_same_operation_retry_permission",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "joined_scope_keeps_launcher_role",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "api/transactional_template.rs",
+    "source_sha256": "6411533765536aec3fcce72cb9178680d0e9d7e667a843d01a62e6919df1ac98",
+    "patch": {
+      "old": "Some(context.into_participant())",
+      "new": "Some(context)"
+    },
+    "target": "scoped_execution",
+    "test": "required_nested_scope_participates_without_rewriting_outer_launcher_or_deadline",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "finished_erases_original_commit_uncertainty",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "api/global_transaction.rs",
+    "source_sha256": "32dfb92cddbb1960b5160e0e896b8572e6fff2a32bd670f99678644780b3cf25",
+    "patch": {
+      "old": "            self.state = if matches!(\n                self.last_status,\n                GlobalStatus::Committed",
+      "new": "            self.state = if matches!(\n                self.last_status,\n                GlobalStatus::Finished | GlobalStatus::Committed"
+    },
+    "target": "manager_calls",
+    "test": "lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "failed_begin_discards_reported_optional_fields",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "api/transaction_manager.rs",
+    "source_sha256": "173d0bc4917e0d151c393833c8d47b532c0443be5d3e1faa1669abadfb1f67d0",
+    "patch": {
+      "old": "reported_begin: Some(Box::new(value)),",
+      "new": "reported_begin: None,"
+    },
+    "target": "manager_calls",
+    "test": "failed_begin_preserves_reported_optional_fields_without_binding_a_launcher",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "builder_debug_exposes_business_name",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "model/transaction_config.rs",
+    "source_sha256": "0606295a7c467a98e70de8ddab4012c985e924b2ff615f42853d24a439c5629f",
+    "patch": {
+      "old": ".field(\"name_bytes\", &self.name.len())\n            .field(\"timeout\", &self.timeout)",
+      "new": ".field(\"name\", &self.name)\n            .field(\"timeout\", &self.timeout)"
+    },
+    "target": "context_config",
+    "test": "config_builder_keeps_tc_timeout_exact_and_defaults_required",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "recovered_end_skips_required_status_query",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "api/global_transaction.rs",
+    "source_sha256": "0c582ffc7cfd662d0945f55fe68a5bdeb4afe5ffd11523071af78753ddada72c",
+    "patch": {
+      "old": "transaction.state = EndState::Uncertain {\n            operation,\n            reconciled: false,\n        };",
+      "new": "transaction.state = EndState::Open;"
+    },
+    "target": "scoped_execution",
+    "test": "unknown_scoped_end_can_recover_original_intent_without_starting_a_new_transaction",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "recovery_ignores_issuing_manager",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "model/recovery_token.rs",
+    "source_sha256": "5aea53e18f334a682d6b05afe67a96ab32fb9e13c326f442577c6c04b7d467b9",
+    "patch": {
+      "old": "Arc::ptr_eq(&self.authority, authority)",
+      "new": "true"
+    },
+    "target": "scoped_execution",
+    "test": "unknown_scoped_end_can_recover_original_intent_without_starting_a_new_transaction",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "valid_business_deadline_is_inverted",
+    "candidate": "D:\\codex-builds\\seata-tm-controls-8d9179793c17",
+    "source": "api/transactional_template.rs",
+    "source_sha256": "e9038e7492eb1a35d9c0ed3cf5f5633ab80d8e570d3553a3ad2ab9fdc34d1add",
+    "patch": {
+      "old": "if deadline <= Instant::now() {",
+      "new": "if deadline > Instant::now() {"
+    },
+    "target": "scoped_execution",
+    "test": "required_nested_scope_participates_without_rewriting_outer_launcher_or_deadline",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  }
+]

@@ -1,0 +1,14 @@
+CREATE TABLE accounts (id BIGINT NOT NULL PRIMARY KEY, balance BIGINT NOT NULL) ENGINE=InnoDB;
+INSERT INTO accounts (id,balance) VALUES (1,1000);
+CREATE TABLE undo_log (
+ id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ branch_id BIGINT NOT NULL,
+ xid VARCHAR(100) NOT NULL,
+ context VARCHAR(128) NOT NULL,
+ rollback_info LONGBLOB NOT NULL,
+ log_status INT NOT NULL,
+ log_created DATETIME NOT NULL,
+ log_modified DATETIME NOT NULL,
+ ext VARCHAR(100) DEFAULT NULL,
+ UNIQUE KEY ux_undo_log (xid,branch_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

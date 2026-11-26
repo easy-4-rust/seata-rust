@@ -1,0 +1,60 @@
+2026-11-25 17:01:59+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.13-1.el9 started.
+2026-11-25 17:02:00+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+2026-11-25 17:02:00+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.13-1.el9 started.
+2026-11-25 17:02:00+00:00 [Note] [Entrypoint]: Initializing database files
+2026-11-25T17:02:00.181443Z 0 [System] [MY-015017] [Server] MySQL Server Initialization - start.
+2026-11-25T17:02:00.182186Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.4.13) initializing of server in progress as process 87
+2026-11-25T17:02:00.182188Z 0 [System] [MY-015150] [Server] Server version with update: '8.4.13.0'
+2026-11-25T17:02:00.187856Z 0 [Warning] [MY-010159] [Server] Setting lower_case_table_names=2 because file system for /var/lib/mysql/ is case insensitive
+2026-11-25T17:02:00.197312Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-11-25T17:02:01.002619Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-11-25T17:02:03.212880Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+2026-11-25T17:02:06.296239Z 0 [System] [MY-015018] [Server] MySQL Server Initialization - end.
+2026-11-25 17:02:06+00:00 [Note] [Entrypoint]: Database files initialized
+2026-11-25 17:02:06+00:00 [Note] [Entrypoint]: Starting temporary server
+2026-11-25T17:02:06.434182Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2026-11-25T17:02:06.628121Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.4.13) starting as process 231
+2026-11-25T17:02:06.628125Z 0 [System] [MY-015150] [Server] Server version with update: '8.4.13.0'
+2026-11-25T17:02:06.631146Z 0 [Warning] [MY-010159] [Server] Setting lower_case_table_names=2 because file system for /var/lib/mysql/ is case insensitive
+2026-11-25T17:02:06.643786Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-11-25T17:02:07.443827Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-11-25T17:02:07.929659Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2026-11-25T17:02:07.930239Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2026-11-25T17:02:07.949986Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2026-11-25T17:02:07.983573Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
+2026-11-25T17:02:07.983632Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.13'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server - GPL.
+2026-11-25 17:02:07+00:00 [Note] [Entrypoint]: Temporary server started.
+'/var/lib/mysql/mysql.sock' -> '/var/run/mysqld/mysqld.sock'
+2026-11-25 17:02:09+00:00 [Note] [Entrypoint]: Creating database undo_c469c00d682f
+
+2026-11-25 17:02:09+00:00 [Note] [Entrypoint]: /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/00-tc.sql
+
+
+2026-11-25 17:02:09+00:00 [Note] [Entrypoint]: /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01-undo.sql
+
+
+2026-11-25 17:02:09+00:00 [Note] [Entrypoint]: Stopping temporary server
+2026-11-25T17:02:09.676789Z 13 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.4.13).
+2026-11-25T17:02:11.258894Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.4.13)  MySQL Community Server - GPL.
+2026-11-25T17:02:11.258921Z 0 [System] [MY-015016] [Server] MySQL Server - end.
+2026-11-25 17:02:11+00:00 [Note] [Entrypoint]: Temporary server stopped
+
+2026-11-25 17:02:11+00:00 [Note] [Entrypoint]: MySQL init process done. Ready for start up.
+
+2026-11-25T17:02:11.686495Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2026-11-25T17:02:11.849808Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.4.13) starting as process 1
+2026-11-25T17:02:11.849812Z 0 [System] [MY-015150] [Server] Server version with update: '8.4.13.0'
+2026-11-25T17:02:11.857391Z 0 [Warning] [MY-010159] [Server] Setting lower_case_table_names=2 because file system for /var/lib/mysql/ is case insensitive
+2026-11-25T17:02:11.887158Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-11-25T17:02:12.073277Z 1 [Warning] [MY-012092] [InnoDB] Tablespace 'undo_c469c00d682f/branch_table.ibd' naming format is like an undo tablespace but its ID 3 is not in the undo tablespace range
+2026-11-25T17:02:12.074316Z 1 [Warning] [MY-012092] [InnoDB] Tablespace 'undo_c469c00d682f/distributed_lock.ibd' naming format is like an undo tablespace but its ID 5 is not in the undo tablespace range
+2026-11-25T17:02:12.075235Z 1 [Warning] [MY-012092] [InnoDB] Tablespace 'undo_c469c00d682f/global_table.ibd' naming format is like an undo tablespace but its ID 2 is not in the undo tablespace range
+2026-11-25T17:02:12.076330Z 1 [Warning] [MY-012092] [InnoDB] Tablespace 'undo_c469c00d682f/lock_table.ibd' naming format is like an undo tablespace but its ID 4 is not in the undo tablespace range
+2026-11-25T17:02:12.077329Z 1 [Warning] [MY-012092] [InnoDB] Tablespace 'undo_c469c00d682f/undo_log.ibd' naming format is like an undo tablespace but its ID 7 is not in the undo tablespace range
+2026-11-25T17:02:12.078269Z 1 [Warning] [MY-012092] [InnoDB] Tablespace 'undo_c469c00d682f/vgroup_table.ibd' naming format is like an undo tablespace but its ID 6 is not in the undo tablespace range
+2026-11-25T17:02:12.654366Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-11-25T17:02:13.129662Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2026-11-25T17:02:13.130012Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2026-11-25T17:02:13.144663Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2026-11-25T17:02:13.200286Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.13'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+2026-11-25T17:02:13.200294Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock

@@ -1,0 +1,23 @@
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+error[E0432]: unresolved import `seata_protocol::protocol::RpcMessage`
+ --> crates\seata_protocol\tests\v1_frames.rs:3:5
+  |
+3 | use seata_protocol::protocol::RpcMessage;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^----------
+  |                               |
+  |                               no `RpcMessage` in `protocol`
+  |
+help: a similar name exists in the module
+  |
+3 - use seata_protocol::protocol::RpcMessage;
+3 + use seata_protocol::protocol::Message;
+  |
+
+error[E0432]: unresolved import `seata_protocol::v1`
+ --> crates\seata_protocol\tests\v1_frames.rs:5:21
+  |
+5 | use seata_protocol::v1::{FrameLimits, ProtocolDecoderV1, ProtocolEncoderV1};
+  |                     ^^ could not find `v1` in `seata_protocol`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-protocol` (test "v1_frames") due to 2 previous errors

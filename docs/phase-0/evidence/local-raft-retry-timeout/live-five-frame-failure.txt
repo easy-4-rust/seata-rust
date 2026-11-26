@@ -1,0 +1,14 @@
+PASS live RAFT diagnostic status=1 originalRecords=2 transitions=2 snapshotReload=true
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\raft_recovery\run.py", line 203, in <module>
+    parser=argparse.ArgumentParser();parser.add_argument('--java-source',default='E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle');parser.add_argument('--java-build',default='D:/codex-builds/seata-java-exact-overlay-20261112');parser.add_argument('--runtime-base',default='D:/codex-builds/seata raft retry timeout');parser.add_argument('--host',default='192.168.1.10');run(parser.parse_args())
+                                                                                                                                                                                                                                                                                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\raft_recovery\run.py", line 164, in run
+    first_errors=inspect_jfr(leader,'election_one',boundary_one)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\raft_recovery\run.py", line 158, in inspect_jfr
+    if status in [16,17]:found,attempt=checks.wait_for_reload(read_events,status,boundary,max_attempts=15,delay=.2)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\raft_recovery\checks.py", line 57, in wait_for_reload
+    raise RuntimeError('No exact async reload event in this transition window before the bounded deadline')
+RuntimeError: No exact async reload event in this transition window before the bounded deadline

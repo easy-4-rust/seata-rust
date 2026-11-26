@@ -1,0 +1,22 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.83s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test branch_probe::tests::first_response_is_withheld_and_only_redelivery_is_acknowledged ... FAILED
+
+failures:
+
+---- branch_probe::tests::first_response_is_withheld_and_only_redelivery_is_acknowledged stdout ----
+
+thread 'branch_probe::tests::first_response_is_withheld_and_only_redelivery_is_acknowledged' (50564) panicked at src\branch_probe.rs:173:62:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "callback response loss probe is not implemented" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    branch_probe::tests::first_response_is_withheld_and_only_redelivery_is_acknowledged
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

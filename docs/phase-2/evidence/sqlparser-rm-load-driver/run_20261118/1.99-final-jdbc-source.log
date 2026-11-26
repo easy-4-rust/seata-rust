@@ -1,0 +1,69 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.67s
+     Running tests\jdbc_load_driver.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jdbc_load_driver-2005157c46c3fde1.exe)
+
+running 4 tests
+test context_prefers_its_class_and_misses_try_the_default_once ... ok
+test loader_dispatch_matches_original_java_profiles ... SEATA_JDBC_LOAD	context-driver	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	no-context	false	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-missing-default-driver	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-null-class	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-selected-class	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-linkage	true	java.lang.LinkageError	context-linkage
+SEATA_JDBC_LOAD	missing-class	true	java.sql.SQLException>java.lang.ClassNotFoundException	com.invalid.NonExistentDriver
+SEATA_JDBC_LOAD	empty-class	true	java.sql.SQLException>java.lang.ClassNotFoundException	
+SEATA_JDBC_LOAD	null-class-name	false	java.lang.NullPointerException	<null>
+SEATA_JDBC_LOAD	private-constructor	true	java.sql.SQLException>java.lang.IllegalAccessException	class org.apache.seata.rm.datasource.util.JdbcUtils cannot access a member of class JdbcRmDriverLoadOracle$PrivateDriver with modifiers "private"
+SEATA_JDBC_LOAD	abstract-class	true	java.sql.SQLException>java.lang.InstantiationException	<null>
+SEATA_JDBC_LOAD	missing-constructor	true	java.sql.SQLException>java.lang.InstantiationException>java.lang.NoSuchMethodException	JdbcRmDriverLoadOracle$MissingConstructor
+SEATA_JDBC_LOAD	constructor-access-subclass	true	java.sql.SQLException>JdbcRmDriverLoadOracle$AccessFailure	constructor-access
+SEATA_JDBC_LOAD	constructor-sql	true	java.sql.SQLException	constructor-sql
+SEATA_JDBC_LOAD	constructor-class-missing	true	java.lang.ClassNotFoundException	constructor-missing
+SEATA_JDBC_LOAD	wrong-driver-type	true	java.lang.ClassCastException	class JdbcRmDriverLoadOracle$NotDriver cannot be cast to class java.sql.Driver (JdbcRmDriverLoadOracle$NotDriver is in unnamed module of loader 'app'; java.sql.Driver is in module java.sql of loader 'platform')
+SEATA_JDBC_LOAD	default-initializer-fails	false	java.lang.ExceptionInInitializerError>java.lang.IllegalStateException	<null>
+ok
+test unrelated_errors_stop_the_current_stage_without_wrapping ... ok
+test wraps_only_designated_failures_and_keeps_cause_identity ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_parser_spi.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jdbc_parser_spi-c15756d84734f7a8.exe)
+
+running 2 tests
+test equal_top_priority_without_a_link_order_is_rejected ... ok
+test rm_uses_the_highest_order_provider_with_the_druid_name ... SEATA_JDBC_SPI	override	true
+SEATA_JDBC_SPI	rm-type	chosen
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_utils_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jdbc_utils_source-ce9fdd575009d43f.exe)
+
+running 11 tests
+test default_parser_is_shared_with_the_registry_and_missing_name_keeps_java_error ... SEATA_JDBC_SPI	shared	true
+SEATA_JDBC_SPI	missing	org.apache.seata.common.loader.EnhancedServiceNotFoundException	not found service provider for : org.apache.seata.sqlparser.util.DbTypeParser
+SEATA_JDBC_SPI	empty	java.lang.IllegalArgumentException	the name of service provider for [org.apache.seata.sqlparser.util.DbTypeParser] name is null
+ok
+test test_build_resource_id_with_empty_query_string ... SEATA_JDBC_SOURCE	testBuildResourceIdWithEmptyQueryString	jdbc:mysql://localhost:3306/test
+ok
+test test_build_resource_id_with_multiple_question_marks ... SEATA_JDBC_SOURCE	testBuildResourceIdWithMultipleQuestionMarks	jdbc:mysql://localhost:3306/test
+ok
+test test_build_resource_id_with_query_string ... SEATA_JDBC_SOURCE	testBuildResourceIdWithQueryString	jdbc:mysql://localhost:3306/test
+ok
+test test_build_resource_id_without_query_string ... SEATA_JDBC_SOURCE	testBuildResourceIdWithoutQueryString	jdbc:mysql://localhost:3306/test
+ok
+test test_db_type_parser_loading ... SEATA_JDBC_SOURCE	testDbTypeParserLoading	true
+ok
+test test_db_type_parser_singleton_pattern ... SEATA_JDBC_SOURCE	testDbTypeParserSingletonPattern	true
+ok
+test test_get_db_type_with_h2_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithH2Url	h2
+ok
+test test_get_db_type_with_mysql_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithMySQLUrl	mysql
+ok
+test test_get_db_type_with_oracle_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithOracleUrl	oracle
+ok
+test test_get_db_type_with_postgresql_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithPostgreSQLUrl	postgresql
+ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

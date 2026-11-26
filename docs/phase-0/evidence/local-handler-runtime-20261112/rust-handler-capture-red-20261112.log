@@ -1,0 +1,29 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.08s
+     Running unittests src\main.rs (D:/cargo-target/seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 2 tests
+test payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes ... FAILED
+test payload::handler_runtime_tests::every_runtime_handler_response_rejects_truncation_and_trailing_bytes ... FAILED
+
+failures:
+
+---- payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes stdout ----
+
+thread 'payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes' (72100) panicked at src\payload\handler_runtime_tests.rs:66:60:
+Java runtime capture fixtures are required: Os { code: 3, kind: NotFound, message: "系统找不到指定的路径。" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- payload::handler_runtime_tests::every_runtime_handler_response_rejects_truncation_and_trailing_bytes stdout ----
+
+thread 'payload::handler_runtime_tests::every_runtime_handler_response_rejects_truncation_and_trailing_bytes' (70364) panicked at src\payload\handler_runtime_tests.rs:83:75:
+Java runtime capture fixtures are required: Os { code: 3, kind: NotFound, message: "系统找不到指定的路径。" }
+
+
+failures:
+    payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes
+    payload::handler_runtime_tests::every_runtime_handler_response_rejects_truncation_and_trailing_bytes
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 81 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

@@ -1,0 +1,90 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0432]: unresolved imports `seata_sqlparser::register_db_type_parser`, `seata_sqlparser::DbTypeParserRegistration`
+ --> crates\seata_db_mysql\tests\jdbc_parser_spi.rs:5:5
+  |
+5 |     register_db_type_parser, DbTypeParser, DbTypeParserRegistration, JavaString, MetadataError,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^ no `DbTypeParserRegistration` in the root
+  |     |
+  |     no `register_db_type_parser` in the root
+  |
+help: a similar name exists in the module
+  |
+5 -     register_db_type_parser, DbTypeParser, DbTypeParserRegistration, JavaString, MetadataError,
+5 +     register_db_type_parser, DbTypeParser, EscapeHandlerRegistration, JavaString, MetadataError,
+  |
+
+warning: unused import: `SqlParserType`
+ --> crates\seata_db_mysql\tests\jdbc_parser_spi.rs:6:21
+  |
+6 |     MetadataLocale, SqlParserType,
+  |                     ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0599]: no associated function or constant named `get_db_type_parser` found for struct `JdbcUtils` in the current scope
+  --> crates\seata_db_mysql\tests\jdbc_parser_spi.rs:37:29
+   |
+37 |     let parser = JdbcUtils::get_db_type_parser()?;
+   |                             ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `JdbcUtils`
+   |
+help: there is an associated function `get_db_type` with a similar name
+  --> crates\seata_db_mysql\src\util\jdbc_utils.rs:24:5
+   |
+24 | /     pub fn get_db_type(
+25 | |         jdbc_url: Option<&JavaString>,
+26 | |         locale: &MetadataLocale,
+27 | |     ) -> Result<JavaString, MetadataError> {
+   | |__________________________________________^
+
+error[E0599]: no associated function or constant named `get_db_type_parser` found for struct `JdbcUtils` in the current scope
+  --> crates\seata_db_mysql\tests\jdbc_utils_source.rs:11:16
+   |
+11 |     JdbcUtils::get_db_type_parser()?;
+   |                ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `JdbcUtils`
+   |
+help: there is an associated function `get_db_type` with a similar name
+  --> crates\seata_db_mysql\src\util\jdbc_utils.rs:24:5
+   |
+24 | /     pub fn get_db_type(
+25 | |         jdbc_url: Option<&JavaString>,
+26 | |         locale: &MetadataLocale,
+27 | |     ) -> Result<JavaString, MetadataError> {
+   | |__________________________________________^
+
+error[E0599]: no associated function or constant named `get_db_type_parser` found for struct `JdbcUtils` in the current scope
+  --> crates\seata_db_mysql\tests\jdbc_utils_source.rs:18:28
+   |
+18 |     let first = JdbcUtils::get_db_type_parser()?;
+   |                            ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `JdbcUtils`
+   |
+help: there is an associated function `get_db_type` with a similar name
+  --> crates\seata_db_mysql\src\util\jdbc_utils.rs:24:5
+   |
+24 | /     pub fn get_db_type(
+25 | |         jdbc_url: Option<&JavaString>,
+26 | |         locale: &MetadataLocale,
+27 | |     ) -> Result<JavaString, MetadataError> {
+   | |__________________________________________^
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error[E0599]: no associated function or constant named `get_db_type_parser` found for struct `JdbcUtils` in the current scope
+  --> crates\seata_db_mysql\tests\jdbc_utils_source.rs:19:29
+   |
+19 |     let second = JdbcUtils::get_db_type_parser()?;
+   |                             ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `JdbcUtils`
+   |
+help: there is an associated function `get_db_type` with a similar name
+  --> crates\seata_db_mysql\src\util\jdbc_utils.rs:24:5
+   |
+24 | /     pub fn get_db_type(
+25 | |         jdbc_url: Option<&JavaString>,
+26 | |         locale: &MetadataLocale,
+27 | |     ) -> Result<JavaString, MetadataError> {
+   | |__________________________________________^
+
+warning: `seata-db-mysql` (test "jdbc_parser_spi") generated 1 warning
+error: could not compile `seata-db-mysql` (test "jdbc_parser_spi") due to 2 previous errors; 1 warning emitted
+warning: build failed, waiting for other jobs to finish...
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "jdbc_utils_source") due to 3 previous errors

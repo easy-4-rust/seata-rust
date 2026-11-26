@@ -1,0 +1,33 @@
+test_actual_capture (test_capture.CaptureTests.test_actual_capture) ... ok
+test_both_probe_copies_changed (test_capture.CaptureTests.test_both_probe_copies_changed) ... FAIL
+test_corrupt_frozen_input (test_capture.CaptureTests.test_corrupt_frozen_input) ... ok
+test_corrupt_go_artifact (test_capture.CaptureTests.test_corrupt_go_artifact) ... ok
+test_mismatched_raw_origin (test_capture.CaptureTests.test_mismatched_raw_origin) ... FAIL
+test_missing_class_audit (test_capture.CaptureTests.test_missing_class_audit) ... ok
+
+======================================================================
+FAIL: test_both_probe_copies_changed (test_capture.CaptureTests.test_both_probe_copies_changed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-global-status-contract\test_capture.py", line 67, in test_both_probe_copies_changed
+    self.damaged({path: path.read_bytes() + b'changed' for path in paths})
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-global-status-contract\test_capture.py", line 37, in damaged
+    with self.assertRaises(ValueError): validate(self.out)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_mismatched_raw_origin (test_capture.CaptureTests.test_mismatched_raw_origin)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-global-status-contract\test_capture.py", line 48, in test_mismatched_raw_origin
+    self.damaged({path: json.dumps(value).encode()})
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-global-status-contract\test_capture.py", line 37, in damaged
+    with self.assertRaises(ValueError): validate(self.out)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 2.673s
+
+FAILED (failures=2)

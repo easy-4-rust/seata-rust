@@ -1,0 +1,67 @@
+test_complete_inventory_is_accepted (test_collect.CollectorGateTest.test_complete_inventory_is_accepted) ... ok
+test_corrupted_payload_copy_cannot_certify_the_capture (test_collect.CollectorGateTest.test_corrupted_payload_copy_cannot_certify_the_capture) ... FAIL
+test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) ... 
+  test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='frame_hex') ... FAIL
+  test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='serialized_hex') ... FAIL
+  test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='kind') ... FAIL
+  test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='request_id') ... FAIL
+test_missing_or_duplicate_case_is_rejected (test_collect.CollectorGateTest.test_missing_or_duplicate_case_is_rejected) ... FAIL
+
+======================================================================
+FAIL: test_corrupted_payload_copy_cannot_certify_the_capture (test_collect.CollectorGateTest.test_corrupted_payload_copy_cannot_certify_the_capture)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-control-envelopes\test_collect.py", line 25, in test_corrupted_payload_copy_cannot_certify_the_capture
+    with self.assertRaises(ValueError):collect.validate_rows(values)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='frame_hex')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-control-envelopes\test_collect.py", line 22, in test_declared_length_type_and_payload_must_match_actual_frame
+    with self.subTest(field=field),self.assertRaises(ValueError):collect.validate_rows(values)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='serialized_hex')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-control-envelopes\test_collect.py", line 22, in test_declared_length_type_and_payload_must_match_actual_frame
+    with self.subTest(field=field),self.assertRaises(ValueError):collect.validate_rows(values)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='kind')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-control-envelopes\test_collect.py", line 22, in test_declared_length_type_and_payload_must_match_actual_frame
+    with self.subTest(field=field),self.assertRaises(ValueError):collect.validate_rows(values)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_declared_length_type_and_payload_must_match_actual_frame (test_collect.CollectorGateTest.test_declared_length_type_and_payload_must_match_actual_frame) (field='request_id')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-control-envelopes\test_collect.py", line 22, in test_declared_length_type_and_payload_must_match_actual_frame
+    with self.subTest(field=field),self.assertRaises(ValueError):collect.validate_rows(values)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_missing_or_duplicate_case_is_rejected (test_collect.CollectorGateTest.test_missing_or_duplicate_case_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-control-envelopes\test_collect.py", line 18, in test_missing_or_duplicate_case_is_rejected
+    with self.assertRaises(ValueError):collect.validate_rows(values)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+FAILED (failures=6)

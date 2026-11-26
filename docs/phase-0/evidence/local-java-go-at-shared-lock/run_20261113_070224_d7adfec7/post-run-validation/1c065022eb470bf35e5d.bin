@@ -1,0 +1,45 @@
+from pathlib import Path
+import hashlib,importlib.util,json,os,socket,subprocess
+ROOT=Path('E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation');BASE=ROOT/'docs/phase-0/evidence/local-java-go-at-shared-lock';OUT=BASE/'run_20261113_070224_d7adfec7';HERE=ROOT/'tools/java-go-at-shared-lock'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def put(p,v):
+ p.parent.mkdir(parents=True,exist_ok=True);v=v.encode() if isinstance(v,str) else v
+ if p.exists():assert p.read_bytes()==v,('Refusing overwrite',p)
+ else:
+  with p.open('xb') as stream:stream.write(v)
+def save(p,v):put(p,json.dumps(v,indent=2)+'\n')
+def module(n,p):
+ spec=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+s=json.loads((OUT/'summary.json').read_bytes());r=json.loads((OUT/'result.json').read_bytes());assert s['expected_defect_reproduced'] and s['shared_global_mutex_certified'] is False and r['succeeded'] and r['recovery_certified'] is False and r['container_state']=='exited' and r['ports_released']
+rows=json.loads((OUT/'source-input-audit.json').read_bytes());assert len(rows)==s['frozen_inputs']==118
+for row in rows:assert sha(Path(row['path']))==row['sha256']==sha(OUT/row['snapshot'])
+e=module('shared_lock_archive_runtime',HERE/'evidence.py');proof=e.derive(OUT);assert proof==json.loads((OUT/'proof.json').read_bytes())==r['proof'];gate=module('shared_lock_archive_additional',Path('D:/codex-builds/shared_lock_additional_gate_20261113.py'));cert=gate.verify_additional(OUT)
+a=module('shared_lock_archive_go',ROOT/'tools/go-java-v1-inflight/audit.py');h=a.sdk.h;deps=module('shared_lock_archive_dependencies',ROOT/'tools/java-retry-timeout-candidate/file_runtime.py');runtime=json.loads((OUT/'runtime.json').read_bytes());cohort=Path(runtime['go_cohort']);assert a.run(cohort)==json.loads((OUT/'go-cohort-audit.json').read_bytes());a.sdk.c.audit_go();assert sha(OUT/'shared-lock.exe')==s['go_binary_sha256'];jar=a.sdk.c.ORACLE/'server/target/seata-server.jar';assert sha(jar)==h.JAR_HASH==s['java_jar_sha256']
+inventory=deps.dependency_inventory((OUT/'effective-classpath.txt').read_text().strip());assert inventory==json.loads((OUT/'compile-dependency-audit.json').read_bytes()) and len(inventory)==342 and sum(1 if row['kind']=='file' else len(row['files']) for row in inventory)==2802
+parent=ROOT/'docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1';assert sha(parent.parent/'manifest.json')=='743a16b3541fe5b618f939628dfb2bf806f60c6bf0e4dc784e82341bca6fed8a';allowed={row['path']:row['sha256'] for row in json.loads((parent.parent/'manifest.json').read_bytes())['files']};overlay=json.loads((parent/'overlay-manifest.json').read_bytes());assert len(overlay)==10
+for row in overlay:assert sha(parent/'overlay'/row['path'])==row['sha256']==allowed[(parent/'overlay'/row['path']).relative_to(parent.parent).as_posix()]
+original=a.sdk.c.ORACLE;build=Path('D:/codex-builds/jret_20261113_010005_fe3b7eb3');source_provenance=[];post={Path(__file__),Path('D:/codex-builds/shared_lock_additional_gate_20261113.py'),Path('D:/codex-builds/shared_lock_legacy_gate_20261113.py'),Path('D:/codex-builds/test_shared_lock_additional_gate_20261113.py')}
+critical=[('rm-datasource','org/apache/seata/rm/datasource/DataSourceProxy'),('rm-datasource','org/apache/seata/rm/datasource/ConnectionProxy'),('rm-datasource','org/apache/seata/rm/datasource/initializer/db/MysqlResourceIdInitializer'),('tm','org/apache/seata/tm/TMClient'),('tm','org/apache/seata/tm/api/DefaultGlobalTransaction'),('rm','org/apache/seata/rm/RMClient')]
+for owner,name in critical:
+ relative=owner+'/src/main/java/'+name+'.java';path=original/relative;compiled=build/owner/'target/classes'/(name+'.class');reference_class=original/owner/'target/classes'/(name+'.class');pinned=h.command(['git','-C',original,'show',h.PIN+':'+relative]).stdout;assert path.read_bytes().replace(b'\r\n',b'\n')==pinned.replace(b'\r\n',b'\n')==(build/relative).read_bytes().replace(b'\r\n',b'\n');assert sha(compiled)==sha(reference_class);post.update([path,compiled,reference_class,build/relative]);source_provenance.append(dict(source=relative,pinned_lf_sha256=hashlib.sha256(pinned.replace(b'\r\n',b'\n')).hexdigest(),compiled_sha256=sha(compiled),original_reference_class_sha256=sha(reference_class)))
+item=json.loads(h.command(['docker','inspect',r['container']]).stdout)[0];assert item['State']['Status']=='exited' and item['Image']==h.IMAGES['db'] and item['Config']['Labels']['seata-shared-lock']==Path(r['runtime']).name;assert next(m for m in item['Mounts'] if m['Destination']=='/var/lib/mysql')['Source'].replace('\\','/').lower()==(Path(r['runtime'])/'mysql').as_posix().lower()
+ports=[28091,28092,28093,28094]
+for port in ports:
+ try:
+  with socket.create_connection(('127.0.0.1',port),timeout=.2):raise AssertionError('Owned port still listening')
+ except OSError:pass
+ids=','.join(str(runtime[key]) for key in ['tc_pid','java_pid','go_pid']);command='$ownedIds=@('+ids+'); @(Get-CimInstance Win32_Process | Where-Object { $ownedIds -contains $_.ProcessId } | Select-Object ProcessId,CommandLine) | ConvertTo-Json -Compress';raw=h.command(['powershell','-NoProfile','-Command',command]).stdout.strip();present=json.loads(raw) if raw else [];present=[present] if isinstance(present,dict) else present;assert not any(Path(r['runtime']).name in str(row.get('CommandLine')) for row in present)
+save(OUT/'cleanup-verification.json',dict(container=item['Id'],state='exited',image=item['Image'],owned_pids=[runtime[key] for key in ['tc_pid','java_pid','go_pid']],owned_processes_stopped=True,ports_released=ports,reused_pid_observations=present))
+env=h.ENV.copy();env.pop('SEATA_SHARED_LOCK_GATE',None);env['SEATA_SHARED_LOCK_ACTUAL']=str(OUT)
+for label,args,count in [('normalized',['python','-m','unittest','discover','-s',str(HERE),'-p','test_evidence.py','-v'],12),('additional',['python','D:/codex-builds/test_shared_lock_additional_gate_20261113.py','-v'],20)]:
+ result=subprocess.run(args,cwd=ROOT,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=30,creationflags=h.FLAGS);assert result.returncode==0 and ('Ran '+str(count)+' tests').encode() in result.stdout
+ if not (OUT/(label+'-tests.log')).exists():put(OUT/(label+'-tests.log'),result.stdout)
+for name in ['shared-lock-actual-frozen-red-20261113.log','shared-lock-actual-frozen-green-20261113.log','shared-lock-python-red-20261113.log','shared-lock-python-green-20261113.log']:
+ path=Path('D:/codex-builds')/name;post.add(path)
+assert b'FAILED (failures=18)' in Path('D:/codex-builds/shared-lock-actual-frozen-red-20261113.log').read_bytes();assert b'Ran 20 tests' in Path('D:/codex-builds/shared-lock-actual-frozen-green-20261113.log').read_bytes()
+post_rows=[]
+for path in sorted(post):
+ leaf='post-run-validation/'+hashlib.sha256(str(path).encode()).hexdigest()[:20]+'.bin';put(OUT/leaf,path.read_bytes());post_rows.append(dict(path=str(path),snapshot=leaf,sha256=sha(path)))
+save(OUT/'post-run-validation-inputs.json',post_rows);save(OUT/'additional-certification.json',dict(succeeded=True,requires_frozen_runtime_and_this_additional_gate=True,actual_evidence_tests=20,legacy_runtime_verifier_red_failures=18,legacy_runtime_verifier_red_controls=2,normalized_tests=12,normalized_red_kind='Disabled-guard adapter control only, not original production behavior',normalized_red_failures=11,normalized_red_controls=1,total_new_python_tests=32,result=cert,original_java_client_provenance=source_provenance))
+save(OUT/'independent-revalidation.json',dict(succeeded=True,expected_defect_reproduced=True,shared_global_mutex_certified=False,frozen_runtime_inputs=118,post_run_inputs=len(post_rows),java_dependency_entries=342,java_dependency_files=2802,tc_preface_overlay_classes=10,actual_client_actor_jvms=1,actual_tc_jvms=1,actual_go_sdk_processes=1,actual_class_origins=len(cert['actual_class_origins']),original_client_classes_proven=6,original_java_protocol=2,original_go_protocol=1,actual_native_queries=12,actual_native_frames=72,java_wire_frames=12,go_wire_frames=48,total_python_tests=32,original_go_unit_tests_inherited=254,original_rust_tests_inherited=117,new_go_or_rust_unit_execution=False,production_rust=False,original_reference_issue='OPEN',cross_language_mutex_issue='OPEN',resources_stopped=True,ports_released=4))
+print(json.dumps(dict(expected_defect_reproduced=True,shared_mutex_certified=False,source_inputs=118,post_run_inputs=len(post_rows),new_python_tests=32,actual_class_origins=len(cert['actual_class_origins']))))

@@ -1,0 +1,7 @@
+java_source,rust_source,state,scope
+org.apache.seata.rm.datasource.DataSourceManager,crates/seata_db_mysql/src/data_source_manager.rs,PARTIAL,正式回调证明后的同步二阶段日志清理与终态
+org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManager,crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs,PARTIAL,承接原删除语义且保留原身份边界
+org.apache.seata.rm.datasource.AsyncWorker,,MISSING,完整异步队列批调度尚未迁移
+RUST_EXTENSION,crates/seata_db_mysql/src/rm_branch_store.rs,RUST_EXTENSION,真实回调授权与双方向终态原子持久化
+RUST_EXTENSION,crates/seata_db_mysql/src/rm_branch_record.rs,RUST_EXTENSION,三种物理能力及合法状态组合
+RUST_EXTENSION,crates/seata_db_mysql/migrations/003_seata_rs_at_commit_decision.sql,RUST_EXTENSION,显式14列能力迁移并保留旧行版本

@@ -1,0 +1,20 @@
+
+running 1 test
+test original_java_tc_stops_automatic_rollback_retry_for_dirty_undo ... FAILED
+
+failures:
+
+---- original_java_tc_stops_automatic_rollback_retry_for_dirty_undo stdout ----
+
+thread 'original_java_tc_stops_automatic_rollback_retry_for_dirty_undo' (36288) panicked at crates\seata_db_mysql\tests\support\java_undo_dirty.rs:35:5:
+assertion `left == right` failed: dirty rollback must stop the original TC automatic retry
+  left: RollbackRetrying
+ right: RollbackFailed
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_java_tc_stops_automatic_rollback_retry_for_dirty_undo
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 20 filtered out; finished in 1.15s
+

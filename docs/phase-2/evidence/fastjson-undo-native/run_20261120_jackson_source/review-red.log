@@ -1,0 +1,32 @@
+   Compiling seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.29s
+     Running tests\jackson_undo_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jackson_undo_source-56cc2896bd07c42c.exe)
+
+running 3 tests
+test jackson_original_projection_rechecks_input_budget ... FAILED
+test jackson_original_uses_java_utf8_escapes ... FAILED
+test jackson_original_scalar_types_and_output_budget_are_preserved ... ok
+
+failures:
+
+---- jackson_original_projection_rechecks_input_budget stdout ----
+
+thread 'jackson_original_projection_rechecks_input_budget' (33160) panicked at crates\seata_at\tests\jackson_undo_source.rs:142:5:
+assertion failed: matches!(tight.decode_original_logs(&doc),
+    Err(UndoCodecError::Budget { limit: "encoded bytes" }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- jackson_original_uses_java_utf8_escapes stdout ----
+
+thread 'jackson_original_uses_java_utf8_escapes' (9736) panicked at crates\seata_at\tests\jackson_undo_source.rs:132:5:
+assertion failed: text.contains("\\u000B\\u001F\\uD83D\\uDC08\u{85}\u{2028}")
+
+
+failures:
+    jackson_original_projection_rechecks_input_budget
+    jackson_original_uses_java_utf8_escapes
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test jackson_undo_source`

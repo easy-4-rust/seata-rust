@@ -1,0 +1,38 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.55s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 2 tests
+test mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete ... FAILED
+test mysql::undo_fragment_cleanup_sqlx_tests::deletes_children_then_root_with_exact_xid_and_parent ... FAILED
+
+failures:
+
+---- mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete stdout ----
+
+thread 'mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete' (62220) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_cleanup_sqlx_tests.rs:138:5:
+assertion `left == right` failed
+  left: Some([22, 68, 69, 76, 69, 84, 69, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 61, 63, 32, 65, 78, 68, 32, 108, 111, 103, 95, 115, 116, 97, 116, 117, 115, 61, 48])
+ right: Some([22, 68, 69, 76, 69, 84, 69, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 61, 63, 32, 65, 78, 68, 32, 108, 111, 103, 95, 115, 116, 97, 116, 117, 115, 61, 48, 32, 65, 78, 68, 32, 67, 65, 83, 84, 40, 120, 105, 100, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41, 61, 67, 65, 83, 84, 40, 63, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41, 32, 65, 78, 68, 32, 67, 65, 83, 84, 40, 99, 111, 110, 116, 101, 120, 116, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41, 61, 67, 65, 83, 84, 40, 63, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete' (62220) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_cleanup_sqlx_tests.rs:60:38:
+assertion failed: matches!(cleanup,
+    Err(DbError::Unsupported { feature: "Undo exact deleted row count" }))
+
+---- mysql::undo_fragment_cleanup_sqlx_tests::deletes_children_then_root_with_exact_xid_and_parent stdout ----
+
+thread 'mysql::undo_fragment_cleanup_sqlx_tests::deletes_children_then_root_with_exact_xid_and_parent' (50936) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_cleanup_sqlx_tests.rs:138:5:
+assertion `left == right` failed
+  left: Some([22, 68, 69, 76, 69, 84, 69, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 61, 63, 32, 65, 78, 68, 32, 108, 111, 103, 95, 115, 116, 97, 116, 117, 115, 61, 48])
+ right: Some([22, 68, 69, 76, 69, 84, 69, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 61, 63, 32, 65, 78, 68, 32, 108, 111, 103, 95, 115, 116, 97, 116, 117, 115, 61, 48, 32, 65, 78, 68, 32, 67, 65, 83, 84, 40, 120, 105, 100, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41, 61, 67, 65, 83, 84, 40, 63, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41, 32, 65, 78, 68, 32, 67, 65, 83, 84, 40, 99, 111, 110, 116, 101, 120, 116, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41, 61, 67, 65, 83, 84, 40, 63, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41])
+Error: Driver { operation: "Undo normal delete", sql_state: None, code: None }
+
+
+failures:
+    mysql::undo_fragment_cleanup_sqlx_tests::deletes_children_then_root_with_exact_xid_and_parent
+    mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

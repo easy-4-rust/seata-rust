@@ -1,0 +1,85 @@
+{
+  "status": "MAP_DEFAULT_METHODS_VERIFIED_WITH_REMAINING_COLLECTION_GAPS",
+  "evidence": "docs/phase-2/evidence/sqlparser-map-defaults/run_20261118",
+  "previous_catalog_sha256": "6c7bf14b8336e9c012f6a85333d56c96325590de8459d9ecaf3c5fe9a180951f",
+  "original_object_states": {
+    "PARTIAL": 5,
+    "IMPLEMENTED": 13,
+    "MISSING": 13
+  },
+  "original_cases_MATCH": 76,
+  "original_JUnit_run_inherited": true,
+  "public_default_entrypoints_added": 11,
+  "java_default_method_observations_MATCH": 40,
+  "inherited_view_observations_MATCH": 35,
+  "inherited_entry_set_reentry_MISMATCH": 1,
+  "mutation_skipping_post_callback_lookup_rejected": true,
+  "rust_toolchains": [
+    "1.99",
+    "1.85"
+  ],
+  "workspace_passed_per_toolchain": 483,
+  "workspace_ignored_per_toolchain": 143,
+  "doc_tests_per_toolchain": 4,
+  "harness_per_toolchain": 102,
+  "registry_dependencies_changed": false,
+  "layout": {
+    "files": 48,
+    "missing_source_objects": 13,
+    "new_layout_errors": 0,
+    "cohesion_review": "616 lines, one Java LowerCaseLinkHashMap object with private helpers and its own methods"
+  },
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "new_P1": 0,
+    "new_P2": 0,
+    "prior_open_P2": 1
+  },
+  "remaining": [
+    "putAll and Java clone/copy constructor",
+    "Remaining Collection surface and tree-bin entry identity",
+    "EntrySet.remove structural equality reentry corruption mismatch",
+    "Default process Locale and full SPI"
+  ],
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "eb81e228502252b5bf6812732126afc475392f6ad2072f442c908d85ecaf1abf"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_values.rs",
+      "sha256": "3d44f7453e50882a6c8976ceb8f65ad9ecfe25c4ae907e49ac5c29095ad0324d"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_values_cursor.rs",
+      "sha256": "c4b52a235532c2a28bdf041087ecea10980909b7328e39db3e9ca944ab64d613"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/util/lower_case_link_hash_map.rs",
+      "sha256": "e6580c746d950e80799766ababf278db76fc8acd818290e5ccd1e78b7bfaf9c7"
+    },
+    {
+      "path": "crates/seata_test/tests/map_defaults_java.rs",
+      "sha256": "3fe2a90fdbac4664b4d7ac5978931165ce4d967030538abc73739601fe4df0a0"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/MapDefaultsOracle.java",
+      "sha256": "39af199663ea6befe111a4b435a01cb319f84ea51ad3f18ad74fee2b2daab342"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/map-defaults-java.tsv",
+      "sha256": "a7378c0645e02c6f04a85251239f3cf36e765d901b19bcbc3214bfe394fd8261"
+    }
+  ],
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

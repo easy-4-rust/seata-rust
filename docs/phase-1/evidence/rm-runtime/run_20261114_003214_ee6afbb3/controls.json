@@ -1,0 +1,90 @@
+[
+  {
+    "name": "crc",
+    "test": "journal",
+    "case": "damaged_version_checksum_or_partial_tail",
+    "original_sha256": "9ea33ba06e7713d7b0a6580dd24f4e4b505d54bfc20e157420f03fff159f092e",
+    "mutated_sha256": "10181990fc98e0c18b73670092f4f364f1e1adf2824e24d6150ee175e0e036ba",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "identity",
+    "test": "journal",
+    "case": "original_identity_and_phase",
+    "original_sha256": "9ea33ba06e7713d7b0a6580dd24f4e4b505d54bfc20e157420f03fff159f092e",
+    "mutated_sha256": "bb19fbc81f391e60103ff3c928188d499cf15f8e0eb68d6e31c3f73554e62727",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "pending",
+    "test": "dispatch",
+    "case": "cancelled_apply_leaves_pending",
+    "original_sha256": "0d255c77ecfb74e459c9bfb4bdc7add40ba7f7ac5b2f8c9029a707b892cf167a",
+    "mutated_sha256": "33b97a7671ab7c03aa2f03fcfb0d645d9efc80ac814ae4a3caff263cab2653ce",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "recovery",
+    "test": "dispatch",
+    "case": "pending_unknown_is_queried",
+    "original_sha256": "0d255c77ecfb74e459c9bfb4bdc7add40ba7f7ac5b2f8c9029a707b892cf167a",
+    "mutated_sha256": "cc70300e27a7b6826ffe8cb81a8aabc0ff5d61c318ada08c61f83157a95f9a77",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "cached-completion",
+    "test": "dispatch",
+    "case": "exact_duplicate_uses_completed_record",
+    "original_sha256": "0d255c77ecfb74e459c9bfb4bdc7add40ba7f7ac5b2f8c9029a707b892cf167a",
+    "mutated_sha256": "4fb9954ea0e45a2ab31e9451961675cd6f5cf44d4ea32df88a230ffd10771f4e",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "failed-is-not-success",
+    "test": "native_calls",
+    "case": "failed_lock_query_keeps_true_field",
+    "original_sha256": "a6d4f593ee6041686757af8bc5464cdc19ce437402e6a313941abed9d5326d9b",
+    "mutated_sha256": "9e625af35ab6200b6db1eb2b331cbff6141a2d3b0c3f40be320a009266521621",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "issued-id-validation",
+    "test": "native_edge_cases",
+    "case": "successful_registration_without_positive_issued_id",
+    "original_sha256": "a6d4f593ee6041686757af8bc5464cdc19ce437402e6a313941abed9d5326d9b",
+    "mutated_sha256": "ba4541a5c7d3d13c9eff9307c8ad1889bd9cae2605346ab544045483578e71a8",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "sent-marker",
+    "test": "native_calls",
+    "case": "wrong_response_family_is_protocol_uncertainty",
+    "original_sha256": "9114fa79a006f616677565e13022d6d8760e6cc4d3ef1d4fae5754f2a1a09bc1",
+    "mutated_sha256": "0c9e9c7a143878b15d8221a1ec28988c2de909f8042156210b8920f68547ea1e",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "cleanup-panic",
+    "test": "native_edge_cases",
+    "case": "shutdown_reports_resource_cleanup_panic",
+    "original_sha256": "d9c878aef77db78f06df59abe778c2f260800fc629d573230b94ac548233a73c",
+    "mutated_sha256": "2fb884d80261d9ff9d154520599c6dd55e9cfd2be8fb0fa8473c0f81f78efd8a",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "batch-phase-conflict",
+    "test": "native_callbacks",
+    "case": "contradictory_directions_inside_one_batch",
+    "original_sha256": "38838982cdad23e5942d44f77a875b2ca3192707b9bdef3f2ae53526e935e0c1",
+    "mutated_sha256": "652036322bcc932ccdb132c5323256da7a1b72e3f9bd705234ecc56080d28259",
+    "actual_compiled_assertion_failure": true
+  },
+  {
+    "name": "validation-deadline",
+    "test": "__lib__",
+    "case": "validation_uses_the_original_absolute_deadline",
+    "original_sha256": "38838982cdad23e5942d44f77a875b2ca3192707b9bdef3f2ae53526e935e0c1",
+    "mutated_sha256": "4c346e2487fe761fed4dbc2e86a1698113ca206e69b2cfd7a66587e196d33f39",
+    "actual_compiled_assertion_failure": true
+  }
+]

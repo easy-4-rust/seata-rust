@@ -1,0 +1,22 @@
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.50s
+     Running tests\context_config.rs (D:/cargo-target/seata-rust-production\debug\deps\context_config-e727152e09756c4c.exe)
+
+running 1 test
+test config_builder_keeps_tc_timeout_exact_and_defaults_required ... FAILED
+
+failures:
+
+---- config_builder_keeps_tc_timeout_exact_and_defaults_required stdout ----
+
+thread 'config_builder_keeps_tc_timeout_exact_and_defaults_required' (69856) panicked at crates\seata_tm\tests\context_config.rs:30:5:
+assertion failed: !format!("{:?}",TransactionConfig::builder("private-name".into())).contains("private-name")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    config_builder_keeps_tc_timeout_exact_and_defaults_required
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-tm --test context_config`

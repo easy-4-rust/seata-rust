@@ -1,0 +1,27 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0599]: no method named `encode_original` found for struct `JacksonUndoLogParser` in the current scope
+  --> crates\seata_at\tests\jackson_undo_source.rs:29:23
+   |
+29 |     let wire = parser.encode_original(Some(&xid), id, Some(&logs)).unwrap();
+   |                       ^^^^^^^^^^^^^^^ method not found in `JacksonUndoLogParser`
+
+error[E0599]: no method named `decode_original_logs` found for struct `JacksonUndoLogParser` in the current scope
+  --> crates\seata_at\tests\jackson_undo_source.rs:34:26
+   |
+34 |     let decoded = parser.decode_original_logs(&document).unwrap().unwrap();
+   |                          ^^^^^^^^^^^^^^^^^^^^ method not found in `JacksonUndoLogParser`
+
+error[E0599]: no method named `encode_original` found for struct `JacksonUndoLogParser` in the current scope
+  --> crates\seata_at\tests\jackson_undo_source.rs:65:23
+   |
+65 |         wire = parser.encode_original(Some(&xid), id, Some(&logs)).unwrap();
+   |                       ^^^^^^^^^^^^^^^ method not found in `JacksonUndoLogParser`
+
+error[E0599]: no method named `decode_original_logs` found for struct `JacksonUndoLogParser` in the current scope
+  --> crates\seata_at\tests\jackson_undo_source.rs:70:37
+   |
+70 |         std::hint::black_box(parser.decode_original_logs(&document).unwrap().unwrap());
+   |                                     ^^^^^^^^^^^^^^^^^^^^ method not found in `JacksonUndoLogParser`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-at` (test "jackson_undo_source") due to 4 previous errors

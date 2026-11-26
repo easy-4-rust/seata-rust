@@ -1,0 +1,36 @@
+test_before_sample_cannot_belong_to_another_process (test_raft_stop_binding_20261113.StopBindingGuards.test_before_sample_cannot_belong_to_another_process) ... FAIL
+test_before_sample_cannot_claim_another_term (test_raft_stop_binding_20261113.StopBindingGuards.test_before_sample_cannot_claim_another_term) ... FAIL
+test_both_actual_stopped_leaders (test_raft_stop_binding_20261113.StopBindingGuards.test_both_actual_stopped_leaders) ... ok
+test_follower_cannot_replace_stopped_leader_identity (test_raft_stop_binding_20261113.StopBindingGuards.test_follower_cannot_replace_stopped_leader_identity) ... FAIL
+
+======================================================================
+FAIL: test_before_sample_cannot_belong_to_another_process (test_raft_stop_binding_20261113.StopBindingGuards.test_before_sample_cannot_belong_to_another_process)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\test_raft_stop_binding_20261113.py", line 16, in test_before_sample_cannot_belong_to_another_process
+    with self.assertRaises(RuntimeError):verify_stop_binding(receipt,before,after,process)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_before_sample_cannot_claim_another_term (test_raft_stop_binding_20261113.StopBindingGuards.test_before_sample_cannot_claim_another_term)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\test_raft_stop_binding_20261113.py", line 20, in test_before_sample_cannot_claim_another_term
+    with self.assertRaises(RuntimeError):verify_stop_binding(receipt,before,after,process)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_follower_cannot_replace_stopped_leader_identity (test_raft_stop_binding_20261113.StopBindingGuards.test_follower_cannot_replace_stopped_leader_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\test_raft_stop_binding_20261113.py", line 13, in test_follower_cannot_replace_stopped_leader_identity
+    with self.assertRaises(RuntimeError):verify_stop_binding(receipt,before,after,process)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+FAILED (failures=3)

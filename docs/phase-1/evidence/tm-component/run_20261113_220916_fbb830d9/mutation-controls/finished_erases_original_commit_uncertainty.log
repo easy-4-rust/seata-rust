@@ -1,0 +1,22 @@
+   Compiling seata-tm v0.1.0 (D:\codex-builds\seata-tm-controls-dcaf30dedc09\crates\seata_tm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.20s
+     Running tests\manager_calls.rs (D:/cargo-target/seata-rust-tm-controls\debug\deps\manager_calls-21e9a59b86a61e42.exe)
+
+running 1 test
+test lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown ... FAILED
+
+failures:
+
+---- lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown stdout ----
+
+thread 'lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown' (43088) panicked at crates\seata_tm\tests\manager_calls.rs:224:5:
+assertion failed: tx.has_unknown_outcome()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.11s
+
+error: test failed, to rerun pass `-p seata-tm --test manager_calls`

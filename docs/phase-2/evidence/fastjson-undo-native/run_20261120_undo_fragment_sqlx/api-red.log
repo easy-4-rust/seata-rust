@@ -1,0 +1,39 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0432]: unresolved import `crate::mysql_loopback_fixture`
+ --> crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:2:13
+  |
+2 | use crate::{mysql_loopback_fixture::{authenticate, read_command, write_error, write_packet}, DbError};
+  |             ^^^^^^^^^^^^^^^^^^^^^^ could not find `mysql_loopback_fixture` in the crate root
+
+error[E0599]: no associated function or constant named `write_fragments` found for struct `MySqlUndoLogManager` in the current scope
+  --> crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:31:39
+   |
+31 |     let result = MySqlUndoLogManager::write_fragments(&mut tx, "xid", &layout).await;
+   |                                       ^^^^^^^^^^^^^^^ associated function or constant not found in `MySqlUndoLogManager`
+   |
+  ::: crates\seata_db_mysql\src\mysql\mysql_undo_log_manager.rs:7:1
+   |
+ 7 | pub(crate) struct MySqlUndoLogManager;
+   | ------------------------------------- associated function or constant `write_fragments` not found for this struct
+
+warning: method call on a diverging inference variable
+  --> crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:90:23
+   |
+90 |     assert_eq!(actual.as_deref(), Some(expected));
+   |                       ^^^^^^^^
+   |
+   = help: consider providing a type annotation
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: for more information, see issue #156047 <https://github.com/rust-lang/rust/issues/156047>
+   = note: `#[warn(method_call_on_diverging_infer_var)]` (part of `#[warn(future_incompatible)]`) on by default
+
+error[E0599]: no method named `as_deref` found for type `!` in the current scope
+  --> crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:90:23
+   |
+90 |     assert_eq!(actual.as_deref(), Some(expected));
+   |                       ^^^^^^^^ method not found in `!`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+warning: `seata-db-mysql` (lib test) generated 1 warning
+error: could not compile `seata-db-mysql` (lib test) due to 3 previous errors; 2 warnings emitted

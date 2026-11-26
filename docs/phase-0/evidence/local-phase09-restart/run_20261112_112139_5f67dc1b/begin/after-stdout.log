@@ -1,0 +1,34 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+11:21:58.105  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+11:21:58.171  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+11:21:58.204  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 56748 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\seata-phase09-restart\20261112_112139_5f67dc1b\begin)
+11:21:58.205  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+11:21:59.781  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+11:21:59.813  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: file
+11:22:00.444  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 3.216 seconds (process running for 4.63)
+11:22:01.293  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: file
+11:22:01.685  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 28091
+11:22:01.716  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/seata-phase09-restart/20261112_112139_5f67dc1b/begin/logs.
+11:22:01.716  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 1260 millSeconds
+11:22:07.583  INFO --- [ttyServerNIOWorker_1_1_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='orders-rust', transactionServiceGroup='default_tx_group', extraData=''},channel:[id: 0xfb29392b, L:/127.0.0.1:28091 - R:/127.0.0.1:49925],client version:1.1.0,client protocol-version:null
+11:22:07.600  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='mysql://orders', version='1.1.0', applicationId='orders-rust', transactionServiceGroup='default_tx_group', extraData='null'},channel:[id: 0xdb99e40b, L:/127.0.0.1:28091 - R:/127.0.0.1:49926],client version:1.1.0
+11:22:07.618  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:28091:4045076317180162049', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+11:22:07.634  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Begin, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+11:22:07.634  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076317180162049', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+11:22:07.686  INFO --- [rverHandlerThread_1_3_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076317180162049] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076317180162049.
+11:22:07.687  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+11:22:07.692  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:49925 to server channel inactive.
+11:22:07.692  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:49926 to server channel inactive.
+11:22:07.693  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xfb29392b, L:/127.0.0.1:28091 ! R:/127.0.0.1:49925]context:RpcContext{applicationId='orders-rust', transactionServiceGroup='default_tx_group', clientId='orders-rust:127.0.0.1:49925', channel=[id: 0xfb29392b, L:/127.0.0.1:28091 ! R:/127.0.0.1:49925], resourceSets=null}
+11:22:07.693  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xdb99e40b, L:/127.0.0.1:28091 ! R:/127.0.0.1:49926]context:RpcContext{applicationId='orders-rust', transactionServiceGroup='default_tx_group', clientId='orders-rust:127.0.0.1:49926', channel=[id: 0xdb99e40b, L:/127.0.0.1:28091 ! R:/127.0.0.1:49926], resourceSets=[]}
+11:22:07.695  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:28091:4045076317180162049', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+11:22:07.695  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group

@@ -1,0 +1,42 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling windows-link v0.2.1
+   Compiling thiserror v2.0.21
+   Compiling pin-project-lite v0.2.17
+   Compiling bytes v1.12.1
+   Compiling windows-sys v0.61.2
+   Compiling syn v3.0.10
+   Compiling socket2 v0.6.5
+   Compiling mio v1.2.4
+   Compiling thiserror-impl v2.0.21
+   Compiling tokio-macros v2.7.2
+   Compiling tokio v1.54.1
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.75s
+     Running tests\inbound_response.rs (D:/cargo-target/seata-rust-response-review\debug\deps\inbound_response-403954c11a4476a9.exe)
+
+running 1 test
+test reply_without_tokio_context_is_typed_local_failure_before_queue_or_write ... FAILED
+
+failures:
+
+---- reply_without_tokio_context_is_typed_local_failure_before_queue_or_write stdout ----
+
+thread 'reply_without_tokio_context_is_typed_local_failure_before_queue_or_write' (23068) panicked at crates\seata_transport\src\netty\connection_handle.rs:134:15:
+there is no reactor running, must be called from the context of a Tokio 1.x runtime
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'tokio-rt-worker' (71492) panicked at crates\seata_transport\tests\support\session_peer.rs:116:5:
+assertion `left == right` failed
+  left: 1
+ right: 0
+
+
+failures:
+    reply_without_tokio_context_is_typed_local_failure_before_queue_or_write
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-transport --test inbound_response`

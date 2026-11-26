@@ -1,0 +1,137 @@
+{
+  "status": "COLUMN_METADATA_AND_LOSSLESS_UTF16_VERIFIED_CORE_OPEN",
+  "oracle": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-column\\run_20261118_024925_550591f9",
+  "verification": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-column\\run_20261118_024925_550591f9\\verification_20261118_025807_344089",
+  "original_JUnit_passed": 76,
+  "source_cases_MATCH": 41,
+  "source_cases_MISSING": 35,
+  "source_objects": 31,
+  "source_objects_present": 12,
+  "source_objects_MISSING": 19,
+  "original_edge_observations_MATCH": 21,
+  "Rust": {
+    "1.99": {
+      "ordinary": 406,
+      "harness": 85,
+      "ignored": 143,
+      "doc": 4,
+      "source_MATCH": 41,
+      "edge_MATCH": 21
+    },
+    "1.85": {
+      "ordinary": 406,
+      "harness": 85,
+      "ignored": 143,
+      "doc": 4,
+      "source_MATCH": 41,
+      "edge_MATCH": 21
+    }
+  },
+  "mutants": [
+    {
+      "name": "stale-snapshot-and-debug-lock",
+      "path": "D:\\codex-builds\\seata_column_metadata_20261118_024925_550591f9\\mutants\\verification_20261118_025807_344089\\stale-snapshot-and-debug-lock\\crates\\seata_sqlparser\\src\\struct\\column_meta.rs",
+      "before_sha256": "b3cb40e863e5fa6b153de7455c1378d2c12dbe34c65c3fa72f525457a5d24c76",
+      "mutant_sha256": "7f040b804b51c42366eea19eb022104b4b1d2e8251dd3a033e5c31b2a2a69bd0",
+      "actual_failed_tests": 4,
+      "result": "RUNTIME_REJECTED"
+    },
+    {
+      "name": "ascii-only-autoincrement",
+      "path": "D:\\codex-builds\\seata_column_metadata_20261118_024925_550591f9\\mutants\\verification_20261118_025807_344089\\ascii-only-autoincrement\\crates\\seata_sqlparser\\src\\struct\\column_meta.rs",
+      "before_sha256": "b3cb40e863e5fa6b153de7455c1378d2c12dbe34c65c3fa72f525457a5d24c76",
+      "mutant_sha256": "4aa360d06fc0ce30ff899cb59ed61e748d644519ec86a56f81607ff8d3d9a385",
+      "actual_failed_tests": 1,
+      "result": "RUNTIME_REJECTED"
+    },
+    {
+      "name": "lossy-surrogate-storage",
+      "path": "D:\\codex-builds\\seata_column_metadata_20261118_024925_550591f9\\mutants\\verification_20261118_025807_344089\\lossy-surrogate-storage\\crates\\seata_sqlparser\\src\\java_string.rs",
+      "before_sha256": "679468a53f2e8c1408a5e9c4cc7827bafa4c350580ef83813d122d18779efb1a",
+      "mutant_sha256": "b9e7aa92acc39d1b6b2835d99ed2376f6cc9182a1d255f7348e9745193b02c42",
+      "actual_failed_tests": 1,
+      "result": "RUNTIME_REJECTED"
+    },
+    {
+      "name": "ignore-case-sensitive-hash",
+      "path": "D:\\codex-builds\\seata_column_metadata_20261118_024925_550591f9\\mutants\\verification_20261118_025807_344089\\ignore-case-sensitive-hash\\crates\\seata_sqlparser\\src\\struct\\column_meta.rs",
+      "before_sha256": "b3cb40e863e5fa6b153de7455c1378d2c12dbe34c65c3fa72f525457a5d24c76",
+      "mutant_sha256": "3096642ce8a32780071f9b6037588d7c75ada077cbdf1ca5f45c6d7c0ca7ce65",
+      "actual_failed_tests": 1,
+      "result": "RUNTIME_REJECTED"
+    },
+    {
+      "name": "erase-boxed-number-type",
+      "path": "D:\\codex-builds\\seata_column_metadata_20261118_024925_550591f9\\mutants\\verification_20261118_025807_344089\\erase-boxed-number-type\\crates\\seata_sqlparser\\src\\java_object.rs",
+      "before_sha256": "a056c9d5464e62f7febc31502274c0b9d0508912f7ba7350bf054a16afd2b35d",
+      "mutant_sha256": "3d69cb75ddbfb11929de1244b2baf3e68c23accd0184faa1acf6ff6d91c6c0a6",
+      "actual_failed_tests": 1,
+      "result": "RUNTIME_REJECTED"
+    }
+  ],
+  "source_fixture_assets": 0,
+  "original_test_sources": 12,
+  "original_source_changes": false,
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user",
+  "limitations": [
+    "IndexMeta/TableMeta/SqlServer metadata and remaining SPI/recognizer objects not yet migrated",
+    "No new DB qualification; old seata_at SQL support matrix unchanged",
+    "UTF8 convenience views are optional; Java counterparts use explicit lossless *_java accessors"
+  ],
+  "parent": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-core-values-gate\\run_20261118_022222_bb4f2677",
+  "parent_catalog_sha256": "b0056e0927ef6a565c07f7c39ee49b2cc7fed58ad77bc08bf47bec7acec989cd",
+  "object_states": {
+    "IMPLEMENTED": 12,
+    "MISSING": 19
+  },
+  "input_files": 422,
+  "unchanged_existing_component_files": 348,
+  "registry_dependency_closure_changed": false,
+  "original_runtime_inputs_bound": 219,
+  "comparison_counterexamples": 8,
+  "original_JUnit_counterexamples": 13,
+  "strict_module_layout_blockers": 19,
+  "reviewed_cohesive_file": {
+    "path": "crates/seata_sqlparser/src/struct/column_meta.rs",
+    "lines": 606,
+    "reason": "One Java ColumnMeta and its private shared state; 20 field accessors plus explicit equals/hash/toString; no unrelated source objects"
+  },
+  "closed_findings": [
+    "P2 Debug invokes user formatting under lock",
+    "P2 stale tail fields after reentrant Object callbacks",
+    "Java YES.equalsIgnoreCase includes U+017F; ASCII-only comparison rejected"
+  ],
+  "historical_attempts": [
+    {
+      "path": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-column\\run_20261118_024925_550591f9\\verification_20261118_025509_021380",
+      "reason": "Mutation anchor whitespace mismatch; no qualified mutant set"
+    },
+    {
+      "path": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-column\\run_20261118_024925_550591f9\\verification_20261118_025633_141857",
+      "reason": "Successful precursor before source provenance doc additions; final input set comes from later explicit run"
+    }
+  ],
+  "gate": "docs\\phase-2\\evidence\\sqlparser-column-gate\\run_20261118_030159_4362448c",
+  "catalog_sha256": "1e54b372ce3454028d650bb7d46e72f25a3a4d42c724441d1ec04756ace213da",
+  "current_inventory": "docs/phase-2/sqlparser_core/inventory.json",
+  "current_source_parity": "docs/phase-2/sqlparser_core/source-test-parity.json",
+  "predecessor": "docs/phase-2/wp05-sqlparser-core-values.json",
+  "selected_source_methods_MATCH": 41,
+  "selected_source_methods_MISSING": 1094,
+  "selected_source_concrete_cases_MATCH": 41,
+  "selected_source_concrete_cases_MISSING": 1286,
+  "resolved_gaps": [
+    "UTF16 String lossless domain for sequence/exception",
+    "Unicode YES case equivalence",
+    "Debug lock reentrancy",
+    "Object callback tail-read order"
+  ],
+  "current_specification_state": "WP05_IMPLEMENTING_SQLPARSER_CORE_OPEN",
+  "next_action": "Migrate IndexMeta and TableMeta remaining35 source cases"
+}

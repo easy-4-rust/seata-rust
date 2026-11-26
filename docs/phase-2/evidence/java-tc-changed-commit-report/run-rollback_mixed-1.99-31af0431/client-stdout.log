@@ -1,0 +1,20 @@
+
+running 1 test
+test original_java_tc_rolls_back_mixed_compound_key_work ... FAILED
+
+failures:
+
+---- original_java_tc_rolls_back_mixed_compound_key_work stdout ----
+
+thread 'original_java_tc_rolls_back_mixed_compound_key_work' (22196) panicked at crates\seata_db_mysql\tests\support\java_undo_mixed.rs:92:5:
+assertion `left == right` failed
+  left: ["1_9007199254740993", "2_9007199254740994"]
+ right: ["1_9007199254740993;undo_work:2_9007199254740994"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_java_tc_rolls_back_mixed_compound_key_work
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 22 filtered out; finished in 1.10s
+

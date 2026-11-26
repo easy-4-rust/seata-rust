@@ -1,0 +1,5 @@
+Owned test runtime: isolated WSL MySQL engine /run/seata-validation-20261120, container seata-wsl-java-tc-full-profile-20261124, MySQL 8.4.13, database undo_changed_commit_loss_20261124.
+The live test used a Windows relay on 127.0.0.1:43318 and a response-loss proxy on 127.0.0.1:43320.
+After testing, exact-command-line verified relay and proxy wrapper/child PIDs 31772, 46312, 49284, 46392 were stopped.
+Correction: the initial engine inspection used default Alpine WSL, while this test ran in Ubuntu-20.04. Its container and isolated engine were still active then; the earlier absence conclusion was false.
+In the subsequent report-validation run, Ubuntu-20.04 inspection confirmed exact container ID 66c30eff627a13df1f6e1ea055cc44300e3f3afca5a32a37466a5476b52bd356 and owner label seata-java-tc-full-profile-validation-20261124. After the report tests, the exact container was stopped and removed and the isolated engine was stopped; see ../mysql-changed-commit-report/changed-report-cleanup.log. No test port listener remained. The isolated engine data root was retained as rebuildable runtime data.

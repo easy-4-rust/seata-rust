@@ -1,0 +1,50 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_foundation_20261113_235728_c0b4952f\identity\crates\seata_rm)
+warning: unused variable: `phase`
+   --> crates\seata_rm\src\store\file_branch_store.rs:297:9
+    |
+297 |         phase: BranchPhase,
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `value`
+   --> crates\seata_rm\src\store\file_branch_store.rs:300:18
+    |
+300 |             Some(value) if false => {
+    |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+
+warning: fields `identity` and `phase` are never read
+  --> crates\seata_rm\src\store\file_branch_store.rs:46:5
+   |
+45 | struct StoredRecord {
+   |        ------------ fields in this struct
+46 |     identity: BranchIdentity,
+   |     ^^^^^^^^
+47 |     phase: BranchPhase,
+   |     ^^^^^
+   |
+   = note: `StoredRecord` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-rm` (lib) generated 3 warnings (run `cargo fix --lib -p seata-rm` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.37s
+     Running tests\journal.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\journal-056ec008a226e2bc.exe)
+
+running 1 test
+test original_identity_and_phase_cannot_be_changed_even_after_restart ... FAILED
+
+failures:
+
+---- original_identity_and_phase_cannot_be_changed_even_after_restart stdout ----
+
+thread 'original_identity_and_phase_cannot_be_changed_even_after_restart' (78280) panicked at crates\seata_rm\tests\journal.rs:154:5:
+assertion failed: store.lease(branch(1), BranchPhase::Rollback).await.is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_identity_and_phase_cannot_be_changed_even_after_restart
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p seata-rm --test journal`

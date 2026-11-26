@@ -1,0 +1,206 @@
+// Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0.
+package org.apache.seata.core.rpc.netty;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http2.Http2FrameCodec;
+import io.netty.util.ReferenceCountUtil;
+import org.apache.seata.core.protocol.HeartbeatMessage;
+import org.apache.seata.core.protocol.ProtocolConstants;
+import org.apache.seata.core.protocol.RpcMessage;
+import org.apache.seata.core.protocol.detector.Http2Detector;
+import org.apache.seata.core.protocol.detector.HttpDetector;
+import org.apache.seata.core.protocol.detector.ProtocolDetector;
+import org.apache.seata.core.protocol.detector.SeataDetector;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/** 固定原探测器与独立候选的真实Netty行为测试；不依赖候选新增接口。 */
+class ProtocolPrefaceFragmentationTest {
+    /** 只记录实际V1解码结果，不替换生产解码器。 */
+    private static class CaptureRpc extends SimpleChannelInboundHandler<RpcMessage> {
+        private RpcMessage message;
+        private int count;
+
+        @Override
+        protected void channelRead0(ChannelHandlerContext context, RpcMessage value) {
+            message = value;
+            count++;
+        }
+    }
+
+    /** 生成真实探测所需前缀；HTTP请求业务分发不属于本测试目标。 */
+    private byte[] prefix(String kind) {
+        if ("SEATA".equals(kind)) {
+            return new byte[] {(byte) 0xda, (byte) 0xda, 1, 0, 0, 0, 16, 0, 16, 3, 1, 0, 0x10, 0x20, 0x30, 0x40};
+        }
+        if ("HTTP2".equals(kind)) return "PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n".getBytes(StandardCharsets.US_ASCII);
+        String request = kind.substring("HTTP1_".length()) + " / HTTP/1.1\r\nHost: localhost\r\n\r\n";
+        return Arrays.copyOf(request.getBytes(StandardCharsets.US_ASCII), 8);
+    }
+
+    /** 使用三个原生产探测器及其实际协议处理器。 */
+    private EmbeddedChannel channel(CaptureRpc capture, int order) {
+        ChannelHandler[] handlers = {capture};
+        ProtocolDetector seata = new SeataDetector(handlers);
+        ProtocolDetector http = new HttpDetector();
+        ProtocolDetector http2 = new Http2Detector(handlers);
+        ProtocolDetector[] detectors = order == 0 ? new ProtocolDetector[] {seata, http2, http}
+                : order == 1 ? new ProtocolDetector[] {http, seata, http2}
+                : new ProtocolDetector[] {http2, http, seata};
+        return new EmbeddedChannel(new ProtocolDetectHandler(detectors));
+    }
+
+    /** 验证协议栈实际安装和Seata原解码字段，没有重放原输入的快捷路径。 */
+    private void recognized(EmbeddedChannel channel, CaptureRpc capture, String kind) {
+        if ("SEATA".equals(kind)) {
+            assertEquals(1, capture.count);
+            assertNotNull(capture.message);
+            assertEquals(0x10203040, capture.message.getId());
+            assertEquals(ProtocolConstants.MSGTYPE_HEARTBEAT_REQUEST, capture.message.getMessageType());
+            assertEquals(HeartbeatMessage.PING, capture.message.getBody());
+        } else if ("HTTP2".equals(kind)) {
+            assertNotNull(channel.pipeline().get(Http2FrameCodec.class));
+        } else {
+            assertNotNull(channel.pipeline().get(HttpServerCodec.class));
+        }
+        assertTrue(channel.isActive(), "valid incomplete/complete protocol prefix was closed");
+    }
+
+    /** 释放HTTP/2设置输出等真实协议栈资源。 */
+    private void cleanup(EmbeddedChannel channel) {
+        Object outbound;
+        while (Objects.nonNull(outbound = channel.readOutbound())) ReferenceCountUtil.release(outbound);
+        channel.finishAndReleaseAll();
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"SEATA", "HTTP1_GET", "HTTP1_POST", "HTTP1_PUT", "HTTP1_DELETE", "HTTP1_HEAD", "HTTP1_OPTIONS", "HTTP1_PATCH", "HTTP2"})
+    void everyFragmentBoundary(String kind) {
+        byte[] data = prefix(kind);
+        for (int split = 1; split < data.length; split++) {
+            CaptureRpc capture = new CaptureRpc();
+            EmbeddedChannel channel = channel(capture, 0);
+            try {
+                channel.writeInbound(Unpooled.wrappedBuffer(Arrays.copyOfRange(data, 0, split)));
+                assertTrue(channel.isActive(), "valid partial prefix closed at " + split);
+                channel.writeInbound(Unpooled.wrappedBuffer(Arrays.copyOfRange(data, split, data.length)));
+                recognized(channel, capture, kind);
+            } finally { cleanup(channel); }
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"SEATA", "HTTP1_GET", "HTTP1_POST", "HTTP1_PUT", "HTTP1_DELETE", "HTTP1_HEAD", "HTTP1_OPTIONS", "HTTP1_PATCH", "HTTP2"})
+    void byteByByte(String kind) {
+        CaptureRpc capture = new CaptureRpc();
+        EmbeddedChannel channel = channel(capture, 0);
+        try {
+            for (byte value : prefix(kind)) {
+                channel.writeInbound(Unpooled.wrappedBuffer(new byte[] {value}));
+                assertTrue(channel.isActive(), "valid bytewise prefix closed");
+            }
+            recognized(channel, capture, kind);
+        } finally { cleanup(channel); }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"SEATA", "HTTP1_GET", "HTTP1_POST", "HTTP1_PUT", "HTTP1_DELETE", "HTTP1_HEAD", "HTTP1_OPTIONS", "HTTP1_PATCH", "HTTP2"})
+    void completeControls(String kind) {
+        CaptureRpc capture = new CaptureRpc();
+        EmbeddedChannel channel = channel(capture, 0);
+        try { channel.writeInbound(Unpooled.wrappedBuffer(prefix(kind))); recognized(channel, capture, kind); }
+        finally { cleanup(channel); }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"00", "7f", "da00", "5058", "4746"})
+    void unknownPrefixesClose(String hex) {
+        byte[] data = new byte[hex.length() / 2];
+        for (int i = 0; i < data.length; i++) data[i] = (byte) Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
+        EmbeddedChannel channel = channel(new CaptureRpc(), 0);
+        try { channel.writeInbound(Unpooled.wrappedBuffer(data)); assertFalse(channel.isActive()); }
+        finally { cleanup(channel); }
+    }
+
+    @Test
+    void oversizedInputClosesBeforeProtocolSelection() {
+        EmbeddedChannel channel = channel(new CaptureRpc(), 0);
+        ByteBuf data = Unpooled.buffer(ProtocolConstants.MAX_FRAME_LENGTH + 1).writeZero(ProtocolConstants.MAX_FRAME_LENGTH + 1);
+        data.setByte(0, 0xda); data.setByte(1, 0xda);
+        try { channel.writeInbound(data); assertFalse(channel.isActive()); }
+        finally { cleanup(channel); }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"SEATA", "HTTP1_GET", "HTTP1_POST", "HTTP1_PUT", "HTTP1_DELETE", "HTTP1_HEAD", "HTTP1_OPTIONS", "HTTP1_PATCH", "HTTP2"})
+    void detectorsUseReadableOffset(String kind) {
+        ByteBuf data = Unpooled.buffer().writeByte(0x7f).writeBytes(prefix(kind)); data.readerIndex(1);
+        ProtocolDetector detector = "SEATA".equals(kind) ? new SeataDetector(new ChannelHandler[0])
+                : "HTTP2".equals(kind) ? new Http2Detector(new ChannelHandler[0]) : new HttpDetector();
+        try { assertTrue(detector.detect(data), "detector read absolute0 instead of readable offset"); assertEquals(1, data.readerIndex()); }
+        finally { data.release(); }
+    }
+
+    @Test
+    void handlerPreservesNonzeroReadableOffset() {
+        CaptureRpc capture = new CaptureRpc(); EmbeddedChannel channel = channel(capture, 0);
+        ByteBuf data = Unpooled.buffer().writeByte(0x7f).writeBytes(prefix("SEATA")); data.readerIndex(1);
+        try { channel.writeInbound(data); recognized(channel, capture, "SEATA"); }
+        finally { cleanup(channel); }
+    }
+
+    @Test
+    void legacyMutatingDetectorCannotConsumeOriginalBytes() {
+        ByteArrayOutputStream recorded = new ByteArrayOutputStream();
+        ProtocolDetector detector = new ProtocolDetector() {
+            @Override public boolean detect(ByteBuf data) { data.readByte(); data.markReaderIndex(); return true; }
+            @Override public ChannelHandler[] getHandlers() {
+                return new ChannelHandler[] {new SimpleChannelInboundHandler<ByteBuf>() {
+                    @Override protected void channelRead0(ChannelHandlerContext context, ByteBuf data) {
+                        byte[] bytes = new byte[data.readableBytes()]; data.readBytes(bytes); recorded.write(bytes, 0, bytes.length);
+                    }
+                }};
+            }
+        };
+        EmbeddedChannel channel = new EmbeddedChannel(new ProtocolDetectHandler(new ProtocolDetector[] {detector}));
+        try { channel.writeInbound(Unpooled.wrappedBuffer(new byte[] {1, 2, 3})); assertArrayEquals(new byte[] {1, 2, 3}, recorded.toByteArray()); }
+        finally { cleanup(channel); }
+    }
+
+    @Test
+    void legacyBooleanDetectorStillRejectsWithoutOptionalWaitContract() {
+        ProtocolDetector detector = new ProtocolDetector() {
+            @Override public boolean detect(ByteBuf data) { data.readByte(); return false; }
+            @Override public ChannelHandler[] getHandlers() { return new ChannelHandler[] {new CaptureRpc()}; }
+        };
+        EmbeddedChannel channel = new EmbeddedChannel(new ProtocolDetectHandler(new ProtocolDetector[] {detector}));
+        try { channel.writeInbound(Unpooled.wrappedBuffer(new byte[] {0x7f})); assertFalse(channel.isActive()); }
+        finally { cleanup(channel); }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2})
+    void detectorOrderingDoesNotChangeSeata(int order) {
+        CaptureRpc capture = new CaptureRpc(); EmbeddedChannel channel = channel(capture, order);
+        try { channel.writeInbound(Unpooled.wrappedBuffer(prefix("SEATA"))); recognized(channel, capture, "SEATA"); }
+        finally { cleanup(channel); }
+    }
+}

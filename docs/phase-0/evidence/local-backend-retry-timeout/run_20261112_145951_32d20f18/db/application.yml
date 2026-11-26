@@ -1,0 +1,31 @@
+server:
+  port: 28091
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/seata backend retry timeout/20261112_145951_32d20f18/db/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28091
+    enable-check-auth: false
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:28093/seata_retry_20261112_145951_32d20f18?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      user: root
+      password: seata_retry_fixture_only
+      min-conn: 1
+      max-conn: 4

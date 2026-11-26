@@ -1,0 +1,26 @@
+test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) ... 
+  test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='commit') ... FAIL
+  test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='rollback') ... FAIL
+
+======================================================================
+FAIL: test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='commit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\seata-tm-observer-controls-7d9ad526b91b\tools\formal-tm-loss\test_validate.py", line 122, in test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation
+    with self.assertRaises(ValueError):validate(mode,text,rows,'n')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation (test_validate.ValidatorControls.test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation) (mode='rollback')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\seata-tm-observer-controls-7d9ad526b91b\tools\formal-tm-loss\test_validate.py", line 122, in test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation
+    with self.assertRaises(ValueError):validate(mode,text,rows,'n')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=2)

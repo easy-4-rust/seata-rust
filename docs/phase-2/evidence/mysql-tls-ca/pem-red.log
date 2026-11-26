@@ -1,0 +1,22 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.63s
+     Running tests\options_contract.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\options_contract-ca8732b2d2f9dcae.exe)
+
+running 1 test
+test custom_ca_is_bounded_redacted_and_cannot_be_combined_with_disabled_tls ... FAILED
+
+failures:
+
+---- custom_ca_is_bounded_redacted_and_cannot_be_combined_with_disabled_tls stdout ----
+
+thread 'custom_ca_is_bounded_redacted_and_cannot_be_combined_with_disabled_tls' (39192) panicked at crates\seata_db_mysql\tests\options_contract.rs:83:5:
+assertion failed: options.clone().with_tls_ca_pem(b"malformed-pem-fixture".to_vec()).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    custom_ca_is_bounded_redacted_and_cannot_be_combined_with_disabled_tls
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test options_contract`

@@ -1,0 +1,145 @@
+[
+  {
+    "name": "duplicate_original_response_is_ignored",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "35ae5ec209cd79cee45f4be5bacdb7818e6daba0351e6b9ff489b4358d0f18b9",
+    "patches": [
+      {
+        "old": "require(key not in completed,'An original request has more than one actual response')",
+        "new": "pass"
+      }
+    ],
+    "test": "test_original_response_is_unique_and_not_also_forwarded",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "old_inflight_query_authorizes_recovery",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "e6545938837d4275d9afc12f3a7fe85d54de7fa4dda6ecb78a7e5ead66b7754b",
+    "patches": [
+      {
+        "old": "require(drop_index<query_index<index<end_limit and query['kind']==15 and query['xid']==target,'Recovery status request was already in flight before the original response loss')",
+        "new": "pass"
+      }
+    ],
+    "test": "test_inflight_status_request_cannot_be_used_as_post_loss_reconciliation",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "client_status_and_unknown_claims_are_ignored",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "b0e2e2ebb5c82d046ed5b101b2cb073b257eff712903ff21827afbd4c73832a0",
+    "patches": [
+      {
+        "old": "require(actual==expected,'Client uncertainty/identity/status/business claim differs from actual raw responses')",
+        "new": "pass"
+      }
+    ],
+    "test": "test_finished_cannot_be_rewritten_as_confirmed_commit_in_client_claim",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "same_xid_retry_changes_operation",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "4b6dc5bdf3b7712ce761e9bea6ca5a4c5af5dccf9e0a68c267b7b655d0a84fc8",
+    "patches": [
+      {
+        "old": "require(len(original_ends) in [1,2] and all(row['kind']==operation for _,row in original_ends),'Recovery switched operation or replayed more than one explicit duplicate')",
+        "new": "pass"
+      },
+      {
+        "old": "row['kind']==operation+1 and row['matched_request_index']==original_ends[1][0]",
+        "new": "row['matched_request_index']==original_ends[1][0]"
+      }
+    ],
+    "test": "test_retry_cannot_switch_the_original_operation",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "callback_operation_nonce_is_unchecked",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "7fa2f86c5b4a1a7c214ba4b50e704a33295eabd90c6da52b69e4a2d74b176265",
+    "patches": [
+      {
+        "old": " and cb['data']==identity['data']",
+        "new": ""
+      }
+    ],
+    "test": "test_callback_nonce_and_original_connection_cannot_be_substituted",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "callback_moves_to_unregistered_connection",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "472f3824f9b2085a3610a6176c07cc225b4e436f78b7b6e98acbac90216b2372",
+    "patches": [
+      {
+        "old": "require(row['connection'] in [identities['TM'][0],identities['RM'][0]],'Frame migrated to an unregistered connection')",
+        "new": "pass"
+      },
+      {
+        "old": " and callback['connection']==roles['RM'][0]",
+        "new": ""
+      }
+    ],
+    "test": "test_callback_nonce_and_original_connection_cannot_be_substituted",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "lock_query_uses_different_resource_or_key",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "cbcc83837ee1b8e74a002d69bc0b73e71a06c3b37766f609301dcef878971855",
+    "patches": [
+      {
+        "old": "(lock_identity['resource'],lock_identity['lock'],lock_identity['branch_type'])==(identity['resource'],identity['lock'],0)",
+        "new": "True"
+      }
+    ],
+    "test": "test_lock_occupation_and_release_use_original_resource_and_key",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "native_identity_rejection_is_accepted",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "b2bf02096a04e6a3e45d044eb3902404989dfc764ecbda7066e7e1a1c40047f9",
+    "patches": [
+      {
+        "old": "require(response[2:3]==b'\\x01','Native identity rejected')",
+        "new": "pass"
+      }
+    ],
+    "test": "test_rollback_keeps_business_error_and_native_identity_must_be_accepted",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "finished_response_is_accepted_as_original_success",
+    "candidate": "D:\\codex-builds\\seata-tm-observer-controls-7d9ad526b91b",
+    "source_sha256": "98e9fa90dea70b77c2295ec9874293507fcf3527a8ec16cfb1dfdeae12f898ec",
+    "patches": [
+      {
+        "old": "require(drop['global_status']==terminal,'Withheld original end response was not actual success')",
+        "new": "pass"
+      }
+    ],
+    "test": "test_only_successful_original_end_response_can_be_withheld",
+    "exit_code": 1,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  }
+]

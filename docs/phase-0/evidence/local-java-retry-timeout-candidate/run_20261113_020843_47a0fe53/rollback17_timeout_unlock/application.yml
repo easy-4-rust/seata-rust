@@ -1,0 +1,27 @@
+server:
+  port: 28091
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/jrf_20261113_020843_47a0fe53/rollback17_timeout_unlock/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28091
+    enable-check-auth: false
+    rollback-retry-timeout-unlock-enable: true
+    rollback-failed-unlock-enable: false
+  store:
+    mode: file
+    session:
+      mode: file
+    lock:
+      mode: file
+    file:
+      dir: D:/codex-builds/jrf_20261113_020843_47a0fe53/rollback17_timeout_unlock/store
+      flush-disk-mode: sync

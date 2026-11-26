@@ -1,0 +1,1449 @@
+{
+  "status": "Java_module_migration_incomplete",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "objects": [
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/ColumnMeta.java",
+      "target": "crates/seata_datasource/src/struct/column_meta.rs",
+      "source_sha256": "43114dcfe387728c56fe7390b27722495ec2c26ee7b994279e40f3cb330a68ee",
+      "state": "PARTIAL",
+      "reason": "Metadata/local read foundation only; full Java API/source-case differential not implemented"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/struct/TableMeta.java",
+      "target": "crates/seata_datasource/src/struct/table_meta.rs",
+      "source_sha256": "7cd72604d1002bcb982cd4b107b78f1cef1dece860040177c06e865f8f9b2e03",
+      "state": "PARTIAL",
+      "reason": "Metadata/local read foundation only; full Java API/source-case differential not implemented"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/exception/TableMetaException.java",
+      "target": "crates/seata_datasource/src/metadata_error.rs",
+      "source_sha256": "34c7f375d6eaed05a1954be21de014fafd38bf11ba2c1ac84624e2e9a8543fa8",
+      "state": "PARTIAL",
+      "reason": "Metadata/local read foundation only; full Java API/source-case differential not implemented"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/DataSourceProxy.java",
+      "target": "crates/seata_db_mysql/src/data_source_proxy.rs",
+      "source_sha256": "7aeee0ea0f754bb3afa639cd06968b9fc96d70f8d015cd3a6743270cda86e57e",
+      "state": "PARTIAL",
+      "reason": "Metadata/local read foundation only; full Java API/source-case differential not implemented"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/ConnectionProxy.java",
+      "target": "crates/seata_db_mysql/src/connection_proxy.rs",
+      "source_sha256": "cc60b33a6071cfb92dfe558d8c2e963e19a0a61ab357f1ca2c01c4c0a436aad7",
+      "state": "PARTIAL",
+      "reason": "Metadata/local read foundation only; full Java API/source-case differential not implemented"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/sql/struct/cache/MysqlTableMetaCache.java",
+      "target": "crates/seata_db_mysql/src/cache/mysql_table_meta_reader.rs",
+      "source_sha256": "627cd90af30d972f7fbabc5dc139138edf87b41040b0e36708a71ea91deaf2bd",
+      "state": "PARTIAL",
+      "reason": "Metadata/local read foundation only; full Java API/source-case differential not implemented"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/sql/struct/Field.java",
+      "target": "crates/seata_datasource/src/struct/field.rs",
+      "source_sha256": "0f2abf4be6adda4d83da20398c299cf969549e9c9b62af3e758441c4a7214c70",
+      "state": "PARTIAL",
+      "reason": "Bounded exact value model only; JDBC reader and original serialization/differential not implemented"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/sql/struct/Row.java",
+      "target": "crates/seata_datasource/src/struct/row.rs",
+      "source_sha256": "d1266bb3aa12471c6cafa257caf885e404b8a26a58a58813492160b5c295863c",
+      "state": "PARTIAL",
+      "reason": "Bounded exact value model only; JDBC reader and original serialization/differential not implemented"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/sql/struct/TableRecords.java",
+      "target": "crates/seata_datasource/src/struct/table_records.rs",
+      "source_sha256": "3343d1e1cf43b131cab1b6759085e9fd67354f8310d7b197fefbe10a4952c837",
+      "state": "PARTIAL",
+      "reason": "Bounded exact value model only; JDBC reader and original serialization/differential not implemented"
+    }
+  ],
+  "source_test_files": [
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/BaseDataSourceResourceTest.java",
+      "sha256": "eae05d9a91911364410d9015ddafa2a9aec9779eb04ebdbb09490611263c23c7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/AsyncWorkerBehaviorTest.java",
+      "sha256": "1f4579042b14e5c92cd69b0b0885970edf0f8c0d65cf1dedbc617c18dcdaf859",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/AsyncWorkerTest.java",
+      "sha256": "7d98a822eb221259081da8413d7307f88a8c9f0cd5fee9252d16e298df40552a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/ColumnUtilsTest.java",
+      "sha256": "d7629c4164f9feab8e757afaf8f7f7a7f436671a9936bd527a141a8a01992399",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/combine/CombineConnectionHolderTest.java",
+      "sha256": "e7351f5cc47811e4fe212eff5ca6dea3cc0e4ded9798aa7bbebf0746b60349aa",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/ConnectionContextProxyTest.java",
+      "sha256": "60dcead8b40963083ab44884eaaf0d993e4c4d42caeda93a5e6f04b9cfd9b6fd",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/ConnectionContextTest.java",
+      "sha256": "36ce7e155db3d3b066cc2490e1696b9c73a1076d8d9dc46dd2fbdbeb1deb351d",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/ConnectionProxyBehaviorTest.java",
+      "sha256": "0508678d33d45de4088014afa787b04ffd6e8678ba9116bf6601c2e9282b0607",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/ConnectionProxyTest.java",
+      "sha256": "4821e7e3b4b38920a7d84e91f7ed2b0df834180d9c9d18841d73ae2402afcd12",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/DataCompareUtilsBehaviorTest.java",
+      "sha256": "cfe9ef8ee85802d7bb1634a53fbe8df8d1a3a6d79461e52c28bc307784ebbd58",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/DataCompareUtilsTest.java",
+      "sha256": "22e1513c34997dc1e70168f10cb5d7088aba1a55bb67ee81f1826ad6baf985ad",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/DataSourceManagerBehaviorTest.java",
+      "sha256": "4e3db067565061c8a3ae6db9c7ef72b177d47c0d86e2491b93e1bc37d6b45f84",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/DataSourceProxyTest.java",
+      "sha256": "c76d6a677e33dc2003039972a621170eebf999b058bf6bd88d4cf777c289f230",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/AbstractDMLBaseExecutorTest.java",
+      "sha256": "6f2213b8232b384814d4a5d7eeaff679ad7f795e1861d34a50191afef458abcf",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/BaseTransactionalExecutorTest.java",
+      "sha256": "1339c84557cd3b3c35b2b311e3a61fc95a7d29823bd70da73170ee8ea5fade08",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/BatchInsertExecutorTest.java",
+      "sha256": "afb963fb1ea6c0fa2c9e56d55cb9f49b296d6454cda4a1d83c91a20081af46bc",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/DeleteExecutorTest.java",
+      "sha256": "e0f9234a5b09938b9a08e4958d814d13c4b98aff3f9b0de76cafa205ef5927fc",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/DmInsertExecutorTest.java",
+      "sha256": "2b1ab5812b15bee9671063a2b5ef36e36c042ff2212165a897e1297c5eaa0b9f",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/DMLExecutorBehaviorTest.java",
+      "sha256": "40a91780c5276a8f71e9682c860baf89ebbfe45e512fa3da91a366157e812303",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/ExecuteTemplateBehaviorTest.java",
+      "sha256": "c8d8122e423412d4325a014a237546f2bfe09df7b5bba3261ea67c2bd265c803",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/InsertExecutorBehaviorTest.java",
+      "sha256": "b90ed202704be96c529bf364249df7934f9b1aeb2f368021c450566d30729a68",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/KingbaseInsertExecutorTest.java",
+      "sha256": "6d914ce06c030f1628f08ab19cdaed4decd8c42a2e3b945054a20426a8fc295d",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/LockRetryControllerTest.java",
+      "sha256": "1f90ecda851750d23e19757bb12660f72e105edd3a5e7059e5c72d1b51a4d669",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/MariadbInsertExecutorTest.java",
+      "sha256": "dfc43fc32396e60f0ef8bc99c3b7a1fa2d03539b9f7dbb4ac9c3ad80e1c7f31e",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/MariadbInsertOnDuplicateUpdateExecutorTest.java",
+      "sha256": "b57e4b974a04fb5f044be728d84e648de68212cb5630164cbab69249a2a4b5a3",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/MultiExecutorTest.java",
+      "sha256": "79b9cbc0eb8e8878d575d56a585260cca5db8b0e984070bf5c3638c5f6658c47",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/MySQLInsertExecutorTest.java",
+      "sha256": "8904f6254f53db56a162b13431397cb53a0a9a48c96c627759efde677cf377df",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/MySQLInsertOnDuplicateUpdateExecutorTest.java",
+      "sha256": "5d2aa16341b8bbbfce53737dd9b430c171533e66248075df8acb6b16e3d79a9d",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/OceanBaseInsertExecutorTest.java",
+      "sha256": "81d5bbdc3b17838db8b8b62fb267b7f6848543e542c89a90d220b720f94738c7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/OracleInsertExecutorTest.java",
+      "sha256": "6bd6c0c7c6bca9e23d699d4d3a084c87b7e9e49ccaa1cfaa951c38cf6db902c8",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/OscarInsertExecutorTest.java",
+      "sha256": "60562baa004e44fdf19b52c9f682245f9eed4189f56ca154bdfec172ae761a09",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/PlainExecutorTest.java",
+      "sha256": "0517603da319ff9a7c30d5f35ea8509bbc664745d7fe5ad347514170af97eff3",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/PolarDBXInsertExecutorTest.java",
+      "sha256": "ec609d9611933d54f675def3076798cfb1339aaea800c11c9447db8470abf16a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/PolarDBXInsertOnDuplicateUpdateExecutorTest.java",
+      "sha256": "65ad7305e580adaadff4fcb95da95df07e44b351116ac4a383a450823dc70096",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/PostgresqlInsertExecutorTest.java",
+      "sha256": "5279d14573b4ef49c747344a5edc2c6ad5d15c039932ad7fcd528c5a1470a33e",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/SelectForUpdateExecutorTest.java",
+      "sha256": "ffdca686bb996d7cbe0ba857e2bdc991e93b88a309a5cd5208789974d4fab3c2",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/sqlserver/SqlServerExecutorBehaviorTest.java",
+      "sha256": "d7909fd1381296d9ea90e996d9d8d13fa63be86e97ce9f7b410ea888e0b08d24",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/SqlServerInsertExecutorTest.java",
+      "sha256": "1923fe85869124c525cc514c8d395c431ed1530c76c8b8d89c9fa605d74ec1d3",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/UpdateExecutorTest.java",
+      "sha256": "837a32f43ba7f16e0bdbd0fd92cc1727f1a6ec24a51278b85c93d2459e079784",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/exec/UpdateJoinExecutorTest.java",
+      "sha256": "f74b388969cdc99afb30ca58a5e88fc49b29c63b2d8833670424d9433c69b48a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/initializer/db/ResourceIdInitializerTest.java",
+      "sha256": "cd3d89fac6c315bbd03ccc91db894c95f14366cae89050beb6528390bdf765a1",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/JdbcConnectionProxyBehaviorTest.java",
+      "sha256": "b3deef4afe70534ea2bd3d4440112e4b253e1c96ef67daaf09e9c0abfb692f7a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockBlob.java",
+      "sha256": "25f34368d63d7bb61e209f8d7a3e1514187ca64670c31896394c776af7217d64",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockClob.java",
+      "sha256": "892f1041b4bf6904c79fc641cd03f59a5252113ba020839e18978bb1a0be3af7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockConnection.java",
+      "sha256": "10be21aaaca9d772bf9def9430408e569b54fa3cd6071a4002590750676cf4ac",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockConnectionProxy.java",
+      "sha256": "d309840a9aee6ef0007dfffad6b7afdacb0c6996eed7f78bf64ccbad8102c1af",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockDatabaseMetaData.java",
+      "sha256": "f80d92d4fde143a56ea9a55c521e3225aa429b65df46a259898124b8dad48c63",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockDataSource.java",
+      "sha256": "631a7d2dbbdf1cb0925777d39246f148a0f0ae1bb6a9f97236d242b31e4721ab",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockDriver.java",
+      "sha256": "0c946ad4b6c29827a902ab4987e2205cb8032689354301f2a9a32d139e6fa99a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockExecuteHandlerImpl.java",
+      "sha256": "8c9d8f9f7afd6c893d1427042dbf14eb15538e43207846582d8206d99c8498f7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockLockConflictConnectionProxy.java",
+      "sha256": "ae44215b535f239fc6b4e8df1281c91581f072983226e39ffc5ea90dca8b7da1",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockMariadbDataSource.java",
+      "sha256": "b7f629b4788579691c9b615fff9d8aadd5d33f7e17dd57b0f563b3d7dca5ff1d",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockParameterMetaData.java",
+      "sha256": "6ce4bea1e5b4d21f91df1f17be9aaaa7b2bc2c95d398d9ddb2b7625c9d7b96c0",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockPreparedStatement.java",
+      "sha256": "c672deb6605af5c91bc34dd0651aba7e5b3570c7da9857b890d4320e970a85e1",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockResultSet.java",
+      "sha256": "ce07c08a28706d579b6b2ea58aebfbae7406259dfa9ad666810072740e0118ba",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/mock/MockResultSetMetaData.java",
+      "sha256": "7502194a4d93411ee6153d5b4d1982b6eca744d41493d2b80ad6b78507e0d3a0",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/PreparedStatementProxyTest.java",
+      "sha256": "738217aa800df8d032e028fa54446d1d8225938778a2174305c5eb3b3270e453",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/handler/EscapeHandlerTest.java",
+      "sha256": "3e19add0022d4b4292c2967cc208c5be1877a92c01e14d708d8301f82bc0c5c7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/handler/oceanbase/OceanBaseEscapeHandlerBehaviorTest.java",
+      "sha256": "b4d13a3d99dc3d4777dc9f5335ed9b9a4782cce9ff45549d7205012e3c313d08",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/serial/SerialArrayBehaviorTest.java",
+      "sha256": "e07c3e2ceb2680d1358831aeae40c71afdff62f1cd1ad870cd6f18eec97c3091",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/SQLVisitorFactoryTest.java",
+      "sha256": "4fbcd5ee4c85c767d36f6bb018c7de8d8d81a64ac5ad28e008dc6b0bb3bdb474",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/DmTableMetaCacheTest.java",
+      "sha256": "12d8bf7cbcd0f021d2ab27bc69980f64dd5ac487648f861a0dd99db61a324b04",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/KingbaseTableMetaCacheTest.java",
+      "sha256": "dd9e03aa6341e594e498a9895b46f36019d1f30b7d2fd49116ef45e871329a5c",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/MariadbTableMetaCacheTest.java",
+      "sha256": "e09e677746c3e10e372df12c0267a84383275744f9b220b58f3e691406bbc816",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/MysqlTableMetaCacheTest.java",
+      "sha256": "460530204079005fec82d1c27d9882a06b316522959a8ce0e14139f587d0cefe",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/OceanBaseTableMetaCacheBehaviorTest.java",
+      "sha256": "9de369f83352585c0ca365b901adaa06ab6e62748c266ffcda7dde5b310254ca",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/OceanBaseTableMetaCacheTest.java",
+      "sha256": "ee2e00814b48484bda241985e91b269bedd3565998bbe43d25303fa211a1b5af",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/OracleTableMetaCacheTest.java",
+      "sha256": "b59fa3e5ee3f950d0e2bf594837669ece0eed75164ab4db66dc4cf140f066f20",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/OscarTableMetaCacheTest.java",
+      "sha256": "c83db4ddd4d78c4cb4cb8584f602448442035d33230a876431022ccfa2e0c1dc",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/PostgresqlTableMetaCacheTest.java",
+      "sha256": "0a39d1ee007803c24484e1a50496b7f14c0de89d0bc3222e1345facb5ae5abdf",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/cache/SqlServerTableMetaCacheTest.java",
+      "sha256": "61ea08c8dc183cbe8d38a4ee2dec0a787e602aaa191bcfb693ac81c594bac0e3",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/ColumnMetaTest.java",
+      "sha256": "882300f1ff3f060f1e3b57cb9e98d2a6bef8f0705a3bb2b23c31fcc337aca86a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/IndexMetaTest.java",
+      "sha256": "ecb12ff2510a1a7125658c2df2445e334db1a742c11a27fcf9e10d99f3468861",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/IndexTypeTest.java",
+      "sha256": "cea4bab8b9122695ff082527e06ec3bc569c0f1e4337f6679176fa25f95138b8",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/TableMetaCacheFactoryTest.java",
+      "sha256": "735a01eab3fb5c91b7fc5f4e2af567f6462a1ed6e9cf33ce21c6284bf342ea2b",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/TableMetaTest.java",
+      "sha256": "a8198d37abab1dfdfacfb7a3f5ff668086f16096bc124f003292ddc23b511dd8",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/sql/struct/TableRecordsTest.java",
+      "sha256": "28f1ffdfb54d6cd411326ddb83b3cce19bc495ff803370d8ca8c043a63b341b7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/SqlGenerateUtilsTest.java",
+      "sha256": "f80593e71b61b886d99d608ec2daf3956e4f36451d0d509ded5f2ef1be9f982a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/StatementProxyTest.java",
+      "sha256": "80c75427c0755078fcbbca81a8df61351f6c8f30bc2cbcb645c0e73209d10b36",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/TrackingJsonSerializer.java",
+      "sha256": "61768913979a4f9a62867dfb431cbf0350c5811eba3139d41689071fa719d751",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/BaseExecutorTest.java",
+      "sha256": "7b7afe566e5938cf55a57652d71067dea273bdee34e01b69a4551bbfc37d2640",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/BaseH2Test.java",
+      "sha256": "5ef670fe72af12b6a40fb8bcb6d742e52a9e5f1c930fe6bd15f71f8e4ae4691d",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/BaseUndoExecutorTest.java",
+      "sha256": "8d3fe8fb4c17eed461ba676f4b2afdca58447a5f38c167d5f4946b0c26b18d08",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/BaseUndoLogParserTest.java",
+      "sha256": "4ddda159a04c7c141e1000e8cc7422b6e0ecac79687b7a5159f352cbffd64667",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/BranchUndoLogTest.java",
+      "sha256": "ed4015839731f11d8df63f609df8ccc74f459165b95dc575094aca6b80ca8ebb",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/dm/DmUndoDeleteExecutorTest.java",
+      "sha256": "b7fc0add96b66e8b1270c2d4aaa169f7195b6a0492d4573665b2fb180e186ca7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/dm/DmUndoExecutorHolderTest.java",
+      "sha256": "d7ce24c77ae462661c249886de7de6e9e9e477dc27387e120d13f8c83f620dd8",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/dm/DmUndoInsertExecutorTest.java",
+      "sha256": "af8b9f09b1d87bded143eccb326ff15fa895e250aaf644a488b6abb1ebab5df3",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/dm/DmUndoLogManagerTest.java",
+      "sha256": "d039cba5d9ff5317e59bb1f00fc2e3ba1ece7a871d9970c9c6f9d8a54faf39fb",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/dm/DmUndoUpdateExecutorTest.java",
+      "sha256": "19dfc44982f62b6b682a2abc690972784c25a7bc8a6bee0403ddef5834c073eb",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/EscapeHandlerFactoryTest.java",
+      "sha256": "8574812a113d7ec1fd9a451884cc74998ad65c5186d5cb2ec104f2d6d176cbe0",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/h2/keyword/H2EscapeHandler.java",
+      "sha256": "edc27382df7cbcdb5db4ff04b3279f6d5fd620ca66c6a3d2084ebd22f7e60109",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/kingbase/keyword/KingbaseEscapeHandlerTest.java",
+      "sha256": "a7fe58b66c5117d9f70e72b780f341f26dc57d343b053cc3982fca2980d88118",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/kingbase/KingbaseUndoDeleteExecutorTest.java",
+      "sha256": "4e3f99d37acf5fedc064065f62e8d147297748b7dfa4da61a36252395e7a8d03",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/kingbase/KingbaseUndoInsertExecutorTest.java",
+      "sha256": "80a96b2ecfaf755827f91c3af9e099ca9ef21ab2a338702eec9453b7a2ac3e20",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/kingbase/KingbaseUndoLogManagerTest.java",
+      "sha256": "e32370fa466a2aa03e7cb2ed1de84dc93104eda8beed16c9ceed127ff00d8be7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/kingbase/KingbaseUndoUpdateExecutorTest.java",
+      "sha256": "d2b225408cbec6cdde46bde7fded2868dc86d4b36f0c076eee98c096e5a82ff3",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mariadb/keyword/MariadbEscapeHandlerTest.java",
+      "sha256": "82d98b1d3a925d7bb76654ea245a9a6cf4ae260ce6eb40d7d4627f92030755c1",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mariadb/MariadbLUndoInsertExecutorTest.java",
+      "sha256": "d1a8c4e78d82f61851089e36cad459f541a994a9e6ca953ecde53db26c742b61",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mariadb/MariadbUndoDeleteExecutorTest.java",
+      "sha256": "c536338307e5221c31d983678757b099b73b66bbc92035c365e2adf0b13c2bcf",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mariadb/MariadbUndoLogManagerTest.java",
+      "sha256": "4387ee9c8f4cddaf38a9ca5773dc45669a6d4cabb84749b04321bf89765ada58",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mariadb/MariadbUndoUpdateExecutorTest.java",
+      "sha256": "cd7fcd1f845e871b485b50d92427bba659537d3b5b9f33ec0ee553e0d93a8ef0",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mysql/keyword/MySQLEscapeHandlerTest.java",
+      "sha256": "a7a68f4c4fea2515e27f504c4c9b3ba76b8c55610639b1dae40c13f5ebda4777",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mysql/MySQLUndoDeleteExecutorTest.java",
+      "sha256": "13111df72297de19994ddc3e8d2402ff30efb1449e820d52463025a632248850",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mysql/MySQLUndoInsertExecutorTest.java",
+      "sha256": "a65b4f0ac36c7e2269bf7a4ea60bbb352506dbaa3d9c00e87918b6b4fa148f90",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mysql/MySQLUndoLogManagerBehaviorTest.java",
+      "sha256": "714fb6dc425443c72172534a1c92bae30ac4957aeea57660f77881f0a9718b25",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mysql/MySQLUndoLogManagerTest.java",
+      "sha256": "2483050b4fcfa2d18484603b6ad7ac083469451ce4854cf6869322056796d385",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/mysql/MySQLUndoUpdateExecutorTest.java",
+      "sha256": "8eb6324b555eda8aae96e0719cecb55e87ccf98c8e8b699740b94f54ddf73f04",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oceanbase/OceanBaseEscapeHandlerTest.java",
+      "sha256": "37a7141865206b20637f992fdda4e01d962e6778f91cd2f2ca0946c97b4575ee",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oceanbase/OceanBaseUndoDeleteExecutorTest.java",
+      "sha256": "ce68fac7f17e1d28190931ff764b3eb519dc3c9693107549a0c600bd37346b5c",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oceanbase/OceanBaseUndoExecutorHolderTest.java",
+      "sha256": "604de22eede2b36dd851ff897c0a284a5f3e330781d73ec3d6b2bf381cabbcc0",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oceanbase/OceanBaseUndoInsertExecutorTest.java",
+      "sha256": "4501251e4e20cfe32d3bde3f457d17f892279926415673385670560638cc00ee",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oceanbase/OceanBaseUndoLogManagerTest.java",
+      "sha256": "739b1b2904a27c8725006e1e929cc6fb4cb572143663dcbc33227d11483d36ed",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oceanbase/OceanBaseUndoUpdateExecutorTest.java",
+      "sha256": "c57468bf874d9492981c235417ce0d86d3d771e442fd5f9936e42c7e5acafced",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oracle/keyword/OracleEscapeHandlerTest.java",
+      "sha256": "faa51e00436dfe15c6a87775df459e1dd7c66b93c104db40bef175cdbc775282",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oracle/OracleUndoDeleteExecutorTest.java",
+      "sha256": "fc22cbed46c719272b777fd25f8947885feecb04a81df52d96b943e91b970525",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oracle/OracleUndoInsertExecutorTest.java",
+      "sha256": "3c9ad01fedc82b557bcc31f3758c7dbc41e1dcaad552901fdea47da041691012",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oracle/OracleUndoLogManagerTest.java",
+      "sha256": "2f363393e3d9534037b78c9aceb6edb2a91a0cc128616cdadf794879f7bcd034",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oracle/OracleUndoUpdateExecutorTest.java",
+      "sha256": "57b155c945d0161131d471a7887bdd62f2dd95dd1079593648a4be82ea3bdddf",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oscar/OscarUndoDeleteExecutorTest.java",
+      "sha256": "c342988dfb8d84acf8b71fe2b73c8b3711f8ad9ba1e45f59cb8d75b15a6134a8",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oscar/OscarUndoExecutorHolderTest.java",
+      "sha256": "5187a8c759452d84f626fef45f03d00c630f5b433be524db59058fcc99e13d12",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oscar/OscarUndoInsertExecutorTest.java",
+      "sha256": "caf56577f3729fa54fc1dc1677891b7d6bf99e83907743a95f761df1f330a76e",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oscar/OscarUndoLogManagerTest.java",
+      "sha256": "6c26bd71f8f2cdff5410f39f8c736a422e4933e7198f8881ecd98931be7d6c71",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/oscar/OscarUndoUpdateExecutorTest.java",
+      "sha256": "144d8abb09ca4b112bb27f8f613544b2468ea24d3ae8b87ebdee14bc27f75395",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/Fastjson2ConcurrentRefDeserializationTest.java",
+      "sha256": "c04e67da4c694311043a58109a7f23553c52a0f018cb45fe9e30cd61500e37e9",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/Fastjson2UndoLogParserTest.java",
+      "sha256": "a001cc91155e1beb79185571836a86df77765b6fb3088b2a113103268dc67b83",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/FastjsonUndoLogParserTest.java",
+      "sha256": "cd7ff4e3136393215d167edfa9d905ad3b107045b0f5ba93e57a11e5c70c6321",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/ForyUndoLogParserTest.java",
+      "sha256": "301e101229b725f9adf9a450463d8fccfe155fcb4cf2ac5f2bb5301910e42b42",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/JacksonUndoLogParserTest.java",
+      "sha256": "8fa25bbe8d9437003caaefa7d87d1773481448db8dfc1237e3b7655329b6fb99",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/KryoSerializerBehaviorTest.java",
+      "sha256": "347d48ce72a3c6c4855a1d0071a7ef2793b4809615da4f111e50ec264c52d272",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/KryoUndoLogParserTest.java",
+      "sha256": "fd485957308a02331687bf197c800dc40a252ccc1b33db5f402348bfe9087399",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/parser/ProtostuffUndoLogParserTest.java",
+      "sha256": "fe1e611076834ed069aedb1e95f33986e1db1fd3ba9640e2097fb405c5fdb285",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/polardbx/keyword/PolarDBXEscapeHandlerTest.java",
+      "sha256": "65f91818a331d3bae324c72fd53299a84b9310687014dfd93ec44924bd52f947",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/polardbx/PolarDBXUndoDeleteExecutorTest.java",
+      "sha256": "5430facf21b268aec1fc5b06e999371ba651c87dddaaae8f99dd576d79cf084a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/polardbx/PolarDBXUndoInsertExecutorTest.java",
+      "sha256": "9d633c5ff810f03b3bd11253dc8410a69562fff114117e1d7de4d075e2d244ac",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/polardbx/PolarDBXUndoLogManagerTest.java",
+      "sha256": "dfc856b256d0df74964137cdd126c86d988bab23fdb0ad75f03436195e8212ef",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/polardbx/PolarDBXUndoUpdateExecutorTest.java",
+      "sha256": "f49535bbdbc5744b6894082dadd5a8935bf1907fb39ffb9d497dbe158a751c8b",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/postgresql/keyword/PostgresqlEscapeHandlerTest.java",
+      "sha256": "3051ec7cc4f5025ab315a27daddee51be68b0d6acb9d197fed2a53a72aa8fcca",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/postgresql/PostgresqlUndoDeleteExecutorTest.java",
+      "sha256": "a533938a7374274867312e0554aa9908afcab7b1aaf2aaaa7340ed361596c32c",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/postgresql/PostgresqlUndoExecutorHolderTest.java",
+      "sha256": "131f005d801e400385e92a25b1f5b118cade470fdefd63c7ea65b414b85bc828",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/postgresql/PostgresqlUndoInsertExecutorTest.java",
+      "sha256": "d50574537c1459150b3328effd6f10868107f6fab74a34b0fc434459c1c7a2e5",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/postgresql/PostgresqlUndoLogManagerTest.java",
+      "sha256": "efa05ed5be5b7754c15097e4a96df02907c1ead8d4d0a239f0f3e8525ce28cd1",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/postgresql/PostgresqlUndoUpdateExecutorTest.java",
+      "sha256": "5685095f64baa7b3ba715afa38afe7b896372843b40821996742967322a7fc84",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/sqlserver/keyword/SqlServerKeywordCheckerTest.java",
+      "sha256": "219c67ec588b00a21d77b735e8fce5fe6a818565e623907a994d57ba63c583f8",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/sqlserver/SqlServerBaseUndoExecutorTest.java",
+      "sha256": "4462e4a9940924eb3e5a22da6de51a5afc574ea881f27bd3157710c04539a05e",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/sqlserver/SqlServerUndoDeleteExecutorTest.java",
+      "sha256": "c688f55fd40e24f4688ee38a29124ebaff4cfaf11df2dbaf9cd7673fb0af0747",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/sqlserver/SqlServerUndoExecutorHolderTest.java",
+      "sha256": "0b6d408054321330c65ae463431e6a201732d0c243f0dc309b5bcfa8ab5f0827",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/sqlserver/SqlServerUndoInsertExecutorTest.java",
+      "sha256": "4f07c4ef42fe2a75edd64f095ea2018ac96e87b4aaaa1f8fb68863ca148e6c55",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/sqlserver/SqlServerUndoLogManagerTest.java",
+      "sha256": "8d26f724c2810608fadd5dd0cb73b2542c6338f108b1853e94e7f49d6c4e3779",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/sqlserver/SqlServerUndoUpdateExecutorTest.java",
+      "sha256": "b348eea611ae27fd996e5e2a1f97e559b6515fcf1bac4b7f9b6af76abc9cb38c",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/UndoExecutorBehaviorTest.java",
+      "sha256": "162b4f92d50a192399ffdb374c8b09161f05d80440b2f2327b7c78c47807aadd",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/UndoExecutorTest.java",
+      "sha256": "d744259bcdf74774640239205d7a063b5b139edecc3eaa010ee0a764fc5e1210",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/UndoLogManagerBehaviorTest.java",
+      "sha256": "8aba1d5c91acc9cc345007ab73cc03931f9437eeee29f196847fed12327adb6f",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/UndoLogManagerFailureBehaviorTest.java",
+      "sha256": "7f6a3563be4408bec109e41d23de1d8b41139d7c212993d96eb6446e9debf083",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/UndoLogManagerTest.java",
+      "sha256": "4ace119ed5cf90238bcff87a77918a24d662fc18b1c405d6d63e685943502073",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/UndoLogParserFactoryTest.java",
+      "sha256": "c0f5c5959317deb26d4bebe5cf9569feb5e0490ef0f574ec5efbc96263fd60c2",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/undo/UndoLogParserProviderTest.java",
+      "sha256": "c0e45e152050ecb151c094ba1e15d3035a55dcefc963c66631ad1d44a7f88080",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/util/JdbcUtilsTest.java",
+      "sha256": "c1b13272627578daf8fc1bdfde4c909cdd89f16e063905a93e368f756bdf21be",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/util/OffsetTimeUtilsBehaviorTest.java",
+      "sha256": "d5f23435a1feab4f884e7dd4c28fb9b771a5f8ec5ea840b6276132b4de4b8730",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/util/XAUtilsTest.java",
+      "sha256": "2cb994a1326f4e560de54351ae4882a1be56aa1abff235089792a625543fe695",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/AbstractConnectionProxyXATest.java",
+      "sha256": "ebd287efb64ed0c9f76e77c62c52e4fc7b51a852220316d1853e9a564d497bb3",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/AbstractDataSourceProxyXATest.java",
+      "sha256": "5039c79f0d590e7bc929e91f8d88d73c4af3140f51c57985488a3e7cdbde23e9",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/ConnectionProxyXABehaviorTest.java",
+      "sha256": "6d167039224772f400e3244b54d233e1600d7dc6c343543d392221527dbc2b88",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/ConnectionProxyXATest.java",
+      "sha256": "3d3b4a53013f11410341ccb61dca5f50b928b6414380c252d4d5e94d73c5c17b",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/DataSourceProxyXANativeTest.java",
+      "sha256": "fb5c2aaaa12d5535d334bdb40b77b1dcf8ff233688b53d8f34ee13a365d97637",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/DataSourceProxyXATest.java",
+      "sha256": "772550137682d53cb1f36c2f55500a4aefa31109fdc7f3575f3f8d9c8a4a7ef7",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/ExecuteTemplateXATest.java",
+      "sha256": "4d37a99cba00b936b3c3327fc1666799ada31b47f21d2a1bebdb50fc40a12a91",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/PreparedStatementProxyXATest.java",
+      "sha256": "a8d60cad6bf64d0baf45f5e496056676271a3a93a0c7aae84ed7ee27220b25d0",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/ResourceManagerXABehaviorTest.java",
+      "sha256": "26323c307940d471c6aeee105aac52eb0ede968b0c931871f5ba64805acd4d74",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/ResourceManagerXATest.java",
+      "sha256": "4cad2e7b88835fa2bcea7c98864ce24edeac95b8a3953c8979097987a2d0ef6a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/StatementProxyXATest.java",
+      "sha256": "474c4559417b8d1b02e8806fb9e00ac04d17cd159af3139acd15e909c9375060",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/XABranchXidTest.java",
+      "sha256": "dbe1cf7d2649e2c1e9a7c32f2f40a47769c4b8500023e6b3251c8f67f6663d6c",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/datasource/xa/XAXidBuilderTest.java",
+      "sha256": "bf5dcd33ca752faa0a5aa419af62db3bc5f9d1d5af98514a06848f0f58eccc3e",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/DataSourceResourceBehaviorTest.java",
+      "sha256": "32e5047158ea18020adb702a3b26782865a7cc3535885e5a153b8de1b4a1fd7e",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/GlobalLockTemplateTest.java",
+      "sha256": "d9ef67680c35209f4f8b82e52f45b9bee720ca76a94a9f0f3e7c9c10d2393226",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/RMHandlerATBehaviorTest.java",
+      "sha256": "c08216230b7b498fe641aaa74a85e24e36fe661c090f9106ced8c7c07ba432dc",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "rm-datasource/src/test/java/org/apache/seata/rm/RMHandlerATTest.java",
+      "sha256": "6949586a786a6f73b7bcf2c5e5bc3efb36d2253eb3f6b232e7af662e5b3c7604",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/EscapeSymbolTest.java",
+      "sha256": "8e2b3429da740603a2d8ad911fea0560e105b88e9b847b1a4766f8de2947acb2",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "sha256": "1184fd961d61308e3f08378d985134eb4ee8ef11f3d6794ac5e5149516deccdd",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "sha256": "7af0e119b58465cb9f284c045e6d2a5d010b5afdf08cc6f6b84b409fe6578cde",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "sha256": "922d7870760c3a937687afa540d68660136161e9dff558267e5a09eee46f85d4",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "sha256": "656e2ee5283f63c9eafb04cc83a622f827b6f32fd6654fd081816f1a67ec4af6",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "sha256": "11a2df072b888927423468aa10b3e1e91a532c9fd9cb9df9e1c344b51556b85a",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java",
+      "sha256": "3a85dfb507021834f3bf3eadcdbc5516673cf09f876098e119a23c0203c05fc8",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NullTest.java",
+      "sha256": "340a501f19d310568b5398f2246b7a4a4a74805b360c065355d98c6ec8b41f80",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java",
+      "sha256": "d94fa32204fe895f5bf09e26905238d897ebe2e5c1065fb6953387ae455fca5f",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java",
+      "sha256": "48c64cef7d7edb62a63d8b07faa9b46a085fbd74e4438474af725102a8bc174f",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "sha256": "547ec4ff5ab4883b242858691ccaa26ee850d1f71ce3241768b4008534dbb99f",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "sha256": "7e8b9417ff164964aa0f456fcf38c7f0b5047061f0ed61070e7b7c3fc098abe2",
+      "state": "MISSING",
+      "concrete_cases_expanded": false,
+      "differential": "NOT_RUN"
+    }
+  ],
+  "source_test_assets": [
+    {
+      "source": "rm-datasource/src/test/resources/file.conf",
+      "target": "tests/fixtures/mysql/java_source_assets/rm-datasource/src/test/resources/file.conf",
+      "sha256": "3576420dd3dc562ececc6e2c52e561ad81184db2fdc15091f63699cfb5e2b030",
+      "byte_identical": true
+    },
+    {
+      "source": "rm-datasource/src/test/resources/META-INF/services/org.apache.seata.common.json.JsonSerializer",
+      "target": "tests/fixtures/mysql/java_source_assets/rm-datasource/src/test/resources/META-INF/services/org.apache.seata.common.json.JsonSerializer",
+      "sha256": "cc229e1a5f19efcadb74c6339b959fe46466d8e6cf99c16729bbf95afb76914c",
+      "byte_identical": true
+    },
+    {
+      "source": "rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.druid.SQLOperateRecognizerHolder",
+      "target": "tests/fixtures/mysql/java_source_assets/rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.druid.SQLOperateRecognizerHolder",
+      "sha256": "b7a8c0df41c27f4953b4991e9562442504783b4a995c7458f4b6dbee897c307e",
+      "byte_identical": true
+    },
+    {
+      "source": "rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.EscapeHandler",
+      "target": "tests/fixtures/mysql/java_source_assets/rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.EscapeHandler",
+      "sha256": "bcf4d6ba0ad34c2c2ac8831eabd28cd8cb3a845cd33531910a492f506d5cf6f0",
+      "byte_identical": true
+    },
+    {
+      "source": "rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.SQLRecognizerFactory",
+      "target": "tests/fixtures/mysql/java_source_assets/rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.SQLRecognizerFactory",
+      "sha256": "7dedb00d302bd62bd39dec69bec3330f5ec0898b8c23c347854030a25d7491c4",
+      "byte_identical": true
+    },
+    {
+      "source": "rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.util.DbTypeParser",
+      "target": "tests/fixtures/mysql/java_source_assets/rm-datasource/src/test/resources/META-INF/services/org.apache.seata.sqlparser.util.DbTypeParser",
+      "sha256": "d23cf12b0ced311b702877bbbff7e118d1779412db79ab9260cadbe0fe5986c6",
+      "byte_identical": true
+    },
+    {
+      "source": "rm-datasource/src/test/resources/registry.conf",
+      "target": "tests/fixtures/mysql/java_source_assets/rm-datasource/src/test/resources/registry.conf",
+      "sha256": "2a8919eff26d1b3847dcbf8539641e7eb473cf46b00f7e7fb4c1e7faa03400e3",
+      "byte_identical": true
+    }
+  ],
+  "source_case_parity_complete": false,
+  "Java_execution": false,
+  "full_API_implemented": false,
+  "Rust_extensions": [
+    "ColumnType JDBC value-domain subset",
+    "MySqlOptions finite pool/TLS configuration",
+    "DbError redacted SQLSTATE boundary",
+    "DecimalValue canonical exact text",
+    "FieldValue exhaustive value domain",
+    "ImageError fixed redacted validation"
+  ]
+}

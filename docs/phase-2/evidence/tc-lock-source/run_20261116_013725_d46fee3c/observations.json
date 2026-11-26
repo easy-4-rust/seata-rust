@@ -1,0 +1,196 @@
+[ {
+  "case" : "normal",
+  "delegated_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:1",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "empty",
+  "delegated_rows" : [ ],
+  "recording_backend_calls" : 0,
+  "key" : "t:",
+  "acquire_returned" : true,
+  "parsed_rows" : [ ]
+}, {
+  "case" : "blank",
+  "delegated_rows" : [ ],
+  "recording_backend_calls" : 0,
+  "key" : "t: ",
+  "acquire_returned" : true,
+  "parsed_rows" : [ ]
+}, {
+  "case" : "unicode-blank",
+  "delegated_rows" : [ ],
+  "recording_backend_calls" : 0,
+  "key" : "t: ",
+  "acquire_returned" : true,
+  "parsed_rows" : [ ]
+}, {
+  "case" : "nonbreaking-space",
+  "delegated_rows" : [ {
+    "pk" : " ",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t: ",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : " ",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "broken-middle",
+  "delegated_rows" : [ {
+    "pk" : "x",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:x;broken;later:2",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "x",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "broken-first",
+  "delegated_rows" : [ ],
+  "recording_backend_calls" : 0,
+  "key" : "broken;t:1",
+  "acquire_returned" : true,
+  "parsed_rows" : [ ]
+}, {
+  "case" : "empty-first",
+  "delegated_rows" : [ ],
+  "recording_backend_calls" : 0,
+  "key" : "t:;later:2",
+  "acquire_returned" : true,
+  "parsed_rows" : [ ]
+}, {
+  "case" : "injected-valid-group",
+  "delegated_rows" : [ {
+    "pk" : "x",
+    "table" : "t"
+  }, {
+    "pk" : "y",
+    "table" : "fake"
+  }, {
+    "pk" : "2",
+    "table" : "later"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:x;fake:y;later:2",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "x",
+    "table" : "t"
+  }, {
+    "pk" : "y",
+    "table" : "fake"
+  }, {
+    "pk" : "2",
+    "table" : "later"
+  } ]
+}, {
+  "case" : "binary-a",
+  "delegated_rows" : [ {
+    "pk" : "[0",
+    "table" : "t"
+  }, {
+    "pk" : " -1]",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:[0, -1]",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "[0",
+    "table" : "t"
+  }, {
+    "pk" : " -1]",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "binary-b",
+  "delegated_rows" : [ {
+    "pk" : "[0",
+    "table" : "t"
+  }, {
+    "pk" : " -2]",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:[0, -2]",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "[0",
+    "table" : "t"
+  }, {
+    "pk" : " -2]",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "partial-empty-row",
+  "delegated_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:,1",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "partial-blank-row",
+  "delegated_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:1, ",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "trailing-delimiters",
+  "delegated_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:1,,",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "1",
+    "table" : "t"
+  } ]
+}, {
+  "case" : "normal-multi-table",
+  "delegated_rows" : [ {
+    "pk" : "x",
+    "table" : "t"
+  }, {
+    "pk" : "2",
+    "table" : "later"
+  } ],
+  "recording_backend_calls" : 1,
+  "key" : "t:x;later:2",
+  "acquire_returned" : true,
+  "parsed_rows" : [ {
+    "pk" : "x",
+    "table" : "t"
+  }, {
+    "pk" : "2",
+    "table" : "later"
+  } ]
+} ]

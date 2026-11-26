@@ -1,0 +1,20 @@
+
+running 1 test
+test lost_registration_response_is_handed_to_validated_callback_without_forged_success_receipt ... 
+thread 'lost_registration_response_is_handed_to_validated_callback_without_forged_success_receipt' (45084) panicked at crates\seata_db_mysql\tests\live_callback_ownership.rs:38:128:
+assertion `left == right` failed: validated callback must recover lost registration without a fabricated success receipt
+  left: PhaseTwoRollbackFailedRetryable
+ right: PhaseTwoRollbacked
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'lost_registration_response_is_handed_to_validated_callback_without_forged_success_receipt' (45084) panicked at crates\seata_db_mysql\tests\live_callback_ownership.rs:48:205:
+called `Result::unwrap()` on an `Err` value: JoinError::Panic(Id(6), "assertion `left == right` failed: validated callback must recover lost registration without a fabricated success receipt\n  left: PhaseTwoRollbackFailedRetryable\n right: PhaseTwoRollbacked", ...)
+FAILED
+
+failures:
+
+failures:
+    lost_registration_response_is_handed_to_validated_callback_without_forged_success_receipt
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.74s
+

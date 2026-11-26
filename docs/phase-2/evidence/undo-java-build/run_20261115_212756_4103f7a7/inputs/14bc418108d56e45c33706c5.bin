@@ -1,0 +1,112 @@
+"""Compile exact selected Java oracle sources; snapshot every explicit library/fallback class input."""
+import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import uuid
+
+ROOT = Path(__file__).resolve().parents[2]
+JAVA = ROOT.parent / 'seata-java-phase09-oracle'
+DEPS = Path('D:/codex-builds/seata-undo-java-dependencies')
+JDK = Path('D:/Java/jdk-17.0.12/bin')
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def build():
+    stamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:8]
+    runtime = Path('D:/codex-builds') / ('seata_undo_java_' + stamp)
+    out = ROOT / 'docs/phase-2/evidence/undo-java-build' / ('run_' + stamp)
+    out.mkdir(parents=True)
+    (runtime / 'classes').mkdir(parents=True)
+    (runtime / 'lib').mkdir()
+    env = os.environ | dict(TEMP='D:/Temp', TMP='D:/Temp', PYTHONDONTWRITEBYTECODE='1', PYTHONUTF8='1')
+    def put(name, data):
+        path = out / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data.encode('utf-8') if isinstance(data, str) else data)
+    def save(name, data):
+        put(name, json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+    pin = subprocess.check_output(['git','-C',str(JAVA),'rev-parse','HEAD'], env=env).decode().strip()
+    if pin != 'cba73e180fd8896a99df6415b859d275122feaa7':
+        raise ValueError('Original Java pin differs')
+    ds = JAVA / 'rm-datasource/src/main/java/org/apache/seata/rm/datasource'
+    sql = JAVA / 'sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser'
+    selected = [ds / p for p in [
+        'sql/struct/Field.java','sql/struct/KeyType.java','sql/struct/Row.java','sql/struct/TableRecords.java',
+        'sql/struct/cache/AbstractTableMetaCache.java','sql/struct/cache/MysqlTableMetaCache.java',
+        'undo/BranchUndoLog.java','undo/SQLUndoLog.java','undo/UndoLogParser.java',
+        'undo/parser/JacksonUndoLogParser.java','undo/parser/spi/JacksonSerializer.java']]
+    selected += [sql / p for p in ['SQLType.java','struct/ColumnMeta.java','struct/TableMeta.java',
+        'struct/IndexMeta.java','struct/IndexType.java','struct/TableMetaCache.java','util/ColumnUtils.java']]
+    selected.append(Path(__file__).with_name('UndoFormatOracle.java'))
+    paths = set(selected) | {Path(__file__),Path(__file__).with_name('prepare.py'),DEPS/'manifest.json',
+        JAVA/'dependencies/pom.xml',JAVA/'pom.xml',JAVA/'rm-datasource/pom.xml',
+        ROOT/'docs/phase-2/mysql-undo-format-contract.md'}
+    libraries = []
+    deps = json.loads((DEPS/'manifest.json').read_text('utf-8'))
+    for row in deps:
+        path = Path(row['path'])
+        if sha(path) != row['sha256']:
+            raise ValueError('Prepared dependency drift')
+        paths.add(path)
+        if row['artifact'] != 'mysql-connector-java':
+            target = runtime/'lib'/path.name
+            shutil.copyfile(path,target)
+            libraries.append(target)
+    for name in ['seata-common-2.8.0-SNAPSHOT.jar','seata-core-2.8.0-SNAPSHOT.jar','slf4j-api-2.0.17.jar',
+        'logback-classic-1.5.32.jar','logback-core-1.5.32.jar','commons-lang3-3.19.0.jar','guava-32.1.3-jre.jar']:
+        path = JAVA/'server/target/lib'/name
+        if not path.is_file():
+            # Do not silently select another installed library version.
+            raise ValueError('Explicit oracle library missing: '+name)
+        target = runtime/'lib'/name
+        shutil.copyfile(path,target);paths.add(path);libraries.append(target)
+    class_roots = [JAVA/'rm-datasource/target/classes', JAVA/'sqlparser/seata-sqlparser-core/target/classes']
+    fallback = []
+    for i, directory in enumerate(class_roots):
+        target = runtime/('fallback-'+str(i))
+        shutil.copytree(directory,target)
+        fallback.append(target)
+        paths.update(p for p in directory.rglob('*') if p.is_file())
+    frozen=[]
+    for path in sorted(paths):
+        name='inputs/'+hashlib.sha256(str(path).encode()).hexdigest()[:24]+'.bin'
+        put(name,path.read_bytes());frozen.append(dict(path=str(path),sha256=sha(path),snapshot=name))
+    save('source-inputs.json',frozen)
+    cp=os.pathsep.join(str(p) for p in libraries+fallback)
+    args=[JDK/'javac.exe','-encoding','UTF-8','-cp',cp,'-d',runtime/'classes']+selected
+    value=subprocess.run([str(x) for x in args],cwd=ROOT,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
+        creationflags=subprocess.CREATE_NO_WINDOW,timeout=120)
+    put('compile.log',value.stdout)
+    if value.returncode:
+        raise ValueError('Original Java oracle compile failed: '+str(out))
+    compiled=[]
+    for path in sorted((runtime/'classes').rglob('*.class')):
+        name='classes/'+path.relative_to(runtime/'classes').as_posix()
+        put(name,path.read_bytes());compiled.append(dict(path=str(path),snapshot=name,sha256=sha(path)))
+    console='<configuration><appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender"><encoder><pattern>%msg%n</pattern></encoder></appender><root level="WARN"><appender-ref ref="CONSOLE"/></root></configuration>'
+    (runtime/'console.xml').write_text(console,encoding='utf-8');put('console.xml',console)
+    classpath=os.pathsep.join([str(runtime/'classes')]+[str(p) for p in libraries+fallback])
+    save('build.json',dict(java_pin=pin,runtime=str(runtime),classpath=classpath,
+        explicit_sources=[str(p) for p in selected],compiled_classes=compiled,
+        libraries=[dict(path=str(p),sha256=sha(p)) for p in libraries],
+        fallback_class_roots=[str(p) for p in fallback],
+        limitation='Selected original sources compiled exactly; complete fallback directory bytes frozen, not claimed recompiled Java module',
+        source_case_parity_complete=False,WP05_complete=False))
+    for row in frozen:
+        if sha(Path(row['path']))!=row['sha256']:
+            raise ValueError('Original compile input drift')
+    members=[dict(path=p.relative_to(out).as_posix(),sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()]
+    save('catalog.json',dict(members=members))
+    print('UNDO_JAVA_BUILD '+str(out),flush=True)
+    return out
+
+
+if __name__=='__main__':
+    build()

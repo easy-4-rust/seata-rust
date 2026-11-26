@@ -1,0 +1,32 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_jdbc_source_mutant_0hjqm3py\crates\seata_sqlparser)
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_jdbc_source_mutant_0hjqm3py\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.55s
+     Running tests\jdbc_utils_source.rs (D:/cargo-target/seata-rust-production\debug\deps\jdbc_utils_source-ce9fdd575009d43f.exe)
+
+running 8 tests
+test test_build_resource_id_with_empty_query_string ... ok
+test test_build_resource_id_with_multiple_question_marks ... ok
+test test_build_resource_id_with_query_string ... ok
+test test_build_resource_id_without_query_string ... ok
+test test_get_db_type_with_h2_url ... FAILED
+test test_get_db_type_with_mysql_url ... ok
+test test_get_db_type_with_oracle_url ... ok
+test test_get_db_type_with_postgresql_url ... ok
+
+failures:
+
+---- test_get_db_type_with_h2_url stdout ----
+
+thread 'test_get_db_type_with_h2_url' (40348) panicked at crates\seata_db_mysql\tests\jdbc_utils_source.rs:22:5:
+assertion `left == right` failed: testGetDbTypeWithH2Url
+  left: JavaString { units: [104, 51], utf8: Some("h3") }
+ right: JavaString { units: [104, 50], utf8: Some("h2") }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    test_get_db_type_with_h2_url
+
+test result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_utils_source`

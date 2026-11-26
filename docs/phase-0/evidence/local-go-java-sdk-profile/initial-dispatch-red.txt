@@ -1,0 +1,42 @@
+go: downloading github.com/arana-db/parser v0.2.17
+go: downloading github.com/dsnet/compress v0.0.1
+go: downloading github.com/klauspost/compress v1.15.11
+go: downloading github.com/pierrec/lz4/v4 v4.1.17
+go: downloading github.com/pingcap/errors v0.11.5-0.20210425183316-da1aaba5fb63
+go: downloading github.com/pingcap/log v0.0.0-20210906054005-afc726e70354
+go: downloading gopkg.in/natefinch/lumberjack.v2 v2.0.0
+=== RUN   TestJavaV1SDKDeliversWholeMergedReplyToOuterFuture
+    java_v1_sdk_dispatch_test.go:39: actual original processor dropped valid whole-batch reply
+--- FAIL: TestJavaV1SDKDeliversWholeMergedReplyToOuterFuture (0.00s)
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/shortResults
+    java_v1_sdk_dispatch_test.go:75: actual processor panicked: runtime error: index out of range [1] with length 1
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+    java_v1_sdk_dispatch_test.go:88: inconsistent merge correlation leaked
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/missingIds
+    java_v1_sdk_dispatch_test.go:75: actual processor panicked: runtime error: index out of range [1] with length 1
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+    java_v1_sdk_dispatch_test.go:88: inconsistent merge correlation leaked
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/extraResults
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/duplicateIds
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/wrongResultType
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/nilResult
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+    java_v1_sdk_dispatch_test.go:83: inconsistent batch partially completed a child
+--- FAIL: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion (0.00s)
+    --- FAIL: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/shortResults (0.00s)
+    --- FAIL: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/missingIds (0.00s)
+    --- FAIL: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/extraResults (0.00s)
+    --- FAIL: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/duplicateIds (0.00s)
+    --- FAIL: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/wrongResultType (0.00s)
+    --- FAIL: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/nilResult (0.00s)
+=== RUN   TestJavaV1SDKLegacyMergeRetainsIdsAndDropsDuplicates
+--- PASS: TestJavaV1SDKLegacyMergeRetainsIdsAndDropsDuplicates (0.00s)
+FAIL
+FAIL	seata.apache.org/seata-go/v2/pkg/remoting/getty	1.521s
+FAIL

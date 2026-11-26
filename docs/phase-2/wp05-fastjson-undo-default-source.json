@@ -1,0 +1,150 @@
+{
+  "status": "FASTJSON_DEFAULT_CONTENT_INHERITED_ORIGINAL_CASE_MATCH",
+  "predecessor": "docs/phase-2/wp05-fastjson-undo-control-transaction.json",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "original_source_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_junit_gyqjjad8",
+  "original_source_catalog_sha256": "8ebe8c39734c39b27453684a6e5684e9497d19d17050627ab539ec58c8831cb3",
+  "native_wire_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_native_grv3eqft",
+  "native_wire_catalog_sha256": "4c35ff6908b8043f795f10d1e8898c74c26d40e6258648b7f0f640c909b1ff35",
+  "native_wire_observations_regression_match": 45,
+  "source_case_binding": {
+    "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testDecodeDefaultContent()]",
+    "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+    "java": [
+      "{}",
+      "true",
+      "true",
+      "0",
+      "true"
+    ],
+    "rust": {
+      "1.99": [
+        "{}",
+        "true",
+        "true",
+        "0",
+        "true"
+      ],
+      "1.85": [
+        "{}",
+        "true",
+        "true",
+        "0",
+        "true"
+      ]
+    },
+    "status": "MATCH"
+  },
+  "original_java_cases_reexecuted": 7,
+  "original_fastjson_cases_rust_match": 1,
+  "original_fastjson_cases_rust_remaining": 6,
+  "inherited_method_concrete_variants": 6,
+  "inherited_method_fully_migrated": false,
+  "global_methods_remaining": 1030,
+  "global_rust_methods_match": 105,
+  "global_cases_remaining": 1217,
+  "global_rust_source_MATCH": 110,
+  "rust": {
+    "1.99": {
+      "ordinary": 540,
+      "ignored": 160,
+      "harnesses": 114,
+      "doc": 4,
+      "targeted": 6,
+      "java_original_assertions_match": 4
+    },
+    "1.85": {
+      "ordinary": 540,
+      "ignored": 160,
+      "harnesses": 114,
+      "doc": 4,
+      "targeted": 6,
+      "java_original_assertions_match": 4
+    }
+  },
+  "rust_evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261119_default_source",
+  "runtime_controls": [
+    {
+      "label": "null-fastjson-default",
+      "target": "fastjson_source_test_decode_default_content",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_0hjd0nvf",
+      "mutated_file": "crates/seata_at/src/undo/parser/fastjson_undo_log_parser.rs",
+      "original_sha256": "9c611256328d27f499184c24ca55344ec6110ff96f135bed0ea454634edd874d",
+      "mutant_sha256": "833acf06bb773e9d80d59b8d9d051036d0e2c7aea3d7f23dca7a807c776ea7b1",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "fastjson_undo_native",
+        "--",
+        "fastjson_source_test_decode_default_content",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "empty-default-log-list",
+      "target": "fastjson_source_test_decode_default_content",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_0hjd0nvf",
+      "mutated_file": "crates/seata_at/src/undo/parser/fastjson_undo_branch.rs",
+      "original_sha256": "2bfa92fc3340d658d22b1eddbb5b0f82c99d2200d6c247a0216614e7a2c946b9",
+      "mutant_sha256": "d64d6a1f7e749a710246cf51cda65a0fb498a3b328fe72b8db87c95b1b395c6d",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "fastjson_undo_native",
+        "--",
+        "fastjson_source_test_decode_default_content",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    }
+  ],
+  "evidence_sha256": {
+    "1.85-clippy.log": "85dc0f466af5083fd8d6cd821d037a4681bdbf0b4dee2e0c8d50b01ed23f1b0c",
+    "1.85-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-doc.log": "e0a7046ef4876f4d2d2114b2b228b01fbbcb701e3429bdf1feb441817955635d",
+    "1.85-targeted.log": "3cca2a69139356433074a54c9c76f09396262cb21adee4e7db6bff8d6979f45b",
+    "1.85-tests.log": "e0e2bfde4b47ae0d00c9bfec1e99d5510b375710264976670f97396638a88103",
+    "1.99-clippy.log": "4cc56a4bbf2d518a0c450b0ff39e6ddee822e33694c8223037e76343dcc315f9",
+    "1.99-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-doc.log": "a5ec20f556203e85a9b3db49ea690e4682ac869d5d3f68c276e8a5850a186367",
+    "1.99-targeted.log": "52afb2f5dc5de5ca7e342e83f7428a177e72a5b9eb7d6171af0f6a110fdd21f4",
+    "1.99-tests.log": "047fe75ce2aec1ee98d818075047708e243e15167bc5a33938af49c11a08968d",
+    "api-red.log": "a37038c62b962b9ce6938a3c00242cc0bad9daec7be02f1e811fb78380689dac",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-empty-default-log-list.stderr": "8f2a84de928a6bfacc658d26d32a0d6620428c2f377c1b704964c3947bfc1cf9",
+    "mutant-empty-default-log-list.stdout": "8cc84030240213389963726839d80c9bab2e3ac83ac223e52a74b91215c302c6",
+    "mutant-null-fastjson-default.stderr": "bcbe52fa6bf26a6bc36ece795be7a3eef0bb06414117b0bc674307af40e81d72",
+    "mutant-null-fastjson-default.stdout": "8cc84030240213389963726839d80c9bab2e3ac83ac223e52a74b91215c302c6",
+    "runtime-mutation-controls.json": "602216d53ea7470f82f8352bc490d34a7a7c5a7c054fb052dec18600041182d0"
+  },
+  "source_inputs_sha256": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_at/src/lib.rs": "2ae08c1c81cfb80e5eaffb633a92a009284a28a116ee1b40efd15bd5ea749e96",
+    "crates/seata_at/src/undo/mod.rs": "324803983121dd7ee330235eb817fb885152bb0b12b6553eba4d375c127c453c",
+    "crates/seata_at/src/undo/parser/mod.rs": "b78d6340d558df8a220a2dffe9063a8c0ffdca29128645612774ca585b1538d5",
+    "crates/seata_at/src/undo/parser/fastjson_undo_branch.rs": "2bfa92fc3340d658d22b1eddbb5b0f82c99d2200d6c247a0216614e7a2c946b9",
+    "crates/seata_at/src/undo/parser/fastjson_wire.rs": "b9b1201ad1fa2c05f36301c0acf0d645fe789ed092614f8ccf4f5eb628a45f47",
+    "crates/seata_at/src/undo/parser/fastjson_undo_log_parser.rs": "9c611256328d27f499184c24ca55344ec6110ff96f135bed0ea454634edd874d",
+    "crates/seata_at/tests/fastjson_undo_native.rs": "fb2eb7436095abb877e6219751811f0f2d2cf44956b9c55bc5895c497781b954",
+    "tools/formal-source-junit/fastjson_undo_source.py": "774f1d5dd1115ae9856a148b111eaac0a4192dbdd3a8b45e7a57aa911d2da4e4",
+    "tools/formal-source-junit/fastjson_undo_native.py": "51d5c0466f7d9b86d771c98100b34442837f823b7db3071dd158c939ad7a2422"
+  },
+  "live_fastjson_rollback_verified": false,
+  "production_fastjson_undo_load_enabled": false,
+  "phase_05_complete": false,
+  "phase_06_complete": false,
+  "v1_complete": false
+}

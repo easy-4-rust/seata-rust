@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\backend_recovery\run.py", line 252, in <module>
+    parser=argparse.ArgumentParser();parser.add_argument('--java-source',default='E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle');parser.add_argument('--java-build',default='D:/codex-builds/seata-java-exact-overlay-20261112');parser.add_argument('--runtime-base',default='D:/codex-builds/seata backend retry timeout');run(parser.parse_args())
+                                                                                                                                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\backend_recovery\run.py", line 214, in run
+    query(observer,case_dir,f'observer-{observer_index}-before',1,11,0)
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\backend_recovery\run.py", line 104, in query
+    if row.get('xid')!=xid or row.get('status')!=status or len(row.get('branchSessionVOs') or [])!=branches: raise RuntimeError('Console original status/branch fields differ')
+                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Console original status/branch fields differ

@@ -1,0 +1,20 @@
+test_foreign_response_id_rejected (test_native_observer.NativeObserverGuards.test_foreign_response_id_rejected) ... ok
+test_only_registration_status_and_lock_queries (test_native_observer.NativeObserverGuards.test_only_registration_status_and_lock_queries) ... ok
+test_status_request_contains_java_extra_data_field (test_native_observer.NativeObserverGuards.test_status_request_contains_java_extra_data_field) ... FAIL
+test_truncated_response_rejected (test_native_observer.NativeObserverGuards.test_truncated_response_rejected) ... ok
+test_wrong_lock_rejected (test_native_observer.NativeObserverGuards.test_wrong_lock_rejected) ... ok
+test_wrong_response_envelope_rejected (test_native_observer.NativeObserverGuards.test_wrong_response_envelope_rejected) ... ok
+test_wrong_status_rejected (test_native_observer.NativeObserverGuards.test_wrong_status_rejected) ... ok
+
+======================================================================
+FAIL: test_status_request_contains_java_extra_data_field (test_native_observer.NativeObserverGuards.test_status_request_contains_java_extra_data_field)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-retry-timeout-candidate\test_native_observer.py", line 25, in test_status_request_contains_java_extra_data_field
+    self.assertEqual(second[16:size],bytes.fromhex('000f0001780000'))
+AssertionError: b'\x00\x0f\x00\x01x' != b'\x00\x0f\x00\x01x\x00\x00'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.001s
+
+FAILED (failures=1)

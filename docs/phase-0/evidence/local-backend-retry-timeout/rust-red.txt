@@ -1,0 +1,31 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.04s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 2 tests
+test backend_timeout_probe::tests::finished_cannot_masquerade_as_a_retained_retry_timeout ... FAILED
+test backend_timeout_probe::tests::timeout_queries_preserve_status_and_never_mutate_the_original_xid ... FAILED
+
+failures:
+
+---- backend_timeout_probe::tests::finished_cannot_masquerade_as_a_retained_retry_timeout stdout ----
+
+thread 'backend_timeout_probe::tests::finished_cannot_masquerade_as_a_retained_retry_timeout' (42796) panicked at src\backend_timeout_probe.rs:53:9:
+assertion `left == right` failed
+  left: []
+ right: [(15, "original")]
+
+---- backend_timeout_probe::tests::timeout_queries_preserve_status_and_never_mutate_the_original_xid stdout ----
+
+thread 'backend_timeout_probe::tests::timeout_queries_preserve_status_and_never_mutate_the_original_xid' (61748) panicked at src\backend_timeout_probe.rs:43:89:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "Backend retry observation unavailable" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    backend_timeout_probe::tests::finished_cannot_masquerade_as_a_retained_retry_timeout
+    backend_timeout_probe::tests::timeout_queries_preserve_status_and_never_mutate_the_original_xid
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 96 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

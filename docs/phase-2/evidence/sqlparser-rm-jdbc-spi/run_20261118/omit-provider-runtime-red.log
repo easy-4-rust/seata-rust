@@ -1,0 +1,45 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_jdbc_spi_mutant_0ni_kx0h\crates\seata_sqlparser)
+warning: unused imports: `DbTypeParserRegistration` and `SqlParserType`
+ --> crates\seata_sqlparser\src\druid\druid_delegating_db_type_parser.rs:2:19
+  |
+2 |     DbTypeParser, DbTypeParserRegistration, DruidDbTypeParserImpl, JavaString, MetadataError,
+  |                   ^^^^^^^^^^^^^^^^^^^^^^^^
+3 |     SqlParserType,
+  |     ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: static `IMPLEMENTATION` is never used
+  --> crates\seata_sqlparser\src\druid\druid_delegating_db_type_parser.rs:12:8
+   |
+12 | static IMPLEMENTATION: DruidDbTypeParserImpl = DruidDbTypeParserImpl;
+   |        ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: static `PROVIDER` is never used
+  --> crates\seata_sqlparser\src\druid\druid_delegating_db_type_parser.rs:13:8
+   |
+13 | static PROVIDER: DruidDelegatingDbTypeParser = DruidDelegatingDbTypeParser {
+   |        ^^^^^^^^
+
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_jdbc_spi_mutant_0ni_kx0h\crates\seata_db_mysql)
+warning: `seata-sqlparser` (lib) generated 3 warnings (run `cargo fix --lib -p seata-sqlparser` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.79s
+     Running tests\jdbc_utils_source.rs (D:/cargo-target/seata-rust-production\debug\deps\jdbc_utils_source-ce9fdd575009d43f.exe)
+
+running 1 test
+test test_db_type_parser_loading ... FAILED
+
+failures:
+
+---- test_db_type_parser_loading stdout ----
+Error: ObjectException(JavaObjectError { class_name: "org.apache.seata.common.loader.EnhancedServiceNotFoundException", message: Some(JavaString { units: [110, 111, 116, 32, 102, 111, 117, 110, 100, 32, 115, 101, 114, 118, 105, 99, 101, 32, 112, 114, 111, 118, 105, 100, 101, 114, 32, 102, 111, 114, 32, 58, 32, 111, 114, 103, 46, 97, 112, 97, 99, 104, 101, 46, 115, 101, 97, 116, 97, 46, 115, 113, 108, 112, 97, 114, 115, 101, 114, 46, 117, 116, 105, 108, 46, 68, 98, 84, 121, 112, 101, 80, 97, 114, 115, 101, 114], utf8: Some("not found service provider for : org.apache.seata.sqlparser.util.DbTypeParser") }), .. })
+
+
+failures:
+    test_db_type_parser_loading
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_utils_source`

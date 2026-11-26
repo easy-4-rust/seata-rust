@@ -1,0 +1,31 @@
+
+running 5 tests
+test mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads ... ok
+test mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order ... ok
+test mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads ... ok
+test mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan ... FAILED
+
+failures:
+
+---- mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body stdout ----
+
+thread 'mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body' (63476) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:226:5:
+assertion `left == right` failed
+  left: Some([22, 83, 69, 76, 69, 67, 84, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 99, 111, 110, 116, 101, 120, 116, 61, 63, 32, 76, 73, 77, 73, 84, 32, 54, 53, 32, 70, 79, 82, 32, 85, 80, 68, 65, 84, 69])
+ right: Some([3, 82, 79, 76, 76, 66, 65, 67, 75])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body' (63476) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:130:26:
+unexpected read result: Err(Driver { operation: "Undo child membership", sql_state: None, code: None })
+
+---- mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan stdout ----
+Error: Unsupported { feature: "Undo subId trailing separator" }
+
+
+failures:
+    mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan
+    mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body
+
+test result: FAILED. 3 passed; 2 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.01s
+

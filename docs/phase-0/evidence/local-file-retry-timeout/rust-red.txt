@@ -1,0 +1,32 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.85s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 3 tests
+test file_timeout_probe::tests::invalid_expected_status_does_not_send_anything ... ok
+test file_timeout_probe::tests::a_retained_timeout_is_not_misreported_as_finished_or_retried ... FAILED
+test file_timeout_probe::tests::observes_original_status_and_lock_using_a_separate_cleaned_up_contender ... FAILED
+
+failures:
+
+---- file_timeout_probe::tests::a_retained_timeout_is_not_misreported_as_finished_or_retried stdout ----
+
+thread 'file_timeout_probe::tests::a_retained_timeout_is_not_misreported_as_finished_or_retried' (77376) panicked at src\file_timeout_probe.rs:81:9:
+assertion `left == right` failed
+  left: []
+ right: [15]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- file_timeout_probe::tests::observes_original_status_and_lock_using_a_separate_cleaned_up_contender stdout ----
+
+thread 'file_timeout_probe::tests::observes_original_status_and_lock_using_a_separate_cleaned_up_contender' (77428) panicked at src\file_timeout_probe.rs:64:72:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "FILE timeout query probe unavailable" }
+
+
+failures:
+    file_timeout_probe::tests::a_retained_timeout_is_not_misreported_as_finished_or_retried
+    file_timeout_probe::tests::observes_original_status_and_lock_using_a_separate_cleaned_up_contender
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 93 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

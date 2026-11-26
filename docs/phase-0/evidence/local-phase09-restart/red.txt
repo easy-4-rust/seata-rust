@@ -1,0 +1,38 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.83s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 5 tests
+test restart_probe::tests::failed_or_malformed_lock_query_is_not_lockable_false ... ok
+test restart_probe::tests::lock_query_boolean_uses_java_short_and_preserves_false ... FAILED
+test restart_record::tests::decodes_original_identity_with_or_without_a_branch ... FAILED
+test restart_record::tests::malformed_record_is_not_usable_as_a_transaction ... ok
+test restart_record::tests::identity_is_synced_and_never_overwrites_existing_record ... FAILED
+
+failures:
+
+---- restart_probe::tests::lock_query_boolean_uses_java_short_and_preserves_false stdout ----
+
+thread 'restart_probe::tests::lock_query_boolean_uses_java_short_and_preserves_false' (62792) panicked at src\restart_probe.rs:11:44:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "lock query decoder missing" }
+
+---- restart_record::tests::decodes_original_identity_with_or_without_a_branch stdout ----
+
+thread 'restart_record::tests::decodes_original_identity_with_or_without_a_branch' (62480) panicked at src\restart_record.rs:28:106:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "restart record decoder missing" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- restart_record::tests::identity_is_synced_and_never_overwrites_existing_record stdout ----
+
+thread 'restart_record::tests::identity_is_synced_and_never_overwrites_existing_record' (56292) panicked at src\restart_record.rs:43:28:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "restart record writer missing" }
+
+
+failures:
+    restart_probe::tests::lock_query_boolean_uses_java_short_and_preserves_false
+    restart_record::tests::decodes_original_identity_with_or_without_a_branch
+    restart_record::tests::identity_is_synced_and_never_overwrites_existing_record
+
+test result: FAILED. 2 passed; 3 failed; 0 ignored; 0 measured; 29 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

@@ -1,0 +1,22 @@
+
+running 8 tests
+test absolute_deadline_during_actual_unique_key_wait_discards_owned_transaction ... ok
+test cancelling_actual_unique_key_wait_discards_owned_transaction ... ok
+test empty_flush_writes_nothing_and_successful_flush_seals_all_mutations ... ok
+test existing_normal_and_global_finished_rows_are_not_overwritten ... ok
+test inbound_foreign_key_on_undo_table_rejects_flush_and_rolls_back_business ... ok
+test missing_unsafe_or_incomplete_undo_table_never_commits_business ... 
+thread 'missing_unsafe_or_incomplete_undo_table_never_commits_business' (86188) panicked at crates\seata_db_mysql\tests\live_undo_store.rs:229:52:
+called `Result::unwrap()` on an `Err` value: Database(MySqlDatabaseError { code: Some("HY000"), number: 1295, message: "This command is not supported in the prepared statement protocol yet" })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test original_undo_row_and_business_share_one_uncommitted_transaction_then_rollback ... ok
+test packet_splits_original_bytes_and_root_context_reassembles_exactly ... ok
+
+failures:
+
+failures:
+    missing_unsafe_or_incomplete_undo_table_never_commits_business
+
+test result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.28s
+

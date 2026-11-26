@@ -1,0 +1,102 @@
+{
+  "status": "MYSQL_BINARY_COLLATION_TEXT_IMAGES_AND_REAL_UNDO_ROLLBACK_VERIFIED",
+  "spec": "docs/phase-2/mysql-execution-images-contract.md",
+  "predecessor": "docs/phase-2/wp05-real-java-tc-compensation-retry.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text",
+  "mysql": {
+    "version": "8.4.13",
+    "engine": "InnoDB",
+    "isolation": "REPEATABLE-READ",
+    "image_index": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+    "image_config": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+    "execution_fixture": "Pinned foundation schema plus original Undo DDL, with the isolated general log cleared before each execution suite",
+    "collations": [
+      "utf8mb4_bin",
+      "utf8mb4_0900_bin",
+      "ascii_bin",
+      "utf8mb3_bin"
+    ]
+  },
+  "jdbc": {
+    "driver": "mysql-connector-j 8.0.33",
+    "jar_sha256": "e2a3b2fc726a1ac64e998585db86b30fa8bf3f706195b78bb77c5f99bf877bd9",
+    "scope": "Independent JDBC getObject types and restored byte values from the same MySQL fixture"
+  },
+  "observed": [
+    "Before the fix, a real MySQL prepared UPDATE failed at text image decoding",
+    "UPDATE images preserve UTF-8 text, a decomposed character, supplementary characters, trailing space, and NULL",
+    "INSERT temporary key staging returns the original text primary key; case-distinct lock keys use the original values",
+    "Empty text, NULL and VARBINARY containing FF retain distinct types and values",
+    "Production Undo compensation removes the INSERT and reverses the UPDATE, restoring the original bytes, consuming the Undo row"
+  ],
+  "fixture_scope": "Original local transaction rolled back; final business rows and Normal Undo seeded together in an owned administrative transaction to exercise the production compensation entry point",
+  "rust": {
+    "1.99": {
+      "live_undo_rollback": 14,
+      "live_undo_store": 10,
+      "live_row_images": 10,
+      "live_execution": 17,
+      "ordinary": 629.0,
+      "ignored": 176.0,
+      "harnesses": 121,
+      "doc": 4.0,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "live_undo_rollback": 14,
+      "live_undo_store": 10,
+      "live_row_images": 10,
+      "live_execution": 17,
+      "ordinary": 629.0,
+      "ignored": 176.0,
+      "harnesses": 121,
+      "doc": 4.0,
+      "strict_clippy": true
+    }
+  },
+  "original_java_matches": {
+    "cases": 152,
+    "complete_methods": 131
+  },
+  "open": [
+    "Complete TC lock coverage",
+    "Public phase-one COMMIT",
+    "Shared locking deferred",
+    "Complete WP05 and WP06 acceptance"
+  ],
+  "review": "Independent source review found no blocking issue in text decoding; live regression additionally covers utf8mb3_bin",
+  "cleanup": "Owned container, Windows loopback relay and isolated Docker daemon stopped; D-backed image and data retained",
+  "sha256": {
+    "crates/seata_db_mysql/src/mysql_image_reader.rs": "3405cdda94fb3c268dcd7949464487da23d0ddeddf6a5ea913ba53ea91a568f1",
+    "crates/seata_db_mysql/tests/live_undo_rollback.rs": "4665858ca2ef8c93749e0578044e056d1dd7ec59d1acd5b6ba257c776c14879a",
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "tools/formal-mysql-foundation/schema.sql": "e43a8f28054d2ecb02e6901a5f36e86ccb951562e5bf4e8afa70ffe0200c390a",
+    "docs/phase-2/mysql-execution-images-contract.md": "67875b836073b13553288896da5a46e3d2f9a5445a38d64ab478c2947deb732b",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/pre-fix-red.log": "44e0df4086b86ffbb853ea34262e09e11387a7b239b2d840aaa4e4fa3f27efc8",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/initial-green.log": "1307e1871cf6bf0bbb0bae20816c0d1bf00eee345557ec1183fa2ae81f62f438",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/runtime-start.log": "fb59ef23c940854eb5e9cbf652ded9c7c61ec4b01ed83c98b15737fda54ee903",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/server-and-fixtures.log": "d96f5bc0d577ad33cd5a53b36e78b12c348ea5955f8869fa88f3de12b7b49da6",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/rust-toolchains.log": "477e3a5fdcf4fea262200b8fc5dafa9b7bfb6352d303872423ddc04fabae3bb3",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/final-physical-types.log": "45948ffaa974d461ec63e683b496a0785f782b235a512a22a619d82724cf51fb",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/cleanup.log": "168d1d68f2bd7b1f911103c5a77889d0a329ed4248e79cea34f1e93fc9558a25",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/BinaryCollationOracle.java": "e4e034ac7286bd9b5a44526d7e6ed93d0a81e91cdc0f32f67fc2bfdc97e9780c",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/jdbc-oracle.log": "107cf252f781bc949cffbed9084255bb2b68b293eef8976cf5c2da3204c69ae2",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-live_undo_rollback.log": "11dd0f8d23838d73eb93b7bdb12a0d36727a8979e1fccae5e154b8f22e330a20",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-live_undo_store.log": "8ca06eb1b356df12b9982f28c54c2b9d8ececc86633ae0dd0e898ff8ecd586d1",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-live_row_images.log": "39b61298a194f1206fd66256bba14e63b49c70d0a3abd2c6ac21e4a4cbe377d0",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-live_execution.log": "e9eef710f27952095ae333aff72c46d59426d8725b5ee82bda6050f88ff6f2de",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-workspace.log": "b10a7dcf99def91695783b943443792dee6c8175b72dee14d5a354477be717da",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-doc.log": "c38d218ffa33476037baa050fe8f93caa12f4dbde7b0c86e33e490ffa0704693",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-clippy.log": "0ac64496506a290141a41405531a412588fd127cf8169b0bc36e81e635b63991",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.99-live_undo_rollback/restored-bin-text.json": "ede9d202c97fcdbd4437f6d37ba7df28e6298c9a8dc576dc5fb40ac5e3ea125c",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-live_undo_rollback.log": "09b5fe66e4ae3379fcfc1804bc65b74e0ccc0bb4c63cf1bb9efcd0c55893ebdd",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-live_undo_store.log": "b8f02006140214f343dd3f223e931831501f336ad33b84db4588e2bc1f718a2c",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-live_row_images.log": "230fe3969bbd6e04d3ba69a6852fd9783f099833d3d53b5fecbc231717b7ed37",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-live_execution.log": "e6dc7598894e69b5ff7dcc237776797b0d5e8b5f14f4d34e8e1d25d1303bb5e8",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-workspace.log": "0fc67a1cdd1f9722af7c65779d5210a7524d37f8c8c7ec99a5c15d5571a903e7",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-doc.log": "d13fd3433f423a3271c9718d065f93c5103b457049580380a84c2bf7eb1bc701",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-clippy.log": "7d7a774a1bcc6b1bab791e0a6f6fa228892679cb6d3f219a602f58334c590f08",
+    "docs/phase-2/evidence/fastjson-undo-native/run_20261120_bin_text/1.85-live_undo_rollback/restored-bin-text.json": "ede9d202c97fcdbd4437f6d37ba7df28e6298c9a8dc576dc5fb40ac5e3ea125c"
+  }
+}

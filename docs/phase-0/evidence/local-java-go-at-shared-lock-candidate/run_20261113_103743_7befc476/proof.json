@@ -1,0 +1,159 @@
+{
+  "conflict_rejection_certified": true,
+  "go_end_action": "commit",
+  "java_end_action": "rollback",
+  "java_xid": "198.18.0.1:28091:4045076660550967297",
+  "rejected_go_xid": "198.18.0.1:28091:4045076660550967299",
+  "new_go_xid": "198.18.0.1:28091:4045076660550967301",
+  "shared_resource": "jdbc:mysql://127.0.0.1:28093/seata_shared_c1f1d5fa",
+  "shared_lock_key": "accounts:1",
+  "rejected_original_branch": {
+    "xid": "198.18.0.1:28091:4045076660550967299",
+    "error_code": 2,
+    "branch_id": 0,
+    "resource": "jdbc:mysql://127.0.0.1:28093/seata_shared_c1f1d5fa",
+    "lock_key": "accounts:1"
+  },
+  "original_callbacks": [
+    {
+      "actor": "java",
+      "xid": "198.18.0.1:28091:4045076660550967297",
+      "branch_id": 4045076660550967298,
+      "type": 5
+    },
+    {
+      "actor": "go",
+      "xid": "198.18.0.1:28091:4045076660550967301",
+      "branch_id": 4045076660550967302,
+      "type": 3
+    }
+  ],
+  "original_reports": [
+    {
+      "xid": "198.18.0.1:28091:4045076660550967301",
+      "branch_id": 4045076660550967302,
+      "status": 2
+    }
+  ],
+  "tm_counts": {
+    "java": {
+      "begins": 1,
+      "commits": 0,
+      "rollbacks": 1
+    },
+    "go": {
+      "begins": 2,
+      "commits": 1,
+      "rollbacks": 1
+    }
+  },
+  "wire_frame_counts": {
+    "java": 12,
+    "go": 48
+  },
+  "native_queries": 3,
+  "native_frames": 18,
+  "actual_class_origins": [
+    {
+      "actor": "java",
+      "type": "SharedLockJavaActor",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-go-at-shared-lock-candidate/run_20261113_103743_7befc476/compiled/",
+      "line": "[0.234s][info][class,load] SharedLockJavaActor source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-go-at-shared-lock-candidate/run_20261113_103743_7befc476/compiled/"
+    },
+    {
+      "actor": "java",
+      "type": "org.apache.seata.rm.datasource.DataSourceProxy",
+      "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/",
+      "line": "[2.168s][info][class,load] org.apache.seata.rm.datasource.DataSourceProxy source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/"
+    },
+    {
+      "actor": "java",
+      "type": "org.apache.seata.rm.datasource.ConnectionProxy",
+      "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/",
+      "line": "[2.785s][info][class,load] org.apache.seata.rm.datasource.ConnectionProxy source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/"
+    },
+    {
+      "actor": "java",
+      "type": "org.apache.seata.rm.datasource.initializer.db.MysqlResourceIdInitializer",
+      "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/",
+      "line": "[2.633s][info][class,load] org.apache.seata.rm.datasource.initializer.db.MysqlResourceIdInitializer source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/"
+    },
+    {
+      "actor": "java",
+      "type": "org.apache.seata.tm.TMClient",
+      "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/",
+      "line": "[1.307s][info][class,load] org.apache.seata.tm.TMClient source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/"
+    },
+    {
+      "actor": "java",
+      "type": "org.apache.seata.tm.api.DefaultGlobalTransaction",
+      "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/",
+      "line": "[2.688s][info][class,load] org.apache.seata.tm.api.DefaultGlobalTransaction source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/"
+    },
+    {
+      "actor": "java",
+      "type": "org.apache.seata.rm.RMClient",
+      "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm/target/classes/",
+      "line": "[2.018s][info][class,load] org.apache.seata.rm.RMClient source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm/target/classes/"
+    },
+    {
+      "actor": "java",
+      "type": "com.mysql.cj.jdbc.MysqlDataSource",
+      "source": "file:/E:/Java/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar",
+      "line": "[2.100s][info][class,load] com.mysql.cj.jdbc.MysqlDataSource source: file:/E:/Java/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.server.storage.file.lock.FileLockManager",
+      "source": "jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/",
+      "line": "[2.620s][info][class,load] org.apache.seata.server.storage.file.lock.FileLockManager source: jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.server.transaction.at.ATCore",
+      "source": "jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/",
+      "line": "[3.450s][info][class,load] org.apache.seata.server.transaction.at.ATCore source: jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.server.session.SessionHolder",
+      "source": "jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/",
+      "line": "[3.459s][info][class,load] org.apache.seata.server.session.SessionHolder source: jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.core.rpc.netty.ProtocolDetectHandler",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+      "line": "[4.263s][info][class,load] org.apache.seata.core.rpc.netty.ProtocolDetectHandler source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.core.protocol.detector.IncrementalProtocolDetector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+      "line": "[4.268s][info][class,load] org.apache.seata.core.protocol.detector.IncrementalProtocolDetector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.core.protocol.detector.SeataDetector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+      "line": "[4.269s][info][class,load] org.apache.seata.core.protocol.detector.SeataDetector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.core.protocol.detector.HttpDetector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+      "line": "[4.269s][info][class,load] org.apache.seata.core.protocol.detector.HttpDetector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "actor": "tc",
+      "type": "org.apache.seata.core.protocol.detector.Http2Detector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+      "line": "[4.269s][info][class,load] org.apache.seata.core.protocol.detector.Http2Detector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    }
+  ],
+  "final_balance": 900,
+  "final_undo_rows": 0,
+  "duplicate_open_rejected": true,
+  "old_resource_migration_certified": false,
+  "undo_interchange_certified": false
+}

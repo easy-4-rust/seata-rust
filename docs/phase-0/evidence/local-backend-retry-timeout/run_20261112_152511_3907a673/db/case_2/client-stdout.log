@@ -1,0 +1,7 @@
+PASS RegisterTM identified=true protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS RegisterRM identified=true resourceId=mysql://backend-retry-db-2 protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS live Java TC registration smoke: TM + RM
+BACKEND_LOCK targetXid=127.0.0.1:28091:920002 contenderXid=198.18.0.1:28091:4045076377620865047 lockable=true expected=true
+BACKEND_INITIAL xid=127.0.0.1:28091:920002 status=16 branches=0 targetMutationCount=0
+BACKEND_LOCK targetXid=127.0.0.1:28091:920002 contenderXid=198.18.0.1:28091:4045076377620865053 lockable=true expected=true
+PASS BACKEND_RETRY xid=127.0.0.1:28091:920002 branchId=0 initialStatus=16 observedStatus=15 actions=0 lockReleased=true targetMutationCount=0

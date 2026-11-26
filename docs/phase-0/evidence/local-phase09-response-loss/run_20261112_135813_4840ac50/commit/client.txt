@@ -1,0 +1,11 @@
+PASS RegisterTM identified=true protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS RegisterRM identified=true resourceId=mysql://orders-loss-commit-20261112_135813_4840ac50 protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS live Java TC registration smoke: TM + RM
+LOSS_TARGET operation=7 xid=198.18.0.1:28091:4045076355646328836 initialBranchId=Some(4045076355646328837) applicationData={}
+LOSS_LOCK targetXid=198.18.0.1:28091:4045076355646328836 contenderXid=198.18.0.1:28091:4045076355646328838 lockable=false expected=false
+LOSS_CALLBACK xid=198.18.0.1:28091:4045076355646328836 branchId=4045076355646328837 type=3 requestId=2 learnedFromCallback=false actions=1
+UNKNOWN operation=7 requestId=6005 xid=198.18.0.1:28091:4045076355646328836 cause=TimedOut replayed=false
+LOSS_QUERY xid=198.18.0.1:28091:4045076355646328836 status=15 confirmedEnd=false
+LOSS_LOCK targetXid=198.18.0.1:28091:4045076355646328836 contenderXid=198.18.0.1:28091:4045076355646328838 lockable=true expected=true
+UNKNOWN_RETAINED operation=7 xid=198.18.0.1:28091:4045076355646328836 observedStatus=Finished15 reason=no-terminal-proof replayed=false
+PASS response-loss operation=7 xid=198.18.0.1:28091:4045076355646328836 branchId=4045076355646328837 observedStatus=15 confirmedEnd=false registrationReconciled=false actions=1 lockReleased=true replayed=false

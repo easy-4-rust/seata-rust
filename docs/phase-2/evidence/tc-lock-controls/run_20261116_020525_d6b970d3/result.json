@@ -1,0 +1,191 @@
+{
+  "status": "ACTUAL_EVIDENCE_NEGATIVE_CONTROLS_VERIFIED",
+  "observation_packet": "docs\\phase-2\\evidence\\tc-lock-live\\run_20261116_020229_df8ce4db",
+  "observation_catalog_sha256": "58b48297821a70c461f6bca502a6597c9f83c5f8c4cd713b8b40b395c31eede2",
+  "baseline": {
+    "observations": [
+      {
+        "case": "normal",
+        "owner_lock_rows": 1,
+        "contender_lockable": false,
+        "contender_registered": false
+      },
+      {
+        "case": "empty",
+        "owner_lock_rows": 0,
+        "contender_lockable": true,
+        "contender_registered": true
+      },
+      {
+        "case": "blank",
+        "owner_lock_rows": 0,
+        "contender_lockable": true,
+        "contender_registered": true
+      },
+      {
+        "case": "unicode-blank",
+        "owner_lock_rows": 0,
+        "contender_lockable": true,
+        "contender_registered": true
+      },
+      {
+        "case": "partial-empty",
+        "owner_lock_rows": 1,
+        "contender_lockable": true,
+        "contender_registered": true
+      },
+      {
+        "case": "semicolon",
+        "owner_lock_rows": 1,
+        "contender_lockable": true,
+        "contender_registered": true
+      },
+      {
+        "case": "binary-same",
+        "owner_lock_rows": 2,
+        "contender_lockable": false,
+        "contender_registered": false
+      },
+      {
+        "case": "binary-distinct",
+        "owner_lock_rows": 2,
+        "contender_lockable": false,
+        "contender_registered": false
+      }
+    ],
+    "actual_Begin_requests": 16,
+    "actual_global_end_requests": 16,
+    "actual_branch_register_requests": 16,
+    "actual_lock_queries": 8,
+    "actual_callbacks": 13,
+    "definite_lock_conflicts": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540354",
+        "branch_type": 0,
+        "resource": "mysql://auth-a",
+        "key": "t:1",
+        "data": "{\"tcLockCoverage\":\"f9836638c7854d7b85de981a2a5858ce\"}",
+        "registered": false,
+        "branch_id": 0,
+        "error": 2,
+        "error_message": "TransactionException[Global lock acquire failed xid = 198.18.0.1:63162:4045077595485540354 branchId = 4045077595485540358]",
+        "request_ns": 642097134484600,
+        "reply_ns": 642097140446900
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540469",
+        "branch_type": 0,
+        "resource": "mysql://auth-a",
+        "key": "t_binary:[0, -1]",
+        "data": "{\"tcLockCoverage\":\"f9836638c7854d7b85de981a2a5858ce\"}",
+        "registered": false,
+        "branch_id": 0,
+        "error": 2,
+        "error_message": "TransactionException[Global lock acquire failed xid = 198.18.0.1:63162:4045077595485540469 branchId = 4045077595485540473]",
+        "request_ns": 642109863724500,
+        "reply_ns": 642109867740600
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540487",
+        "branch_type": 0,
+        "resource": "mysql://auth-a",
+        "key": "t_binary:[0, -2]",
+        "data": "{\"tcLockCoverage\":\"f9836638c7854d7b85de981a2a5858ce\"}",
+        "registered": false,
+        "branch_id": 0,
+        "error": 2,
+        "error_message": "TransactionException[Global lock acquire failed xid = 198.18.0.1:63162:4045077595485540487 branchId = 4045077595485540491]",
+        "request_ns": 642111794178400,
+        "reply_ns": 642111798224700
+      }
+    ],
+    "TC_safety_gate_passed": false,
+    "TC_registration_gate_passed": false,
+    "SQL_Undo_atomicity_verified": false,
+    "public_COMMIT_available": false
+  },
+  "negative_controls": [
+    {
+      "control": "native-pk-value",
+      "actual_rejection": "Native actual primary values/order differ",
+      "input_copy_only": true
+    },
+    {
+      "control": "native-pk-jdbc-type",
+      "actual_rejection": "Native text JDBC value differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "native-multirow-order",
+      "actual_rejection": "Native actual primary values/order differ",
+      "input_copy_only": true
+    },
+    {
+      "control": "missing-owned-lock-row",
+      "actual_rejection": "Actual DB lock rows differ",
+      "input_copy_only": true
+    },
+    {
+      "control": "forged-branch-resource",
+      "actual_rejection": "Original DB global status/branch resource differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "forged-global-state",
+      "actual_rejection": "Original DB global status/branch resource differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "forged-physical-row-key",
+      "actual_rejection": "DB physical lock identity differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "registration-credential",
+      "actual_rejection": "Native registration role/application identity differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "registration-not-identified",
+      "actual_rejection": "Native registration not identified",
+      "input_copy_only": true
+    },
+    {
+      "control": "rollback-returned-committed",
+      "actual_rejection": "Original rollback did not explicitly return Rollbacked",
+      "input_copy_only": true
+    },
+    {
+      "control": "callback-returned-timeout",
+      "actual_rejection": "Callback identity/status differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "finished-query-status",
+      "actual_rejection": "Final cleanup query missing or precedes original end",
+      "input_copy_only": true
+    },
+    {
+      "control": "query-before-owner-lock",
+      "actual_rejection": "Owner observation/contender conflict-query/registration ordering differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "owner-snapshot-after-query",
+      "actual_rejection": "Owner observation/contender conflict-query/registration ordering differs",
+      "input_copy_only": true
+    },
+    {
+      "control": "client-end-status-forged",
+      "actual_rejection": "Client original end differs from actual response",
+      "input_copy_only": true
+    },
+    {
+      "control": "cleanup-lock-row-remains",
+      "actual_rejection": "Original TC storage was not released",
+      "input_copy_only": true
+    }
+  ],
+  "controls": 16,
+  "TC_safety_gate_passed": false
+}

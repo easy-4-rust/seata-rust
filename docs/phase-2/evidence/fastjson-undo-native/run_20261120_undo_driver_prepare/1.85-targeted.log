@@ -1,0 +1,26 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.28s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_db_mysql-9f465d5209367bab.exe)
+
+running 18 tests
+test mysql::undo_fragment_layout_tests::layout_preserves_exact_packet_boundary_and_rejects_empty_or_unrepresentable_payloads ... ok
+test mysql::undo_fragment_layout_tests::layout_withholds_rows_until_every_child_identity_is_known_and_valid ... ok
+test mysql::undo_fragment_sqlx_tests::driver_error_preserves_os_code_and_excludes_custom_message ... ok
+test mysql::undo_fragment_layout_tests::original_oversized_log_has_java_fragments_and_exact_root_references ... ok
+test mysql::undo_fragment_sqlx_tests::insert_prepare_rejection_preserves_server_diagnostics ... ok
+test mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause ... ok
+test mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement ... ok
+test mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement ... ok
+test mysql::undo_fragment_cleanup_sqlx_tests::deletes_children_then_root_with_exact_xid_and_parent ... ok
+test mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body ... ok
+test mysql::undo_fragment_read_sqlx_tests::child_batch_prepare_rejection_preserves_server_diagnostics ... ok
+test mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads ... ok
+test mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete ... ok
+test mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads ... ok
+test mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children ... ok
+test mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order ... ok
+test mysql::undo_fragment_read_sqlx_tests::reads_original_child_ids_payloads_and_closes_the_batch_statement ... ok
+test mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.34s
+

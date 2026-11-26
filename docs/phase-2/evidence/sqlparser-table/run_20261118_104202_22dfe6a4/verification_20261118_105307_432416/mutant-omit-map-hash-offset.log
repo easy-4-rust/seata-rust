@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_table_metadata_20261118_104202_22dfe6a4\mutants\verification_20261118_105307_432416\omit-map-hash-offset\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_table_metadata_20261118_104202_22dfe6a4\mutants\verification_20261118_105307_432416\omit-map-hash-offset\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.92s
+     Running tests\table_java_diff.rs (D:/cargo-target/seata-table-mutants\debug\deps\table_java_diff-740d0dfac559283e.exe)
+
+running 1 test
+test defaults_and_original_name_case_flag_equals_hash_quirks_match ... FAILED
+
+failures:
+
+---- defaults_and_original_name_case_flag_equals_hash_quirks_match stdout ----
+
+thread 'defaults_and_original_name_case_flag_equals_hash_quirks_match' (38988) panicked at crates\seata_test\tests\table_java_diff.rs:145:5:
+assertion `left == right` failed
+  left: ["null", "null", "false", "0", "0", "1237"]
+ right: ["null", "null", "false", "0", "0", "1299"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    defaults_and_original_name_case_flag_equals_hash_quirks_match
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test table_java_diff`

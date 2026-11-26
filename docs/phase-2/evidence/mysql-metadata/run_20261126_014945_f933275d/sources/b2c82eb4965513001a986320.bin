@@ -1,0 +1,466 @@
+use crate::{DbError, MySqlCommitAttempt, MySqlDataSource, MySqlRecoveryError};
+use seata_at::MySqlJdbcProfile;
+use seata_protocol::ResultCode;
+use seata_rm::RegisteredBranch;
+use seata_transport::ResourceKey;
+use sqlx::Row;
+use tokio::time::{timeout_at, Instant};
+
+/// 将原成功登记回执独立持久化的提交尝试存储；不执行原业务 COMMIT。
+/// 对应 Java: ConnectionProxy#processGlobalTransactionCommit 的 Rust 持久交接扩展。
+pub(crate) struct MySqlCommitAttemptStore;
+
+impl MySqlCommitAttemptStore {
+    /// 按原 XID/BranchId 从 006 表读取记录；参数资源和配置必须与持久原值逐字节一致。
+    /// 返回 None 只表示未找到 Armed 记录，不能推断旧业务事务未生效。
+    pub(crate) async fn load(
+        source: &MySqlDataSource,
+        xid: &str,
+        branch_id: i64,
+        resource: &ResourceKey,
+        profile: MySqlJdbcProfile,
+    ) -> Result<Option<MySqlCommitAttempt>, DbError> {
+        if xid.is_empty() || xid.len() > 128 || branch_id <= 0 {
+            return Err(DbError::RecoveryConflict);
+        }
+        let deadline = Instant::now() + source.operation_timeout();
+        let expired = || DbError::Deadline {
+            operation: "load commit attempt",
+        };
+        let result = timeout_at(deadline, async {
+            let mut connection = source
+                .control_pool()
+                .acquire()
+                .await
+                .map_err(|error| DbError::driver("commit attempt load acquire", error))?;
+            connection.close_on_drop();
+            let mut tx = sqlx::Transaction::begin(connection, None)
+                .await
+                .map_err(|error| DbError::driver("commit attempt load begin", error))?;
+            Self::validate(&mut tx, source.database()).await?;
+            let row = sqlx::query(
+                "SELECT schema_version,xid,branch_id,resource_id,application_data,lock_key,\
+                 jdbc_profile,response_result_code,response_exception_code,attempt_state,report_started \
+                 FROM seata_rs_at_commit_attempt WHERE xid=? AND branch_id=? FOR UPDATE",
+            )
+            .bind(xid.as_bytes())
+            .bind(branch_id)
+            .fetch_optional(&mut *tx)
+            .await
+            .map_err(|error| DbError::driver("commit attempt load row", error))?;
+            let attempt = row
+                .as_ref()
+                .map(|row| MySqlCommitAttempt::from_row(row, xid, branch_id, resource, profile))
+                .transpose()?;
+            tx.rollback()
+                .await
+                .map_err(|error| DbError::driver("commit attempt load release", error))?;
+            Ok(attempt)
+        })
+        .await
+        .map_err(|_| expired())?;
+        if Instant::now() >= deadline {
+            return Err(expired());
+        }
+        result
+    }
+
+    /// 按原 006 身份持久抢占成功报告发送权；确认控制 COMMIT 后才返回 true。
+    /// false 表示任一进程已开始报告；提交/读取未知时只返回错误，调用者绝不发包。
+    pub(crate) async fn claim_report(
+        source: &MySqlDataSource,
+        attempt: &MySqlCommitAttempt,
+    ) -> Result<bool, DbError> {
+        let identity = attempt.identity();
+        let deadline = Instant::now() + source.operation_timeout();
+        let expired = || DbError::Deadline {
+            operation: "claim success report",
+        };
+        let result = timeout_at(deadline, async {
+            let mut connection = source
+                .control_pool()
+                .acquire()
+                .await
+                .map_err(|error| DbError::driver("report claim acquire", error))?;
+            connection.close_on_drop();
+            let mut tx = sqlx::Transaction::begin(connection, None)
+                .await
+                .map_err(|error| DbError::driver("report claim begin", error))?;
+            Self::validate(&mut tx, source.database()).await?;
+            let row = sqlx::query(
+                "SELECT schema_version,xid,branch_id,resource_id,application_data,lock_key,\
+                 jdbc_profile,response_result_code,response_exception_code,attempt_state,report_started \
+                 FROM seata_rs_at_commit_attempt WHERE xid=? AND branch_id=? FOR UPDATE",
+            )
+            .bind(identity.xid().as_bytes())
+            .bind(identity.branch_id())
+            .fetch_optional(&mut *tx)
+            .await
+            .map_err(|error| DbError::driver("report claim identity", error))?
+            .ok_or(DbError::RecoveryConflict)?;
+            let current = MySqlCommitAttempt::from_row(
+                &row,
+                identity.xid(),
+                identity.branch_id(),
+                identity.resource(),
+                attempt.profile(),
+            )?;
+            if current.identity() != identity
+                || current.lock_key() != attempt.lock_key()
+                || current.response_exception_code() != attempt.response_exception_code()
+            {
+                return Err(DbError::RecoveryConflict);
+            }
+            let started: u8 = row
+                .try_get("report_started")
+                .map_err(|error| DbError::driver("report claim state", error))?;
+            if started > 1 {
+                return Err(DbError::RecoveryConflict);
+            }
+            if started == 1 {
+                tx.rollback()
+                    .await
+                    .map_err(|error| DbError::driver("report claim release", error))?;
+                return Ok(false);
+            }
+            let updated = sqlx::query(
+                "UPDATE seata_rs_at_commit_attempt SET report_started=1,modified_at=now(6) \
+                 WHERE xid=? AND branch_id=? AND report_started=0",
+            )
+            .bind(identity.xid().as_bytes())
+            .bind(identity.branch_id())
+            .execute(&mut *tx)
+            .await
+            .map_err(|error| DbError::driver("report claim update", error))?;
+            if updated.rows_affected() != 1 {
+                return Err(DbError::RecoveryConflict);
+            }
+            tx.commit()
+                .await
+                .map_err(|error| DbError::driver("report claim commit", error))?;
+            Ok(true)
+        })
+        .await
+        .map_err(|_| expired())?;
+        if Instant::now() >= deadline {
+            return Err(expired());
+        }
+        result
+    }
+
+    /// 参数为同物理数据源、原成功回执与 JDBC 配置；返回已持久确认的 Armed 记录。
+    /// 已有完全相同记录可复用；不同身份、表结构或控制提交未知均保守拒绝。
+    pub(crate) async fn arm(
+        source: &MySqlDataSource,
+        receipt: &RegisteredBranch,
+        profile: MySqlJdbcProfile,
+    ) -> Result<(), MySqlRecoveryError> {
+        let identity = receipt.identity().clone();
+        if identity.branch_id() <= 0
+            || receipt.response().response.result_code != ResultCode::Success
+            || source.resource_id().ok().as_deref() != Some(identity.resource().resource_id())
+        {
+            return Err(MySqlRecoveryError::InvalidIdentity);
+        }
+        let deadline = Instant::now() + source.operation_timeout();
+        let mut commit_attempted = false;
+        let result = timeout_at(deadline, async {
+            let mut connection = source
+                .control_pool()
+                .acquire()
+                .await
+                .map_err(|error| DbError::driver("commit attempt acquire", error))?;
+            connection.close_on_drop();
+            let mut tx = sqlx::Transaction::begin(connection, None)
+                .await
+                .map_err(|error| DbError::driver("commit attempt begin", error))?;
+            Self::validate(&mut tx, source.database()).await?;
+            let id = receipt.identity();
+            let inserted = sqlx::query(
+                "INSERT INTO seata_rs_at_commit_attempt \
+                 (schema_version,xid,branch_id,resource_id,application_data,lock_key,jdbc_profile,\
+                  response_result_code,response_exception_code,attempt_state,report_started,created_at,modified_at) \
+                 VALUES(1,?,?,?,?,?,?,?,?,1,0,now(6),now(6))",
+            )
+            .bind(id.xid().as_bytes())
+            .bind(id.branch_id())
+            .bind(id.resource().resource_id().as_bytes())
+            .bind(id.application_data().map(str::as_bytes))
+            .bind(receipt.lock_key().map(str::as_bytes))
+            .bind(match profile {
+                MySqlJdbcProfile::Connector8Default => 1_u8,
+                MySqlJdbcProfile::Connector8NumericTinyInt => 2_u8,
+            })
+            .bind(receipt.response().response.result_code.to_java_v1())
+            .bind(receipt.response().response.transaction_exception_code.to_java_v1())
+            .execute(&mut *tx)
+            .await;
+            let inserted = match inserted {
+                Ok(result) if result.rows_affected() == 1 => true,
+                Ok(_) => return Err(DbError::RecoveryConflict),
+                Err(error) => {
+                    let error = DbError::driver("commit attempt insert", error);
+                    if matches!(error, DbError::Driver { code: Some(1062), .. }) {
+                        false
+                    } else {
+                        return Err(error);
+                    }
+                }
+            };
+            // INSERT 成功和唯一键冲突都再次锁定并逐字节核对；绝不覆盖先前尝试。
+            let row = sqlx::query(
+                "SELECT schema_version,xid,branch_id,resource_id,application_data,lock_key,\
+                 jdbc_profile,response_result_code,response_exception_code,attempt_state,report_started \
+                 FROM seata_rs_at_commit_attempt WHERE xid=? AND branch_id=? FOR UPDATE",
+            )
+            .bind(id.xid().as_bytes())
+            .bind(id.branch_id())
+            .fetch_one(&mut *tx)
+            .await
+            .map_err(|error| DbError::driver("commit attempt identity", error))?;
+            let bytes = |column| {
+                row.try_get::<Vec<u8>, _>(column)
+                    .map_err(|error| DbError::driver("commit attempt bytes", error))
+            };
+            let optional = |column| {
+                row.try_get::<Option<Vec<u8>>, _>(column)
+                    .map_err(|error| DbError::driver("commit attempt optional", error))
+            };
+            let number = |column| {
+                row.try_get::<u8, _>(column)
+                    .map_err(|error| DbError::driver("commit attempt number", error))
+            };
+            if row
+                .try_get::<u16, _>("schema_version")
+                .map_err(|error| DbError::driver("commit attempt version", error))?
+                != 1
+                || bytes("xid")? != id.xid().as_bytes()
+                || row
+                    .try_get::<i64, _>("branch_id")
+                    .map_err(|error| DbError::driver("commit attempt branch", error))?
+                    != id.branch_id()
+                || bytes("resource_id")? != id.resource().resource_id().as_bytes()
+                || optional("application_data")?.as_deref()
+                    != id.application_data().map(str::as_bytes)
+                || optional("lock_key")?.as_deref() != receipt.lock_key().map(str::as_bytes)
+                || number("jdbc_profile")?
+                    != match profile {
+                        MySqlJdbcProfile::Connector8Default => 1,
+                        MySqlJdbcProfile::Connector8NumericTinyInt => 2,
+                    }
+                || number("response_result_code")?
+                    != receipt.response().response.result_code.to_java_v1()
+                || number("response_exception_code")?
+                    != receipt.response().response.transaction_exception_code.to_java_v1()
+                || number("attempt_state")? != 1
+                || number("report_started")? != 0
+            {
+                return Err(DbError::RecoveryConflict);
+            }
+            if Instant::now() >= deadline {
+                return Err(DbError::Deadline {
+                    operation: "commit attempt",
+                });
+            }
+            if inserted {
+                commit_attempted = true;
+                tx.commit()
+                    .await
+                    .map_err(|error| DbError::driver("commit attempt commit", error))?;
+            } else {
+                tx.rollback()
+                    .await
+                    .map_err(|error| DbError::driver("commit attempt read release", error))?;
+            }
+            Ok(())
+        })
+        .await;
+        let result = if Instant::now() >= deadline {
+            Err(DbError::Deadline {
+                operation: "commit attempt",
+            })
+        } else {
+            result.unwrap_or(Err(DbError::Deadline {
+                operation: "commit attempt",
+            }))
+        };
+        result.map_err(|source| {
+            if commit_attempted {
+                MySqlRecoveryError::CommitOutcomeUnknown {
+                    identity: Box::new(identity),
+                    source,
+                }
+            } else {
+                MySqlRecoveryError::BeforeCommit {
+                    identity: Box::new(identity),
+                    source,
+                }
+            }
+        })
+    }
+
+    async fn validate(
+        tx: &mut sqlx::Transaction<'static, sqlx::MySql>,
+        database: &str,
+    ) -> Result<(), DbError> {
+        // 在元数据读取前取得表 MDL，避免校验与 INSERT 之间被 DDL 替换。
+        sqlx::query("SELECT xid FROM seata_rs_at_commit_attempt WHERE 1=0 FOR UPDATE")
+            .fetch_all(&mut **tx)
+            .await
+            .map_err(|error| DbError::driver("commit attempt metadata lock", error))?;
+        let shape: (i64, i64, i64) = sqlx::query_as(
+            "SELECT \
+             (SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_commit_attempt' AND TABLE_TYPE='BASE TABLE' AND ENGINE='InnoDB'),\
+             (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_commit_attempt'),\
+             (SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA=? AND EVENT_OBJECT_TABLE='seata_rs_at_commit_attempt')",
+        )
+        .bind(database)
+        .bind(database)
+        .bind(database)
+        .fetch_one(&mut **tx)
+        .await
+        .map_err(|error| DbError::driver("commit attempt table shape", error))?;
+        if shape != (1, 13, 0) {
+            return Err(DbError::Unsupported {
+                feature: "commit attempt exact InnoDB table",
+            });
+        }
+        let columns = sqlx::query(
+            "SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS name,\
+             CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind,\
+             CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4) AS nullable,\
+             CAST(EXTRA AS CHAR CHARACTER SET utf8mb4) AS extra,\
+             CAST(COLUMN_DEFAULT AS CHAR CHARACTER SET utf8mb4) AS default_value,\
+             CAST(GENERATION_EXPRESSION AS CHAR CHARACTER SET utf8mb4) AS generation_value \
+             FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? \
+             AND TABLE_NAME='seata_rs_at_commit_attempt' ORDER BY ORDINAL_POSITION",
+        )
+        .bind(database)
+        .fetch_all(&mut **tx)
+        .await
+        .map_err(|error| DbError::driver("commit attempt columns", error))?;
+        let expected = [
+            ("schema_version", "smallint unsigned", "NO"),
+            ("xid", "varbinary(128)", "NO"),
+            ("branch_id", "bigint", "NO"),
+            ("resource_id", "varbinary(512)", "NO"),
+            ("application_data", "mediumblob", "YES"),
+            ("lock_key", "mediumblob", "YES"),
+            ("jdbc_profile", "tinyint unsigned", "NO"),
+            ("response_result_code", "tinyint unsigned", "NO"),
+            ("response_exception_code", "tinyint unsigned", "NO"),
+            ("attempt_state", "tinyint unsigned", "NO"),
+            ("report_started", "tinyint unsigned", "NO"),
+            ("created_at", "datetime(6)", "NO"),
+            ("modified_at", "datetime(6)", "NO"),
+        ];
+        if columns.len() != expected.len() {
+            return Err(DbError::RecoveryConflict);
+        }
+        for (row, (name, kind, nullable)) in columns.iter().zip(expected) {
+            let text = |column| {
+                row.try_get::<String, _>(column)
+                    .map_err(|error| DbError::driver("commit attempt column", error))
+            };
+            if text("name")? != name
+                || text("kind")? != kind
+                || text("nullable")? != nullable
+                || !text("extra")?.is_empty()
+                || !text("generation_value")?.is_empty()
+                || row
+                    .try_get::<Option<String>, _>("default_value")
+                    .map_err(|error| DbError::driver("commit attempt default", error))?
+                    .as_deref()
+                    != if name == "report_started" {
+                        Some("1")
+                    } else {
+                        None
+                    }
+            {
+                return Err(DbError::Unsupported {
+                    feature: "commit attempt exact columns",
+                });
+            }
+        }
+        let indexes = sqlx::query(
+            "SELECT CAST(INDEX_NAME AS CHAR CHARACTER SET utf8mb4) AS name,\
+             CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS column_name,\
+             CAST(SEQ_IN_INDEX AS SIGNED) AS sequence_value,\
+             CAST(NON_UNIQUE AS SIGNED) AS non_unique,\
+             CAST(SUB_PART AS SIGNED) AS prefix_value,\
+             CAST(IS_VISIBLE AS CHAR CHARACTER SET utf8mb4) AS visible,\
+             CAST(INDEX_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind \
+             FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? \
+             AND TABLE_NAME='seata_rs_at_commit_attempt' ORDER BY INDEX_NAME,SEQ_IN_INDEX",
+        )
+        .bind(database)
+        .fetch_all(&mut **tx)
+        .await
+        .map_err(|error| DbError::driver("commit attempt primary key", error))?;
+        if indexes.len() != 2 {
+            return Err(DbError::Unsupported {
+                feature: "commit attempt sole primary key",
+            });
+        }
+        for (index, row) in indexes.iter().enumerate() {
+            let text = |column| {
+                row.try_get::<String, _>(column)
+                    .map_err(|error| DbError::driver("commit attempt index", error))
+            };
+            if text("name")? != "PRIMARY"
+                || text("column_name")? != ["xid", "branch_id"][index]
+                || text("visible")? != "YES"
+                || text("kind")? != "BTREE"
+                || row
+                    .try_get::<i64, _>("sequence_value")
+                    .map_err(|error| DbError::driver("commit attempt index order", error))?
+                    != index as i64 + 1
+                || row
+                    .try_get::<i64, _>("non_unique")
+                    .map_err(|error| DbError::driver("commit attempt uniqueness", error))?
+                    != 0
+                || row
+                    .try_get::<Option<i64>, _>("prefix_value")
+                    .map_err(|error| DbError::driver("commit attempt index prefix", error))?
+                    .is_some()
+            {
+                return Err(DbError::Unsupported {
+                    feature: "commit attempt exact primary key",
+                });
+            }
+        }
+        let unsafe_count: i64 = sqlx::query_scalar(
+            "SELECT (SELECT COUNT(*) FROM information_schema.TABLE_CONSTRAINTS \
+             WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_commit_attempt' \
+             AND CONSTRAINT_TYPE<>'PRIMARY KEY') \
+             +(SELECT COUNT(*) FROM information_schema.INNODB_FOREIGN \
+             WHERE FOR_NAME=CONCAT(?,'/seata_rs_at_commit_attempt') \
+             OR REF_NAME=CONCAT(?,'/seata_rs_at_commit_attempt')) \
+             +(SELECT COUNT(*) FROM information_schema.PARTITIONS \
+             WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_commit_attempt' AND PARTITION_NAME IS NOT NULL)",
+        )
+        .bind(database)
+        .bind(database)
+        .bind(database)
+        .bind(database)
+        .fetch_one(&mut **tx)
+        .await
+        .map_err(|error| DbError::driver("commit attempt unsafe schema", error))?;
+        if unsafe_count != 0 {
+            return Err(DbError::Unsupported {
+                feature: "commit attempt constraints or partitions",
+            });
+        }
+        let flush: i64 =
+            sqlx::query_scalar("SELECT CAST(@@GLOBAL.innodb_flush_log_at_trx_commit AS SIGNED)")
+                .fetch_one(&mut **tx)
+                .await
+                .map_err(|error| DbError::driver("commit attempt durability", error))?;
+        if flush != 1 {
+            return Err(DbError::Unsupported {
+                feature: "commit attempt durable InnoDB commit",
+            });
+        }
+        Ok(())
+    }
+}

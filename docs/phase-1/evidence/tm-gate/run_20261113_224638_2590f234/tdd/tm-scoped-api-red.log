@@ -1,0 +1,88 @@
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+error[E0432]: unresolved import `seata_tm::TransactionError`
+ --> crates\seata_tm\tests\scoped_execution.rs:7:121
+  |
+7 | ...on,TransactionConfig,TransactionContext,TransactionError,Xid};
+  |                                            ^^^^^^^^^^^^^^^^ no `TransactionError` in the root
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:23:19
+   |
+23 |     let result=tm.execute(config(),|| {
+   |                ---^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:27:27
+   |
+27 | ...   let nested=tm.execute(config(),|| async {let ctx=RootContext::current().unwrap();assert_eq!(ctx.role(),GlobalTransactionRole::...
+   |                     ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:39:8
+   |
+39 |     tm.execute(config(),||async {
+   |     ---^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:42:12
+   |
+42 | ...   tm.execute(inner,||async {assert_eq!(RootContext::current().unwrap().xid().as_str(),"inner");assert_eq!(RootContext::current()...
+   |          ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:44:22
+   |
+44 | ...   let value=tm.execute(unmanaged,||async {assert!(RootContext::current().is_none());Ok::<_,&str>(())}).await.unwrap();assert_eq!...
+   |                    ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:54:16
+   |
+54 |     assert!(tm.execute(mandatory.clone(),||async {panic!("invalid Mandatory must not construct business");#[allow(unreachable_code)]...
+   |                ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:57:22
+   |
+57 | ...   let value=tm.execute(cfg,||async {assert!(RootContext::current().is_none());Ok::<_,&str>(())}).await.unwrap();assert_eq!(value...
+   |                    ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:62:26
+   |
+62 | ...   let value=tm.execute(cfg,||async {assert_eq!(RootContext::current().unwrap().role(),GlobalTransactionRole::Participant);Ok::<_...
+   |                    ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:65:20
+   |
+65 | ...   assert!(tm.execute(never,||async {panic!("invalid Never must not run business");#[allow(unreachable_code)] Ok::<_,&str>(())})....
+   |                  ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:74:18
+   |
+74 |     let error=tm.execute(config(),||async {Err::<(),_>("business error")}).await.unwrap_err();
+   |                  ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:86:18
+   |
+86 |     let error=tm.execute(cfg,||async {std::future::pending::<Result<(),&str>>().await}).await.unwrap_err();
+   |                  ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\scoped_execution.rs:95:18
+   |
+95 |     let error=tm.execute(config(),||async {Ok::<_,&str>(7)}).await.unwrap_err();
+   |                  ^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `execute` found for struct `Arc<TransactionManager>` in the current scope
+   --> crates\seata_tm\tests\scoped_execution.rs:106:50
+    |
+106 | ...   let task=tokio::spawn(async move {cloned.execute(config(),||async {ready.send(RootContext::current().unwrap().xid().clone())....
+    |                                                ^^^^^^^ method not found in `Arc<TransactionManager>`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-tm` (test "scoped_execution") due to 14 previous errors

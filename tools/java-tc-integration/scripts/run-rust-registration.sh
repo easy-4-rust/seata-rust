@@ -10,4 +10,4 @@ command -v cargo >/dev/null 2>&1 || {
 }
 
 cargo test --manifest-path "$MANIFEST"
-cargo run --manifest-path "$MANIFEST" --bin seata-java-tc-it
+cargo run --manifest-path "$MANIFEST" --bin seata-java-tc-it -- "$@"

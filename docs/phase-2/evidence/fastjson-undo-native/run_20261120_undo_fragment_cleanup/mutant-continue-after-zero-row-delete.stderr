@@ -1,0 +1,14 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_compare_mutants_2yxagctn\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.24s
+     Running unittests src\lib.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\seata_db_mysql-0eae6d12f56bc15e.exe)
+
+thread 'mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete' (63024) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_cleanup_sqlx_tests.rs:138:5:
+assertion `left == right` failed
+  left: Some([22, 68, 69, 76, 69, 84, 69, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 61, 63, 32, 65, 78, 68, 32, 108, 111, 103, 95, 115, 116, 97, 116, 117, 115, 61, 48, 32, 65, 78, 68, 32, 67, 65, 83, 84, 40, 120, 105, 100, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41, 61, 67, 65, 83, 84, 40, 63, 32, 65, 83, 32, 66, 73, 78, 65, 82, 89, 41])
+ right: Some([3, 82, 79, 76, 76, 66, 65, 67, 75])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete' (63024) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_cleanup_sqlx_tests.rs:60:38:
+assertion failed: matches!(cleanup,
+    Err(DbError::Unsupported { feature: "Undo exact deleted row count" }))
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

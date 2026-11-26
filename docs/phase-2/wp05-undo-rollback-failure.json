@@ -1,0 +1,82 @@
+{
+  "status": "UNDO_ROLLBACK_OBSERVED_FAILURE_PRESERVED_OFFLINE",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_manager_failure",
+  "java_original_cases_reexecuted": 15,
+  "source_case_bindings": [
+    {
+      "java_case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.UndoLogManagerBehaviorTest]/[test-template:rollbackFailureDoesNotHideOriginalError(boolean)]/[test-template-invocation:#1]",
+      "rust_test": "dirty_failure_survives_explicit_rollback_error",
+      "status": "PARTIAL"
+    },
+    {
+      "java_case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.UndoLogManagerBehaviorTest]/[test-template:rollbackFailureDoesNotHideOriginalError(boolean)]/[test-template-invocation:#2]",
+      "rust_test": "acquired_read_failure_survives_timeout_while_rolling_back",
+      "status": "PARTIAL"
+    },
+    {
+      "java_case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.UndoLogManagerBehaviorTest]/[method:connectionAcquisitionFailureIsRetriable()]",
+      "rust_test": "acquire_failure_and_late_commit_remain_distinguishable",
+      "status": "PARTIAL"
+    }
+  ],
+  "remaining_evidence": "Precise Java JDBC resource/callback assertions and real SQLx/MySQL rollback and cleanup behavior",
+  "independent_review": "Checked SQLx 0.8.6 connection ownership and close_on_drop, no blocking finding",
+  "rust_new_original_cases": 0,
+  "global_rust_source_MATCH": 150,
+  "global_rust_methods_match": 129,
+  "rust": {
+    "1.99": {
+      "ordinary": 602,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "fault_tests": 3,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 602,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "fault_tests": 3,
+      "strict_clippy": true
+    }
+  },
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "crates/seata_db_mysql/src/lib.rs": "bd9dccbcfee2b5a8d550d632af74468a475da0e0d91cb63325ba59b7299c9f4f",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "33c11436a71420c04faf14afeec5640baf0f67009b4483516c67f53df2446912",
+    "crates/seata_db_mysql/src/undo_rollback_attempt.rs": "9c85783209d2be5e8a165aa5fd62dac6cfc3f48e1d669bc0c202837c11c52189",
+    "crates/seata_db_mysql/src/undo_rollback_attempt_tests.rs": "bf3350325e71801bc44ab268253f81fe43d614df30ce010a7cee961e12fdb2cc"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "f9a54cbfd5912fb424f23d8c698eeb693c2346bc2270b97f02cfe9fa44f33d55",
+    "1.85-doc.log": "c861fde08188b1e02f31656736bfeb273e0e477dcb37b563ccace01226ea35a3",
+    "1.85-targeted.log": "11def1cd9700b89225df00fa2e1da1dde53b375fc614137a6e98a19c6a4a81a6",
+    "1.85-tests.log": "61a9232b92e56c658b0b299b971b342083d7ec879261e32a5c27adc07c761ae3",
+    "1.99-clippy.log": "98d7d36cc56eb8b84b22783af8194be419510ae676d1c8e25d107a73685da568",
+    "1.99-doc.log": "297a7b7f57dff2e2106e3d3aefb9349fa88434193e086f2be6cbaba1e5dc4a79",
+    "1.99-targeted.log": "70ef89f98737123cdb97f50ae77071f0975c0245399dc5bb0f2658397d418c80",
+    "1.99-tests.log": "ea3ef81f9962c20f9fa332028b4db1f7eb89275d43a9efe2bf0b9f06e4b66225",
+    "commands.json": "7281a6c2560871407e5b0d5bf7bdbdf07dc6eb8f6244e801a6d216e72770b340",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-discard-observed-failure-on-timeout.stderr": "9469565b49e1ac48b8d6bf91942105d26554e60446286857a07c29c02013e5d5",
+    "mutant-discard-observed-failure-on-timeout.stdout": "7875a307fc7014563668a5b859853c62f67e2531f38e0836957a9ecb2e7ce1d5",
+    "mutant-omit-commit-marker.stderr": "f52734a2c44b4548200f3a93f82aa981c482c6abed918282a1490fdfdc78dc1b",
+    "mutant-omit-commit-marker.stdout": "b9a627d0443b7224ebdc42176d0bc0206a88b66367752a2fa392669cd6b3e67d",
+    "mutant-skip-explicit-cleanup.stderr": "d3b5c953d907942dcb306e51320c516aaafb3fd7adf84d5cc6d67b2271c33599",
+    "mutant-skip-explicit-cleanup.stdout": "ecde4dd58683f3ffe1099b3e4f73e0b30871bd7c8e10ccf08d2be695fd089ecf",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "original-inputs.json": "d6f5ed1f5259a3e5a8469f86e37ac53a74e2c534fd81e259109f9108631b88ca",
+    "original-junit.jsonl": "65b4a0b3c7c4a88de9fab88538cb95cdb96a0f39f828f892421cc836af40d11e",
+    "original-junit.log": "5845ea8eb4df6e6b322726a24925826b5415289ea1a9d2f3edfd8c6117a30040",
+    "runtime-mutation-controls.json": "8304ec99486bc78346e90889bebb19d30c0665095eae42f031cc0d1e1eb5dec2",
+    "rust-red.log": "b0cf9b7c2af44a5baf7e572eefd25a52120823387b0dce019c96885df3e542dc",
+    "UndoLogManagerBehaviorTest.java": "d37e49333647e7f444fc4fafa26a235dd575d84b1ae4acc7c07654e595117eb4"
+  }
+}

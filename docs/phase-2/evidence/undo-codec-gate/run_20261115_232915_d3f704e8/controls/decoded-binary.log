@@ -1,0 +1,28 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_undo_codec_gate_20261115_232915_d3f704e8\decoded-binary\crates\seata_at)
+warning: unused variable: `decoded`
+   --> crates\seata_at\src\undo\parser\value_format.rs:147:13
+    |
+147 |         let decoded = STANDARD
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_decoded`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-at` (lib) generated 1 warning (run `cargo fix --lib -p seata-at` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.63s
+     Running tests\undo_codec_value_bounds.rs (D:/cargo-target/seata-undo-codec-controls\debug\deps\undo_codec_value_bounds-f069f86ce2e16acd.exe)
+
+running 1 test
+
+thread 'text_and_decoded_binary_allow_exactly_one_mib_and_reject_the_next_byte' (79900) panicked at crates\seata_at\tests\undo_codec_value_bounds.rs:37:17:
+assertion failed: matches!(parser.decode(&bytes), Err(UndoCodecError::Budget { .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test text_and_decoded_binary_allow_exactly_one_mib_and_reject_the_next_byte ... FAILED
+
+failures:
+
+failures:
+    text_and_decoded_binary_allow_exactly_one_mib_and_reject_the_next_byte
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.22s
+
+error: test failed, to rerun pass `-p seata-at --test undo_codec_value_bounds`

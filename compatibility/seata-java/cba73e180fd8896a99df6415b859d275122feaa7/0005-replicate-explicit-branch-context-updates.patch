@@ -1,0 +1,99 @@
+--- a/server/src/main/java/org/apache/seata/server/cluster/raft/sync/msg/dto/BranchTransactionDTO.java
++++ b/server/src/main/java/org/apache/seata/server/cluster/raft/sync/msg/dto/BranchTransactionDTO.java
+@@ -17,6 +17,7 @@
+ package org.apache.seata.server.cluster.raft.sync.msg.dto;
+ 
+ import org.apache.seata.core.store.BranchTransactionDO;
++import com.fasterxml.jackson.annotation.JsonInclude;
+ 
+ /**
+  */
+@@ -24,6 +25,20 @@
+ 
+     private static final long serialVersionUID = 4550610938263777969L;
+     private String lockKey;
++
++    /** true表示本次状态消息显式更新上下文；缺失/null/false保留历史status-only语义。 */
++    private Boolean applicationDataUpdated;
++
++    /** 返回本次状态消息是否显式更新上下文；null表示历史消息未指定。 */
++    @JsonInclude(JsonInclude.Include.NON_NULL)
++    public Boolean getApplicationDataUpdated() {
++        return applicationDataUpdated;
++    }
++
++    /** 设置可空更新标志；参数true同时允许applicationData为null以明确清除。 */
++    public void setApplicationDataUpdated(Boolean applicationDataUpdated) {
++        this.applicationDataUpdated = applicationDataUpdated;
++    }
+ 
+     public BranchTransactionDTO(String xid, long branchId) {
+         super(xid, branchId);
+--- a/server/src/main/java/org/apache/seata/server/storage/raft/session/RaftSessionManager.java
++++ b/server/src/main/java/org/apache/seata/server/storage/raft/session/RaftSessionManager.java
+@@ -38,6 +38,7 @@
+ import java.io.IOException;
+ import java.util.List;
+ import java.util.concurrent.CompletableFuture;
++import java.util.Objects;
+ 
+ import static org.apache.seata.server.cluster.raft.sync.msg.RaftSyncMsgType.ADD_BRANCH_SESSION;
+ import static org.apache.seata.server.cluster.raft.sync.msg.RaftSyncMsgType.ADD_GLOBAL_SESSION;
+@@ -100,7 +101,7 @@
+     @Override
+     public void removeGlobalSession(GlobalSession session) throws TransactionException {
+         GlobalSession globalSession = sessionMap.remove(session.getXid());
+-        if (globalSession != null) {
++        if (Objects.nonNull(globalSession)) {
+             List<BranchSession> branchSessionList = globalSession.getBranchSessions();
+             // For the follower, this code will not execute because, by the time the follower receives the remove global
+             // session request, the branch sessions on the leader side have already been completely cleared.
+@@ -158,6 +159,9 @@
+         BranchTransactionDTO branchTransactionDO =
+                 new BranchTransactionDTO(globalSession.getXid(), branchSession.getBranchId());
+         branchTransactionDO.setStatus(branchStatus.getCode());
++        // 状态报告可能更新实际业务上下文；显式标志区分旧日志缺失与本次null清除。
++        branchTransactionDO.setApplicationData(branchSession.getApplicationData());
++        branchTransactionDO.setApplicationDataUpdated(Boolean.TRUE);
+         RaftBranchSessionSyncMsg raftSyncMsg =
+                 new RaftBranchSessionSyncMsg(UPDATE_BRANCH_SESSION_STATUS, branchTransactionDO);
+         RaftTaskUtil.createTask(closure, raftSyncMsg, completableFuture);
+--- a/server/src/main/java/org/apache/seata/server/cluster/raft/execute/branch/UpdateBranchSessionExecute.java
++++ b/server/src/main/java/org/apache/seata/server/cluster/raft/execute/branch/UpdateBranchSessionExecute.java
+@@ -17,6 +17,7 @@
+ package org.apache.seata.server.cluster.raft.execute.branch;
+ 
+ import org.apache.seata.core.model.BranchStatus;
++import java.util.Objects;
+ import org.apache.seata.server.cluster.raft.execute.AbstractRaftMsgExecute;
+ import org.apache.seata.server.cluster.raft.sync.msg.RaftBaseMsg;
+ import org.apache.seata.server.cluster.raft.sync.msg.RaftBranchSessionSyncMsg;
+@@ -36,7 +37,7 @@
+                 (RaftSessionManager) SessionHolder.getRootSessionManager(sessionSyncMsg.getGroup());
+         String xid = sessionSyncMsg.getBranchSession().getXid();
+         GlobalSession globalSession = raftSessionManager.findGlobalSession(xid);
+-        if (globalSession == null) {
++        if (Objects.isNull(globalSession)) {
+             if (logger.isWarnEnabled()) {
+                 logger.warn(
+                         "The transaction corresponding to the XID: {} does not exist, which may cause a two-phase concurrency issue, msg type: {}",
+@@ -47,7 +48,7 @@
+         }
+         long branchId = sessionSyncMsg.getBranchSession().getBranchId();
+         BranchSession branchSession = globalSession.getBranch(branchId);
+-        if (branchSession == null) {
++        if (Objects.isNull(branchSession)) {
+             if (logger.isWarnEnabled()) {
+                 logger.warn(
+                         "The branch session corresponding to the branchId: {} does not exist, which may cause a two-phase concurrency issue, msg type: {}",
+@@ -57,6 +58,10 @@
+             return false;
+         }
+         BranchStatus status = BranchStatus.get(sessionSyncMsg.getBranchSession().getStatus());
++        // 仅新消息的显式更新标志允许覆盖；旧status-only日志不得抹掉已有上下文。
++        if (Boolean.TRUE.equals(sessionSyncMsg.getBranchSession().getApplicationDataUpdated())) {
++            branchSession.setApplicationData(sessionSyncMsg.getBranchSession().getApplicationData());
++        }
+         branchSession.setStatus(status);
+         if (logger.isDebugEnabled()) {
+             logger.debug("update branch: {} , status: {}", branchSession.getBranchId(), branchSession.getStatus());

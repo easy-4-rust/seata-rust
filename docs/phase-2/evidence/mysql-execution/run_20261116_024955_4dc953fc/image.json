@@ -1,0 +1,69 @@
+[
+    {
+        "Id": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+        "RepoTags": [
+            "mysql:8"
+        ],
+        "RepoDigests": [
+            "mysql@sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-11-03T00:28:00.628827072Z",
+        "Config": {
+            "ExposedPorts": {
+                "3306/tcp": {},
+                "33060/tcp": {}
+            },
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "GOSU_VERSION=1.19",
+                "MYSQL_MAJOR=8.4",
+                "MYSQL_VERSION=8.4.13-1.el9",
+                "MYSQL_SHELL_VERSION=8.4.10-1.el9"
+            ],
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "Cmd": [
+                "mysqld"
+            ],
+            "Volumes": {
+                "/var/lib/mysql": {}
+            },
+            "WorkingDir": "/"
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 1102604061,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:cecc8e2556a87b1d7fe523b620974dd69b96cddb1b96ee5d680b9d523b29a72c",
+                "sha256:a29793a512755393b8d8aa785a346683fa90a9e0f848a4bf7ab7c50b6406f2ea",
+                "sha256:c3a2e3ecb4e70deb78cb616656f02913bb7479605d06c5980280c794b2713c16",
+                "sha256:869a9a4f67cfdeb0b03fbd6487026a51acfbd6cdaddf7cef6b1c29621ac9fd22",
+                "sha256:44ace0eae2357a948e322cc946dec87027d0464fc30e41f3c542aec01ac316d3",
+                "sha256:a1617c8fdf9523cba50029efbd1375e9cdc6d7592856172d7cb8f01e5ed4e266",
+                "sha256:abffd2fb6c8f7b651c3ac7705584017f2111f2ac555ab0de39c54bcf06296995",
+                "sha256:2b0da76e421ca4e5b8325c8bbaf0d8dd34e279cd31a4ce3dd63dcb926a3dc885",
+                "sha256:644aebd394242e13565ac2f1a397067663100374d3cf3d294d295448a14a1bcb",
+                "sha256:9fe653ae7e170583ef1d77605ec94e85e5ebef33b27317a1be8ff5e22f4c3f10"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-11-07T15:41:15.805592896Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "size": 2605
+        },
+        "Identity": {
+            "Pull": [
+                {
+                    "Repository": "docker.io/library/mysql"
+                }
+            ]
+        }
+    }
+]

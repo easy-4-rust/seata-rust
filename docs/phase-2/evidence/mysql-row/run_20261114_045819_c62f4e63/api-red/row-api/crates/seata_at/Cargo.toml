@@ -1,0 +1,17 @@
+[package]
+name = "seata-at"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "AT SQL recognition, images and undo contracts for Seata-Rust"
+
+[dependencies]
+thiserror.workspace = true
+sqlparser = "=0.52.0"
+# 固定已有公共缓存版本，避免离线解析选择尚未验证的MSRV或依赖。
+log = "=0.4.27"
+
+[lints]
+workspace = true

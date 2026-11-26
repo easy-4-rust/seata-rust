@@ -1,0 +1,76 @@
+diff --git a/server/src/main/java/org/apache/seata/server/metrics/MetricsSubscriber.java b/server/src/main/java/org/apache/seata/server/metrics/MetricsSubscriber.java
+--- a/server/src/main/java/org/apache/seata/server/metrics/MetricsSubscriber.java
++++ b/server/src/main/java/org/apache/seata/server/metrics/MetricsSubscriber.java
+@@ -29,6 +29,7 @@
+ 
+ import java.util.HashMap;
+ import java.util.Map;
++import java.util.Objects;
+ import java.util.concurrent.TimeUnit;
+ import java.util.function.Consumer;
+ 
+@@ -41,7 +42,8 @@
+ import static org.apache.seata.metrics.IdConstants.TRANSACTION_NAME_KEY;
+ 
+ /**
+- * Event subscriber for metrics
++ * 按事件生命周期记录事务指标，避免处理中事件污染完成计数。
++ * 对应 Java: org.apache.seata.server.metrics.MetricsSubscriber
+  *
+  */
+ public class MetricsSubscriber {
+@@ -107,8 +109,22 @@
+     }
+ 
+     private void increaseTimer(Id timerId, GlobalTransactionEvent event) {
++        Long beginTime = event.getBeginTime();
++        Long endTime = event.getEndTime();
++        // 不完整、倒序或溢出的时间没有有效耗时，不能补零或补当前时间。
++        if (Objects.isNull(beginTime) || Objects.isNull(endTime) || endTime < beginTime) {
++            LOGGER.debug("ignore unavailable transaction duration, transactionId={}, status={}", event.getId(), event.getStatus());
++            return;
++        }
++        final long duration;
++        try {
++            duration = Math.subtractExact(endTime, beginTime);
++        } catch (ArithmeticException overflow) {
++            LOGGER.debug("ignore overflowing transaction duration, transactionId={}, status={}", event.getId(), event.getStatus());
++            return;
++        }
+         registry.getTimer(timerId.withTag(APP_ID_KEY, event.getApplicationId()).withTag(GROUP_KEY, event.getGroup()))
+-                .record(event.getEndTime() - event.getBeginTime(), TimeUnit.MILLISECONDS);
++                .record(duration, TimeUnit.MILLISECONDS);
+     }
+ 
+     private void processGlobalStatusBegin(GlobalTransactionEvent event) {
+@@ -215,9 +231,27 @@
+ 
+     @Subscribe
+     public void recordGlobalTransactionEventForMetrics(GlobalTransactionEvent event) {
+-        if (registry != null && consumers.containsKey(event.getStatus())) {
+-            consumers.get(event.getStatus()).accept(event);
+-        }
++        if (Objects.isNull(registry) || Objects.isNull(event)) {
++            return;
++        }
++        Consumer<GlobalTransactionEvent> consumer = consumers.get(event.getStatus());
++        if (Objects.isNull(consumer)) {
++            return;
++        }
++        // postSessionDoingEvent有意不提供结束时间。重入16/17不代表再次结束事务。
++        if (Objects.isNull(event.getEndTime()) && !isInProgressStatus(event.getStatus())) {
++            LOGGER.debug("ignore unfinished completion metrics, transactionId={}, status={}", event.getId(), event.getStatus());
++            return;
++        }
++        consumer.accept(event);
++    }
++
++    /** 开始与重试进度事件允许没有结束时间，其余已支持状态必须等待完成事件。 */
++    private boolean isInProgressStatus(String status) {
++        return GlobalStatus.Begin.name().equals(status)
++                || GlobalStatus.CommitRetrying.name().equals(status)
++                || GlobalStatus.RollbackRetrying.name().equals(status)
++                || GlobalStatus.TimeoutRollbackRetrying.name().equals(status);
+     }
+ 
+     @Subscribe

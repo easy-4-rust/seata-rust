@@ -1,0 +1,23 @@
+test_late_failed_target_end_is_kept_separate_from_the_original_unknown (test_tm_validate.TmBindingTests.test_late_failed_target_end_is_kept_separate_from_the_original_unknown) ... ERROR
+
+======================================================================
+ERROR: test_late_failed_target_end_is_kept_separate_from_the_original_unknown (test_tm_validate.TmBindingTests.test_late_failed_target_end_is_kept_separate_from_the_original_unknown)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-rm-java\test_tm_validate.py", line 68, in test_late_failed_target_end_is_kept_separate_from_the_original_unknown
+    proof=self.check(values);self.assertTrue(proof['client_reported_end_unknown']);self.assertEqual(proof['target_end_result_code'],0);self.assertEqual(proof['target_end_response_status'],5)
+          ^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-rm-java\test_tm_validate.py", line 40, in check
+    def check(self,parts):return rm.validator.validate_tm(*parts,rm.NONCE)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-rm-java\validate.py", line 209, in validate_tm
+    need(reader.take(2)==b'\x01\x00','TM result did not succeed')
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-rm-java\validate.py", line 9, in need
+    if not condition:raise ValueError(reason)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: TM result did not succeed
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (errors=1)

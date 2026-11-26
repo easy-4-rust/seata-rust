@@ -1,0 +1,30 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling thiserror v2.0.21
+   Compiling log v0.4.27
+   Compiling sqlparser v0.52.0
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_mysql_execution_20261115_205718_cc203af6\template-offset\crates\seata_datasource)
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_mysql_execution_20261115_205718_cc203af6\template-offset\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.66s
+     Running tests\insert_value_templates.rs (D:/cargo-target/seata-mysql-execution-controls\debug\deps\insert_value_templates-cb49314782a9a8cb.exe)
+
+running 1 test
+
+thread 'templates_keep_original_row_column_and_binding_positions' (38196) panicked at crates\seata_at\tests\insert_value_templates.rs:22:5:
+assertion `left == right` failed
+  left: [[(0, 1), (0, 1), (0, 3)], [(0, 3), (0, 4), (0, 4)]]
+ right: [[(0, 1), (1, 0), (1, 2)], [(3, 0), (3, 1), (4, 0)]]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test templates_keep_original_row_column_and_binding_positions ... FAILED
+
+failures:
+
+failures:
+    templates_keep_original_row_column_and_binding_positions
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test insert_value_templates`

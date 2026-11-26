@@ -1,0 +1,51 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling windows-link v0.2.1
+   Compiling thiserror v2.0.21
+   Compiling winapi v0.3.9
+   Compiling pin-project-lite v0.2.17
+   Compiling bytes v1.12.1
+   Compiling crc32fast v1.5.0
+   Compiling cfg-if v1.0.5
+   Compiling windows-sys v0.61.2
+   Compiling syn v3.0.10
+   Compiling mio v1.2.4
+   Compiling socket2 v0.6.5
+   Compiling fs2 v0.4.3
+   Compiling thiserror-impl v2.0.21
+   Compiling tokio-macros v2.7.2
+   Compiling tokio v1.54.1
+   Compiling seata-protocol v0.1.0 (D:\codex-builds\formal_rm_foundation_20261113_235227_16b0517f\crc\crates\seata_protocol)
+   Compiling seata-transport v0.1.0 (D:\codex-builds\formal_rm_foundation_20261113_235227_16b0517f\crc\crates\seata_transport)
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_foundation_20261113_235227_16b0517f\crc\crates\seata_rm)
+warning: unused variable: `expected`
+   --> crates\seata_rm\src\store\file_branch_store.rs:233:17
+    |
+233 |             let expected =
+    |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_expected`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-rm` (lib) generated 1 warning (run `cargo fix --lib -p seata-rm` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.15s
+     Running tests\journal.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\journal-056ec008a226e2bc.exe)
+
+running 1 test
+test damaged_version_checksum_or_partial_tail_is_never_silently_truncated ... FAILED
+
+failures:
+
+---- damaged_version_checksum_or_partial_tail_is_never_silently_truncated stdout ----
+
+thread 'damaged_version_checksum_or_partial_tail_is_never_silently_truncated' (61716) panicked at crates\seata_rm\tests\journal.rs:262:9:
+assertion failed: FileBranchStore::open(file.clone(), options()).await.is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    damaged_version_checksum_or_partial_tail_is_never_silently_truncated
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p seata-rm --test journal`

@@ -1,0 +1,104 @@
+{
+  "status": "FOUNDATION_VALUES_VERIFIED_MODULE_MIGRATION_OPEN",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "source_oracle": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-core-values\\run_20261118_021350_31930d45",
+  "verification": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\sqlparser-core-values\\run_20261118_021350_31930d45\\verification_20261118_021907_559229",
+  "rust_pin": "130ad634279cef10cd2998fc3bfae82996224d66",
+  "original_core_JUnit_passed": 76,
+  "core_object_denominator": 31,
+  "core_source_case_denominator": 76,
+  "production_objects_added": 11,
+  "core_source_cases_MATCH": 23,
+  "core_source_cases_MISSING": 53,
+  "original_constant_records_MATCH": 88,
+  "Rust": {
+    "1.99": {
+      "ordinary_passed": 369,
+      "harness_results": 81,
+      "ignored": 143,
+      "doctests_passed": 4,
+      "source_cases_MATCH": 23
+    },
+    "1.85": {
+      "ordinary_passed": 369,
+      "harness_results": 81,
+      "ignored": 143,
+      "doctests_passed": 4,
+      "source_cases_MATCH": 23
+    }
+  },
+  "runtime_mutants": [
+    {
+      "name": "wrong-select-mapping",
+      "source": "D:\\codex-builds\\seata_core_values_20261118_021350_31930d45\\mutants\\verification_20261118_021907_559229\\wrong-select-mapping\\crates\\seata_sqlparser\\src\\sql_type.rs",
+      "before_sha256": "73dc1bb23a685cca8854f6e779042404e81db3f1142bf7404a48f5945b730271",
+      "mutant_sha256": "64f0807e07f1b83747c35cc60d484fd4610fde2baf70546a18eef55b8eb606fd",
+      "suite": "core_values",
+      "test": "sql_type_value_of",
+      "result": "RUNTIME_ASSERTION_REJECTED"
+    },
+    {
+      "name": "accept-enum-hole",
+      "source": "D:\\codex-builds\\seata_core_values_20261118_021350_31930d45\\mutants\\verification_20261118_021907_559229\\accept-enum-hole\\crates\\seata_sqlparser\\src\\sql_type.rs",
+      "before_sha256": "73dc1bb23a685cca8854f6e779042404e81db3f1142bf7404a48f5945b730271",
+      "mutant_sha256": "53c2dced5a6d63e800ca3aed1227dc9f2205f37309dabd3eaea9938dc12c3f5f",
+      "suite": "core_values",
+      "test": "sql_type_invalid",
+      "result": "RUNTIME_ASSERTION_REJECTED"
+    },
+    {
+      "name": "clamp-negative-count",
+      "source": "D:\\codex-builds\\seata_core_values_20261118_021350_31930d45\\mutants\\verification_20261118_021907_559229\\clamp-negative-count\\crates\\seata_sqlparser\\src\\struct\\sql_method_expr.rs",
+      "before_sha256": "b2fc5dd11cc9df0501bc79db4d43a56eb1233d68419974e473fe7284acf6e06d",
+      "mutant_sha256": "8ea08d6ad50ab3d86cb34aac8c50da0bcb25a2d6d337ada0206761dcfcfc3418",
+      "suite": "core_value_obligations",
+      "test": "method_count_is_signed_and_participates_in_equality",
+      "result": "RUNTIME_ASSERTION_REJECTED"
+    },
+    {
+      "name": "lose-cause-message",
+      "source": "D:\\codex-builds\\seata_core_values_20261118_021350_31930d45\\mutants\\verification_20261118_021907_559229\\lose-cause-message\\crates\\seata_sqlparser\\src\\sql_parsing_exception.rs",
+      "before_sha256": "afa0f6a3b9d76847295cdb770423dca82a7ac7fc56f0652602a499daa3a21428",
+      "mutant_sha256": "ef5938d7665523edeff478755e8cfffdcdfd8deb567cef30594f2685c0a37ccf",
+      "suite": "core_values",
+      "test": "exception_cause",
+      "result": "RUNTIME_ASSERTION_REJECTED"
+    },
+    {
+      "name": "truncate-utf16-char",
+      "source": "D:\\codex-builds\\seata_core_values_20261118_021350_31930d45\\mutants\\verification_20261118_021907_559229\\truncate-utf16-char\\crates\\seata_sqlparser\\src\\escape_symbol.rs",
+      "before_sha256": "3a2a33ac9303a6d9c1aaacd8616f8c0b9752567187e8ef6fe10ccbb35d4de565",
+      "mutant_sha256": "5a806c48e05a3eae0945ecf4592cb4d39f8b5e8cab42b7bc49b50978bf52c07f",
+      "suite": "core_value_obligations",
+      "test": "escape_preserves_utf16_code_units",
+      "result": "RUNTIME_ASSERTION_REJECTED"
+    },
+    {
+      "name": "wrong-jdbc-constant",
+      "source": "D:\\codex-builds\\seata_core_values_20261118_021350_31930d45\\mutants\\verification_20261118_021907_559229\\wrong-jdbc-constant\\crates\\seata_sqlparser\\src\\util\\jdbc_constants.rs",
+      "before_sha256": "a522c56a92061f7399d95faa5925ee3620580913ac6f30d9b5df601a14f31c69",
+      "mutant_sha256": "c7b899463891cc4b5efd7357bbe513ed09653109c7cc7ebe8dbfa5a636d270c6",
+      "suite": "core_constants_diff",
+      "test": "complete_constant_inventory_matches_original_java",
+      "result": "RUNTIME_ASSERTION_REJECTED"
+    }
+  ],
+  "differential_counterexamples": [
+    "missing-case",
+    "foreign-case",
+    "forged-green-over-value-mismatch",
+    "duplicate-case-observation"
+  ],
+  "full_core_migration_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "external_TC_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user",
+  "limitations": [
+    "Java String lone surrogate input domain is not representable by Rust UTF-8 String",
+    "No DB qualification rerun: existing database paths unchanged; host evidence remains inherited",
+    "Remaining 20 core objects and 53 source cases are not implemented",
+    "Initial RED is missing API E0432; runtime assertion RED comes from isolated mutants"
+  ]
+}

@@ -1,0 +1,23 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.86s
+     Running tests\jackson_undo_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jackson_undo_source-56cc2896bd07c42c.exe)
+
+running 1 test
+test jackson_rejects_empty_serial_blob_encoder_and_preserves_signed_double_zero ... FAILED
+
+failures:
+
+---- jackson_rejects_empty_serial_blob_encoder_and_preserves_signed_double_zero stdout ----
+
+thread 'jackson_rejects_empty_serial_blob_encoder_and_preserves_signed_double_zero' (61848) panicked at crates\seata_at\tests\jackson_undo_source.rs:322:5:
+assertion failed: matches!(parser.encode_typed_field(&empty),
+    Err(UndoCodecError::Unsupported { .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    jackson_rejects_empty_serial_blob_encoder_and_preserves_signed_double_zero
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test jackson_undo_source`

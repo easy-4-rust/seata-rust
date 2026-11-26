@@ -1,0 +1,24 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_locale_20261118_045646_08aaa78a\mutants\verification_20261118_052302_225325\previous-high-surrogate-lookahead\crates\seata_sqlparser)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.37s
+     Running unittests src\lib.rs (D:/cargo-target/seata-locale-mutants\debug\deps\seata_sqlparser-02fe1d704f95a549.exe)
+
+running 1 test
+test utf16_cursor::tests::previous_preserves_code_point_before_partial_surrogate_position ... FAILED
+
+failures:
+
+---- utf16_cursor::tests::previous_preserves_code_point_before_partial_surrogate_position stdout ----
+
+thread 'utf16_cursor::tests::previous_preserves_code_point_before_partial_surrogate_position' (47904) panicked at crates\seata_sqlparser\src\utf16_cursor.rs:82:13:
+assertion `left == right` failed: start 2
+  left: (65536, 1)
+ right: (55296, 1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    utf16_cursor::tests::previous_preserves_code_point_before_partial_surrogate_position
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-sqlparser --lib`

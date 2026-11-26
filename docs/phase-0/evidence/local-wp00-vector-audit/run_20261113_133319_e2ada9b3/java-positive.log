@@ -1,0 +1,23 @@
+SLF4J(W): Class path contains multiple SLF4J providers.
+SLF4J(W): Found provider [ch.qos.logback.classic.spi.LogbackServiceProvider@6e75aa0d]
+SLF4J(W): Found provider [org.slf4j.simple.SimpleServiceProvider@7fc229ab]
+SLF4J(W): See https://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J(I): Actual provider is of type [ch.qos.logback.classic.spi.LogbackServiceProvider@6e75aa0d]
+13:33:23.929 [main] INFO org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+13:33:23.983 [main] INFO org.apache.seata.config.ConfigurationFactory -- load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+13:33:23.984 [main] ERROR org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider -- Get config 'seata.config.file.name' default value from the property object failed:
+org.apache.seata.common.exception.ShouldNeverHappenException: PropertyClass for prefix: [seata.config.file] should not be null.
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.getDefaultValueFromPropertyObject(SpringBootConfigurationProvider.java:123)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:95)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.getConfig(<generated>)
+	at org.apache.seata.config.ConfigurationFactory.maybeNeedOriginFileInstance(ConfigurationFactory.java:136)
+	at org.apache.seata.config.ConfigurationFactory.<clinit>(ConfigurationFactory.java:64)
+	at org.apache.seata.core.serializer.SerializerServiceLoader.<clinit>(SerializerServiceLoader.java:50)
+	at org.apache.seata.core.rpc.netty.v1.ProtocolDecoderV1.<init>(ProtocolDecoderV1.java:79)
+	at org.apache.seata.core.rpc.netty.v1.ProtocolV1GoldenFrameTest.decodeAndReencode(ProtocolV1GoldenFrameTest.java:49)
+	at org.apache.seata.core.rpc.netty.v1.ProtocolV1GoldenFrameTest.decodesAndReencodesGoGoldenGlobalBeginRequestFrame(ProtocolV1GoldenFrameTest.java:77)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.serializer.seata.FrozenCorpusProbe.main(FrozenCorpusProbe.java:68)

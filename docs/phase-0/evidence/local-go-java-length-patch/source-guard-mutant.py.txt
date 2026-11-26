@@ -1,0 +1,18 @@
+def audit_cohort(work, expected_changes, test_bytes):
+    rows = []
+    with tarfile.open(c.ARCHIVE) as archive:
+        for entry in archive:
+            relative = '/'.join(entry.name.split('/')[1:])
+            if not entry.isfile() or not (relative.endswith('.go') or relative in ['go.mod', 'go.sum']):
+                continue
+            original = archive.extractfile(entry).read()
+            current = (work / relative).read_bytes()
+            expected = expected_changes.get(relative)
+            if expected is None and current != original:
+                raise RuntimeError('Unexpected Go cohort drift: ' + relative)
+            if expected is not None and h.sha(work / relative) != expected:
+                raise RuntimeError('Wrong Go patched file: ' + relative)
+            rows.append(dict(path=relative, original_sha256=hashlib.sha256(original).hexdigest(), actual_sha256=h.sha(work / relative)))
+    if len(rows) != 714:
+        raise RuntimeError('Go cohort source closure changed')
+    return rows

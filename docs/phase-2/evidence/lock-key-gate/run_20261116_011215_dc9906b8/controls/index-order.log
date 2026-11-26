@@ -1,0 +1,99 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling thiserror v2.0.21
+   Compiling serde_json v1.0.140
+   Compiling log v0.4.27
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling ryu v1.0.23
+   Compiling base64 v0.22.1
+   Compiling sqlparser v0.52.0
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_lock_key_gate_20261116_011215_dc9906b8\index-order\crates\seata_datasource)
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_lock_key_gate_20261116_011215_dc9906b8\index-order\crates\seata_at)
+warning: unused import: `super::java_primary_key_order::JavaPrimaryKeyOrder`
+ --> crates\seata_at\src\exec\base_transactional_executor.rs:1:5
+  |
+1 | use super::java_primary_key_order::JavaPrimaryKeyOrder;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `JavaPrimaryKeyOrder` is never constructed
+ --> crates\seata_at\src\exec\java_primary_key_order.rs:6:19
+  |
+6 | pub(crate) struct JavaPrimaryKeyOrder<'a> {
+  |                   ^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `OrderNode` is never constructed
+  --> crates\seata_at\src\exec\java_primary_key_order.rs:12:8
+   |
+12 | struct OrderNode {
+   |        ^^^^^^^^^
+
+warning: struct `OrderBucket` is never constructed
+  --> crates\seata_at\src\exec\java_primary_key_order.rs:21:8
+   |
+21 | struct OrderBucket {
+   |        ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> crates\seata_at\src\exec\java_primary_key_order.rs:27:19
+    |
+ 25 | impl<'a> JavaPrimaryKeyOrder<'a> {
+    | -------------------------------- associated items in this implementation
+ 26 |     /// 参数为按原PRIMARY索引插入的ASCII唯一列名；返回原HashMap遍历对应的输入下标，不改变SQL索引序。
+ 27 |     pub(crate) fn indices(names: &'a [&'a str]) -> Result<Vec<usize>, LockKeyError> {
+    |                   ^^^^^^^
+...
+ 73 |     fn invalid() -> LockKeyError {
+    |        ^^^^^^^
+...
+ 78 |     fn compare(&self, first: usize, second: usize) -> Ordering {
+    |        ^^^^^^^
+...
+ 84 |     fn resize(&mut self) -> Result<(), LockKeyError> {
+    |        ^^^^^^
+...
+120 |     fn treeify(&mut self, bucket: usize) -> Result<(), LockKeyError> {
+    |        ^^^^^^^
+...
+132 |     fn insert_tree(&mut self, bucket: usize, node: usize, link: bool) -> Result<(), LockKeyError> {
+    |        ^^^^^^^^^^^
+...
+172 |     fn front(&mut self, bucket: usize) -> Result<(), LockKeyError> {
+    |        ^^^^^
+...
+183 |     fn rotate(&mut self, root: &mut usize, pivot: usize, left: bool) -> Result<(), LockKeyError> {
+    |        ^^^^^^
+...
+222 |     fn balance(&mut self, mut root: usize, mut node: usize) -> Result<usize, LockKeyError> {
+    |        ^^^^^^^
+
+warning: `seata-at` (lib) generated 5 warnings (run `cargo fix --lib -p seata-at` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 15.65s
+     Running tests\global_lock_key_order.rs (D:/cargo-target/seata-lock-key-controls\debug\deps\global_lock_key_order-8fc3488751829b8f.exe)
+
+running 1 test
+
+thread 'java_lock_order_is_separate_from_database_index_and_physical_column_order' (87712) panicked at crates\seata_at\tests\global_lock_key_order.rs:52:5:
+assertion `left == right` failed
+  left: Some("composite:2_1")
+ right: Some("composite:1_2")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test java_lock_order_is_separate_from_database_index_and_physical_column_order ... FAILED
+
+failures:
+
+failures:
+    java_lock_order_is_separate_from_database_index_and_physical_column_order
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test global_lock_key_order`

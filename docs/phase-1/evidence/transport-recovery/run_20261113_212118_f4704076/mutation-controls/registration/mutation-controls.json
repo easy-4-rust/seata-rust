@@ -1,0 +1,86 @@
+[
+  {
+    "name": "identified_false_is_accepted",
+    "candidate": "D:\\codex-builds\\seata-registration-controls-eae40e3d90d2",
+    "source": "session_registration.rs",
+    "source_sha256": "60a7f7a56913bb9a10c69f7c367f2014d93a6a35e70288408925552ece54aa45",
+    "patch": {
+      "old": "RegistrationStatus::Rejected",
+      "new": "RegistrationStatus::Accepted"
+    },
+    "test": "explicit_identity_denial_is_rejected_without_resource_or_business_attempt",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "initializing_handle_is_selectable",
+    "candidate": "D:\\codex-builds\\seata-registration-controls-eae40e3d90d2",
+    "source": "pool_core.rs",
+    "source_sha256": "38b23e6bb033cdb76b743970cb4880c03e12286d7b44ef3966dd023332fef877",
+    "patch": {
+      "old": "            let selectable = match revision {\n                None => slot.state == PoolSlotState::Connected,\n                Some(revision) => {\n                    slot.state == PoolSlotState::Ready\n                        && slot.registration.as_ref().is_some_and(|report| {\n                            report.is_ready()\n                                && report.registry_revision == revision\n                                && Some(report.generation) == slot.generation\n                        })\n                }\n            };\n",
+      "new": "            let selectable=true;\n"
+    },
+    "test": "withheld_tm_identity_prevents_business_write_until_identified",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "stale_revision_retains_ready_snapshot",
+    "candidate": "D:\\codex-builds\\seata-registration-controls-eae40e3d90d2",
+    "source": "pool_core.rs",
+    "source_sha256": "7001e9d2505a0c980f1a8d8d3facb5bf29c3db3dd9616803b6829e15da9e3d99",
+    "patch": {
+      "old": "        if let Some(registration) = &self.registration {\n            let current = registration.revision();\n            for slot in &mut snapshot.slots {\n                if slot.state == PoolSlotState::Ready\n                    && !slot.registration.as_ref().is_some_and(|report| {\n                        current\n                            .as_ref()\n                            .is_ok_and(|revision| *revision == report.registry_revision)\n                    })\n                {\n                    slot.state = if current.is_ok() {\n                        PoolSlotState::Registering\n                    } else {\n                        PoolSlotState::Degraded\n                    };\n                }\n            }\n        }\n",
+      "new": ""
+    },
+    "test": "adding_resource_invalidates_old_revision_until_live_session_is_registered_again",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "required_resources_silently_truncated",
+    "candidate": "D:\\codex-builds\\seata-registration-controls-eae40e3d90d2",
+    "source": "session_registration.rs",
+    "source_sha256": "72c919a52f80a80baaef1e734e3aace92eaaaf7218870213fed6b1149fe94fcd",
+    "patch": {
+      "old": ".resources()\n                .iter()",
+      "new": ".resources()\n                .iter().take(1)"
+    },
+    "test": "replacement_session_repeats_identity_and_all_cached_resources_before_status",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "each_resource_restarts_initialization_deadline",
+    "candidate": "D:\\codex-builds\\seata-registration-controls-eae40e3d90d2",
+    "source": "session_registration.rs",
+    "source_sha256": "73cec267c7fc9c3d22b3099a3652020902caccd7fc61f406d13f2c0f610ff615",
+    "patch": {
+      "old": ".attempt(handle, Some(entry.resource.resource_id()), deadline)",
+      "new": ".attempt(handle, Some(entry.resource.resource_id()), Instant::now()+self.timeout)"
+    },
+    "test": "netty::session_registration::tests::initialization_steps_share_one_deadline_and_leave_later_resources_unattempted",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "rm_adds_empty_resource_handshake",
+    "candidate": "D:\\codex-builds\\seata-registration-controls-eae40e3d90d2",
+    "source": "session_registration.rs",
+    "source_sha256": "a0c237b203304906516b99fbccb72d660872dc1e6a17e450605f12d4ab839bb3",
+    "patch": {
+      "old": "            for (index, entry) in report.resources.iter_mut().enumerate() {",
+      "new": "            report.identity=self.attempt(handle,None,deadline).await;\n            if report.identity.status!=RegistrationStatus::Accepted {return Ok(report);}\n            for (index, entry) in report.resources.iter_mut().enumerate() {"
+    },
+    "test": "rm_first_registration_includes_resource_for_identity_and_resource_auth_policy",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "unlocked-preflight",
+    "target": "preflight_locks_prevent_row_growth_and_phantoms_before_full_query_is_forwarded",
+    "actual_assertion_failed": true,
+    "assertion_message": "row growth must be blocked before full value query",
+    "executed_source": "D:\\codex-builds\\seata_mysql_image_race_20261114_052627_abb1eddd\\unlocked-preflight\\crates\\seata_db_mysql\\src\\mysql_image_reader.rs",
+    "snapshot": "controls/unlocked-preflight/executed.rs",
+    "sha256": "2f933318599dc7bdd2946f31864bf4e755d75dde6615cba5a605ba224da6e2d3",
+    "actual_child": "D:\\codex-builds\\seata_mysql_image_race_20261114_052627_abb1eddd\\unlocked-preflight\\docs\\phase-2\\evidence\\mysql-image-race\\run_20261114_052734_428d710f",
+    "held_packet": {
+      "bytes": 102,
+      "sha256": "0545e948290a7184311184b236fe6134f1276d7726f20c7676ff9ee51b873f3a",
+      "hex": "620000001653454c45435420606964602c20607061796c6f6164602046524f4d2060696d6167655f696e7465725f717565727960205748455245206964203e3d203f204f524445522042592060696460204c494d4954203130323520464f5220555044415445",
+      "command": "COM_STMT_PREPARE",
+      "sql": "SELECT `id`, `payload` FROM `image_inter_query` WHERE id >= ? ORDER BY `id` LIMIT 1025 FOR UPDATE"
+    }
+  },
+  {
+    "name": "read-committed",
+    "target": "preflight_locks_prevent_row_growth_and_phantoms_before_full_query_is_forwarded",
+    "actual_assertion_failed": true,
+    "assertion_message": "phantom insert must be blocked before full value query",
+    "executed_source": "D:\\codex-builds\\seata_mysql_image_race_20261114_052627_abb1eddd\\read-committed\\crates\\seata_db_mysql\\src\\data_source_proxy.rs",
+    "snapshot": "controls/read-committed/executed.rs",
+    "sha256": "bc2705f6feef69f6c3301e758c36eb02c671b916d791e31c3c10a99ed5f3c98f",
+    "actual_child": "D:\\codex-builds\\seata_mysql_image_race_20261114_052627_abb1eddd\\read-committed\\docs\\phase-2\\evidence\\mysql-image-race\\run_20261114_052814_a15f80c4",
+    "held_packet": {
+      "bytes": 102,
+      "sha256": "0545e948290a7184311184b236fe6134f1276d7726f20c7676ff9ee51b873f3a",
+      "hex": "620000001653454c45435420606964602c20607061796c6f6164602046524f4d2060696d6167655f696e7465725f717565727960205748455245206964203e3d203f204f524445522042592060696460204c494d4954203130323520464f5220555044415445",
+      "command": "COM_STMT_PREPARE",
+      "sql": "SELECT `id`, `payload` FROM `image_inter_query` WHERE id >= ? ORDER BY `id` LIMIT 1025 FOR UPDATE"
+    }
+  }
+]

@@ -1,0 +1,26 @@
+from pathlib import Path
+import hashlib,importlib.util,json,sys
+ROOT=Path('E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation');HERE=ROOT/'tools/java-metrics-lifecycle-candidate';OUT=Path('D:/codex-builds/metrics-lifecycle-20261113')
+sys.path.insert(0,str(HERE));import unit_run as u
+h=u.module('frozen_metrics_unit_support',ROOT/'tools/java-tc-integration/backend_recovery/run.py');a=u.module('frozen_metrics_dependency_audit',ROOT/'tools/java-retry-timeout-candidate/file_runtime.py')
+cp=(OUT/'effective-classpath.txt').read_text().strip();dependencies=a.dependency_inventory(cp)
+assert dependencies==json.loads((OUT/'dependency-before.json').read_bytes())
+sources=[HERE/'MetricsSubscriber.java',HERE/'MetricsLifecycleCandidateTest.java',ROOT/'tools/java-raft-reload-candidate/ObservationJUnit.java',OUT/'original-sources/MetricsSubscriberUnitTest.java']
+rows=[];snapshots={}
+for source in sources:
+ data=source.read_bytes();target=OUT/'frozen-inputs'/hashlib.sha256(str(source).encode()).hexdigest()[:20]/source.name;u.put(target,data);snapshots[source.name]=target;rows.append(dict(path=str(source),snapshot=str(target),sha256=hashlib.sha256(data).hexdigest()))
+u.put(OUT/'frozen-source-audit.json',json.dumps(rows,indent=2)+'\n');u.put(OUT/'frozen-compile-dependencies.json',json.dumps(dependencies,indent=2)+'\n')
+def run(binary,args,label):
+ path=OUT/(label+'.args');u.put(path,'\n'.join(u.quote(x) for x in args)+'\n');result=h.command([binary,'@'+str(path)],check=False,timeout=120);u.put(OUT/(label+'.log'),result.stdout);return result
+candidate=OUT/'frozen-candidate';candidate.mkdir(exist_ok=True);tests=OUT/'frozen-test-classes';tests.mkdir(exist_ok=True)
+r=run(h.JAVA.parent/'javac.exe',['-encoding','UTF-8','-cp',cp,'-d',candidate,snapshots['MetricsSubscriber.java']],'frozen-candidate-compile');assert r.returncode==0,r.stdout
+r=run(h.JAVA.parent/'javac.exe',['-encoding','UTF-8','-cp',str(OUT/'original-jar')+';'+cp,'-d',tests,snapshots['MetricsLifecycleCandidateTest.java'],snapshots['MetricsSubscriberUnitTest.java'],snapshots['ObservationJUnit.java']],'frozen-test-compile');assert r.returncode==0,r.stdout
+for path in tests.rglob('*.class'):assert u.sha(path)==u.sha(OUT/'test-classes'/path.relative_to(tests))
+leaf='org/apache/seata/server/metrics/MetricsSubscriber.class';assert u.sha(candidate/leaf)==u.sha(OUT/'candidate'/leaf)
+for label,selected,expected in [('frozen-red',OUT/'original-jar',b'OBSERVATION_JUNIT tests=77 succeeded=30 failed=47 skipped=0'),('frozen-green',candidate,b'OBSERVATION_JUNIT tests=77 succeeded=77 failed=0 skipped=0')]:
+ r=run(h.JAVA,['-Djava.io.tmpdir=D:/Temp','-Duser.home='+str(OUT),'-cp',str(tests)+';'+str(selected)+';'+cp,'ObservationJUnit','org.apache.seata.server.metrics.MetricsLifecycleCandidateTest','org.apache.seata.server.metrics.MetricsSubscriberUnitTest'],label);assert expected in r.stdout
+ assert r.returncode==(1 if label=='frozen-red' else 0)
+for row in rows:assert u.sha(Path(row['path']))==row['sha256']==u.sha(Path(row['snapshot']))
+assert dependencies==a.dependency_inventory(cp)
+u.put(OUT/'frozen-binary-audit.json',json.dumps(dict(test_classes=[dict(path=p.relative_to(tests).as_posix(),sha256=u.sha(p)) for p in sorted(tests.rglob('*.class'))],candidate_class_sha256=u.sha(candidate/leaf),source_inputs_unchanged=True,dependencies_unchanged=True),indent=2)+'\n')
+print('FROZEN_METRICS_UNIT_RED_GREEN_VERIFIED 77=47fail/30control;77green;identical_binary=true')

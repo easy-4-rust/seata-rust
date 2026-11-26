@@ -1,0 +1,27 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.81s
+     Running tests\live_metadata.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_metadata-dcefb108e0de7fe8.exe)
+
+running 1 test
+test charset_only_ddl_rejects_stale_text_domain_in_an_existing_transaction ... FAILED
+
+failures:
+
+---- charset_only_ddl_rejects_stale_text_domain_in_an_existing_transaction stdout ----
+
+thread 'charset_only_ddl_rejects_stale_text_domain_in_an_existing_transaction' (4624) panicked at crates\seata_db_mysql\tests\live_metadata.rs:618:5:
+assertion failed: matches!(tx.table_meta("charset_later").await,
+    Err(DbError::Unsupported
+    {
+        feature:
+        "table definition changed after transaction metadata snapshot",
+    }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    charset_only_ddl_rejects_stale_text_domain_in_an_existing_transaction
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.50s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_metadata`

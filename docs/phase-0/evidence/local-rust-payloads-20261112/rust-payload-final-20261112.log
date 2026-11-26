@@ -1,0 +1,81 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s
+     Running unittests src\main.rs (D:/cargo-target/seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 73 tests
+test branch_callback_state::tests::duplicate_commit_replies_to_new_rpc_id_without_reapplying_action ... ok
+test branch_callback_state::tests::duplicate_rollback_preserves_terminal_outcome_for_same_or_new_rpc_id ... ok
+test branch_probe::tests::rejects_failure_invalid_id_truncation_and_trailing_data ... ok
+test branch_probe::tests::rollback_callback_echoes_request_id_and_returns_rollbacked_branch_status ... ok
+test branch_callback_state::tests::failed_simulated_action_is_not_cached_as_success ... ok
+test branch_probe::tests::commit_callback_echoes_request_id_and_returns_committed_branch_status ... ok
+test branch_callback_state::tests::conflicting_redelivery_is_rejected_before_applying_or_returning_cached_success ... ok
+test branch_probe::tests::first_response_is_withheld_and_only_redelivery_is_acknowledged ... ok
+test branch_probe::tests::missing_or_same_rpc_redelivery_cannot_pass_loss_probe ... ok
+test payload::tests::golden_branch_commit_response_failed ... ok
+test branch_probe::tests::malformed_callback_never_gets_success_ack ... ok
+test branch_probe::tests::accepts_positive_tc_branch_id ... ok
+test branch_probe::tests::wrong_identity_or_callback_operation_never_gets_success_ack ... ok
+test payload::tests::golden_branch_commit_request ... ok
+test payload::tests::golden_branch_commit_response ... ok
+test payload::tests::golden_branch_register_response ... ok
+test payload::tests::golden_branch_register_request ... ok
+test payload::tests::golden_branch_register_response_failed ... ok
+test payload::tests::golden_branch_report_request ... ok
+test payload::tests::golden_branch_rollback_request ... ok
+test payload::tests::golden_branch_report_response ... ok
+test payload::tests::golden_branch_rollback_response ... ok
+test payload::tests::golden_global_begin_request ... ok
+test payload::tests::golden_global_begin_response ... ok
+test payload::tests::golden_global_begin_response_failed ... ok
+test payload::tests::golden_global_commit_response ... ok
+test payload::tests::golden_global_commit_request ... ok
+test payload::tests::golden_global_lock_query_request ... ok
+test payload::tests::golden_global_commit_response_failed ... ok
+test payload::tests::golden_global_report_request ... ok
+test payload::tests::golden_global_lock_query_response ... ok
+test payload::tests::golden_global_report_response ... ok
+test payload::tests::golden_global_rollback_response ... ok
+test payload::tests::golden_global_status_request ... ok
+test payload::tests::golden_global_status_response ... ok
+test payload::tests::golden_global_rollback_request ... ok
+test payload::tests::golden_register_rm_response ... ok
+test payload::tests::golden_register_tm_response ... ok
+test payload::tests::golden_register_tm_request ... ok
+test payload::tests::golden_register_rm_request ... ok
+test payload::tests::golden_undo_log_delete_request ... ok
+test payload::tests::all_29_go_payloads_are_decoded ... ok
+test payload::tests::every_truncated_prefix_and_trailing_byte_is_rejected ... ok
+test payload::tests::java_global_report_null_status_is_a_valid_sentinel ... ok
+test payload::tests::signed_scalars_and_multibyte_text_are_preserved ... ok
+test payload::tests::java_registration_missing_version_keeps_constructor_default ... ok
+test payload::tests::zero_length_semantics_match_each_java_codec ... ok
+test payload::tests::malformed_utf8_lengths_and_missing_required_fields_are_rejected ... ok
+test restart_probe::tests::failed_or_malformed_lock_query_is_not_lockable_false ... ok
+test restart_probe::tests::lock_query_boolean_uses_java_short_and_preserves_false ... ok
+test restart_record::tests::decodes_original_identity_with_or_without_a_branch ... ok
+test restart_record::tests::malformed_record_is_not_usable_as_a_transaction ... ok
+test tests::rm_frame_uses_string32_for_resource_ids ... ok
+test tests::tm_frame_has_v1_header_and_type_101 ... ok
+test transaction::tests::retains_failure_code_message_and_authoritative_status ... ok
+test transaction::tests::begin_preserves_tc_issued_xid ... ok
+test transaction::tests::begin_rejects_empty_xid_even_on_success ... ok
+test transaction::tests::distinguishes_finished_from_committed ... ok
+test transaction::tests::drives_two_separate_empty_transactions_without_replaying_requests ... ok
+test transaction::tests::injected_rollback_loss_retains_failed_retrying_outcome_for_later_query ... ok
+test transaction::tests::lost_begin_response_is_unknown_and_is_not_retried ... ok
+test transaction::tests::normal_path_and_unexpected_failed_states_remain_errors ... ok
+test transaction::tests::rejects_malformed_result_status_and_trailing_bytes ... ok
+test transaction::tests::rejects_truncated_frame ... ok
+test transaction::tests::rejects_wrong_id_type_and_unsupported_envelope ... ok
+test transaction::tests::accepts_complete_response_and_removes_type_prefix ... ok
+test tests::live_registration_roles_use_the_same_numeric_client_version ... ok
+test branch_probe::tests::rejects_reused_xid_before_registering_the_second_branch ... ok
+test branch_probe::tests::branch_lifecycle_services_rm_before_tm_end_can_finish ... ok
+test restart_record::tests::identity_is_synced_and_never_overwrites_existing_record ... ok
+test payload::tests::writer_checks_byte_length_and_payload_limit_before_truncation ... ok
+test payload::tests::every_unknown_enum_and_message_type_is_rejected ... ok
+test payload::tests::every_single_byte_mutation_is_rejected_or_preserved_without_panicking ... ok
+
+test result: ok. 73 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+

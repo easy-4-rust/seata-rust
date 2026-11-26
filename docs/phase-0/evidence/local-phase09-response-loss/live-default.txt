@@ -1,0 +1,65 @@
+PASS actual response loss scenario=branch-register xid=198.18.0.1:28091:4045076353687814145 branchId=4045076353687814146 status=15
+PASS actual response loss scenario=commit xid=198.18.0.1:28091:4045076353687814148 branchId=4045076353687814149 status=15
+PASS actual response loss scenario=rollback xid=198.18.0.1:28091:4045076353687814151 branchId=4045076353687814152 status=15
+{
+  "executed_at": "2026-11-12T13:50:46.9376698+08:00",
+  "succeeded": true,
+  "java_source": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "server_jar_sha256": "AEF2E8386C97DEB78B45C6AD662AD601447DEF6F5C23537B7D5B1A314654C5D5",
+  "tc_pid": 76236,
+  "port_released": true,
+  "scenarios": [
+    {
+      "scenario": "branch-register",
+      "operation": 11,
+      "xid": "198.18.0.1:28091:4045076353687814145",
+      "branch_id": 4045076353687814146,
+      "client_exit": 0,
+      "proxy_exit": 0,
+      "drop_count": 1,
+      "mutating_target_attempts": 1,
+      "branch_registrations": 1,
+      "phase_two_actions": 1,
+      "observed_status": 15,
+      "confirmed_end": false,
+      "lock_released": true,
+      "callback_request_id": 1,
+      "proxy_pid": 46436
+    },
+    {
+      "scenario": "commit",
+      "operation": 7,
+      "xid": "198.18.0.1:28091:4045076353687814148",
+      "branch_id": 4045076353687814149,
+      "client_exit": 0,
+      "proxy_exit": 0,
+      "drop_count": 1,
+      "mutating_target_attempts": 1,
+      "branch_registrations": 1,
+      "phase_two_actions": 1,
+      "observed_status": 15,
+      "confirmed_end": false,
+      "lock_released": true,
+      "callback_request_id": 2,
+      "proxy_pid": 36336
+    },
+    {
+      "scenario": "rollback",
+      "operation": 9,
+      "xid": "198.18.0.1:28091:4045076353687814151",
+      "branch_id": 4045076353687814152,
+      "client_exit": 0,
+      "proxy_exit": 0,
+      "drop_count": 1,
+      "mutating_target_attempts": 1,
+      "branch_registrations": 1,
+      "phase_two_actions": 1,
+      "observed_status": 15,
+      "confirmed_end": false,
+      "lock_released": true,
+      "callback_request_id": 3,
+      "proxy_pid": 36524
+    }
+  ],
+  "scope": "One complete successful response discarded externally on live V1 channels; simulated RM only, no DB/Undo Log; Finished alone retains uncertainty"
+}

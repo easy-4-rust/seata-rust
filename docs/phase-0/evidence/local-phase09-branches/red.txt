@@ -1,0 +1,52 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.22s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 19 tests
+test tests::tm_frame_has_v1_header_and_type_101 ... ok
+test branch_probe::tests::malformed_callback_never_gets_success_ack ... ok
+test branch_probe::tests::rejects_failure_invalid_id_truncation_and_trailing_data ... ok
+test transaction::tests::distinguishes_finished_from_committed ... ok
+test tests::rm_frame_uses_string32_for_resource_ids ... ok
+test transaction::tests::accepts_complete_response_and_removes_type_prefix ... ok
+test transaction::tests::begin_preserves_tc_issued_xid ... ok
+test branch_probe::tests::wrong_identity_or_callback_operation_never_gets_success_ack ... ok
+test transaction::tests::drives_two_separate_empty_transactions_without_replaying_requests ... ok
+test transaction::tests::begin_rejects_empty_xid_even_on_success ... ok
+test transaction::tests::lost_begin_response_is_unknown_and_is_not_retried ... ok
+test transaction::tests::rejects_truncated_frame ... ok
+test branch_probe::tests::commit_callback_echoes_request_id_and_returns_committed_branch_status ... FAILED
+test branch_probe::tests::accepts_positive_tc_branch_id ... FAILED
+test branch_probe::tests::rollback_callback_echoes_request_id_and_returns_rollbacked_branch_status ... FAILED
+test transaction::tests::rejects_malformed_result_status_and_trailing_bytes ... ok
+test transaction::tests::rejects_wrong_id_type_and_unsupported_envelope ... ok
+test transaction::tests::retains_failure_code_message_and_authoritative_status ... ok
+test tests::live_registration_roles_use_the_same_numeric_client_version ... ok
+
+failures:
+
+---- branch_probe::tests::commit_callback_echoes_request_id_and_returns_committed_branch_status stdout ----
+
+thread 'branch_probe::tests::commit_callback_echoes_request_id_and_returns_committed_branch_status' (58736) panicked at src\branch_probe.rs:44:57:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "branch callback handling is not implemented" }
+
+---- branch_probe::tests::accepts_positive_tc_branch_id stdout ----
+
+thread 'branch_probe::tests::accepts_positive_tc_branch_id' (54404) panicked at src\branch_probe.rs:76:66:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "branch response parsing is not implemented" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- branch_probe::tests::rollback_callback_echoes_request_id_and_returns_rollbacked_branch_status stdout ----
+
+thread 'branch_probe::tests::rollback_callback_echoes_request_id_and_returns_rollbacked_branch_status' (35256) panicked at src\branch_probe.rs:50:57:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "branch callback handling is not implemented" }
+
+
+failures:
+    branch_probe::tests::accepts_positive_tc_branch_id
+    branch_probe::tests::commit_callback_echoes_request_id_and_returns_committed_branch_status
+    branch_probe::tests::rollback_callback_echoes_request_id_and_returns_rollbacked_branch_status
+
+test result: FAILED. 16 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

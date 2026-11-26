@@ -1,0 +1,27 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.02s
+     Running unittests src\main.rs (D:/cargo-target/seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 3 tests
+test raft_timeout_probe::tests::invalid_or_reused_original_identities_fail_before_network_io ... ok
+test raft_timeout_probe::tests::finished_does_not_count_as_retained_retry_timeout ... ok
+test raft_timeout_probe::tests::both_original_xids_are_queried_once_and_no_mutation_is_sent ... FAILED
+
+failures:
+
+---- raft_timeout_probe::tests::both_original_xids_are_queried_once_and_no_mutation_is_sent stdout ----
+RAFT_STATUS xid=old-a status=16 originalMutations=0
+
+thread 'raft_timeout_probe::tests::both_original_xids_are_queried_once_and_no_mutation_is_sent' (35620) panicked at src\raft_timeout_probe.rs:39:13:
+assertion `left == right` failed
+  left: 21
+ right: 42
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    raft_timeout_probe::tests::both_original_xids_are_queried_once_and_no_mutation_is_sent
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 103 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

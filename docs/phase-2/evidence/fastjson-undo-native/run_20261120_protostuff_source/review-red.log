@@ -1,0 +1,33 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.78s
+     Running tests\protostuff_undo_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\protostuff_undo_source-7c6682d20c0a4c0f.exe)
+
+running 2 tests
+test protostuff_timestamp_delegate_requires_class_tag_before_payload ... FAILED
+test protostuff_double_keeps_raw_nan_bits ... FAILED
+
+failures:
+
+---- protostuff_timestamp_delegate_requires_class_tag_before_payload stdout ----
+
+thread 'protostuff_timestamp_delegate_requires_class_tag_before_payload' (53228) panicked at crates\seata_at\tests\protostuff_undo_source.rs:247:5:
+assertion failed: matches!(parser.decode_branch(&wire),
+    Err(seata_at::UndoCodecError::Shape
+    { reason: "Protostuff delegate discriminator order" }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- protostuff_double_keeps_raw_nan_bits stdout ----
+
+thread 'protostuff_double_keeps_raw_nan_bits' (35300) panicked at crates\seata_at\tests\protostuff_undo_source.rs:262:5:
+assertion `left == right` failed
+  left: 9221120237041090560
+ right: 9221120237041090851
+
+
+failures:
+    protostuff_double_keeps_raw_nan_bits
+    protostuff_timestamp_delegate_requires_class_tag_before_payload
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test protostuff_undo_source`

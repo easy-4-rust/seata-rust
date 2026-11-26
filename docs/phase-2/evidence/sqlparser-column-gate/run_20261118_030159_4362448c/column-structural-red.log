@@ -1,0 +1,21 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+warning: missing documentation for a struct
+ --> crates\seata_sqlparser\src\struct\sql_sequence_expr.rs:6:1
+  |
+6 | pub struct SqlSequenceExpr {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: requested on the command line with `-W missing-docs`
+
+warning: `seata-sqlparser` (lib) generated 1 warning
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+error[E0432]: unresolved imports `seata_sqlparser::ColumnMeta`, `seata_sqlparser::JavaObject`
+ --> crates\seata_test\tests\column_meta.rs:4:23
+  |
+4 | use seata_sqlparser::{ColumnMeta, JavaObject, JavaString};
+  |                       ^^^^^^^^^^  ^^^^^^^^^^ no `JavaObject` in the root
+  |                       |
+  |                       no `ColumnMeta` in the root
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-test` (test "column_meta") due to 1 previous error

@@ -1,0 +1,99 @@
+{
+  "status": "RM_DB_TYPE_PARSER_LINK_DISCOVERY_AND_SOURCE_SINGLETON_VERIFIED",
+  "evidence": "docs/phase-2/evidence/sqlparser-rm-jdbc-spi/run_20261118",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "prior_rm_jdbc_catalog_sha256": "42eb747c3ae8bbcff58739f5b73980cb19d0dfbf37e3bb290823082c0630193d",
+  "original_java_cases_passed": 21,
+  "rm_jdbc_source_MATCH": 10,
+  "rm_jdbc_cases_pending": 11,
+  "sqlparser_core_source_MATCH": 76,
+  "global_rust_source_MATCH": 86,
+  "global_methods_remaining": 1049,
+  "global_cases_remaining": 1241,
+  "resolved_mixed_case_runtime_regression": true,
+  "supplemental_spi_observations_MATCH": 5,
+  "runtime_negative_controls": 2,
+  "rust": {
+    "1.99": {
+      "ordinary": 501,
+      "harnesses": 108,
+      "ignored": 143,
+      "doc": 4,
+      "core_source_MATCH": 76,
+      "rm_jdbc_source_MATCH": 10,
+      "supplemental_spi_MATCH": 5
+    },
+    "1.85": {
+      "ordinary": 501,
+      "harnesses": 108,
+      "ignored": 143,
+      "doc": 4,
+      "core_source_MATCH": 76,
+      "rm_jdbc_source_MATCH": 10,
+      "supplemental_spi_MATCH": 5
+    }
+  },
+  "native_link_scope": {
+    "name_normalization": "Explicit Locale snapshot; RM binds ROOT once",
+    "tie": "explicit error",
+    "instance": "static linked singleton",
+    "jvm_loader_isolation_or_unload_parity": false
+  },
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "resolved_P2": 1,
+    "remaining_P1": 0,
+    "remaining_P2": 0
+  },
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "1d0469d09db7e5f9f2f2b921fd5c8c68b9e32677dcf2bf3165dda37d6ab8d2e8"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/util/mod.rs",
+      "sha256": "51b5db6748c925ef5cdf18d836a786f7fcb42815df55ea2638868917f3dfdb18"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/util/db_type_parser_registration.rs",
+      "sha256": "2effc03f5b77ca0756074d6c09caf8c5790f9e48feccc6de3cacd03c2ccdc68f"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/mod.rs",
+      "sha256": "dfefa2daf9c2aabb4b0c1e1d36ab2fb866cc927845120a47e8bffbabd24a53b1"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/druid_db_type_parser_impl.rs",
+      "sha256": "ad90ac0bd013c17a3cc2ea27ff3aee18ebebc5c410b46ead9027272813a810e6"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/druid_delegating_db_type_parser.rs",
+      "sha256": "7735a5e30a5c7b353709a31593b0392ac2c3ae0b7ed276e9cbfeebb898a535ae"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+      "sha256": "c2b6bd0507607d56e417465a4b9225d90afb86b4fd10bde6a984b06179afe221"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/jdbc_utils_source.rs",
+      "sha256": "8b3666a0c614d403bc6f5114ff69f5cc2e9d1b6341dfcbf384a0d1ecbabfb5d3"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/jdbc_parser_spi.rs",
+      "sha256": "5b2f90936498936da6bb25d059bedea54bbad39d8e84254192f2f2cc66e1daca"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/JdbcRmParserSpiOracle.java",
+      "sha256": "13591e09977629e01453d9710c32caa9cf309ff1b564ab468588a3a97134d035"
+    }
+  ],
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "external_TC_risk_accepted": false
+}

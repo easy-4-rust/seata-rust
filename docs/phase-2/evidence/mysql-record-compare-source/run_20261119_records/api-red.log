@@ -1,0 +1,64 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0432]: unresolved import `seata_db_mysql::JavaCompareRecordsMut`
+ --> crates\seata_db_mysql\tests\support\data_compare_records_source.rs:3:58
+  |
+3 | use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareRecordsMut, JavaCompareValue};
+  |                                                          ^^^^^^^^^^^^^^^^^^^^^ no `JavaCompareRecordsMut` in the root
+  |
+help: a similar name exists in the module
+  |
+3 - use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareRecordsMut, JavaCompareValue};
+3 + use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareRecords, JavaCompareValue};
+  |
+
+error[E0599]: no associated function or constant named `java_records_equal_with_serializer` found for struct `DataCompareUtils` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_records_source.rs:10:27
+    |
+ 10 |         DataCompareUtils::java_records_equal_with_serializer(
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+    |
+help: there is an associated function `java_records_equal` with a similar name
+   --> crates\seata_db_mysql\src\data_compare_utils.rs:132:5
+    |
+132 | /     pub fn java_records_equal(
+133 | |         left: Option<&JavaCompareRecords<'_>>,
+134 | |         right: Option<&JavaCompareRecords<'_>>,
+135 | |         locale: &MetadataLocale,
+136 | |     ) -> Result<bool, MetadataError> {
+    | |____________________________________^
+
+error[E0599]: no associated function or constant named `java_records_equal_with_serializer` found for struct `DataCompareUtils` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_records_source.rs:60:35
+    |
+ 60 |     let equal = DataCompareUtils::java_records_equal_with_serializer(
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+    |
+help: there is an associated function `java_records_equal` with a similar name
+   --> crates\seata_db_mysql\src\data_compare_utils.rs:132:5
+    |
+132 | /     pub fn java_records_equal(
+133 | |         left: Option<&JavaCompareRecords<'_>>,
+134 | |         right: Option<&JavaCompareRecords<'_>>,
+135 | |         locale: &MetadataLocale,
+136 | |     ) -> Result<bool, MetadataError> {
+    | |____________________________________^
+
+error[E0599]: no associated function or constant named `java_records_equal_with_serializer` found for struct `DataCompareUtils` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_records_source.rs:70:37
+    |
+ 70 |     let unequal = DataCompareUtils::java_records_equal_with_serializer(
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+    |
+help: there is an associated function `java_records_equal` with a similar name
+   --> crates\seata_db_mysql\src\data_compare_utils.rs:132:5
+    |
+132 | /     pub fn java_records_equal(
+133 | |         left: Option<&JavaCompareRecords<'_>>,
+134 | |         right: Option<&JavaCompareRecords<'_>>,
+135 | |         locale: &MetadataLocale,
+136 | |     ) -> Result<bool, MetadataError> {
+    | |____________________________________^
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-db-mysql` (test "data_compare_source") due to 4 previous errors

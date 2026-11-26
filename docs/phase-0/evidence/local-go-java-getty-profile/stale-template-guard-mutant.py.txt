@@ -1,0 +1,14 @@
+"""In-memory removal of the reviewed guard; ROOT inputs remain untouched."""
+import ast,importlib.util,os,unittest
+from pathlib import Path
+root=Path('E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation')
+os.environ['PYTHONDONTWRITEBYTECODE']='1';os.environ['SEATA_GETTY_COHORT']='D:/codex-builds/seata-go-getty-quick-20261112_200714'
+spec=importlib.util.spec_from_file_location('getty_mutant_test',root/'tools/go-java-v1-getty-profile/test_validation.py');t=importlib.util.module_from_spec(spec);spec.loader.exec_module(t)
+tree=ast.parse((root/'tools/go-java-v1-getty-profile/run.py').read_text(encoding='utf-8'))
+function=next(node for node in tree.body if isinstance(node,ast.FunctionDef) and node.name=='audit_candidate')
+old=len(function.body);function.body=[node for node in function.body if not(isinstance(node,ast.For) and 'prep.files()' in ast.unparse(node.iter))]
+assert old==len(function.body)+1
+exec(compile(ast.fix_missing_locations(ast.Module(body=[function],type_ignores=[])),'getty_guard_removed','exec'),t.r.__dict__)
+suite=unittest.TestSuite([t.ValidationTest('test_editable_template_mismatch_is_rejected')])
+result=unittest.TextTestRunner(verbosity=2).run(suite)
+raise SystemExit(0 if result.wasSuccessful() else 1)

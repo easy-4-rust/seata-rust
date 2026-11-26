@@ -1,0 +1,589 @@
+{
+  "status": "SELECTED_UNDO_WRITE_AND_ROLLBACK_COMPONENT_VERIFIED_FULL_WP05_OPEN",
+  "live": {
+    "1.99": {
+      "store": {
+        "path": "docs/phase-2/evidence/mysql-undo-store/run_20261116_025347_b383ba00",
+        "catalog_sha256": "7464cf287c62fbb1b06d33d2e1a5850f1e8c4d022e88db0501745fc0a927ce83",
+        "members": 11942,
+        "result": {
+          "status": "SELECTED_MYSQL_UNDO_STORE_OBSERVATIONS_VERIFIED",
+          "verified": true,
+          "Rust": "1.99",
+          "selected": null,
+          "source_inputs": 11918,
+          "actual_test_summary": [
+            "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.49s"
+          ],
+          "Java_peer": {
+            "run": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\undo-store-java-peer\\run_20261116_025445_4452c2ae",
+            "catalog_sha256": "47a6cfe4e1260ffd5b142afaae39f457f8082242f3d7ec42c4a9a2072c402886"
+          },
+          "public_COMMIT_available": false,
+          "TC_registration_gate_passed": false,
+          "SQL_Undo_commit_atomicity_verified": false,
+          "WP05_complete": false
+        }
+      },
+      "ready_handoff": {
+        "path": "docs/phase-2/evidence/mysql-undo-store/run_20261116_025513_d58c6732",
+        "catalog_sha256": "35dd5435b3fa54ecc65e9c34e5464ec533685f3522d4a27334d82dc0dad5fd77",
+        "members": 11934,
+        "result": {
+          "status": "SELECTED_MYSQL_UNDO_STORE_OBSERVATIONS_VERIFIED",
+          "verified": true,
+          "Rust": "1.99",
+          "selected": "connection_proxy::tests::ready_undo_publication_after_deadline_keeps_poison_and_rolls_back_original_transaction",
+          "source_inputs": 11918,
+          "actual_test_summary": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.12s"
+          ],
+          "Java_peer": null,
+          "public_COMMIT_available": false,
+          "TC_registration_gate_passed": false,
+          "SQL_Undo_commit_atomicity_verified": false,
+          "WP05_complete": false
+        }
+      },
+      "native_codec_locks": {
+        "path": "docs/phase-2/evidence/mysql-lock-key/run_20261116_025606_255acd94",
+        "catalog_sha256": "82921a8991dd350906de9338a5ce88390ea1d7b5b9783fc24b085a8bb7632591",
+        "members": 349,
+        "result": {
+          "succeeded": true,
+          "selected_case": null,
+          "actual_MySQL": true,
+          "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+          "source_inputs": 307,
+          "actual_live_tests": 1,
+          "passed_live_tests": 1,
+          "failed_live_tests": 0,
+          "rust": "1.99",
+          "suite": "undo_codec",
+          "cleanup_errors": [],
+          "WP05_complete": false,
+          "SQL_Undo_atomicity_verified": false,
+          "full_V1_complete": false,
+          "external_tc_risk_accepted": false,
+          "shared_lock_issue": "deferred_by_user"
+        }
+      },
+      "Java_peer": {
+        "path": "docs/phase-2/evidence/undo-store-java-peer/run_20261116_025445_4452c2ae",
+        "catalog_sha256": "47a6cfe4e1260ffd5b142afaae39f457f8082242f3d7ec42c4a9a2072c402886",
+        "members": 30,
+        "result": {
+          "status": "SELECTED_ORIGINAL_UNDO_STORE_METHODS_MATCH",
+          "comparisons": 4,
+          "original_newly_compiled_sources": 2,
+          "actual_JDBC": "8.0.27",
+          "actual_schema_and_database": "undo_ee5039e8f4b1",
+          "archived_Rust_rows_reinserted_as_fixture": true,
+          "original_full_flushUndoLogs_invoked": false,
+          "original_JUnit_executed": false,
+          "SQL_Undo_commit_atomicity_verified": false,
+          "public_COMMIT_available": false,
+          "WP05_complete": false
+        }
+      },
+      "legacy_database": [
+        {
+          "path": "docs/phase-2/evidence/mysql-metadata/run_20261116_025347_2a6c2dac",
+          "catalog_sha256": "1f18d283e35efc3352b2db8981afc939dc39c9dc06fa972c5961ccf60ad911bd",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 9,
+            "passed_live_tests": 9,
+            "failed_live_tests": 0,
+            "rust": "1.99",
+            "suite": "metadata",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-row-images/run_20261116_025429_0db97007",
+          "catalog_sha256": "f318930bc45b6e87f2906aceadbc15d6d1e12f068a02bf3417f4bff7cb8e1bd1",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 10,
+            "passed_live_tests": 10,
+            "failed_live_tests": 0,
+            "rust": "1.99",
+            "suite": "row_images",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-image-race/run_20261116_025516_66c6ac83",
+          "catalog_sha256": "aecd751ce69b8359cf55145bdd8e3bc0c46d2ae3d699af25eb0fae39cc9e8b99",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 1,
+            "passed_live_tests": 1,
+            "failed_live_tests": 0,
+            "rust": "1.99",
+            "suite": "image_race",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-execution/run_20261116_025547_22b6f28d",
+          "catalog_sha256": "5ebac1a5ae99b719c349c7e25d1f5c75492d9bea445eed6b03a7946a2af3d2fb",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 17,
+            "passed_live_tests": 17,
+            "failed_live_tests": 0,
+            "rust": "1.99",
+            "suite": "execution",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-type-identity/run_20261116_025640_51ce99d8",
+          "catalog_sha256": "0d206872a803edefe598fddf7a1853bc134bdf076bd44bd56aebb912a04c1946",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 1,
+            "passed_live_tests": 1,
+            "failed_live_tests": 0,
+            "rust": "1.99",
+            "suite": "mysql_types",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        }
+      ]
+    },
+    "1.85": {
+      "store": {
+        "path": "docs/phase-2/evidence/mysql-undo-store/run_20261116_025347_a4471290",
+        "catalog_sha256": "86341550c0945504740bf364f036c39b152bbbd219fbaa081e19ded01f04eab1",
+        "members": 11942,
+        "result": {
+          "status": "SELECTED_MYSQL_UNDO_STORE_OBSERVATIONS_VERIFIED",
+          "verified": true,
+          "Rust": "1.85",
+          "selected": null,
+          "source_inputs": 11918,
+          "actual_test_summary": [
+            "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.04s"
+          ],
+          "Java_peer": {
+            "run": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\undo-store-java-peer\\run_20261116_025443_647be611",
+            "catalog_sha256": "e154723ac50aa6a81ea97291d7f2ae85a2af52e33064b59b5a8b8116efcbd950"
+          },
+          "public_COMMIT_available": false,
+          "TC_registration_gate_passed": false,
+          "SQL_Undo_commit_atomicity_verified": false,
+          "WP05_complete": false
+        }
+      },
+      "ready_handoff": {
+        "path": "docs/phase-2/evidence/mysql-undo-store/run_20261116_025512_7ca2024f",
+        "catalog_sha256": "df47875f4af59bc83548a9e42f00a52109981e7a408e36082e1a0623a9f31946",
+        "members": 11934,
+        "result": {
+          "status": "SELECTED_MYSQL_UNDO_STORE_OBSERVATIONS_VERIFIED",
+          "verified": true,
+          "Rust": "1.85",
+          "selected": "connection_proxy::tests::ready_undo_publication_after_deadline_keeps_poison_and_rolls_back_original_transaction",
+          "source_inputs": 11918,
+          "actual_test_summary": [
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.13s"
+          ],
+          "Java_peer": null,
+          "public_COMMIT_available": false,
+          "TC_registration_gate_passed": false,
+          "SQL_Undo_commit_atomicity_verified": false,
+          "WP05_complete": false
+        }
+      },
+      "native_codec_locks": {
+        "path": "docs/phase-2/evidence/mysql-lock-key/run_20261116_025607_677d0f0b",
+        "catalog_sha256": "02b2c19271c6b5cf9143fd3d05b79d9962428f2a942e9008023ab20090661571",
+        "members": 349,
+        "result": {
+          "succeeded": true,
+          "selected_case": null,
+          "actual_MySQL": true,
+          "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+          "source_inputs": 307,
+          "actual_live_tests": 1,
+          "passed_live_tests": 1,
+          "failed_live_tests": 0,
+          "rust": "1.85",
+          "suite": "undo_codec",
+          "cleanup_errors": [],
+          "WP05_complete": false,
+          "SQL_Undo_atomicity_verified": false,
+          "full_V1_complete": false,
+          "external_tc_risk_accepted": false,
+          "shared_lock_issue": "deferred_by_user"
+        }
+      },
+      "Java_peer": {
+        "path": "docs/phase-2/evidence/undo-store-java-peer/run_20261116_025443_647be611",
+        "catalog_sha256": "e154723ac50aa6a81ea97291d7f2ae85a2af52e33064b59b5a8b8116efcbd950",
+        "members": 30,
+        "result": {
+          "status": "SELECTED_ORIGINAL_UNDO_STORE_METHODS_MATCH",
+          "comparisons": 4,
+          "original_newly_compiled_sources": 2,
+          "actual_JDBC": "8.0.27",
+          "actual_schema_and_database": "undo_68cea44063b6",
+          "archived_Rust_rows_reinserted_as_fixture": true,
+          "original_full_flushUndoLogs_invoked": false,
+          "original_JUnit_executed": false,
+          "SQL_Undo_commit_atomicity_verified": false,
+          "public_COMMIT_available": false,
+          "WP05_complete": false
+        }
+      },
+      "legacy_database": [
+        {
+          "path": "docs/phase-2/evidence/mysql-metadata/run_20261116_025347_9270bdce",
+          "catalog_sha256": "451fca45876a7de11c40915e84df6feb63fdb12ac800628ef88df33df2168fff",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 9,
+            "passed_live_tests": 9,
+            "failed_live_tests": 0,
+            "rust": "1.85",
+            "suite": "metadata",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-row-images/run_20261116_025424_3c9615dc",
+          "catalog_sha256": "cf12212b728dfb7aa99d3f1e5cdc21a5de0017da315d451fdf063947fb391d84",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 10,
+            "passed_live_tests": 10,
+            "failed_live_tests": 0,
+            "rust": "1.85",
+            "suite": "row_images",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-image-race/run_20261116_025514_aba475c0",
+          "catalog_sha256": "126c96d556710c5631e5df2134e610eac605e8e3a3ee8682146aa2d778dab9f4",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 1,
+            "passed_live_tests": 1,
+            "failed_live_tests": 0,
+            "rust": "1.85",
+            "suite": "image_race",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-execution/run_20261116_025545_311eb24a",
+          "catalog_sha256": "6211f863b60ea1af3a70256879742442ecee68daf74c05046b116f8948393656",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 17,
+            "passed_live_tests": 17,
+            "failed_live_tests": 0,
+            "rust": "1.85",
+            "suite": "execution",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        },
+        {
+          "path": "docs/phase-2/evidence/mysql-type-identity/run_20261116_025638_b65bd0ee",
+          "catalog_sha256": "ab8ed210165b0dbcc8bfc901481c5d9a2d3bcad28836ac1aa1faddf9f690ce28",
+          "members": 313,
+          "result": {
+            "succeeded": true,
+            "selected_case": null,
+            "actual_MySQL": true,
+            "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+            "source_inputs": 292,
+            "actual_live_tests": 1,
+            "passed_live_tests": 1,
+            "failed_live_tests": 0,
+            "rust": "1.85",
+            "suite": "mysql_types",
+            "cleanup_errors": [],
+            "WP05_complete": false,
+            "SQL_Undo_atomicity_verified": false,
+            "full_V1_complete": false,
+            "external_tc_risk_accepted": false,
+            "shared_lock_issue": "deferred_by_user"
+          }
+        }
+      ]
+    }
+  },
+  "peers": {
+    "document": {
+      "path": "docs/phase-2/evidence/undo-document-peer/run_20261116_024747_acdf6b3e",
+      "catalog_sha256": "7dd581f617268adf77ad9d6ee3fde2b39f923c95eb0e056df93dec6b7f6a1e8b",
+      "members": 493,
+      "result": {
+        "status": "selected_document_runtime_differential_passed",
+        "Java_generated_native_cases": 12,
+        "Rust_obligation_original_Java_probe_cases": 4,
+        "source_value_and_scale_probes": 17,
+        "original_number_constraint_probes": 14,
+        "original_accepted_numeric_documents": 7,
+        "original_JUnit_tests_executed": false,
+        "Java_runtime_MATCH": 40,
+        "Java_reencode_Rust_parse_cases": 40,
+        "second_Java_runtime_MATCH": 40,
+        "true_prepared_business_logs_verified": false,
+        "source_case_parity_complete": false,
+        "SQL_Undo_atomicity_verified": false,
+        "WP05_complete": false,
+        "original_build": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\undo-java-build\\run_20261115_214102_f1bb6c34",
+        "original_build_catalog_sha256": "b998a485e845359e05ad3a8b2edac389b8ba26b8cda990b5bde9f7ffb1f00bf0"
+      }
+    },
+    "lock": {
+      "path": "docs/phase-2/evidence/lock-key-peer/run_20261116_024827_e884af58",
+      "catalog_sha256": "f2284a86bc69ab251494587d1d2dca326716f0a44dc9095b8c6beff4e52b3ea6",
+      "members": 327,
+      "result": {
+        "status": "SELECTED_ORIGINAL_LOCK_KEY_DIFFERENTIAL_PASSED",
+        "cases": 1029,
+        "Java_Rust_MATCH": 1029,
+        "original_source_value_probes": 4,
+        "original_JUnit_tests_executed": false,
+        "original_newly_compiled_sources": 3,
+        "Java_source_case_parity_complete": false,
+        "actual_TC_lock_coverage_verified": false,
+        "SQL_Undo_atomicity_verified": false,
+        "TC_registration_verified": false,
+        "public_COMMIT_available": false,
+        "WP05_complete": false
+      }
+    },
+    "tc_source": {
+      "path": "docs/phase-2/evidence/tc-lock-source/run_20261116_024843_60223e8a",
+      "catalog_sha256": "79bf2d62f7e6cabb54f4ac1f3e13643ea96d22e81ae67a6a6ad7ad473422c960",
+      "members": 307,
+      "result": {
+        "status": "ORIGINAL_TC_SOURCE_OBSERVATIONS_VERIFIED",
+        "source_scenarios": 15,
+        "recording_backend": true,
+        "original_selected_sources_compiled": 1,
+        "all_file_class_origins_bound": true,
+        "runtime_files": 633,
+        "frozen_server_fallback_files": 285,
+        "full_original_Maven_environment_recreated": false,
+        "actual_network_TC_requests": 0,
+        "real_backend_lock_storage_verified": false,
+        "TC_safety_gate_passed": false,
+        "TC_registration_gate_passed": false,
+        "SQL_Undo_atomicity_verified": false,
+        "public_COMMIT_available": false,
+        "WP05_complete": false,
+        "external_tc_risk_accepted": false
+      }
+    }
+  },
+  "red": [
+    {
+      "path": "docs/phase-2/evidence/mysql-undo-store/run_20261116_021848_661f0ea0",
+      "catalog_sha256": "20868d24228653d35b7411c234aba226c26c5f4808b98bc1bacc716d9f01cc15",
+      "members": 11928,
+      "result": {
+        "status": "EXPECTED_MISSING_STORE_RED",
+        "verified": true,
+        "Rust": "1.99",
+        "selected": "original_undo_row_and_business_share_one_uncommitted_transaction_then_rollback",
+        "source_inputs": 11912,
+        "actual_test_summary": [
+          "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s"
+        ],
+        "public_COMMIT_available": false,
+        "TC_registration_gate_passed": false,
+        "SQL_Undo_commit_atomicity_verified": false,
+        "WP05_complete": false
+      }
+    },
+    {
+      "path": "docs/phase-2/evidence/mysql-undo-store/run_20261116_022738_005047c8",
+      "catalog_sha256": "b29de68a464212e8a6ec05b966c3639f3e4bd1386e0ed63eff411f9eac3bf57c",
+      "members": 11931,
+      "result": {
+        "status": "EXPECTED_MISSING_STORE_RED",
+        "verified": true,
+        "Rust": "1.99",
+        "selected": "inbound_foreign_key_on_undo_table_rejects_flush_and_rolls_back_business",
+        "source_inputs": 11915,
+        "actual_test_summary": [
+          "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 2.26s"
+        ],
+        "public_COMMIT_available": false,
+        "TC_registration_gate_passed": false,
+        "SQL_Undo_commit_atomicity_verified": false,
+        "WP05_complete": false
+      }
+    },
+    {
+      "path": "docs/phase-2/evidence/mysql-undo-store/run_20261116_022950_253ac205",
+      "catalog_sha256": "40d2cfc0cb5c4aee0ebdc1e9a6e72fad94c1e62c2391c164e14d47392015c74e",
+      "members": 11931,
+      "result": {
+        "status": "EXPECTED_MISSING_STORE_RED",
+        "verified": true,
+        "Rust": "1.99",
+        "selected": "connection_proxy::tests::ready_undo_publication_after_deadline_keeps_poison_and_rolls_back_original_transaction",
+        "source_inputs": 11915,
+        "actual_test_summary": [
+          "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.18s"
+        ],
+        "public_COMMIT_available": false,
+        "TC_registration_gate_passed": false,
+        "SQL_Undo_commit_atomicity_verified": false,
+        "WP05_complete": false
+      }
+    }
+  ],
+  "ordinary": {
+    "1.99": {
+      "passed": 331,
+      "existing_lib_integration_tests": 325,
+      "existing_example_tests": 6,
+      "test_artifacts": 56,
+      "compiled_registry_packages": 150,
+      "actual_RM_children": 6
+    },
+    "1.85": {
+      "passed": 331,
+      "existing_lib_integration_tests": 325,
+      "existing_example_tests": 6,
+      "test_artifacts": 56,
+      "compiled_registry_packages": 150,
+      "actual_RM_children": 6
+    }
+  },
+  "fresh_DB_cases": {
+    "1.99": {
+      "store": 10,
+      "ready_handoff": 1,
+      "legacy": 38,
+      "native_codec_locks": 1
+    },
+    "1.85": {
+      "store": 10,
+      "ready_handoff": 1,
+      "legacy": 38,
+      "native_codec_locks": 1
+    }
+  },
+  "registry_archives": 185,
+  "actual_compiled_registry_packages": 150,
+  "existing_source_changes": [
+    "crates/seata_db_mysql/src/cache/mysql_table_meta_reader.rs",
+    "crates/seata_db_mysql/src/connection_proxy.rs",
+    "crates/seata_db_mysql/src/db_error.rs",
+    "crates/seata_db_mysql/src/lib.rs",
+    "crates/seata_transport/src/netty/pending_requests_tests.rs"
+  ],
+  "full_original_manager_migrated": false,
+  "original_JUnit_executed": false,
+  "compression_profile": "NONE",
+  "SQL_Undo_commit_atomicity_verified": false,
+  "TC_registration_gate_passed": false,
+  "TC_safety_gate_passed": false,
+  "public_COMMIT_available": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "external_tc_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user"
+}

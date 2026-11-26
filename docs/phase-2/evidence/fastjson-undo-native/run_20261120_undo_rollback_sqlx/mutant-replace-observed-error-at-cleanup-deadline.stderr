@@ -1,0 +1,15 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_compare_mutants_urjojbur\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.04s
+     Running unittests src\lib.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\seata_db_mysql-0eae6d12f56bc15e.exe)
+
+thread 'data_source_proxy::rollback_sqlx_tests::sqlx_closes_failed_rollback_connection_without_reply' (28640) panicked at crates\seata_db_mysql\src\data_source_proxy_rollback_sqlx_tests.rs:90:5:
+assertion failed: matches!(failure, UndoRollbackError::BeforeCommit
+    {
+        source: DbError::Driver
+        {
+            operation: "metadata visibility", sql_state: Some(ref state),
+            code: Some(1142),
+        }, ..
+    } if state == "42000")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

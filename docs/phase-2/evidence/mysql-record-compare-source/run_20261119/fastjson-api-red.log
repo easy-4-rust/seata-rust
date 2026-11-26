@@ -1,0 +1,160 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0432]: unresolved import `seata_db_mysql::JavaCompareTemporal`
+ --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:4:58
+  |
+4 | use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareTemporal, JavaCompareValue};
+  |                                                          ^^^^^^^^^^^^^^^^^^^ no `JavaCompareTemporal` in the root
+  |
+help: a similar name exists in the module
+  |
+4 - use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareTemporal, JavaCompareValue};
+4 + use seata_db_mysql::{DataCompareUtils, JavaCompareField, JavaCompareRecords, JavaCompareValue};
+  |
+
+error[E0599]: no associated function or constant named `java_fastjson_fields_equal` found for struct `DataCompareUtils` in the current scope
+  --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:49:27
+   |
+49 |         DataCompareUtils::java_fastjson_fields_equal(Some(&mut a), Some(&mut b), jdk_parse)?;
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+   |
+help: there is an associated function `java_fields_equal` with a similar name
+  --> crates\seata_db_mysql\src\data_compare_utils.rs:19:5
+   |
+19 | /     pub fn java_fields_equal(
+20 | |         left: Option<&JavaCompareField>,
+21 | |         right: Option<&JavaCompareField>,
+22 | |     ) -> bool {
+   | |_____________^
+
+error[E0599]: no method named `value` found for struct `JavaCompareField` in the current scope
+  --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:50:15
+   |
+50 |     assert!(a.value() == native.value());
+   |               ^^^^^ private field, not a method
+
+error[E0599]: no method named `value` found for struct `JavaCompareField` in the current scope
+  --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:50:33
+   |
+50 |     assert!(a.value() == native.value());
+   |                                 ^^^^^ private field, not a method
+
+error[E0599]: no associated function or constant named `java_fastjson_fields_equal` found for struct `DataCompareUtils` in the current scope
+  --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:54:27
+   |
+54 |         DataCompareUtils::java_fastjson_fields_equal(Some(&mut a), Some(&mut b), jdk_parse)?;
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+   |
+help: there is an associated function `java_fields_equal` with a similar name
+  --> crates\seata_db_mysql\src\data_compare_utils.rs:19:5
+   |
+19 | /     pub fn java_fields_equal(
+20 | |         left: Option<&JavaCompareField>,
+21 | |         right: Option<&JavaCompareField>,
+22 | |     ) -> bool {
+   | |_____________^
+
+error[E0599]: no method named `value` found for struct `JavaCompareField` in the current scope
+  --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:55:15
+   |
+55 |     assert!(b.value() == native.value());
+   |               ^^^^^ private field, not a method
+
+error[E0599]: no method named `value` found for struct `JavaCompareField` in the current scope
+  --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:55:33
+   |
+55 |     assert!(b.value() == native.value());
+   |                                 ^^^^^ private field, not a method
+
+error[E0599]: no variant, associated function, or constant named `Temporal` found for enum `JavaCompareValue` in the current scope
+  --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:70:27
+   |
+70 |         JavaCompareValue::Temporal(kind, jdk_parse(kind, &typed_input.into())?),
+   |                           ^^^^^^^^ variant, associated function, or constant not found in `JavaCompareValue`
+
+error[E0599]: no variant, associated function, or constant named `Decimal` found for enum `JavaCompareValue` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:107:27
+    |
+107 |         JavaCompareValue::Decimal(DecimalValue::new("42")?),
+    |                           ^^^^^^^ variant, associated function, or constant not found in `JavaCompareValue`
+
+error[E0599]: no variant, associated function, or constant named `Temporal` found for enum `JavaCompareValue` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:133:27
+    |
+133 |         JavaCompareValue::Temporal(kind, jdk_parse(kind, &input.into())?),
+    |                           ^^^^^^^^ variant, associated function, or constant not found in `JavaCompareValue`
+
+error[E0599]: no associated function or constant named `java_fastjson_fields_equal` found for struct `DataCompareUtils` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:138:27
+    |
+138 |         DataCompareUtils::java_fastjson_fields_equal(
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+    |
+help: there is an associated function `java_fields_equal` with a similar name
+   --> crates\seata_db_mysql\src\data_compare_utils.rs:19:5
+    |
+ 19 | /     pub fn java_fields_equal(
+ 20 | |         left: Option<&JavaCompareField>,
+ 21 | |         right: Option<&JavaCompareField>,
+ 22 | |     ) -> bool {
+    | |_____________^
+
+error[E0599]: no associated function or constant named `java_fastjson_fields_equal` found for struct `DataCompareUtils` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:143:27
+    |
+143 |         DataCompareUtils::java_fastjson_fields_equal(None, None, jdk_parse)?,
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+    |
+help: there is an associated function `java_fields_equal` with a similar name
+   --> crates\seata_db_mysql\src\data_compare_utils.rs:19:5
+    |
+ 19 | /     pub fn java_fields_equal(
+ 20 | |         left: Option<&JavaCompareField>,
+ 21 | |         right: Option<&JavaCompareField>,
+ 22 | |     ) -> bool {
+    | |_____________^
+
+error[E0599]: no associated function or constant named `java_fastjson_fields_equal` found for struct `DataCompareUtils` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:144:27
+    |
+144 |         DataCompareUtils::java_fastjson_fields_equal(Some(&mut int), None, jdk_parse)?,
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+    |
+help: there is an associated function `java_fields_equal` with a similar name
+   --> crates\seata_db_mysql\src\data_compare_utils.rs:19:5
+    |
+ 19 | /     pub fn java_fields_equal(
+ 20 | |         left: Option<&JavaCompareField>,
+ 21 | |         right: Option<&JavaCompareField>,
+ 22 | |     ) -> bool {
+    | |_____________^
+
+error[E0599]: no associated function or constant named `java_fastjson_fields_equal` found for struct `DataCompareUtils` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:145:27
+    |
+145 |         DataCompareUtils::java_fastjson_fields_equal(Some(&mut int), Some(&mut null), jdk_parse)?,
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `DataCompareUtils`
+    |
+help: there is an associated function `java_fields_equal` with a similar name
+   --> crates\seata_db_mysql\src\data_compare_utils.rs:19:5
+    |
+ 19 | /     pub fn java_fields_equal(
+ 20 | |         left: Option<&JavaCompareField>,
+ 21 | |         right: Option<&JavaCompareField>,
+ 22 | |     ) -> bool {
+    | |_____________^
+
+error[E0599]: no method named `value` found for struct `JavaCompareField` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:147:18
+    |
+147 |     assert!(text.value() == actual.value());
+    |                  ^^^^^ private field, not a method
+
+error[E0599]: no method named `value` found for struct `JavaCompareField` in the current scope
+   --> crates\seata_db_mysql\tests\support\data_compare_fastjson_source.rs:147:36
+    |
+147 |     assert!(text.value() == actual.value());
+    |                                    ^^^^^ private field, not a method
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-db-mysql` (test "data_compare_source") due to 16 previous errors

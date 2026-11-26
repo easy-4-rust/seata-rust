@@ -1,0 +1,52 @@
+{
+  "reviewed_local": "2026-11-17T11:21:22",
+  "reviewer": "/root/undo_rollback_review",
+  "read_only": true,
+  "outcome": "NO_REMAINING_CONFIRMABLE_P1_P2_IN_SELECTED_COMPONENT",
+  "remaining_P1": 0,
+  "remaining_P2": 0,
+  "catalog_sha256": "cb577013e36b5bf13def0a35718e650c34e6a35763cf76e37b2ea9abe102b8a7",
+  "parent_members_rehashed": 7554,
+  "current_source_and_snapshots_rehashed": 7370,
+  "ordinary_tests_per_toolchain": 333,
+  "actual_test_artifacts_per_toolchain": 60,
+  "actual_compiled_registry_packages_per_toolchain": 150,
+  "actual_RM_children_per_toolchain": 6,
+  "RM_archived_recovery_files_per_toolchain": 22,
+  "fresh_native_DB_tests_per_toolchain": 13,
+  "fresh_fault_DB_tests_per_toolchain": 3,
+  "original_Java_observations_per_toolchain": 24,
+  "native_Java_input_cases_per_toolchain": 10,
+  "original_newly_compiled_source_files": 7,
+  "actual_Java_cleanup_negative_controls_per_toolchain": 2,
+  "original_full_manager_or_JUnit_executed": false,
+  "wire_packets_independently_rehashed": 6,
+  "wire_negative_controls_independently_replayed": 60,
+  "role_negative_controls": 6,
+  "qualification_container_identity_records": 8,
+  "closed_findings": [
+    {
+      "priority": "P2",
+      "finding": "forwarded ACK not byte-bound to captured original OK",
+      "resolution": "decode forwarded packet and require exact original bytes/sequence/session; actual-copy ERR mutation rejected"
+    },
+    {
+      "priority": "P2",
+      "finding": "same connection did not prove a single transaction",
+      "resolution": "archive full command profile; original BEGIN/IN_TRANS ACK before DML and exact final COMMIT/OK; map every execute to original prepared SQL including preprepared SET; reject transaction boundaries and reset/auth commands; actual-copy ROLLBACK/prepared SET/preprepared SET/reset rejected"
+    },
+    {
+      "priority": "P2",
+      "finding": "Java cleanup invocation lacked Undo deletion/retention assertions",
+      "resolution": "all seven columns plus another branch sentinel; original cleanup uses tracked JDBC; independent actual JVM probes reject omitted cleanup or deleted retained log"
+    }
+  ],
+  "inherited_previous_DB_tests_not_fresh": 63,
+  "limits": [
+    "selected native full image and existing type profiles only",
+    "historical Java lossy tinyint values not certified reversible",
+    "Consumed is not proof all old attempts are fenced or generic RM Applied/NotApplied",
+    "no formal resource adapter or first-phase business COMMIT",
+    "WP05/WP06/TC gates/full V1 remain OPEN"
+  ]
+}

@@ -1,0 +1,36 @@
+
+running 6 tests
+test absent_enrollment_is_unknown_but_enrolled_missing_undo_fences_and_finishes_atomically ... 
+thread 'absent_enrollment_is_unknown_but_enrolled_missing_undo_fences_and_finishes_atomically' (37296) panicked at crates\seata_db_mysql\tests\live_rm_recovery.rs:117:36:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: None }, source: Driver { operation: "RM recovery columns", sql_state: Some("42000"), code: Some(1064) } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test compensation_and_terminal_are_atomic_and_duplicate_callbacks_preserve_later_business ... 
+thread 'compensation_and_terminal_are_atomic_and_duplicate_callbacks_preserve_later_business' (25900) panicked at crates\seata_db_mysql\tests\live_rm_recovery.rs:62:36:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: None }, source: Driver { operation: "RM recovery columns", sql_state: Some("42000"), code: Some(1064) } }
+FAILED
+test dirty_failure_keeps_undo_and_persistent_direction_for_next_recovery ... 
+thread 'dirty_failure_keeps_undo_and_persistent_direction_for_next_recovery' (8804) panicked at crates\seata_db_mysql\tests\live_rm_recovery.rs:150:36:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: None }, source: Driver { operation: "RM recovery columns", sql_state: Some("42000"), code: Some(1064) } }
+FAILED
+test enrollment_is_idempotent_but_does_not_overwrite_application_or_profile ... 
+thread 'enrollment_is_idempotent_but_does_not_overwrite_application_or_profile' (35492) panicked at crates\seata_db_mysql\tests\live_rm_recovery.rs:188:36:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: None }, source: Driver { operation: "RM recovery columns", sql_state: Some("42000"), code: Some(1064) } }
+FAILED
+test recovery_table_is_reserved_before_any_business_dml ... ok
+test unsupported_commit_binds_direction_without_reporting_success_or_deleting_undo ... 
+thread 'unsupported_commit_binds_direction_without_reporting_success_or_deleting_undo' (44728) panicked at crates\seata_db_mysql\tests\live_rm_recovery.rs:220:36:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: None }, source: Driver { operation: "RM recovery columns", sql_state: Some("42000"), code: Some(1064) } }
+FAILED
+
+failures:
+
+failures:
+    absent_enrollment_is_unknown_but_enrolled_missing_undo_fences_and_finishes_atomically
+    compensation_and_terminal_are_atomic_and_duplicate_callbacks_preserve_later_business
+    dirty_failure_keeps_undo_and_persistent_direction_for_next_recovery
+    enrollment_is_idempotent_but_does_not_overwrite_application_or_profile
+    unsupported_commit_binds_direction_without_reporting_success_or_deleting_undo
+
+test result: FAILED. 1 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.88s
+

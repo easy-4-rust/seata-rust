@@ -1,0 +1,11 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.47s
+     Running `D:\cargo-target\seata-phase09\debug\seata-java-tc-it.exe --lifecycle`
+PASS RegisterTM identified=true protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS RegisterRM identified=true resourceId=mysql://orders protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS live Java TC registration smoke: TM + RM
+GlobalBegin xid=198.18.0.1:28091:4045075949638950913 scenario=empty-commit
+PASS empty-transaction commit xid=198.18.0.1:28091:4045075949638950913 responseStatus=9 observedStatus=15
+GlobalBegin xid=198.18.0.1:28091:4045075949638950914 scenario=empty-rollback
+PASS empty-transaction rollback xid=198.18.0.1:28091:4045075949638950914 responseStatus=11 observedStatus=15
+PASS no-branch global lifecycle smoke; AT and RM callbacks NOT tested

@@ -1,0 +1,39 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_runtime_20261114_003214_ee6afbb3\failed-is-not-success\crates\seata_rm)
+warning: unused import: `ResultCode`
+ --> crates\seata_rm\src\manager\resource_client.rs:7:31
+  |
+7 | use seata_protocol::{Message, ResultCode};
+  |                               ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `prefix`
+   --> crates\seata_rm\src\manager\resource_client.rs:153:18
+    |
+153 |         let Some(prefix) = prefix else {
+    |                  ^^^^^^ help: if this is intentional, prefix it with an underscore: `_prefix`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-rm` (lib) generated 2 warnings (run `cargo fix --lib -p seata-rm` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.06s
+     Running tests\native_calls.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\native_calls-f0efa2a6a5e8bf87.exe)
+
+running 1 test
+test failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean ... FAILED
+
+failures:
+
+---- failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean stdout ----
+
+thread 'failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean' (45496) panicked at crates\seata_rm\tests\native_calls.rs:150:10:
+called `Result::unwrap_err()` on an `Ok` value: GlobalLockQueryResponse { response: AbstractTransactionResponse { result_code: Failed, msg_present: false, transaction_exception_code: LockableCheckFailed, .. }, lockable: true, .. }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-rm --test native_calls`

@@ -1,0 +1,267 @@
+{
+  "status": "FASTJSON_SERIAL_ARRAY_ORIGINAL_CASES_AND_BYTES_MATCH",
+  "predecessor": "docs/phase-2/wp05-fastjson-undo-write-class-source.json",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "original_source_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_junit_c1dw9r0t",
+  "original_source_catalog_sha256": "f3ab65e10b2b135f5c076ba715845a3db6eee736f68b53861e883eeb302cb257",
+  "native_wire_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_native_5rvbl_xm",
+  "native_wire_catalog_sha256": "b363034a7a0413f7fe3e5e936b9327376b6484e89cf5682b9331a74bfc6f7273",
+  "native_wire_observations_regression_match": 45,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testDecodeDefaultContent()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+      "java": [
+        "{}",
+        "true",
+        "true",
+        "0",
+        "true"
+      ],
+      "rust": {
+        "1.99": [
+          "{}",
+          "true",
+          "true",
+          "0",
+          "true"
+        ],
+        "1.85": [
+          "{}",
+          "true",
+          "true",
+          "0",
+          "true"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testWriteClassName()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "true",
+        "true",
+        "true",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"PRIMARY_KEY\",\"name\":\"id\",\"type\":-5,\"value\":0L},{\"keyType\":\"NULL\",\"name\":\"money\",\"type\":3,\"value\":1.}]}],\"tableName\":\"t1\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "true",
+          "true",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"PRIMARY_KEY\",\"name\":\"id\",\"type\":-5,\"value\":0L},{\"keyType\":\"NULL\",\"name\":\"money\",\"type\":3,\"value\":1.}]}],\"tableName\":\"t1\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ],
+        "1.85": [
+          "true",
+          "true",
+          "true",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"PRIMARY_KEY\",\"name\":\"id\",\"type\":-5,\"value\":0L},{\"keyType\":\"NULL\",\"name\":\"money\",\"type\":3,\"value\":1.}]}],\"tableName\":\"t1\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testDirectSerialArraySerialization()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "-5",
+        "int8",
+        "[1, 2, 3, 4, 5]",
+        "{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1,2,3,4,5]}"
+      ],
+      "rust": {
+        "1.99": [
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1,2,3,4,5]}"
+        ],
+        "1.85": [
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1,2,3,4,5]}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testSerializeAndDeserializeSerialArray()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "true",
+        "-5",
+        "int8",
+        "[1, 2, 3, 4, 5]",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"dept_ids\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,2L,3L,4L,5L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"dept_ids\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,2L,3L,4L,5L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ],
+        "1.85": [
+          "true",
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"dept_ids\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,2L,3L,4L,5L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testSerializeAndDeserializeSerialArrayWithNulls()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "true",
+        "3",
+        "[1, null, 3]",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"nullable_array\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,null,3L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "3",
+          "[1, null, 3]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"nullable_array\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,null,3L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ],
+        "1.85": [
+          "true",
+          "3",
+          "[1, null, 3]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"nullable_array\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,null,3L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ]
+      },
+      "status": "MATCH"
+    }
+  ],
+  "scalar_observations_match": 2,
+  "original_java_cases_reexecuted": 7,
+  "original_fastjson_cases_rust_match": 5,
+  "original_fastjson_cases_rust_remaining": 2,
+  "inherited_method_concrete_variants": 6,
+  "inherited_method_fully_migrated": false,
+  "global_methods_remaining": 1026,
+  "global_rust_methods_match": 109,
+  "global_cases_remaining": 1213,
+  "global_rust_source_MATCH": 114,
+  "rust": {
+    "1.99": {
+      "ordinary": 545,
+      "ignored": 160,
+      "harnesses": 114,
+      "doc": 4,
+      "targeted": 11,
+      "java_original_assertions_match": 19
+    },
+    "1.85": {
+      "ordinary": 545,
+      "ignored": 160,
+      "harnesses": 114,
+      "doc": 4,
+      "targeted": 11,
+      "java_original_assertions_match": 19
+    }
+  },
+  "rust_evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261119_serial_array",
+  "runtime_controls": [
+    {
+      "label": "require-tagged-direct-array-elements",
+      "target": "serial_array_source::fastjson_source_test_direct_serial_array_serialization",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_piyby2ph",
+      "mutated_file": "crates/seata_at/src/undo/parser/serial_array.rs",
+      "original_sha256": "72c694c730b204a46f3d88a82f3a873765072aff44a05fd853e2ac2076b5a2d1",
+      "mutant_sha256": "fe239778f4e8779a0339920a8e6850ec314195108512dcd05d183dd864f5533a",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "fastjson_undo_native",
+        "--",
+        "serial_array_source::fastjson_source_test_direct_serial_array_serialization",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "replace-array-null-with-zero",
+      "target": "serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array_with_nulls",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_piyby2ph",
+      "mutated_file": "crates/seata_at/src/undo/parser/serial_array.rs",
+      "original_sha256": "72c694c730b204a46f3d88a82f3a873765072aff44a05fd853e2ac2076b5a2d1",
+      "mutant_sha256": "687dbabfcc95408d6a8d1fee728526d1a867fcd7ebc55626700773cefe90f7d7",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "fastjson_undo_native",
+        "--",
+        "serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array_with_nulls",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    }
+  ],
+  "evidence_sha256": {
+    "1.85-clippy.log": "591cbfcde7165ce06d5f0aa39643a54549bb9bd3f70313f4bc4d89aa9b97c578",
+    "1.85-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-doc.log": "87b96012d81ce62982c54d2bda86a42509a3f0e10149243f9dcee386a5927c84",
+    "1.85-targeted.log": "e4796b8aab30e50b1362e14ad73ed3ac8c1abd2cef48f942458216d1ff859bdc",
+    "1.85-tests.log": "138df1ac11e893778d98f5c5c4f5e3e51a3736a76d34f631f9deea1a6c4c578b",
+    "1.99-clippy.log": "10f6c81c4001a275841f04aacfde009f980e21e905b7bbfce1b0e400c6ff2c82",
+    "1.99-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-doc.log": "ef48f65565d4f7d2ea0e22d9590d78f9ab7be737069d7c7161699d7d010a5903",
+    "1.99-targeted.log": "0a67a492a21773e0305a97b3b69dbf834ea6d9f8975e479a8fbf72492dd93141",
+    "1.99-tests.log": "aead3f8c3f8457c05e6271217ab0c68393a3b302a57cbf26e4a67a907f14d350",
+    "api-red.log": "0adf9edfa1743a537fccd343b13944a380585ea264fdc4e5afc476d20e679501",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-replace-array-null-with-zero.stderr": "f11f8d5831198de91d8410c6bb724b86c3eda771573e2751024be9da7e2090e7",
+    "mutant-replace-array-null-with-zero.stdout": "a593e2b7ed26b816a54da1f639cbf71b2123d368681aeadc8d363a60be677ebd",
+    "mutant-require-tagged-direct-array-elements.stderr": "0ba200d3b3ed8a7ee515362b1a18bbe2bcccdb7f4c9959ee77707f21308ea298",
+    "mutant-require-tagged-direct-array-elements.stdout": "abcd8d2541249cb9bd30c00bd2a30eee9b2b7e89d3f9367771498b4bb83a53e5",
+    "runtime-mutation-controls.json": "ec954384f73bdd7ab90b3545772a688e7a008641c4b215771878b3f1ea4e9dba"
+  },
+  "source_inputs_sha256": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_at/src/lib.rs": "40c4a42b4b13556f7ad6174efc43dc232dd1f5d07d82ebe313748074482c77f7",
+    "crates/seata_at/src/undo/mod.rs": "d1e6dd7120182c44168ef7c102d099c60a46c90c9d91f23ab413cb9dc1983115",
+    "crates/seata_at/src/undo/parser/mod.rs": "a6004c2fcd0c10bdf0ceef7e25d90678cd6a80adaa38207b4037752de5a23b66",
+    "crates/seata_at/src/undo/parser/fastjson_undo_branch.rs": "b9d1c6dd7668db9fdc15e6dc2ae824ee49b6e266fa660f27aaefc199ad0ba688",
+    "crates/seata_at/src/undo/parser/fastjson_wire.rs": "b9b1201ad1fa2c05f36301c0acf0d645fe789ed092614f8ccf4f5eb628a45f47",
+    "crates/seata_at/src/undo/parser/fastjson_undo_log_parser.rs": "5befb8aa683f3061ae5b493ae5d29ec9b8b36b3563c1e12f77b4237725aa8a84",
+    "crates/seata_at/src/undo/parser/fastjson_branch_encoder.rs": "f277069b2ee16358cd5132fe032e2665e738b92e12d05d0af00ec4239fed3656",
+    "crates/seata_at/src/undo/parser/bounded_output.rs": "06b2c407eb140949c5b7584ad8fc4047c9404bc416adff17560961107cf770df",
+    "crates/seata_at/src/undo/parser/fastjson_sql_undo_log.rs": "0e8e47f73e5537aa30cef5b542cc14418b046761ac636c30e52c8ff0ce6c918b",
+    "crates/seata_at/src/undo/parser/fastjson_undo_records.rs": "39592227ab57f128e68878fcec56c7fa52a2bfae77432ee2d40fab0c78857f29",
+    "crates/seata_at/src/undo/parser/fastjson_undo_field.rs": "cf4c05b1cb441722266259552610a31dd523142359b0c529c36b8c61d5dd8aeb",
+    "crates/seata_at/src/undo/parser/fastjson_undo_field_value.rs": "bdb5db307b929dff1faf39ea5c05ec5e2de6d9c962d4c5cc3cd9e5a0c2e26be9",
+    "crates/seata_datasource/src/struct/decimal_value.rs": "62cc021ccef17687e09c6e40c83b325f84c6a8966ddd8b3428a949cef47a81cf",
+    "crates/seata_db_mysql/src/java_compare_value.rs": "8a30b8bd700fd4cfb723700179d16619bc028b77a9c88fd342aff38914fd7ac3",
+    "tools/formal-source-junit/FastjsonUndoEscapingOracle.java": "98d08efed5c8e4ef116051cd3a5f838eb5816c3e914d4e5ae12b09a614fee203",
+    "crates/seata_at/src/undo/parser/serial_array.rs": "72c694c730b204a46f3d88a82f3a873765072aff44a05fd853e2ac2076b5a2d1",
+    "crates/seata_at/tests/support/fastjson_serial_array.rs": "240bf6bd350a8144bc34831d4bfea26531a7075201459a0092885fbdd342b098",
+    "crates/seata_at/tests/fastjson_undo_native.rs": "971a1861541abf46046d5798d0477cea22d22862d2948562147f8f10da41c1ea",
+    "tools/formal-source-junit/fastjson_undo_source.py": "0f221e59bbfc5cdb5bdb6904c9e1e003860b136af98f762537a85e96d824b0d9",
+    "tools/formal-source-junit/fastjson_undo_native.py": "0b9a1270782c920cb984fc8ec4cb32c3c5d0cc59984cdfab3cefbe4db5231a2c"
+  },
+  "live_fastjson_rollback_verified": false,
+  "production_fastjson_undo_load_enabled": false,
+  "phase_05_complete": false,
+  "phase_06_complete": false,
+  "v1_complete": false
+}

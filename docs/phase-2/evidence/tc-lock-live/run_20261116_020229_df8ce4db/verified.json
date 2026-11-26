@@ -1,0 +1,102 @@
+{
+  "observations": [
+    {
+      "case": "normal",
+      "owner_lock_rows": 1,
+      "contender_lockable": false,
+      "contender_registered": false
+    },
+    {
+      "case": "empty",
+      "owner_lock_rows": 0,
+      "contender_lockable": true,
+      "contender_registered": true
+    },
+    {
+      "case": "blank",
+      "owner_lock_rows": 0,
+      "contender_lockable": true,
+      "contender_registered": true
+    },
+    {
+      "case": "unicode-blank",
+      "owner_lock_rows": 0,
+      "contender_lockable": true,
+      "contender_registered": true
+    },
+    {
+      "case": "partial-empty",
+      "owner_lock_rows": 1,
+      "contender_lockable": true,
+      "contender_registered": true
+    },
+    {
+      "case": "semicolon",
+      "owner_lock_rows": 1,
+      "contender_lockable": true,
+      "contender_registered": true
+    },
+    {
+      "case": "binary-same",
+      "owner_lock_rows": 2,
+      "contender_lockable": false,
+      "contender_registered": false
+    },
+    {
+      "case": "binary-distinct",
+      "owner_lock_rows": 2,
+      "contender_lockable": false,
+      "contender_registered": false
+    }
+  ],
+  "actual_Begin_requests": 16,
+  "actual_global_end_requests": 16,
+  "actual_branch_register_requests": 16,
+  "actual_lock_queries": 8,
+  "actual_callbacks": 13,
+  "definite_lock_conflicts": [
+    {
+      "xid": "198.18.0.1:63162:4045077595485540354",
+      "branch_type": 0,
+      "resource": "mysql://auth-a",
+      "key": "t:1",
+      "data": "{\"tcLockCoverage\":\"f9836638c7854d7b85de981a2a5858ce\"}",
+      "registered": false,
+      "branch_id": 0,
+      "error": 2,
+      "error_message": "TransactionException[Global lock acquire failed xid = 198.18.0.1:63162:4045077595485540354 branchId = 4045077595485540358]",
+      "request_ns": 642097134484600,
+      "reply_ns": 642097140446900
+    },
+    {
+      "xid": "198.18.0.1:63162:4045077595485540469",
+      "branch_type": 0,
+      "resource": "mysql://auth-a",
+      "key": "t_binary:[0, -1]",
+      "data": "{\"tcLockCoverage\":\"f9836638c7854d7b85de981a2a5858ce\"}",
+      "registered": false,
+      "branch_id": 0,
+      "error": 2,
+      "error_message": "TransactionException[Global lock acquire failed xid = 198.18.0.1:63162:4045077595485540469 branchId = 4045077595485540473]",
+      "request_ns": 642109863724500,
+      "reply_ns": 642109867740600
+    },
+    {
+      "xid": "198.18.0.1:63162:4045077595485540487",
+      "branch_type": 0,
+      "resource": "mysql://auth-a",
+      "key": "t_binary:[0, -2]",
+      "data": "{\"tcLockCoverage\":\"f9836638c7854d7b85de981a2a5858ce\"}",
+      "registered": false,
+      "branch_id": 0,
+      "error": 2,
+      "error_message": "TransactionException[Global lock acquire failed xid = 198.18.0.1:63162:4045077595485540487 branchId = 4045077595485540491]",
+      "request_ns": 642111794178400,
+      "reply_ns": 642111798224700
+    }
+  ],
+  "TC_safety_gate_passed": false,
+  "TC_registration_gate_passed": false,
+  "SQL_Undo_atomicity_verified": false,
+  "public_COMMIT_available": false
+}

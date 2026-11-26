@@ -1,0 +1,85 @@
+{
+  "status": "UNDO_PHYSICAL_ENGINE_VERIFIED_UNDER_ORIGINAL_MDL",
+  "mysql": "8.4.13",
+  "image": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+  "rust": {
+    "1.99": {
+      "workspace_passed": 635,
+      "ignored": 193,
+      "store_live_passed": 11,
+      "rollback_live_passed": 16,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "workspace_passed": 635,
+      "ignored": 193,
+      "store_live_passed": 11,
+      "rollback_live_passed": 16,
+      "strict_clippy": true
+    }
+  },
+  "red": {
+    "business_rows_after_rollback": 0,
+    "nontransactional_orphan_undo_rows": 1,
+    "engine": "MyISAM"
+  },
+  "coverage": [
+    "Business statement creates dictionary snapshot before later Undo engine DDL",
+    "Current SHOW CREATE engine is checked under original Undo MDL before writes",
+    "Plain MyISAM and column/table comments with exact fake InnoDB token are rejected before flush",
+    "Real current DDL bytes show escaped comment newlines and a single actual MyISAM engine line",
+    "Rejected scope remains poisoned; original business and Undo counts are zero after rollback",
+    "Restored InnoDB accepts fresh flush on same data source and rolls back both tables"
+  ],
+  "remaining": [
+    "Other protected Undo/recovery schema snapshot dimensions, including columns, indexes and constraints",
+    "Original TC safety, public first-phase COMMIT and remaining WP05/WP06/full plan gates"
+  ],
+  "sha256": {
+    "Cargo.lock": "21459760f5f3338182baa1feafe023d4b96a7c61303236a7ad8e7609d603ff97",
+    "crates/seata_db_mysql/src/cache/mysql_table_meta_reader.rs": "f2fdec19fa39dfc073a64dedac297fb10d4248ade6dccd0b5e40b96f17639bba",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "08482be122fade16a70c90cd3b7d9bcbd81123ac01a32d257d964b8e3c55ab6c",
+    "crates/seata_db_mysql/tests/live_undo_store.rs": "e23454d1385f08da647eb441ce50bb0e2a38a0143390941c2037f82485767ef3",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.85-business-engine.log": "077c37a3888ac0d26a8106c063ff723899910556412bbd7a0c40666252e633bb",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.85-clippy.log": "544515f4d8fe6a35022a1f66e727dd067d6b33477b0b35e9c2e0498a84158919",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.85-engine-focused.log": "7544a7cc1ab66b2ac36328c08862ffc9ec46f1b45302865ebf7f8a76800943a7",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.85-live_undo_rollback.log": "7bb096bc01f9dee80c1aa2d9d58604ad722743c6f1a7ac50db0d01e49926d948",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.85-live_undo_store.log": "b729fcde9381edb557d48e5f43d7cb6cd770625b84821299e3f38f1ec9355378",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.85-rollback-fixture-overlap.log": "210a64c553eb06e6cfffce7124ea86538db3d7b579f04e16c5fd13309150a13d",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.85-workspace.log": "575fe00f4c6d65d353931584e10ae837560979042ef0e14c84fc5f14fe4d8c72",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-business-engine.log": "ca25e610d2eacbe0d5d6cdb51e57e75ba7314c9629092f62fa07171570e9e41d",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-clippy.log": "7cf3c9bcc64498ab38a4b93edf87fabf583e81790bc09790e252c2716ed9fc28",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-engine-focused.log": "9f49e28640c710897b35e4d614d18816ac02d562c504121f6cd80215eb35da9e",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-engine.log": "b575832e6cecf04f6b5ff964de12468f886a6579e3c97ecd3fa8108cbaf91ecb",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-lib-initial.log": "0fca77b6ab1025eab5061b9dd2158184386ab96c3e53b7371e08ee8e7e5b59f7",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-live_undo_rollback.log": "9011d6fda1e07307c8164ee5352b9362a956950d79ee962c848a15675d7475da",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-live_undo_store.log": "0975dbfd2d800baef0dbcbb29492c0c7ce38b7304979bb90358a9a1baf7b6d87",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/1.99-workspace.log": "782d44175ed343238464b6d0492672cbf81e44d9ecdc7abf16dffd316c493590",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/cleanup-runtime.sh": "e21b6523c42d0514c45588f5fee15f0e231971565bb4ddf9ae35f6f4af3b0e14",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/cleanup.log": "9c1bc538fc1bc5b4888437fdc8800778016504574506b9db6d54f7bb2def80b3",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/current-engine-lines.log": "5cedfddaa84ef3c9324b5b793eefc7fb78f8ddfbccc3e9898cc7a9f2c50a15db",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/ddl-current-definition-0.json": "e14722d87a70d57957452b64fcc22a542acbce0de16300cce320d9ed28831d42",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/ddl-current-definition-1.json": "9d651bf68f1f415408a2d999d0b6f27838c03fb4bc520352765b1d1851d96386",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/ddl-current-definition-2.json": "9fec84dc4e937726ee3af03a9d7cacca6e1b7347f37c821c924199f4dbc404f5",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/final-engine-case-counts.log": "14537b994ced0f78e39d6ef4692b8a6159b9d6eaa7b5a3ff9aaff42b23947e4e",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/image.log": "82e6eb9db55e4c654343ec121040a3b36e98089d38bf34667f8f428af4651c3c",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/independent-server.log": "7d970ed802fc0b6dc9692f553e370f01b5f5b53445ff7b36aa2c5620321ee3c0",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/README.md": "1e0e876498a328f945eba3554ef7d186391364911543396bfb3182d6fc86bf94",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/red-database.log": "45436a3d37a1e929f8d9185eddc809ab7633cb766951a58577213e9fef770b4c",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/red.log": "d3315fed1ba0ecafab8544094d0288b7312f2b3538c0784de424865cdc9b7bab",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/review.md": "24cec4844a10cba43389c5eed434d12cfe02e97ca64919ac5561593674cf8375",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/run-business-engine.ps1": "a5ff61bbd395b5fec712db98a7a504b547b20f8d4d78dc4cb59389a98a40b1d2",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/run-clippy-final.ps1": "ca9d5af10d62d1dd48c9bed24102b4b78ec2cf82f59f66849f85971dfcd8553a",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/run-live.ps1": "fb4e63db3e20bdaaf43a39eda067dd12812c94957ef99c10d856e0401ac43d5b",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/run-store-final.ps1": "b9274a7cd54930282ac9be83f5332096ed1369f6c96ff312a0b08694dd1fe2cc",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/run-workspace.ps1": "6d11aa7c42a25f23377ba3fa9eecd91de51450f0d055a35317823b6a48a1bc3a",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/runtime.log": "aa279ef56bc9d634c86d4ca52c390589d4eaa6bf1dfac68701a9b6d1631a5ea1",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/start-runtime.sh": "d51d4d1292083c73a1e2eebbd5b7318642cda6c4bae516266a1d8cb4a30d46a9",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/strong-comment-fixture-overlap.log": "700f44157c08eae53ff07f97234873859c181c75f05a1790ac2514520a7c9076",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/strong-comment.log": "9872969bafbdcc874d9c0a9aa7489c7996f3e823e2cd6c1af12415bfd8365dfb",
+    "docs/phase-2/evidence/mysql-undo-engine-ddl/verify.py": "c1a95a16f69ce77fa4f329e9fdea1ce00f5549ace966cbec38e1ea9bd9582dbd",
+    "docs/phase-2/mysql-undo-store-contract.md": "0f1d4408ce93619e867782f61bf11f6c8bc036418ffeb29b3f2b7aec2cffb0c4"
+  }
+}

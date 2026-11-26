@@ -1,0 +1,76 @@
+{
+  "status": "UNDO_NORMAL_CLEANUP_IDENTITY_BOUND_AND_SQLX_LOOPBACK_VERIFIED",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-fragment-read-sqlx.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_fragment_cleanup",
+  "rust": {
+    "1.99": {
+      "ordinary": 614,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "cleanup_wire_tests": 2,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 614,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "cleanup_wire_tests": 2,
+      "strict_clippy": true
+    }
+  },
+  "verified": [
+    "Normal child/root XID binary predicate plus indexed identity",
+    "child context binary predicate",
+    "exact one-row check and child-before-root order",
+    "no root DELETE or COMMIT on child error",
+    "rollback remains owned by caller"
+  ],
+  "validator_replay": {
+    "archived_captures": 9,
+    "synthetic_exact_format": 9,
+    "negative_controls": 36,
+    "validators": 3
+  },
+  "independent_review": "Preserved exact historical decoding only for absent markers; added explicit null negative",
+  "global_rust_source_MATCH": 151,
+  "global_rust_methods_match": 130,
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "860299b9f81818e5969bddc4181ac54d8671419e85b94961403d4c5a820bf4a7",
+    "tools/formal-undo-rollback/live.py": "50b9c490780b191225784af7ee1d75a2a07031779d10d7c87df303e3b9c43bc7",
+    "tools/formal-undo-rollback-loss/validate.py": "c1b36005462977c224d4f501123b6bae7cf1e11768130230fcba65d8a18fec1b",
+    "tools/formal-rm-mysql/live.py": "b422c1af02cb0b1f18fade08b8d2fb231d0967b4ceeb27663792022e1f516177",
+    "tools/formal-rm-mysql/validate.py": "c2678b179f89416db80c792743aea73d8570ad993fcf0d84bea0e5e6ad377dd7",
+    "tools/formal-commit-preconditions/managed_rollback_fence.py": "08cdc512d435c41a68871ca7fc8b43e0f29989c86222fe1bcd0dd5c1269b89ae",
+    "tools/formal-commit-preconditions/managed_rollback_wire.py": "d47336ec29aeeabaa99e75735e7470f9d58eaf2054bda6d674b35ea25c551fb1",
+    "crates/seata_db_mysql/src/mysql/mod.rs": "2946fd113615043db58a9845c1af99eef047ca55450b0f784f25a32fce62a0fe",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "75799a0b4d32e634b37819887ee12b50e39fc25b54b0abeab1da90c6a9ecf6b0",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_cleanup_sqlx_tests.rs": "03f0d0c606fc08ed56aaf737895ab6e061fa0e7848409c0d12945b06d1237bd4"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "f4dd4d9d70fd07fbb4f1bcf44a1dbb022ba6639f43dd6cba3b6f8c71ba262b66",
+    "1.85-doc.log": "0562b6840e0327c08330ddbe5811d1bde8d7a3a6b1de50fbed48c54c82b3ed7b",
+    "1.85-targeted.log": "bb5fd5a959603d7064396d246fc4f51a5984f7c8f6b560032f7696d8d85c9d0b",
+    "1.85-tests.log": "982b0de0a240566792a61cb36f82c5a89ddcee435f14711622c874bb3ad99bb4",
+    "1.99-clippy.log": "182f1bb89eac4344a829f163f5da732210504369d2a14a668fa350951806ab2c",
+    "1.99-doc.log": "9fc3ee20e093c363809287733c8d8adcb373b4bbb2992d22935b53ab8ebf6569",
+    "1.99-targeted.log": "13b00c180e83f7fd4f205eeea4959ee8c86ed97aeb13fa467e1919bf8dd18d7c",
+    "1.99-tests.log": "5df851677f3d9fb6a0a7250819e700a1ff8b5abfec41bbffbcfbb00529e19ee4",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-continue-after-zero-row-delete.stderr": "4d3d8a59b7cd00fd1ac4364ad71a7cfe770c9a925e6005cc85ded776c192583f",
+    "mutant-continue-after-zero-row-delete.stdout": "9acb04ce2e3af8b98a63ddabc6a70b84198e2e577bbb527a48f0c90c528ab923",
+    "mutant-omit-exact-parent-guard.stderr": "6adddc252b23e95081128ebf8df45a0233d178c1ee61be9f81dc3656b6352b59",
+    "mutant-omit-exact-parent-guard.stdout": "6fbf8d552699a70c657088d861a1c24b53792a07db5e6b65d3312dfe14743fc5",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "runtime-mutation-controls.json": "653581d3de358ad09019cd0eb899302c3625d48621ed2ea5ea2c3c0a57120f9c",
+    "unqualified-delete-red.log": "5a4602b64b7c09500473f8e84f42ad5183254ca01e824512d7a091df360fc8e9",
+    "validator-replay.json": "11e4b963081278b0fa8ad46c03312230e86c7d0686ab98306f94a9f78cbc7c8b",
+    "verify-delete-formats.py": "16bf493b8ad6e3c24f3e4a4bd3a333e69cdd883a2ac710d63186add9332e5a51"
+  }
+}

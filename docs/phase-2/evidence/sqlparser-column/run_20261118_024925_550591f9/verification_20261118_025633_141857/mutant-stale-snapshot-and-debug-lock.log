@@ -1,0 +1,51 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_column_metadata_20261118_024925_550591f9\mutants\verification_20261118_025633_141857\stale-snapshot-and-debug-lock\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_column_metadata_20261118_024925_550591f9\mutants\verification_20261118_025633_141857\stale-snapshot-and-debug-lock\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running tests\column_meta_obligations.rs (D:/cargo-target/seata-column-mutants\debug\deps\column_meta_obligations-82ffb276e37346ef.exe)
+
+running 9 tests
+test autoincrement_uses_java_unicode_ignore_case_not_ascii_only ... ok
+test clone_shares_column_mutations_and_allows_clearing ... ok
+test object_field_preserves_boxed_types_and_null ... ok
+test java_hash_wraps_and_text_retains_raw_utf16 ... ok
+test replacing_dynamic_object_releases_user_drop_outside_metadata_lock ... ok
+test hash_reads_tail_fields_after_reentrant_object_callback ... FAILED
+test text_reads_tail_fields_after_reentrant_object_callback ... FAILED
+test equals_reads_tail_fields_after_reentrant_object_callback ... FAILED
+test debug_does_not_call_user_formatting_under_metadata_lock ... FAILED
+
+failures:
+
+---- hash_reads_tail_fields_after_reentrant_object_callback stdout ----
+
+thread 'hash_reads_tail_fields_after_reentrant_object_callback' (18904) panicked at crates\seata_test\tests\column_meta_obligations.rs:205:5:
+assertion `left == right` failed: Java reads ordinalPosition after Object.hashCode callback
+  left: 2485
+ right: 2492
+
+---- text_reads_tail_fields_after_reentrant_object_callback stdout ----
+
+thread 'text_reads_tail_fields_after_reentrant_object_callback' (5328) panicked at crates\seata_test\tests\column_meta_obligations.rs:222:5:
+assertion failed: text.contains("ordinalPosition=7")
+
+---- equals_reads_tail_fields_after_reentrant_object_callback stdout ----
+
+thread 'equals_reads_tail_fields_after_reentrant_object_callback' (38264) panicked at crates\seata_test\tests\column_meta_obligations.rs:188:5:
+Java reads ordinalPosition after Object.equals callback
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- debug_does_not_call_user_formatting_under_metadata_lock stdout ----
+
+thread 'debug_does_not_call_user_formatting_under_metadata_lock' (41480) panicked at crates\seata_test\tests\column_meta_obligations.rs:263:5:
+Debug blocked by a user callback acquiring the column write lock
+
+
+failures:
+    debug_does_not_call_user_formatting_under_metadata_lock
+    equals_reads_tail_fields_after_reentrant_object_callback
+    hash_reads_tail_fields_after_reentrant_object_callback
+    text_reads_tail_fields_after_reentrant_object_callback
+
+test result: FAILED. 5 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.01s
+
+error: test failed, to rerun pass `-p seata-test --test column_meta_obligations`

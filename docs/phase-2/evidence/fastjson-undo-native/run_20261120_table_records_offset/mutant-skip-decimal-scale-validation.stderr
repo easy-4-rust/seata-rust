@@ -1,0 +1,17 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_compare_mutants_21g_6_im\crates\seata_at)
+warning: unused import: `value_format::ValueFormat`
+ --> crates\seata_at\src\undo\parser\offset_date_time.rs:1:13
+  |
+1 | use super::{value_format::ValueFormat, UndoCodecError};
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-at` (lib) generated 1 warning (run `cargo fix --lib -p seata-at` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.44s
+     Running tests\table_records_source.rs (D:/cargo-target/seata-compare-source-mutants\debug\deps\table_records_source-56d454fcf856501c.exe)
+
+thread 'jackson_offset_timestamp_matches_java_boundaries' (12628) panicked at crates\seata_at\tests\table_records_source.rs:220:17:
+assertion failed: OffsetDateTime::decode_jackson_timestamp(json.as_bytes()).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-at --test table_records_source`

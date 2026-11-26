@@ -1,0 +1,40 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.73s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 2 tests
+test mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement ... FAILED
+test mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement ... FAILED
+
+failures:
+
+---- mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement stdout ----
+
+thread 'mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement' (55944) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:107:5:
+assertion `left == right` failed
+  left: Some([23, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 8, 0, 253, 0, 253, 0, 252, 0, 102, 0, 0, 0, 0, 0, 0, 0, 3, 120, 105, 100, 11, 98, 114, 97, 110, 99, 104, 73, 100, 61, 52, 50, 2, 8, 9])
+ right: Some([25, 1, 0, 0, 0])
+Error: Driver { operation: "Undo insert", sql_state: None, code: None }
+
+---- mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement stdout ----
+
+thread 'mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement' (62040) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:107:5:
+assertion `left == right` failed
+  left: Some([23, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 8, 0, 253, 0, 253, 0, 252, 0, 102, 0, 0, 0, 0, 0, 0, 0, 3, 120, 105, 100, 11, 98, 114, 97, 110, 99, 104, 73, 100, 61, 52, 50, 2, 8, 9])
+ right: Some([25, 1, 0, 0, 0])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement' (62040) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:46:9:
+assertion failed: matches!(result,
+    Err(DbError::Driver
+    { operation: "Undo insert", code: Some(1062), sql_state: Some(state) }) if
+    state == "23000")
+
+
+failures:
+    mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement
+    mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

@@ -1,0 +1,31 @@
+{
+  "owner": "7fd7dcced9a34cdc893687ba52e966e3",
+  "name": "seata-first-phase-witness-7fd7dcced9a3",
+  "database": "undo_7fd7dcced9a3",
+  "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "scratch": "D:\\codex-builds\\seata_first_phase_witness_grwz2p0d",
+  "id": "6ca4fc53fa81abbb37994b8d1c3c4111ac4152b6239094367a4aa2653b91764e",
+  "argv": [
+    "docker",
+    "run",
+    "-d",
+    "--pull=never",
+    "--name",
+    "seata-first-phase-witness-7fd7dcced9a3",
+    "--label",
+    "seata.fixture.owner=7fd7dcced9a34cdc893687ba52e966e3",
+    "-p",
+    "127.0.0.1::3306",
+    "--mount",
+    "type=bind,source=D:\\codex-builds\\seata_first_phase_witness_grwz2p0d\\data,target=/var/lib/mysql",
+    "-e",
+    "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+    "-e",
+    "MYSQL_ROOT_HOST=%",
+    "-e",
+    "MYSQL_DATABASE=undo_7fd7dcced9a3",
+    "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+    "--innodb-flush-log-at-trx-commit=1",
+    "--performance-schema=ON"
+  ]
+}

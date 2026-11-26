@@ -1,0 +1,36 @@
+test_actual_registered_reported_and_replicated_context (test_raft_commit_context_binding_20261113.OriginalContextGuards.test_actual_registered_reported_and_replicated_context) ... ok
+test_all_replicas_cannot_agree_on_wrong_context (test_raft_commit_context_binding_20261113.OriginalContextGuards.test_all_replicas_cannot_agree_on_wrong_context) ... FAIL
+test_changed_prepare_context_is_outside_selected_unchanged_context_scope (test_raft_commit_context_binding_20261113.OriginalContextGuards.test_changed_prepare_context_is_outside_selected_unchanged_context_scope) ... FAIL
+test_original_report_must_bind_replicated_context (test_raft_commit_context_binding_20261113.OriginalContextGuards.test_original_report_must_bind_replicated_context) ... FAIL
+
+======================================================================
+FAIL: test_all_replicas_cannot_agree_on_wrong_context (test_raft_commit_context_binding_20261113.OriginalContextGuards.test_all_replicas_cannot_agree_on_wrong_context)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\test_raft_commit_context_binding_20261113.py", line 33, in test_all_replicas_cannot_agree_on_wrong_context
+    with self.assertRaises(RuntimeError):verify_context_binding(proof,registered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_changed_prepare_context_is_outside_selected_unchanged_context_scope (test_raft_commit_context_binding_20261113.OriginalContextGuards.test_changed_prepare_context_is_outside_selected_unchanged_context_scope)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\test_raft_commit_context_binding_20261113.py", line 39, in test_changed_prepare_context_is_outside_selected_unchanged_context_scope
+    with self.assertRaises(RuntimeError):verify_context_binding(proof,registered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_original_report_must_bind_replicated_context (test_raft_commit_context_binding_20261113.OriginalContextGuards.test_original_report_must_bind_replicated_context)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\codex-builds\test_raft_commit_context_binding_20261113.py", line 36, in test_original_report_must_bind_replicated_context
+    with self.assertRaises(RuntimeError):verify_context_binding(proof,registered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+FAILED (failures=3)

@@ -1,0 +1,121 @@
+{
+  "status": "FASTJSON_INTERNAL_CONTROL_TRANSACTION_ROUTING_VERIFIED_OFFLINE",
+  "predecessor": "docs/phase-2/wp05-fastjson-undo-preflight.json",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "prior_java_input_sha256": "6dab3157924516a6b67747822ebca92dde623149dd530b521e4812e5550438de",
+  "java_parser_source_changed": false,
+  "rust": {
+    "1.99": {
+      "ordinary": 538,
+      "ignored": 160,
+      "harnesses": 114,
+      "doc": 4,
+      "mysql_library_tests": 4,
+      "live_fastjson_test": "compiled, ignored"
+    },
+    "1.85": {
+      "ordinary": 538,
+      "ignored": 160,
+      "harnesses": 114,
+      "doc": 4,
+      "mysql_library_tests": 4,
+      "live_fastjson_test": "compiled, ignored"
+    }
+  },
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261119_control_transaction",
+  "runtime_controls": [
+    {
+      "label": "ignore-locked-serializer",
+      "target": "undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_15w94maz",
+      "mutated_file": "crates/seata_db_mysql/src/undo/undo_serializer.rs",
+      "original_sha256": "866b4693a05169c56795900e1f923d107e44cb01c480261465f6d82de48311ab",
+      "mutant_sha256": "1227e70cf40acb1a54b653c9c504b692a0e1d2b2aaef6ec3873476d98155c7bc",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-db-mysql",
+        "--lib",
+        "--",
+        "undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "route-fastjson-to-jackson",
+      "target": "undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_15w94maz",
+      "mutated_file": "crates/seata_db_mysql/src/undo/rollback_undo_document.rs",
+      "original_sha256": "42452b848baea0bf9de9bfe7ff95829f6b213a835a4dabc02aa3bb78b860bde1",
+      "mutant_sha256": "6e852735812b8a15c2f395f41b7c839cc2da9274b869d4942fb659a016018989",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-db-mysql",
+        "--lib",
+        "--",
+        "undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    }
+  ],
+  "source_inputs_sha256": {
+    "crates/seata_db_mysql/src/undo/undo_serializer.rs": "866b4693a05169c56795900e1f923d107e44cb01c480261465f6d82de48311ab",
+    "crates/seata_db_mysql/src/undo/rollback_undo_document.rs": "42452b848baea0bf9de9bfe7ff95829f6b213a835a4dabc02aa3bb78b860bde1",
+    "crates/seata_db_mysql/src/undo/rollback_undo_document_tests.rs": "8eadc241d5b176dc1abbb67d42a4bcc4b4642e8560ff7a63d736fc1a69f76d64",
+    "crates/seata_db_mysql/src/undo/mod.rs": "859b60cb3dadc4780b28eead6fe5b3132fd7ee3527dfa05a01c104d4fdefe5da",
+    "crates/seata_db_mysql/src/undo/abstract_undo_log_manager.rs": "357accda10ec139b94d27816a0ad268c753c913616c23c979925c52a4535e919",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "2347856a043e2c52454b1ee1b9e1f7e9d60f5f42d0ab2b3402be7596de0265f4",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "00579c185b0c8b7e28858004ef8b5025442ca865fef2294f8da6c8e45a262761",
+    "crates/seata_db_mysql/src/data_source_proxy_fastjson_tests.rs": "dcb34655c1037acf7377f7f9ab726a0d7783ab0766f01c44fd3ed275c67078f4",
+    "crates/seata_db_mysql/src/connection_proxy.rs": "243d4a75f82c28adccb07f6e5470cea1707444df83f4cff57239374efddae04c",
+    "crates/seata_db_mysql/src/data_source_manager.rs": "64cf0b6d2ec31ed6fd0d182670c78625da87b9f1e23be0e86855c1dce88b7de1"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "cd6108be3ce6eead9d0a069ac4f9fb92e2bde5540cbb2b58f416a628f6ce8311",
+    "1.85-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-doc.log": "c6ec8be31fd60e4e056daaa57b9794f303397db7c65ca785cc25f38b2077c4d9",
+    "1.85-targeted.log": "d5cd8ef1b3fd4119e11e704bd56191480fad3f9cb5da1bcdeb7662c59bbc1177",
+    "1.85-tests.log": "c815bbe4433a1277a3070eaf408ce789e76ab4d19a0ab5507d1c9c635520886b",
+    "1.99-clippy.log": "acf53e1948652dea1404f06c721d4462f630b9a4fea1d5bae6960b04a54b9ba5",
+    "1.99-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-doc.log": "2e677fa8731335a944249076bfb5d06ac9cb225f9ab2b6df1b205f60bca54119",
+    "1.99-targeted.log": "77ea6a72cfbf88e0e0f676377faff90f713027b49209cc73b19601d928a31337",
+    "1.99-tests.log": "e1787059b4a143f9f1a21e7bc18eb2d1b389c6b57cc1195180ac07d073e04c39",
+    "api-red.log": "e55f0efff28da5beafdf27ac1b68abbd5240c372b2708f54975d38fa6a964892",
+    "docker-api-1.44.log": "f34b74fe907bb46cc5e40535927c683fce065187100c06532636b39712f5e6ae",
+    "docker-engine.log": "bc196ddebcbdc662ceeef4837fa134e3b16c876c9d25a4e8ca471adf38d42d9d",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-ignore-locked-serializer.stderr": "339b912d881f6ccecb9b06e93a53db0aad289581de7b48c17f34757c95ecf81c",
+    "mutant-ignore-locked-serializer.stdout": "486a5184ab06c865d6fc6d7e7b83e1e4f2eeb8a240c195a8fc7f553f4270a64a",
+    "mutant-route-fastjson-to-jackson.stderr": "9dbc5ee8c7f0141c9c9ad2339a7da603d7b6d99c24d550a3fd7a705d89f2bd6d",
+    "mutant-route-fastjson-to-jackson.stdout": "486a5184ab06c865d6fc6d7e7b83e1e4f2eeb8a240c195a8fc7f553f4270a64a",
+    "runtime-mutation-controls.json": "62d3076a30f0f0550d00568f7ad9a35b64d8a5a036f784d6e3fec86a6d187c44"
+  },
+  "test_activation": "explicit private selector within owned MySQL library test",
+  "official_live_entry": "tools/formal-undo-rollback/live.py",
+  "live_test": "data_source_proxy::fastjson_tests::fastjson_split_undo_validates_all_logs_before_writes_and_then_cleans_up",
+  "live_executed": false,
+  "docker_engine_http_status": 500,
+  "default_rollback_serializer": "jackson",
+  "managed_rollback_serializer": "jackson",
+  "first_phase_witness_serializer": "jackson",
+  "production_fastjson_undo_load_enabled": false,
+  "global_rust_source_MATCH": 109,
+  "global_rust_methods_match": 105,
+  "global_methods_remaining": 1030,
+  "global_cases_remaining": 1218,
+  "phase_05_complete": false,
+  "phase_06_complete": false,
+  "v1_complete": false
+}

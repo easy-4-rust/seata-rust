@@ -1,0 +1,72 @@
+[
+  {
+    "name": "hidden_business_replay",
+    "candidate": "D:\\codex-builds\\seata-pool-controls-6c97078fb568",
+    "source": "pool_handle.rs",
+    "source_sha256": "3752f496ac69f6331ebfe8189b0445f6b2d0c352456fff11bf0d53f82cf60c57",
+    "patch": {
+      "old": "        handle.request_until(body, deadline).await",
+      "new": "        let result=handle.request_until(body.clone(),deadline).await;\n        if result.is_err() {self.acquire_until(deadline).await?.request_until(body,deadline).await} else {result}"
+    },
+    "test": "disconnect_replaces_generation_but_never_replays_lost_begin",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "flapping_connection_resets_backoff",
+    "candidate": "D:\\codex-builds\\seata-pool-controls-6c97078fb568",
+    "source": "reconnect_backoff.rs",
+    "source_sha256": "3db071bc34e650be7cfd3ccdf3648ea290949209890246994d160c97d47c148c",
+    "patch": {
+      "old": "if lifetime >= self.policy.stable_after {",
+      "new": "if !lifetime.is_zero() {"
+    },
+    "test": "netty::reconnect_backoff::tests::backoff_caps_without_wrap_and_short_lived_connections_do_not_reset",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "owner_drop_does_not_synchronously_close",
+    "candidate": "D:\\codex-builds\\seata-pool-controls-6c97078fb568",
+    "source": "connection_pool.rs",
+    "source_sha256": "c58f9fd238dfcc889514f6061c8257d5e1a2fc44912bb67dff6d62a0dbb8d600",
+    "patch": {
+      "old": "impl Drop for ConnectionPool {\n    fn drop(&mut self) {\n        self.handle.core.stop(TransportError::PoolClosed);",
+      "new": "impl Drop for ConnectionPool {\n    fn drop(&mut self) {"
+    },
+    "test": "owner_drop_closes_active_requests_and_all_pool_handles",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "acquisition_time_restarts_request_timeout",
+    "candidate": "D:\\codex-builds\\seata-pool-controls-6c97078fb568",
+    "source": "pool_handle.rs",
+    "source_sha256": "d2d6e6af2b4bb78524fa1dc282a123c27afea443580160461d4bb7b8d737e0b2",
+    "patch": {
+      "old": "        handle.request_until(body, deadline).await",
+      "new": "        handle.request(body, timeout).await"
+    },
+    "test": "netty::pool_handle::tests::acquisition_time_is_part_of_one_absolute_request_budget",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "quota_error_leaves_generation_open",
+    "candidate": "D:\\codex-builds\\seata-pool-controls-6c97078fb568",
+    "source": "connection_handle.rs",
+    "source_sha256": "a5f2528285f3a5e007e606f7c156e1dc3e24b18d30c01f0c979098ed842a7d78",
+    "patch": {
+      "old": "                if matches!(reason, TransportError::RequestIdRotationRequired { .. }) {\n                    self.core.terminate(reason.clone());\n                }",
+      "new": ""
+    },
+    "test": "exhausted_request_id_quota_rotates_pool_generation_without_replaying_rejected_call",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  }
+]

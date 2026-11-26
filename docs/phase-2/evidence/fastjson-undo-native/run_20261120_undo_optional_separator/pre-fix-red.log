@@ -1,0 +1,35 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.50s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 7 tests
+test mysql::undo_fragment_read_sqlx_tests::reads_original_child_ids_payloads_and_closes_the_batch_statement ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body ... ok
+test mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads ... ok
+test mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children ... ok
+test mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads ... ok
+test mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan ... ok
+
+failures:
+
+---- mysql::undo_fragment_read_sqlx_tests::reads_original_child_ids_payloads_and_closes_the_batch_statement stdout ----
+Error: "body read finished before the final row"
+
+---- mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order stdout ----
+
+thread 'mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order' (47168) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_read_sqlx_tests.rs:384:5:
+assertion `left == right` failed
+  left: Some([22, 83, 69, 76, 69, 67, 84, 32, 114, 111, 108, 108, 98, 97, 99, 107, 95, 105, 110, 102, 111, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 120, 105, 100, 61, 63, 32, 65, 78, 68, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 61, 63, 32, 70, 79, 82, 32, 85, 80, 68, 65, 84, 69])
+ right: Some([22, 83, 69, 76, 69, 67, 84, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 44, 114, 111, 108, 108, 98, 97, 99, 107, 95, 105, 110, 102, 111, 32, 70, 82, 79, 77, 32, 117, 110, 100, 111, 95, 108, 111, 103, 32, 87, 72, 69, 82, 69, 32, 98, 114, 97, 110, 99, 104, 95, 105, 100, 32, 73, 78, 32, 40, 63, 44, 32, 63, 41, 32, 65, 78, 68, 32, 120, 105, 100, 61, 63, 32, 70, 79, 82, 32, 85, 80, 68, 65, 84, 69])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+Error: "body read finished before the final row"
+
+
+failures:
+    mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order
+    mysql::undo_fragment_read_sqlx_tests::reads_original_child_ids_payloads_and_closes_the_batch_statement
+
+test result: FAILED. 5 passed; 2 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.36s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

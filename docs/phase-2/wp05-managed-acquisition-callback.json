@@ -1,0 +1,100 @@
+{
+  "status": "MANAGED_RM_ACQUISITION_RETRYABLE_WIRE_STATUS_AND_PENDING_REPLAY_VERIFIED",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-acquisition-sqlx.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_managed_acquisition",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_original_cases_reexecuted": 15,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.UndoLogManagerBehaviorTest]/[method:connectionAcquisitionFailureIsRetriable()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.UndoLogManagerBehaviorTest",
+      "status": "PARTIAL",
+      "rust_tests": [
+        "data_source_manager::rollback_sqlx_tests::managed_acquisition_timeout_preserves_phase_before_begin",
+        "data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending"
+      ],
+      "covered": [
+        "Managed pre-BEGIN acquisition stage timeout",
+        "Callback wire retryable status and original identity",
+        "Durable Pending after file reopen"
+      ],
+      "remaining": [
+        "Exact Java SQLException instance identity",
+        "Full registered Java TC callback where compensation itself cannot acquire a connection"
+      ]
+    }
+  ],
+  "verified": [
+    "SQLx pool timeout maps to Deadline with RM recovery acquire stage before BEGIN",
+    "Both original Rust RM callbacks on the registered TCP channel return Failed and status 9",
+    "Original XID, branch ID, signed message ID, nullable ordered header and Pending retained",
+    "No database SQL after either authentication failure during Observe",
+    "RM shutdown followed by journal reopen still reads Pending"
+  ],
+  "fixture_scope": "Real Rust RM, production SQLx, actual file journal and two controlled TCP peers. No Java TC or InnoDB in this callback run.",
+  "independent_review": "Verified callback stage, Rust ResourceManager entry and journal reopen; original source remains partial",
+  "rust": {
+    "1.99": {
+      "ordinary": 629,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "rollback_sqlx_tests": 9,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 629,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "rollback_sqlx_tests": 9,
+      "strict_clippy": true
+    }
+  },
+  "mutation_controls": 3,
+  "global_rust_source_MATCH": 152,
+  "global_rust_methods_match": 131,
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/db_error.rs": "25f861be5ddaab9ff3e96acdb0feab6c9f927f0e2fd8f038b87681f57cc0a5cd",
+    "crates/seata_db_mysql/src/data_source_manager.rs": "7974e93eea45c13e1a17f0a8264393b598d612d1037e21558dd21830941b1f85",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "bc7364547219c63d097bcfd0a21c3fb379fae100979ed14f9c26382bdbe6e8fd",
+    "crates/seata_db_mysql/src/data_source_proxy_rollback_sqlx_tests.rs": "c187a2d59afa37e260c972e13f4eb4fd176cc18fb66a25bf4beefd7927147b3f",
+    "crates/seata_db_mysql/src/data_source_manager_rollback_sqlx_tests.rs": "ff608c9a6b19032c369e754b5430da7d99702f13b6576f47b48f489e07b0355d",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "0c29d139a33391908bfebd1e6c84e869dc12f40f66f9ec327bbb184d5252563a",
+    "crates/seata_rm/src/manager/callback_handler.rs": "8f47aba7e5a3ed866cf59f1eebfb0c6e099304df36233e143098cd64a017dede",
+    "crates/seata_rm/src/manager/branch_dispatcher.rs": "de9d08f8f45c77b1020f9122c3dd31f0a8b0012dcfcdaf34391fe6e914aebb57",
+    "crates/seata_rm/tests/support/rm_peer.rs": "6f10107e6ad5891cbdeb4dbb756b7532895f07ddc8a72e3f60d50b6937e5ef72",
+    "crates/seata_transport/tests/support/session_peer.rs": "12e87b187522308ba6bd4b22fa45c772ba95821adf67e85a1cb1e3b151a599db"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "5ef8c5036f30615259be9f25d290f7a4fa8cfb3f1cd5ee22e2fc96e8abcdc2b5",
+    "1.85-doc.log": "18ffde648eed5ed87b0ac311a2e6e6b4e9abd974dbc025fe61605af7ecad514a",
+    "1.85-targeted.log": "07573d03c75aa85c828c9b3ad0e0309e3e949ddc693b6afcc48475bb594be3bb",
+    "1.85-tests.log": "51319fdaf42b74759701573166c497d19409fc1eb3f74d2bdf7deb5b9d1a52d4",
+    "1.99-clippy.log": "be9f5bace6b082139c899c46c3f01604dd365a561ecfd59482e152b1b8bb4727",
+    "1.99-doc.log": "104342d05a708f9a6d7eaa04fec7f7b451469214014a4ca595317cb6450f0bda",
+    "1.99-targeted.log": "a6f58b92c2fba0b1b88777a2fada285712444695dfd6cd9a3c24b17db1e18060",
+    "1.99-tests.log": "94169e7cd640ce90217c09498349a7532ba75fcb42338c858d4574150c11cf8e",
+    "commands.json": "f6c69aad868684219a5a7bb39f81899aa871e45fdbfc964efaf8a1304ed68961",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-discard-managed-acquisition-stage.stderr": "c269546b05b37b2284aec0418581e52f878501e3a60c0d0fb51828d207526923",
+    "mutant-discard-managed-acquisition-stage.stdout": "26604683aa3ecdf215aaadc0d37d2abe19a59c07c36047aa211a53eaa6e1173d",
+    "mutant-reply-unretryable.stderr": "bfeb88d459f04b95d1d3bfda074aa4e1e270cacd0f52b2ededf0c354aaa2eb4d",
+    "mutant-reply-unretryable.stdout": "0d507f70b61cce8b643a9abc51297c1dcd07e62afdbcb19a1aeebfd68cb64527",
+    "mutant-skip-pending.stderr": "778b2fea1780ee99b7636f37f7c84c0b67f40e8f896555013e080cf591485264",
+    "mutant-skip-pending.stdout": "53c116d9a75c4402a0a05bbe4b7cf88b2cea8e38779d26c4518311c102f27e07",
+    "mysql-environment.log": "21b265507da1c962fac8abe46058a75e3e038590d1c0df306f11d3065c7af21a",
+    "original-inputs.json": "d6f5ed1f5259a3e5a8469f86e37ac53a74e2c534fd81e259109f9108631b88ca",
+    "original-junit.jsonl": "d878ed31fb9cfed867cb252e426d027fc0bc18b254dc655905771cf7c37f010a",
+    "original-junit.log": "5845ea8eb4df6e6b322726a24925826b5415289ea1a9d2f3edfd8c6117a30040",
+    "pre-fix-red.log": "0a771af179d06ab0417c9ba12fb1ef4d372debfa9bb54fb2684106e87e72abbe",
+    "runtime-mutation-controls.json": "559a9cff712cf681390f5d57dc156b4ae0416f866b5973ef6d8bf4a7d44e2fe8",
+    "UndoLogManagerBehaviorTest.java": "d37e49333647e7f444fc4fafa26a235dd575d84b1ae4acc7c07654e595117eb4"
+  }
+}

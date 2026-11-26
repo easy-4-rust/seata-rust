@@ -1,0 +1,25 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling thiserror v2.0.21
+   Compiling syn v3.0.10
+   Compiling thiserror-impl v2.0.21
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_mysql_foundation_20261114_035455_0dec6b55\empty-primary\crates\seata_datasource)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.25s
+     Running tests\metadata_contract.rs (D:/cargo-target/seata-mysql-controls\debug\deps\metadata_contract-02cf8ed652b1e5ea.exe)
+
+running 1 test
+
+thread 'incomplete_duplicate_or_nullable_primary_keys_are_rejected' (81640) panicked at crates\seata_datasource\tests\metadata_contract.rs:51:5:
+assertion failed: TableMeta::new("t".into(), vec![column("a", 1, None)]).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test incomplete_duplicate_or_nullable_primary_keys_are_rejected ... FAILED
+
+failures:
+
+failures:
+    incomplete_duplicate_or_nullable_primary_keys_are_rejected
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-datasource --test metadata_contract`

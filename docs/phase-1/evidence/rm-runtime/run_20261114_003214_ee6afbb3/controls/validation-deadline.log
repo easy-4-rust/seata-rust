@@ -1,0 +1,31 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_runtime_20261114_003214_ee6afbb3\validation-deadline\crates\seata_rm)
+warning: unused variable: `deadline`
+   --> crates\seata_rm\src\manager\callback_handler.rs:133:5
+    |
+133 |     deadline: Instant,
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_deadline`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-rm` (lib test) generated 1 warning (run `cargo fix --lib -p seata-rm --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\seata_rm-f8b11d2e4b5e0236.exe)
+
+running 1 test
+test manager::callback_handler::tests::validation_uses_the_original_absolute_deadline_instead_of_starting_a_new_budget ... FAILED
+
+failures:
+
+---- manager::callback_handler::tests::validation_uses_the_original_absolute_deadline_instead_of_starting_a_new_budget stdout ----
+
+thread 'manager::callback_handler::tests::validation_uses_the_original_absolute_deadline_instead_of_starting_a_new_budget' (15048) panicked at crates\seata_rm\src\manager\callback_handler.rs:210:9:
+assertion failed: matches!(parse(&request(None), 1, deadline), Err(RmError::Unavailable { .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    manager::callback_handler::tests::validation_uses_the_original_absolute_deadline_instead_of_starting_a_new_budget
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-rm --lib`

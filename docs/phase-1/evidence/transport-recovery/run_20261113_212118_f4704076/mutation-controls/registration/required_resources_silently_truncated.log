@@ -1,0 +1,25 @@
+   Compiling seata-transport v0.1.0 (D:\codex-builds\seata-registration-controls-eae40e3d90d2\crates\seata_transport)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.62s
+     Running tests\registered_pool.rs (D:/cargo-target/seata-rust-registration-controls\debug\deps\registered_pool-103e1b087142c04f.exe)
+
+running 1 test
+test replacement_session_repeats_identity_and_all_cached_resources_before_status ... FAILED
+
+failures:
+
+---- replacement_session_repeats_identity_and_all_cached_resources_before_status stdout ----
+
+thread 'replacement_session_repeats_identity_and_all_cached_resources_before_status' (56060) panicked at crates\seata_transport\tests\registered_pool.rs:70:18:
+expected RM registration: Some(GlobalBeginRequest(GlobalBeginRequest { timeout: 30000, transaction_name_present: true, .. }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'replacement_session_repeats_identity_and_all_cached_resources_before_status' (56060) panicked at crates\seata_transport\tests\registered_pool.rs:529:10:
+called `Result::unwrap()` on an `Err` value: LocalFailureBeforeSend { generation: None, request_id: None, reason: PoolAcquireTimeout }
+
+
+failures:
+    replacement_session_repeats_identity_and_all_cached_resources_before_status
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 2.02s
+
+error: test failed, to rerun pass `-p seata-transport --test registered_pool`

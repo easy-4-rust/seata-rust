@@ -1,0 +1,434 @@
+use crate::{
+    cache::MySqlTableMetaReader, recovery_schema::RecoverySchema,
+    registration_origin::RegistrationOrigin, rm_branch_record::RmBranchRecord, DbError,
+};
+use seata_at::MySqlJdbcProfile;
+use seata_rm::{BranchCallbackReceipt, BranchIdentity, BranchPhase, RegisteredBranch};
+use sqlx::{mysql::MySqlRow, MySql, Row, Transaction};
+
+/// 固定版本恢复表的同事务校验与字节身份仲裁；不自行提交、不建表、不驱逐终态。
+/// 对应 Java: 无直接对象；WP05 Rust 恢复扩展，原七列 Undo 表保持不变。
+pub(crate) struct RmBranchStore;
+impl RmBranchStore {
+    /// 参数为原成功回执和固定配置；锁定当前恢复行并仅允许原登记来源的未绑定状态，不修改记录。
+    pub(crate) async fn check_commit(
+        tx: &mut Transaction<'static, MySql>,
+        receipt: &RegisteredBranch,
+        profile: MySqlJdbcProfile,
+        schema: RecoverySchema,
+    ) -> Result<(), DbError> {
+        let id = receipt.identity();
+        let record = Self::lock(tx, id, profile, schema)
+            .await?
+            .ok_or(DbError::RecoveryConflict)?;
+        if record.origin != RegistrationOrigin::Registered || record.phase != 0 || record.terminal {
+            return Err(DbError::RecoveryConflict);
+        }
+        let lock: Option<Vec<u8>> = sqlx::query_scalar(
+            "SELECT lock_key FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=? FOR UPDATE",
+        )
+        .bind(id.xid().as_bytes())
+        .bind(id.branch_id())
+        .fetch_one(&mut **tx)
+        .await
+        .map_err(|e| DbError::driver("commit precondition original lock key", e))?;
+        if lock.as_deref() != receipt.lock_key().map(str::as_bytes) {
+            return Err(DbError::RecoveryConflict);
+        }
+        Ok(())
+    }
+    fn profile(profile: MySqlJdbcProfile) -> u8 {
+        match profile {
+            MySqlJdbcProfile::Connector8Default => 1,
+            MySqlJdbcProfile::Connector8NumericTinyInt => 2,
+        }
+    }
+    /// 参数为 TC 原方向；返回固定持久值，方向一旦绑定不能切换。
+    pub(crate) fn phase(phase: BranchPhase) -> u8 {
+        match phase {
+            BranchPhase::Commit => 1,
+            BranchPhase::Rollback => 2,
+        }
+    }
+    fn unsupported(feature: &'static str) -> DbError {
+        DbError::Unsupported { feature }
+    }
+    fn text(row: &MySqlRow, column: &str) -> Result<String, DbError> {
+        row.try_get(column)
+            .map_err(|e| DbError::driver("RM recovery metadata", e))
+    }
+    /// 参数为独占事务与 schema；持有 MDL 后验证精确迁移、权限视图及本机持久提交前提。
+    pub(crate) async fn validate_table(
+        tx: &mut Transaction<'static, MySql>,
+        database: &str,
+    ) -> Result<RecoverySchema, DbError> {
+        MySqlTableMetaReader::visibility(tx, database).await?;
+        sqlx::query("SELECT xid FROM seata_rs_at_branch_v1 WHERE 1=0 FOR UPDATE")
+            .fetch_all(&mut **tx)
+            .await
+            .map_err(|e| DbError::driver("RM recovery metadata lock", e))?;
+        let row=sqlx::query("SELECT CAST(ENGINE AS CHAR CHARACTER SET utf8mb4) AS engine,CAST(TABLE_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_branch_v1'")
+            .bind(database).fetch_one(&mut **tx).await.map_err(|e|DbError::driver("RM recovery table",e))?;
+        if Self::text(&row, "engine")? != "InnoDB" || Self::text(&row, "kind")? != "BASE TABLE" {
+            return Err(Self::unsupported("RM recovery transactional base table"));
+        }
+        let unsafe_count:i64=sqlx::query_scalar("SELECT (SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA=? AND EVENT_OBJECT_TABLE='seata_rs_at_branch_v1')+(SELECT COUNT(*) FROM information_schema.INNODB_FOREIGN WHERE FOR_NAME=CONCAT(?,'/seata_rs_at_branch_v1') OR REF_NAME=CONCAT(?,'/seata_rs_at_branch_v1'))+(SELECT COUNT(*) FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_branch_v1' AND CONSTRAINT_TYPE<>'PRIMARY KEY')+(SELECT COUNT(*) FROM information_schema.PARTITIONS WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_branch_v1' AND PARTITION_NAME IS NOT NULL)")
+            .bind(database).bind(database).bind(database).bind(database).bind(database).fetch_one(&mut **tx).await.map_err(|e|DbError::driver("RM recovery unsafe metadata",e))?;
+        if unsafe_count != 0 {
+            return Err(Self::unsupported(
+                "RM recovery trigger, foreign key, constraint or partition",
+            ));
+        }
+        let columns=sqlx::query("SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS name,CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4) AS full_type,CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4) AS nullable,CAST(EXTRA AS CHAR CHARACTER SET utf8mb4) AS extra,CAST(COLUMN_DEFAULT AS CHAR CHARACTER SET utf8mb4) AS default_value,CAST(GENERATION_EXPRESSION AS CHAR CHARACTER SET utf8mb4) AS generation_value FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_branch_v1' ORDER BY ORDINAL_POSITION LIMIT 15")
+            .bind(database).fetch_all(&mut **tx).await.map_err(|e|DbError::driver("RM recovery columns",e))?;
+        let mut expected = vec![
+            ("schema_version", "smallint unsigned", "NO"),
+            ("xid", "varbinary(128)", "NO"),
+            ("branch_id", "bigint", "NO"),
+            ("resource_id", "varbinary(32767)", "NO"),
+            ("application_data", "mediumblob", "YES"),
+            ("lock_key", "mediumblob", "YES"),
+            ("jdbc_profile", "tinyint unsigned", "NO"),
+            ("phase", "tinyint unsigned", "NO"),
+            ("terminal", "tinyint unsigned", "NO"),
+            ("created_at", "datetime(6)", "NO"),
+            ("modified_at", "datetime(6)", "NO"),
+        ];
+        let schema = if columns.len() == expected.len() {
+            RecoverySchema::Legacy
+        } else if columns.len() == expected.len() + 1 {
+            expected.insert(6, ("registration_origin", "tinyint unsigned", "NO"));
+            RecoverySchema::CallbackOrigin
+        } else if columns.len() == expected.len() + 3 {
+            expected.insert(6, ("registration_origin", "tinyint unsigned", "NO"));
+            expected.insert(10, ("commit_authorized", "tinyint unsigned", "NO"));
+            expected.insert(11, ("commit_terminal", "tinyint unsigned", "NO"));
+            RecoverySchema::CommitDecision
+        } else {
+            return Err(Self::unsupported("RM recovery exact versioned columns"));
+        };
+        for (row, (name, kind, nullable)) in columns.iter().zip(expected) {
+            if Self::text(row, "name")? != name
+                || Self::text(row, "full_type")? != kind
+                || Self::text(row, "nullable")? != nullable
+                || !Self::text(row, "extra")?.is_empty()
+                || !Self::text(row, "generation_value")?.is_empty()
+                || row
+                    .try_get::<Option<String>, _>("default_value")
+                    .map_err(|e| DbError::driver("RM recovery default", e))?
+                    .as_deref()
+                    != if name == "registration_origin" {
+                        Some("1")
+                    } else if matches!(name, "commit_authorized" | "commit_terminal") {
+                        Some("0")
+                    } else {
+                        None
+                    }
+            {
+                return Err(Self::unsupported("RM recovery exact column semantics"));
+            }
+        }
+        let index=sqlx::query("SELECT CAST(INDEX_NAME AS CHAR CHARACTER SET utf8mb4) AS name,CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS column_name,CAST(SEQ_IN_INDEX AS SIGNED) AS sequence_value,CAST(NON_UNIQUE AS SIGNED) AS non_unique,CAST(SUB_PART AS SIGNED) AS prefix_value,CAST(IS_VISIBLE AS CHAR CHARACTER SET utf8mb4) AS visible,CAST(INDEX_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME='seata_rs_at_branch_v1' ORDER BY INDEX_NAME,SEQ_IN_INDEX LIMIT 3")
+            .bind(database).fetch_all(&mut **tx).await.map_err(|e|DbError::driver("RM recovery identity index",e))?;
+        if index.len() != 2 {
+            return Err(Self::unsupported("RM recovery sole identity index"));
+        }
+        for (i, row) in index.iter().enumerate() {
+            if Self::text(row, "name")? != "PRIMARY"
+                || Self::text(row, "column_name")? != ["xid", "branch_id"][i]
+                || row
+                    .try_get::<i64, _>("sequence_value")
+                    .map_err(|e| DbError::driver("RM recovery index order", e))?
+                    != i as i64 + 1
+                || row
+                    .try_get::<i64, _>("non_unique")
+                    .map_err(|e| DbError::driver("RM recovery index uniqueness", e))?
+                    != 0
+                || row
+                    .try_get::<Option<i64>, _>("prefix_value")
+                    .map_err(|e| DbError::driver("RM recovery index prefix", e))?
+                    .is_some()
+                || Self::text(row, "visible")? != "YES"
+                || Self::text(row, "kind")? != "BTREE"
+            {
+                return Err(Self::unsupported("RM recovery exact primary identity"));
+            }
+        }
+        let flush: i64 =
+            sqlx::query_scalar("SELECT CAST(@@GLOBAL.innodb_flush_log_at_trx_commit AS SIGNED)")
+                .fetch_one(&mut **tx)
+                .await
+                .map_err(|e| DbError::driver("RM recovery durability", e))?;
+        if flush != 1 {
+            return Err(Self::unsupported("RM recovery durable InnoDB commit"));
+        }
+        Ok(schema)
+    }
+    /// 参数为原身份与固定配置；返回锁定当前读的方向/终态，缺行保持 None。
+    pub(crate) async fn lock(
+        tx: &mut Transaction<'static, MySql>,
+        identity: &BranchIdentity,
+        profile: MySqlJdbcProfile,
+        schema: RecoverySchema,
+    ) -> Result<Option<RmBranchRecord>, DbError> {
+        let sql=match schema {RecoverySchema::Legacy=>"SELECT schema_version,xid,branch_id,resource_id,jdbc_profile,phase,terminal,CAST(OCTET_LENGTH(application_data) AS SIGNED) AS app_length,CAST(OCTET_LENGTH(lock_key) AS SIGNED) AS lock_length FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=? FOR UPDATE",RecoverySchema::CallbackOrigin=>"SELECT schema_version,xid,branch_id,resource_id,jdbc_profile,phase,terminal,registration_origin,CAST(OCTET_LENGTH(application_data) AS SIGNED) AS app_length,CAST(OCTET_LENGTH(lock_key) AS SIGNED) AS lock_length FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=? FOR UPDATE",RecoverySchema::CommitDecision=>"SELECT schema_version,xid,branch_id,resource_id,jdbc_profile,phase,terminal,registration_origin,commit_authorized,commit_terminal,CAST(OCTET_LENGTH(application_data) AS SIGNED) AS app_length,CAST(OCTET_LENGTH(lock_key) AS SIGNED) AS lock_length FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=? FOR UPDATE"};
+        let row = sqlx::query(sql)
+            .bind(identity.xid().as_bytes())
+            .bind(identity.branch_id())
+            .fetch_optional(&mut **tx)
+            .await
+            .map_err(|e| DbError::driver("RM recovery identity lock", e))?;
+        let Some(row) = row else { return Ok(None) };
+        for column in ["app_length", "lock_length"] {
+            if row
+                .try_get::<Option<i64>, _>(column)
+                .map_err(|e| DbError::driver("RM recovery payload length", e))?
+                .is_some_and(|n| !(1..=1_048_576).contains(&n))
+            {
+                return Err(Self::unsupported("RM recovery bounded optional payload"));
+            }
+        }
+        let origin = match schema {
+            RecoverySchema::Legacy => RegistrationOrigin::Registered,
+            RecoverySchema::CallbackOrigin | RecoverySchema::CommitDecision => {
+                RegistrationOrigin::from_stored(
+                    row.try_get("registration_origin")
+                        .map_err(|e| DbError::driver("RM recovery origin", e))?,
+                )?
+            }
+        };
+        let version: u16 = row
+            .try_get("schema_version")
+            .map_err(|e| DbError::driver("RM recovery version", e))?;
+        if !((version == 1 && origin == RegistrationOrigin::Registered)
+            || (version == 2 && schema != RecoverySchema::Legacy)
+            || (version == schema.new_record_version() && schema == RecoverySchema::CommitDecision))
+        {
+            return Err(Self::unsupported("RM recovery version and provenance"));
+        }
+        if origin == RegistrationOrigin::Callback
+            && row
+                .try_get::<Option<i64>, _>("lock_length")
+                .map_err(|e| DbError::driver("RM callback unknown lock key", e))?
+                .is_some()
+        {
+            return Err(Self::unsupported(
+                "RM callback cannot claim original lock key",
+            ));
+        }
+        if row
+            .try_get::<Vec<u8>, _>("xid")
+            .map_err(|e| DbError::driver("RM recovery XID", e))?
+            != identity.xid().as_bytes()
+            || row
+                .try_get::<i64, _>("branch_id")
+                .map_err(|e| DbError::driver("RM recovery branch", e))?
+                != identity.branch_id()
+            || row
+                .try_get::<Vec<u8>, _>("resource_id")
+                .map_err(|e| DbError::driver("RM recovery resource", e))?
+                != identity.resource().resource_id().as_bytes()
+            || row
+                .try_get::<u8, _>("jdbc_profile")
+                .map_err(|e| DbError::driver("RM recovery profile", e))?
+                != Self::profile(profile)
+        {
+            return Err(DbError::RecoveryConflict);
+        }
+        let app:Option<Vec<u8>>=sqlx::query_scalar("SELECT application_data FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=? FOR UPDATE").bind(identity.xid().as_bytes()).bind(identity.branch_id()).fetch_one(&mut **tx).await.map_err(|e|DbError::driver("RM recovery application",e))?;
+        if app.as_deref() != identity.application_data().map(str::as_bytes) {
+            return Err(DbError::RecoveryConflict);
+        }
+        let phase: u8 = row
+            .try_get("phase")
+            .map_err(|e| DbError::driver("RM recovery phase", e))?;
+        let terminal: u8 = row
+            .try_get("terminal")
+            .map_err(|e| DbError::driver("RM recovery terminal", e))?;
+        let (authorized, committed) = if schema == RecoverySchema::CommitDecision {
+            (
+                row.try_get::<u8, _>("commit_authorized")
+                    .map_err(|e| DbError::driver("RM commit authority", e))?,
+                row.try_get::<u8, _>("commit_terminal")
+                    .map_err(|e| DbError::driver("RM commit terminal", e))?,
+            )
+        } else {
+            (0, 0)
+        };
+        Ok(Some(RmBranchRecord::checked(
+            phase, terminal, authorized, committed, origin,
+        )?))
+    }
+    /// 参数为真实注册回执；只插入一次，重复时逐字节核对而不覆盖任何字段。
+    pub(crate) async fn enroll(
+        tx: &mut Transaction<'static, MySql>,
+        receipt: &RegisteredBranch,
+        profile: MySqlJdbcProfile,
+        schema: RecoverySchema,
+    ) -> Result<(), DbError> {
+        let id = receipt.identity();
+        let sql=match schema {RecoverySchema::Legacy=>"INSERT INTO seata_rs_at_branch_v1(schema_version,xid,branch_id,resource_id,application_data,lock_key,jdbc_profile,phase,terminal,created_at,modified_at) VALUES(1,?,?,?,?,?,?,0,0,now(6),now(6))",RecoverySchema::CallbackOrigin=>"INSERT INTO seata_rs_at_branch_v1(schema_version,xid,branch_id,resource_id,application_data,lock_key,registration_origin,jdbc_profile,phase,terminal,created_at,modified_at) VALUES(2,?,?,?,?,?,1,?,0,0,now(6),now(6))",RecoverySchema::CommitDecision=>"INSERT INTO seata_rs_at_branch_v1(schema_version,xid,branch_id,resource_id,application_data,lock_key,registration_origin,jdbc_profile,phase,terminal,created_at,modified_at) VALUES(3,?,?,?,?,?,1,?,0,0,now(6),now(6))"};
+        let value = sqlx::query(sql)
+            .bind(id.xid().as_bytes())
+            .bind(id.branch_id())
+            .bind(id.resource().resource_id().as_bytes())
+            .bind(id.application_data().map(str::as_bytes))
+            .bind(receipt.lock_key().map(str::as_bytes))
+            .bind(Self::profile(profile))
+            .execute(&mut **tx)
+            .await;
+        match value {
+            Ok(v) if v.rows_affected() == 1 => {}
+            Ok(_) => return Err(Self::unsupported("RM recovery enrollment row count")),
+            Err(e) => {
+                let error = DbError::driver("RM recovery enrollment", e);
+                if !matches!(
+                    error,
+                    DbError::Driver {
+                        code: Some(1062),
+                        ..
+                    }
+                ) {
+                    return Err(error);
+                }
+            }
+        }
+        let record = Self::lock(tx, id, profile, schema)
+            .await?
+            .ok_or(Self::unsupported(
+                "RM recovery enrolled identity disappeared",
+            ))?;
+        if record.origin == RegistrationOrigin::Callback {
+            return Err(DbError::CallbackObserved);
+        }
+        let lock: Option<Vec<u8>> = sqlx::query_scalar(
+            "SELECT lock_key FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=? FOR UPDATE",
+        )
+        .bind(id.xid().as_bytes())
+        .bind(id.branch_id())
+        .fetch_one(&mut **tx)
+        .await
+        .map_err(|e| DbError::driver("RM recovery original lock key", e))?;
+        if lock.as_deref() != receipt.lock_key().map(str::as_bytes) {
+            return Err(DbError::RecoveryConflict);
+        }
+        Ok(())
+    }
+    /// 参数为原连接回调能力及精确表能力；确认身份并绑定方向，缺行只有显式扩展格式可以建立回调来源。
+    pub(crate) async fn observe_callback(
+        tx: &mut Transaction<'static, MySql>,
+        receipt: &BranchCallbackReceipt,
+        profile: MySqlJdbcProfile,
+        schema: RecoverySchema,
+    ) -> Result<bool, DbError> {
+        let id = receipt.identity();
+        let requested = Self::phase(receipt.phase());
+        let mut inserted = false;
+        let record = if let Some(record) = Self::lock(tx, id, profile, schema).await? {
+            record
+        } else {
+            if schema == RecoverySchema::Legacy {
+                return Err(Self::unsupported(
+                    "explicit callback-origin migration required for unknown registration",
+                ));
+            }
+            let sql = if schema == RecoverySchema::CommitDecision {
+                "INSERT INTO seata_rs_at_branch_v1(schema_version,xid,branch_id,resource_id,application_data,lock_key,registration_origin,jdbc_profile,phase,terminal,commit_authorized,commit_terminal,created_at,modified_at) VALUES(3,?,?,?,?,NULL,2,?,?,0,?,0,now(6),now(6))"
+            } else {
+                "INSERT INTO seata_rs_at_branch_v1(schema_version,xid,branch_id,resource_id,application_data,lock_key,registration_origin,jdbc_profile,phase,terminal,created_at,modified_at) VALUES(2,?,?,?,?,NULL,2,?,?,0,now(6),now(6))"
+            };
+            let query = sqlx::query(sql)
+                .bind(id.xid().as_bytes())
+                .bind(id.branch_id())
+                .bind(id.resource().resource_id().as_bytes())
+                .bind(id.application_data().map(str::as_bytes))
+                .bind(Self::profile(profile))
+                .bind(requested);
+            let value = if schema == RecoverySchema::CommitDecision {
+                query
+                    .bind(u8::from(receipt.phase() == BranchPhase::Commit))
+                    .execute(&mut **tx)
+                    .await
+            } else {
+                query.execute(&mut **tx).await
+            };
+            match value {
+                Ok(v) if v.rows_affected() == 1 => inserted = true,
+                Ok(_) => return Err(Self::unsupported("RM callback enrollment row count")),
+                Err(e) => {
+                    let error = DbError::driver("RM callback enrollment", e);
+                    if !matches!(
+                        error,
+                        DbError::Driver {
+                            code: Some(1062),
+                            ..
+                        }
+                    ) {
+                        return Err(error);
+                    }
+                }
+            }
+            Self::lock(tx, id, profile, schema)
+                .await?
+                .ok_or(Self::unsupported(
+                    "RM callback enrolled identity disappeared",
+                ))?
+        };
+        if record.phase != 0 && record.phase != requested {
+            return Err(DbError::RecoveryConflict);
+        }
+        if receipt.phase() == BranchPhase::Commit
+            && schema == RecoverySchema::CommitDecision
+            && !record.commit_authorized
+        {
+            let count=sqlx::query("UPDATE seata_rs_at_branch_v1 SET phase=1,commit_authorized=1,modified_at=now(6) WHERE xid=? AND branch_id=? AND phase IN (0,1) AND terminal=0 AND commit_authorized=0 AND commit_terminal=0")
+                .bind(id.xid().as_bytes()).bind(id.branch_id()).execute(&mut **tx).await.map_err(|e|DbError::driver("RM commit decision authorization",e))?.rows_affected();
+            if count != 1 {
+                return Err(Self::unsupported(
+                    "RM commit decision authorization row count",
+                ));
+            }
+            return Ok(true);
+        }
+        if record.phase == 0 {
+            Self::bind(tx, id, receipt.phase()).await?;
+            return Ok(true);
+        }
+        Ok(inserted)
+    }
+    /// 参数为锁定后的原身份和 TC 方向；持久绑定一次，其他方向拒绝。
+    pub(crate) async fn bind(
+        tx: &mut Transaction<'static, MySql>,
+        id: &BranchIdentity,
+        phase: BranchPhase,
+    ) -> Result<(), DbError> {
+        let count=sqlx::query("UPDATE seata_rs_at_branch_v1 SET phase=?,modified_at=now(6) WHERE xid=? AND branch_id=? AND phase=0 AND terminal=0").bind(Self::phase(phase)).bind(id.xid().as_bytes()).bind(id.branch_id()).execute(&mut **tx).await.map_err(|e|DbError::driver("RM recovery bind phase",e))?.rows_affected();
+        if count != 1 {
+            return Err(Self::unsupported("RM recovery phase binding row count"));
+        }
+        Ok(())
+    }
+    /// 参数为同事务补偿已成功的原身份；仅写入回滚终态候选，调用者确认 COMMIT 前不得发布。
+    pub(crate) async fn complete_rollback(
+        tx: &mut Transaction<'static, MySql>,
+        id: &BranchIdentity,
+    ) -> Result<(), DbError> {
+        let count=sqlx::query("UPDATE seata_rs_at_branch_v1 SET terminal=1,modified_at=now(6) WHERE xid=? AND branch_id=? AND phase=2 AND terminal=0").bind(id.xid().as_bytes()).bind(id.branch_id()).execute(&mut **tx).await.map_err(|e|DbError::driver("RM recovery complete rollback",e))?.rows_affected();
+        if count != 1 {
+            return Err(Self::unsupported("RM recovery terminal row count"));
+        }
+        Ok(())
+    }
+    /// 参数为已在同一事务清理原日志的身份；只产生提交清理终态候选，原业务提交历史不由此证明。
+    pub(crate) async fn complete_commit(
+        tx: &mut Transaction<'static, MySql>,
+        id: &BranchIdentity,
+    ) -> Result<(), DbError> {
+        let count=sqlx::query("UPDATE seata_rs_at_branch_v1 SET commit_terminal=1,modified_at=now(6) WHERE xid=? AND branch_id=? AND phase=1 AND terminal=0 AND commit_authorized=1 AND commit_terminal=0")
+            .bind(id.xid().as_bytes()).bind(id.branch_id()).execute(&mut **tx).await.map_err(|e|DbError::driver("RM complete commit cleanup",e))?.rows_affected();
+        if count != 1 {
+            return Err(Self::unsupported("RM commit terminal row count"));
+        }
+        Ok(())
+    }
+}

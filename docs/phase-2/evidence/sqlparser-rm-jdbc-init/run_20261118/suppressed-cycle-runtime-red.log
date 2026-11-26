@@ -1,0 +1,22 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.21s
+     Running tests\jdbc_resource_init.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\jdbc_resource_init-57b93eb7fec74c93.exe)
+
+running 1 test
+test suppressed_retains_identity_and_does_not_form_an_arc_cycle ... FAILED
+
+failures:
+
+---- suppressed_retains_identity_and_does_not_form_an_arc_cycle stdout ----
+
+thread 'suppressed_retains_identity_and_does_not_form_an_arc_cycle' (45888) panicked at crates\seata_db_mysql\tests\jdbc_resource_init.rs:232:5:
+assertion failed: secondary.add_suppressed(primary.clone()).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    suppressed_retains_identity_and_does_not_form_an_arc_cycle
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_resource_init`

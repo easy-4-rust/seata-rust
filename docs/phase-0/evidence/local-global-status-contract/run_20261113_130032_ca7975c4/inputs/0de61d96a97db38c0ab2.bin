@@ -1,0 +1,119 @@
+// Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0.
+package main
+
+import (
+	"bytes"
+	"encoding/hex"
+	"encoding/json"
+	"os"
+	"seata.apache.org/seata-go/v2/pkg/protocol/message"
+	e "seata.apache.org/seata-go/v2/pkg/util/errors"
+)
+
+type responseRow struct {
+	Type       int    `json:"type"`
+	Status     int    `json:"status"`
+	Result     int    `json:"result"`
+	Error      int    `json:"error"`
+	Msg        string `json:"msg"`
+	Hex        string `json:"hex"`
+	EncodedHex string `json:"encoded_hex,omitempty"`
+}
+type unknownRow struct {
+	Type      int  `json:"type"`
+	Code      int  `json:"code"`
+	Rejected  bool `json:"rejected"`
+	Preserved bool `json:"preserved"`
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+func end(value interface{}) message.AbstractGlobalEndResponse {
+	switch v := value.(type) {
+	case message.GlobalCommitResponse:
+		return v.AbstractGlobalEndResponse
+	case message.GlobalRollbackResponse:
+		return v.AbstractGlobalEndResponse
+	case message.GlobalStatusResponse:
+		return v.AbstractGlobalEndResponse
+	case message.GlobalReportResponse:
+		return v.AbstractGlobalEndResponse
+	default:
+		panic("unexpected decoded global response")
+	}
+}
+func model(row responseRow) interface{} {
+	value := message.AbstractGlobalEndResponse{GlobalStatus: message.GlobalStatus(row.Status),
+		AbstractTransactionResponse: message.AbstractTransactionResponse{
+			AbstractResultMessage: message.AbstractResultMessage{ResultCode: message.ResultCode(row.Result), Msg: row.Msg},
+			TransactionErrorCode:  e.TransactionErrorCode(row.Error)}}
+	switch row.Type {
+	case 8:
+		return message.GlobalCommitResponse{AbstractGlobalEndResponse: value}
+	case 10:
+		return message.GlobalRollbackResponse{AbstractGlobalEndResponse: value}
+	case 16:
+		return message.GlobalStatusResponse{AbstractGlobalEndResponse: value}
+	case 18:
+		return message.GlobalReportResponse{AbstractGlobalEndResponse: value}
+	default:
+		panic("unsupported response type")
+	}
+}
+func run(encode func(interface{}) ([]byte, error), decode func([]byte) (interface{}, error)) {
+	raw, err := os.ReadFile(os.Args[1])
+	must(err)
+	var input struct {
+		Responses []responseRow `json:"responses"`
+	}
+	must(json.Unmarshal(raw, &input))
+	rows := []responseRow{}
+	unknown := []unknownRow{}
+	for _, expected := range input.Responses {
+		wire, err := hex.DecodeString(expected.Hex)
+		must(err)
+		value, err := decode(wire)
+		must(err)
+		actual := end(value)
+		encoded, err := encode(model(expected))
+		must(err)
+		roundtrip, err := encode(value)
+		must(err)
+		if !bytes.Equal(roundtrip, wire) {
+			panic("decoded re-encode differs")
+		}
+		rows = append(rows, responseRow{Type: expected.Type, Status: int(actual.GlobalStatus),
+			Result: int(actual.ResultCode), Error: int(actual.TransactionErrorCode), Msg: actual.Msg,
+			Hex: expected.Hex, EncodedHex: hex.EncodeToString(encoded)})
+		if expected.Status != 0 || expected.Result != 1 {
+			continue
+		}
+		for code := 21; code <= 255; code++ {
+			changed := append([]byte(nil), wire...)
+			changed[len(changed)-1] = byte(code)
+			value, err := decode(changed)
+			preserved := false
+			if err == nil {
+				output, encodeErr := encode(value)
+				preserved = encodeErr == nil && int(end(value).GlobalStatus) == code && bytes.Equal(output, changed)
+			}
+			unknown = append(unknown, unknownRow{Type: expected.Type, Code: code, Rejected: err != nil, Preserved: preserved})
+		}
+	}
+	// 实际引用原具名常量；不为 16–20 凭空发明上游常量。
+	named := []message.GlobalStatus{message.GlobalStatusUnKnown, message.GlobalStatusBegin, message.GlobalStatusCommitting,
+		message.GlobalStatusCommitRetrying, message.GlobalStatusRollbacking, message.GlobalStatusRollbackRetrying,
+		message.GlobalStatusTimeoutRollbacking, message.GlobalStatusTimeoutRollbackRetrying, message.GlobalStatusAsyncCommitting,
+		message.GlobalStatusCommitted, message.GlobalStatusCommitFailed, message.GlobalStatusRollbacked, message.GlobalStatusRollbackFailed,
+		message.GlobalStatusTimeoutRollbacked, message.GlobalStatusTimeoutRollbackFailed, message.GlobalStatusFinished}
+	codes := []int{}
+	for _, status := range named {
+		codes = append(codes, int(status))
+	}
+	output, err := json.MarshalIndent(map[string]interface{}{"responses": rows, "unknown": unknown, "named_statuses": codes}, "", "  ")
+	must(err)
+	must(os.WriteFile(os.Args[2], output, 0600))
+}

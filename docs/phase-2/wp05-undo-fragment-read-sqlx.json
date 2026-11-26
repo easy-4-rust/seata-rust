@@ -1,0 +1,83 @@
+{
+  "status": "UNDO_FRAGMENT_EXACT_MEMBERSHIP_AND_BODY_ORDER_VERIFIED_WITH_SQLX_LOOPBACK",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-fragment-sqlx.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_fragment_read",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_original_cases_reexecuted": 3,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest]/[method:loadsFragmentsWithBoundIdentifiersAndClosesJdbcResources()]",
+      "rust_tests": [
+        "mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads",
+        "mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order",
+        "mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads"
+      ],
+      "status": "PARTIAL"
+    }
+  ],
+  "remaining_for_java_case": "Original JDBC close assertions, blank subId and invalid numeric cause",
+  "fixture_scope": "production read_normal, locked header/member/body queries on SQLx with scripted loopback",
+  "verified": [
+    "bound queries",
+    "exact member set before body SELECT",
+    "root-first body with subId order",
+    "duplicate, orphan and missing membership results rejected",
+    "no InnoDB transaction simulation"
+  ],
+  "independent_review": "Unexpected duplicate could mask missing child in old predicate; captured actual body PREPARE on RED",
+  "global_rust_source_MATCH": 151,
+  "global_rust_methods_match": 130,
+  "rust": {
+    "1.99": {
+      "ordinary": 612,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "targeted_wire_tests": 3,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 612,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "targeted_wire_tests": 3,
+      "strict_clippy": true
+    }
+  },
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "860299b9f81818e5969bddc4181ac54d8671419e85b94961403d4c5a820bf4a7",
+    "crates/seata_db_mysql/src/mysql/mod.rs": "80c4171eb9b1f1920aabfcd41fb70ab1e7dd513406efadd930ccd7943da5caa7",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "02d68e10882ef45018410245fa1beef9073fc81178d30b9c3ed4493b78ee5fa2",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_read_sqlx_tests.rs": "107e16eae17224619cd7b16754826fff8013d3a3d7e0bbcad558b2a7ed9a0e68"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "5d578226d36a2a6e56b7b87a7eabca40ae2f0a9f939bd38b04345cea19cee9d9",
+    "1.85-doc.log": "95f4d90b5416f2dcd13c3ef00ecd4738ea34025550c9a9fc58952d2fa7856163",
+    "1.85-targeted.log": "c3791a275cf5ce12cf924cf74bcb39188e3d43ff23bf570178a38b3608548a9f",
+    "1.85-tests.log": "db984f828fd1285a70666ac0642e15de9587c7c1d9c56cd25e870c605860f3e7",
+    "1.99-clippy.log": "c464e60a3df6392762eca183676cb7d09373c60de3bf09f3e9090b39c3661b96",
+    "1.99-doc.log": "a73a642659c9d2bab1c1ed5aa860c5bd7e078b4e73e4ff5f2d4dd55b55dae0fa",
+    "1.99-targeted.log": "2300019571835784f00b234adbf10dfa426956b63301e1086b2b94195821f112",
+    "1.99-tests.log": "79c7ad4ae524cc249f401f47b614aedc44c70ff496bda6666bc16cfa9a4b206b",
+    "commands.json": "506d746fb0b1c96ba154a8e0c57bec035aa14b27914bd42dd07962683eb128a6",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "duplicate-red.log": "b8ab41910f814f84fac624d7a0b8bb5b15390d96715bd6dedfbc0945ba87e200",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-duplicate-membership-mask.stderr": "6ee65454b8eec6607a5391dc3a1f06089482cef4073d96e8d725a962871e8f62",
+    "mutant-duplicate-membership-mask.stdout": "afc2fece96caf1ba8db30550605f5889096f2bce9cfdac2ce11dcb88b159274b",
+    "mutant-reverse-body-fetch.stderr": "afff01e3ceaa294274c6a085a4ad06d27a23b552e806e830046a4396f881e09b",
+    "mutant-reverse-body-fetch.stdout": "301d44a53944450aa4e4fbdda073f579a1177245f10ab81e39d80e9953517238",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "MySQLUndoLogManagerBehaviorTest.java": "369e52c346830fefd6617c6843c7220dcede0e02cb95a867585910d41823d846",
+    "original-inputs.json": "1cdebefbdf5c185066eaf9bec3050cfc0072881527c78a2287a729f210ceb751",
+    "original-junit.jsonl": "7215edaa9e7381a5b473939200106eef095a6c8f0d74d1f6f30ab92cea7fcf83",
+    "original-junit.log": "cdadaf3fcc4cd90f0ed928fb6a0ac1f9fca45242bfc58a151174005a39d8643e",
+    "runtime-mutation-controls.json": "2335df22212961ff12d97612baa130e9f4883f42e54ee52b5816b473f6e5dafb"
+  }
+}

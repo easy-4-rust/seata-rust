@@ -1,0 +1,27 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0599]: no method named `with_tls_ca_pem` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\tests\options_contract.rs:82:29
+   |
+82 |     assert!(options.clone().with_tls_ca_pem(Vec::new()).is_err());
+   |                             ^^^^^^^^^^^^^^^ method not found in `MySqlOptions`
+
+error[E0599]: no method named `with_tls_ca_pem` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\tests\options_contract.rs:83:29
+   |
+83 |     assert!(options.clone().with_tls_ca_pem(vec![b'x'; 65537]).is_err());
+   |                             ^^^^^^^^^^^^^^^ method not found in `MySqlOptions`
+
+error[E0599]: no method named `with_tls_ca_pem` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\tests\options_contract.rs:86:35
+   |
+86 |     let secured = options.clone().with_tls_ca_pem(marker.clone()).unwrap();
+   |                                   ^^^^^^^^^^^^^^^ method not found in `MySqlOptions`
+
+error[E0599]: no method named `with_tls_ca_pem` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\tests\options_contract.rs:89:59
+   |
+89 |     assert!(options.with_insecure_loopback_tls().unwrap().with_tls_ca_pem(marker).is_err());
+   |                                                           ^^^^^^^^^^^^^^^ method not found in `MySqlOptions`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "options_contract") due to 4 previous errors

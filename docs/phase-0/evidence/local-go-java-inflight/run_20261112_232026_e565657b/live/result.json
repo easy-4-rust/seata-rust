@@ -1,0 +1,99 @@
+{
+  "succeeded": true,
+  "tc_pid": 48428,
+  "runtime": "D:\\codex-builds\\inflight-live-20261112_232306",
+  "ports_released": true,
+  "original_jar_sha256": "aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5",
+  "sdk_binary_sha256": "6b2691c48f01d9112fadb371e3c1cd8156c78be4877ab812f838d3c76d371b77",
+  "source_sha256": "45826a7c4f3878d09b14b97b516808180170fdeacd01348352b530b46dbc7753",
+  "java_overlay_parent": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-0\\evidence\\local-java-preface-candidate\\run_20261112_221159_a16eafb1",
+  "class_sources": [
+    {
+      "class_name": "org.apache.seata.core.rpc.netty.ProtocolDetectHandler",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "class_name": "org.apache.seata.core.protocol.detector.SeataDetector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "class_name": "org.apache.seata.core.protocol.detector.HttpDetector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "class_name": "org.apache.seata.core.protocol.detector.Http2Detector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    },
+    {
+      "class_name": "org.apache.seata.core.protocol.detector.IncrementalProtocolDetector",
+      "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+    }
+  ],
+  "proof": {
+    "begin_recovery_scope": "XID from test-only TC observer; not general SDK idempotent Begin recovery",
+    "commit_statuses": [
+      8,
+      15
+    ],
+    "connections": 4,
+    "known_status_queries": 7,
+    "natural_timeout_seconds": 20,
+    "owned_future_ids_checked": 128,
+    "owned_futures_remaining": 0,
+    "real_getty_loop": true,
+    "transaction_resends": 0,
+    "unknown": [
+      {
+        "deadline": false,
+        "elapsed_ms": 37,
+        "id": 2,
+        "label": "begin-close",
+        "outcome": "UnknownOutcome"
+      },
+      {
+        "deadline": false,
+        "elapsed_ms": 10,
+        "id": 8,
+        "label": "commit-close",
+        "outcome": "UnknownOutcome"
+      },
+      {
+        "deadline": false,
+        "elapsed_ms": 10,
+        "id": 13,
+        "label": "rollback-close",
+        "outcome": "UnknownOutcome"
+      },
+      {
+        "deadline": true,
+        "elapsed_ms": 20000,
+        "id": 16,
+        "label": "begin-timeout",
+        "outcome": "UnknownOutcome"
+      }
+    ],
+    "xids": [
+      "198.18.0.1:28091:4045076494482026497",
+      "198.18.0.1:28091:4045076494482026498",
+      "198.18.0.1:28091:4045076494482026499",
+      "198.18.0.1:28091:4045076494482026500"
+    ]
+  },
+  "wire_inventory": {
+    "requests": 19,
+    "responses": 19,
+    "connections": 4,
+    "mutating_begins": 4,
+    "mutating_commits": 1,
+    "mutating_rollbacks": 3,
+    "status_queries": 7,
+    "typed_unknown": 4,
+    "late_original": 1,
+    "transaction_resends": 0,
+    "commit_statuses": [
+      8,
+      15
+    ]
+  },
+  "scope": "Explicit synchronous SDK candidate. FILE/auth-disabled TC with independently certified Java preface overlay. Begin XID recovery uses test-only observer; no general Begin idempotency, real RM/Undo, production Rust, full client or WP00 certification."
+}

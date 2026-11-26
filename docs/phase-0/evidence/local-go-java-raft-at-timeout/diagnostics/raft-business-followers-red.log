@@ -1,0 +1,74 @@
+test_active_timeout (test_cluster.ClusterGuards.test_active_timeout) ... ok
+test_actual_raft_term_changed (test_cluster.ClusterGuards.test_actual_raft_term_changed) ... ok
+test_context_changed_across_replicas (test_cluster.ClusterGuards.test_context_changed_across_replicas) ... ok
+test_control (test_cluster.ClusterGuards.test_control) ... ok
+test_election_term_did_not_increase (test_cluster.ClusterGuards.test_election_term_did_not_increase) ... ok
+test_fake_election_same_peer (test_cluster.ClusterGuards.test_fake_election_same_peer) ... ok
+test_final_clean_control (test_cluster.ClusterGuards.test_final_clean_control) ... ok
+test_follower_claims_actual_leadership (test_cluster.ClusterGuards.test_follower_claims_actual_leadership) ... FAIL
+test_follower_peer_replaced (test_cluster.ClusterGuards.test_follower_peer_replaced) ... FAIL
+test_follower_term_changed (test_cluster.ClusterGuards.test_follower_term_changed) ... FAIL
+test_missing_reload (test_cluster.ClusterGuards.test_missing_reload) ... ok
+test_no_quorum (test_cluster.ClusterGuards.test_no_quorum) ... ok
+test_original_branch_replaced (test_cluster.ClusterGuards.test_original_branch_replaced) ... ok
+test_original_resource_replaced (test_cluster.ClusterGuards.test_original_resource_replaced) ... ok
+test_recorded_process_replaced (test_cluster.ClusterGuards.test_recorded_process_replaced) ... FAIL
+test_repeated_leader_changed (test_cluster.ClusterGuards.test_repeated_leader_changed) ... ok
+test_replica_behind (test_cluster.ClusterGuards.test_replica_behind) ... ok
+test_replica_wrong_leader (test_cluster.ClusterGuards.test_replica_wrong_leader) ... ok
+test_rollback_lock_missing (test_cluster.ClusterGuards.test_rollback_lock_missing) ... ok
+test_two_leaders (test_cluster.ClusterGuards.test_two_leaders) ... ok
+test_unexpected_record (test_cluster.ClusterGuards.test_unexpected_record) ... ok
+
+======================================================================
+FAIL: test_follower_claims_actual_leadership (test_cluster.ClusterGuards.test_follower_claims_actual_leadership)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 28, in test_follower_claims_actual_leadership
+    def test_follower_claims_actual_leadership(self):self.bad(lambda v:v['nodes']['1'].update(raft_leader_after=True))
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 17, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_follower_peer_replaced (test_cluster.ClusterGuards.test_follower_peer_replaced)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 27, in test_follower_peer_replaced
+    def test_follower_peer_replaced(self):self.bad(lambda v:v['nodes']['1'].update(raft_peer_id='127.0.0.1:29999'))
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 17, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_follower_term_changed (test_cluster.ClusterGuards.test_follower_term_changed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 26, in test_follower_term_changed
+    def test_follower_term_changed(self):self.bad(lambda v:v['nodes']['1'].update(raft_term_after=99))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 17, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_recorded_process_replaced (test_cluster.ClusterGuards.test_recorded_process_replaced)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 29, in test_recorded_process_replaced
+    def test_recorded_process_replaced(self):self.bad(lambda v:v['processes']['1'].update(pid=999))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-at-timeout\test_cluster.py", line 17, in bad
+    with self.assertRaises(RuntimeError):self.check(value)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.002s
+
+FAILED (failures=4)

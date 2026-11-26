@@ -1,0 +1,24 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.52s
+     Running tests\jdbc_driver_java.rs (D:/cargo-target/seata-rust-production\debug\deps\jdbc_driver_java-be6ede1dbb840a83.exe)
+
+running 1 test
+test outer_probe_overwrites_inner_cached_driver_like_original_jvm ... FAILED
+
+failures:
+
+---- outer_probe_overwrites_inner_cached_driver_like_original_jvm stdout ----
+
+thread 'outer_probe_overwrites_inner_cached_driver_like_original_jvm' (18032) panicked at crates\seata_db_mysql\tests\jdbc_driver_java.rs:120:5:
+assertion `left == right` failed
+  left: "com.mysql.cj.jdbc.Driver\tinner\tcom.mysql.jdbc.Driver\njdbc:mysql:\touter\tcom.mysql.jdbc.Driver\njdbc:mysql:\tlater\tcom.mysql.jdbc.Driver\ncom.clickhouse.jdbc.ClickHouseDriver\tinner\tru.yandex.clickhouse.ClickHouseDriver\njdbc:clickhouse:\touter\tru.yandex.clickhouse.ClickHouseDriver\njdbc:clickhouse:\tlater\tru.yandex.clickhouse.ClickHouseDriver\n"
+ right: "com.mysql.cj.jdbc.Driver\tinner\tcom.mysql.jdbc.Driver\njdbc:mysql:\touter\tcom.mysql.cj.jdbc.Driver\njdbc:mysql:\tlater\tcom.mysql.cj.jdbc.Driver\ncom.clickhouse.jdbc.ClickHouseDriver\tinner\tru.yandex.clickhouse.ClickHouseDriver\njdbc:clickhouse:\touter\tcom.clickhouse.jdbc.ClickHouseDriver\njdbc:clickhouse:\tlater\tcom.clickhouse.jdbc.ClickHouseDriver\n"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    outer_probe_overwrites_inner_cached_driver_like_original_jvm
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_driver_java`

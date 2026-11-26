@@ -1,0 +1,250 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.18s
+     Running tests\column_java_diff.rs (D:/cargo-target/seata-rust-production\debug\deps\column_java_diff-5a7ec8460f57bff5.exe)
+
+running 5 tests
+test column_default_and_raw_overflow_match_original_java ... ok
+test object_callback_read_order_matches_original_java ... ok
+test raw_sequence_exception_and_nullable_cause_text_match_original_java ... ok
+test original_java_string_hash_and_all_code_units_match ... ok
+test exhaustive_yes_case_equivalence_matches_original_jdk17 ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests\column_meta.rs (D:/cargo-target/seata-rust-production\debug\deps\column_meta-21ff5adc39715550.exe)
+
+running 18 tests
+test set_get_column_size ... ok
+test autoincrement ... ok
+test get_table_cat ... ok
+test equals_and_hash_code ... ok
+test set_get_num_prec_radix ... ok
+test set_get_char_octet_length ... ok
+test set_get_column_name ... ok
+test set_get_case_sensitive ... ok
+test set_get_data_type ... ok
+test set_get_null_able ... ok
+test set_get_on_update ... ok
+test set_get_ordinal_position ... ok
+test set_get_data_type_name ... ok
+test set_get_column_def ... ok
+test set_get_remarks ... ok
+test set_get_sql_data_type ... ok
+test set_get_decimal_digits ... ok
+test set_get_sql_datetime_sub ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests\column_meta_obligations.rs (D:/cargo-target/seata-rust-production\debug\deps\column_meta_obligations-82ffb276e37346ef.exe)
+
+running 9 tests
+test autoincrement_uses_java_unicode_ignore_case_not_ascii_only ... ok
+test clone_shares_column_mutations_and_allows_clearing ... ok
+test equals_reads_tail_fields_after_reentrant_object_callback ... ok
+test hash_reads_tail_fields_after_reentrant_object_callback ... ok
+test object_field_preserves_boxed_types_and_null ... ok
+test replacing_dynamic_object_releases_user_drop_outside_metadata_lock ... ok
+test text_reads_tail_fields_after_reentrant_object_callback ... ok
+test java_hash_wraps_and_text_retains_raw_utf16 ... ok
+test debug_does_not_call_user_formatting_under_metadata_lock ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\core_constants_diff.rs (D:/cargo-target/seata-rust-production\debug\deps\core_constants_diff-ff7b23a78cabe3e7.exe)
+
+running 1 test
+test complete_constant_inventory_matches_original_java ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\core_utf16.rs (D:/cargo-target/seata-rust-production\debug\deps\core_utf16-a867b89bf7fb8906.exe)
+
+running 5 tests
+test exception_raw_cause_retains_text_and_original_error_identity ... ok
+test exception_raw_message_and_to_string_retain_unpaired_surrogates ... ok
+test sequence_raw_getters_and_mutations_retain_unpaired_surrogates ... ok
+test java_string_diagnostic_does_not_silently_replace_surrogates ... ok
+test java_string_preserves_all_code_units_and_java_hash ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\core_value_obligations.rs (D:/cargo-target/seata-rust-production\debug\deps\core_value_obligations-311243abae4b61fc.exe)
+
+running 6 tests
+test escape_preserves_utf16_code_units ... ok
+test parser_and_jdbc_constant_contracts ... ok
+test exception_null_and_empty_messages_remain_distinct ... ok
+test method_count_is_signed_and_participates_in_equality ... ok
+test all_sql_type_values_round_trip_and_holes_are_rejected ... ok
+test sequence_empty_and_null_remain_distinct ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\core_values.rs (D:/cargo-target/seata-rust-production\debug\deps\core_values-b0a2c9d4acdf30a0.exe)
+
+running 23 tests
+test default_get ... ok
+test escape_left_symbol ... ok
+test index_type_invalid ... ok
+test escape_right_symbol ... ok
+test exception_cause ... ok
+test sequence_constructor ... ok
+test sql_type_invalid ... ok
+test exception_message_and_cause ... ok
+test index_type_value ... ok
+test index_type_value_of ... ok
+test method_get ... ok
+test method_string ... ok
+test not_placeholder_get ... ok
+test not_placeholder_string ... ok
+test null_get ... ok
+test null_string ... ok
+test exception_message ... ok
+test sequence_default ... ok
+test sequence_set_function ... ok
+test sequence_set_sequence ... ok
+test default_string ... ok
+test sql_type_value_of ... ok
+test sql_type_value ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests\escape_handler.rs (D:/cargo-target/seata-rust-production\debug\deps\escape_handler-afbb016d3a647d82.exe)
+
+running 1 test
+test original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\index_java_diff.rs (D:/cargo-target/seata-rust-production\debug\deps\index_java_diff-328d8b0e784fec8c.exe)
+
+running 4 tests
+test original_exception_identity_propagates_through_all_seven_paths ... ok
+test nullable_defaults_and_hash_replay_with_explicit_jvm_identity_match ... ok
+test live_to_string_iteration_modes_match_jdk17 ... ok
+test all_list_equals_modes_and_mutations_match_jdk17 ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests\index_meta.rs (D:/cargo-target/seata-rust-production\debug\deps\index_meta-fbeeae7942ec4093.exe)
+
+running 16 tests
+test equals_same_object ... ok
+test equals_identical_objects ... ok
+test equals_different_objects ... ok
+test get_set_ordinal_position ... ok
+test equals_different_type ... ok
+test get_set_asc_or_desc ... ok
+test get_set_cardinality ... ok
+test get_set_index_name ... ok
+test get_set_index_qualifier ... ok
+test get_set_indextype ... ok
+test equals_null_object ... ok
+test get_set_type ... ok
+test get_set_values ... ok
+test hash_code_consistency_original_column_assertions ... ok
+test hash_code_difference_original_column_assertions ... ok
+test is_set_non_unique ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\index_meta_obligations.rs (D:/cargo-target/seata-rust-production\debug\deps\index_meta_obligations-b64ada485f1a2eb7.exe)
+
+running 6 tests
+test index_reads_scalar_fields_after_list_comparison_callback ... ok
+test array_list_equality_observes_nonstructural_set_of_future_slot ... ok
+test array_list_equality_detects_structural_change_after_callback ... ok
+test list_nulls_aliases_fixed_mutability_and_index_errors ... ok
+test index_defaults_null_shortcuts_and_cardinality_contract ... ok
+test to_string_uses_live_iterator_has_next_after_callback ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\locale_casing.rs (D:/cargo-target/seata-rust-production\debug\deps\locale_casing-734947b3a23a8a25.exe)
+
+running 2 tests
+test word_boundaries_match_original_root_and_thai_dictionary_profiles ... ok
+test contextual_string_lower_and_upper_match_original_jdk17 ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests\object_callback_errors.rs (D:/cargo-target/seata-rust-production\debug\deps\object_callback_errors-d0ae63023a42cb8b.exe)
+
+running 2 tests
+test throwing_cause_to_string_prevents_exception_construction_and_preserves_original_failure ... ok
+test object_failures_preserve_identity_and_propagate_through_column_and_list ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\sql_server_table_meta.rs (D:/cargo-target/seata-rust-production\debug\deps\sql_server_table_meta-34c11b608d4ab561.exe)
+
+running 1 test
+test sql_server_metadata_matches_original_inherited_dispatch ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\table_exception_hierarchy.rs (D:/cargo-target/seata-rust-production\debug\deps\table_exception_hierarchy-dc37c330f5b26621.exe)
+
+running 2 tests
+test map_equals_catches_both_exception_subclasses_after_direct_callback_retains_identity ... ok
+test map_equals_does_not_guess_catch_family_from_simple_name_or_swallow_other_subclasses ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\table_java_diff.rs (D:/cargo-target/seata-rust-production\debug\deps\table_java_diff-740d0dfac559283e.exe)
+
+running 4 tests
+test original_exception_hierarchy_inputs_preserve_direct_identity_and_map_catch_behavior ... ok
+test defaults_and_original_name_case_flag_equals_hash_quirks_match ... ok
+test actual_language_specific_lowercase_map_keys_values_and_insertion_order_match ... ok
+test primary_hash_iteration_matches_original_resize_treeify_root_front_split_and_null_keys ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests\table_map_obligations.rs (D:/cargo-target/seata-rust-production\debug\deps\table_map_obligations-c27aefa1357520e0.exe)
+
+running 6 tests
+test map_equality_sees_future_replacement_and_keeps_last_callback_structure_shortcut ... ok
+test shared_locale_changes_lookup_and_alias_map_mutations_without_rekeying_old_entries ... ok
+test nullable_values_and_cursor_next_keep_original_structure_version_points ... ok
+test contains_pk_requires_every_key_and_preserves_nullable_collection_elements ... ok
+test clearing_map_releases_user_values_after_unlocking_even_when_drop_reads_map ... ok
+test table_hash_reads_case_flag_after_column_callback_without_holding_table_or_map_lock ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\table_meta.rs (D:/cargo-target/seata-rust-production\debug\deps\table_meta-20dc5faf662ca2d5.exe)
+
+running 19 tests
+test get_all_indexes ... ok
+test set_get_case_sensitive ... ok
+test set_get_table_name ... ok
+test get_primary_key_map_no_primary_key ... ok
+test get_all_columns ... ok
+test equals ... ok
+test hash_code ... ok
+test get_on_update_columns_only_name ... ok
+test get_case_insensitive_pks_no_primary_key ... ok
+test get_on_update_columns_only_name_no_updates ... ok
+test get_column_meta ... ok
+test get_primary_key_map ... ok
+test get_primary_key_only_name ... ok
+test contains_pk_with_no_match ... ok
+test contains_pk_with_exact_match ... ok
+test contains_pk_with_case_insensitive_match ... ok
+test get_case_insensitive_pks ... ok
+test contains_pk_with_null_list ... ok
+test contains_pk_with_no_primary_key ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\table_primary_set.rs (D:/cargo-target/seata-rust-production\debug\deps\table_primary_set-09028fad64b9dc13.exe)
+
+running 3 tests
+test unmodifiable_empty_and_case_equality_keep_java_hash_inconsistency ... ok
+test original_table_primary_sets_match_order_representative_hash_and_errors ... ok
+test all_java17_comparisons_match_including_raw_surrogates ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+

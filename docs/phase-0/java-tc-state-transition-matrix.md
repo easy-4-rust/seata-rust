@@ -64,6 +64,8 @@ The pinned source has several distinct classifications:
 
 Notable discrepancy: `GlobalStatus.isTwoPhaseSuccess` includes Deleting, while `SessionStatusValidator.isEndGlobalStatus` does not. Do not reduce these helpers to one Rust `is_terminal()` without preserving each call-site meaning.
 
+2026-11-13 runtime supplement: [actual pinned JVM and Go evidence](evidence/local-global-status-contract/README.md) covers all21 names/codes, all189 observations of nine helper predicates, and all441 validator pairs (108 rejected). The four global-response codecs preserve all21 statuses across success/failure in168 actual Java cases, matched by original Go and the existing explicit candidate. This certifies those helper/payload observations; it does not establish coordinator reachability, business scheduling or complete client semantics. Original Go has no named states16–20, so GO-V1-STATE-001 remains OPEN.
+
 ### 2.2 Cross-family status validation
 
 `SessionStatusValidator.validateUpdateStatus(before, after)` rejects four cross-family changes:

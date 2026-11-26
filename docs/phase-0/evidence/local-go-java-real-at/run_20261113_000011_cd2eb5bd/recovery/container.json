@@ -1,0 +1,23 @@
+{
+  "id": "7d01dee0a56bcc3d8b90f785de28ab6fe0b143f0eedca89b39882d3d56b871f7",
+  "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "mounts": [
+    {
+      "Type": "bind",
+      "Source": "D:/codex-builds/rat_20261113_000011_cd2eb5bd/recovery/schema.sql",
+      "Destination": "/docker-entrypoint-initdb.d/01-schema.sql",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "D:/codex-builds/rat_20261113_000011_cd2eb5bd/recovery/mysql",
+      "Destination": "/var/lib/mysql",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    }
+  ],
+  "label": "rat_20261113_000011_cd2eb5bd-recovery"
+}

@@ -1,0 +1,7 @@
+{
+  "upstream_port": 43318,
+  "rm_port": 65230,
+  "phase": "commit",
+  "mode": "observe",
+  "terminal_sql": "UPDATE seata_rs_at_branch_v1 SET commit_terminal=1,modified_at=now(6) WHERE xid=? AND branch_id=? AND phase=1 AND terminal=0 AND commit_authorized=1 AND commit_terminal=0"
+}

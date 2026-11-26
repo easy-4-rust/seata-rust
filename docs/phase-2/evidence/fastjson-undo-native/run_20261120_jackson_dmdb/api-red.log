@@ -1,0 +1,50 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved import `seata_at::DmdbTimestamp`
+   --> crates\seata_at\tests\jackson_undo_source.rs:350:9
+    |
+350 |     use seata_at::DmdbTimestamp as Dm;
+    |         ^^^^^^^^^^-------------^^^^^^
+    |                   |
+    |                   no `DmdbTimestamp` in the root
+
+error[E0432]: unresolved import `seata_at::DmdbTimestamp`
+   --> crates\seata_at\tests\jackson_undo_source.rs:367:20
+    |
+367 |     use seata_at::{DmdbTimestamp as Dm, JacksonUndoFieldValue as V};
+    |                    -------------^^^^^^
+    |                    |
+    |                    no `DmdbTimestamp` in the root
+
+error[E0425]: cannot find type `DmdbTimestamp` in crate `seata_at`
+   --> crates\seata_at\tests\jackson_undo_source.rs:335:48
+    |
+335 | fn dmdb_field(name: &str, timestamp: seata_at::DmdbTimestamp) -> seata_at::JacksonUndoField {
+    |                                                ^^^^^^^^^^^^^ not found in `seata_at`
+
+error[E0599]: no variant, associated function, or constant named `DmdbTimestamp` found for enum `JacksonUndoFieldValue` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:337:66
+    |
+337 |         name.into(), 93, false, seata_at::JacksonUndoFieldValue::DmdbTimestamp(timestamp),
+    |                                                                  ^^^^^^^^^^^^^ variant, associated function, or constant not found in `JacksonUndoFieldValue`
+    |
+help: there is a variant with a similar name
+    |
+337 -         name.into(), 93, false, seata_at::JacksonUndoFieldValue::DmdbTimestamp(timestamp),
+337 +         name.into(), 93, false, seata_at::JacksonUndoFieldValue::Timestamp { epoch_seconds: /* value */, nanos: /* value */ },
+    |
+
+error[E0599]: no variant, associated function, or constant named `DmdbTimestamp` found for enum `JacksonUndoFieldValue` in the current scope
+   --> crates\seata_at\tests\jackson_undo_source.rs:372:12
+    |
+372 |     let V::DmdbTimestamp(decoded_time) = decoded.value() else {
+    |            ^^^^^^^^^^^^^ variant, associated function, or constant not found in `JacksonUndoFieldValue`
+    |
+help: there is a variant with a similar name
+    |
+372 -     let V::DmdbTimestamp(decoded_time) = decoded.value() else {
+372 +     let V::Timestamp(decoded_time) = decoded.value() else {
+    |
+
+Some errors have detailed explanations: E0425, E0432, E0599.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `seata-at` (test "jackson_undo_source") due to 5 previous errors

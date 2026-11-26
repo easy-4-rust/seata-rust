@@ -1,0 +1,32 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved import `seata_at::OffsetDateTime`
+   --> crates\seata_at\tests\table_records_source.rs:147:9
+    |
+147 |     use seata_at::OffsetDateTime;
+    |         ^^^^^^^^^^--------------
+    |                   |
+    |                   no `OffsetDateTime` in the root
+
+error[E0432]: unresolved import `seata_at::OffsetDateTime`
+   --> crates\seata_at\tests\table_records_source.rs:181:9
+    |
+181 |     use seata_at::OffsetDateTime;
+    |         ^^^^^^^^^^--------------
+    |                   |
+    |                   no `OffsetDateTime` in the root
+
+error[E0599]: no variant, associated function, or constant named `OffsetDateTime` found for enum `JacksonUndoFieldValue` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:161:60
+    |
+161 |         [vec![Wrapped::Common(Value::Integer(1)), Wrapped::OffsetDateTime(original)]],
+    |                                                            ^^^^^^^^^^^^^^ variant, associated function, or constant not found in `JacksonUndoFieldValue`
+
+error[E0599]: no variant, associated function, or constant named `OffsetDateTime` found for enum `JacksonUndoFieldValue` in the current scope
+   --> crates\seata_at\tests\table_records_source.rs:167:18
+    |
+167 |     let Wrapped::OffsetDateTime(value) = field.value() else {
+    |                  ^^^^^^^^^^^^^^ variant, associated function, or constant not found in `JacksonUndoFieldValue`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "table_records_source") due to 4 previous errors

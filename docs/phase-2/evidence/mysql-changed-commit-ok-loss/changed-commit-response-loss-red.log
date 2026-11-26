@@ -1,0 +1,20 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0599]: no associated function or constant named `start_with_source_port` found for struct `Harness` in the current scope
+   --> crates\seata_db_mysql\tests\live_commit_preconditions.rs:222:26
+    |
+222 |     let mut h = Harness::start_with_source_port(
+    |                          ^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `Harness`
+    |
+   ::: crates\seata_db_mysql\tests\support\first_phase_fixture.rs:12:1
+    |
+ 12 | pub struct Harness {
+    | ------------------ associated function or constant `start_with_source_port` not found for this struct
+    |
+help: there is an associated function `start_with_store` with a similar name
+    |
+222 -     let mut h = Harness::start_with_source_port(
+222 +     let mut h = Harness::start_with_store(
+    |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "live_commit_preconditions") due to 1 previous error

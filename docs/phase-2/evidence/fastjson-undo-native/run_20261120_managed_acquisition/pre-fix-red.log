@@ -1,0 +1,23 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.34s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 2 tests
+test data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending ... ok
+test data_source_manager::rollback_sqlx_tests::managed_acquisition_timeout_preserves_phase_before_begin ... FAILED
+
+failures:
+
+---- data_source_manager::rollback_sqlx_tests::managed_acquisition_timeout_preserves_phase_before_begin stdout ----
+
+thread 'data_source_manager::rollback_sqlx_tests::managed_acquisition_timeout_preserves_phase_before_begin' (60068) panicked at crates\seata_db_mysql\src\data_source_manager_rollback_sqlx_tests.rs:101:9:
+lost managed acquisition stage: BeforeCommit { identity: BranchIdentity { xid_bytes: 3, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 41 }, application_data_bytes: None }, source: Driver { operation: "RM recovery acquire", sql_state: None, code: None, io_source: None } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    data_source_manager::rollback_sqlx_tests::managed_acquisition_timeout_preserves_phase_before_begin
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 37 filtered out; finished in 0.27s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

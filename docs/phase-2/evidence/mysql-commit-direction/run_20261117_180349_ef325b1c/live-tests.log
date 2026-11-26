@@ -1,0 +1,15 @@
+
+running 1 test
+test real_commit_callback_atomically_cleans_root_children_and_terminal_without_business_changes ... 
+thread 'real_commit_callback_atomically_cleans_root_children_and_terminal_without_business_changes' (47736) panicked at crates\seata_db_mysql\tests\live_commit_direction.rs:54:38:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: None }, source: Unsupported { feature: "RM recovery exact versioned columns" } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    real_commit_callback_atomically_cleans_root_children_and_terminal_without_business_changes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+

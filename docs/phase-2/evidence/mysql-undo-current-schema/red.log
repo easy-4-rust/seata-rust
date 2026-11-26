@@ -1,0 +1,19 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.49s
+     Running tests\live_undo_store.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_undo_store-8643e22ed6631df9.exe)
+
+running 1 test
+
+thread 'undo_current_schema_rejects_late_constraints_columns_and_identity_index_changes' (40396) panicked at crates\seata_db_mysql\tests\live_undo_store.rs:34:9:
+late Undo definition was accepted or misclassified: CREATE TRIGGER late_undo_log AFTER INSERT ON undo_log FOR EACH ROW INSERT INTO undo_side_effect VALUES(NEW.branch_id), Ok(())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test undo_current_schema_rejects_late_constraints_columns_and_identity_index_changes ... FAILED
+
+failures:
+
+failures:
+    undo_current_schema_rejects_late_constraints_columns_and_identity_index_changes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.64s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_undo_store`

@@ -1,0 +1,248 @@
+{
+  "status": "JACKSON_TWO_ORIGINAL_DMDB_TIMESTAMP_JUNIT_CASES_MATCH",
+  "predecessor": "docs/phase-2/wp05-jackson-undo-field-source.json",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "original_source_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_jackson_junit_pz8ck_5h",
+  "recording": "docs/phase-2/evidence/fastjson-undo-native/seata_jackson_dmdb_junit_jmjht_6o",
+  "recording_catalog_sha256": "a62013fd796cc71383e91bc661af8e0ec60c2bca44c2021a188e0ec79c6d1354",
+  "driver_state": "docs/phase-2/evidence/fastjson-undo-native/seata_jackson_dmdb_kqi3emy8",
+  "driver_state_catalog_sha256": "1060d3c757eb1182b84ac7e7d3db116096b3bce56ef4b30e979a733201544f90",
+  "original_assertions": 5,
+  "source_case_bindings": [
+    {
+      "mode": "ordinary",
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest]/[method:testSerializeAndDeserializeDmdbTimestamp()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest",
+      "status": "MATCH"
+    },
+    {
+      "mode": "jackson",
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest]/[method:testSerializeAndDeserializeDmdbTimestampWithNoZone()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.JacksonUndoLogParserTest",
+      "status": "MATCH"
+    }
+  ],
+  "java_observations": [
+    [
+      "jackson",
+      "1",
+      "true",
+      "dm.jdbc.driver.DmdbTimestamp",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+    ],
+    [
+      "jackson",
+      "2",
+      "false",
+      "dm.jdbc.driver.DmdbTimestamp",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+    ],
+    [
+      "ordinary",
+      "1",
+      "true",
+      "dm.jdbc.driver.DmdbTimestamp",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+    ],
+    [
+      "ordinary",
+      "2",
+      "false",
+      "dm.jdbc.driver.DmdbTimestamp",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type2\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+    ],
+    [
+      "ordinary",
+      "3",
+      "true",
+      "dm.jdbc.driver.DmdbTimestamp",
+      "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_nanos\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",[1721985847000,12345]]}"
+    ]
+  ],
+  "original_jackson_cases_rust_match": 8,
+  "original_jackson_cases_rust_remaining": 1,
+  "global_methods_remaining": 1021,
+  "global_rust_methods_match": 114,
+  "global_cases_remaining": 1203,
+  "global_rust_source_MATCH": 124,
+  "rust": {
+    "1.99": {
+      "ordinary": 557,
+      "ignored": 164,
+      "harnesses": 115,
+      "doc": 4,
+      "observations": [
+        [
+          "jackson",
+          "1",
+          "true",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "jackson",
+          "2",
+          "false",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "ordinary",
+          "1",
+          "true",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "ordinary",
+          "2",
+          "false",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type2\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "ordinary",
+          "3",
+          "true",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_nanos\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",[1721985847000,12345]]}"
+        ]
+      ]
+    },
+    "1.85": {
+      "ordinary": 557,
+      "ignored": 164,
+      "harnesses": 115,
+      "doc": 4,
+      "observations": [
+        [
+          "jackson",
+          "1",
+          "true",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "jackson",
+          "2",
+          "false",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "ordinary",
+          "1",
+          "true",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "ordinary",
+          "2",
+          "false",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_type2\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",1721985847000]}"
+        ],
+        [
+          "ordinary",
+          "3",
+          "true",
+          "dm.jdbc.driver.DmdbTimestamp",
+          "{\"@class\":\"org.apache.seata.rm.datasource.sql.struct.Field\",\"name\":\"dmdb_timestamp_nanos\",\"keyType\":\"NULL\",\"type\":93,\"value\":[\"dm.jdbc.driver.DmdbTimestamp\",[1721985847000,12345]]}"
+        ]
+      ]
+    }
+  },
+  "rust_evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_jackson_dmdb",
+  "runtime_controls": [
+    {
+      "label": "drop-dmdb-origin",
+      "target": "jackson_dmdb_source_test_serialize_and_deserialize_timestamp",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_wo7ya1q_",
+      "mutated_file": "crates/seata_at/src/undo/parser/dmdb_timestamp.rs",
+      "original_sha256": "2ae7fed5678ccb4869f068f4d4a7a363532a0eba500b8b7ba5c710c460779c86",
+      "mutant_sha256": "535570d64c57c6f624cf4634f2d82fb1543aa82aa288271ca365919043562df8",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "jackson_undo_source",
+        "--",
+        "jackson_dmdb_source_test_serialize_and_deserialize_timestamp",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "drop-dmdb-fraction",
+      "target": "jackson_dmdb_source_test_serialize_and_deserialize_timestamp_with_no_zone",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_wo7ya1q_",
+      "mutated_file": "crates/seata_at/src/undo/parser/dmdb_timestamp.rs",
+      "original_sha256": "2ae7fed5678ccb4869f068f4d4a7a363532a0eba500b8b7ba5c710c460779c86",
+      "mutant_sha256": "86d7b7209012ebc430c25124c8ecc808dcae28bf94c16337f3935a7ab15dae07",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "jackson_undo_source",
+        "--",
+        "jackson_dmdb_source_test_serialize_and_deserialize_timestamp_with_no_zone",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 101
+    }
+  ],
+  "evidence_sha256": {
+    "1.85-clippy.log": "8e115ba5b6b307657e32eac1deee9202fb19b810dfd6980b89e921ed05d31b33",
+    "1.85-core.tsv": "5dfbc4a33d027daa1c708c6006435e743f4d5154babd5eb56dd2595c070ecdef",
+    "1.85-doc.log": "a221077fb8d51462d79c497df37bacdead1edba0c67e539b52810b8bca3d47f8",
+    "1.85-targeted.log": "092cb44f82b997d26a8fd98b979a3991e66f4031bee053c46406eba3303cd8d8",
+    "1.85-tests.log": "27667089bd8d462c6370114a8807345c23f0211e915ff011719726908dabedb7",
+    "1.99-clippy.log": "0f947533c0ac97db156cc5a1bf27c16c57b07316a81174dec4640b5c91e57936",
+    "1.99-core.tsv": "5dfbc4a33d027daa1c708c6006435e743f4d5154babd5eb56dd2595c070ecdef",
+    "1.99-doc.log": "563a2909d74f0ab726a94961d2b209fe6a849e2a7c292731ab900553c34fd569",
+    "1.99-targeted.log": "3d9e07fd1a007c67a70f80f00b8f18c3508d2d778537274b007b4e95e8186278",
+    "1.99-tests.log": "c64e0a9ee665109895c771c894c383ae9610e1d98444877683d4b2a63a1207b9",
+    "api-red.log": "a6259a3302145e90966bd0ed9c68cd639c6eb1781ac5aa15fc4e71a907c4a001",
+    "calendar-java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "calendar-java.stdout": "594ec9a77d5d8d0b509aeae2883ff902e51dec888571c1ff06ddbe39edc178f3",
+    "calendar-red.log": "0c307d268cce4e0fb59939d12dfb405fb88cd3f0bce5112efb014eab882267b2",
+    "DmdbCalendarBoundaryOracle.java": "0fc61b54de4f4e6880979e14c50aac177397025622089695ef4b71b66150588d",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-drop-dmdb-fraction.stderr": "16ddb46c50d98baa5cd8834dc55b33728dbecbe8b7065f244fcb9065b9c961a0",
+    "mutant-drop-dmdb-fraction.stdout": "d7dfe69e5f6953ea02cf722e0a00900afd3569bde385f73b59157b7fdf5adc3d",
+    "mutant-drop-dmdb-origin.stderr": "75c2828eaeeb295a04a97442d05a34c33739acdba98dcf46787bd630635ded8d",
+    "mutant-drop-dmdb-origin.stdout": "0073958a32cd571ed3fc70f1aaf4142e1c6c991c39763374321e09be0f468d99",
+    "runtime-mutation-controls.json": "ee437b2a3c6f7fcead77941d3e7eab453e18a0b542967b637a76439a087dcd84"
+  },
+  "source_inputs_sha256": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_at/src/lib.rs": "b6f5a8f919ad81edf213507c6a0e0b583c5fe889645b6a8db3e3dd6dd67cbc51",
+    "crates/seata_at/src/undo/mod.rs": "13b5e0dce1d1f1b537bbadae3c41d3601510e6919b63b0e585d128131bd3c47b",
+    "crates/seata_at/src/undo/parser/mod.rs": "ee7dc992086479f3d34672838ae4b2dfd723db284f75a4ed1c95235e3aa85a43",
+    "crates/seata_at/src/undo/parser/dmdb_timestamp.rs": "2ae7fed5678ccb4869f068f4d4a7a363532a0eba500b8b7ba5c710c460779c86",
+    "crates/seata_at/src/undo/parser/jackson_original_format.rs": "f6a40103837099d0f43201f07db993185600624feb60589dba831e611b110330",
+    "crates/seata_at/src/undo/parser/jackson_undo_log_parser.rs": "1b5375003c8f3b852df3c341c2ce8b7d8cfb079858567dce563aef4be23a0ad9",
+    "crates/seata_at/src/undo/parser/jackson_undo_field_value.rs": "216eec1526da107508abb05041b29261c4df4674542dbf013a5293a92f39198c",
+    "crates/seata_at/src/undo/parser/value_format.rs": "1d9679d10c980ffd16c7684f220e4c90fd0f9bb39398fe2f877cb5eacdad6e1a",
+    "crates/seata_at/src/undo/parser/strict_json.rs": "63f8c2d3b57e739fc6a28d9588440555991d6c21f9c3a4e679f74e055bba1588",
+    "crates/seata_at/src/undo/parser/bounded_output.rs": "06b2c407eb140949c5b7584ad8fc4047c9404bc416adff17560961107cf770df",
+    "crates/seata_at/tests/jackson_undo_source.rs": "05b20e0ccc2403bd1582e7fd174ffca92415ef62cb6510af9066a41e465056e6"
+  },
+  "supported_dmdb_host_zone": "UTC",
+  "supported_dmdb_from": "1582-10-15T00:00:00Z",
+  "live_mysql_rollback_verified_this_round": false,
+  "phase_05_complete": false,
+  "phase_06_complete": false,
+  "v1_complete": false
+}

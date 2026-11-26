@@ -1,0 +1,40 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved import `seata_at::SerialArray`
+ --> crates\seata_at\tests\support\fastjson_serial_array.rs:5:26
+  |
+5 |     FastjsonUndoRecords, SerialArray, SqlType,
+  |                          ^^^^^^^^^^^ no `SerialArray` in the root
+
+error[E0599]: no method named `encode_serial_array` found for struct `FastjsonUndoLogParser` in the current scope
+  --> crates\seata_at\tests\support\fastjson_serial_array.rs:23:24
+   |
+23 |     let bytes = parser.encode_serial_array(&original).unwrap();
+   |                        ^^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_serial_array` found for struct `FastjsonUndoLogParser` in the current scope
+  --> crates\seata_at\tests\support\fastjson_serial_array.rs:24:26
+   |
+24 |     let decoded = parser.decode_serial_array(&bytes).unwrap();
+   |                          ^^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no variant, associated function, or constant named `SerialArray` found for enum `FastjsonUndoFieldValue` in the current scope
+  --> crates\seata_at\tests\support\fastjson_serial_array.rs:33:90
+   |
+33 |     let field = FastjsonUndoField::new(name.into(), 2003, false, FastjsonUndoFieldValue::SerialArray(original.clone()));
+   |                                                                                          ^^^^^^^^^^^ variant, associated function, or constant not found in `FastjsonUndoFieldValue`
+
+error[E0599]: no method named `clone` found for struct `FastjsonUndoField` in the current scope
+  --> crates\seata_at\tests\support\fastjson_serial_array.rs:37:77
+   |
+37 |         FastjsonUndoRecords::new(Some("test_table".into()), vec![vec![field.clone()]]),
+   |                                                                             ^^^^^ method not found in `FastjsonUndoField`
+
+error[E0599]: no method named `serial_array_field` found for struct `FastjsonUndoBranch` in the current scope
+  --> crates\seata_at\tests\support\fastjson_serial_array.rs:42:24
+   |
+42 |     let other = branch.serial_array_field(0, true, 0, 0).unwrap().unwrap();
+   |                        ^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoBranch`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "fastjson_undo_native") due to 6 previous errors

@@ -1,0 +1,29 @@
+server:
+  port: 28091
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/seata backend retry timeout/20261112_152511_3907a673/redis/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28091
+    enable-check-auth: false
+  store:
+    mode: redis
+    session:
+      mode: redis
+    lock:
+      mode: redis
+    redis:
+      mode: single
+      single:
+        host: 127.0.0.1
+        port: 28094
+      database: 0
+      type: pipeline

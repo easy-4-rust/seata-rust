@@ -1,0 +1,22 @@
+test_actual_reload_exception_is_rejected (test_native_observer.NativeObserverGuards.test_actual_reload_exception_is_rejected) ... ok
+test_foreign_response_id_rejected (test_native_observer.NativeObserverGuards.test_foreign_response_id_rejected) ... ok
+test_loading_exception_class_is_not_throwing_it (test_native_observer.NativeObserverGuards.test_loading_exception_class_is_not_throwing_it) ... FAIL
+test_only_registration_status_and_lock_queries (test_native_observer.NativeObserverGuards.test_only_registration_status_and_lock_queries) ... ok
+test_status_request_contains_java_extra_data_field (test_native_observer.NativeObserverGuards.test_status_request_contains_java_extra_data_field) ... ok
+test_truncated_response_rejected (test_native_observer.NativeObserverGuards.test_truncated_response_rejected) ... ok
+test_wrong_lock_rejected (test_native_observer.NativeObserverGuards.test_wrong_lock_rejected) ... ok
+test_wrong_response_envelope_rejected (test_native_observer.NativeObserverGuards.test_wrong_response_envelope_rejected) ... ok
+test_wrong_status_rejected (test_native_observer.NativeObserverGuards.test_wrong_status_rejected) ... ok
+
+======================================================================
+FAIL: test_loading_exception_class_is_not_throwing_it (test_native_observer.NativeObserverGuards.test_loading_exception_class_is_not_throwing_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-retry-timeout-candidate\test_native_observer.py", line 38, in test_loading_exception_class_is_not_throwing_it
+    self.assertFalse(has_reload_exception(b'[class,load] org.apache.seata.common.exception.ShouldNeverHappenException source: jar:nested:original.jar'))
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+FAILED (failures=1)

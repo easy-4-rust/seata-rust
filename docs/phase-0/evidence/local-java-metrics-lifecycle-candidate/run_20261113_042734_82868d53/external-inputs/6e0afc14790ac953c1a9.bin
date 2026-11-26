@@ -1,0 +1,672 @@
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+SLF4J(W): Class path contains multiple SLF4J providers.
+SLF4J(W): Found provider [ch.qos.logback.classic.spi.LogbackServiceProvider@5bcb04cb]
+SLF4J(W): Found provider [org.slf4j.simple.SimpleServiceProvider@385e36d4]
+SLF4J(W): See https://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J(I): Actual provider is of type [ch.qos.logback.classic.spi.LogbackServiceProvider@5bcb04cb]
+
+Test run finished after 1993 ms
+[        14 containers found      ]
+[         0 containers skipped    ]
+[        14 containers started    ]
+[         0 containers aborted    ]
+[        14 containers successful ]
+[         0 containers failed     ]
+[        77 tests found           ]
+[         0 tests skipped         ]
+[        77 tests started         ]
+[         0 tests aborted         ]
+[        30 tests successful      ]
+[        47 tests failed          ]
+
+
+Failures (47):
+  JUnit Jupiter:MetricsLifecycleCandidateTest:nullEventIsIgnored()
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'nullEventIsIgnored', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "org.apache.seata.core.event.GlobalTransactionEvent.getStatus()" because "event" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.seata.core.event.GlobalTransactionEvent.getStatus()" because "event" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:218)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$nullEventIsIgnored$9(MetricsLifecycleCandidateTest.java:170)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[1] "Committed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitted(MetricsSubscriber.java:134)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[2] "Rollbacked"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusRollbacked(MetricsSubscriber.java:144)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[3] "CommitFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitFailed(MetricsSubscriber.java:167)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[4] "RollbackFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusRollbackFailed(MetricsSubscriber.java:172)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[5] "TimeoutRollbackFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackFailed(MetricsSubscriber.java:182)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[6] "CommitRetryTimeout"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[7] "RollbackRetryTimeout"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackRetryTimeout(MetricsSubscriber.java:196)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[8] "AfterCommitted"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processAfterGlobalCommitted(MetricsSubscriber.java:162)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:missingBeginRetainsCompletionCountWithoutSyntheticLatency(String):[9] "AfterRollbacked"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'missingBeginRetainsCompletionCountWithoutSyntheticLatency', methodParameterTypes = 'java.lang.String']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getBeginTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processAfterGlobalRollbacked(MetricsSubscriber.java:153)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$missingBeginRetainsCompletionCountWithoutSyntheticLatency$5(MetricsLifecycleCandidateTest.java:118)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[1] "Committed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=committed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[2] "Rollbacked"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=rollbacked)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[3] "CommitFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[4] "RollbackFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[5] "TimeoutRollbackFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[6] "CommitRetryTimeout"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[7] "RollbackRetryTimeout"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[8] "AfterCommitted"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=AfterCommitted)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:reversedClockDoesNotCreateTimerSample(String):[9] "AfterRollbacked"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'reversedClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=AfterRollbacked)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.reversedClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:127)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[1] "Committed", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitted(MetricsSubscriber.java:134)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[3] "Rollbacked", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusRollbacked(MetricsSubscriber.java:144)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[5] "CommitFailed", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitFailed(MetricsSubscriber.java:167)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[6] "CommitFailed", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitFailed(MetricsSubscriber.java:167)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[7] "RollbackFailed", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusRollbackFailed(MetricsSubscriber.java:172)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[8] "RollbackFailed", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusRollbackFailed(MetricsSubscriber.java:172)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[9] "TimeoutRollbacked", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: expected: <1> but was: <0>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:168)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:163)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:662)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(MetricsLifecycleCandidateTest.java:92)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[10] "TimeoutRollbacked", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: expected: <1> but was: <0>
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+       org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+       org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:168)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:163)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:662)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(MetricsLifecycleCandidateTest.java:92)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[11] "TimeoutRollbackFailed", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackFailed(MetricsSubscriber.java:182)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[12] "TimeoutRollbackFailed", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackFailed(MetricsSubscriber.java:182)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[13] "CommitRetryTimeout", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[14] "CommitRetryTimeout", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[15] "RollbackRetryTimeout", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackRetryTimeout(MetricsSubscriber.java:196)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[16] "RollbackRetryTimeout", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackRetryTimeout(MetricsSubscriber.java:196)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[17] "AfterCommitted", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processAfterGlobalCommitted(MetricsSubscriber.java:162)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[18] "AfterCommitted", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processAfterGlobalCommitted(MetricsSubscriber.java:162)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[19] "AfterRollbacked", false
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processAfterGlobalRollbacked(MetricsSubscriber.java:153)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:unfinishedCompletionCannotChangeCompletionCountersOrInventLatency(String, boolean):[20] "AfterRollbacked", true
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'unfinishedCompletionCannotChangeCompletionCountersOrInventLatency', methodParameterTypes = 'java.lang.String, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.processAfterGlobalRollbacked(MetricsSubscriber.java:153)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$unfinishedCompletionCannotChangeCompletionCountersOrInventLatency$3(MetricsLifecycleCandidateTest.java:91)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:52)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:restoredTimeoutReentryDoesNotDecrementFreshProcessActiveCount()
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'restoredTimeoutReentryDoesNotDecrementFreshProcessActiveCount', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:159)
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:90)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:56)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:39)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3295)
+       [...]
+     Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+       org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+       org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+       org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)
+       org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.lambda$restoredTimeoutReentryDoesNotDecrementFreshProcessActiveCount$8(MetricsLifecycleCandidateTest.java:152)
+       [...]
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[1] "Committed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=committed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[2] "Rollbacked"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=rollbacked)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[3] "CommitFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[4] "RollbackFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[5] "TimeoutRollbackFailed"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[6] "CommitRetryTimeout"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[7] "RollbackRetryTimeout"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=failed)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[8] "AfterCommitted"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=AfterCommitted)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+  JUnit Jupiter:MetricsLifecycleCandidateTest:overflowingClockDoesNotCreateTimerSample(String):[9] "AfterRollbacked"
+    MethodSource [className = 'org.apache.seata.server.metrics.MetricsLifecycleCandidateTest', methodName = 'overflowingClockDoesNotCreateTimerSample', methodParameterTypes = 'java.lang.String']
+    => org.mockito.exceptions.verification.NeverWantedButInvoked: 
+compactRegistry.getTimer(<any>);
+Never wanted here:
+-> at org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+But invoked here:
+-> at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:110) with arguments: [seata.transaction(applicationId=owned-app,group=owned-group,meter=timer,role=tc,status=AfterRollbacked)]
+
+       org.apache.seata.metrics.registry.compact.CompactRegistry.getTimer(CompactRegistry.java:66)
+       org.apache.seata.server.metrics.MetricsLifecycleCandidateTest.overflowingClockDoesNotCreateTimerSample(MetricsLifecycleCandidateTest.java:135)
+OBSERVATION_JUNIT tests=77 succeeded=30 failed=47 skipped=0

@@ -1,0 +1,22 @@
+   Compiling seata-transport v0.1.0 (D:\codex-builds\seata-loss-controls-dab17a53eb61\crates\seata_transport)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.20s
+     Running unittests examples\transport_loss_live.rs (D:/cargo-target/seata-rust-loss-controls\debug\examples\transport_loss_live-c94d9cdf3aea0573.exe)
+
+running 1 test
+test uncertain_commit::tests::finished_never_creates_commit_confirmation_and_does_not_erase_prior_authority ... FAILED
+
+failures:
+
+---- uncertain_commit::tests::finished_never_creates_commit_confirmation_and_does_not_erase_prior_authority stdout ----
+
+thread 'uncertain_commit::tests::finished_never_creates_commit_confirmation_and_does_not_erase_prior_authority' (69252) panicked at crates\seata_transport\examples\support\uncertain_commit.rs:31:9:
+assertion failed: !state.confirmed()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    uncertain_commit::tests::finished_never_creates_commit_confirmation_and_does_not_erase_prior_authority
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-transport --example transport_loss_live`

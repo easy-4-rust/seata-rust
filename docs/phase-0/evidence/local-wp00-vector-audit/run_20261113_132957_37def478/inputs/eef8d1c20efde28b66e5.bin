@@ -1,0 +1,229 @@
+"""当前原候选语料的三方只读认证；编译与变异只发生在 D 盘副本。"""
+import datetime
+import hashlib
+import importlib.util
+import io
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+import uuid
+import xml.etree.ElementTree as ET
+import zipfile
+from urllib.parse import unquote, urlparse
+
+ROOT = Path(__file__).resolve().parents[2]
+HERE = Path(__file__).resolve().parent
+
+
+def module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    value = importlib.util.module_from_spec(spec)
+    sys.modules[name] = value
+    spec.loader.exec_module(value)
+    return value
+
+
+def run():
+    support = module('vector_source_support', ROOT / 'tools/java-global-status-contract/run.py')
+    audit = module('vector_inflight_audit', ROOT / 'tools/go-java-v1-inflight/audit.py')
+    dep = module('vector_dependencies', ROOT / 'tools/java-retry-timeout-candidate/file_runtime.py')
+    h = audit.sdk.h
+    stamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:8]
+    out = ROOT / 'docs/phase-0/evidence/local-wp00-vector-audit' / ('run_' + stamp)
+    runtime = Path('D:/codex-builds') / ('vectors_' + stamp)
+    out.mkdir(parents=True)
+    runtime.mkdir()
+    print('VECTOR_RUN ' + str(out), flush=True)
+    save, put, sha = support.save, support.put, support.sha
+    def command(args, cwd, env, log, expected=0, timeout=120):
+        result = subprocess.run([str(x) for x in args], cwd=cwd, env=env, stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT, timeout=timeout, creationflags=h.FLAGS)
+        put(out / log, result.stdout)
+        if result.returncode != expected:
+            raise RuntimeError(f'Unexpected command exit {result.returncode}, expected {expected}: {log}')
+        return result.stdout
+    original_go = audit.sdk.c.audit_go()
+    save(out / 'go-source-before.json', original_go)
+    jar = support.ORACLE / 'server/target/seata-server.jar'
+    if sha(jar) != h.JAR_HASH:
+        raise ValueError('Original Java JAR changed')
+    expected_path = ROOT / 'tools/go-golden-vectors/expected.json'
+    expected = json.loads(expected_path.read_bytes())
+    frames_path = ROOT / 'tools/go-golden-vectors/frames.json'
+    frames = json.loads(frames_path.read_bytes())
+    if len(expected) != 29 or len({r['name'] for r in expected}) != 29 or len(frames) != 6:
+        raise ValueError('Frozen corpus identity/count changed')
+    manifest_path = ROOT / 'tests/fixtures/protocol/v1/manifest.json'
+    manifest = json.loads(manifest_path.read_bytes())
+    by_name = {r['name']: r for r in expected}
+    if len(manifest['samples']) != 29 or {r['name'] for r in manifest['samples']} != set(by_name):
+        raise ValueError('Fixture manifest set differs')
+    for row in manifest['samples']:
+        sample = by_name[row['name']]
+        binary = (manifest_path.parent / row['file']).read_bytes()
+        if binary.hex() != sample['serialized_hex'] or hashlib.sha256(binary).hexdigest() != row['sha256']:
+            raise ValueError('Frozen binary differs')
+        if binary[:2] != sample['type_id'].to_bytes(2, 'big') or binary[2:].hex() != sample['body_hex']:
+            raise ValueError('Serialized prefix/body differs')
+    document = ROOT / 'docs/phase-0/protocol-golden-vectors.md'
+    table = re.findall(r'^\| (\w+) \| (\d+) \| (\d+) \| `([0-9a-fA-F ]+)` \|$', document.read_text(encoding='utf-8'), re.M)
+    if len(table) != 25 or {name for name, *_ in table} != {r['name'] for r in expected if not r['name'].endswith('Failed')}:
+        raise ValueError('Document table identity set differs')
+    for name, type_id, length, body in table:
+        sample = by_name[name]
+        if int(type_id) != sample['type_id'] or bytes.fromhex(body).hex() != sample['body_hex'] or int(length) != len(bytes.fromhex(body)):
+            raise ValueError('Document candidate differs from actual corpus: ' + name)
+    crate = ROOT / 'tools/java-tc-integration/rust-client'
+    rust_sources = [p for p in crate.rglob('*') if p.is_file() and 'target' not in p.relative_to(crate).parts]
+    fixtures = [p for p in manifest_path.parent.rglob('*') if p.is_file()]
+    sources = [HERE / 'FrozenCorpusProbe.java', HERE / 'run.py', document,
+        ROOT / 'docs/phase-0/wp00-vector-freeze-review.md', expected_path, frames_path,
+        ROOT / 'tools/go-golden-vectors/main.go', ROOT / 'tools/java-v1-golden/PayloadGoldenCorpusTest.java',
+        ROOT / 'tools/java-v1-golden/ProtocolV1GoldenFrameTest.java'] + rust_sources + fixtures
+    sources += list(support.python_supports(support, audit, dep, *tuple(sys.modules.values())))
+    frozen = support.freeze(out, sources)
+    copies = []
+    for path in rust_sources + fixtures:
+        target = runtime / path.relative_to(ROOT)
+        put(target, path.read_bytes())
+        copies.append((path, target))
+    for path in [expected_path, frames_path]:
+        put(runtime / path.name, path.read_bytes())
+    save(out / 'original-jar.json', dict(path=str(jar), sha256=h.JAR_HASH))
+    report = Path('D:/codex-builds/jret_20261113_010005_fe3b7eb3/server/target/surefire-reports/TEST-org.apache.seata.server.session.FileSessionManagerTest.xml')
+    xml = ET.parse(report).getroot()
+    old_cp = next(p.get('value') for p in xml.findall('properties/property') if p.get('name') == 'surefire.test.class.path').rstrip(';')
+    dependencies = [Path(p) for p in old_cp.split(';') if Path(p).is_file() and Path(p).suffix == '.jar' and not Path(p).name.startswith('seata-')]
+    jars = []
+    original_members = {}
+    with zipfile.ZipFile(jar) as original:
+        for name in original.namelist():
+            if name.startswith('BOOT-INF/lib/seata-') and name.endswith('.jar'):
+                data = original.read(name)
+                target = runtime / 'original-jars' / Path(name).name
+                put(target, data)
+                jars.append(target)
+                original_members[str(target.resolve())] = name
+    if not jars:
+        raise ValueError('No original Seata dependencies')
+    classes = runtime / 'compiled'
+    classes.mkdir()
+    cp = ';'.join(str(p) for p in jars + dependencies)
+    before_deps = dep.dependency_inventory(cp)
+    save(out / 'dependencies-before.json', before_deps)
+    put(out / 'classpath.txt', cp)
+    args = ['-encoding', 'UTF-8', '-cp', cp, '-d', classes, HERE / 'FrozenCorpusProbe.java',
+        ROOT / 'tools/java-v1-golden/PayloadGoldenCorpusTest.java', ROOT / 'tools/java-v1-golden/ProtocolV1GoldenFrameTest.java']
+    argfile = runtime / 'compile.args'
+    put(argfile, '\n'.join(dep.quoted(x) for x in args) + '\n')
+    put(out / 'compile.args', argfile.read_bytes())
+    command([h.JAVA.parent / 'javac.exe', '-version'], runtime, h.ENV, 'javac-version.log')
+    command([h.JAVA, '-version'], runtime, h.ENV, 'java-version.log')
+    command([h.JAVA.parent / 'javac.exe', '@' + str(argfile)], ROOT, h.ENV, 'java-compile.log')
+    compiled = []
+    for path in classes.rglob('*.class'):
+        snapshot = 'artifacts/java-' + sha(path)[:20] + '.bin'
+        put(out / snapshot, path.read_bytes())
+        compiled.append(dict(path=str(path), sha256=sha(path), snapshot=snapshot))
+    save(out / 'compiled-before.json', compiled)
+    resource = classes / 'seata-rust-payload-vectors.json'
+    put(resource, expected_path.read_bytes())
+    log = runtime / 'java-classes.log'
+    command([h.JAVA, '-Djava.io.tmpdir=D:/Temp', '-Xlog:class+load=info:file=' + str(log).replace('\\', '/'),
+        '-cp', str(classes) + ';' + cp, 'org.apache.seata.serializer.seata.FrozenCorpusProbe', out / 'java.json'],
+        runtime, h.ENV, 'java.log')
+    put(out / 'java-classes.log', log.read_bytes())
+    java = json.loads((out / 'java.json').read_bytes())
+    if java['passed'] != 35 or java['failed'] != 0 or len(java['checks']) != 35:
+        raise ValueError('Java assertion identities/count differ')
+    for row in java['payloads']:
+        if any(row[key] != by_name[row['name']][key] for key in ['type_id', 'body_hex', 'serialized_hex']):
+            raise ValueError('Actual Java output differs from corpus')
+    class_rows = []
+    for name, source in re.findall(r'\[class,load\] (org\.apache\.seata\S+) source: (\S+)', log.read_text()):
+        if '$$Lambda' in name:
+            continue
+        source_path = Path(unquote(urlparse(source).path).lstrip('/')).resolve()
+        relative = name.replace('.', '/') + '.class'
+        if source_path == classes.resolve():
+            if name not in ['org.apache.seata.serializer.seata.FrozenCorpusProbe', 'org.apache.seata.serializer.seata.PayloadGoldenCorpusTest',
+                             'org.apache.seata.core.rpc.netty.v1.ProtocolV1GoldenFrameTest']:
+                raise ValueError('Unexpected Seata test override: ' + name)
+            continue
+        if str(source_path) not in original_members:
+            raise ValueError('Seata production class not from original JAR: ' + name + ' ' + source)
+        with zipfile.ZipFile(source_path) as lib:
+            data = lib.read(relative)
+        snapshot = 'original-classes/' + hashlib.sha256(name.encode()).hexdigest()[:20] + '.bin'
+        if not (out / snapshot).exists():
+            put(out / snapshot, data)
+        class_rows.append(dict(name=name, source=source, original_member=original_members[str(source_path)],
+                               sha256=hashlib.sha256(data).hexdigest(), snapshot=snapshot))
+    if not {'org.apache.seata.core.rpc.netty.v1.ProtocolDecoderV1', 'org.apache.seata.core.rpc.netty.v1.ProtocolEncoderV1',
+            'org.apache.seata.serializer.seata.SeataSerializer'} <= {row['name'] for row in class_rows}:
+        raise ValueError('Critical original classes not observed')
+    save(out / 'original-class-audit.json', class_rows)
+    go_binary = runtime / 'native-go.exe'
+    command(['go', 'build', '-o', go_binary, ROOT / 'tools/go-golden-vectors/main.go'], audit.sdk.c.GO_ROOT, audit.sdk.c.GO_ENV, 'go-build.log')
+    go_hash = sha(go_binary)
+    put(out / 'artifacts/native-go.exe', go_binary.read_bytes())
+    go_output = command([go_binary], runtime, audit.sdk.c.GO_ENV, 'go.log').decode('utf-8')
+    if 'verification passed: 29 payloads, 6 frames' not in go_output:
+        raise ValueError('Go corpus did not complete')
+    rust_manifest = runtime / crate.relative_to(ROOT) / 'Cargo.toml'
+    rust_env = h.ENV.copy()
+    rust_env.update(CARGO_TARGET_DIR='D:/cargo-target/vector-' + stamp, CARGO_HOME='D:/cargo-home', RUSTUP_HOME='D:/rustup')
+    built = command(['cargo', 'test', '--offline', '--locked', '--manifest-path', rust_manifest, '--no-run', '--message-format=json'], runtime,
+                    rust_env, 'rust-build.jsonl')
+    artifacts = [json.loads(line) for line in built.splitlines() if line.startswith(b'{')]
+    executables = [row['executable'] for row in artifacts if row.get('reason') == 'compiler-artifact' and row.get('executable') and row.get('profile', {}).get('test')]
+    if len(executables) != 1:
+        raise ValueError('Expected one actual Rust test binary')
+    rust_binary = Path(executables[0])
+    rust_hash = sha(rust_binary)
+    put(out / 'artifacts/rust-unit-test.exe', rust_binary.read_bytes())
+    rust_output = command([rust_binary, '--test-threads=1'], runtime, rust_env, 'rust-tests.log').decode('utf-8')
+    if '117 passed; 0 failed; 0 ignored' not in rust_output:
+        raise ValueError('Rust regression identities/count differ')
+    # 同一个实际测试 binary/Java 断言：有效但语义错误的 timeout，不能只看字节往返。
+    mutant = json.loads(expected_path.read_bytes())
+    mutant[0]['body_hex'] = '000007d1' + mutant[0]['body_hex'][8:]
+    mutant[0]['serialized_hex'] = '0001' + mutant[0]['body_hex']
+    mutant_dir = runtime / 'java-mutant'
+    save(mutant_dir / 'seata-rust-payload-vectors.json', mutant)
+    command([h.JAVA, '-Djava.io.tmpdir=D:/Temp', '-cp', str(mutant_dir) + ';' + str(classes) + ';' + cp,
+             'org.apache.seata.serializer.seata.FrozenCorpusProbe', out / 'java-mutant.json'], runtime, h.ENV, 'java-mutant.log', expected=1)
+    negative = json.loads((out / 'java-mutant.json').read_bytes())
+    if negative['failed'] != 1 or negative['passed'] != 34 or [r['name'] for r in negative['checks'] if not r['passed']] != ['GlobalBeginRequest']:
+        raise ValueError('Java semantic control did not fail exactly its target')
+    rust_fixture = runtime / 'tests/fixtures/protocol/v1/GlobalBeginRequest.bin'
+    original_fixture = rust_fixture.read_bytes()
+    changed = bytes.fromhex(mutant[0]['serialized_hex'])
+    put(out / 'negative-fixture.bin', changed)
+    try:
+        rust_fixture.write_bytes(changed)
+        command([rust_binary, '--exact', 'payload::tests::golden_global_begin_request'], runtime, rust_env, 'rust-semantic-red.log', expected=101)
+    finally:
+        rust_fixture.write_bytes(original_fixture)
+    if any(source.read_bytes() != target.read_bytes() for source, target in copies):
+        raise ValueError('Executed Rust source/fixture copy differs')
+    if sha(go_binary) != go_hash or sha(rust_binary) != rust_hash or any(sha(Path(r['path'])) != r['sha256'] for r in compiled):
+        raise ValueError('Executed binary changed')
+    if sha(jar) != h.JAR_HASH or before_deps != dep.dependency_inventory(cp) or original_go != audit.sdk.c.audit_go():
+        raise ValueError('Original runtime dependencies/source changed')
+    support.unchanged(frozen)
+    save(out / 'execution-artifacts.json', dict(go=dict(path=str(go_binary), sha256=go_hash), rust=dict(path=str(rust_binary), sha256=rust_hash)))
+    save(out / 'result.json', dict(original_payloads=29, document_rows=25, original_frames=6, java_assertion_bodies_passed=35,
+         junit_engine_or_maven_run=False, rust_tests_passed=117, java_semantic_mutant_failed=1, java_mutant_controls_passed=34,
+         rust_semantic_mutant_failed=1, original_classes=len(class_rows), frozen_inputs=len(frozen), original_corpus_mismatches=0,
+         supplemental_divergences_closed=False, complete_wp00=False, production_rust=False, runtime=str(runtime)))
+    members = [dict(path=p.relative_to(out).as_posix(), bytes=p.stat().st_size, sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()]
+    save(out / 'catalog.json', dict(members=members))
+    print(json.dumps(dict(run=str(out), catalog_sha256=sha(out / 'catalog.json'), original_classes=len(class_rows))), flush=True)
+
+
+if __name__ == '__main__':
+    run()

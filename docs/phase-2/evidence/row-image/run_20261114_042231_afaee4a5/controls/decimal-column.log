@@ -1,0 +1,41 @@
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_row_image_20261114_042231_afaee4a5\decimal-column\crates\seata_datasource)
+warning: unused variable: `v`
+  --> crates\seata_datasource\src\struct\field.rs:26:34
+   |
+26 |             (FieldValue::Decimal(v), ColumnType::Decimal) => {
+   |                                  ^ help: if this is intentional, prefix it with an underscore: `_v`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p`
+  --> crates\seata_datasource\src\struct\field.rs:27:84
+   |
+27 |                 matches!((column.numeric_precision(),column.numeric_scale()),(Some(p),Some(s))
+   |                                                                                    ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `s`
+  --> crates\seata_datasource\src\struct\field.rs:27:92
+   |
+27 |                 matches!((column.numeric_precision(),column.numeric_scale()),(Some(p),Some(s))
+   |                                                                                            ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: `seata-datasource` (lib) generated 3 warnings (run `cargo fix --lib -p seata-datasource` to apply 3 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.27s
+     Running tests\row_image_contract.rs (D:/cargo-target/seata-row-image-controls\debug\deps\row_image_contract-ca056d305f011e3f.exe)
+
+running 1 test
+
+thread 'decimal_column_capacity_and_exact_scale_are_required' (42104) panicked at crates\seata_datasource\tests\row_image_contract.rs:100:9:
+assertion failed: Field::new(&col,
+        FieldValue::Decimal(DecimalValue::new(text).unwrap())).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test decimal_column_capacity_and_exact_scale_are_required ... FAILED
+
+failures:
+
+failures:
+    decimal_column_capacity_and_exact_scale_are_required
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-datasource --test row_image_contract`

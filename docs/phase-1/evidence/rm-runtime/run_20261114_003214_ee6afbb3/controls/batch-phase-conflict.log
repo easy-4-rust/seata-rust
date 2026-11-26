@@ -1,0 +1,39 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_runtime_20261114_003214_ee6afbb3\batch-phase-conflict\crates\seata_rm)
+warning: unused variable: `previous`
+   --> crates\seata_rm\src\manager\callback_handler.rs:182:18
+    |
+182 |             let (previous, direction) = &requests[*index];
+    |                  ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_previous`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `direction`
+   --> crates\seata_rm\src\manager\callback_handler.rs:182:28
+    |
+182 |             let (previous, direction) = &requests[*index];
+    |                            ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_direction`
+
+warning: `seata-rm` (lib) generated 2 warnings (run `cargo fix --lib -p seata-rm` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.95s
+     Running tests\native_callbacks.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\native_callbacks-8394f69a7c2014cc.exe)
+
+running 1 test
+test contradictory_directions_inside_one_batch_reject_before_any_resource_effect ... FAILED
+
+failures:
+
+---- contradictory_directions_inside_one_batch_reject_before_any_resource_effect stdout ----
+
+thread 'contradictory_directions_inside_one_batch_reject_before_any_resource_effect' (68740) panicked at crates\seata_rm\tests\support\..\..\..\seata_transport\tests\support\session_peer.rs:116:5:
+assertion `left == right` failed
+  left: 1
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    contradictory_directions_inside_one_batch_reject_before_any_resource_effect
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-rm --test native_callbacks`

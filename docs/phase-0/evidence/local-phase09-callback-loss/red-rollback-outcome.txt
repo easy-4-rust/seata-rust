@@ -1,0 +1,22 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.37s
+     Running unittests src\main.rs (D:\cargo-target\seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test transaction::tests::injected_rollback_loss_retains_failed_retrying_outcome_for_later_query ... FAILED
+
+failures:
+
+---- transaction::tests::injected_rollback_loss_retains_failed_retrying_outcome_for_later_query stdout ----
+
+thread 'transaction::tests::injected_rollback_loss_retains_failed_retrying_outcome_for_later_query' (61120) panicked at src\transaction.rs:293:81:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "TC rejected type 9, xid=x: TransactionResult { success: false, error_code: 0, message: Some(\"timed out\"), status: 5 }" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    transaction::tests::injected_rollback_loss_retains_failed_retrying_outcome_for_later_query
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 28 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

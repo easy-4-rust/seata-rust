@@ -1,0 +1,340 @@
+[ {
+  "case" : "native-case-0.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "UPDATE undo_work SET v = ? WHERE id = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "before" ] ]
+  }
+}, {
+  "case" : "native-case-0.json",
+  "mode" : "already_before",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "before" ] ]
+  }
+}, {
+  "case" : "native-case-0.json",
+  "mode" : "dirty",
+  "source_DML" : [ ],
+  "dirty_rejected" : true,
+  "error_type" : "org.apache.seata.rm.datasource.undo.SQLUndoDirtyException",
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "ORACLE_DIRTY" ] ]
+  }
+}, {
+  "case" : "native-case-1.json",
+  "mode" : "matching_after",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "before" ] ]
+  }
+}, {
+  "case" : "native-case-1.json",
+  "mode" : "already_before",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "before" ] ]
+  }
+}, {
+  "case" : "native-case-1.json",
+  "mode" : "dirty",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "ORACLE_DIRTY" ] ]
+  }
+}, {
+  "case" : "native-case-10.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ]
+  }
+}, {
+  "case" : "native-case-14.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ]
+  }
+}, {
+  "case" : "native-case-14.json",
+  "mode" : "already_before",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ]
+  }
+}, {
+  "case" : "native-case-14.json",
+  "mode" : "dirty",
+  "source_DML" : [ ],
+  "dirty_rejected" : true,
+  "error_type" : "org.apache.seata.rm.datasource.undo.SQLUndoDirtyException",
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "ORACLE_DIRTY" ] ]
+  }
+}, {
+  "case" : "native-case-15.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "DELETE FROM undo_business WHERE id = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ ]
+  }
+}, {
+  "case" : "native-case-15.json",
+  "mode" : "already_before",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ ]
+  }
+}, {
+  "case" : "native-case-15.json",
+  "mode" : "dirty",
+  "source_DML" : [ ],
+  "dirty_rejected" : true,
+  "error_type" : "org.apache.seata.rm.datasource.undo.SQLUndoDirtyException",
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "false" ] ]
+  }
+}, {
+  "case" : "native-case-16.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "UPDATE undo_work SET v = ? WHERE id = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "before" ] ]
+  }
+}, {
+  "case" : "native-case-17.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "INSERT INTO undo_work (v, id) VALUES (?, ?)",
+    "affected" : 1
+  }, {
+    "sql" : "DELETE FROM undo_work WHERE id = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "UPDATE undo_work SET v = ? WHERE id = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ [ "1", "before" ] ]
+  }
+}, {
+  "case" : "native-case-18.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "UPDATE undo_business SET b = ? WHERE id = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "2" ] ]
+  }
+}, {
+  "case" : "native-case-18.json",
+  "mode" : "already_before",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "2" ] ]
+  }
+}, {
+  "case" : "native-case-18.json",
+  "mode" : "dirty",
+  "source_DML" : [ ],
+  "dirty_rejected" : true,
+  "error_type" : "org.apache.seata.rm.datasource.undo.SQLUndoDirtyException",
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "0" ] ]
+  }
+}, {
+  "case" : "native-case-20.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "UPDATE undo_business SET v = ?, amount = ?, payload = ? WHERE a = ?  and z = ?  ",
+    "affected" : 1
+  }, {
+    "sql" : "UPDATE undo_business SET v = ?, amount = ?, payload = ? WHERE a = ?  and z = ?  ",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "x_y", "original", "123.000000000000000000000000000001", "binary:00ff" ], [ "2", "x", "<null>", "2.100000000000000000000000000000", "binary:0000" ], [ "2", "x_y", "keep", "3.000000000000000000000000000000", "<null>" ] ]
+  }
+}, {
+  "case" : "native-case-20.json",
+  "mode" : "already_before",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "x_y", "original", "123.000000000000000000000000000001", "binary:00ff" ], [ "2", "x", "<null>", "2.100000000000000000000000000000", "binary:0000" ], [ "2", "x_y", "keep", "3.000000000000000000000000000000", "<null>" ] ]
+  }
+}, {
+  "case" : "native-case-20.json",
+  "mode" : "dirty",
+  "source_DML" : [ ],
+  "dirty_rejected" : true,
+  "error_type" : "org.apache.seata.rm.datasource.undo.SQLUndoDirtyException",
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "x_y", "changed", "124.000000000000000000000000000001", "<null>" ], [ "2", "x", "ORACLE_DIRTY", "3.100000000000000000000000000000", "<null>" ], [ "2", "x_y", "keep", "3.000000000000000000000000000000", "<null>" ] ]
+  }
+}, {
+  "case" : "native-case-21.json",
+  "mode" : "matching_after",
+  "source_DML" : [ {
+    "sql" : "INSERT INTO undo_business (v, amount, payload, a, z) VALUES (?, ?, ?, ?, ?)",
+    "affected" : 1
+  }, {
+    "sql" : "INSERT INTO undo_business (v, amount, payload, a, z) VALUES (?, ?, ?, ?, ?)",
+    "affected" : 1
+  } ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "x_y", "original", "123.000000000000000000000000000001", "binary:00ff" ], [ "2", "x", "<null>", "2.100000000000000000000000000000", "binary:0000" ], [ "2", "x_y", "keep", "3.000000000000000000000000000000", "<null>" ] ]
+  }
+}, {
+  "case" : "native-case-21.json",
+  "mode" : "already_before",
+  "source_DML" : [ ],
+  "dirty_rejected" : false,
+  "error_type" : null,
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "1", "x_y", "original", "123.000000000000000000000000000001", "binary:00ff" ], [ "2", "x", "<null>", "2.100000000000000000000000000000", "binary:0000" ], [ "2", "x_y", "keep", "3.000000000000000000000000000000", "<null>" ] ]
+  }
+}, {
+  "case" : "native-case-21.json",
+  "mode" : "dirty",
+  "source_DML" : [ ],
+  "dirty_rejected" : true,
+  "error_type" : "org.apache.seata.rm.datasource.undo.SQLUndoDirtyException",
+  "status" : "MATCH",
+  "after" : {
+    "undo_work" : [ ],
+    "undo_business" : [ [ "2", "x", "ORACLE_DIRTY", "2.100000000000000000000000000000", "binary:0000" ], [ "2", "x_y", "keep", "3.000000000000000000000000000000", "<null>" ] ]
+  }
+} ]

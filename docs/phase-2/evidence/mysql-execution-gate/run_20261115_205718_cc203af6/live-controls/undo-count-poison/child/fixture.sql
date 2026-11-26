@@ -1,0 +1,86 @@
+-- Owned fixture only. at_md_79ec98af0608 is generated ASCII and never an application schema.
+SET NAMES utf8mb4;
+CREATE TABLE account (
+ b BIGINT NOT NULL, a BIGINT NOT NULL, amount DECIMAL(65,30) NOT NULL,
+ note VARCHAR(50) NULL, payload VARBINARY(32) NULL, unsigned_id BIGINT UNSIGNED NOT NULL,
+ PRIMARY KEY (a,b)
+) ENGINE=InnoDB;
+INSERT INTO account VALUES
+ (-9223372036854775808,1,12345678901234567890123456789012345.123456789012345678901234567890,'fixture',X'00ff7f00',18446744073709551615),
+ (9223372036854775807,2,-0.000000000000000000000000000001,NULL,NULL,9007199254740993);
+CREATE TABLE mdl_guard (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE drop_guard (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE deadline_guard (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE physical_types (
+ id BIGINT PRIMARY KEY,
+ s8 TINYINT NOT NULL, s16 SMALLINT NOT NULL, s24 MEDIUMINT NOT NULL, s32 INT NOT NULL,
+ u8 TINYINT UNSIGNED NOT NULL, u16 SMALLINT UNSIGNED NOT NULL,
+ u24 MEDIUMINT UNSIGNED NOT NULL, u32 INT UNSIGNED NOT NULL,
+ txt VARCHAR(1) CHARACTER SET utf8mb4 NOT NULL,
+ txt3 VARCHAR(2) CHARACTER SET utf8mb3 NOT NULL,
+ ascii_col VARCHAR(4) CHARACTER SET ascii NOT NULL,
+ fixed_text CHAR(3) CHARACTER SET utf8mb4 NOT NULL,
+ fixed_binary BINARY(4) NOT NULL, binary_col VARBINARY(4) NOT NULL,
+ unsigned_decimal DECIMAL(5,2) UNSIGNED NOT NULL,
+ text_lob TEXT CHARACTER SET utf8mb4 NOT NULL, blob_lob LONGBLOB NOT NULL,
+ nullable_col VARCHAR(5) NULL
+) ENGINE=InnoDB;
+INSERT INTO physical_types VALUES (1,-128,-32768,-8388608,-2147483648,255,65535,16777215,4294967295,
+ '🦀','中文','a','x',X'ff',X'00ff',999.99,'abcd',X'00ff7f80',NULL);
+CREATE TABLE image_bigfield (id INT PRIMARY KEY,payload LONGBLOB NULL) ENGINE=InnoDB;
+INSERT INTO image_bigfield VALUES (1,REPEAT('x',1048577));
+CREATE TABLE image_digit (id INT PRIMARY KEY) ENGINE=InnoDB;
+INSERT INTO image_digit VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9);
+CREATE TABLE image_bytebudget (id INT PRIMARY KEY,payload LONGBLOB NULL) ENGINE=InnoDB;
+INSERT INTO image_bytebudget SELECT id,REPEAT('x',1000000) FROM image_digit WHERE id<9;
+CREATE TABLE image_rowbudget (id INT PRIMARY KEY,payload LONGBLOB NULL) ENGINE=InnoDB;
+INSERT INTO image_rowbudget SELECT a.id+10*b.id+100*c.id+1000*d.id,NULL
+ FROM image_digit a CROSS JOIN image_digit b CROSS JOIN image_digit c CROSS JOIN image_digit d
+ WHERE a.id+10*b.id+100*c.id+1000*d.id<1025;
+CREATE TABLE image_lock_guard (id INT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB;
+INSERT INTO image_lock_guard VALUES (1,10);
+CREATE TABLE image_cancel (id INT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB;
+INSERT INTO image_cancel VALUES (1,10);
+CREATE TABLE image_composite_order (b INT NOT NULL,a INT NOT NULL,v INT NOT NULL,PRIMARY KEY(a,b)) ENGINE=InnoDB;
+INSERT INTO image_composite_order VALUES (1,2,20),(9,1,10),(0,2,21);
+CREATE TABLE image_inter_query (id INT PRIMARY KEY,payload LONGBLOB NOT NULL) ENGINE=InnoDB;
+INSERT INTO image_inter_query VALUES (1,X'78');
+CREATE TABLE execution_records (
+ b BIGINT NOT NULL,a BIGINT UNSIGNED NOT NULL,amount DECIMAL(65,30) NOT NULL,
+ note VARCHAR(50) NULL,payload VARBINARY(32) NULL,PRIMARY KEY(a,b)
+) ENGINE=InnoDB;
+CREATE TABLE execution_work (id INT PRIMARY KEY,v INT NOT NULL,note VARCHAR(50) NULL,payload LONGBLOB NULL) ENGINE=InnoDB;
+INSERT INTO execution_work VALUES (1,10,'old',X'78'),(2,20,'other',NULL);
+CREATE TABLE execution_budget (id INT PRIMARY KEY,payload LONGBLOB NULL) ENGINE=InnoDB;
+INSERT INTO execution_budget SELECT id,X'78' FROM image_digit WHERE id<9;
+CREATE TABLE execution_rounding (id INT PRIMARY KEY,note VARCHAR(50) NOT NULL) ENGINE=InnoDB;
+INSERT INTO execution_rounding VALUES(1,'old-one'),(3,'old-three');
+CREATE TABLE execution_mixed_keys (
+ tc CHAR(3) CHARACTER SET utf8mb4 NOT NULL,bk BINARY(4) NOT NULL,dk DECIMAL(5,2) NOT NULL,
+ note VARCHAR(50) NOT NULL,PRIMARY KEY(tc,bk,dk)
+) ENGINE=InnoDB;
+CREATE TABLE no_pk (id INT) ENGINE=InnoDB;
+CREATE TABLE non_transactional (id INT PRIMARY KEY) ENGINE=MyISAM;
+CREATE TABLE generated_col (id INT PRIMARY KEY, v INT GENERATED ALWAYS AS (id+1) STORED) ENGINE=InnoDB;
+CREATE TABLE auto_id (id INT PRIMARY KEY AUTO_INCREMENT) ENGINE=InnoDB;
+CREATE TABLE float_col (id INT PRIMARY KEY, v DOUBLE) ENGINE=InnoDB;
+CREATE TABLE invisible_col (id INT PRIMARY KEY, v INT INVISIBLE) ENGINE=InnoDB;
+CREATE TABLE with_trigger (id INT PRIMARY KEY, v INT) ENGINE=InnoDB;
+CREATE TABLE trigger_log (id INT) ENGINE=InnoDB;
+CREATE TRIGGER fixture_trigger AFTER INSERT ON with_trigger FOR EACH ROW INSERT INTO trigger_log VALUES (NEW.id);
+CREATE TABLE fk_parent (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE fk_child (id INT PRIMARY KEY, parent_id INT, FOREIGN KEY(parent_id) REFERENCES fk_parent(id)) ENGINE=InnoDB;
+CREATE TABLE `fk$dollar_parent` (id INT PRIMARY KEY) ENGINE=InnoDB;
+CREATE TABLE `fk$dollar_child` (id INT PRIMARY KEY,p INT,FOREIGN KEY(p) REFERENCES `fk$dollar_parent`(id)) ENGINE=InnoDB;
+CREATE VIEW account_view AS SELECT * FROM account;
+CREATE USER 'metadata_low'@'%' IDENTIFIED BY 'seata-mysql-fixture-only';
+GRANT SELECT,UPDATE ON `at_md_79ec98af0608`.* TO 'metadata_low'@'%';
+CREATE USER 'execution_no_temp'@'%' IDENTIFIED BY 'seata-mysql-fixture-only';
+GRANT SELECT,INSERT,UPDATE,DELETE,TRIGGER ON `at_md_79ec98af0608`.* TO 'execution_no_temp'@'%';
+GRANT PROCESS ON *.* TO 'execution_no_temp'@'%';
+CREATE USER 'metadata_scoped'@'%' IDENTIFIED BY 'seata-mysql-fixture-only';
+GRANT SELECT,UPDATE,TRIGGER ON `at_md_79ec98af0608`.* TO 'metadata_scoped'@'%';
+SET GLOBAL partial_revokes=ON;
+CREATE USER 'metadata_revoked'@'%' IDENTIFIED BY 'seata-mysql-fixture-only';
+GRANT SELECT,UPDATE,PROCESS,TRIGGER ON *.* TO 'metadata_revoked'@'%';
+REVOKE TRIGGER ON `at_md_79ec98af0608`.* FROM 'metadata_revoked'@'%';

@@ -1,0 +1,40 @@
+//! 自有容器测试的连接配置；缺少运行器环境必须失败。
+use seata_db_mysql::MySqlOptions;
+use sqlx::Connection;
+pub fn options(port: Option<u16>) -> MySqlOptions {
+    options_for_user(
+        port,
+        "root".into(),
+        std::env::var("SEATA_MYSQL_PASSWORD").unwrap(),
+    )
+}
+
+/// 参数为自有库端口和夹具用户凭据；返回保持原资源身份的连接配置。
+pub fn options_for_user(port: Option<u16>, user: String, password: String) -> MySqlOptions {
+    MySqlOptions::new(
+        "127.0.0.1".into(),
+        port.unwrap_or_else(|| std::env::var("SEATA_MYSQL_PORT").unwrap().parse().unwrap()),
+        user,
+        password,
+        std::env::var("SEATA_MYSQL_DATABASE").unwrap(),
+    )
+    .unwrap()
+    .with_insecure_loopback_tls()
+    .unwrap()
+}
+pub async fn admin() -> sqlx::MySqlConnection {
+    admin_at(std::env::var("SEATA_MYSQL_PORT").unwrap().parse().unwrap()).await
+}
+
+/// 连接自有 MySQL 夹具的指定回环端口，供独立观察者核对物理数据库。
+pub async fn admin_at(port: u16) -> sqlx::MySqlConnection {
+    let config = sqlx::mysql::MySqlConnectOptions::new()
+        .host("127.0.0.1")
+        .port(port)
+        .username("root")
+        .password(&std::env::var("SEATA_MYSQL_PASSWORD").unwrap())
+        .database(&std::env::var("SEATA_MYSQL_DATABASE").unwrap())
+        .charset("utf8mb4")
+        .ssl_mode(sqlx::mysql::MySqlSslMode::Disabled);
+    sqlx::MySqlConnection::connect_with(&config).await.unwrap()
+}

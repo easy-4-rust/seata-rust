@@ -1,0 +1,316 @@
+"""Verify an explicitly patched Go cohort against fresh authoritative Java bytes.
+
+Never changes the original reference export, original fixture corpus or upstream pins.
+"""
+import datetime
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import shutil
+import struct
+import subprocess
+import sys
+import tarfile
+import uuid
+import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/java-control-envelopes'))
+spec = importlib.util.spec_from_file_location('control_length_support', ROOT / 'tools/java-control-envelopes/run.py')
+c = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(c)
+h = c.h
+PATCH_DIR = ROOT / 'compatibility/seata-go/82570d905919c1c66bb025a3a5979f25390de498'
+PATCH = PATCH_DIR / '0001-java-v1-error-text-length.patch'
+SUITES = {**c.TESTS, 'GoErrorLengthCompatibilityTest': 24}
+NAMES = {family + '_' + suffix for family in ['Branch', 'Lock'] for suffix in [
+    'Empty', 'AsciiOne', 'Ascii127', 'Ascii128', 'Ascii255', 'Ascii256',
+    'Ascii32767', 'Ascii32768', 'Utf8Short', 'Utf8Boundary',
+]} | {'Branch_Success', 'Lock_SuccessFalse', 'Lock_SuccessTrue', 'Lock_FailedTrue'}
+
+
+def read_rows(log):
+    rows = [json.loads(line.split(b'SEATA_GO_LENGTH ', 1)[1].decode('ascii'))
+            for line in log.read_bytes().splitlines() if line.startswith(b'SEATA_GO_LENGTH ')]
+    if len(rows) != 24 or len({r['name'] for r in rows}) != 24 or {r['name'] for r in rows} != NAMES:
+        raise RuntimeError('Need all24 unique Java length cases')
+    for row in rows:
+        data = bytes.fromhex(row['serialized_hex'])
+        type_id = 14 if row['name'].startswith('Branch_') else 22
+        if len(data) < 4 or struct.unpack('>H', data[:2])[0] != type_id or row['type_id'] != type_id:
+            raise RuntimeError('Wrong Java length case type')
+        if data[2] != row['result_code'] or data[2] not in [0, 1]:
+            raise RuntimeError('Wrong result code')
+        offset = 3
+        if data[2] == 0:
+            length = struct.unpack('>h', data[offset:offset + 2])[0]
+            if length < 0:
+                raise RuntimeError('This cohort requires Java-decodable nonnegative text lengths')
+            offset += 2
+            message = data[offset:offset + length].decode('utf-8')
+            if message != (row['message'] or ''):
+                raise RuntimeError('Java text metadata differs from actual bytes')
+            offset += length
+        elif row['message'] is not None:
+            raise RuntimeError('Success text is not on the wire')
+        if data[offset] != row['error_code']:
+            raise RuntimeError('Java error field differs')
+        offset += 1
+        if type_id == 22:
+            if struct.unpack('>H', data[offset:offset + 2])[0] != int(row['lockable']):
+                raise RuntimeError('Java lockable differs')
+            offset += 2
+        if offset != len(data):
+            raise RuntimeError('Trailing/truncated Java result')
+    return rows
+
+
+def export(rows, directory):
+    directory.mkdir(parents=True, exist_ok=False)
+    h.write(directory / 'vectors.json', json.dumps(rows, ensure_ascii=True, indent=2) + '\n')
+    h.write(directory / 'vectors.tsv', ''.join(row['name'] + '\t' + row['serialized_hex'] + '\n' for row in rows))
+    for row in rows:
+        h.write(directory / (row['name'] + '.payload.bin'), bytes.fromhex(row['serialized_hex']))
+    h.write(directory / 'manifest.json', json.dumps(dict(
+        java_pin=h.PIN, go_pin='82570d905919c1c66bb025a3a5979f25390de498',
+        profile='Java authority; Go compatibility requires separately identified length patch candidate',
+        scope='24 Java-generated boundary cases; original Go is not compatible for21 failed cases',
+        files=[dict(path=p.name, sha256=h.sha(p)) for p in sorted(directory.iterdir())]
+    ), indent=2) + '\n')
+
+
+def run_command(args, work, env, log, timeout=180, expected=0):
+    with log.open('xb') as output:
+        result = subprocess.run([str(a) for a in args], cwd=work, env=env, stdout=output,
+                                stderr=subprocess.STDOUT, timeout=timeout, creationflags=h.FLAGS)
+    if expected is not None and result.returncode != expected:
+        raise RuntimeError('Command failed: ' + log.name + ' exit=' + str(result.returncode))
+    return result.returncode
+
+
+def snapshot_name(source):
+    # Short names avoid Windows MAX_PATH while the audit retains original paths.
+    return hashlib.sha256(source.relative_to(ROOT).as_posix().encode()).hexdigest()[:20] + '.bin'
+
+
+def audit_cohort(work, expected_changes, test_bytes):
+    if (work / 'pkg/protocol/codec/java_v1_length_compat_test.go').read_bytes() != test_bytes:
+        raise RuntimeError('Executed Go regression test drifted from frozen input')
+    rows = []
+    with tarfile.open(c.ARCHIVE) as archive:
+        for entry in archive:
+            relative = '/'.join(entry.name.split('/')[1:])
+            if not entry.isfile() or not (relative.endswith('.go') or relative in ['go.mod', 'go.sum']):
+                continue
+            original = archive.extractfile(entry).read()
+            current = (work / relative).read_bytes()
+            expected = expected_changes.get(relative)
+            if expected is None and current != original:
+                raise RuntimeError('Unexpected Go cohort drift: ' + relative)
+            if expected is not None and h.sha(work / relative) != expected:
+                raise RuntimeError('Wrong Go patched file: ' + relative)
+            rows.append(dict(path=relative, original_sha256=hashlib.sha256(original).hexdigest(), actual_sha256=h.sha(work / relative)))
+    if len(rows) != 714:
+        raise RuntimeError('Go cohort source closure changed')
+    return rows
+
+
+def run(extra_capture=None, rust_extra_env=None, extra_sources=()):
+    if ROOT.drive.upper() not in ['D:', 'E:']:
+        raise RuntimeError('Development is restricted to D:/E:')
+    if h.command(['git', '-C', c.ORACLE, 'rev-parse', 'HEAD']).stdout.decode().strip() != h.PIN:
+        raise RuntimeError('Java authority pin changed')
+    if h.sha(c.ORACLE / 'server/target/seata-server.jar') != h.JAR_HASH:
+        raise RuntimeError('Original Java JAR changed')
+    patch_bytes = PATCH.read_bytes()
+    patch_manifest_bytes = (PATCH_DIR / 'manifest.json').read_bytes()
+    patch_manifest = json.loads(patch_manifest_bytes)
+    if hashlib.sha256(patch_bytes).hexdigest() != patch_manifest['patch_sha256']:
+        raise RuntimeError('Patch manifest differs')
+    stamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:8]
+    out = ROOT / 'docs/phase-0/evidence/local-go-java-length-patch' / ('run_' + stamp)
+    out.mkdir(parents=True, exist_ok=False)
+    source_paths = list((ROOT / 'tools/java-tc-integration/rust-client/src').rglob('*.rs'))
+    source_paths += list((ROOT / 'tools/java-v1-golden').glob('*.java'))
+    source_paths += [Path(__file__), Path(c.__file__), ROOT / 'tools/java-control-envelopes/collect.py',
+                     Path(h.__file__), ROOT / 'tools/go-java-v1-length-patch/java_v1_length_compat_test.go', PATCH, PATCH_DIR / 'manifest.json']
+    source_paths += [ROOT / 'tools/go-golden-vectors' / name for name in ['main.go', 'expected.json', 'frames.json']]
+    source_paths += [ROOT / 'tools/go-failure-variants/expected.json']
+    source_paths += [ROOT / 'tools/java-tc-integration/rust-client' / name for name in ['Cargo.toml', 'Cargo.lock']]
+    source_paths += list(extra_sources)
+    frozen_sources = {source: source.read_bytes() for source in source_paths}
+    for source, frozen in frozen_sources.items():
+        target = out / 'source-inputs' / snapshot_name(source)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        h.write(target, frozen)
+    work = Path('D:/codex-builds') / ('seata-go-length-patch-' + stamp)
+    work.mkdir()
+    original_go_before = c.audit_go()
+    java_before = h.audit_build(c.ORACLE, c.BUILD)
+    overlays = []
+    inputs = out / 'overlay-inputs'
+    inputs.mkdir()
+    sources = c.BUILD / 'test-suite/test-new-version/src/test/java'
+    for source in sorted((ROOT / 'tools/java-v1-golden').glob('*.java')):
+        matches = list(sources.rglob(source.name))
+        if len(matches) != 1:
+            raise RuntimeError('Need one established overlay destination: ' + source.name)
+        copied = source.read_bytes()
+        matches[0].write_bytes(copied)
+        h.write(inputs / source.name, copied)
+        overlays.append((source, matches[0], copied))
+    reports = c.BUILD / 'test-suite/test-new-version/target/surefire-reports'
+    resources = c.BUILD / 'test-suite/test-new-version/src/test/resources'
+    resource_rows = []
+    for source_name, target_name in [('tools/go-golden-vectors/expected.json', 'seata-rust-payload-vectors.json'),
+                                     ('tools/go-failure-variants/expected.json', 'seata-rust-failure-variants.json')]:
+        source = ROOT / source_name
+        target = resources / target_name
+        target.write_bytes(frozen_sources[source])
+        resource_rows.append(dict(source=source_name, target=str(target), sha256=hashlib.sha256(frozen_sources[source]).hexdigest()))
+    for name in SUITES:
+        for old in reports.glob('TEST-*.' + name + '.xml'):
+            old.unlink()
+    class_file = c.BUILD / 'test-suite/test-new-version/target/test-classes/org/apache/seata/serializer/seata/GoErrorLengthCompatibilityTest.class'
+    if class_file.exists():
+        class_file.unlink()
+    run_command([h.MAVEN, '-B', '-ntp', '-s', h.SETTINGS, '-f', c.BUILD / 'pom.xml',
+                 '-pl', 'test-suite/test-new-version', '-am', '-Dtest=' + ','.join(SUITES),
+                 '-Dsurefire.failIfNoSpecifiedTests=false', '-Djava.io.tmpdir=D:/Temp', 'test'],
+                ROOT, h.ENV, out / 'java-tests.log', timeout=360)
+    report_out = out / 'reports'
+    report_out.mkdir()
+    for name, count in SUITES.items():
+        paths = list(reports.glob('TEST-*.' + name + '.xml'))
+        if len(paths) != 1:
+            raise RuntimeError('Missing fresh Java report: ' + name)
+        suite = ET.parse(paths[0]).getroot()
+        if int(suite.get('tests', '0')) != count or any(int(suite.get(k, '0')) for k in ['failures', 'errors', 'skipped']):
+            raise RuntimeError('Java report failed: ' + name)
+        h.write(report_out / paths[0].name, paths[0].read_bytes())
+    executed = out / 'overlay-executed'
+    executed.mkdir()
+    overlay_rows = []
+    for source, target, copied in overlays:
+        c.verify_input_unchanged(source, copied)
+        h.write(executed / source.name, target.read_bytes())
+        same = copied == target.read_bytes()
+        if source.name in ['GoErrorLengthCompatibilityTest.java', 'TransactionExceptionProfileTest.java'] and not same:
+            raise RuntimeError('Reconcile formatter output for new Java length test before certification')
+        overlay_rows.append(dict(source=source.relative_to(ROOT).as_posix(), input_sha256=hashlib.sha256(copied).hexdigest(),
+                                 executed_sha256=h.sha(target), byte_identical=same))
+    h.write(out / 'overlay-audit.json', json.dumps(overlay_rows, indent=2) + '\n')
+    for row in resource_rows:
+        if h.sha(Path(row['target'])) != row['sha256']:
+            raise RuntimeError('Java test resource changed during Maven')
+    h.write(out / 'java-resource-audit.json', json.dumps(resource_rows, indent=2) + '\n')
+    h.write(out / 'java-production-source-audit.json', json.dumps(dict(before=java_before, after=h.audit_build(c.ORACLE, c.BUILD)), indent=2) + '\n')
+    rows = read_rows(out / 'java-tests.log')
+    capture = out / 'capture'
+    export(rows, capture)
+    fixtures = ROOT / 'tests/fixtures/protocol/v1/error_lengths'
+    if not fixtures.exists():
+        export(rows, fixtures)
+    else:
+        for path in capture.iterdir():
+            if path.read_bytes() != (fixtures / path.name).read_bytes():
+                raise RuntimeError('Refusing error-length fixture overwrite: ' + path.name)
+    if extra_capture is not None:
+        extra_capture(out / 'java-tests.log', out)
+    with tarfile.open(c.ARCHIVE) as archive:
+        for entry in archive:
+            relative = '/'.join(entry.name.split('/')[1:])
+            if not relative:
+                continue
+            target = (work / relative).resolve()
+            if not target.is_relative_to(work.resolve()):
+                raise RuntimeError('Archive path escapes owned work directory')
+            if entry.isdir():
+                target.mkdir(parents=True, exist_ok=True)
+            else:
+                if not entry.isfile():
+                    raise RuntimeError('Unsupported archive entry')
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(archive.extractfile(entry).read())
+    test_source = ROOT / 'tools/go-java-v1-length-patch/java_v1_length_compat_test.go'
+    test_bytes = test_source.read_bytes()
+    (work / 'pkg/protocol/codec/java_v1_length_compat_test.go').write_bytes(test_bytes)
+    h.write(out / 'go-test-executed.go', test_bytes)
+    original_cohort = audit_cohort(work, {}, test_bytes)
+    env = c.GO_ENV.copy()
+    env['SEATA_JAVA_LENGTH_VECTORS'] = str(capture / 'vectors.json')
+    red_exit = run_command(['go', 'test', './pkg/protocol/codec', '-run', '^TestJavaV1ErrorLength$', '-count=1', '-json'],
+                           work, env, out / 'go-original-red.jsonl', expected=None)
+    red_records = [json.loads(line) for line in (out / 'go-original-red.jsonl').read_bytes().splitlines() if line.startswith(b'{')]
+    failed = [row['Test'] for row in red_records if row.get('Action') == 'fail' and '/' in row.get('Test', '')]
+    passed = [row['Test'] for row in red_records if row.get('Action') == 'pass' and '/' in row.get('Test', '')]
+    success_names = {'Branch_Success', 'Lock_SuccessFalse', 'Lock_SuccessTrue'}
+    expected_passes = {'TestJavaV1ErrorLength/' + name for name in success_names}
+    expected_failures = {'TestJavaV1ErrorLength/' + name for name in NAMES - success_names}
+    if red_exit != 1 or len(failed) != 21 or len(passed) != 3 or set(failed) != expected_failures or set(passed) != expected_passes or b'Java encode mismatch' not in (out / 'go-original-red.jsonl').read_bytes():
+        raise RuntimeError('Original Go did not reproduce exact21 failures/three controls')
+    audit_cohort(work, {}, test_bytes)
+    owned_patch = out / 'candidate.patch'
+    h.write(owned_patch, patch_bytes)
+    h.write(out / 'patch-manifest.json', patch_manifest_bytes)
+    # Git for Windows may default to autocrlf=true; per-command overrides keep
+    # exact patch hashes reproducible without changing user/global configuration.
+    git = ['git', '-c', 'core.autocrlf=false', '-c', 'core.safecrlf=false']
+    run_command(git + ['apply', '--check', owned_patch], work, h.ENV, out / 'patch-check.log')
+    run_command(git + ['apply', owned_patch], work, h.ENV, out / 'patch-apply.log')
+    changes = {row['path']: row['patched_sha256'] for row in patch_manifest['files']}
+    patched_before = audit_cohort(work, changes, test_bytes)
+    run_command(['go', 'test', './pkg/protocol/codec', './pkg/util/bytes', './pkg/util/errors', '-count=1', '-json'], work, env, out / 'go-patched-tests.jsonl')
+    green_records = [json.loads(line) for line in (out / 'go-patched-tests.jsonl').read_bytes().splitlines() if line.startswith(b'{')]
+    green_cases = [r for r in green_records if r.get('Action') == 'pass' and r.get('Test', '').startswith('TestJavaV1ErrorLength/')]
+    if len(green_cases) != 24 or {r['Test'] for r in green_cases} != expected_passes | expected_failures or any(r.get('Action') == 'fail' for r in green_records):
+        raise RuntimeError('Patched Go suite did not pass all24 Java cases')
+    harness = work / 'tools/seata-rust-golden'
+    harness.mkdir(parents=True)
+    for name in ['main.go', 'expected.json', 'frames.json']:
+        shutil.copyfile(ROOT / 'tools/go-golden-vectors' / name, harness / name)
+    run_command(['go', 'run', '.'], harness, env, out / 'go-original29-sixframes.log')
+    if b'Go codec + V1 frame fixture verification passed: 29 payloads, 6 frames' not in (out / 'go-original29-sixframes.log').read_bytes():
+        raise RuntimeError('Original Go corpus inventory missing')
+    patched_after = audit_cohort(work, changes, test_bytes)
+    original_go_after = c.audit_go()
+    if patched_before != patched_after or original_go_before != original_go_after:
+        raise RuntimeError('Go source closure changed during test')
+    if PATCH.read_bytes() != patch_bytes or (PATCH_DIR / 'manifest.json').read_bytes() != patch_manifest_bytes or test_source.read_bytes() != test_bytes:
+        raise RuntimeError('Patch/test input changed during validation')
+    h.write(out / 'go-source-audit.json', json.dumps(dict(original_before=original_go_before, original_after=original_go_after,
+        cohort_original=original_cohort, patched_before=patched_before, patched_after=patched_after), indent=2) + '\n')
+    rust_env = h.ENV.copy()
+    rust_env['SEATA_IT_ERROR_LENGTH_DIR'] = str(capture)
+    rust_env.update(rust_extra_env or {})
+    for label, command in [('rust-tests', ['cargo', 'test']), ('rust-clippy', ['cargo', 'clippy']), ('rust-fmt', ['cargo', 'fmt'])]:
+        command += ['--manifest-path', str(ROOT / 'tools/java-tc-integration/rust-client/Cargo.toml')]
+        if label == 'rust-clippy':
+            command += ['--all-targets', '--', '-D', 'warnings']
+        if label == 'rust-fmt':
+            command += ['--', '--check']
+        run_command(command, ROOT, rust_env, out / (label + '.log'))
+    if b'test result: ok. 116 passed; 0 failed;' not in (out / 'rust-tests.log').read_bytes():
+        raise RuntimeError('Rust116 inventory differs')
+    for source, frozen in frozen_sources.items():
+        if source.read_bytes() != frozen:
+            raise RuntimeError('Validation source changed during execution: ' + str(source))
+    h.write(out / 'source-input-audit.json', json.dumps([dict(path=source.relative_to(ROOT).as_posix(), snapshot='source-inputs/' + snapshot_name(source), sha256=hashlib.sha256(frozen).hexdigest())
+        for source, frozen in sorted(frozen_sources.items())], indent=2) + '\n')
+    summary = dict(succeeded=True, executed_at=datetime.datetime.now().astimezone().isoformat(),
+        java_selected_tests=sum(SUITES.values()), java_length_cases=24, rust_tests=116,
+        original_go_failed_cases=21, original_go_success_controls=3, patched_go_java_cases=24,
+        go_codec_bytes_test_functions=sum(r.get('Action') == 'pass' and bool(r.get('Test')) and '/' not in r['Test'] for r in green_records),
+        java_pin=h.PIN, go_pin='82570d905919c1c66bb025a3a5979f25390de498', patch_sha256=hashlib.sha256(patch_bytes).hexdigest(),
+        original_jar_sha256=h.sha(c.ORACLE / 'server/target/seata-server.jar'), cohort=str(work),
+        scope='Explicit Go patch candidate, not upstream fix. Valid signed-short text and verified ASCII truncation only; original baseline remains incompatible. Error ordinals/merge/oversized Unicode/production Rust remain separate.')
+    h.write(out / 'summary.json', json.dumps(summary, indent=2) + '\n')
+    (out.parent / 'latest_run.json').write_text(json.dumps(dict(succeeded=True, evidence_directory=str(out)), indent=2) + '\n', encoding='utf-8')
+    print(json.dumps(summary))
+    return out, summary
+
+
+if __name__ == '__main__':
+    run()

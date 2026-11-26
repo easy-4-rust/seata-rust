@@ -1,0 +1,28 @@
+    Checking seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+    Checking seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+error: use of `format!` to build up a string from an iterator
+  --> crates\seata_test\tests\table_primary_set.rs:21:5
+   |
+21 | /     text.as_utf16()
+22 | |         .iter()
+23 | |         .map(|unit| format!("{unit:04x}"))
+24 | |         .collect()
+   | |__________________^
+   |
+help: call `fold` instead
+  --> crates\seata_test\tests\table_primary_set.rs:23:10
+   |
+23 |         .map(|unit| format!("{unit:04x}"))
+   |          ^^^
+help: ... and use the `write!` macro here
+  --> crates\seata_test\tests\table_primary_set.rs:23:21
+   |
+23 |         .map(|unit| format!("{unit:04x}"))
+   |                     ^^^^^^^^^^^^^^^^^^^^^
+   = note: this can be written more efficiently by appending to a `String` directly
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#format_collect
+   = note: `-D clippy::format-collect` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_collect)]`
+
+error: could not compile `seata-test` (test "table_primary_set") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

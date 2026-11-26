@@ -1,0 +1,96 @@
+   Compiling bigdecimal v0.4.10
+   Compiling num-integer v0.1.47
+   Compiling num-bigint v0.4.8
+   Compiling num-iter v0.1.46
+   Compiling num-bigint-dig v0.8.6
+   Compiling rsa v0.9.10
+   Compiling sqlx-core v0.8.6
+   Compiling sqlx-mysql v0.8.6
+   Compiling sqlx v0.8.6
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:17:20
+   |
+17 |     let records=tx.before_image(&sql,&[FieldValue::Text("not-executed".into()),FieldValue::Signed(1)]).await.unwrap();
+   |                    ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:39:20
+   |
+39 |     let records=tx.before_image(&sql,&[FieldValue::Unsigned(u64::MAX),FieldValue::Decimal(DecimalValue::new("12345678901234567890123...
+   |                    ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:42:20
+   |
+42 |     let records=tx.before_image(&numeric,&[FieldValue::Decimal(DecimalValue::new("2").unwrap()),FieldValue::Decimal(DecimalValue::ne...
+   |                    ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:50:110
+   |
+50 | ...HERE id=?").unwrap();let records=tx.before_image(&sql,&[FieldValue::Signed(1)]).await.unwrap();
+   |                                        ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:64:107
+   |
+64 | ... a=?").unwrap();assert!(matches!(tx.before_image(&sql,&[]).await,Err(DbError::Input{..})));
+   |                                        ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no variant named `Input` found for enum `DbError`
+  --> crates\seata_db_mysql\tests\live_row_images.rs:64:149
+   |
+64 | ...(tx.before_image(&sql,&[]).await,Err(DbError::Input{..})));
+   |                                                  ^^^^^ variant not found in `DbError`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:65:20
+   |
+65 |     let records=tx.before_image(&sql,&[FieldValue::Signed(999)]).await.unwrap();assert!(records.rows().is_empty());assert_eq!(record...
+   |                    ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:75:29
+   |
+75 | ...   assert!(matches!(tx.before_image(&sql,&[]).await,Err(DbError::Image(ImageError::Budget{..}))),"expected preflight budget for {...
+   |                           ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no variant, associated function, or constant named `Image` found for enum `DbError` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:75:71
+   |
+75 | ...&sql,&[]).await,Err(DbError::Image(ImageError::Budget{..}))),"expected preflight budget for {table}");
+   |                                 ^^^^^ variant, associated function, or constant not found in `DbError`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:87:110
+   |
+87 | ... WHERE id=?").unwrap();let image=tx.before_image(&sql,&[FieldValue::Signed(1)]).await.unwrap();assert_eq!(image.rows().len(),1);
+   |                                        ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+  --> crates\seata_db_mysql\tests\live_row_images.rs:98:153
+   |
+98 | ...Signed(1)];let mut read=Box::pin(tx.before_image(&sql,&params));
+   |                                        ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+   --> crates\seata_db_mysql\tests\live_row_images.rs:111:63
+    |
+111 |     let result=tokio::time::timeout(Duration::from_secs(4),tx.before_image(&sql,&[FieldValue::Signed(1)])).await.expect("inner clie...
+    |                                                               ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+   --> crates\seata_db_mysql\tests\live_row_images.rs:119:117
+    |
+119 | ...?,?)").unwrap();assert!(matches!(tx.before_image(&insert,&[FieldValue::Signed(1),FieldValue::Signed(2)]).await,Err(DbError::Unsu...
+    |                                        ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+error[E0599]: no method named `before_image` found for struct `MySqlLocalTransaction` in the current scope
+   --> crates\seata_db_mysql\tests\live_row_images.rs:121:113
+    |
+121 | ... b=?").unwrap();assert!(matches!(tx.before_image(&update,&[FieldValue::Signed(99),FieldValue::Signed(i64::MIN)]).await,Err(DbErr...
+    |                                        ^^^^^^^^^^^^ method not found in `MySqlLocalTransaction`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "live_row_images") due to 14 previous errors

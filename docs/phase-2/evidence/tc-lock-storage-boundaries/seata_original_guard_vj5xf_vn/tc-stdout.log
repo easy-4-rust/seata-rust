@@ -1,0 +1,285 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+14:04:29.931  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+14:04:29.986  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+14:04:30.008  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 45792 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\seata_original_guard_vj5xf_vn)
+14:04:30.008  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+14:04:30.910  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+14:04:30.931  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+14:04:31.161  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 1.939 seconds (process running for 3.082)
+14:04:31.520  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+14:04:31.732  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+14:04:31.884  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 63965
+14:04:31.894  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/seata_original_guard_vj5xf_vn/logs.
+14:04:31.894  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 726 millSeconds
+14:04:41.393  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0xe6c10651, L:/127.0.0.1:63965 - R:/127.0.0.1:53074],client version:1.1.0
+14:04:41.395  INFO --- [ttyServerNIOWorker_1_1_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0xcda3deaf, L:/127.0.0.1:63965 - R:/127.0.0.1:53075],client version:1.1.0,client protocol-version:null
+14:04:41.429  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.445  INFO --- [rverHandlerThread_1_2_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005569] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005569
+14:04:41.445  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005569', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.472  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005569', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='storage_text:ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.495  INFO --- [rverHandlerThread_1_3_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:63965:4045078480545005569] : Register branch successfully, xid = 198.18.0.1:63965:4045078480545005569, branchId = 4045078480545005571, resourceId = jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries ,lockKeys = storage_text:ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€
+14:04:41.496  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045078480545005571, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.696  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.702  INFO --- [rverHandlerThread_1_4_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005572] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005572
+14:04:41.703  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005572', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.724  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005572', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='storage_text:ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.731 ERROR --- [rverHandlerThread_1_5_500] [ption.AbstractExceptionHandler] [eptionHandleTemplate]  [198.18.0.1:63965:4045078480545005572] : Catch TransactionException while do RPC, request: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005572', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='storage_text:ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€ðŸ¦€', applicationData='null'}
+==> 
+org.apache.seata.core.exception.TransactionException: branch register request failed. xid=198.18.0.1:63965:4045078480545005572, msg=Data truncation: Data too long for column 'pk' at row 1
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:212)
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:203)
+	at org.apache.seata.core.exception.AbstractExceptionHandler.exceptionHandleTemplate(AbstractExceptionHandler.java:128)
+	at org.apache.seata.server.AbstractTCInboundHandler.handle(AbstractTCInboundHandler.java:202)
+	at org.apache.seata.core.protocol.transaction.BranchRegisterRequest.handle(BranchRegisterRequest.java:136)
+	at org.apache.seata.server.limit.AbstractTransactionRequestHandler.next(AbstractTransactionRequestHandler.java:44)
+	at org.apache.seata.server.limit.ratelimit.RateLimiterHandler.handle(RateLimiterHandler.java:75)
+	at org.apache.seata.server.limit.LimitRequestDecorator.handle(LimitRequestDecorator.java:44)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.onRequest(DefaultCoordinator.java:806)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.onRequestMessage(ServerOnRequestProcessor.java:216)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.process(ServerOnRequestProcessor.java:126)
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemoting.lambda$processMessage$2(AbstractNettyRemoting.java:315)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.apache.seata.common.exception.StoreException: Data truncation: Data too long for column 'pk' at row 1
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.doAcquireLock(LockStoreDataBaseDAO.java:363)
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.acquireLock(LockStoreDataBaseDAO.java:190)
+	at org.apache.seata.server.storage.db.lock.DataBaseLocker.acquireLock(DataBaseLocker.java:64)
+	at org.apache.seata.server.lock.AbstractLockManager.acquireLock(AbstractLockManager.java:67)
+	at org.apache.seata.server.session.BranchSession.lock(BranchSession.java:301)
+	at org.apache.seata.server.transaction.at.ATCore.branchSessionLock(ATCore.java:78)
+	at org.apache.seata.server.coordinator.AbstractCore.lambda$branchRegister$0(AbstractCore.java:110)
+	at org.apache.seata.server.storage.db.session.DataBaseSessionManager.lockAndExecute(DataBaseSessionManager.java:162)
+	at org.apache.seata.server.session.SessionHolder.lockAndExecute(SessionHolder.java:397)
+	at org.apache.seata.server.coordinator.AbstractCore.branchRegister(AbstractCore.java:105)
+	at org.apache.seata.server.coordinator.DefaultCore.branchRegister(DefaultCore.java:113)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.doBranchRegister(DefaultCoordinator.java:373)
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:208)
+	... 15 common frames omitted
+Caused by: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'pk' at row 1
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:104)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeUpdate(DruidPooledPreparedStatement.java:241)
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.doAcquireLock(LockStoreDataBaseDAO.java:358)
+	... 27 common frames omitted
+ <==
+14:04:41.733  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=0, resultCode=Failed, msg='TransactionException[branch register request failed. xid=198.18.0.1:63965:4045078480545005572, msg=Data truncation: Data too long for column 'pk' at row 1]'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.866  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.872  INFO --- [rverHandlerThread_1_6_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005577] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005577
+14:04:41.872  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005577', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.895  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005577', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='tttttttttttttttttttttttttttttttt:table', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:41.910  INFO --- [rverHandlerThread_1_7_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:63965:4045078480545005577] : Register branch successfully, xid = 198.18.0.1:63965:4045078480545005577, branchId = 4045078480545005579, resourceId = jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries ,lockKeys = tttttttttttttttttttttttttttttttt:table
+14:04:41.910  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045078480545005579, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.066  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.071  INFO --- [rverHandlerThread_1_8_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005580] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005580
+14:04:42.072  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005580', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.094  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005580', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='ttttttttttttttttttttttttttttttttt:table', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.096 ERROR --- [rverHandlerThread_1_9_500] [ption.AbstractExceptionHandler] [eptionHandleTemplate]  [198.18.0.1:63965:4045078480545005580] : Catch TransactionException while do RPC, request: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005580', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='ttttttttttttttttttttttttttttttttt:table', applicationData='null'}
+==> 
+org.apache.seata.core.exception.TransactionException: branch register request failed. xid=198.18.0.1:63965:4045078480545005580, msg=Data truncation: Data too long for column 'table_name' at row 1
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:212)
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:203)
+	at org.apache.seata.core.exception.AbstractExceptionHandler.exceptionHandleTemplate(AbstractExceptionHandler.java:128)
+	at org.apache.seata.server.AbstractTCInboundHandler.handle(AbstractTCInboundHandler.java:202)
+	at org.apache.seata.core.protocol.transaction.BranchRegisterRequest.handle(BranchRegisterRequest.java:136)
+	at org.apache.seata.server.limit.AbstractTransactionRequestHandler.next(AbstractTransactionRequestHandler.java:44)
+	at org.apache.seata.server.limit.ratelimit.RateLimiterHandler.handle(RateLimiterHandler.java:75)
+	at org.apache.seata.server.limit.LimitRequestDecorator.handle(LimitRequestDecorator.java:44)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.onRequest(DefaultCoordinator.java:806)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.onRequestMessage(ServerOnRequestProcessor.java:216)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.process(ServerOnRequestProcessor.java:126)
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemoting.lambda$processMessage$2(AbstractNettyRemoting.java:315)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.apache.seata.common.exception.StoreException: Data truncation: Data too long for column 'table_name' at row 1
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.doAcquireLock(LockStoreDataBaseDAO.java:363)
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.acquireLock(LockStoreDataBaseDAO.java:190)
+	at org.apache.seata.server.storage.db.lock.DataBaseLocker.acquireLock(DataBaseLocker.java:64)
+	at org.apache.seata.server.lock.AbstractLockManager.acquireLock(AbstractLockManager.java:67)
+	at org.apache.seata.server.session.BranchSession.lock(BranchSession.java:301)
+	at org.apache.seata.server.transaction.at.ATCore.branchSessionLock(ATCore.java:78)
+	at org.apache.seata.server.coordinator.AbstractCore.lambda$branchRegister$0(AbstractCore.java:110)
+	at org.apache.seata.server.storage.db.session.DataBaseSessionManager.lockAndExecute(DataBaseSessionManager.java:162)
+	at org.apache.seata.server.session.SessionHolder.lockAndExecute(SessionHolder.java:397)
+	at org.apache.seata.server.coordinator.AbstractCore.branchRegister(AbstractCore.java:105)
+	at org.apache.seata.server.coordinator.DefaultCore.branchRegister(DefaultCore.java:113)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.doBranchRegister(DefaultCoordinator.java:373)
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:208)
+	... 15 common frames omitted
+Caused by: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'table_name' at row 1
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:104)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeUpdate(DruidPooledPreparedStatement.java:241)
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.doAcquireLock(LockStoreDataBaseDAO.java:358)
+	... 27 common frames omitted
+ <==
+14:04:42.100  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=0, resultCode=Failed, msg='TransactionException[branch register request failed. xid=198.18.0.1:63965:4045078480545005580, msg=Data truncation: Data too long for column 'table_name' at row 1]'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.250  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.255  INFO --- [verHandlerThread_1_10_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005583] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005583
+14:04:42.256  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005583', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.277  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005583', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='tttttttttttttttttttttttttttttttt:rrrrrrrrrrrrrrrrrrrrrrrrr', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.290  INFO --- [verHandlerThread_1_11_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:63965:4045078480545005583] : Register branch successfully, xid = 198.18.0.1:63965:4045078480545005583, branchId = 4045078480545005585, resourceId = jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries ,lockKeys = tttttttttttttttttttttttttttttttt:rrrrrrrrrrrrrrrrrrrrrrrrr
+14:04:42.290  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045078480545005585, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.449  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.455  INFO --- [verHandlerThread_1_12_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005586] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005586
+14:04:42.455  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005586', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.477  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005586', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='tttttttttttttttttttttttttttttttt:rrrrrrrrrrrrrrrrrrrrrrrrrr', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.479 ERROR --- [verHandlerThread_1_13_500] [ption.AbstractExceptionHandler] [eptionHandleTemplate]  [198.18.0.1:63965:4045078480545005586] : Catch TransactionException while do RPC, request: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005586', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='tttttttttttttttttttttttttttttttt:rrrrrrrrrrrrrrrrrrrrrrrrrr', applicationData='null'}
+==> 
+org.apache.seata.core.exception.TransactionException: branch register request failed. xid=198.18.0.1:63965:4045078480545005586, msg=Data truncation: Data too long for column 'row_key' at row 1
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:212)
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:203)
+	at org.apache.seata.core.exception.AbstractExceptionHandler.exceptionHandleTemplate(AbstractExceptionHandler.java:128)
+	at org.apache.seata.server.AbstractTCInboundHandler.handle(AbstractTCInboundHandler.java:202)
+	at org.apache.seata.core.protocol.transaction.BranchRegisterRequest.handle(BranchRegisterRequest.java:136)
+	at org.apache.seata.server.limit.AbstractTransactionRequestHandler.next(AbstractTransactionRequestHandler.java:44)
+	at org.apache.seata.server.limit.ratelimit.RateLimiterHandler.handle(RateLimiterHandler.java:75)
+	at org.apache.seata.server.limit.LimitRequestDecorator.handle(LimitRequestDecorator.java:44)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.onRequest(DefaultCoordinator.java:806)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.onRequestMessage(ServerOnRequestProcessor.java:216)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.process(ServerOnRequestProcessor.java:126)
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemoting.lambda$processMessage$2(AbstractNettyRemoting.java:315)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.apache.seata.common.exception.StoreException: Data truncation: Data too long for column 'row_key' at row 1
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.doAcquireLock(LockStoreDataBaseDAO.java:363)
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.acquireLock(LockStoreDataBaseDAO.java:190)
+	at org.apache.seata.server.storage.db.lock.DataBaseLocker.acquireLock(DataBaseLocker.java:64)
+	at org.apache.seata.server.lock.AbstractLockManager.acquireLock(AbstractLockManager.java:67)
+	at org.apache.seata.server.session.BranchSession.lock(BranchSession.java:301)
+	at org.apache.seata.server.transaction.at.ATCore.branchSessionLock(ATCore.java:78)
+	at org.apache.seata.server.coordinator.AbstractCore.lambda$branchRegister$0(AbstractCore.java:110)
+	at org.apache.seata.server.storage.db.session.DataBaseSessionManager.lockAndExecute(DataBaseSessionManager.java:162)
+	at org.apache.seata.server.session.SessionHolder.lockAndExecute(SessionHolder.java:397)
+	at org.apache.seata.server.coordinator.AbstractCore.branchRegister(AbstractCore.java:105)
+	at org.apache.seata.server.coordinator.DefaultCore.branchRegister(DefaultCore.java:113)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.doBranchRegister(DefaultCoordinator.java:373)
+	at org.apache.seata.server.AbstractTCInboundHandler$4.execute(AbstractTCInboundHandler.java:208)
+	... 15 common frames omitted
+Caused by: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'row_key' at row 1
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:104)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeUpdate(DruidPooledPreparedStatement.java:241)
+	at org.apache.seata.server.storage.db.lock.LockStoreDataBaseDAO.doAcquireLock(LockStoreDataBaseDAO.java:358)
+	... 27 common frames omitted
+ <==
+14:04:42.482  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=0, resultCode=Failed, msg='TransactionException[branch register request failed. xid=198.18.0.1:63965:4045078480545005586, msg=Data truncation: Data too long for column 'row_key' at row 1]'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.603  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.607  INFO --- [verHandlerThread_1_14_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005589] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005589
+14:04:42.609  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005589', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.629  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005589', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='storage_text:Cafe', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.643  INFO --- [verHandlerThread_1_15_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:63965:4045078480545005589] : Register branch successfully, xid = 198.18.0.1:63965:4045078480545005589, branchId = 4045078480545005591, resourceId = jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries ,lockKeys = storage_text:Cafe
+14:04:42.644  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045078480545005591, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.818  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-lock-storage', timeout=90000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.823  INFO --- [verHandlerThread_1_16_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:63965:4045078480545005599] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-lock-storage,timeout:90000,xid:198.18.0.1:63965:4045078480545005599
+14:04:42.823  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:63965:4045078480545005599', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.829  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:63965:4045078480545005599', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='storage_text:cafÃ©', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.829  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=false, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.847  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005599', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='storage_text:cafÃ©', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.849  INFO --- [verHandlerThread_1_18_500] [e.db.lock.LockStoreDataBaseDAO] [         acquireLock]  [198.18.0.1:63965:4045078480545005599] : Global lock on [storage_text:Cafe] is holding by xid 198.18.0.1:63965:4045078480545005589 branchId 4045078480545005591
+14:04:42.850 ERROR --- [verHandlerThread_1_18_500] [ption.AbstractExceptionHandler] [eptionHandleTemplate]  [198.18.0.1:63965:4045078480545005599] : this request cannot acquire global lock, you can let Seata retry by setting config [client.rm.lock.retryPolicyBranchRollbackOnConflict] = false or manually retry by yourself. request: BranchRegisterRequest{xid='198.18.0.1:63965:4045078480545005599', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:63964/undo_3266acd3ed47_storage_boundaries', lockKey='storage_text:cafÃ©', applicationData='null'}
+14:04:42.853  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=0, resultCode=Failed, msg='TransactionException[Global lock acquire failed xid = 198.18.0.1:63965:4045078480545005599 branchId = 4045078480545005601]'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:42.972  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.065  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='198.18.0.1:63965:4045078480545005569', branchId=4045078480545005571, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.077  INFO --- [verHandlerThread_1_19_500] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [198.18.0.1:63965:4045078480545005569] : Rollback branch transaction successfully, xid = 198.18.0.1:63965:4045078480545005569 branchId = 4045078480545005571
+14:04:43.077  INFO --- [verHandlerThread_1_19_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005569] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005569.
+14:04:43.077  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.083  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005572', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.086  INFO --- [verHandlerThread_1_20_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005572] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005572.
+14:04:43.088  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.088  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005577', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.178  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='198.18.0.1:63965:4045078480545005577', branchId=4045078480545005579, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.191  INFO --- [verHandlerThread_1_21_500] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [198.18.0.1:63965:4045078480545005577] : Rollback branch transaction successfully, xid = 198.18.0.1:63965:4045078480545005577 branchId = 4045078480545005579
+14:04:43.191  INFO --- [verHandlerThread_1_21_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005577] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005577.
+14:04:43.191  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.198  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005580', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.202  INFO --- [verHandlerThread_1_22_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005580] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005580.
+14:04:43.203  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.203  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005583', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.291  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='198.18.0.1:63965:4045078480545005583', branchId=4045078480545005585, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.301  INFO --- [verHandlerThread_1_23_500] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [198.18.0.1:63965:4045078480545005583] : Rollback branch transaction successfully, xid = 198.18.0.1:63965:4045078480545005583 branchId = 4045078480545005585
+14:04:43.302  INFO --- [verHandlerThread_1_23_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005583] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005583.
+14:04:43.302  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.308  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005586', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.309  INFO --- [verHandlerThread_1_24_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005586] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005586.
+14:04:43.313  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.313  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005589', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.398  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='198.18.0.1:63965:4045078480545005589', branchId=4045078480545005591, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.408  INFO --- [verHandlerThread_1_25_500] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [198.18.0.1:63965:4045078480545005589] : Rollback branch transaction successfully, xid = 198.18.0.1:63965:4045078480545005589 branchId = 4045078480545005591
+14:04:43.408  INFO --- [verHandlerThread_1_25_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005589] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005589.
+14:04:43.408  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.414  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:63965:4045078480545005599', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.416  INFO --- [verHandlerThread_1_26_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005599] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005599.
+14:04:43.420  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.420  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.425  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.478  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.484  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.539  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.545  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.602  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.607  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.664  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.669  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.724  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.730  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.786  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.792  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.847  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.853  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.909  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.915  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacking, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.953  INFO --- [nPool.commonPool-worker-4] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005577] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005577.
+14:04:43.953  INFO --- [nPool.commonPool-worker-2] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005589] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005589.
+14:04:43.960  INFO --- [nPool.commonPool-worker-5] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005572] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005572.
+14:04:43.960  INFO --- [nPool.commonPool-worker-3] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005599] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005599.
+14:04:43.966  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005586] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005586.
+14:04:43.967  INFO --- [nPool.commonPool-worker-1] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005583] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005583.
+14:04:43.967  INFO --- [nPool.commonPool-worker-7] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005569] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005569.
+14:04:43.967  INFO --- [nPool.commonPool-worker-6] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:63965:4045078480545005580] : Rollback global transaction successfully, xid = 198.18.0.1:63965:4045078480545005580.
+14:04:43.970  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005569', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.975  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.975  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005572', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.975  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.975  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005577', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.975  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.975  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005580', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005583', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005586', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005589', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:63965:4045078480545005599', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.981  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+14:04:43.986  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:53075 to server channel inactive.
+14:04:43.986  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:53074 to server channel inactive.
+14:04:43.986  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xcda3deaf, L:/127.0.0.1:63965 ! R:/127.0.0.1:53075]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:53075', channel=[id: 0xcda3deaf, L:/127.0.0.1:63965 ! R:/127.0.0.1:53075], resourceSets=null}
+14:04:43.986  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xe6c10651, L:/127.0.0.1:63965 ! R:/127.0.0.1:53074]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:53074', channel=[id: 0xe6c10651, L:/127.0.0.1:63965 ! R:/127.0.0.1:53074], resourceSets=[]}

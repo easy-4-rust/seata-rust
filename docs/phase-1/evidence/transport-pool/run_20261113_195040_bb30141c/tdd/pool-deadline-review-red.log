@@ -1,0 +1,22 @@
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.83s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-production\debug\deps\seata_transport-3d2e911176bbab8d.exe)
+
+running 1 test
+test netty::pending_requests::tests::synchronous_pending_lock_wait_is_included_in_request_deadline ... FAILED
+
+failures:
+
+---- netty::pending_requests::tests::synchronous_pending_lock_wait_is_included_in_request_deadline stdout ----
+
+thread 'netty::pending_requests::tests::synchronous_pending_lock_wait_is_included_in_request_deadline' (68716) panicked at crates\seata_transport\src\netty\pending_requests_tests.rs:40:9:
+lock wait incorrectly restarted request budget: 4.999514s
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    netty::pending_requests::tests::synchronous_pending_lock_wait_is_included_in_request_deadline
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.06s
+
+error: test failed, to rerun pass `-p seata-transport --lib`

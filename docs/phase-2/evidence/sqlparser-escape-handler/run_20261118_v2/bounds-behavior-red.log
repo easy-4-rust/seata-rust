@@ -1,0 +1,24 @@
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.51s
+     Running tests\escape_handler.rs (D:/cargo-target/seata-rust-production\debug\deps\escape_handler-afbb016d3a647d82.exe)
+
+running 1 test
+test original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks ... FAILED
+
+failures:
+
+---- original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks stdout ----
+
+thread 'original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks' (44320) panicked at crates\seata_test\tests\escape_handler.rs:121:13:
+assertion `left == right` failed: "0\ttrue\t\tcontains\tjava.lang.StringIndexOutOfBoundsException\t0053007400720069006e006700200069006e0064006500780020006f007500740020006f0066002000720061006e00670065003a00200030\tsymbol;"
+  left: "java.lang.StringIndexOutOfBoundsException\tnull\tsymbol;"
+ right: "java.lang.StringIndexOutOfBoundsException\t0053007400720069006e006700200069006e0064006500780020006f007500740020006f0066002000720061006e00670065003a00200030\tsymbol;"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test escape_handler`

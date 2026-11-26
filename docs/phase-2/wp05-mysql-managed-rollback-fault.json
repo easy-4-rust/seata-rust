@@ -1,0 +1,245 @@
+{
+  "status": "MANAGED_ROLLBACK_CONTROL_COMMIT_FAULTS_OBSERVED",
+  "spec": "docs/phase-2/mysql-undo-fence-contract.md",
+  "original_managed_fence": "docs/phase-2/wp05-mysql-managed-rollback-fence.json",
+  "mysql_version": "8.4.13",
+  "mysql_image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "network_peer": "controlled original RM callback protocol",
+  "execution_date": "2026-11-18",
+  "replay_date": "2026-11-19",
+  "rust": {
+    "1.99": {
+      "drop_ok": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/seata_managed_rollback_us0z7idj",
+        "catalog_sha256": "92b8a2a055c1d20a49d2bfb12c943ab4d4fbc6a394a33bd0cfbb5dbd5dfa458b",
+        "catalog_members": 17,
+        "verification": {
+          "rollback_control_attempts": 1,
+          "actual_rollback_commits": 1,
+          "compensation_executes": 1,
+          "guard_executes": 1,
+          "terminal_executes": 1
+        },
+        "independently_observed_before_retry": {
+          "branch_id": 42,
+          "business_rows": 0,
+          "fault": "drop_ok",
+          "first_reply": "PhaseTwoRollbackFailedRetryable",
+          "flags": [
+            2,
+            1,
+            1
+          ],
+          "journal": "Pending",
+          "undo_status": 1,
+          "xid": "commit-check:consumed-guard"
+        }
+      },
+      "block_commit": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/seata_managed_rollback_pryne7dt",
+        "catalog_sha256": "c8d7e0a70706e8cea0d985474b6d7938b735f21b3993a5303e932ce1da8608f1",
+        "catalog_members": 17,
+        "verification": {
+          "rollback_control_attempts": 2,
+          "actual_rollback_commits": 1,
+          "compensation_executes": 2,
+          "guard_executes": 2,
+          "terminal_executes": 2
+        },
+        "independently_observed_before_retry": {
+          "branch_id": 42,
+          "business_rows": 1,
+          "fault": "block_commit",
+          "first_reply": "PhaseTwoRollbackFailedRetryable",
+          "flags": [
+            2,
+            0,
+            1
+          ],
+          "journal": "Pending",
+          "undo_status": 0,
+          "xid": "commit-check:consumed-guard"
+        }
+      },
+      "delay_ok": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/seata_managed_rollback_lwq_thji",
+        "catalog_sha256": "b020a4729b0e8de19b8cc2c428d81b840483ed8bf3969d7fecb04a4be1ac352e",
+        "catalog_members": 18,
+        "verification": {
+          "rollback_control_attempts": 1,
+          "actual_rollback_commits": 1,
+          "compensation_executes": 1,
+          "guard_executes": 1,
+          "terminal_executes": 1
+        },
+        "independently_observed_before_retry": {
+          "branch_id": 42,
+          "business_rows": 0,
+          "fault": "delay_ok",
+          "first_reply": "PhaseTwoRollbackFailedRetryable",
+          "flags": [
+            2,
+            1,
+            1
+          ],
+          "journal": "Pending",
+          "undo_status": 1,
+          "xid": "commit-check:consumed-guard"
+        }
+      },
+      "workspace": {
+        "ordinary": 509,
+        "ignored": 148,
+        "doc": 4,
+        "harnesses": 110
+      }
+    },
+    "1.85": {
+      "drop_ok": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/seata_managed_rollback_xyem2a1e",
+        "catalog_sha256": "e7d417da65534fba081730ee8e1b8bda384814f670c69f22202c8ba9cf6e95de",
+        "catalog_members": 17,
+        "verification": {
+          "rollback_control_attempts": 1,
+          "actual_rollback_commits": 1,
+          "compensation_executes": 1,
+          "guard_executes": 1,
+          "terminal_executes": 1
+        },
+        "independently_observed_before_retry": {
+          "branch_id": 42,
+          "business_rows": 0,
+          "fault": "drop_ok",
+          "first_reply": "PhaseTwoRollbackFailedRetryable",
+          "flags": [
+            2,
+            1,
+            1
+          ],
+          "journal": "Pending",
+          "undo_status": 1,
+          "xid": "commit-check:consumed-guard"
+        }
+      },
+      "block_commit": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/seata_managed_rollback_32_a9kdv",
+        "catalog_sha256": "6e9019a94f9acc44ab3a067f992677d4270e1c030b6f5d8718f27f922538d5ed",
+        "catalog_members": 17,
+        "verification": {
+          "rollback_control_attempts": 2,
+          "actual_rollback_commits": 1,
+          "compensation_executes": 2,
+          "guard_executes": 2,
+          "terminal_executes": 2
+        },
+        "independently_observed_before_retry": {
+          "branch_id": 42,
+          "business_rows": 1,
+          "fault": "block_commit",
+          "first_reply": "PhaseTwoRollbackFailedRetryable",
+          "flags": [
+            2,
+            0,
+            1
+          ],
+          "journal": "Pending",
+          "undo_status": 0,
+          "xid": "commit-check:consumed-guard"
+        }
+      },
+      "delay_ok": {
+        "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/seata_managed_rollback_rr6do0ye",
+        "catalog_sha256": "8abbce652a4e5bed2f515775e3cb7052d8b0431674936453eae6b82fbbdc2c75",
+        "catalog_members": 18,
+        "verification": {
+          "rollback_control_attempts": 1,
+          "actual_rollback_commits": 1,
+          "compensation_executes": 1,
+          "guard_executes": 1,
+          "terminal_executes": 1
+        },
+        "independently_observed_before_retry": {
+          "branch_id": 42,
+          "business_rows": 0,
+          "fault": "delay_ok",
+          "first_reply": "PhaseTwoRollbackFailedRetryable",
+          "flags": [
+            2,
+            1,
+            1
+          ],
+          "journal": "Pending",
+          "undo_status": 1,
+          "xid": "commit-check:consumed-guard"
+        }
+      },
+      "workspace": {
+        "ordinary": 509,
+        "ignored": 148,
+        "doc": 4,
+        "harnesses": 110
+      }
+    }
+  },
+  "verifier_negative_controls": [
+    {
+      "case": "duplicated_compensation_frame",
+      "message": "business mutation stream was not limited to the fixture and compensation"
+    },
+    {
+      "case": "blocked_commit_appears_forwarded",
+      "message": "blocked COMMIT reached MySQL"
+    },
+    {
+      "case": "late_ok_appears_before_checkpoint",
+      "message": "retryable checkpoint did not precede the exact late OK"
+    }
+  ],
+  "workspace_evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/final_workspace_20261119",
+  "workspace_artifacts": {
+    "1.85-clippy.log": "6b19faaf9cd28abf78b93673b90b67cfb9ab625a0d029ff843b3950d5ce9ce44",
+    "1.85-doc.log": "62e09d6c2f46fe4b78f60902171a4155c7df962d8d8a7d82f35f0a268a4d10a6",
+    "1.85-tests.log": "ec7cb6b39ec2b97de0d9b78d403c37ab6bce6725d2c68325805385c5f5de9a87",
+    "1.99-clippy.log": "f55dd3032e52dd654f62fdc081227d3948188fb12c6bcee866dff5936bd131a7",
+    "1.99-doc.log": "abfe5d9488fd7eb70a891a2fc31738f94ed1c3c73a2ffaffcbf3410fcde4683b",
+    "1.99-tests.log": "c9a66875dabbffd258fcf8501cf5b1b07ae798b64f04324afac4966970da67c3",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "replay_inputs": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_db_mysql/src/data_source_manager.rs": "64cf0b6d2ec31ed6fd0d182670c78625da87b9f1e23be0e86855c1dce88b7de1",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "d7c08abab029210b2c2773fee27e4fcd3941f054e00ec02c747f0417196f9997",
+    "crates/seata_db_mysql/tests/support/managed_rollback_fence_cases.rs": "37dffaad60cfc15eaed101a9a06fd5d48a5ded91434698fdbd9815d46fbe9f5a",
+    "tools/formal-commit-preconditions/managed_rollback_fence.py": "8fee4e0c4f0e2357b939365619e5a3bd1bb81d8f33f068da7e554ac0288ba358",
+    "tools/formal-commit-preconditions/managed_rollback_wire.py": "db50de5dda220132ebf4b1b259bdd26a4a47eec8d4e17c066e40ed9e4763e16d",
+    "tools/formal-commit-direction/proxy.py": "09e75e88e00f9ea5cc62d0e0daf3e61dd56f8c0c816748d1d63cb8ed7baf67e0"
+  },
+  "current_live_retry": {
+    "status": "FAILED_BEFORE_MYSQL_CONTAINER_CREATE",
+    "reason": "Docker Desktop Linux Engine HTTP 500",
+    "fault_runs": [
+      "20wqikim",
+      "_vl5mi9r",
+      "thyc01bx",
+      "7yjqv4h3",
+      "v0yxn7ch",
+      "85s0cki8"
+    ],
+    "non_fault_suites": [
+      "exaccc00",
+      "uhhgy90h"
+    ],
+    "cleanup_inventory_available": false
+  },
+  "review": {
+    "status": "READ_ONLY_REVIEW_NO_BLOCKING_FINDINGS",
+    "evidence": "docs/phase-2/evidence/mysql-managed-rollback-fault/readonly-review-20261119.json",
+    "evidence_sha256": "0a3412b27bde22413bbc5556be56682be5ec9a329bedf427f6a849d6d2ee2b79"
+  },
+  "production_behavior_changed": false,
+  "actual_rust_business_commit": false,
+  "full_TC_gate": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false
+}

@@ -1,0 +1,1638 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.80s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_at-ff52648379343b26.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\fastjson_undo_native.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\fastjson_undo_native-49c8ab2492468a30.exe)
+
+running 13 tests
+test fastjson_branch_envelope_keeps_null_and_empty_logs_distinct ... ok
+test fastjson_preflight_authorizes_table_lookup_before_physical_binding ... ok
+test fastjson_preflight_rejects_unbound_identity_and_unqueryable_tables ... ok
+test fastjson_rejects_malformed_or_unbound_native_values_before_returning_logs ... ok
+test fastjson_source_test_decode_default_content ... SEATA_FASTJSON_DEFAULT	{}	true	true	0	true
+ok
+test fastjson_source_test_write_class_name ... SEATA_FASTJSON_WRITE_CLASS	true	true	true	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"PRIMARY_KEY","name":"id","type":-5,"value":0L},{"keyType":"NULL","name":"money","type":3,"value":1.}]}],"tableName":"t1"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"table_name"}],"xid":"xiddddddddddd"}
+ok
+test fastjson_string_escapes_match_original_writer ... SEATA_FASTJSON_ESCAPE	"\u0000\u0001\b\t\n\u000B\f\r\u000E\u001F \"/\\~\u007F\u0080\u009F \u2028\u2029蟹"
+SEATA_FASTJSON_LONG_OVERFLOW	java.math.BigInteger
+ok
+test h2_source::fastjson_source_test_encode_and_decode ... ignored, requires fixed source JDBC H2 input trace
+test h2_source::fastjson_source_test_performance ... ignored, requires fixed H2 trace and original 100000 codec iterations
+test original_fastjson_restores_complete_ordered_insert_update_delete ... SEATA_FASTJSON_NATIVE	LOG	INSERT	undo_fixture
+SEATA_FASTJSON_NATIVE	IMAGE	0
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	696e736572742de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	LOG	UPDATE	undo_fixture
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	696e736572742de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	7570646174652de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	LOG	DELETE	undo_fixture
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	7570646174652de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	IMAGE	0
+ok
+test serial_array_source::fastjson_source_test_direct_serial_array_serialization ... SEATA_FASTJSON_ARRAY_DIRECT	-5	int8	[1, 2, 3, 4, 5]	{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1,2,3,4,5]}
+ok
+test serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array ... SEATA_FASTJSON_ARRAY_EMBEDDED	true	-5	int8	[1, 2, 3, 4, 5]	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"NULL","name":"dept_ids","type":2003,"value":{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1L,2L,3L,4L,5L]}}]}],"tableName":"test_table"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"test_table"}],"xid":"test_xid"}
+ok
+test serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array_with_nulls ... SEATA_FASTJSON_ARRAY_NULLS	true	3	[1, null, 3]	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"NULL","name":"nullable_array","type":2003,"value":{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1L,null,3L]}}]}],"tableName":"test_table"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"test_table"}],"xid":"test_xid"}
+ok
+
+test result: ok. 11 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests\global_lock_key_order.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\global_lock_key_order-cc5eeccb1e649f02.exe)
+
+running 2 tests
+test java_lock_order_is_separate_from_database_index_and_physical_column_order ... ok
+test original_java_order_corpus_covers_resize_tree_collisions_and_split_iteration ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests\global_lock_keys.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\global_lock_keys-67809233508c4de3.exe)
+
+running 7 tests
+test aggregate_budget_and_log_count_are_atomic_and_include_separators ... ok
+test default_tiny_boolean_does_not_destroy_integer_two_and_unknown_native_is_rejected ... ok
+test delete_uses_before_insert_and_update_use_after_and_full_chunks_are_deduplicated ... ok
+test one_transaction_cannot_mix_jdbc_profiles_even_when_the_current_key_bytes_match ... ok
+test original_single_and_composite_pk_lock_bytes_preserve_row_order ... ok
+test original_text_comma_rejection_is_redacted_and_failed_append_is_atomic ... ok
+test single_key_budget_includes_table_prefix_and_expanded_signed_binary_bytes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests\insert_value_templates.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\insert_value_templates-f548cedc0bb577c5.exe)
+
+running 3 tests
+test non_insert_recognizers_have_no_value_templates ... ok
+test template_debug_does_not_disclose_literals ... ok
+test templates_keep_original_row_column_and_binding_positions ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jackson_undo_source.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jackson_undo_source-10c06dfc736cbfa3.exe)
+
+running 15 tests
+test jackson_dmdb_source_test_serialize_and_deserialize_timestamp ... SEATA_JACKSON_DMDB	ordinary	1	true	dm.jdbc.driver.DmdbTimestamp	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"dmdb_timestamp","keyType":"NULL","type":93,"value":["dm.jdbc.driver.DmdbTimestamp",1721985847000]}
+SEATA_JACKSON_DMDB	ordinary	2	false	dm.jdbc.driver.DmdbTimestamp	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"dmdb_timestamp_type2","keyType":"NULL","type":93,"value":["dm.jdbc.driver.DmdbTimestamp",1721985847000]}
+SEATA_JACKSON_DMDB	ordinary	3	true	dm.jdbc.driver.DmdbTimestamp	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"dmdb_timestamp_nanos","keyType":"NULL","type":93,"value":["dm.jdbc.driver.DmdbTimestamp",[1721985847000,12345]]}
+ok
+test jackson_dmdb_source_test_serialize_and_deserialize_timestamp_with_no_zone ... SEATA_JACKSON_DMDB	jackson	1	true	dm.jdbc.driver.DmdbTimestamp	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"dmdb_timestamp_type","keyType":"NULL","type":93,"value":["dm.jdbc.driver.DmdbTimestamp",1721985847000]}
+SEATA_JACKSON_DMDB	jackson	2	false	dm.jdbc.driver.DmdbTimestamp	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"dmdb_timestamp_type","keyType":"NULL","type":93,"value":["dm.jdbc.driver.DmdbTimestamp",1721985847000]}
+ok
+test jackson_dmdb_utc_rejects_unmapped_historical_driver_calendar ... ok
+test jackson_field_source_test_encode_jdbc_field_values ... SEATA_JACKSON_FIELD	1	java.lang.Long	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"bigint_type","keyType":"NULL","type":-5,"value":["java.lang.Long",9223372036854775807]}
+SEATA_JACKSON_FIELD	2	java.math.BigDecimal	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"decimal_type","keyType":"NULL","type":3,"value":["java.math.BigDecimal",55555555555555555555.55555555555555555555]}
+SEATA_JACKSON_FIELD	3	java.lang.Double	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"double_type","keyType":"NULL","type":8,"value":999999.999999999}
+SEATA_JACKSON_FIELD	4	java.sql.Timestamp	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"timestamp_type","keyType":"NULL","type":93,"value":["java.sql.Timestamp",1621358602111]}
+SEATA_JACKSON_FIELD	5	java.sql.Timestamp	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"timestamp_type","keyType":"NULL","type":93,"value":["java.sql.Timestamp",[1565434166926,926554000]]}
+SEATA_JACKSON_FIELD	6	javax.sql.rowset.serial.SerialBlob	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"blob_type","keyType":"NULL","type":2004,"value":["javax.sql.rowset.serial.SerialBlob","aGVsbG8="]}
+SEATA_JACKSON_FIELD	7	javax.sql.rowset.serial.SerialClob	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"clob_type","keyType":"NULL","type":2005,"value":["javax.sql.rowset.serial.SerialClob","hello"]}
+SEATA_JACKSON_FIELD	8	java.time.LocalDateTime	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"localdatetime_type","keyType":"NULL","type":91,"value":["java.time.LocalDateTime",1621358602111]}
+SEATA_JACKSON_FIELD	9	java.time.LocalDateTime	true	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"localdatetime_type2","keyType":"NULL","type":91,"value":["java.time.LocalDateTime",[1621358602222,222333000]]}
+ok
+test jackson_local_date_time_preserves_millis_when_submillis_is_separate ... ok
+test jackson_original_projection_rechecks_input_budget ... ok
+test jackson_original_scalar_types_and_output_budget_are_preserved ... ok
+test jackson_original_uses_java_utf8_escapes ... ok
+test jackson_rejects_empty_serial_blob_encoder_and_preserves_signed_double_zero ... ok
+test jackson_source_test_decode_default_content ... SEATA_FASTJSON_DEFAULT	{}	true	true	0	true
+ok
+test jackson_source_test_encode_and_decode ... ignored, requires fixed source JDBC H2 input trace
+test jackson_source_test_performance ... ignored, requires fixed H2 trace and original 100000 codec iterations
+test jackson_source_test_serialize_and_deserialize_serial_array ... SEATA_JACKSON_ARRAY_VALUES	true	-5	int8	[1, 2, 3, 4, 5]	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"dept_ids","keyType":"NULL","type":2003,"value":{"@class":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1,2,3,4,5]}}
+ok
+test jackson_source_test_serialize_and_deserialize_serial_array_with_nulls ... SEATA_JACKSON_ARRAY_NULLS	true	3	[1, null, 3]	{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"nullable_array","keyType":"NULL","type":2003,"value":{"@class":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1,null,3]}}
+ok
+test jackson_timestamp_source_test_branch_encode_and_decode ... SEATA_JACKSON_BRANCH_TIMESTAMP	2147483000	999999	{"@class":"org.apache.seata.rm.datasource.undo.BranchUndoLog","xid":"192.168.0.1:8091:123456","branchId":123457,"sqlUndoLogs":["java.util.ArrayList",[{"@class":"org.apache.seata.rm.datasource.undo.SQLUndoLog","sqlType":null,"tableName":null,"beforeImage":{"@class":"org.apache.seata.rm.datasource.sql.struct.TableRecords$EmptyTableRecords","tableName":null,"rows":["java.util.ArrayList",[]]},"afterImage":{"@class":"org.apache.seata.rm.datasource.sql.struct.TableRecords","tableName":"test","rows":["java.util.ArrayList",[{"@class":"org.apache.seata.rm.datasource.sql.struct.Row","fields":["java.util.ArrayList",[{"@class":"org.apache.seata.rm.datasource.sql.struct.Field","name":"gmt_create","keyType":"PRIMARY_KEY","type":93,"value":["java.sql.Timestamp",[2147483000,999999]]}]]}]]}}]]}
+ok
+
+test result: ok. 13 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\mysql_sql_recognition.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\mysql_sql_recognition-12700ba2548c07d5.exe)
+
+running 18 tests
+test bare_mysql_builtins_are_not_misclassified_as_deterministic_columns ... ok
+test canonical_token_check_preserves_quotes_keyword_case_and_not_equal_spellings ... ok
+test conditional_comments_hints_and_mysql_mode_ambiguous_text_are_rejected ... ok
+test deep_or_over_budget_expressions_are_rejected_without_stack_failure ... ok
+test delete_supports_bounded_predicates_and_absent_where_without_inventing_one ... ok
+test duplicate_columns_and_ragged_values_are_rejected ... ok
+test exact_identifiers_are_validated_without_case_folding_or_sql_injection ... ok
+test flat_operator_budget_is_checked_before_constructing_a_deep_ast ... ok
+test ignored_non_mysql_from_keyword_cannot_survive_as_an_accepted_original_sql ... ok
+test in_values_cannot_silently_expand_the_declared_constant_or_bound_value_matrix ... ok
+test insert_retains_table_columns_rows_original_sql_and_real_parameters ... ok
+test parser_consumed_modifiers_cannot_disappear_from_the_executable_contract ... ok
+test public_debug_does_not_disclose_literal_sql_or_predicate_values ... ok
+test raw_budget_is_enforced_before_parsing_and_errors_redact_sql_values ... ok
+test rejects_entire_unsupported_statement_before_exposing_an_executable_plan ... ok
+test unsupported_div_syntax_and_non_dml_return_typed_errors_without_parser_panic ... ok
+test unsupported_operator_chains_are_also_bounded_before_ast_construction ... ok
+test update_separates_assignment_parameters_from_where_image_parameters ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\sql_undo_image_contract.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\sql_undo_image_contract-9c7761e813ed4453.exe)
+
+running 6 tests
+test duplicate_raw_primary_identities_are_rejected ... ok
+test empty_update_and_delete_are_valid_no_match_images ... ok
+test insert_and_delete_require_the_correct_empty_side ... ok
+test undo_debug_does_not_disclose_values ... ok
+test update_identity_order_and_schema_cannot_change ... ok
+test valid_insert_update_delete_keep_full_schema_and_exact_values ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\undo_codec_value_bounds.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\undo_codec_value_bounds-50d6d80614b94108.exe)
+
+running 3 tests
+test declared_integer_wrappers_and_timestamp_nanos_reject_overflow_and_wrong_shapes ... ok
+test jackson_number_digit_limit_counts_mantissa_and_exponent_but_not_signs_or_dot ... ok
+test text_and_decoded_binary_allow_exactly_one_mib_and_reject_the_next_byte ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests\undo_jackson_document.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\undo_jackson_document-6d5271576e9d6dbd.exe)
+
+running 12 tests
+test big_decimal_exponent_and_scale_follow_the_original_java_rejections ... ok
+test debug_and_errors_do_not_expose_document_values ... ok
+test decimal_lexemes_and_unsigned_big_integer_never_pass_through_float ... ok
+test default_branch_obeys_structure_limits_while_its_input_remains_two_bytes ... ok
+test duplicate_escaped_keys_unknown_classes_and_trailing_content_are_rejected ... ok
+test empty_collection_container_depth_is_the_same_for_encode_and_decode ... ok
+test node_scalar_and_output_budgets_are_independent_of_depth_and_input_length ... ok
+test nullable_bean_state_is_not_validated_as_an_application_transaction ... ok
+test original_default_bytes_and_null_are_distinct ... ok
+test original_native_golden_documents_keep_ids_types_and_exact_numbers ... ok
+test original_source_value_probes_keep_temporal_arrays_and_nullable_sql_identity ... ok
+test smaller_depth_and_node_limits_reject_before_a_document_is_published ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests\undo_prepared_encoding.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\undo_prepared_encoding-64b03c2d4adbc755.exe)
+
+running 6 tests
+test default_boolean_profile_does_not_silently_destroy_physical_integer_two ... ok
+test missing_native_identity_and_unregistered_branch_arguments_cannot_encode_prepared_effects ... ok
+test prepared_node_preflight_accepts_the_exact_tree_quota_and_rejects_one_less ... ok
+test restored_fields_reject_type_key_name_class_and_fake_empty_records_before_execution ... ok
+test restored_native_documents_bind_original_identity_metadata_and_explicit_jdbc_profile ... ok
+test unsigned_and_bigint_wrappers_follow_actual_connector8_types_even_for_small_values ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests examples\lock_key_peer.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\lock_key_peer-9338d9dd1aefe1a9.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples\undo_codec_peer.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\undo_codec_peer-b95e89eb8e286b57.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_datasource-3fbf6695e34b1f86.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\column_domain_contract.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\column_domain_contract-8f1c746ce334781b.exe)
+
+running 8 tests
+test character_sets_reject_unrepresentable_values ... ok
+test inconsistent_domain_metadata_is_rejected ... ok
+test legacy_metadata_remains_optional_and_domains_affect_schema_equality ... ok
+test signed_physical_widths_reject_one_past_each_boundary ... ok
+test text_lob_uses_octets_and_fixed_binary_requires_padding ... ok
+test unsigned_decimal_rejects_negative_values ... ok
+test unsigned_physical_widths_do_not_wrap ... ok
+test utf8_character_limit_is_not_an_octet_limit ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\metadata_contract.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\metadata_contract-7ade16aef9ea64a2.exe)
+
+running 4 tests
+test column_names_and_ordinals_cannot_alias_or_silently_reorder ... ok
+test decimal_metadata_and_schema_budgets_are_checked ... ok
+test incomplete_duplicate_or_nullable_primary_keys_are_rejected ... ok
+test primary_index_order_is_independent_of_physical_column_order ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\mysql_type_identity.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\mysql_type_identity-44db38b76669ac14.exe)
+
+running 6 tests
+test binary_and_blob_subtypes_are_not_conflated ... ok
+test changing_domain_cannot_invalidate_existing_native_identity ... ok
+test integer_width_and_boolean_display_identity_remain_distinct ... ok
+test legacy_constructor_does_not_guess_a_native_type ... ok
+test native_identity_requires_a_real_compatible_domain ... ok
+test text_subtypes_keep_jdbc_relevant_lob_identity ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\row_image_contract.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\row_image_contract-51a19c3bd15aff88.exe)
+
+running 14 tests
+test debug_and_errors_do_not_disclose_values ... ok
+test decimal_column_capacity_and_exact_scale_are_required ... ok
+test decimal_preserves_all_65_digits_and_scale_without_float ... ok
+test decimal_rejects_noncanonical_or_out_of_budget_inputs ... ok
+test empty_records_keep_metadata_and_no_values ... ok
+test integer_extremes_remain_typed_and_exact ... ok
+test null_empty_text_and_empty_binary_are_distinct ... ok
+test primary_keys_follow_index_order_and_nonkeys_follow_physical_order ... ok
+test records_reject_other_schema_and_keep_original_state ... ok
+test row_and_byte_budgets_fail_atomically ... ok
+test row_requires_complete_ordered_and_exact_column_metadata ... ok
+test single_field_payload_has_independent_hard_budget ... ok
+test utf8_and_binary_lengths_use_octets ... ok
+test wrong_value_domains_and_nonnullable_null_are_rejected ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_db_mysql-2051d36ab76c9b52.exe)
+
+running 7 tests
+test connection_proxy::tests::ready_undo_publication_after_deadline_keeps_poison_and_rolls_back_original_transaction ... ignored, requires owned real MySQL fixture
+test data_compare_utils::tests::records_equal_consumes_distinct_composite_keys_in_any_order ... ok
+test data_compare_utils::tests::records_equal_rejects_a_repeated_key_in_either_image ... ok
+test data_source_proxy::fastjson_tests::fastjson_split_undo_validates_all_logs_before_writes_and_then_cleans_up ... ignored, requires owned real MySQL with original undo_log schema
+test mysql::mysql_undo_log_manager::tests::older_control_snapshot_reads_the_later_committed_guard ... ignored, requires owned real MySQL fixture
+test mysql_image_reader::tests::oversized_parameters_are_rejected_before_native_argument_encoding ... ok
+test undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup ... ok
+
+test result: ok. 4 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\data_compare_source.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\data_compare_source-a2a7cd2ae1aaf5a2.exe)
+
+running 22 tests
+test decimal_row_keys_follow_big_decimal_to_string ... SEATA_COMPARE_EXTRA	decimal_key_0.0000010	0.0000010
+SEATA_COMPARE_EXTRA	decimal_key_0.0000001	1E-7
+SEATA_COMPARE_EXTRA	decimal_key_-0.0000001200	-1.200E-7
+SEATA_COMPARE_EXTRA	decimal_key_0.0000000	0E-7
+SEATA_COMPARE_EXTRA	decimal_key_12.0000000	12.0000000
+ok
+test fastjson_date_only_spaces_throws_before_parsing ... SEATA_COMPARE_EXTRA	space_only_date	java.lang.ArrayIndexOutOfBoundsException:Index 0 out of bounds for length 0
+ok
+test fastjson_source::fastjson_bigint ... SEATA_DATA_COMPARE	DataCompareUtilsBehaviorTest#fastjsonValuesCompareWithJdbcTypesInEitherDirection:-5	11
+ok
+test fastjson_source::fastjson_date ... SEATA_DATA_COMPARE	DataCompareUtilsBehaviorTest#fastjsonValuesCompareWithJdbcTypesInEitherDirection:91	11
+ok
+test fastjson_source::fastjson_decimal ... SEATA_DATA_COMPARE	DataCompareUtilsBehaviorTest#fastjsonValuesCompareWithJdbcTypesInEitherDirection:3	11
+ok
+test fastjson_source::fastjson_local_date_time_and_null_values ... SEATA_DATA_COMPARE	DataCompareUtilsBehaviorTest#fastjsonLocalDateTimeAndNullValues	1100
+ok
+test fastjson_source::fastjson_time ... SEATA_DATA_COMPARE	DataCompareUtilsBehaviorTest#fastjsonValuesCompareWithJdbcTypesInEitherDirection:92	11
+ok
+test fastjson_source::fastjson_timestamp ... SEATA_DATA_COMPARE	DataCompareUtilsBehaviorTest#fastjsonValuesCompareWithJdbcTypesInEitherDirection:93	11
+ok
+test is_field_equals ... SEATA_DATA_COMPARE	DataCompareUtilsTest#isFieldEquals	000000111
+ok
+test is_records_equals ... SEATA_DATA_COMPARE	DataCompareUtilsTest#isRecordsEquals	0000100001
+ok
+test is_rows_equals ... SEATA_DATA_COMPARE	DataCompareUtilsTest#isRowsEquals	00100
+ok
+test java_map_preserves_original_duplicate_and_collision_behavior ... SEATA_COMPARE_EXTRA	right_duplicate	false
+SEATA_COMPARE_EXTRA	left_duplicate	true
+SEATA_COMPARE_EXTRA	both_duplicate	true
+SEATA_COMPARE_EXTRA	colliding_key_reordered	false
+SEATA_COMPARE_EXTRA	different_composite_key	false
+SEATA_COMPARE_EXTRA	colliding_mapper_rows	1
+ok
+test jdbc_utc_source::jdbc_utc_values_and_exception_classes_match_the_fixed_jdk ... SEATA_COMPARE_JDBC_UTC	date	2024-02-31	1709337600:000000000
+SEATA_COMPARE_JDBC_UTC	date	1582-10-10	-12218860800:000000000
+SEATA_COMPARE_JDBC_UTC	date	1500-2-29	-14825894400:000000000
+SEATA_COMPARE_JDBC_UTC	date	0000-01-01	-62167392000:000000000
+SEATA_COMPARE_JDBC_UTC	date	2024-02-32	java.lang.IllegalArgumentException
+SEATA_COMPARE_JDBC_UTC	date	2024-x-01	java.lang.NumberFormatException
+SEATA_COMPARE_JDBC_UTC	date	٢٠٢٤-٢-٢٩	1709164800:000000000
+SEATA_COMPARE_JDBC_UTC	date	2024-+2-+9	1707436800:000000000
+SEATA_COMPARE_JDBC_UTC	time	24:00:00	86400:000000000
+SEATA_COMPARE_JDBC_UTC	time	00:00:00	0:000000000
+SEATA_COMPARE_JDBC_UTC	time	-1:+1:60	-3480:000000000
+SEATA_COMPARE_JDBC_UTC	time	2147483647:00:00	7730941129200:000000000
+SEATA_COMPARE_JDBC_UTC	time	-2147483648:00:00	-7730940009600:000000000
+SEATA_COMPARE_JDBC_UTC	time	2147483648:00:00	java.lang.NumberFormatException
+SEATA_COMPARE_JDBC_UTC	time	00:0:0:1	java.lang.NumberFormatException
+SEATA_COMPARE_JDBC_UTC	timestamp	 1969-12-31 23:59:59.123456789 	-1:123456789
+SEATA_COMPARE_JDBC_UTC	timestamp	1582-10-04 24:00:00.01	-12219292800:010000000
+SEATA_COMPARE_JDBC_UTC	timestamp	1582-10-14 24:00:00	-12219292800:000000000
+SEATA_COMPARE_JDBC_UTC	timestamp	9999-12-31 24:00:00	253402300800:000000000
+SEATA_COMPARE_JDBC_UTC	timestamp	2024-2-9 0:0:0.١٢	1707436800:120000000
+SEATA_COMPARE_JDBC_UTC	timestamp	2024-02-30 24:00:00.	java.lang.IllegalArgumentException
+SEATA_COMPARE_JDBC_UTC	timestamp	2024-02-30 24:00:00.1234567890	java.lang.IllegalArgumentException
+SEATA_COMPARE_JDBC_UTC	timestamp	2024-2-9 0:0:0.1x	java.lang.NumberFormatException
+SEATA_COMPARE_JDBC_UTC	timestamp	2024-2-9 :0:0	java.lang.NumberFormatException
+ok
+test local_datetime_source::local_datetime_values_and_errors_match_fixed_jdk ... SEATA_COMPARE_LOCAL_TIME	2024-03-02T12:34	2024:03:02:12:34:00:000000000
+SEATA_COMPARE_LOCAL_TIME	2024-03-02t12:34:56.	2024:03:02:12:34:56:000000000
+SEATA_COMPARE_LOCAL_TIME	2024-03-02T12:34:56.1	2024:03:02:12:34:56:100000000
+SEATA_COMPARE_LOCAL_TIME	2024-03-02T12:34:56.100000000	2024:03:02:12:34:56:100000000
+SEATA_COMPARE_LOCAL_TIME	2024-03-02T12:34:56.000000001	2024:03:02:12:34:56:000000001
+SEATA_COMPARE_LOCAL_TIME	0000-02-29T00:00	0:02:29:00:00:00:000000000
+SEATA_COMPARE_LOCAL_TIME	-0001-01-01T23:59:59	-1:01:01:23:59:59:000000000
+SEATA_COMPARE_LOCAL_TIME	+10000-02-29T00:00	10000:02:29:00:00:00:000000000
+SEATA_COMPARE_LOCAL_TIME	+02024-02-29T00:00	2024:02:29:00:00:00:000000000
+SEATA_COMPARE_LOCAL_TIME	+0999999999-12-31T23:59:59.999999999	999999999:12:31:23:59:59:999999999
+SEATA_COMPARE_LOCAL_TIME	-999999999-01-01T00:00	-999999999:01:01:00:00:00:000000000
+SEATA_COMPARE_LOCAL_TIME	+1000000000-01-01T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	-0000-01-01T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	+2024-01-01T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	10000-01-01T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	1582-10-10T00:00	1582:10:10:00:00:00:000000000
+SEATA_COMPARE_LOCAL_TIME	1500-02-29T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-04-31T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-13-01T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T24:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T00:60	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T00:00:60	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T00:00:00.1234567890	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T00:00.	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T00:00Z	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T00:00+08:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-01-01T00:00 	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	2024-1-01T00:00	java.time.format.DateTimeParseException
+SEATA_COMPARE_LOCAL_TIME	٢٠٢٤-01-01T00:00	java.time.format.DateTimeParseException
+ok
+test records_source::records_compare_null_empty_and_missing_metadata_in_order ... SEATA_COMPARE_RECORDS	null_records	true:false:true:false:false:true
+SEATA_COMPARE_RECORDS	null_metadata	java.lang.NullPointerException:java.lang.NullPointerException
+ok
+test records_source::records_use_left_keys_then_update_the_original_fields ... SEATA_COMPARE_RECORDS	left_metadata_and_updates	true:true:false
+ok
+test rows_match_by_composite_key_and_report_missing_columns_or_rows ... SEATA_DATA_COMPARE	DataCompareUtilsBehaviorTest#rowsMatchByCompositeKeyAndReportMissingColumnsOrRows	010
+ok
+test rows_source::compare_rows_matches_primary_keys_before_temporal_conversion ... SEATA_COMPARE_ROWS	keys_before_conversion	false:true
+ok
+test rows_source::compare_rows_preserves_jdk_bucket_order_and_partial_conversion ... SEATA_COMPARE_ROWS	duplicate_then_date_failure	java.lang.ArrayIndexOutOfBoundsException:true:true
+ok
+test rows_source::compare_rows_selects_the_exact_serializer_name ... SEATA_COMPARE_ROWS	serializer_unset	false:false
+SEATA_COMPARE_ROWS	serializer_different_case	false:false
+SEATA_COMPARE_ROWS	serializer_fastjson	true:true
+ok
+test test_row_list_to_map_with_multip_pk ... SEATA_DATA_COMPARE	DataCompareUtilsTest#testRowListToMapWithMultipPk	3:1
+ok
+test test_row_list_to_map_with_single_pk ... SEATA_DATA_COMPARE	DataCompareUtilsTest#testRowListToMapWithSinglePk	3:1
+ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\escape_dialects_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\escape_dialects_java-80ad014276538b14.exe)
+
+running 1 test
+test linked_escape_handlers_match_all_production_java_providers ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests\escape_pk_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\escape_pk_java-812c7e3ea66d28f0.exe)
+
+running 2 tests
+test original_mysql_provider_and_table_primary_key_escape_match ... ok
+test provider_cache_uses_raw_name_and_retries_lookup_after_locale_change ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\escape_spi.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\escape_spi-c116c921b0fe8efe.exe)
+
+running 4 tests
+test discovers_linked_mysql_and_constructs_only_winning_singleton_on_concurrent_lookup ... ok
+test prototype_is_cached_once_per_raw_request_name ... ok
+test singleton_constructor_can_resolve_its_alias_and_preserves_both_raw_bindings ... ok
+test tied_highest_priority_reports_configuration_error_without_selecting_a_provider ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_driver_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_driver_java-170b691bda2afc56.exe)
+
+running 2 tests
+test driver_profiles_and_resource_identity_match_original_jdbc ... ok
+test outer_probe_overwrites_inner_cached_driver_like_original_jvm ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\jdbc_driver_jvm_source.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_driver_jvm_source-5663e0e0188790c3.exe)
+
+running 4 tests
+test test_load_driver_with_empty_class_name ... ignored, requires pinned Java and original H2 JDBC driver
+test test_load_driver_with_invalid_driver_class ... ignored, requires pinned Java and original H2 JDBC driver
+test test_load_driver_with_null_class_name ... ignored, requires pinned Java and original H2 JDBC driver
+test test_load_driver_with_valid_h2_driver ... ignored, requires pinned Java and original H2 JDBC driver
+
+test result: ok. 0 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_load_driver.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_load_driver-50584409f84b470d.exe)
+
+running 4 tests
+test context_prefers_its_class_and_misses_try_the_default_once ... ok
+test loader_dispatch_matches_original_java_profiles ... SEATA_JDBC_LOAD	context-driver	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	no-context	false	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-missing-default-driver	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-null-class	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-selected-class	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-linkage	true	java.lang.LinkageError	context-linkage
+SEATA_JDBC_LOAD	missing-class	true	java.sql.SQLException>java.lang.ClassNotFoundException	com.invalid.NonExistentDriver
+SEATA_JDBC_LOAD	empty-class	true	java.sql.SQLException>java.lang.ClassNotFoundException	
+SEATA_JDBC_LOAD	null-class-name	false	java.lang.NullPointerException	<null>
+SEATA_JDBC_LOAD	private-constructor	true	java.sql.SQLException>java.lang.IllegalAccessException	class org.apache.seata.rm.datasource.util.JdbcUtils cannot access a member of class JdbcRmDriverLoadOracle$PrivateDriver with modifiers "private"
+SEATA_JDBC_LOAD	abstract-class	true	java.sql.SQLException>java.lang.InstantiationException	<null>
+SEATA_JDBC_LOAD	missing-constructor	true	java.sql.SQLException>java.lang.InstantiationException>java.lang.NoSuchMethodException	JdbcRmDriverLoadOracle$MissingConstructor
+SEATA_JDBC_LOAD	constructor-access-subclass	true	java.sql.SQLException>JdbcRmDriverLoadOracle$AccessFailure	constructor-access
+SEATA_JDBC_LOAD	constructor-sql	true	java.sql.SQLException	constructor-sql
+SEATA_JDBC_LOAD	constructor-class-missing	true	java.lang.ClassNotFoundException	constructor-missing
+SEATA_JDBC_LOAD	wrong-driver-type	true	java.lang.ClassCastException	class JdbcRmDriverLoadOracle$NotDriver cannot be cast to class java.sql.Driver (JdbcRmDriverLoadOracle$NotDriver is in unnamed module of loader 'app'; java.sql.Driver is in module java.sql of loader 'platform')
+SEATA_JDBC_LOAD	default-initializer-fails	false	java.lang.ExceptionInInitializerError>java.lang.IllegalStateException	<null>
+ok
+test unrelated_errors_stop_the_current_stage_without_wrapping ... ok
+test wraps_only_designated_failures_and_keeps_cause_identity ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_parser_spi.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_parser_spi-dc08e38998be82ff.exe)
+
+running 2 tests
+test equal_top_priority_without_a_link_order_is_rejected ... ok
+test rm_uses_the_highest_order_provider_with_the_druid_name ... SEATA_JDBC_SPI	override	true
+SEATA_JDBC_SPI	rm-type	chosen
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_resource_init.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_resource_init-8b436fe1c284b2af.exe)
+
+running 4 tests
+test db_type_null_reference_preserves_the_close_exception ... ok
+test jdbc_and_xa_initialization_match_original_close_and_registration_order ... SEATA_JDBC_INIT	jdbc-driver-probe-fails	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|probe|close-connection	java.lang.LinkageError:driver-probe
+SEATA_JDBC_INIT	jdbc-ok	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|driver=com.mysql.jdbc.Driver|db=mysql|close-connection|register	ok
+SEATA_JDBC_INIT	jdbc-acquire-sql	group=group|get-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:get-connection)
+SEATA_JDBC_INIT	jdbc-null-metadata	group=group|get-connection|metadata|close-connection	java.lang.NullPointerException:Cannot invoke "java.sql.DatabaseMetaData.getURL()" because the return value of "java.sql.Connection.getMetaData()" is null
+SEATA_JDBC_INIT	jdbc-null-url	group=group|get-connection|metadata|url|close-connection	java.lang.NullPointerException:Cannot invoke "String.contains(java.lang.CharSequence)" because "jdbcUrl" is null
+SEATA_JDBC_INIT	jdbc-null-connection	group=group|get-connection	java.lang.NullPointerException:Cannot invoke "java.sql.Connection.getMetaData()" because "connection" is null
+SEATA_JDBC_INIT	jdbc-unknown-driver	group=group|get-connection|metadata|url|id=jdbc:unknown:db|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:unknown jdbc driver : jdbc:unknown:db?param=1)
+SEATA_JDBC_INIT	jdbc-close-sql	group=group|get-connection|metadata|url|id=jdbc:mysql://localhost:3306/test|driver=com.mysql.jdbc.Driver|db=mysql|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	jdbc-metadata-and-close-sql	group=group|get-connection|metadata|close-connection	java.lang.IllegalStateException:can not init DataSourceResource with jdbc-probe cause(java.sql.SQLException:metadata suppressed(java.sql.SQLException:close-connection))
+SEATA_JDBC_INIT	jdbc-null-metadata-and-close-sql	group=group|get-connection|metadata|close-connection	java.lang.NullPointerException:Cannot invoke "java.sql.DatabaseMetaData.getURL()" because the return value of "java.sql.Connection.getMetaData()" is null suppressed(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	xa-ok	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa|register	ok
+SEATA_JDBC_INIT	xa-acquire-sql	group=group|get-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:get-xa)
+SEATA_JDBC_INIT	xa-null-connection	group=group|get-xa	java.lang.NullPointerException:Cannot invoke "javax.sql.XAConnection.getConnection()" because "xaConnection" is null
+SEATA_JDBC_INIT	xa-inner-acquire-sql	group=group|get-xa|get-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:get-connection)
+SEATA_JDBC_INIT	xa-close-sql	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-xa)
+SEATA_JDBC_INIT	xa-inner-close-sql	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-connection)
+SEATA_JDBC_INIT	xa-both-close-sql	group=group|get-xa|get-connection|metadata|url|id=jdbc:h2:mem:test|driver=org.h2.Driver|db=h2|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-xa)
+SEATA_JDBC_INIT	xa-close-replaces-runtime-error	group=group|get-xa|get-connection|metadata|close-connection|close-xa	java.lang.IllegalStateException:can not get XAConnection from DataSourceResource with xa-probe cause(java.sql.SQLException:close-xa)
+ok
+test rust_host_failure_keeps_both_operation_and_close_errors ... ok
+test suppressed_retains_identity_and_does_not_form_an_arc_cycle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_resource_init_source.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_resource_init_source-b32bd98a389ed54a.exe)
+
+running 7 tests
+test test_init_data_source_resource_success ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_data_source_resource_with_null_meta_data ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_data_source_resource_with_sql_exception ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_ensures_connection_closed ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_success ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_with_null_xa_connection ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_with_sql_exception ... ignored, requires pinned JVM and original JDBC drivers
+
+test result: ok. 0 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_rm_type_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_rm_type_java-6bc4767b6cf67768.exe)
+
+running 1 test
+test rm_jdbc_url_type_keeps_locale_fold_and_original_null_error ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\jdbc_utils_source.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_utils_source-e4cdbcbdeae7c153.exe)
+
+running 11 tests
+test default_parser_is_shared_with_the_registry_and_missing_name_keeps_java_error ... SEATA_JDBC_SPI	shared	true
+SEATA_JDBC_SPI	missing	org.apache.seata.common.loader.EnhancedServiceNotFoundException	not found service provider for : org.apache.seata.sqlparser.util.DbTypeParser
+SEATA_JDBC_SPI	empty	java.lang.IllegalArgumentException	the name of service provider for [org.apache.seata.sqlparser.util.DbTypeParser] name is null
+ok
+test test_build_resource_id_with_empty_query_string ... SEATA_JDBC_SOURCE	testBuildResourceIdWithEmptyQueryString	jdbc:mysql://localhost:3306/test
+ok
+test test_build_resource_id_with_multiple_question_marks ... SEATA_JDBC_SOURCE	testBuildResourceIdWithMultipleQuestionMarks	jdbc:mysql://localhost:3306/test
+     Running tests\live_callback_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_callback_java-684689327df239be.exe)
+ok
+test test_build_resource_id_with_query_string ... SEATA_JDBC_SOURCE	testBuildResourceIdWithQueryString	jdbc:mysql://localhost:3306/test
+ok
+test test_build_resource_id_without_query_string ... SEATA_JDBC_SOURCE	testBuildResourceIdWithoutQueryString	jdbc:mysql://localhost:3306/test
+ok
+test test_db_type_parser_loading ... SEATA_JDBC_SOURCE	testDbTypeParserLoading	true
+ok
+test test_db_type_parser_singleton_pattern ... SEATA_JDBC_SOURCE	testDbTypeParserSingletonPattern	true
+ok
+test test_get_db_type_with_h2_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithH2Url	h2
+ok
+test test_get_db_type_with_mysql_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithMySQLUrl	mysql
+ok
+test test_get_db_type_with_oracle_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithOracleUrl	oracle
+ok
+test test_get_db_type_with_postgresql_url ... SEATA_JDBC_SOURCE	testGetDbTypeWithPostgreSQLUrl	postgresql
+ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 1 test
+test original_java_tc_callback_recovers_lost_registration_with_real_branch_id_and_no_business_commit ... ignored, requires pinned original Java TC, raw registration-loss proxy and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_callback_ownership.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_callback_ownership-dcf5ef947f0b6d57.exe)
+
+running 18 tests
+test callback_before_positive_response_prevents_late_none_lock_key_enrollment ... ignored, requires owned real MySQL fixture
+test expanded_schema_preserves_known_receipt_and_enrollment_remains_idempotent ... ignored, requires owned real MySQL fixture
+test legacy_recovery::absent_enrollment_is_unknown_but_enrolled_missing_undo_fences_and_finishes_atomically ... ignored, requires owned real MySQL fixture
+test legacy_recovery::cancelled_dispatch_retains_pending_and_new_process_recovers_original_identity ... ignored, requires owned real MySQL fixture and exact recovery child artifact
+test legacy_recovery::collation_alias_guard_cannot_publish_another_xid_terminal ... ignored, requires owned real MySQL fixture
+test legacy_recovery::compensation_and_terminal_are_atomic_and_duplicate_callbacks_preserve_later_business ... ignored, requires owned real MySQL fixture
+test legacy_recovery::concurrent_and_delayed_attempts_observe_one_durable_terminal ... ignored, requires owned real MySQL fixture
+test legacy_recovery::dirty_failure_keeps_undo_and_persistent_direction_for_next_recovery ... ignored, requires owned real MySQL fixture
+test legacy_recovery::enrollment_is_idempotent_but_does_not_overwrite_application_or_profile ... ignored, requires owned real MySQL fixture
+test legacy_recovery::recovery_schema_drift_and_triggers_are_rejected_without_enrollment ... ignored, requires owned real MySQL fixture
+test legacy_recovery::recovery_table_is_reserved_before_any_business_dml ... ignored, requires owned real MySQL fixture
+test legacy_recovery::terminal_write_denial_rolls_back_already_executed_compensation_and_undo_delete ... ignored, requires owned real MySQL fixture
+test legacy_recovery::unsupported_commit_binds_direction_without_reporting_success_or_deleting_undo ... ignored, requires owned real MySQL fixture
+test lost_registration_response_is_handed_to_validated_callback_without_forged_success_receipt ... ignored, requires owned real MySQL fixture
+test manual_dispatch_cannot_mint_callback_ownership ... ignored, requires owned real MySQL fixture
+test migration::archived_old_reader_rejects_expansion_and_current_child_recovers_original_pending ... ignored, requires owned real MySQL fixture
+test migration::legacy_known_callback_works_but_missing_ownership_requires_explicit_migration ... ignored, requires owned real MySQL fixture
+test migration::malformed_origin_version_phase_lock_knowledge_and_default_are_rejected_without_undo ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 18 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_callback_ownership_loss.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_callback_ownership_loss-4e4753aebbad8a9a.exe)
+
+running 1 test
+test callback_origin_commit_unknown_stays_pending_and_original_retry_finishes ... ignored, requires owned MySQL and original packet callback-origin COMMIT observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_commit_check_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_commit_check_java-0751458c69123279.exe)
+
+running 1 test
+test original_java_tc_preparation_keeps_normal_undo_local_then_rolls_back_before_the_real_callback ... ignored, requires pinned original Java TC, raw passthrough observer and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_commit_direction.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_commit_direction-4b65c514251da671.exe)
+
+running 12 tests
+test cases::actual_v2_reader_refuses_fourteen_columns_and_current_reader_recovers_pending_rollback ... ignored, requires owned real MySQL fixture and archived actual v2 executable
+test cases::normal_guard_absent_and_many_orphan_children_cleanup_preserves_other_branches ... ignored, requires owned real MySQL fixture
+test cases::public_commit_cannot_authorize_or_cleanup_new_physical_records ... ignored, requires owned real MySQL fixture
+test cases::upgrading_real_legacy_phase_one_rows_preserves_bytes_and_requires_fresh_callback ... ignored, requires owned real MySQL fixture
+test guard_cases::authorized_cleanup_deadline_and_mid_wait_cancellation_preserve_logs_then_original_callback_recovers ... ignored, requires owned real MySQL fixture
+test guard_cases::collation_aliases_and_distinct_suffixes_never_delete_other_original_identities ... ignored, requires owned real MySQL fixture
+test guard_cases::illegal_direction_authority_and_dual_terminal_combinations_are_never_applied ... ignored, requires owned real MySQL fixture
+test real_commit_callback_atomically_cleans_root_children_and_terminal_without_business_changes ... ignored, requires owned real MySQL fixture
+test recovery_cases::early_real_commit_decision_blocks_late_precommit_and_original_local_normal_is_rolled_back ... ignored, requires owned real MySQL fixture
+test recovery_cases::malformed_commit_capability_shape_defaults_and_trigger_never_authorize_or_clean ... ignored, requires owned real MySQL fixture
+test recovery_cases::parallel_independent_recovery_instances_serialize_one_cleanup_effect ... ignored, requires owned real MySQL fixture
+test recovery_cases::terminal_update_permission_denial_rolls_back_actual_deletion_and_recovers_after_grant ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_commit_direction_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_commit_direction_java-c2fb5701b2460a92.exe)
+
+running 2 tests
+test lock_guard_cases::native_registration_guard_preserves_exclusive_tc_lock_and_releases_on_original_rollback ... ignored, requires pinned original Java TC and owned MySQL lock store
+test original_java_tc_commit_authorizes_and_cleans_manually_committed_fixture_without_business_replay ... ignored, requires pinned original Java TC and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_commit_direction_loss.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_commit_direction_loss-57d066781d488a24.exe)
+
+running 1 test
+test original_cleanup_failure_retains_pending_and_actual_process_recovers_without_business_replay ... ignored, requires owned real MySQL with targeted commit cleanup fault observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_commit_preconditions.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_commit_preconditions-11f59f7c8a17571d.exe)
+
+running 11 tests
+test actual_recovery_lock_wait_deadline_and_cancellation_consume_original_scope ... ignored, requires owned real MySQL fixture
+test callback_bound_before_check_never_allows_check_even_during_undo_lock_cycle ... ignored, requires owned real MySQL fixture
+test changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration ... ignored, requires owned real MySQL fixture
+test checked_drop_and_unpolled_check_drop_roll_back_and_release_all_original_locks ... ignored, requires owned real MySQL fixture
+test managed_rollback_fence_cases::managed_rollback_fences_a_stale_writer_after_compensating_normal_undo ... ignored, requires owned real MySQL fixture
+test no_change_checks_do_not_require_recovery_or_undo_tables_or_register_a_branch ... ignored, requires owned real MySQL fixture
+test original_callback_after_local_check_waits_then_finishes_after_local_rollback ... ignored, requires owned real MySQL fixture
+test original_eleven_column_and_migrated_version_one_records_keep_commit_checks_compatible ... ignored, requires owned real MySQL fixture
+test original_transaction_holds_commit_arbitration_until_whole_rollback ... ignored, requires owned real MySQL fixture
+test witness_cases::first_phase_witness_is_written_in_the_original_transaction_and_rolls_back_with_it ... ignored, requires owned real MySQL fixture
+test witness_cases::first_phase_witness_observation_preserves_legacy_and_survives_real_callback_cleanup ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_execution.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_execution-10203ee262ae0b4b.exe)
+
+running 17 tests
+test after_image_over_budget_is_not_published_and_the_business_effects_roll_back ... ignored, requires owned real MySQL fixture
+test decimal_text_primary_assignment_cannot_capture_an_adjacent_old_row ... ignored, requires owned real MySQL fixture
+test duplicate_key_failure_poisons_and_rollback_removes_all_prior_local_effects ... ignored, requires owned real MySQL fixture
+test execution_failures::business_table_matching_next_internal_name_is_not_shadowed_or_dropped ... ignored, requires owned real MySQL fixture
+test execution_failures::cancellation_after_business_before_after_image_releases_the_actual_write ... ignored, requires owned real MySQL fixture
+test execution_failures::cancellation_after_key_assignment_cleans_temp_and_rolls_back_prior_business ... ignored, requires owned real MySQL fixture
+test execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements ... ignored, requires owned real MySQL fixture
+test execution_failures::deadline_after_key_assignment_cleans_temp_and_rolls_back_prior_business ... ignored, requires owned real MySQL fixture
+test execution_failures::invalid_key_assignment_leaves_no_committed_effect_and_session_exit_cleans_temp ... ignored, requires owned real MySQL fixture
+test execution_failures::missing_temp_permission_poisons_without_committing_prior_business ... ignored, requires owned real MySQL fixture
+test insert_uses_explicit_composite_keys_and_native_exact_values_without_committing ... ignored, requires owned real MySQL fixture
+test key_assignment_staging_preserves_char_binary_decimal_and_does_not_commit_prior_work ... ignored, requires owned real MySQL fixture
+test local_parameter_rejection_preserves_the_scope_without_appending_undo ... ignored, requires owned real MySQL fixture
+test missing_explicit_insert_key_and_primary_key_update_fail_before_business_execution ... ignored, requires owned real MySQL fixture
+test no_match_and_noop_do_not_invent_rows_or_require_a_changed_row_count ... ignored, requires owned real MySQL fixture
+test pending_undo_record_limit_poisons_and_forces_full_rollback ... ignored, requires owned real MySQL fixture
+test update_after_image_uses_original_keys_when_the_where_column_changes_then_delete_is_empty ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 17 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_first_phase_enrollment_loss.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_first_phase_enrollment_loss-b633b279b048e27a.exe)
+
+running 1 test
+test enrollment_commit_loss_retains_known_receipt_and_original_callback_can_finish ... ignored, requires owned MySQL with original enrollment COMMIT fault observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_first_phase_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_first_phase_java-c0913f81c8a360c1.exe)
+
+running 1 test
+test original_java_tc_preparation_keeps_normal_undo_local_then_rolls_back_before_the_real_callback ... ignored, requires pinned original Java TC, raw passthrough observer and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_first_phase_preparation.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_first_phase_preparation-d0a4105bd2f96aa3.exe)
+
+running 11 tests
+test cases::early_callback_prevents_preparation_and_retains_the_genuine_late_receipt ... ignored, requires owned real MySQL fixture
+test cases::existing_guard_rejects_normal_undo_after_registration_and_preserves_real_identity ... ignored, requires owned real MySQL fixture
+test cases::local_validation_poison_and_sealed_undo_are_rejected_before_any_registration ... ignored, requires owned real MySQL fixture
+test cases::outer_registration_deadline_and_explicit_cancellation_close_original_transaction ... ignored, requires owned real MySQL fixture
+test cases::rejected_and_lost_registration_consume_business_without_fabricating_a_receipt ... ignored, requires owned real MySQL fixture
+test empty_and_zero_row_changes_do_not_register_or_create_recovery_ownership ... ignored, requires owned real MySQL fixture
+test preparation_uses_real_images_and_positive_receipt_but_keeps_business_and_undo_uncommitted ... ignored, requires owned real MySQL fixture
+test registration_guard_cases::lossy_row_tokens_abort_before_registration_and_safe_tokens_keep_the_original_wire ... ignored, requires owned real MySQL fixture
+test wait_cases::actual_enrollment_and_undo_waits_preserve_known_receipt_and_cancelled_scope ... ignored, requires owned real MySQL fixture
+test wait_cases::an_unpolled_preparation_future_drops_the_original_transaction_without_registering ... ignored, requires owned real MySQL fixture
+test wait_cases::preparation_resource_mismatch_is_local_before_registration ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_image_race.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_image_race-bd7deb7978514838.exe)
+
+running 1 test
+test preflight_locks_prevent_row_growth_and_phantoms_before_full_query_is_forwarded ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_metadata.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_metadata-f1b55535e8adf282.exe)
+
+running 9 tests
+test actual_metadata_preserves_physical_integer_text_binary_and_unsigned_decimal_domains ... ignored, requires owned real MySQL fixture
+test drop_releases_real_metadata_lock_without_a_business_commit ... ignored, requires owned real MySQL fixture
+test exact_metadata_has_physical_order_composite_primary_order_and_unsigned_precision ... ignored, requires owned real MySQL fixture
+test metadata_lock_blocks_actual_ddl_until_the_same_transaction_rolls_back ... ignored, requires owned real MySQL fixture
+test metadata_visibility_is_required_before_interpreting_missing_triggers_as_absence ... ignored, requires owned real MySQL fixture
+test schema_partial_revocation_cannot_be_overridden_by_a_global_trigger_grant ... ignored, requires owned real MySQL fixture
+test scoped_table_grants_do_not_prove_global_inbound_foreign_key_visibility ... ignored, requires owned real MySQL fixture
+test unsafe_tables_and_unknown_types_fail_closed_and_poison_the_local_scope ... ignored, requires owned real MySQL fixture
+test withheld_database_response_obeys_the_client_deadline_and_discards_the_transaction ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_mysql_types.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_mysql_types-b5945a98ad36061e.exe)
+
+running 1 test
+test physical_types_keep_all_native_subtypes_and_tinyint_display_width ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_rm_recovery.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_rm_recovery-17025c004e705438.exe)
+
+running 11 tests
+test absent_enrollment_is_unknown_but_enrolled_missing_undo_fences_and_finishes_atomically ... ignored, requires owned real MySQL fixture
+test cancelled_dispatch_retains_pending_and_new_process_recovers_original_identity ... ignored, requires owned real MySQL fixture and exact recovery child artifact
+test collation_alias_guard_cannot_publish_another_xid_terminal ... ignored, requires owned real MySQL fixture
+test compensation_and_terminal_are_atomic_and_duplicate_callbacks_preserve_later_business ... ignored, requires owned real MySQL fixture
+test concurrent_and_delayed_attempts_observe_one_durable_terminal ... ignored, requires owned real MySQL fixture
+test dirty_failure_keeps_undo_and_persistent_direction_for_next_recovery ... ignored, requires owned real MySQL fixture
+test enrollment_is_idempotent_but_does_not_overwrite_application_or_profile ... ignored, requires owned real MySQL fixture
+test recovery_schema_drift_and_triggers_are_rejected_without_enrollment ... ignored, requires owned real MySQL fixture
+test recovery_table_is_reserved_before_any_business_dml ... ignored, requires owned real MySQL fixture
+test terminal_write_denial_rolls_back_already_executed_compensation_and_undo_delete ... ignored, requires owned real MySQL fixture
+test unsupported_commit_binds_direction_without_reporting_success_or_deleting_undo ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_rm_recovery_loss.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_rm_recovery_loss-ca560604b6f8f19f.exe)
+
+running 1 test
+test lost_terminal_commit_recovers_without_replaying_compensation_or_business ... ignored, requires owned MySQL and original packet recovery commit observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_row_images.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_row_images-2caef4c7024c82ac.exe)
+
+running 10 tests
+test caller_cancellation_releases_the_owned_transaction_before_proxy_shutdown ... ignored, requires owned real MySQL fixture
+test captured_rows_stay_locked_until_original_transaction_rolls_back ... ignored, requires owned real MySQL fixture
+test composite_primary_order_is_database_index_order_not_physical_column_order ... ignored, requires owned real MySQL fixture
+test decimal_and_unsigned_predicate_parameters_keep_native_numeric_semantics ... ignored, requires owned real MySQL fixture
+test empty_images_keep_schema_and_bad_parameter_counts_do_not_poison ... ignored, requires owned real MySQL fixture
+test insert_and_primary_key_update_are_rejected_without_business_execution ... ignored, requires owned real MySQL fixture
+test physical_types_decode_char_padding_binary_null_and_exact_unsigned_values ... ignored, requires owned real MySQL fixture
+test response_loss_uses_one_client_deadline_for_the_whole_before_image_chain ... ignored, requires owned real MySQL fixture
+test row_field_and_total_budgets_reject_before_full_payload_select ... ignored, requires owned real MySQL fixture
+test update_before_image_uses_where_parameters_and_preserves_full_exact_rows ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 10 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_undo_codec.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_codec-f9c32c181b5bd7b4.exe)
+
+running 1 test
+test real_prepared_insert_update_delete_and_exact_composite_rows_encode_without_commit ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_undo_fence.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_fence-cadc5d52134e8446.exe)
+
+running 9 tests
+test cancellation_during_actual_identity_wait_publishes_no_guard ... ignored, requires owned real MySQL fixture
+test committed_normal_is_preserved_as_opaque_pending_work ... ignored, requires owned real MySQL fixture
+test deadline_during_actual_identity_wait_stays_before_commit ... ignored, requires owned real MySQL fixture
+test durable_guard_blocks_two_original_late_normal_writers_without_replaying_business ... ignored, requires owned real MySQL fixture
+test invalid_identity_has_no_sql_effect_and_debug_hides_xid ... ignored, requires owned real MySQL fixture
+test malformed_or_unknown_guard_never_becomes_a_fence ... ignored, requires owned real MySQL fixture
+test original_normal_winner_is_observed_after_actual_lock_arbitration ... ignored, requires owned real MySQL fixture
+test relaxed_flush_configuration_is_rejected_without_guard ... ignored, requires owned real MySQL fixture
+test two_control_attempts_have_one_durable_identity_without_automatic_retry ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_undo_fence_loss.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_fence_loss-c5dceafa8eef65fd.exe)
+
+running 1 test
+test unknown_control_commit_requires_original_identity_observation ... ignored, requires owned MySQL and raw packet observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_undo_rollback.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_rollback-1f783bdc9ddc3d8c.exe)
+
+running 13 tests
+test already_restored_and_equal_images_skip_dml_then_follow_original_missing_log_fence ... ignored, requires owned real MySQL fixture
+test cancellation_during_original_undo_lock_wait_publishes_no_partial_restoration ... ignored, requires owned real MySQL fixture
+test changed_or_unsafe_schema_and_unknown_compression_do_not_consume_undo ... ignored, requires owned real MySQL fixture
+test concurrent_duplicate_rollback_has_one_normal_consumer_and_preserves_original_missing_log_semantics ... ignored, requires owned real MySQL fixture
+test corrupted_or_missing_subrows_keep_business_and_every_remaining_original_byte ... ignored, requires owned real MySQL fixture
+test deadline_during_original_undo_lock_wait_publishes_no_partial_restoration ... ignored, requires owned real MySQL fixture
+test jdbc_profile_or_original_document_identity_mismatch_never_changes_business ... ignored, requires owned real MySQL fixture
+test later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes ... ignored, requires owned real MySQL fixture
+test mixed_logs_run_in_reverse_and_consume_only_original_branch ... ignored, requires owned real MySQL fixture
+test numeric_tinyint_profile_restores_physical_integer_two_without_boolean_loss ... ignored, requires owned real MySQL fixture
+test real_packet_chunks_are_validated_reassembled_and_deleted_with_their_original_root ... ignored, requires owned real MySQL fixture
+test stored_insert_undo_restores_business_and_consumes_original_row_atomically ... ignored, requires owned real MySQL fixture
+test update_and_delete_restore_original_values_without_pk_cartesian_products ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 13 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_undo_rollback_loss.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_rollback_loss-49a01597035c60a3.exe)
+
+running 1 test
+test uncertain_rollback_commit_keeps_original_identity_and_recovers_without_business_replay ... ignored, requires owned MySQL and original packet COMMIT observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\live_undo_store.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_undo_store-2108e9c12468548b.exe)
+
+running 10 tests
+test absolute_deadline_during_actual_unique_key_wait_discards_owned_transaction ... ignored, requires owned real MySQL fixture
+test cancelling_actual_unique_key_wait_discards_owned_transaction ... ignored, requires owned real MySQL fixture
+test empty_flush_writes_nothing_and_successful_flush_seals_all_mutations ... ignored, requires owned real MySQL fixture
+test existing_normal_and_global_finished_rows_are_not_overwritten ... ignored, requires owned real MySQL fixture
+test inbound_foreign_key_on_undo_table_rejects_flush_and_rolls_back_business ... ignored, requires owned real MySQL fixture
+test invalid_original_identity_poisoned_before_any_undo_insert ... ignored, requires owned real MySQL fixture
+test missing_unsafe_or_incomplete_undo_table_never_commits_business ... ignored, requires owned real MySQL fixture
+test original_undo_row_and_business_share_one_uncommitted_transaction_then_rollback ... ignored, requires owned real MySQL fixture
+test oversized_sub_id_context_never_publishes_partial_undo ... ignored, requires owned real MySQL fixture
+test packet_splits_original_bytes_and_root_context_reassembles_exactly ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 10 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\options_contract.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\options_contract-535d30c3bfc3e2e4.exe)
+
+running 3 tests
+test debug_never_prints_password_or_username ... ok
+test disabling_tls_requires_an_explicit_literal_loopback_address ... ok
+test options_reject_invalid_identifiers_addresses_and_pool_limits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples\mysql_commit_recovery_child.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\mysql_commit_recovery_child-8997426a5c02e4e2.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples\mysql_rm_recovery_child.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\mysql_rm_recovery_child-87af3bac720118b0.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_protocol-7f28255cf14bc8b3.exe)
+
+running 7 tests
+test codec::primitive_tests::budgets_prevent_partial_field_writes_and_arithmetic_overflow ... ok
+test codec::primitive_tests::malformed_lengths_utf8_and_boolean_are_rejected_before_allocation ... ok
+test codec::primitive_tests::ordinary_zero_and_nullable_header_values_have_distinct_contracts ... ok
+test codec::primitive_tests::signed_scalars_match_independent_big_endian_bytes ... ok
+test codec::primitive_tests::signed_short_string_limit_does_not_truncate_unicode ... ok
+test codec::primitive_tests::string32_and_full_consumption_preserve_explicit_fields ... ok
+test codec::primitive_tests::string_lengths_count_utf8_bytes_and_all_truncated_prefixes_fail ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\handler_payloads.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\handler_payloads-975c9b3dca2de402.exe)
+
+running 1 test
+test all_78_named_java_handler_contexts_match_independent_expectations ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\java_payload_oracles.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\java_payload_oracles-01ee1c8fddce5418.exe)
+
+running 3 tests
+test all_168_java_status_records_preserve_failed_result_independently ... ok
+test all_250_java_exception_records_have_independent_fields_and_encoding ... ok
+test all_seven_java_supplemental_failures_match_without_rewriting_go_records ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\merge_payloads.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\merge_payloads-7a053203237551d5.exe)
+
+running 8 tests
+test accepted_single_byte_mutations_roundtrip_without_partial_objects_or_panics ... ok
+test all_38_java_profile_trees_match_composed_semantics_and_exact_bytes ... ok
+test configured_batch_node_depth_and_byte_limits_apply_to_encode_and_decode ... ok
+test every_truncated_merge_prefix_sealed_length_and_signed_count_is_rejected ... ok
+test invalid_id_shapes_non_results_and_unset_result_array_fail_both_directions ... ok
+test result_child_budget_is_checked_before_scanning_child_types ... ok
+test shared_node_budget_and_64_layer_stack_boundary_are_enforced ... ok
+test six_actual_java_control_merges_match_independent_fields_and_encoding ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests\payload_boundaries.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\payload_boundaries-2f149b2f5fa25085.exe)
+
+running 8 tests
+test byte_limits_and_signed_wire_scalars_are_explicit ... ok
+test debug_does_not_print_registration_secrets_or_error_text ... ok
+test every_original_payload_prefix_and_trailing_byte_is_rejected ... ok
+test failed_result_and_long_error_text_survive_each_response_layout ... ok
+test malformed_utf8_huge_negative_lengths_and_unknown_codes_fail ... ok
+test registration_wire_absence_and_java_getter_projection_are_separate ... ok
+test report_absence_255_is_distinct_from_unknown_0 ... ok
+test unrepresentable_success_text_and_required_empty_fields_fail ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\payload_golden.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\payload_golden-c1299f8b2545c6c4.exe)
+
+running 30 tests
+test all_original_case_identities_are_required ... ok
+test golden_branch_commit_request ... ok
+test golden_branch_commit_response ... ok
+test golden_branch_commit_response_failed ... ok
+test golden_branch_register_request ... ok
+test golden_branch_register_response ... ok
+test golden_branch_register_response_failed ... ok
+test golden_branch_report_request ... ok
+test golden_branch_report_response ... ok
+test golden_branch_rollback_request ... ok
+test golden_branch_rollback_response ... ok
+test golden_global_begin_request ... ok
+test golden_global_begin_response ... ok
+test golden_global_begin_response_failed ... ok
+test golden_global_commit_request ... ok
+test golden_global_commit_response ... ok
+test golden_global_commit_response_failed ... ok
+test golden_global_lock_query_request ... ok
+test golden_global_lock_query_response ... ok
+test golden_global_report_request ... ok
+test golden_global_report_response ... ok
+test golden_global_rollback_request ... ok
+test golden_global_rollback_response ... ok
+test golden_global_status_request ... ok
+test golden_global_status_response ... ok
+test golden_register_rm_request ... ok
+test golden_register_rm_response ... ok
+test golden_register_tm_request ... ok
+test golden_register_tm_response ... ok
+test golden_undo_log_delete_request ... ok
+
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\v1_frames.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\v1_frames-a3363de78e58fe15.exe)
+
+running 12 tests
+test accepted_single_byte_frame_mutations_roundtrip_exactly ... ok
+test all_37_fresh_original_java_frames_match_formal_objects_and_encoding ... ok
+test all_nine_java_control_frames_include_empty_heartbeat_and_full_merge_bodies ... ok
+test all_original_six_frames_are_reconstructed_from_their_certified_payloads ... ok
+test exact_frame_header_entry_and_payload_limits_apply_in_both_directions ... ok
+test header_byte_budget_precedes_hashing_and_duplicate_key_validation ... ok
+test heartbeat_and_ordinary_body_rules_and_known_unsupported_codecs_are_explicit ... ok
+test malformed_frame_lengths_magic_versions_and_truncation_are_rejected ... ok
+test malformed_null_duplicate_utf8_and_unsealed_header_fields_are_rejected ... ok
+test maximum_signed_header_boundary_and_metadata_only_debug_are_verified ... ok
+test ordered_headers_preserve_null_empty_unicode_and_signed_request_ids ... ok
+test original_begin_frames_match_independent_objects_with_and_without_headers ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\wire_codes.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\wire_codes-af440a6af6e3720b.exe)
+
+running 5 tests
+test branch_status_and_mode_do_not_default_unknown_codes_to_at ... ok
+test envelope_codes_and_known_extensions_are_explicit ... ok
+test exception_codes_keep_java_raft_leader_and_fail_fast_distinct ... ok
+test global_status_has_all_21_explicit_java_codes ... ok
+test sparse_message_codes_and_known_unsupported_families_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests examples\peer_profile_probe.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\peer_profile_probe-bbeb7fb053cd2c8b.exe)
+
+running 1 test
+test tests::encode_failure_after_successful_decode_is_not_normal_rejection ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_rm-c360ada6c677e98a.exe)
+
+running 3 tests
+test manager::callback_handler::tests::application_data_bounds_and_some_empty_are_checked_before_identity_construction ... ok
+test manager::callback_handler::tests::validation_uses_the_original_absolute_deadline_instead_of_starting_a_new_budget ... ok
+test store::file_branch_store::tests::actual_write_failure_poison_prevents_a_later_false_completion ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests\callback_ownership.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\callback_ownership-9830aca59566a4d8.exe)
+
+running 3 tests
+test cancelled_observer_leaves_pending_and_next_callback_recovers_without_apply ... ok
+test invalid_later_batch_child_cannot_issue_first_child_callback_receipt ... ok
+test manual_dispatch_does_not_invoke_a_resource_callback_observer ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests\dispatch.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\dispatch-8399ea6d4509c686.exe)
+
+running 8 tests
+test adapter_errors_keep_pending_and_recovery_errors_do_not_allow_another_action ... ok
+test authoritative_no_effect_and_rejection_have_different_retry_behavior ... ok
+test cancelled_apply_leaves_pending_and_a_separate_dispatcher_queries_before_any_new_action ... ok
+test catalog_never_announces_a_replacement_or_an_unhandled_resource ... ok
+test exact_duplicate_uses_completed_record_but_identity_or_phase_changes_do_not_execute ... ok
+test only_authoritative_recovery_no_effect_permits_a_new_attempt ... ok
+test pending_unknown_is_queried_without_action_and_authoritative_applied_finishes_without_replay ... ok
+test simultaneous_dispatchers_share_one_branch_lease_and_never_repeat_a_confirmed_action ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests\journal.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\journal-412f4f018123a6c5.exe)
+
+running 12 tests
+test an_independent_owner_cannot_open_the_same_journal_while_it_is_owned ... ok
+test branch_identity_rejects_ambiguous_or_invalid_fields_and_redacts_debug ... ok
+test cancellation_or_owner_drop_leaves_durable_pending_instead_of_retry_permission ... ok
+test cancelled_disk_operation_keeps_its_branch_and_budget_until_the_worker_really_finishes ... ok
+test checksummed_but_invalid_sequence_state_and_identity_cannot_bypass_replay_validation ... ok
+test completed_rows_are_not_evicted_and_repeated_completion_adds_no_record ... ok
+test damaged_version_checksum_or_partial_tail_is_never_silently_truncated ... ok
+test empty_existing_file_is_corruption_and_not_a_new_journal ... ok
+test original_identity_and_phase_cannot_be_changed_even_after_restart ... ok
+test pending_and_completed_identity_survive_actual_close_and_reopen ... ok
+test record_and_file_budgets_fail_before_writing_or_acknowledging_completion ... ok
+test store_shared_leases_serialize_dispatchers_and_cancelled_waiters_release_budget ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests\native_callbacks.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\native_callbacks-0b5a8fba09cc98bc.exe)
+
+running 8 tests
+test an_unsupported_later_batch_child_rejects_before_the_first_resource_effect ... ok
+test callback_deadline_cancels_resource_future_and_next_instruction_recovers_without_replaying ... ok
+test contradictory_directions_inside_one_batch_reject_before_any_resource_effect ... ok
+test dropping_manager_synchronously_closes_the_pool_for_all_client_clones ... ok
+test duplicate_callbacks_keep_signed_id_nullable_headers_and_exact_branch_identity_without_reexecution ... ok
+test flat_batch_preserves_order_and_exact_duplicate_children_apply_only_once ... ok
+test missing_or_wrong_branch_type_resource_returns_explicit_failure_with_original_identity ... ok
+test shutdown_owns_cancelled_resource_tasks_and_leaves_durable_pending ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.39s
+
+     Running tests\native_calls.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\native_calls-f9aaa3da58914958.exe)
+
+running 5 tests
+test ambiguous_empty_optional_input_is_rejected_before_the_business_frame_and_closed_clients_stay_closed ... ok
+test failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean ... ok
+test lost_registration_response_preserves_original_request_and_reconnect_never_replays_it ... ok
+test registered_rm_registers_reports_and_observes_lock_false_without_losing_fields ... ok
+test wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests\native_edge_cases.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\native_edge_cases-78250a484c5ee5bb.exe)
+
+running 7 tests
+test branch_report_preserves_java_absent_resource_and_application_data_without_filling_them ... ok
+test callback_started_on_old_connection_never_sends_its_reply_on_the_replacement_connection ... ok
+test callback_worker_budget_one_does_not_start_queued_resource_actions_during_shutdown ... ok
+test dynamic_resource_buffers_callbacks_and_business_until_the_full_revision_is_ready ... ok
+test failed_branch_registration_preserves_returned_id_message_exception_and_original_request ... ok
+
+thread 'shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain' panicked at crates\seata_rm\tests\support\rm_peer.rs:31:9:
+fixture adapter cleanup panicked
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain ... ok
+test successful_registration_without_positive_issued_id_remains_protocol_uncertainty ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests\process_restart.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\process_restart-46fa3de3ce5698ba.exe)
+
+running 3 tests
+test commit_effect_survives_forced_process_exit_and_two_new_processes_do_not_repeat_it ... process-restart-evidence=D:/codex-builds/rm-process-59852-1795111335675215900-Commit phase=Commit apply=1 recover=1 children=3 terminated=true
+ok
+test journal_process_child ... ignored, parent launches this exact helper in a separately owned process
+test rollback_effect_survives_forced_process_exit_and_two_new_processes_do_not_repeat_it ... process-restart-evidence=D:/codex-builds/rm-process-59852-1795111335815547300-Rollback phase=Rollback apply=1 recover=1 children=3 terminated=true
+ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests\registration_receipt.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\registration_receipt-43f419f820df528d.exe)
+
+running 3 tests
+test issued_receipt_keeps_original_identity_optional_fields_and_exact_long ... ok
+test lost_issued_response_has_no_receipt_and_reconnection_does_not_register_again ... ok
+test rejection_and_invalid_issued_ids_cannot_create_receipts ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_sqlparser-51a805a43988728b.exe)
+
+running 2 tests
+test escape_provider_instance::tests::existing_waiter_gets_outer_while_new_lookup_can_see_published_inner ... ok
+test utf16_cursor::tests::previous_preserves_code_point_before_partial_surrogate_position ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests\column_java_diff.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\column_java_diff-08317ea10ba8b465.exe)
+
+running 5 tests
+test column_default_and_raw_overflow_match_original_java ... ok
+test exhaustive_yes_case_equivalence_matches_original_jdk17 ... ok
+test object_callback_read_order_matches_original_java ... ok
+test original_java_string_hash_and_all_code_units_match ... ok
+test raw_sequence_exception_and_nullable_cause_text_match_original_java ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests\column_meta.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\column_meta-bcc6e5b0b4a3d7f2.exe)
+
+running 18 tests
+test autoincrement ... ok
+test equals_and_hash_code ... ok
+test get_table_cat ... ok
+test set_get_case_sensitive ... ok
+test set_get_char_octet_length ... ok
+test set_get_column_def ... ok
+test set_get_column_name ... ok
+test set_get_column_size ... ok
+test set_get_data_type ... ok
+test set_get_data_type_name ... ok
+test set_get_decimal_digits ... ok
+test set_get_null_able ... ok
+test set_get_num_prec_radix ... ok
+test set_get_on_update ... ok
+test set_get_ordinal_position ... ok
+test set_get_remarks ... ok
+test set_get_sql_data_type ... ok
+test set_get_sql_datetime_sub ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\column_meta_obligations.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\column_meta_obligations-9d05169b0e344a62.exe)
+
+running 9 tests
+test autoincrement_uses_java_unicode_ignore_case_not_ascii_only ... ok
+test clone_shares_column_mutations_and_allows_clearing ... ok
+test debug_does_not_call_user_formatting_under_metadata_lock ... ok
+test equals_reads_tail_fields_after_reentrant_object_callback ... ok
+test hash_reads_tail_fields_after_reentrant_object_callback ... ok
+test java_hash_wraps_and_text_retains_raw_utf16 ... ok
+test object_field_preserves_boxed_types_and_null ... ok
+test replacing_dynamic_object_releases_user_drop_outside_metadata_lock ... ok
+test text_reads_tail_fields_after_reentrant_object_callback ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\core_constants_diff.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\core_constants_diff-a56c4ac8f214271e.exe)
+
+running 1 test
+test complete_constant_inventory_matches_original_java ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\core_utf16.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\core_utf16-cb2598b17f8f7bdb.exe)
+
+running 5 tests
+test exception_raw_cause_retains_text_and_original_error_identity ... ok
+test exception_raw_message_and_to_string_retain_unpaired_surrogates ... ok
+test java_string_diagnostic_does_not_silently_replace_surrogates ... ok
+test java_string_preserves_all_code_units_and_java_hash ... ok
+test sequence_raw_getters_and_mutations_retain_unpaired_surrogates ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\core_value_obligations.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\core_value_obligations-367a804786dca8d9.exe)
+
+running 6 tests
+test all_sql_type_values_round_trip_and_holes_are_rejected ... ok
+test escape_preserves_utf16_code_units ... ok
+test exception_null_and_empty_messages_remain_distinct ... ok
+test method_count_is_signed_and_participates_in_equality ... ok
+test parser_and_jdbc_constant_contracts ... ok
+test sequence_empty_and_null_remain_distinct ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\core_values.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\core_values-9c7d782b944c5bdf.exe)
+
+running 23 tests
+test default_get ... ok
+test default_string ... ok
+test escape_left_symbol ... ok
+test escape_right_symbol ... ok
+test exception_cause ... ok
+test exception_message ... ok
+test exception_message_and_cause ... ok
+test index_type_invalid ... ok
+test index_type_value ... ok
+test index_type_value_of ... ok
+test method_get ... ok
+test method_string ... ok
+test not_placeholder_get ... ok
+test not_placeholder_string ... ok
+test null_get ... ok
+test null_string ... ok
+test sequence_constructor ... ok
+test sequence_default ... ok
+test sequence_set_function ... ok
+test sequence_set_sequence ... ok
+test sql_type_invalid ... ok
+test sql_type_value ... ok
+test sql_type_value_of ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\escape_handler.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\escape_handler-e38982ffd5208160.exe)
+
+running 1 test
+test original_escape_defaults_match_utf16_results_identity_exceptions_and_callbacks ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\index_java_diff.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\index_java_diff-8ae66f0aa724e63d.exe)
+
+running 4 tests
+test all_list_equals_modes_and_mutations_match_jdk17 ... ok
+test live_to_string_iteration_modes_match_jdk17 ... ok
+test nullable_defaults_and_hash_replay_with_explicit_jvm_identity_match ... ok
+test original_exception_identity_propagates_through_all_seven_paths ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests\index_meta.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\index_meta-1ddb3084cbbfcd12.exe)
+
+running 16 tests
+test equals_different_objects ... ok
+test equals_different_type ... ok
+test equals_identical_objects ... ok
+test equals_null_object ... ok
+test equals_same_object ... ok
+test get_set_asc_or_desc ... ok
+test get_set_cardinality ... ok
+test get_set_index_name ... ok
+test get_set_index_qualifier ... ok
+test get_set_indextype ... ok
+test get_set_ordinal_position ... ok
+test get_set_type ... ok
+test get_set_values ... ok
+test hash_code_consistency_original_column_assertions ... ok
+test hash_code_difference_original_column_assertions ... ok
+test is_set_non_unique ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\index_meta_obligations.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\index_meta_obligations-dcd97b998a6b4be5.exe)
+
+running 6 tests
+test array_list_equality_detects_structural_change_after_callback ... ok
+test array_list_equality_observes_nonstructural_set_of_future_slot ... ok
+test index_defaults_null_shortcuts_and_cardinality_contract ... ok
+test index_reads_scalar_fields_after_list_comparison_callback ... ok
+test list_nulls_aliases_fixed_mutability_and_index_errors ... ok
+test to_string_uses_live_iterator_has_next_after_callback ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\jdbc_db_type_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\jdbc_db_type_java-c6c2b88eac79c646.exe)
+
+running 1 test
+test native_jdbc_parser_matches_original_druid_for_all_prefixes_and_boundaries ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\locale_casing.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\locale_casing-b527428526eefaa6.exe)
+
+running 2 tests
+test contextual_string_lower_and_upper_match_original_jdk17 ... ok
+test word_boundaries_match_original_root_and_thai_dictionary_profiles ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+     Running tests\map_copy_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\map_copy_java-9e2ab9f2faef8c11.exe)
+
+running 1 test
+test java_bulk_write_and_shallow_copy_follow_original_two_pass_semantics ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\map_defaults_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\map_defaults_java-6d1d2232a7e7e6c5.exe)
+
+running 1 test
+test lower_case_map_defaults_match_original_callback_and_null_semantics ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\map_views_java.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\map_views_java-2caece2ae5c184eb.exe)
+
+running 1 test
+test original_live_map_views_preserve_detached_entries_and_origin_side_effects ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\object_callback_errors.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\object_callback_errors-80b9e05b51399521.exe)
+
+running 2 tests
+test object_failures_preserve_identity_and_propagate_through_column_and_list ... ok
+test throwing_cause_to_string_prevents_exception_construction_and_preserves_original_failure ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\sql_server_table_meta.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\sql_server_table_meta-f5213f6c54a82c6e.exe)
+
+running 1 test
+test sql_server_metadata_matches_original_inherited_dispatch ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\table_exception_hierarchy.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\table_exception_hierarchy-86fef339b7d9acca.exe)
+
+running 2 tests
+test map_equals_catches_both_exception_subclasses_after_direct_callback_retains_identity ... ok
+test map_equals_does_not_guess_catch_family_from_simple_name_or_swallow_other_subclasses ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\table_java_diff.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\table_java_diff-b854c8df00a20ce8.exe)
+
+running 4 tests
+test actual_language_specific_lowercase_map_keys_values_and_insertion_order_match ... ok
+test defaults_and_original_name_case_flag_equals_hash_quirks_match ... ok
+test original_exception_hierarchy_inputs_preserve_direct_identity_and_map_catch_behavior ... ok
+test primary_hash_iteration_matches_original_resize_treeify_root_front_split_and_null_keys ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests\table_map_obligations.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\table_map_obligations-4fdb46b9d4855cd1.exe)
+
+running 6 tests
+test clearing_map_releases_user_values_after_unlocking_even_when_drop_reads_map ... ok
+test contains_pk_requires_every_key_and_preserves_nullable_collection_elements ... ok
+test map_equality_sees_future_replacement_and_keeps_last_callback_structure_shortcut ... ok
+test nullable_values_and_cursor_next_keep_original_structure_version_points ... ok
+test shared_locale_changes_lookup_and_alias_map_mutations_without_rekeying_old_entries ... ok
+test table_hash_reads_case_flag_after_column_callback_without_holding_table_or_map_lock ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\table_meta.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\table_meta-99d1895c31cf6104.exe)
+
+running 19 tests
+test contains_pk_with_case_insensitive_match ... ok
+test contains_pk_with_exact_match ... ok
+test contains_pk_with_no_match ... ok
+test contains_pk_with_no_primary_key ... ok
+test contains_pk_with_null_list ... ok
+test equals ... ok
+test get_all_columns ... ok
+test get_all_indexes ... ok
+test get_case_insensitive_pks ... ok
+test get_case_insensitive_pks_no_primary_key ... ok
+test get_column_meta ... ok
+test get_on_update_columns_only_name ... ok
+test get_on_update_columns_only_name_no_updates ... ok
+test get_primary_key_map ... ok
+test get_primary_key_map_no_primary_key ... ok
+test get_primary_key_only_name ... ok
+test hash_code ... ok
+test set_get_case_sensitive ... ok
+test set_get_table_name ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\table_primary_set.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\table_primary_set-a5b8a152469b9887.exe)
+
+running 3 tests
+test all_java17_comparisons_match_including_raw_surrogates ... ok
+test original_table_primary_sets_match_order_representative_hash_and_errors ... ok
+test unmodifiable_empty_and_case_equality_keep_java_hash_inconsistency ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_tm-5058350898108387.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\context_config.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\context_config-73062994eba58fc0.exe)
+
+running 7 tests
+test config_builder_keeps_tc_timeout_exact_and_defaults_required ... ok
+test config_rejects_lossy_zero_or_overflow_timeout_and_invalid_name ... ok
+test interleaved_futures_on_one_task_keep_independent_xids_each_poll ... ok
+test nested_context_is_restored_after_return_and_business_error ... ok
+
+thread 'panic_or_cancellation_does_not_leak_context_into_worker_or_outer_scope' panicked at crates\seata_tm\tests\context_config.rs:146:13:
+business panic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test panic_or_cancellation_does_not_leak_context_into_worker_or_outer_scope ... ok
+test spawned_tasks_require_explicit_participant_capture_and_never_inherit_implicitly ... ok
+test xid_validation_preserves_exact_utf8_and_never_normalizes_or_synthesizes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\manager_calls.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\manager_calls-007d113672b4c93b.exe)
+
+running 13 tests
+test cancelled_end_keeps_original_operation_until_authoritative_reconciliation ... ok
+test connection_unavailable_is_local_pre_send_not_tc_rejection_or_unknown ... ok
+test fabricated_protocol_diagnostic_cannot_mint_a_launcher_recovery_capability ... ok
+test failed_begin_preserves_reported_optional_fields_without_binding_a_launcher ... ok
+test failed_commit_preserves_exception_optional_message_and_authoritative_status ... ok
+test failed_duplicate_with_finished_does_not_erase_original_commit_uncertainty ... ok
+test failed_status_retry_timeout_revokes_prior_same_operation_retry_permission ... ok
+test lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin ... ok
+test lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown ... ok
+test malformed_end_response_is_protocol_failure_with_retained_xid_and_possible_effect ... ok
+test native_tm_begin_binds_only_lexical_scope_and_end_preserves_exact_xid ... ok
+test participant_never_sends_global_begin_commit_or_rollback ... ok
+test successful_begin_without_xid_is_protocol_uncertainty_never_a_usable_launcher ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests\scoped_execution.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\scoped_execution-737a8664de19273d.exe)
+
+running 8 tests
+test business_error_and_rollback_rejection_are_both_returned_with_original_xid ... ok
+test expired_business_is_cancelled_and_rolls_back_once_without_commit ... ok
+test lost_scoped_commit_never_falls_through_to_rollback_or_background_retry ... ok
+test mandatory_never_and_supports_observe_context_before_business_or_network ... ok
+
+thread 'panic_and_cancel_restore_context_without_unowned_network_cleanup' panicked at crates\seata_tm\tests\scoped_execution.rs:366:25:
+business panic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test panic_and_cancel_restore_context_without_unowned_network_cleanup ... ok
+test required_nested_scope_participates_without_rewriting_outer_launcher_or_deadline ... ok
+test requires_new_suspends_outer_and_not_supported_clears_then_restores_context ... ok
+test unknown_scoped_end_can_recover_original_intent_without_starting_a_new_transaction ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running unittests examples\tm_live.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\tm_live-f1b973659ace6325.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples\tm_loss_live.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\tm_loss_live-1a9b5c536f9dda4c.exe)
+
+running 2 tests
+test simulated_branch::tests::mismatches_neither_learn_branch_nor_execute_simulated_action ... ok
+test simulated_branch::tests::pending_identity_is_learned_only_from_exact_callback_and_duplicate_action_is_cached ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\seata_transport-c7427259a1ed3f7f.exe)
+
+running 24 tests
+test netty::connection_generation::tests::generation_counter_never_wraps_or_reuses_zero ... ok
+test netty::idle_timer::tests::absolute_boundary_is_inclusive_and_reset_moves_it_forward ... ok
+test netty::idle_timer::tests::complete_activity_suppresses_probe_across_many_original_windows ... ok
+test netty::idle_timer::tests::delayed_scheduler_resets_from_now_without_catch_up_burst ... ok
+test netty::idle_timer::tests::disabled_timer_never_fires_or_expires ... ok
+test netty::pending_requests::tests::close_classifies_each_pending_by_its_own_write_marker ... ok
+test netty::pending_requests::tests::completed_response_is_available_before_losing_deadline_branch_can_observe_removal ... ok
+test netty::pending_requests::tests::queued_expiry_is_local_and_never_reaches_write_marker ... ok
+test netty::pending_requests::tests::response_after_absolute_deadline_is_late_even_if_caller_timer_was_not_polled ... ok
+test netty::pending_requests::tests::response_before_first_write_closes_connection_without_claiming_business_rejection ... ok
+test netty::pending_requests::tests::synchronous_pending_lock_wait_is_included_in_request_deadline ... ok
+
+thread '<unnamed>' panicked at crates\seata_transport\src\netty\pending_requests_tests.rs:258:9:
+controlled poison
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test netty::pending_requests::tests::unpolled_worker_guard_and_poisoned_lock_both_clear_pending ... ok
+test netty::pending_requests::tests::writer_skips_queued_frame_whose_deadline_already_elapsed ... ok
+test netty::pool_handle::tests::absolute_dispatch_deadline_survives_delay_before_session_first_poll ... ok
+test netty::pool_handle::tests::acquisition_time_is_part_of_one_absolute_request_budget ... ok
+test netty::pool_handle::tests::unpolled_pool_worker_exit_stops_acquisition_and_owns_no_reconnect ... ok
+test netty::reconnect_backoff::tests::backoff_caps_without_wrap_and_short_lived_connections_do_not_reset ... ok
+test netty::request_id_allocator::tests::final_two_ids_of_a_valid_full_space_epoch_exhaust_without_reuse ... ok
+test netty::session_registration::tests::initialization_steps_share_one_deadline_and_leave_later_resources_unattempted ... ok
+test netty::tcp_connection::tests::dropping_unpolled_response_writer_resolves_receipt_and_releases_budget ... ok
+test netty::tcp_connection::tests::response_partial_write_survives_deadline_or_cancellation_and_closure_never_reuses_stream ... ok
+test netty::tcp_connection::tests::response_queue_budget_and_prewrite_expiry_or_cancel_skip_all_reply_bytes ... ok
+test netty::tcp_connection::tests::skipped_cancelled_queue_entries_do_not_reset_writer_idle ... ok
+test netty::write_receipt::tests::closure_and_full_write_arbitrate_before_unpolled_caller_observes_result ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.10s
+
+     Running tests\connection_pool.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\connection_pool-89091a6f73ef6e09.exe)
+
+running 10 tests
+test acquisition_timeout_and_cancel_do_not_create_or_send_a_business_request ... ok
+test disconnect_replaces_generation_but_never_replays_lost_begin ... ok
+test exhausted_request_id_quota_rotates_pool_generation_without_replaying_rejected_call ... ok
+test inbound_frame_preserves_origin_generation_and_saturation_closes_that_session ... ok
+test one_pool_call_dispatches_once_and_shutdown_prevents_reconnect ... ok
+test owner_drop_closes_active_requests_and_all_pool_handles ... ok
+test pool_budgets_and_backoff_are_explicit_and_validated ... ok
+test short_lived_connections_keep_exponential_backoff_and_stable_connection_resets_it ... ok
+test shutdown_cancels_connect_attempt_and_wakes_waiting_acquirer ... ok
+test two_slots_are_reused_by_concurrent_acquisition_without_creating_new_sockets ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.50s
+
+     Running tests\heartbeat_idle.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\heartbeat_idle-f2150fe613cdeadd.exe)
+
+running 9 tests
+test disabled_idle_emits_no_probe_and_owner_drop_stops_enabled_timers ... ok
+test heartbeat_ids_exhaust_without_reuse_and_require_new_generation ... ok
+test idle_intervals_are_explicit_positive_ordered_and_checked ... ok
+test outbound_pong_replies_reset_writer_idle_and_suppress_own_probes ... ok
+test partial_frame_drips_cannot_keep_a_generation_alive ... ok
+test repeated_pongs_keep_idle_session_alive_without_creating_waiters ... ok
+test silent_peer_idle_expiry_is_unknown_for_observed_request_and_closes_socket ... ok
+test sustained_business_writes_reset_writer_idle_and_suppress_probes ... ok
+test writer_idle_sends_native_ping_without_pending_and_business_id_is_next ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.21s
+
+     Running tests\inbound_response.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\inbound_response-b4082dcb7acf9d54.exe)
+
+running 7 tests
+test callback_and_outbound_call_can_share_wire_id_without_cross_completion ... ok
+test complete_flat_callback_batch_checks_every_child_identity_before_reply ... ok
+test direct_reply_preserves_signed_id_nullable_headers_and_original_branch_identity ... ok
+test old_pool_callback_cannot_reply_over_replacement_generation ... ok
+test oneway_or_expired_reply_never_writes_an_ordinary_response ... ok
+test reply_without_tokio_context_is_typed_local_failure_before_queue_or_write ... ok
+test wrong_family_or_branch_identity_is_rejected_without_writing ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests\registered_pool.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\registered_pool-1374bcf006e662cc.exe)
+
+running 13 tests
+test adding_resource_invalidates_old_revision_until_live_session_is_registered_again ... ok
+test explicit_identity_denial_is_rejected_without_resource_or_business_attempt ... ok
+test invalid_resource_frame_is_local_registration_failure_not_unknown_or_rejection ... ok
+test lost_identity_response_is_unknown_registration_not_explicit_rejection ... ok
+test partial_resource_denial_stays_degraded_with_every_required_outcome ... ok
+test registration_identity_and_registry_byte_budgets_fail_before_mutation ... ok
+test registry_change_cancels_outdated_initialization_and_late_reply_cannot_publish_ready ... ok
+test registry_is_bounded_typed_idempotent_and_redacts_debug ... ok
+test replacement_session_repeats_identity_and_all_cached_resources_before_status ... ok
+test rm_first_registration_includes_resource_for_identity_and_resource_auth_policy ... ok
+test shutdown_and_drop_cancel_identity_wait_and_close_socket ... ok
+test withheld_tm_identity_prevents_business_write_until_identified ... ok
+test wrong_registration_response_family_preserves_unknown_protocol_failure ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+     Running tests\stream_and_ids.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\stream_and_ids-fc5d5a4177e2a70d.exe)
+
+running 10 tests
+test all_37_actual_java_frames_include_large_nullable_headers_and_every_payload_family ... ok
+test allocator_quota_requires_rotation_and_all_32_bits_can_be_configured ... ok
+test coalesced_good_frame_is_delivered_before_following_corrupt_frame_terminates_stream ... ok
+test coalesced_input_larger_than_per_frame_budget_is_drained_one_frame_at_a_time ... ok
+test empty_fragments_do_not_close_or_consume_valid_partial_state_and_debug_hides_payload ... ok
+test eof_with_partial_header_or_body_is_an_error_and_never_reuses_the_decoder ... ok
+test every_java_control_frame_handles_every_two_way_split_and_one_byte_fragments ... ok
+test identifier_sequence_preserves_signed_wrap_and_zero_without_reuse ... ok
+test partial_fixed_header_rejects_signed_head_and_body_shape_without_waiting_for_payload ... ok
+test prefix_validation_rejects_hostile_lengths_and_capabilities_before_body_buffering ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests\tcp_session.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\tcp_session-65b8c47198de6541.exe)
+
+running 14 tests
+test bounded_pending_capacity_rejects_overload_before_write ... ok
+test cancellation_removes_waiter_and_late_response_is_only_observed ... ok
+test concurrent_reverse_responses_preserve_signed_wrap_and_require_quota_rotation ... ok
+test dropping_owner_closes_socket_and_resolves_started_request ... ok
+test explicit_failed_result_preserves_even_contradictory_status_fields ... ok
+test flat_batch_requires_all_response_types_and_child_count_before_completion ... ok
+test local_validation_writes_nothing_and_keeps_connection_usable ... ok
+test real_request_response_and_same_id_pong_do_not_cross_complete ... ok
+test refused_connection_is_known_local_before_any_request_write ... ok
+test remote_close_after_read_is_unknown_and_cleans_all_waiters ... ok
+test shutdown_resolves_outstanding_requests_and_rejects_new_calls_before_send ... ok
+test timeout_after_observed_write_is_unknown_and_late_duplicates_cannot_complete_next_call ... ok
+test two_live_generations_can_share_wire_id_without_cross_completion ... ok
+test wrong_response_type_is_unknown_protocol_failure_not_definite_rejection ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.22s
+
+     Running unittests examples\registration_live.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\registration_live-d50e5a1cd1c42b5f.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples\transport_loss_live.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\examples\transport_loss_live-1edc52ad7afec799.exe)
+
+running 3 tests
+test simulated_branch::tests::mismatches_neither_learn_branch_nor_execute_simulated_action ... ok
+test simulated_branch::tests::pending_identity_is_learned_only_from_exact_callback_and_duplicate_action_is_cached ... ok
+test uncertain_commit::tests::finished_never_creates_commit_confirmation_and_does_not_erase_prior_authority ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

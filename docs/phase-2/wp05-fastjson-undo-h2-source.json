@@ -1,0 +1,356 @@
+{
+  "status": "FASTJSON_ALL_SEVEN_ORIGINAL_JUNIT_CASES_MATCH",
+  "predecessor": "docs/phase-2/wp05-fastjson-undo-serial-array-source.json",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "original_source_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_junit_wfvl6hp2",
+  "original_source_catalog_sha256": "a3a39772de7d296e1d4db27ef08be228f59297eea8689d28487a9c8a85d22582",
+  "native_wire_evidence": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_native_bnc4h6ng",
+  "native_wire_catalog_sha256": "84ddd32ae22c1fc7317aad6a44048fc8555f89a63573d7894c9fca264ec9582e",
+  "native_wire_observations_regression_match": 45,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testDecodeDefaultContent()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+      "java": [
+        "{}",
+        "true",
+        "true",
+        "0",
+        "true"
+      ],
+      "rust": {
+        "1.99": [
+          "{}",
+          "true",
+          "true",
+          "0",
+          "true"
+        ],
+        "1.85": [
+          "{}",
+          "true",
+          "true",
+          "0",
+          "true"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testWriteClassName()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "true",
+        "true",
+        "true",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"PRIMARY_KEY\",\"name\":\"id\",\"type\":-5,\"value\":0L},{\"keyType\":\"NULL\",\"name\":\"money\",\"type\":3,\"value\":1.}]}],\"tableName\":\"t1\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "true",
+          "true",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"PRIMARY_KEY\",\"name\":\"id\",\"type\":-5,\"value\":0L},{\"keyType\":\"NULL\",\"name\":\"money\",\"type\":3,\"value\":1.}]}],\"tableName\":\"t1\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ],
+        "1.85": [
+          "true",
+          "true",
+          "true",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"PRIMARY_KEY\",\"name\":\"id\",\"type\":-5,\"value\":0L},{\"keyType\":\"NULL\",\"name\":\"money\",\"type\":3,\"value\":1.}]}],\"tableName\":\"t1\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testDirectSerialArraySerialization()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "-5",
+        "int8",
+        "[1, 2, 3, 4, 5]",
+        "{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1,2,3,4,5]}"
+      ],
+      "rust": {
+        "1.99": [
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1,2,3,4,5]}"
+        ],
+        "1.85": [
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1,2,3,4,5]}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testSerializeAndDeserializeSerialArray()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "true",
+        "-5",
+        "int8",
+        "[1, 2, 3, 4, 5]",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"dept_ids\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,2L,3L,4L,5L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"dept_ids\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,2L,3L,4L,5L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ],
+        "1.85": [
+          "true",
+          "-5",
+          "int8",
+          "[1, 2, 3, 4, 5]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"dept_ids\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,2L,3L,4L,5L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testSerializeAndDeserializeSerialArrayWithNulls()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest",
+      "java": [
+        "true",
+        "3",
+        "[1, null, 3]",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"nullable_array\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,null,3L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "3",
+          "[1, null, 3]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"nullable_array\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,null,3L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ],
+        "1.85": [
+          "true",
+          "3",
+          "[1, null, 3]",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"nullable_array\",\"type\":2003,\"value\":{\"@type\":\"org.apache.seata.rm.datasource.sql.serial.SerialArray\",\"baseType\":-5,\"baseTypeName\":\"int8\",\"elements\":[1L,null,3L]}}]}],\"tableName\":\"test_table\"},\"beforeImage\":{\"rows\":[]},\"sqlType\":\"INSERT\",\"tableName\":\"test_table\"}],\"xid\":\"test_xid\"}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testEncodeAndDecode()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+      "java": [
+        "true",
+        "123456",
+        "xiddddddddddd",
+        "2",
+        "UPDATE",
+        "table_name",
+        "true",
+        "true",
+        "UPDATE",
+        "table_name",
+        "true",
+        "true",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"},{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "true",
+          "123456",
+          "xiddddddddddd",
+          "2",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"},{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ],
+        "1.85": [
+          "true",
+          "123456",
+          "xiddddddddddd",
+          "2",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "UPDATE",
+          "table_name",
+          "true",
+          "true",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"},{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ]
+      },
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.parser.FastjsonUndoLogParserTest]/[method:testPerformance()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.BaseUndoLogParserTest",
+      "java": [
+        "100000",
+        "true",
+        "123456",
+        "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"},{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+      ],
+      "rust": {
+        "1.99": [
+          "100000",
+          "true",
+          "123456",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"},{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ],
+        "1.85": [
+          "100000",
+          "true",
+          "123456",
+          "{\"@type\":\"org.apache.seata.rm.datasource.undo.BranchUndoLog\",\"branchId\":123456,\"sqlUndoLogs\":[{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"aaa\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"},{\"afterImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"beforeImage\":{\"rows\":[{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12345},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]},{\"fields\":[{\"keyType\":\"NULL\",\"name\":\"ID\",\"type\":4,\"value\":12346},{\"keyType\":\"NULL\",\"name\":\"NAME\",\"type\":12,\"value\":\"xxx\"}]}],\"tableName\":\"table_name\"},\"sqlType\":\"UPDATE\",\"tableName\":\"table_name\"}],\"xid\":\"xiddddddddddd\"}"
+        ]
+      },
+      "status": "MATCH"
+    }
+  ],
+  "scalar_observations_match": 2,
+  "original_java_cases_reexecuted": 7,
+  "original_fastjson_cases_rust_match": 7,
+  "original_fastjson_cases_rust_remaining": 0,
+  "inherited_method_concrete_variants": 6,
+  "inherited_method_fully_migrated": false,
+  "global_methods_remaining": 1026,
+  "global_rust_methods_match": 109,
+  "global_cases_remaining": 1211,
+  "global_rust_source_MATCH": 116,
+  "rust": {
+    "1.99": {
+      "ordinary": 545,
+      "ignored": 162,
+      "harnesses": 114,
+      "doc": 4,
+      "targeted": 11,
+      "original_assertion_sites_match": 33,
+      "h2_performance_iterations": 100000
+    },
+    "1.85": {
+      "ordinary": 545,
+      "ignored": 162,
+      "harnesses": 114,
+      "doc": 4,
+      "targeted": 11,
+      "original_assertion_sites_match": 33,
+      "h2_performance_iterations": 100000
+    }
+  },
+  "rust_evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261119_h2_source",
+  "runtime_controls": [
+    {
+      "label": "coerce-h2-integer-to-long",
+      "target": "h2_source::fastjson_source_test_encode_and_decode",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_16csfu9v",
+      "mutated_file": "crates/seata_at/src/undo/parser/fastjson_undo_field_value.rs",
+      "original_sha256": "3736b443101ba4a6d373984f2a4934fef1ea9292f39123ab96daacbb893f8375",
+      "mutant_sha256": "81d348878b65423a69c5fef91f91f382f15fce15e570724dce491324a4025464",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "fastjson_undo_native",
+        "--",
+        "h2_source::fastjson_source_test_encode_and_decode",
+        "--exact",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "swap-h2-undo-images",
+      "target": "h2_source::fastjson_source_test_encode_and_decode",
+      "scratch": "D:\\codex-builds\\seata_compare_mutants_16csfu9v",
+      "mutated_file": "crates/seata_at/src/undo/parser/fastjson_sql_undo_log.rs",
+      "original_sha256": "bf7238e4ff8e32830e44019bd41bb7cd56390f4bd9734c3b4e1c73b31e40649c",
+      "mutant_sha256": "4d3f13cff4a3826cd0e4b702b1c3d7884cf908c910f9aabe7bb982af80fda37d",
+      "cmd": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "seata-at",
+        "--test",
+        "fastjson_undo_native",
+        "--",
+        "h2_source::fastjson_source_test_encode_and_decode",
+        "--exact",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit": 101
+    }
+  ],
+  "evidence_sha256": {
+    "1.85-clippy.log": "0caa55fa0221f243e34dadaadea1107ca44591588bf19b6ee2b4e412e9db269d",
+    "1.85-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-doc.log": "940fcef463c3d09ce4c6bff902d04d4bedd5053161cddd18f5f4eb0b7e23608b",
+    "1.85-targeted.log": "5fcdc0a38d3bd1f4fac8002ab25eb7e5197240f67ef1477e9d82814c4e239859",
+    "1.85-tests.log": "f7c625e5e499262aa9da2e741a9e7d90c76ff597664f668e84ef42e2fe758199",
+    "1.99-clippy.log": "3634389aa5fd3b512fa6e3c60d79b7c70292dd07370d68e859dc3e63961ff955",
+    "1.99-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-doc.log": "07bbc8f2df2806cdc4bc48b9be01c24e798faeb67855cc5cea874a7fad35d12e",
+    "1.99-targeted.log": "0d3d86d27ff2bd50c142179c2eb9f12e9d1f368433644469dae2eaf9a9041708",
+    "1.99-tests.log": "5d891137568d288d3cc39df6cb44a16c534bc5070478f7b452bf86d89fc2c54c",
+    "api-red.log": "39f444473395c72504dc158a0ca14e1a2e90a946475d094bb17e90a3281eff70",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-coerce-h2-integer-to-long.stderr": "eb670bd2a7b0833dc8cd1fe2712e7b9c7e5515a13420ad09affd33387c7588b7",
+    "mutant-coerce-h2-integer-to-long.stdout": "d5df27ede076653f3c741f7ba96af086b59d93fff617be259efd17ebbc855392",
+    "mutant-swap-h2-undo-images.stderr": "2f252890387173ae596e417fad14196920e476659e189e3fd526ec997c5dbfb9",
+    "mutant-swap-h2-undo-images.stdout": "d5df27ede076653f3c741f7ba96af086b59d93fff617be259efd17ebbc855392",
+    "runtime-mutation-controls.json": "be5f221df07d2016e7d65627e45eea3f057afa14a777e8b71163368dde127cee"
+  },
+  "source_inputs_sha256": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_at/src/lib.rs": "40c4a42b4b13556f7ad6174efc43dc232dd1f5d07d82ebe313748074482c77f7",
+    "crates/seata_at/src/undo/mod.rs": "d1e6dd7120182c44168ef7c102d099c60a46c90c9d91f23ab413cb9dc1983115",
+    "crates/seata_at/src/undo/parser/mod.rs": "a6004c2fcd0c10bdf0ceef7e25d90678cd6a80adaa38207b4037752de5a23b66",
+    "crates/seata_at/src/undo/parser/fastjson_undo_branch.rs": "16169a12903da396a0676c89888700c4b45e9742df226c9aff2faa6ca28a6774",
+    "crates/seata_at/src/undo/parser/fastjson_wire.rs": "b9b1201ad1fa2c05f36301c0acf0d645fe789ed092614f8ccf4f5eb628a45f47",
+    "crates/seata_at/src/undo/parser/fastjson_undo_log_parser.rs": "5befb8aa683f3061ae5b493ae5d29ec9b8b36b3563c1e12f77b4237725aa8a84",
+    "crates/seata_at/src/undo/parser/fastjson_branch_encoder.rs": "f277069b2ee16358cd5132fe032e2665e738b92e12d05d0af00ec4239fed3656",
+    "crates/seata_at/src/undo/parser/bounded_output.rs": "06b2c407eb140949c5b7584ad8fc4047c9404bc416adff17560961107cf770df",
+    "crates/seata_at/src/undo/parser/fastjson_sql_undo_log.rs": "bf7238e4ff8e32830e44019bd41bb7cd56390f4bd9734c3b4e1c73b31e40649c",
+    "crates/seata_at/src/undo/parser/fastjson_undo_records.rs": "38427c2a6adc3885b58472902ad13efd7c75f463155f85c7b75dd0e216790460",
+    "crates/seata_at/src/undo/parser/fastjson_undo_field.rs": "722adf09f14e5cb408c4638c022448d8b3a9cde79b6d4eee695ba26480960219",
+    "crates/seata_at/src/undo/parser/fastjson_undo_field_value.rs": "3736b443101ba4a6d373984f2a4934fef1ea9292f39123ab96daacbb893f8375",
+    "crates/seata_datasource/src/struct/decimal_value.rs": "62cc021ccef17687e09c6e40c83b325f84c6a8966ddd8b3428a949cef47a81cf",
+    "crates/seata_db_mysql/src/java_compare_value.rs": "8a30b8bd700fd4cfb723700179d16619bc028b77a9c88fd342aff38914fd7ac3",
+    "tools/formal-source-junit/FastjsonUndoEscapingOracle.java": "98d08efed5c8e4ef116051cd3a5f838eb5816c3e914d4e5ae12b09a614fee203",
+    "crates/seata_at/src/undo/parser/serial_array.rs": "72c694c730b204a46f3d88a82f3a873765072aff44a05fd853e2ac2076b5a2d1",
+    "crates/seata_at/tests/support/fastjson_serial_array.rs": "240bf6bd350a8144bc34831d4bfea26531a7075201459a0092885fbdd342b098",
+    "crates/seata_at/tests/support/fastjson_h2_source.rs": "47a312eec3208c4f841693f13c888f5a14378723a1c37cbe1b2d88f205011f41",
+    "tools/formal-source-junit/FastjsonUndoH2Observer.java": "de83358abb5f506f5abfbf6c001e156b521f59caa133e82661eb35eb29fd3eb9",
+    "crates/seata_at/src/undo/parser/restored_format.rs": "3329dccb0470dc070ebf7188da485863e24019375e6f2c03e8ac927b5b0a7e4d",
+    "crates/seata_at/tests/fastjson_undo_native.rs": "e5c18641d0910da19fe69ef5db0c2a2df125096d7a75be6dceb8ea9079c6344d",
+    "tools/formal-source-junit/fastjson_undo_source.py": "9aa2c8c6e59d7510a3ad1bbf1367b3f8859afcfd46217224928e0dea29e7e09b",
+    "tools/formal-source-junit/fastjson_undo_native.py": "d1971ee6e228b69578a5793828b4f298aec0502bb5c9a9fc4e021f924cc06f57"
+  },
+  "h2_input": "docs/phase-2/evidence/fastjson-undo-native/seata_fastjson_junit_wfvl6hp2/h2-source-input.tsv",
+  "h2_input_sha256": "ef91228a35b752f84a4e0826feca5fc7d8448a72398c7e331a55d53f15078f6b",
+  "full_h2_rows_and_wire_match": true,
+  "each_original_performance_run_iterations": 100000,
+  "benchmark_claim": false,
+  "live_fastjson_rollback_verified": false,
+  "production_fastjson_undo_load_enabled": false,
+  "phase_05_complete": false,
+  "phase_06_complete": false,
+  "v1_complete": false
+}

@@ -1,0 +1,20 @@
+{
+  "status": "DIAGNOSTIC_SOURCE_METHOD_RECORDING_BACKEND_UNQUALIFIED",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "source_checkout_sha256": "ab7d4336c1fc3e5c27668f266846fa61d67d00c8df7d126f6934c1a96260eed6",
+  "source_Git_blob_sha256": "fbe6e70dca0c2b860291fc42e6c09c703cbedccfe50e47d913840c40612740ef",
+  "scenarios": 6,
+  "observations": [
+    "t:1 => one parsed lock, acquire true, recording backend called once",
+    "t: and t:space => no parsed locks, acquire true, recording backend not called",
+    "t:x;broken;later:2 => later row missing, only t:x parsed",
+    "binary [0, -1] => two parsed PK fragments; no demonstrated lost mutual exclusion"
+  ],
+  "full_runtime_closure_before_after_sealed": false,
+  "actual_network_TC_requests": false,
+  "real_backend_lock_storage_verified": false,
+  "actual_TC_lock_coverage_gate_passed": false,
+  "external_TC_risk_accepted": false,
+  "COMMIT_authorized": false,
+  "next": "Freeze source/classpath/class origins and run original owned Java TC conflict controls before commit integration"
+}

@@ -1,0 +1,40 @@
+{
+  "source_sha256": "1c8f982ce4fa0e4a682627a4ac0557839e73dc376191e57ccc02f91c831c72a4",
+  "controls": [
+    {
+      "case": "coalesced-published-resource",
+      "status": "EXPECTED_REJECTION",
+      "error": "same physical instance was not established"
+    },
+    {
+      "case": "duplicated-physical-composite-tuple",
+      "status": "EXPECTED_REJECTION",
+      "error": "case input does not match the expected physical identity"
+    },
+    {
+      "case": "altered-alias-query-boolean",
+      "status": "EXPECTED_REJECTION",
+      "error": "original lock query did not match registration"
+    }
+  ],
+  "storage_profile_replay": {
+    "1.99": {
+      "branch_registrations": 8,
+      "successful": 4,
+      "rejected": 4,
+      "lock_queries": 1,
+      "original_rollback_callbacks": 4,
+      "original_rollback_retries": 0,
+      "global_rollbacks": 8
+    },
+    "1.85": {
+      "branch_registrations": 8,
+      "successful": 4,
+      "rejected": 4,
+      "lock_queries": 1,
+      "original_rollback_callbacks": 4,
+      "original_rollback_retries": 0,
+      "global_rollbacks": 8
+    }
+  }
+}

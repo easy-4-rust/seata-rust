@@ -1,0 +1,34 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.35s
+     Running tests\live_tls_lifecycle.rs (D:/cargo-target/seata-rust-load-driver-msrv\debug\deps\live_tls_lifecycle-7fa6d83e1fba2b3b.exe)
+
+running 4 tests
+X509 rejected client lifetime: client-expired.pem
+independent lifecycle business value=10
+X509 rejected client lifetime: client-future.pem
+independent lifecycle business value=10
+valid client identity accepted after lifetime rejection controls
+test expired_and_future_client_certificates_are_rejected_by_x509_account ... ok
+independent lifecycle business value=10
+server lifetime rejected new and auxiliary sessions: server-expired.pem; old observer stayed connected
+independent lifecycle business value=10
+server lifetime rejected new and auxiliary sessions: server-future.pem; old observer stayed connected
+test expired_and_future_server_certificates_reject_new_and_auxiliary_sessions ... ok
+TLS reload certificate=renewed.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+same CA renewed leaf accepted by new pool and auxiliary connections
+TLS reload certificate=rotated.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+independent lifecycle business value=10
+CA rotation rejected old trust, accepted overlap and replacement trust; old observer stayed connected
+TLS reload certificate=server.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+same overlap trust bundle accepted fresh sessions under both CAs
+test leaf_and_ca_rotation_keep_new_connection_trust_and_original_transaction_atomicity ... ok
+independent lifecycle business value=10
+MySQL rejected invalid reload with 3888 and kept previous context: server-expired.pem
+TLS reload certificate=server.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+independent lifecycle business value=10
+MySQL rejected invalid reload with 3888 and kept previous context: server-future.pem
+TLS reload certificate=server.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+test mysql_refuses_invalid_lifetime_reload_and_keeps_previous_tls_context ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.92s
+

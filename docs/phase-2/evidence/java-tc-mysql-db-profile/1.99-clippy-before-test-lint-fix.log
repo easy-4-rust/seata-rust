@@ -1,0 +1,31 @@
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error: used `unwrap()` on a `Result` value
+  --> crates\seata_db_mysql\src\mysql_options_java_tc_profile_tests.rs:4:5
+   |
+ 4 | /     MySqlOptions::new(
+ 5 | |         "127.0.0.1".into(),
+ 6 | |         3306,
+ 7 | |         "writer".into(),
+...  |
+11 | |     .unwrap()
+   | |_____________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#unwrap_used
+   = note: `-D clippy::unwrap-used` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::unwrap_used)]`
+
+error: used `unwrap()` on a `Result` value
+  --> crates\seata_db_mysql\src\mysql_options_java_tc_profile_tests.rs:31:19
+   |
+31 |       let options = options()
+   |  ___________________^
+32 | |         .with_insecure_loopback_tls()
+33 | |         .unwrap()
+   | |_________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#unwrap_used
+
+error: could not compile `seata-db-mysql` (lib test) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

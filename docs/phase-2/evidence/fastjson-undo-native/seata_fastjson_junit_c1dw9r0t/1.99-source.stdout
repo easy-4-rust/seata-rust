@@ -1,0 +1,15 @@
+
+running 5 tests
+test fastjson_source_test_decode_default_content ... SEATA_FASTJSON_DEFAULT	{}	true	true	0	true
+ok
+test fastjson_source_test_write_class_name ... SEATA_FASTJSON_WRITE_CLASS	true	true	true	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"PRIMARY_KEY","name":"id","type":-5,"value":0L},{"keyType":"NULL","name":"money","type":3,"value":1.}]}],"tableName":"t1"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"table_name"}],"xid":"xiddddddddddd"}
+ok
+test serial_array_source::fastjson_source_test_direct_serial_array_serialization ... SEATA_FASTJSON_ARRAY_DIRECT	-5	int8	[1, 2, 3, 4, 5]	{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1,2,3,4,5]}
+ok
+test serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array ... SEATA_FASTJSON_ARRAY_EMBEDDED	true	-5	int8	[1, 2, 3, 4, 5]	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"NULL","name":"dept_ids","type":2003,"value":{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1L,2L,3L,4L,5L]}}]}],"tableName":"test_table"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"test_table"}],"xid":"test_xid"}
+ok
+test serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array_with_nulls ... SEATA_FASTJSON_ARRAY_NULLS	true	3	[1, null, 3]	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"NULL","name":"nullable_array","type":2003,"value":{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1L,null,3L]}}]}],"tableName":"test_table"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"test_table"}],"xid":"test_xid"}
+ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+

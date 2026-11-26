@@ -1,0 +1,22 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.84s
+     Running unittests src\main.rs (D:/cargo-target/seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test payload::tests::java_global_report_null_status_is_a_valid_sentinel ... FAILED
+
+failures:
+
+---- payload::tests::java_global_report_null_status_is_a_valid_sentinel stdout ----
+
+thread 'payload::tests::java_global_report_null_status_is_a_valid_sentinel' (61940) panicked at src\payload\tests.rs:433:50:
+Java encodes a null report status as -1: Custom { kind: InvalidData, error: "unknown GlobalStatus: 255" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    payload::tests::java_global_report_null_status_is_a_valid_sentinel
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 71 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

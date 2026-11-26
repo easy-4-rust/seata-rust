@@ -1,0 +1,19 @@
+13:36:33.356 [main] DEBUG org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- The same extension org.apache.seata.config.file.SimpleFileConfig has already been loaded, skipped
+13:36:33.358 [main] DEBUG org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- The same extension org.apache.seata.config.file.YamlFileConfig has already been loaded, skipped
+13:36:33.359 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.file.FileConfig] class fail: no service files found in 'META-INF/seata/'.
+13:36:33.380 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.ExtConfigurationProvider] class fail: no service files found in 'META-INF/services/'.
+13:36:33.380 [main] WARN org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Load [org.apache.seata.config.ExtConfigurationProvider] class fail: no service files found in 'META-INF/seata/'.
+13:36:33.381 [main] INFO org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+13:36:33.381 [main] DEBUG org.apache.seata.config.ConfigurationFactory -- failed to load extConfiguration: not found service provider for : org.apache.seata.config.ExtConfigurationProvider
+org.apache.seata.common.loader.EnhancedServiceNotFoundException: not found service provider for : org.apache.seata.config.ExtConfigurationProvider
+13:36:33.387 [main] DEBUG io.netty.util.internal.logging.InternalLoggerFactory -- Using SLF4J as the default logging framework
+13:36:33.388 [configOperate_1_1_2] DEBUG org.apache.seata.config.FileConfiguration -- Could not found property config.type, try to use default value instead. exception:No configuration setting found for key 'config'
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at org.apache.seata.server.store.StoreConfig.<clinit>(StoreConfig.java:36)
+	at org.apache.seata.server.session.BranchSession.<clinit>(BranchSession.java:51)
+	at LockCoverageOracle.main(LockCoverageOracle.java:42)
+Caused by: org.apache.seata.common.exception.NotSupportYetException: config type can not be null
+	at org.apache.seata.config.ConfigurationFactory.getConfigType(ConfigurationFactory.java:152)
+	at org.apache.seata.config.ConfigurationFactory.maybeNeedOriginFileInstance(ConfigurationFactory.java:133)
+	at org.apache.seata.config.ConfigurationFactory.<clinit>(ConfigurationFactory.java:64)
+	... 3 more

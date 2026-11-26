@@ -1,0 +1,43 @@
+server:
+  port: 28291
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/rat_20261113_051200_20f60e07/node_0/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28291
+    enable-check-auth: false
+    max-rollback-retry-timeout: 5000
+    rollback-retry-timeout-unlock-enable: false
+    rollback-failed-unlock-enable: false
+    retry-dead-threshold: 500
+    recovery:
+      rollbacking-retry-period: 200
+    raft:
+      group: default
+      server-addr: 127.0.0.1:28292,127.0.0.1:28294,127.0.0.1:28296
+      sync: true
+      snapshot-interval: 600
+      election-timeout-ms: 1000
+      reporter-enabled: false
+      serialization: jackson
+      compressor: none
+  store:
+    mode: raft
+    session:
+      mode: raft
+    lock:
+      mode: raft
+    file:
+      dir: D:/codex-builds/rat_20261113_051200_20f60e07/node_0/store
+  metrics:
+    enabled: false
+  transport:
+    rpc-tc-request-timeout: 750

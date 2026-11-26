@@ -1,0 +1,44 @@
+[
+  {
+    "name": "last-query-mark",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_utils_source",
+      "--",
+      "--test-threads=1"
+    ],
+    "cwd": "D:\\codex-builds\\seata_jdbc_source_mutant_0hjqm3py",
+    "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+    "baseline_sha256": "66146e53c7ceddfb96165267fa7c853d9b62c254e761f69d03cfd7bd2b7cde97",
+    "mutant_sha256": "0d0e7fdc3ee308cf2d0af4b49f8abfa89b5b22047fec285cc14ea413a38d3832",
+    "target": "test_build_resource_id_with_multiple_question_marks",
+    "exit_code": 101
+  },
+  {
+    "name": "wrong-h2-type",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_utils_source",
+      "--",
+      "--test-threads=1"
+    ],
+    "cwd": "D:\\codex-builds\\seata_jdbc_source_mutant_0hjqm3py",
+    "path": "crates/seata_sqlparser/src/druid/druid_db_type_parser_impl.rs",
+    "baseline_sha256": "ad90ac0bd013c17a3cc2ea27ff3aee18ebebc5c410b46ead9027272813a810e6",
+    "mutant_sha256": "bd52edd116714cb26c790e0afe5f34a5975ee0a094d78d0514415e850debe30c",
+    "target": "test_get_db_type_with_h2_url",
+    "exit_code": 101
+  }
+]

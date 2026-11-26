@@ -1,0 +1,9 @@
+java_source,rust_source,state,scope
+org.apache.seata.rm.datasource.DataSourceManager,crates/seata_db_mysql/src/data_source_manager.rs,PARTIAL,受管理 MySQL 回滚恢复路径；提交方向及一阶段提交尚未实现
+org.apache.seata.rm.datasource.DataSourceProxy,crates/seata_db_mysql/src/data_source_proxy.rs,PARTIAL,单主机配置的精确 JDBC 资源标识与内部控制事务访问器
+org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManager,crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs,PARTIAL,锁定 Guard 和 Normal 分派之前验证原 XID 字节与 BranchId
+org.apache.seata.rm.AbstractResourceManager.branchRegister,crates/seata_rm/src/manager/resource_client.rs,PARTIAL,保留既有单次注册入口；新增受控回执交接；完整 Java 对象未声明完成
+RUST_EXTENSION,crates/seata_rm/src/model/registered_branch.rs,RUST_EXTENSION,成功匹配响应才能构造的本地注册回执
+RUST_EXTENSION,crates/seata_db_mysql/src/rm_branch_store.rs,RUST_EXTENSION,独立版本恢复行的元数据与字节身份仲裁
+RUST_EXTENSION,crates/seata_db_mysql/src/recovery_action.rs,RUST_EXTENSION,登记和方向绑定及回滚的封闭内部动作
+RUST_EXTENSION,crates/seata_db_mysql/src/mysql_recovery_error.rs,RUST_EXTENSION,按完整原身份区分控制提交前失败和确认未知

@@ -1,0 +1,143 @@
+"""只读复核已封存恢复调查证据；不重跑旧归档器或启动服务。"""
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import uuid
+
+ROOT = Path('E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation')
+BASE = ROOT / 'docs/phase-0/evidence'
+PIN = 'cba73e180fd8896a99df6415b859d275122feaa7'
+JAR = 'aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5'
+SELECTED = {
+    'local-file-retry-timeout': ('run_20261112_141913_1d63f1a8', None),
+    'local-backend-retry-timeout': ('run_20261112_152511_3907a673', None),
+    'local-raft-retry-timeout': ('run_20261112_165835_c293c228', None),
+    'local-go-java-real-at-timeout': ('run_20261113_003324_c684846f', None),
+    'local-go-java-real-commit-timeout': ('run_20261113_005014_9352c041', '3ad00f3009854f86cca9b4b2a477f2f4bf96a529ac395a1ee5dc5bf0111aa4a7'),
+    'local-java-retry-timeout-candidate': ('run_20261113_021912_ac00a207', '90f7cc98a194ebb652ff0a1fe725b4e01c16daf08479309549ba3483118263a1'),
+    'local-go-java-file-at-timeout': ('run_20261113_032718_6712fd5e', '4a8bb3abfcbfde159ecff41e3354b0495d12152761e1880bf7b78cb1f465fc1b'),
+    'local-go-java-file-commit-timeout': ('run_20261113_035053_4ea827e1', 'aec4261bc4ed8e5036d89d57a5bd2d3c61289c3257a0318d439027372dcd5f48'),
+    'local-go-java-raft-at-timeout': ('run_20261113_052816_8ea31012', '44ce3db09536d961cdf7a416cb9a50c8e1f6e07686fd72f29260c22e67efb9f1'),
+    'local-go-java-raft-commit-timeout': ('run_20261113_055235_cb3164e4', 'c3bd4466f4d84adb0c367c8566350949dc4780262f653eeb9fa568b37f040c53'),
+    'local-java-raft-context-candidate': ('run_20261113_064040_f5c35163', 'e31173d8ca6088636039039819c9edd3960b247f6a169ded583d27d8da5b9525'),
+}
+
+
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load(path):
+    return json.loads(path.read_bytes())
+
+
+def write(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('xb') as stream:
+        stream.write(value if isinstance(value, bytes) else (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode())
+
+
+def main():
+    stamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:8]
+    out = BASE / 'local-wp00-recovery-investigation-audit' / ('run_' + stamp)
+    out.mkdir(parents=True)
+    write(out / 'audit-source.py.txt', Path(__file__).read_bytes())
+    print('RECOVERY_AUDIT ' + str(out), flush=True)
+    records = []
+    for folder, (run, expected) in SELECTED.items():
+        base = BASE / folder
+        manifest = base / 'manifest.json'
+        before = digest(manifest)
+        if expected and expected != before:
+            raise ValueError('Historical catalog identity changed: ' + folder)
+        value = load(manifest)
+        rows = value.get('files', value.get('evidence_files'))
+        if not rows:
+            raise ValueError('Missing historical evidence catalog')
+        identities = [row['path'] for row in rows]
+        if len(identities) != len(set(identities)):
+            raise ValueError('Duplicate historical catalog identity')
+        total = 0
+        for row in rows:
+            path = (base / row['path']).resolve()
+            if not path.is_relative_to(base.resolve()) or not path.is_file() or digest(path) != row['sha256'].lower():
+                raise ValueError('Historical evidence differs: ' + folder + '/' + row['path'])
+            if 'bytes' in row and path.stat().st_size != row['bytes']:
+                raise ValueError('Historical evidence size differs')
+            total += path.stat().st_size
+        if digest(manifest) != before:
+            raise ValueError('Historical manifest changed during audit')
+        snapshot = 'inputs/' + hashlib.sha256(folder.encode()).hexdigest()[:20] + '.json'
+        write(out / snapshot, manifest.read_bytes())
+        result_path = base / run / 'result.json'
+        if not result_path.exists():
+            raise ValueError('Missing primary runtime result')
+        result = load(result_path)
+        if folder in ['local-file-retry-timeout', 'local-backend-retry-timeout', 'local-raft-retry-timeout']:
+            if result.get('java_pin') != PIN or result.get('jar_sha256', result.get('server_jar_sha256', '')).lower() != JAR:
+                raise ValueError('Wrong original runtime pin')
+        records.append(dict(folder=folder, primary=run, catalog_sha256=before, snapshot=snapshot,
+                            verified_files=len(rows), verified_bytes=total, primary_result_sha256=digest(result_path)))
+        print(folder + ': ' + str(len(rows)) + ' files verified', flush=True)
+    # 下面重新核对 REC 关键事实；调查失败证据不能被标成恢复通过。
+    file = load(BASE / 'local-file-retry-timeout' / SELECTED['local-file-retry-timeout'][0] / 'result.json')
+    cases = {row['seeded_status']: row for row in file['scenarios']}
+    assert set(cases) == {1, 16, 17}
+    assert cases[16]['startup_ready'] is False and cases[16]['startup_exit'] == -1
+    assert cases[17]['restored_sessions'] == 0 and cases[17]['restored_branches'] == 0
+    assert cases[17]['native_status'] == 15 and cases[17]['lockable'] is True
+    assert all(cases[status]['recovery_acceptance_pass'] is False for status in [16, 17])
+    backend = load(BASE / 'local-backend-retry-timeout' / SELECTED['local-backend-retry-timeout'][0] / 'result.json')
+    assert backend['succeeded'] is True and len(backend['cases']) == 8
+    assert {(r['backend'], r['seeded_status'], r['branches']) for r in backend['cases']} == {
+        (backend, status, branches) for backend in ['db', 'redis'] for status in [16, 17] for branches in [0, 1]}
+    assert all(row['operator_code'] == '200' and row['repeat_http'] == 500 and row['original_mutations'] == 0 for row in backend['cases'])
+    assert all(row['simulated_actions'] == row['branches'] for row in backend['cases'])
+    raft = load(BASE / 'local-raft-retry-timeout' / SELECTED['local-raft-retry-timeout'][0] / 'result.json')
+    assert raft['succeeded'] is True and len(raft['cohorts']) == 3
+    assert all(row['actual_snapshot_reload'] is True for row in raft['cohorts'])
+    assert all(row['first_reload_exceptions'] == 1 and row['second_reload_exceptions'] == 1
+               and row['diagnostic_only'] is True for row in raft['cohorts'] if row['seeded_status'] in [16, 17])
+    real = {}
+    for folder, status in [('local-go-java-real-at-timeout', 17), ('local-go-java-real-commit-timeout', 16)]:
+        run = BASE / folder / SELECTED[folder][0]
+        proof = load(run / 'proof.json')
+        snapshots = proof['snapshots']
+        assert proof['callback_correlations'] is True and proof['tm_begins'] == 1 and not proof['proxy_errors']
+        assert len(proof['database_starts']) == 3
+        for stage in ['timeout', 'restart', 'lost', 'second_restart']:
+            value = load(run / ('console-' + stage.replace('_', '-') + '.json'))
+            assert value['total'] == 1 and value['data'][0]['status'] == status
+        assert load(run / 'console-final.json')['total'] == 0
+        if status == 17:
+            assert proof['successful_response_lost'] == 1 and proof['original_branch'] is True
+            assert proof['tm_rollbacks'] == 1 and proof['operator_results'] == [500, 200]
+            assert [snapshots[s]['balance'] for s in ['timeout', 'restart', 'lost', 'second_restart', 'final']] == [900, 900, 1000, 1000, 1000]
+            assert [snapshots[s]['locks'] for s in ['timeout', 'restart', 'lost', 'second_restart', 'final']] == [1, 1, 1, 1, 0]
+            assert snapshots['final']['branches'] == 0 and snapshots['final']['undo_status'] == 1
+        else:
+            assert proof['lost'] == 1 and proof['original_branches'] is True
+            assert proof['tm_commits'] == 1 and proof['tm_rollbacks'] == 0
+            assert proof['operator_results'] == [[200, '500'], [200, '200']]
+            assert all(snapshots[s]['balance'] == 900 for s in snapshots)
+            assert [snapshots[s]['confirmed'] for s in ['timeout', 'restart', 'lost', 'second_restart', 'final']] == [0, 0, 10, 10, 10]
+            assert [snapshots[s]['effect_count'] for s in ['timeout', 'restart', 'lost', 'second_restart', 'final']] == [0, 0, 1, 1, 1]
+            assert snapshots['final']['undo_status'] is None
+        real[folder] = dict(status=status, snapshot_stages=list(snapshots), operator_results=proof['operator_results'],
+                            database_starts=len(proof['database_starts']), tm_begins=proof['tm_begins'])
+    write(out / 'historical-integrity.json', records)
+    write(out / 'facts.json', dict(original_file_16_startup_failed=True, original_file_17_filtered=True,
+         original_raft_reload_exceptions=4, db_redis_seeded_profiles=8, empty_branch_profiles=4, real=real))
+    write(out / 'result.json', dict(investigation_ids=[f'REC-TIMEOUT-{i:03d}' for i in range(1, 11)],
+         historical_catalogs_verified=len(records), historical_files_verified=sum(r['verified_files'] for r in records),
+         source_current_rebuild_or_business_reexecution=False, full_recovery_acceptance=False,
+         formal_wp01_authorized_by_this_audit=False, integrity_verified=True))
+    members = [dict(path=p.relative_to(out).as_posix(), sha256=digest(p), bytes=p.stat().st_size)
+               for p in sorted(out.rglob('*')) if p.is_file()]
+    write(out / 'catalog.json', dict(members=members))
+    print(json.dumps(dict(run=str(out), files=sum(r['verified_files'] for r in records),
+                          catalog_sha256=digest(out / 'catalog.json'))), flush=True)
+
+
+if __name__ == '__main__': main()

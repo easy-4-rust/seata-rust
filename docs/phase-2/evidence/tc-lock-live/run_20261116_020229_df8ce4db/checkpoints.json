@@ -1,0 +1,1032 @@
+[
+  {
+    "data": {
+      "SQL_rolled_back": true,
+      "cases": [
+        {
+          "case": "normal",
+          "contender_key": "t:1",
+          "owner_key": "t:1"
+        },
+        {
+          "case": "empty",
+          "contender_key": "t:",
+          "owner_key": "t:"
+        },
+        {
+          "case": "blank",
+          "contender_key": "t: ",
+          "owner_key": "t: "
+        },
+        {
+          "case": "unicode-blank",
+          "contender_key": "t: ",
+          "owner_key": "t: "
+        },
+        {
+          "case": "partial-empty",
+          "contender_key": "t:",
+          "owner_key": "t:,1"
+        },
+        {
+          "case": "semicolon",
+          "contender_key": "t:z",
+          "owner_key": "t:x;broken,z"
+        },
+        {
+          "case": "binary-same",
+          "contender_key": "t_binary:[0, -1]",
+          "owner_key": "t_binary:[0, -1]"
+        },
+        {
+          "case": "binary-distinct",
+          "contender_key": "t_binary:[0, -2]",
+          "owner_key": "t_binary:[0, -1]"
+        }
+      ]
+    },
+    "index": 0,
+    "stage": "provenance",
+    "observer_time_ns": 642095240044400,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "business_counts": {
+      "t": 0,
+      "t_binary": 0,
+      "undo_log": 0
+    },
+    "observer_completed_ns": 642096198430500
+  },
+  {
+    "data": {
+      "case": "normal",
+      "contender_xid": "198.18.0.1:63162:4045077595485540354",
+      "owner": {
+        "branch_id": 4045077595485540356,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540353"
+    },
+    "index": 0,
+    "stage": "owner",
+    "observer_time_ns": 642096607211200,
+    "locks": [
+      {
+        "pk": "1",
+        "xid": "198.18.0.1:63162:4045077595485540353",
+        "table": "t",
+        "row_key": "mysql://auth-a^^^t^^^1",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540356
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540353",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540356
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540353",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540354",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642097100883200
+  },
+  {
+    "data": {
+      "case": "normal",
+      "contender": {
+        "definite_rejected": true,
+        "registered": false
+      },
+      "contender_lockable": false,
+      "contender_xid": "198.18.0.1:63162:4045077595485540354",
+      "owner": {
+        "branch_id": 4045077595485540356,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540353"
+    },
+    "index": 0,
+    "stage": "contender",
+    "observer_time_ns": 642097164294700,
+    "locks": [
+      {
+        "pk": "1",
+        "xid": "198.18.0.1:63162:4045077595485540353",
+        "table": "t",
+        "row_key": "mysql://auth-a^^^t^^^1",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540356
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540353",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540356
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540353",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540354",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642097610175500
+  },
+  {
+    "data": {
+      "case": "normal",
+      "contender": {
+        "definite_rejected": true,
+        "registered": false
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540354"
+      },
+      "contender_lockable": false,
+      "contender_xid": "198.18.0.1:63162:4045077595485540354",
+      "owner": {
+        "branch_id": 4045077595485540356,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540353"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540353"
+    },
+    "index": 0,
+    "stage": "released",
+    "observer_time_ns": 642098601343000,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642099057130300
+  },
+  {
+    "data": {
+      "case": "empty",
+      "contender_xid": "198.18.0.1:63162:4045077595485540376",
+      "owner": {
+        "branch_id": 4045077595485540378,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540375"
+    },
+    "index": 1,
+    "stage": "owner",
+    "observer_time_ns": 642099120548100,
+    "locks": [],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540375",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540378
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540375",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540376",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642099556078100
+  },
+  {
+    "data": {
+      "case": "empty",
+      "contender": {
+        "branch_id": 4045077595485540382,
+        "registered": true
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540376",
+      "owner": {
+        "branch_id": 4045077595485540378,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540375"
+    },
+    "index": 1,
+    "stage": "contender",
+    "observer_time_ns": 642099588147000,
+    "locks": [],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540375",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540378
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540376",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540382
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540375",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540376",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642100020570800
+  },
+  {
+    "data": {
+      "case": "empty",
+      "contender": {
+        "branch_id": 4045077595485540382,
+        "registered": true
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540376"
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540376",
+      "owner": {
+        "branch_id": 4045077595485540378,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540375"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540375"
+    },
+    "index": 1,
+    "stage": "released",
+    "observer_time_ns": 642100578594600,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642101012095700
+  },
+  {
+    "data": {
+      "case": "blank",
+      "contender_xid": "198.18.0.1:63162:4045077595485540394",
+      "owner": {
+        "branch_id": 4045077595485540396,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540393"
+    },
+    "index": 2,
+    "stage": "owner",
+    "observer_time_ns": 642101075230800,
+    "locks": [],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540393",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540396
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540393",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540394",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642101505516900
+  },
+  {
+    "data": {
+      "case": "blank",
+      "contender": {
+        "branch_id": 4045077595485540400,
+        "registered": true
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540394",
+      "owner": {
+        "branch_id": 4045077595485540396,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540393"
+    },
+    "index": 2,
+    "stage": "contender",
+    "observer_time_ns": 642101538094400,
+    "locks": [],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540393",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540396
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540394",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540400
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540393",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540394",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642101964990300
+  },
+  {
+    "data": {
+      "case": "blank",
+      "contender": {
+        "branch_id": 4045077595485540400,
+        "registered": true
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540394"
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540394",
+      "owner": {
+        "branch_id": 4045077595485540396,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540393"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540393"
+    },
+    "index": 2,
+    "stage": "released",
+    "observer_time_ns": 642102707778600,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642103176532900
+  },
+  {
+    "data": {
+      "case": "unicode-blank",
+      "contender_xid": "198.18.0.1:63162:4045077595485540414",
+      "owner": {
+        "branch_id": 4045077595485540416,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540413"
+    },
+    "index": 3,
+    "stage": "owner",
+    "observer_time_ns": 642103270265000,
+    "locks": [],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540413",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540416
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540413",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540414",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642103702766700
+  },
+  {
+    "data": {
+      "case": "unicode-blank",
+      "contender": {
+        "branch_id": 4045077595485540418,
+        "registered": true
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540414",
+      "owner": {
+        "branch_id": 4045077595485540416,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540413"
+    },
+    "index": 3,
+    "stage": "contender",
+    "observer_time_ns": 642103765866300,
+    "locks": [],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540413",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540416
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540414",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540418
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540413",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540414",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642104203387900
+  },
+  {
+    "data": {
+      "case": "unicode-blank",
+      "contender": {
+        "branch_id": 4045077595485540418,
+        "registered": true
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540414"
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540414",
+      "owner": {
+        "branch_id": 4045077595485540416,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540413"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540413"
+    },
+    "index": 3,
+    "stage": "released",
+    "observer_time_ns": 642104736821700,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642105192511700
+  },
+  {
+    "data": {
+      "case": "partial-empty",
+      "contender_xid": "198.18.0.1:63162:4045077595485540432",
+      "owner": {
+        "branch_id": 4045077595485540434,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540431"
+    },
+    "index": 4,
+    "stage": "owner",
+    "observer_time_ns": 642105256965400,
+    "locks": [
+      {
+        "pk": "1",
+        "xid": "198.18.0.1:63162:4045077595485540431",
+        "table": "t",
+        "row_key": "mysql://auth-a^^^t^^^1",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540434
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540431",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540434
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540431",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540432",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642105731782700
+  },
+  {
+    "data": {
+      "case": "partial-empty",
+      "contender": {
+        "branch_id": 4045077595485540436,
+        "registered": true
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540432",
+      "owner": {
+        "branch_id": 4045077595485540434,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540431"
+    },
+    "index": 4,
+    "stage": "contender",
+    "observer_time_ns": 642105764578300,
+    "locks": [
+      {
+        "pk": "1",
+        "xid": "198.18.0.1:63162:4045077595485540431",
+        "table": "t",
+        "row_key": "mysql://auth-a^^^t^^^1",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540434
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540431",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540434
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540432",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540436
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540431",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540432",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642106222546800
+  },
+  {
+    "data": {
+      "case": "partial-empty",
+      "contender": {
+        "branch_id": 4045077595485540436,
+        "registered": true
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540432"
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540432",
+      "owner": {
+        "branch_id": 4045077595485540434,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540431"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540431"
+    },
+    "index": 4,
+    "stage": "released",
+    "observer_time_ns": 642106848106500,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642107299835400
+  },
+  {
+    "data": {
+      "case": "semicolon",
+      "contender_xid": "198.18.0.1:63162:4045077595485540451",
+      "owner": {
+        "branch_id": 4045077595485540453,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540450"
+    },
+    "index": 5,
+    "stage": "owner",
+    "observer_time_ns": 642107363506600,
+    "locks": [
+      {
+        "pk": "x",
+        "xid": "198.18.0.1:63162:4045077595485540450",
+        "table": "t",
+        "row_key": "mysql://auth-a^^^t^^^x",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540453
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540450",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540453
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540450",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540451",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642107802286300
+  },
+  {
+    "data": {
+      "case": "semicolon",
+      "contender": {
+        "branch_id": 4045077595485540455,
+        "registered": true
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540451",
+      "owner": {
+        "branch_id": 4045077595485540453,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540450"
+    },
+    "index": 5,
+    "stage": "contender",
+    "observer_time_ns": 642107866151100,
+    "locks": [
+      {
+        "pk": "x",
+        "xid": "198.18.0.1:63162:4045077595485540450",
+        "table": "t",
+        "row_key": "mysql://auth-a^^^t^^^x",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540453
+      },
+      {
+        "pk": "z",
+        "xid": "198.18.0.1:63162:4045077595485540451",
+        "table": "t",
+        "row_key": "mysql://auth-a^^^t^^^z",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540455
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540450",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540453
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540451",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540455
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540450",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540451",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642108336214200
+  },
+  {
+    "data": {
+      "case": "semicolon",
+      "contender": {
+        "branch_id": 4045077595485540455,
+        "registered": true
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540451"
+      },
+      "contender_lockable": true,
+      "contender_xid": "198.18.0.1:63162:4045077595485540451",
+      "owner": {
+        "branch_id": 4045077595485540453,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540450"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540450"
+    },
+    "index": 5,
+    "stage": "released",
+    "observer_time_ns": 642108867518800,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642109333955900
+  },
+  {
+    "data": {
+      "case": "binary-same",
+      "contender_xid": "198.18.0.1:63162:4045077595485540469",
+      "owner": {
+        "branch_id": 4045077595485540471,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540468"
+    },
+    "index": 6,
+    "stage": "owner",
+    "observer_time_ns": 642109397746700,
+    "locks": [
+      {
+        "pk": " -1]",
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^ -1]",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540471
+      },
+      {
+        "pk": "[0",
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^[0",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540471
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540471
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540469",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642109834202600
+  },
+  {
+    "data": {
+      "case": "binary-same",
+      "contender": {
+        "definite_rejected": true,
+        "registered": false
+      },
+      "contender_lockable": false,
+      "contender_xid": "198.18.0.1:63162:4045077595485540469",
+      "owner": {
+        "branch_id": 4045077595485540471,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540468"
+    },
+    "index": 6,
+    "stage": "contender",
+    "observer_time_ns": 642109897713700,
+    "locks": [
+      {
+        "pk": " -1]",
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^ -1]",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540471
+      },
+      {
+        "pk": "[0",
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^[0",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540471
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540471
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540468",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540469",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642110347727100
+  },
+  {
+    "data": {
+      "case": "binary-same",
+      "contender": {
+        "definite_rejected": true,
+        "registered": false
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540469"
+      },
+      "contender_lockable": false,
+      "contender_xid": "198.18.0.1:63162:4045077595485540469",
+      "owner": {
+        "branch_id": 4045077595485540471,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540468"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540468"
+    },
+    "index": 6,
+    "stage": "released",
+    "observer_time_ns": 642110850233200,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642111274957800
+  },
+  {
+    "data": {
+      "case": "binary-distinct",
+      "contender_xid": "198.18.0.1:63162:4045077595485540487",
+      "owner": {
+        "branch_id": 4045077595485540489,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540486"
+    },
+    "index": 7,
+    "stage": "owner",
+    "observer_time_ns": 642111339477400,
+    "locks": [
+      {
+        "pk": " -1]",
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^ -1]",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540489
+      },
+      {
+        "pk": "[0",
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^[0",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540489
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540489
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540487",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642111771184500
+  },
+  {
+    "data": {
+      "case": "binary-distinct",
+      "contender": {
+        "definite_rejected": true,
+        "registered": false
+      },
+      "contender_lockable": false,
+      "contender_xid": "198.18.0.1:63162:4045077595485540487",
+      "owner": {
+        "branch_id": 4045077595485540489,
+        "registered": true
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540486"
+    },
+    "index": 7,
+    "stage": "contender",
+    "observer_time_ns": 642111803783800,
+    "locks": [
+      {
+        "pk": " -1]",
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^ -1]",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540489
+      },
+      {
+        "pk": "[0",
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "table": "t_binary",
+        "row_key": "mysql://auth-a^^^t_binary^^^[0",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540489
+      }
+    ],
+    "branches": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "resource": "mysql://auth-a",
+        "branch_id": 4045077595485540489
+      }
+    ],
+    "globals": [
+      {
+        "xid": "198.18.0.1:63162:4045077595485540486",
+        "status": 1
+      },
+      {
+        "xid": "198.18.0.1:63162:4045077595485540487",
+        "status": 1
+      }
+    ],
+    "observer_completed_ns": 642112232196400
+  },
+  {
+    "data": {
+      "case": "binary-distinct",
+      "contender": {
+        "definite_rejected": true,
+        "registered": false
+      },
+      "contender_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540487"
+      },
+      "contender_lockable": false,
+      "contender_xid": "198.18.0.1:63162:4045077595485540487",
+      "owner": {
+        "branch_id": 4045077595485540489,
+        "registered": true
+      },
+      "owner_end": {
+        "status": 11,
+        "xid": "198.18.0.1:63162:4045077595485540486"
+      },
+      "owner_xid": "198.18.0.1:63162:4045077595485540486"
+    },
+    "index": 7,
+    "stage": "released",
+    "observer_time_ns": 642112981098700,
+    "locks": [],
+    "branches": [],
+    "globals": [],
+    "observer_completed_ns": 642113412505500
+  }
+]

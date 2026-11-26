@@ -1,0 +1,20 @@
+   Compiling seata-at v0.1.0 (D:\codex-builds\seata_mysql_execution_20261115_205718_cc203af6\undo-direction\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.34s
+     Running tests\sql_undo_image_contract.rs (D:/cargo-target/seata-mysql-execution-controls\debug\deps\sql_undo_image_contract-f992495841c8899a.exe)
+
+running 1 test
+
+thread 'insert_and_delete_require_the_correct_empty_side' (17016) panicked at crates\seata_at\tests\sql_undo_image_contract.rs:86:5:
+assertion failed: SqlUndoLog::new(SqlType::Insert, records(&table, &[(1, "x")]),
+        records(&table, &[(2, "y")])).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test insert_and_delete_require_the_correct_empty_side ... FAILED
+
+failures:
+
+failures:
+    insert_and_delete_require_the_correct_empty_side
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test sql_undo_image_contract`

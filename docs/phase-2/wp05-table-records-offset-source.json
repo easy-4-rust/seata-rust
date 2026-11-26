@@ -1,0 +1,118 @@
+{
+  "status": "ALL_SIX_TABLE_RECORDS_ORIGINAL_CASES_MATCH",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "predecessor": "docs/phase-2/wp05-table-records-source.json",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_table_records_offset",
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.sql.struct.TableRecordsTest]/[method:testEmpty()]",
+      "declaring_class": "org.apache.seata.rm.datasource.sql.struct.TableRecordsTest",
+      "rust_test": "original_test_empty",
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.sql.struct.TableRecordsTest]/[method:testPkRow()]",
+      "declaring_class": "org.apache.seata.rm.datasource.sql.struct.TableRecordsTest",
+      "rust_test": "original_test_pk_row",
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.sql.struct.TableRecordsTest]/[method:testTableRecords()]",
+      "declaring_class": "org.apache.seata.rm.datasource.sql.struct.TableRecordsTest",
+      "rust_test": "original_test_table_records",
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.sql.struct.TableRecordsTest]/[method:testBuildRecords()]",
+      "declaring_class": "org.apache.seata.rm.datasource.sql.struct.TableRecordsTest",
+      "rust_test": "original_test_build_records",
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.sql.struct.TableRecordsTest]/[method:testBuildRecordsNewFeild()]",
+      "declaring_class": "org.apache.seata.rm.datasource.sql.struct.TableRecordsTest",
+      "rust_test": "original_test_build_records_new_field",
+      "status": "MATCH"
+    },
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.sql.struct.TableRecordsTest]/[method:testBuildRecordsWithOffsetDateTime()]",
+      "declaring_class": "org.apache.seata.rm.datasource.sql.struct.TableRecordsTest",
+      "rust_test": "original_test_build_records_with_offset_date_time",
+      "status": "MATCH"
+    }
+  ],
+  "java_original_cases_reexecuted": 6,
+  "rust_new_original_cases": 1,
+  "java_supplemental_observations_matched": 20,
+  "independent_review": "Two BigDecimal invalid scale observations reproduced red and fixed via shared Jackson decimal range validation",
+  "global_rust_source_MATCH": 150,
+  "global_rust_methods_match": 129,
+  "global_cases_remaining": 1177,
+  "global_methods_remaining": 1006,
+  "rust": {
+    "1.99": {
+      "ordinary": 599,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "original_table_records_matches": 6,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 599,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "original_table_records_matches": 6,
+      "strict_clippy": true
+    }
+  },
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "crates/seata_at/src/lib.rs": "3e63a411f5ec61a00f36086a45cac96033d8086945c38955a13159fcbc998ad4",
+    "crates/seata_at/src/undo/mod.rs": "8851354fa8f59bc2fc98b46e82ee2acdbfc42a4344c028c590ff06eada65cb7e",
+    "crates/seata_at/tests/table_records_source.rs": "739a1c912d9a23e46d21e02a3d35030744e49c40ea12c61212bae9c2d6651f34",
+    "crates/seata_at/src/undo/parser/mod.rs": "23c4092c8b4e0a88b42bc78e0b6348c5fe4899a61dbbae6c0ca840df7da7acdf",
+    "crates/seata_at/src/undo/parser/offset_date_time.rs": "25eb241d48316500cc2fbe6da3cfc84a4e38cc82f9fd0327f11e6b559dc30117",
+    "crates/seata_at/src/undo/parser/jackson_undo_field_value.rs": "c3f992eb1cf29c77cd60b15ac7d9fe59f0ebab5a8efa5be077489ec4f3c1c550",
+    "crates/seata_at/src/undo/parser/jackson_undo_records.rs": "27541f1940e2757bf9d46b031e8ddc637638f80a9ffbcb13294cdb780ae3bb3b",
+    "crates/seata_at/src/undo/parser/value_format.rs": "c67fe403fb54097db4ee84175b73f42d13c7071cd7ee291d7d31625f333c1814",
+    "crates/seata_at/src/undo/parser/jackson_original_format.rs": "e496e58ec5f63407c55171b297068d1c404a09d0ad1267bfbb5d7efed3049fbd",
+    "crates/seata_at/tests/fixtures/table_records_offset_java.tsv": "5a696b6368c7cbf4403f7909523839afc6c03aca27582a52ef7324c416cef185",
+    "crates/seata_at/tests/fixtures/offset_datetime_boundaries_java.tsv": "d8a7753f868e51dd98c0670dabfaee8121ffb42803693719c3a28cae9892230f"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "1b564946063494a13c0f62b03d625a9a42dd3491a5f77ae99ddf207a5437b3e8",
+    "1.85-doc.log": "4174e3d6fee9a51aa9769890f4d77e6dfd60a94edd5a6fa71a70925a1a12b553",
+    "1.85-targeted.log": "e9d337f1403097e5b0fa8574ae9dc3ecde37404c833c9dd691761cdf8be2e5a9",
+    "1.85-tests.log": "9dfc47cbcf276457f918d57da26009f0acf17b884474ab61cbab254624052e85",
+    "1.99-clippy.log": "71ccd18fbae06d7124d21e55b7c957f7f90b2043c0d6e646800bf89a4cf46644",
+    "1.99-doc.log": "92e3001f636fa24886a4a585b2bcf8a4bd80eb58badce49e2461cc1574b12bef",
+    "1.99-targeted.log": "ff45bb762737e54160d74b9cf85f53a3ee7a71aa6ad204c383385271f9b1effd",
+    "1.99-tests.log": "bc76d98fc0694f03c898675def66125a5e429881aced449a09d916a0179a86dc",
+    "commands.json": "aaa1dec0e7e03a237682e015919d77299e6f2e6e5edf644a22ccf2e2b301a8c1",
+    "compile-original.log": "d0fb9c692c01fa6ea6f01a5337b0de61972ec84112abb0c58433559308581908",
+    "exponent-red.log": "2d533b4c1d4192a71021f0e09ea47b017ad68594a592931c2dc6626326dcdf14",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java-offset-boundaries.tsv": "d8a7753f868e51dd98c0670dabfaee8121ffb42803693719c3a28cae9892230f",
+    "java.stderr": "cf0f744b42966047acd81fed9255735f73de71b2162c4d551e3a576dc762862e",
+    "mutant-discard-nanoseconds.stderr": "69890cbf650d745722f636659d7fe6c8b978193605fe44322fc0d36c66a1ac9f",
+    "mutant-discard-nanoseconds.stdout": "9c972af2fc049c1337a808fcc7b4bc419b892a73132a37fb78cf3d8948877278",
+    "mutant-skip-decimal-scale-validation.stderr": "326d45942244091c0acafdddadf58541a999169cbc63e3b551bc02655f9af35e",
+    "mutant-skip-decimal-scale-validation.stdout": "9c972af2fc049c1337a808fcc7b4bc419b892a73132a37fb78cf3d8948877278",
+    "mutant-skip-negative-subsecond-borrow.stderr": "10a1a0e1dba1d89033f32e57c4bf2b555ecafaeb28c20be96adc39e870d27b7a",
+    "mutant-skip-negative-subsecond-borrow.stdout": "9c972af2fc049c1337a808fcc7b4bc419b892a73132a37fb78cf3d8948877278",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "OffsetDateTimeOracle.java": "f050d208d7108e10ffe7093069a732dd8b3c4ed479f6f08aaa938e46fb28ce70",
+    "original-commands.json": "daa177c7413854cc0155a0a17edbf5f8ee287191f0508d01df6edd468daf7c3f",
+    "original-inputs.json": "c72bf4fefac611bd0eb58c0c38660205f1a4b71ac208916332c958f6764daeaa",
+    "original-junit.jsonl": "692d237676f712a25d2f136e7acdcc51fc3f42c6ec8214f073c01d7daddb5f0c",
+    "original-junit.log": "f38b247bedb5e1ee87fd9270e3f2d6dfc74085776ddb65a0ee6ab1129886a97f",
+    "runtime-mutation-controls.json": "aff2b68e8d7e9cf94248ebb55c5c05fdb42ec16968e67bb6bfb16457ea7c51b6",
+    "rust-red.log": "fcc51c3efa46512c9e68112ea24afaaafd6524ba909fe26e0af80342b6634143",
+    "TableRecordsTest.java": "1d87f17ad72e046c0d81831c20df4619ea137de5694790f452d8d0697c43ecfc"
+  }
+}

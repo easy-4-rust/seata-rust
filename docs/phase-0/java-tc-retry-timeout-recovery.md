@@ -1,6 +1,6 @@
 # Java Seata 2.x — Retry-Timeout Recovery and Operator-Intervention Audit
 
-> **Status:** source-derived storage-path audit; FILE/RAFT reload branches now have three passing Java unit tests in GitHub Actions Run #25. Full persisted-store restart and operator retry integration remain untested.
+> **Status:** FILE fixtures reproduce full TC startup failure for16 and missing session/lock for17. DB/Redis now pass eight seeded-record restart/operator cases with simulated RM. Natural scheduler timeout, live RAFT recovery, real compensation/durable replay and the FILE recovery failures remain open. This is not full recovery acceptance.
 >
 > Java baseline: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
 
@@ -78,11 +78,11 @@ Pinned sources:
 
 | Store mode | Source-observed handling | Risk / unknown |
 |---|---|---|
-| FILE + CommitRetryTimeout | FileSessionManager pre-filter does not discard it; SessionHolder.reload has no case | Reaches unexpected-status exception during reload; likely startup/recovery blocker if such a record exists |
-| FILE + RollbackRetryTimeout | FileSessionManager.checkSessionStatus filters it out before SessionHolder.reload | Removed from active session map; reconcile this with console manual retry support |
-| RAFT + either retry-timeout | SessionHolder.reload switch has no explicit case; no FILE pre-filter in this path | Exact leader reload invocation and persisted record handling require Raft integration test |
-| DB + either retry-timeout | asynchronous cleanup query omits both | Intended retention is plausible from console retry API, but restart lookup and retry behavior need DB test |
-| Redis + either retry-timeout | same cleanup query omits both | Intended retention is plausible, but restart lookup and retry behavior need Redis test |
+| FILE + CommitRetryTimeout | FileSessionManager pre-filter does not discard it; SessionHolder.reload has no case | Confirmed with seeded real FILE records: unchanged full TC JAR exits -1 with ShouldNeverHappenException; JAVA-FILE-RETRY-TIMEOUT-001 |
+| FILE + RollbackRetryTimeout | FileSessionManager.checkSessionStatus filters it out before SessionHolder.reload | Confirmed with seeded real FILE records: zero restored session/branch, full TC returns Finished15 and old lock is available; JAVA-FILE-RETRY-TIMEOUT-002 |
+| RAFT + either retry-timeout | SessionHolder.reload switch has no explicit case; no FILE pre-filter in this path | Real three-node elections/snapshot restart retain16/17 and original branches/locks; actual async reload throws for both. JAVA-RAFT-RELOAD-001 remains open; this is diagnostic, not safe recovery acceptance |
+| DB + either retry-timeout | asynchronous cleanup query omits both | Seeded records/branches/locks survive actual MySQL restart and fresh TC startup; actual console retry succeeds with simulated RM, including empty branches. Natural generation and business compensation remain unverified |
+| Redis + either retry-timeout | same cleanup query omits both | Same four scoped cases pass through Redis restart, fresh TC and actual console/native calls; original JAR dependency cohort is required for the fixture |
 
 Do not translate this into a single Rust rule such as `is_terminal() => delete`. Retry-timeout is a failed transaction state with operator intervention semantics, and storage modes currently differ.
 
@@ -143,7 +143,52 @@ The overlay test `tools/java-v1-golden/SessionHolderRetryTimeoutRecoveryTest.jav
 2. Calls `SessionHolder.reload(..., SessionMode.FILE, false)` with `CommitRetryTimeout` and verifies the pinned reload switch throws `ShouldNeverHappenException`.
 3. Calls the RAFT reload path with both retry-timeout states and verifies neither has an explicit recovery case.
 
-The test suite proves the source-level filter/reload behavior. It does **not** recreate an on-disk persisted transaction and restart a full TC process, nor does it exercise DB/Redis storage or a live Raft leader transition. Therefore REC-TIMEOUT-001–004 remain integration-level tasks even though their underlying code branches now have unit-level evidence.
+Those three tests prove only the filter/reload branches; Run25 did not recreate an on-disk transaction or full TC startup, DB/Redis storage or a live Raft leader transition. Subsequent §6.2 supplies seeded FILE/full-JAR diagnostic evidence for001–002. Recovery acceptance and003–004 live Raft integration remain open.
+
+## 6.2 Persisted FILE and full-JAR diagnostic — 2026-11-12
+
+[Raw records, commands and evidence](evidence/local-file-retry-timeout/README.md). A real storage writer JVM persists Begin + AT branch + status update; it closes and exits, then a second JVM inspects the exact file without changing its hash. A third JVM starts the unchanged pinned TC JAR. Begin1 is the positive control and restores original identity and lock. Status16 retains one session/branch but prevents full TC startup. Status17 filters both, and native queries return Finished15 with a free lock. No target end or BranchRegister is replayed.
+
+Both three-case runs reproduced these observations, including a spaced runtime path. Final runner recompiles/reruns the focused5 Java process tests before startup; the earlier combined target140 also passed. Rust96 tests pass. An independent review found stale-report acceptance in the first runner; final runner resolves it with fresh execution and archived report/hash.
+
+REC-TIMEOUT-001's desired safe startup is contradicted for these valid persisted fixtures. REC-TIMEOUT-002's current filter is verified, but intended retention/deletion and manual retry recovery are unresolved. Neither is marked a recovery pass. That FILE increment did not exercise natural scheduler timeouts, abrupt writer crashes, compensation or console retry. Subsequent §6.3 adds DB/Redis/operator evidence; live RAFT remains open.
+
+## 6.3 Real MySQL / Redis restart and operator retry — 2026-11-12
+
+[Complete eight-case evidence](evidence/local-backend-retry-timeout/README.md), final run `run_20261112_152511_3907a673`. Real pinned managers seed16/17 with/without an AT branch and actual locks. The backend process restarts with preserved D-drive data; a fresh reader and the complete original TC JAR observe the original records. Actual console query/changeGlobalStatus, native status/lock queries and original BranchId callbacks then prove the scoped outcomes. Final MySQL global/branch/lock rows are0/0/0, and Redis has no global/branch keys. All owned containers exited and ports were released.
+
+| Gate | Current executed result | Remaining scope |
+|---|---|---|
+| REC-TIMEOUT-005 | Scoped pass: MySQL16 retained, console-queryable, real original commit callback/action and removal | Injected state and simulated RM; natural deadline generation is separate |
+| REC-TIMEOUT-006 | Scoped pass: MySQL17 retained, original rollback callback/action, stored lock restored/released | No real SQL/Undo compensation |
+| REC-TIMEOUT-007 | Scoped pass: Redis16/17, both one-branch and branch-empty profiles, actual process restart and console/native checks | Same simulated-resource boundary |
+| REC-TIMEOUT-008 | Partial: actual manual commit, original branch identity and safe repeated-command rejection verified | Durable RM replay, callback loss during manual retry and business effects remain unverified |
+| REC-TIMEOUT-009 | Partial: actual manual rollback and original lock lifecycle verified | Undo/compensation and durable replay remain unverified |
+| REC-TIMEOUT-010 | Scoped pass: four empty profiles complete and remain absent after precisely identified repeat rejection | Repeat returns an error rather than a successful no-op; arbitrary concurrent/crash races unverified |
+
+The repeat response is HTTP500/empty on this pinned Netty console. It counts only when newly appended owned-TC logs contain the same XID and exact missing-session cause, followed by another absent query. Ordinary observer Rollback RPCs return11 but persist4 under DELAY_HANDLE_SESSION. Their two distinct owned XIDs are checked for4/zero branches and explicitly completed through TC sendCommitOrRollback; this is fixture teardown, never automatic cleanup or replay of the original target.
+
+Runtime provenance is stronger than a source label:2122 production source/resource/POM files are checked against the pin before/after fresh helper tests; only one compiled helper and the existing JDBC driver are added to the original JAR cohort. A real StandardEnvironment supplies the validated fixture configuration for standalone manager initialization. A mixed reactor test runtime first exposed Jedis3.8 Long versus original-JAR Jedis7 long ABI mismatch; that harness failure is retained and corrected, not labeled an upstream Redis failure.
+
+**JAVA-METRICS-RETRY-001 is OPEN:** both final TC logs show four MetricsSubscriber failures because a seeded timeout re-entry event has null endTime. Transaction callbacks/state/cleanup still pass. Metrics correctness and equivalence to naturally generated retry-timeout events are not established. Java selected3, Rust98 and Python5 tests pass; independent review findings were fixed and re-reviewed. REC001–004 and the remaining008–009 scope are not closed by these results.
+
+## 6.4 Live RAFT validation execution plan
+
+REC003/004 will use three original TC applications with independent D:/E: data directories and real JRaft membership, logs and elections. Separate fresh cohorts cover Begin1 control, CommitRetryTimeout16 and RollbackRetryTimeout17, so one exception cannot hide a later status in the same reload loop. Timeout cohorts include one original AT branch and one branch-empty record. States are injected through real GlobalSession lifecycle / RaftSessionManager replication, not by altering a map, RocksDB bytes, original class or JAR.
+
+Before and after stopping the original leader, restarting it with preserved data, and a further leader transition, capture exact original XIDs/branches, lock occupancy, leader/term, committed/applied indices and console/native visibility. Require replication on all members before stopping a process. Request actual snapshots and retain their files. A loopback test-only control class runs the original ServerApplication unchanged; guarded owned-directory/port checks precede startup. It exposes fixture seeding, inspection, snapshot and JFR dump only. It does not implement recovery or replace a TC component.
+
+`onLeaderStart` schedules reload through an unobserved CompletableFuture; a startup log alone therefore cannot establish completion or success. Enable standard JDK exception events before original startup, then inspect the new leader's JFR stack for the actual SessionHolder.reload path. Record retained state and availability independently of any reload exception. An exception reproduced in a live cluster is diagnostic evidence, not a recovery acceptance pass. Manual retries and real compensation retain their separate requirements.
+
+## 6.5 Real three-node RAFT elections and snapshot reload — 2026-11-12
+
+The §6.4 execution plan ran against the original JAR in `run_20261112_165835_c293c228`: Begin1,16 and17 fresh cohorts; six real leader transitions and three fresh-JVM reloads from actual member snapshots. The root verifier checks39 replica record sets, original branch/resource/lock key and lock occupancy,18 independent native V1 queries and corresponding actual console responses. No original mutation is replayed. [Raw evidence, snapshots and reproduction](evidence/local-raft-retry-timeout/README.md).
+
+Begin controls queue the original branch to RollbackRetrying5 while the branch-empty original finishes/disappears. Both timeout cohorts retain their records at16/17 with the original held lock. Each timeout cohort has two exact original `ShouldNeverHappenException` events from asynchronous `SessionHolder.reload` / `RaftStateMachine.onLeaderStart`, after the corresponding pre-stop timestamp. The TC still runs and answers console/native queries; that availability does not mean the unobserved future succeeded. `JAVA-RAFT-RELOAD-001` records this actual behavior.
+
+Fresh Java4, Rust106 and Python3 pass within the diagnostic scope. The independent review's async race, stale exception attribution and fabricated-resource concerns are corrected. A standard JDK streaming reader preserves all recorded frames because the CLI's default five-frame export omits the async caller. Actual recordings and failed attempts remain preserved; JAR/helper/reader/probe/source hashes are bound in the evidence manifest. All owned processes stop and ports release.
+
+REC003/004 now have real replication, snapshot, leader-change, lock and operator-visible-state evidence. Safe recovery acceptance remains open because reload fails. RAFT operator retries, natural deadlines and durable business compensation are not supplied by this increment. Additional metadata deserialization and Sofa logging ABI observations are documented separately in [runtime findings](raft-reload-runtime-findings.md); no original class, dependency or JAR was patched.
 
 ## 7. Evidence status
 
@@ -154,8 +199,128 @@ The test suite proves the source-level filter/reload behavior. It does **not** r
 | FILE pre-filter removes RollbackRetryTimeout but not CommitRetryTimeout | Verified in pinned source and unit test in Run #25 |
 | DB/Redis cleanup query omits both | Verified in pinned source |
 | SessionHolder FILE reload throws for a retained CommitRetryTimeout session | Verified by unit test in Run #25 |
-| FILE CommitRetryTimeout causes a production server startup failure in a real persisted deployment | Inferred from call chain; full restart not runtime reproduced |
-| DB/Redis sessions remain queryable and manually retryable after restart | Unknown; targeted integration tests required |
-| RAFT behavior in a live leader restart | Unknown; targeted integration test required |
+| Seeded real FILE CommitRetryTimeout prevents full pinned TC JAR startup | Confirmed locally2026-11-12 twice; original on-disk record and full startup stack preserved; not an observed production outage |
+| Seeded real FILE RollbackRetryTimeout loses original session/branch and lock restoration | Confirmed locally2026-11-12 twice; native original-XID Finished15 and separate contender lock=true; not compensation evidence |
+| Seeded DB/Redis sessions remain queryable and manually retryable after backend restart/fresh TC startup | Verified locally2026-11-12, eight scoped cases; original identity/callback/locks and empty profiles; simulated RM only |
+| Retry-timeout metrics events are safe after re-entry | Not established; JAVA-METRICS-RETRY-001 records actual null-endTime subscriber errors |
+| RAFT behavior in a live leader restart | Reproduced locally2026-11-12: states16/17 and original locks retained/queryable, four actual async reload exceptions across two transitions per cohort; safe recovery acceptance remains open |
 
-**Conclusion:** this is a source-proven inconsistency in recovery-path handling, with a likely FILE-mode CommitRetryTimeout failure and a deliberate-or-accidental RollbackRetryTimeout removal. Do not call it a confirmed production outage until the pinned Java integration tests reproduce it.
+**Conclusion:** FILE asymmetry and RAFT asynchronous reload failure are reproduced with real persisted records and original TC runtime. Recovery acceptance, FILE removal intent and safe RAFT timeout reload remain unresolved. This establishes controlled diagnostic behavior, not an observed production outage or an implemented Rust TC recovery policy.
+
+
+## 真实AT自然重试超时与持久重放增量（2026-11-13）
+
+依据[真实AT超时计划](go-java-v1-real-at-timeout-plan.md)完成新的MySQL DB存储TC联合运行：完整Go SDK只创建一次原事务和真实SQL/Undo分支，代理阻断实际回滚指令，原调度器自然写入RollbackRetryTimeout17；原TC/SDK进程退出及MySQL重启后，原XID/BranchId/资源/锁与完整Undo字节保留。实际控制台人工重试由真实RM补偿余额900→1000并删除Undo，成功响应被代理丢弃，TC仍保持17及原分支/锁；再次TC/SDK/MySQL重启后再人工重试原分支，余额保持1000，TC记录/分支/锁清理，Go RM写入同原身份status1防悬挂Undo。[正式证据](evidence/local-go-java-real-at-timeout/README.md)。
+
+三个不同TC和完整SDK进程、两次数据库重启、实际注册/分支/回调连接与请求ID、五阶段SQL/控制台及自然17日志分别核对。首次HTTP500必须与原分支响应超时对应，最终成功不只依赖HTTP200。本轮新执行Python25通过，包含保持帧哈希/序号合法的原始证据负向用例；Go254/Rust117/Java617明确继承父证据，本轮未重跑。770项输入导入前冻结；固定JDBC8.0.33在每阶段前后校验字节与实际class来源，原Java JAR与Go候选副本未改。失败收尾尝试及修复后完整重跑均保留，正式运行容器/进程已停止、端口已释放。
+
+REC-TIMEOUT-009的真实MySQL AT补偿/丢响应/持久重放取得该链路证据，仍非所有SQL、并发崩溃和存储组合验收。REC-TIMEOUT-008/自然16仍开放：固定Java纯AT通常走AsyncCommitting，不能靠改状态或短时观察声称自然16。FILE/RAFT缺陷、资源标识差异、生产认证、正式Rust、完整WP00和Phase1–7仍未完成；既有分阶段冻结提案仍待确认。下一步补真实提交重试及剩余恢复边界，不把选定参考链路当成生产交付。
+
+
+## 真实AT＋TCC自然提交超时与持久重放增量（2026-11-13）
+
+按[真实混合提交计划](go-java-v1-real-commit-timeout-plan.md)完成新鲜运行：完整Go SDK建立原AT/TCC两分支，真实AT业务余额1000→900并生成Undo，TCC业务真实预留10。仅阻断真实TC Commit指令，让原调度器自然持久化CommitRetryTimeout16。TC/SDK/MySQL重启后保留原XID、两BranchId、资源、AT Undo完整字节和TCC预留。人工重试时原AT实际清理Undo并答复，原TCC本地确认10后成功响应丢失，TC维持16且只剩原TCC分支；再次TC/SDK/MySQL重启后人工重试原TCC，确认仍10、效果计数仍1，最终TC global/branch/lock和Undo均空，AT余额保持900。[正式归档](evidence/local-go-java-real-commit-timeout/README.md)。
+
+原TM仅一次Begin/Commit、无Rollback或目标重发。首次operator为HTTP200/body code500，须匹配原TCC等待响应超时及AT提交成功日志，不能当成完全成功；最终HTTP200/code200同时经过帧、独立SQL及控制台验证。每个callback与原分支类型/资源/连接/请求ID及唯一成功回复绑定。审查发现的重复TCC成功替代AT回复、错误envelope、SQL冻结遗漏已修复；合法不同V1 header负向用例有修前RED和修后GREEN。
+
+本轮Python27新执行通过；Go254/Rust117/Java617明确继承，未重跑。783输入导入前冻结，含新增schema.sql；固定JDBC8.0.33/原JAR、每轮实际Driver类来源及10个覆盖类字节/5主类来源前后核对。自有容器/进程已停止，端口释放。原TC重试指标订阅者的null endTime异常再次出现，JAVA-METRICS-RETRY-001保持OPEN，见归档事件；未将业务恢复通过冒充指标已修复。
+
+这是REC-TIMEOUT-008选定AT＋TCC真实提交恢复与持久业务幂等证据，与此前009真实回滚链路互补。TCC幂等来自本次业务的本地事务/唯一身份/行锁，不表示SDK自动保障任意业务；纯AT AsyncCommitting也不是本次自然16触发源。全SQL/并发崩溃矩阵、完整TCC Fence、FILE/RAFT安全恢复、混合语言资源标识、生产认证、正式Rust、完整WP00及Phase1–7仍未完成。既有分阶段冻结提案仍待确认。下一步处理剩余存储恢复和资源兼容边界，保持全部计划范围。
+
+
+## Java重试超时保留候选与真实FILE重启增量（2026-11-13）
+
+按[候选恢复计划](java-retry-timeout-retention-candidate-plan.md)形成独立Java0002补丁：FileSessionManager不再过滤17，SessionHolder显式保留16/17且不激活、不改成自动重试；16不重新获取提交锁，17按原两个解锁开关决定保留回滚锁。DefaultCoordinator两个既有超时入口和恢复共用原启动快照，避免热变更provider产生生命周期分叉。未修改原Java源码/JAR、旧前导补丁或正式Rust策略。[完整证据](evidence/local-java-retry-timeout-candidate/README.md)。
+
+最终Maven72项新鲜通过（37目标＋35受影响原测试），Python12项通过。相同编译测试字节对原JAR有23失败/14控制，对实际部署覆盖类37全过；独立JVM曾复现动态配置读取12失败/25控制，共享快照后通过。真实FILE六情形、12个完整TC进程：Begin控制保留锁；16成功启动并保留原会话/分支、提交锁释放；17保留原身份并遵守两flags四种组合。控制台与仅101/15/21原生查询分别核对，无Begin/End或RM资源注册。原2122生产文件仅三处候选差异，29仓库输入导入前冻结、两外部元数据及340classpath/2800实际依赖绑定，19覆盖类字节/三个候选实际来源核对。自有TC停止、28091释放。
+
+旧夹具引导、缺extraData、误判类加载和编译元数据缺口等失败/较弱运行保留，不计正式通过。原未打补丁FILE16/17问题仍存在；候选只取得本次seeded真实FILE及单元范围证据，不冒称自然超时/真实RM补偿。RAFT分支单元覆盖不能代替实际选举/快照；原未观察CompletableFuture的失败安全性仍需专门验证。指标、RAFT元数据/日志兼容、混合语言资源标识、正式Rust、完整WP00与Phase1–7仍开放；分阶段冻结提案仍待确认。后续继续候选的真实RAFT重载与剩余资源恢复，不降低原验收。
+
+
+## Java RAFT 候选真实选举与恢复完成观察增量（2026-11-13）
+
+按[观察候选计划](java-raft-reload-observation-candidate-plan.md)新增独立0003补丁，组合既有0001/0002；原Java源码/JAR、旧补丁和正式Rust策略保持原样。实际SessionHolder.reload异步成功才记录捕获的任期，单调更新避免旧任务晚完成覆盖新成功；失败记录分组/任期/异常。标记仅供观察，不改变isLeader，不代表服务就绪或失败领导隔离。[完整证据](evidence/local-java-raft-reload-candidate/README.md)。
+
+真实三节点覆盖Begin1对照、CommitRetryTimeout16及默认双解锁开关关闭的RollbackRetryTimeout17：6次领导切换、3次快照重载、12个独立TC JVM。16保留原身份/分支/状态且清理残锁；17保留原记录和锁，不转自动重试。18组当前领导确认核对Seata/JRaft实际前后任期及领导身份、第二次取样、复制位置和原记录。18次只读101/15/21查询的108原帧重新解码并核对完整请求；48条实际主类来源及6份JFR原件核验。
+
+本轮新执行Java52项（8目标＋44上游RAFT原回归）、Python18项通过。同一目标二进制对原JAR为6失败/2控制，对实际运行覆盖类8通过；44项以正确Spring环境、实际覆盖类和编译依赖前后绑定执行。轻量环境回归失败及早期较弱运行保留作诊断，不计最终通过。53输入导入前冻结，父清单固定认证19类，340classpath/2800文件继承并核对；21覆盖类和实际JFR reader等生成类前后守卫。最终完整性失败先转失败再写结果。自有进程停止、9端口释放。
+
+本候选取得seeded真实RAFT选举/快照恢复及异步成功观察证据；不是自然超时、真实RM补偿、额外解锁配置实测或失败领导隔离验收。原版FILE/RAFT、元数据/日志、指标、混合资源标识、正式Rust、完整WP00及Phase1–7仍未完成；分阶段冻结提案仍待确认。下一步验证自然超时后的FILE业务恢复与其余存储/资源边界，继续全部计划。
+
+
+## FILE自然17与真实AT持久补偿增量（2026-11-13）
+
+依据[FILE业务恢复计划](go-java-v1-file-at-timeout-plan.md)，完成独立19类Java候选的真实FILE链路：完整固定Go SDK只创建一次原事务/SQL/Undo并发起一次Rollback；代理阻断8个真实回滚请求，原调度器自然进入17。实际FILE journal经停止及新TC/SDK/MySQL重启后，原XID、BranchId、资源、回滚锁与完整Undo字节保留。人工操作由真实RM补偿900→1000并删除Undo，真实成功响应丢失后TC仍17及原分支/锁；再次停止重启后人工重放原分支，业务仍1000，原TC会话/分支/锁移除，Go持久化同原身份status1防悬挂Undo。[正式证据](evidence/local-go-java-file-at-timeout/README.md)。
+
+MySQL仅accounts/undo_log，TC实际session/lock均FILE。3TC/3SDK与两次MySQL重启，日志/配置/PID/类来源及停机journal→下一轮启动原字节分别绑定；原journal在丢成功响应阶段也未变。五阶段独立SQL、控制台、只读原生5查询/30帧及SDK注册/回调/请求ID/方向/外层类型核对；原Begin回复及Rollback目标XID均绑定。首次HTTP500对应原分支响应超时，最终HTTP200/code200还须业务与TC清理证据。
+
+本轮Python44项新执行通过（13归一化、8FILE、23真实证据破坏控制），含先前7/9/1项行为RED的修复。803输入导入前冻结，Go cohort及原JAR、SDK binary、配置、19覆盖类字节前后一致，24条实际主类来源核验；完整性检查先于成功写入。Go254/Rust117/Java617明确继承未重跑。首轮较弱校验运行保留诊断；自有TC/SDK/代理和容器停止，3端口释放。
+
+REC-TIMEOUT-009取得本候选选定FILE自然17与真实业务持久重放证据；其他SQL/并发/崩溃、FILE自然16、RAFT真实业务、额外配置和生产策略继续按原范围验证。原版FILE/RAFT缺陷、指标/元数据/日志、混合资源标识、正式Rust、完整WP00及Phase1–7仍未完成，分阶段冻结提案仍待确认。下一步继续FILE自然提交超时和其余运行时边界，保持全部计划目标。
+
+
+## FILE自然16与真实AT/TCC持久提交增量（2026-11-13）
+
+依据[FILE混合提交计划](go-java-v1-file-commit-timeout-plan.md)完成独立19类Java候选的真实自然16链路。完整Go SDK只发一次Begin/Commit、零Rollback；真实AT本地SQL/Undo与TCC预留后，代理阻断9个原Commit请求，原调度器自然进入16。TC/SDK及MySQL重启后原XID、两分支、AT完整Undo、TCC预留保留且提交锁可用。实际人工重试中原TCC确认10后成功回复丢失，原AT真实清理Undo并答复；TC仍16且仅原TCC。再次重启并人工重放原TCC后，余额仍900、Undo空、确认仍10且效果计数仍1，原TC会话/分支清理。[正式证据](evidence/local-go-java-file-commit-timeout/README.md)。
+
+MySQL仅四个业务/Undo/TCC表，TC实际session/lock为同步FILE。3TC/3SDK及两次MySQL重启，两次启动journal分别精确等于前次停机字节；部分提交移除AT与最终清理后journal正常追加。原13报告、成功14确认、保留分支状态/应用上下文和实际Commit回调逐项绑定，确认必须先于首次回调；原Begin/Commit目标、注册、方向、外层类型、连接/请求ID、真实丢帧和operator顺序均核对。五阶段独立SQL/控制台/5原生查询30帧，以及24条实际主类来源分别重算。
+
+本轮Python57项新执行通过（13归一化、8FILE、36真实证据破坏控制），包含先前7/3/2项行为RED的修复。819输入导入前冻结，父783及共享代码/候选类认证；Go cohort、原JAR/SDK binary/配置/19类字节前后匹配，完整性检查先于成功写入。Go254/Rust117/Java617明确继承未重跑。早期两次较弱门禁运行保留诊断；自有资源停止，3端口释放。
+
+JAVA-METRICS-RETRY-001本轮再次出现2条原指标订阅者null endTime异常，独立归档并保持OPEN，未将业务恢复通过冒充指标修复。REC-TIMEOUT-008取得本候选选定FILE自然16与持久业务幂等证据；完整TCCFence、RAFT真实业务、其他SQL/配置/并发/崩溃矩阵仍单独验收。原参考缺陷、元数据/日志、资源标识、生产认证、正式Rust、完整WP00及Phase1–7仍未完成，分阶段冻结提案仍待确认。下一步处理已复现指标异常与其他剩余边界，继续全部计划。
+
+
+## Java指标生命周期候选与真实FILE16增量（2026-11-13）
+
+依据[指标候选计划](java-metrics-lifecycle-candidate-plan.md)新增独立0004补丁：producer的doing事件有意保留null endTime，完成状态消费者须先区分未完成事件，避免重入16/17时误扣active、伪增失败并抛NPE。Begin/三Retrying保留原规则；有效done指标名称/标签/计数不改，缺begin/倒序/溢出仅跳Timer，不补零或当前时间。原JAR、producer及事件未修改。[正式证据](evidence/local-java-metrics-lifecycle-candidate/README.md)。
+
+同一实际CompactRegistry测试字节对原JAR为47失败/30控制，候选77项通过（65目标＋12固定pin原回归）；4源先冻结再重编，测试/候选class与实际部署字节一致，278classpath/1950文件前后绑定。新执行Python72项：父业务57重跑、指标破坏15；异步完成标记曾2失败/13控制，修后全绿。Go254/Rust117/Java617完整父范围明确继承，不与77直接相加。
+
+真实FILE16混合业务继续通过3TC/3SDK与两次journal/MySQL恢复、真实AT清Undo、TCC成功丢回复和持久重放。每进程SDK前基线独立全0；初始自然超时failed/timeout/timer各1且5486ms；两个恢复进程实际null-end doing被精确DEBUG标记确认后采样，重入不增完成计数、active保持0；最终真实AfterCommitted counter/summary/timer各1，实际3ms。8快照/8回执、原总线事件、30类来源及原SQL/控制台/5查询30原帧分别核对。只读get/count/total不measure/clear；Exporter仅绑独立端口，未scrape，不据此验收Exporter输出。
+
+834仓库输入导入前冻结、40外部输入（含源码快照/类/编译参数/日志/D冻结脚本）及运行依赖完整性通过后才写成功。MySQL临时套接字误ready的失败及缺显式顺序屏障的早期运行保留诊断；正式采用TCP就绪和“同TC/原transactionId跳过标记→采样”门禁。自有资源停止，五端口释放。
+
+JAVA-METRICS-RETRY-001原参考仍OPEN，0004在本候选FILE16事件生命周期范围取得通过证据；不等于全部重启计数重建/去重、Exporter、真实FILE17/RAFT指标或完整生产验收。其他SQL/配置/并发/崩溃、资源标识、认证、正式Rust、完整WP00与Phase1–7继续开放，分阶段冻结提案仍待确认。后续继续真实回滚指标及其余运行时门禁，保持全部计划目标。
+
+
+## Java指标候选与真实FILE17回滚增量（2026-11-13）
+
+[回滚指标计划](java-metrics-rollback-candidate-plan.md)和[证据](evidence/local-java-metrics-rollback-candidate/README.md)延伸REC-TIMEOUT-009：相同0004生产字节、完整原Go AT业务实际进入17，两次FILE/SDK/MySQL恢复；原补偿完成但成功响应丢失，TC继续保留原分支/锁，再次同分支持久重放保持余额1000，最终会话清理。8真实Registry快照/回执证明初始失败/超时/timer各1=5485ms，人工重入空结束时间doing被候选处理后不伪增完成指标，最终真实AfterRollbacked各1=3ms；不修改producer、事件、计数或采样窗口。
+
+Python71项本轮执行（44业务、12阶段、15实际证据破坏）；Java77及Go254/Rust117/Java617继承，本轮重编subscriber严格等于认证测试字节。854仓库/40外部输入、278classpath/1950依赖与原SDK/JAR/配置及候选类前后认证；30主类来源、5原生查询30帧、原RPC/SQL/Undo/控制台/日志恢复分别复核。自有资源停止，五端口释放。
+
+JAVA-METRICS-RETRY-001原参考仍OPEN，仅独立0004取得选定FILE16和17的分开生命周期证据；全重启指标重建/去重、Exporter、RAFT真实业务/指标、其他SQL/配置/并发/崩溃、正式Rust和完整WP00保持开放。
+
+
+## 真实RAFT自然17与持久AT恢复增量（2026-11-13）
+
+按[真实RAFT AT计划](go-java-v1-raft-at-timeout-plan.md)完成[候选自然17链路](evidence/local-go-java-raft-at-timeout/README.md)，补充REC-TIMEOUT-003/004/009的真实业务证据。原Go一次Begin/Rollback与实际SQL/Undo自然17；三节点snapshot后两次可见领导更替、两次SDK/业务DB重启，实际补偿成功丢回复而原17/分支/锁保留，再次同分支持久重放保持1000，最终三副本会话/分支/锁清理。
+
+当前真实任期/peer/reload成功、全副本进度和重复确认，业务路由/恢复/查询前后同任期、六snapshot/两次原盘精确index加载、两份JFR重读与停止回执、20类来源及五原生查询30帧和原RPC/SQL/Undo/控制台均复核。运行65 Python及最终停止身份4，共69；923运行输入＋3最终校验输入、341classpath/2821文件与原生产覆盖字节认证。Go254/Rust117/Java RAFT52继承未重跑，资源停止、11端口释放。
+
+额外归档门禁要求实际停止的对象等于前任确认领导，不能以第三follower身份配旧leader样本；本次冻结runtime保持原字节，最终认证须通过两层。原reload/metadata/logging问题仍OPEN；本候选选定自然17恢复不代表自然16、指标/Exporter、全分区/并发/损坏/崩溃、生产认证、正式Rust或完整WP00通过。
+
+
+## 真实RAFT自然16混合提交增量（2026-11-13）
+
+按[RAFT混合提交计划](go-java-v1-raft-commit-timeout-plan.md)，[055235候选](evidence/local-go-java-raft-commit-timeout/README.md)在3000ms选举窗口完成REC-TIMEOUT-003/004/008选定真实自然16业务。原一次Begin/Commit与AT/TCC预留，原TC自然16；两次领导更替/DB与SDK重启、真实TCC确认丢成功回复和AT清Undo后仅原TCC保留，再次同分支持久重放确认仍10、效果仍1，最终三个副本清理。
+
+87运行Python＋4最终context绑定=91；原13/14与17条副本分支status/application_data直接关联、原11==13 UTF8关系明确。停止身份门禁已纳runtime。948输入＋3最终校验输入、341classpath/2821依赖、20关键类来源、六snapshot/两原盘加载/两JFR与五原生查询30帧及原RPC/SQL/Undo/控制台分别复核。Go254/Rust117/Java RAFT52继承；资源停止、11端口释放。
+
+1000ms 054700选举分票失败仍OPEN，不能用3000ms通过覆盖；连接超时导致分票仅推断。本例Prepare不改context，固定Java状态更新未携带applicationData的源码风险尚需真实变更场景，见[发现](raft-commit-runtime-findings.md)。原参考reload/metadata/logging和指标、通用Fence、全SQL/分区/并发/损坏/崩溃、认证、正式Rust、完整WP00继续单独验收。
+
+
+## RAFT Prepare 上下文更新修复候选（2026-11-13）
+
+[计划](java-raft-context-replication-candidate-plan.md)对应[原实现真实缺陷](evidence/local-go-java-raft-context-reference/README.md)与[0005候选064040](evidence/local-java-raft-context-candidate/README.md)。原11/13确实不同，原副本保留旧上下文，选主后实际TCC拒绝确认、业务效果0；负向运行不计恢复成功。候选统一补丁组三节点在两次领导更替、六snapshot/两原盘加载、两次DB/SDK重启及真实成功回复丢失后，同原分支持久重放确认仍10/效果1，最终三副本清理，余额900/Undo空。
+
+直接绑定原13/14→12副本观察→全部真实TCC回调（阶段5/1/1）→五SQL准备token及两个接受记录；5TC/3Go SDK、35实际类来源、两JFR重读和五原生查询30帧完整核验。Java同字节25测试原类RED11失败/14控制、候选25通过，真实原类705B旧消息兼容通过。Python102＋追加实际证据破坏10＝112；归一化15已包含，空guard适配器RED仅作校验器负控，不冒充原生产RED。1039运行输入＋10追加验证输入、341classpath/2821依赖、23生产覆盖类/1只读控制/3辅助类前后闭合；资源停止、11端口释放。Go254/Rust117及旧Java父范围继承未重跑。
+
+JAVA-RAFT-BRANCH-CONTEXT-001原参考仍OPEN，独立0005取得选定范围证据；只认证统一补丁与新reader读旧消息，不支持混合版本滚升声明或修复历史已丢上下文。1000ms分票、metadata/logging、指标/Exporter、全故障矩阵/通用Fence/认证、正式Rust、完整WP00和Phase1–7继续开放；分阶段冻结提案仍待确认。
+
+
+## 2026-11-13 — WP-00 调查任务逐项闭合，恢复验收仍开放
+
+[十项核对](wp00-recovery-investigation-closure.md)按现行原任务“运行调查或明确记录受阻项”完成调查状态核对。001/002原FILE失败、003/004原RAFT异常和未执行原版人工重试被明确保留；005–007种子/模拟范围、008/009后续真实DB/FILE/RAFT业务与010零分支重复拒绝分别列明，没有把候选当原版修复。十一份历史清单/20,880列出文件重新SHA核对，关键状态/余额/效果/丢回复与最终清理重核，[审计记录](evidence/local-wp00-recovery-investigation-audit/README.md)。
+
+这只完成WP-00的调查checkbox，不关闭完整恢复验收、WP-00或Phase0，也不调整WP-01依赖/批准分阶段冻结提案。当前文档早期章节的open/partial是当时范围；最新逐项范围见本次核对，未执行项目仍明确列出。没有新增业务运行/测试或修改旧证据，共享锁继续延期。

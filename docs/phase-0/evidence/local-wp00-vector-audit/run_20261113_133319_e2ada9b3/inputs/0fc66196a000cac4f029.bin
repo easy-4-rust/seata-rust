@@ -1,0 +1,97 @@
+# Independent Rust V1 integration probe
+
+This std-only binary is a test tool, not the production Seata-Rust client. It lives at `tools/java-tc-integration/rust-client`; there is no root Cargo workspace.
+
+## Local checks
+
+```bash
+cargo test --manifest-path tools/java-tc-integration/rust-client/Cargo.toml
+cargo fmt --manifest-path tools/java-tc-integration/rust-client/Cargo.toml -- --check
+cargo clippy --manifest-path tools/java-tc-integration/rust-client/Cargo.toml --all-targets -- -D warnings
+```
+
+## Run against the isolated pinned Java TC
+
+Use Java commit `cba73e180fd8896a99df6415b859d275122feaa7`. Start the existing Java harness separately. Do not point this probe at production: the lifecycle option creates and ends real global transactions.
+
+```bash
+# Registration only, retaining the existing default behavior:
+bash tools/java-tc-integration/scripts/run-rust-registration.sh
+
+# Registration plus two independent EMPTY global transactions:
+bash tools/java-tc-integration/scripts/run-rust-registration.sh --lifecycle
+```
+
+Equivalent native command (also usable from PowerShell):
+
+```text
+cargo run --manifest-path tools/java-tc-integration/rust-client/Cargo.toml -- --lifecycle
+```
+
+Environment: `SEATA_TC_HOST` defaults to `127.0.0.1`; `SEATA_TC_PORT` defaults to `18091`. The existing application, service-group, resource and connection-hold variables remain supported.
+
+The lifecycle probe executes Begin → Status(Begin) → Commit → Status, followed by a separate Begin → Status(Begin) → Rollback → Status. It requires the operation-specific success status before accepting subsequent session removal (`Finished`). It logs TC-issued XIDs and does not automatically replay a request after a failed write or missing response.
+
+## Simulated AT branch callbacks
+
+```text
+cargo run --manifest-path tools/java-tc-integration/rust-client/Cargo.toml -- --branches
+```
+
+This creates two new transactions, registers one simulated AT branch in each using the registered resource, and drives commit then rollback. RM services the matching callback concurrently with the TM request. It verifies XID, BranchId, AT type, resource and applicationData, echoes the TC request ID, and responds with PhaseTwo_Committed=5 or PhaseTwo_Rollbacked=8. Both successful TM responses and callback handling are required, followed by a Finished status query. Transport failures are not replayed.
+
+The bounded probe expects one callback per transaction within the existing 5-second socket timeout. It rejects unsupported envelopes, compression, HeadMap, unexpected requests and malformed bodies. It has no heartbeat, reconnect, duplicate callback or recovery support. The simulated resource performs no database writes or Undo Log operations.
+
+Live local evidence for the pinned Java TC is in [local-phase09-branches](../../../docs/phase-0/evidence/local-phase09-branches/README.md). TC logs must be cross-checked: AT commit can finish the TM request before branch cleanup. A client-side write or a Finished query alone does not prove that the TC accepted the branch response.
+
+## First callback response loss
+
+```text
+cargo run --manifest-path tools/java-tc-integration/rust-client/Cargo.toml -- --callback-loss
+```
+
+Use the dedicated [fault configuration and runner](../../../docs/phase-0/evidence/local-phase09-callback-loss/README.md), which set TC callback timeout and recovery periods to 1000 ms. The probe's existing 5-second socket timeout is intentionally bounded; the normal TC's 15-second callback timeout will not fit this test budget.
+
+For each separate commit/rollback transaction, the simulated RM action succeeds once, its first response is deliberately not written, and the probe requires a second valid callback with a fresh TC RPC ID. Process-local state validates identity even on a cache hit and returns the original terminal branch outcome using the current RPC ID. No TM end or BranchRegister is automatically replayed.
+
+An injected rollback timeout may return **ResultCode=Failed with RollbackRetrying=5**. Only this explicit loss scenario retains that initial outcome and continues querying; the failure, error code and message are logged. It is not reported as an initially successful rollback. The normal modes still reject failed responses. Final acceptance requires redelivery, one simulated action, a Finished query, and matching server receipt/completion logs.
+
+This proves only the test model's in-process success deduplication. It does not prove database idempotency, Undo Log correctness, durable exactly-once processing, arbitrary retries/reconnection, loss of TM or BranchRegister responses, or FILE restart recovery.
+
+## FILE restart probe
+
+Use [run-file-restart.ps1](../scripts/run-file-restart.ps1) to prepare and resume two cases around forced TC process restarts. Each run creates fresh runtime and evidence directories; it does not reset older data. The TC artifact and source are pinned. Original XID/BranchId/resource are kept in a strict create-only `SEATA_IT_RESTART_RECORD`; a fresh Rust process re-registers, queries the original XID and rolls it back without re-registering its branch.
+
+Native modes: `--prepare-restart-begin`, `--prepare-restart-branch`, `--resume-restart`. Prepared transactions deliberately remain open, with a 600-second TC deadline. Keep the original FILE data and endpoint when restarting. A branch resume also requires the original resource to match the new registration, receives the original BranchId callback, and checks lock occupation/release using separate contender XIDs.
+
+Evidence and limitations: [local-phase09-restart](../../../docs/phase-0/evidence/local-phase09-restart/README.md). This is a process-crash test for normal FILE records, not a database or power-loss durability guarantee. The record alone is never treated as proof of restoration; TC responses, real old-BranchId callback and server logs are required.
+
+## Lost BranchRegister / Commit / Rollback response
+
+Use [run-response-loss.ps1](../scripts/run-response-loss.ps1) to start an owned pinned FILE TC and an external loopback proxy. The proxy discards one complete, correlated successful response per case. Native modes are `--lost-branch-register-response`, `--lost-commit-response`, and `--lost-rollback-response`; running them without the proxy must fail because a delivered response is not loss evidence.
+
+The client sends each target mutation once. Lost registration leaves BranchId unknown until an actual callback matches the known XID/resource/AT type and nonempty applicationData nonce. The observer's hidden response never feeds the client. Lost end requests retain uncertainty if queries return only Finished15; a separately observed matching terminal9/11 is required for a definite result. Callback processing and lock release are checked independently and do not turn Finished into success.
+
+[Executed runs, raw traffic and limits](../../../docs/phase-0/evidence/local-phase09-response-loss/README.md). Coverage is one pending simulated branch per unique nonce and same-connection loss; no database, reconnect or durable idempotency proof follows.
+
+## Seeded FILE retry-timeout diagnostics
+
+[run-file-retry-timeout.ps1](../scripts/run-file-retry-timeout.ps1) writes statuses1/16/17 through the pinned Java FILE storage API in a separate JVM, inspects the store in another JVM, then starts the unchanged pinned TC JAR. It reruns the five Java process tests before each diagnostic run. This reproduces an external TC limitation; it does not fix recovery or simulate a natural scheduler timeout.
+
+The new `--query-file-timeout` mode takes `SEATA_IT_TIMEOUT_XID` and `SEATA_IT_TIMEOUT_EXPECT_STATUS` (1 or15). It queries the old XID and uses a separate, cleaned-up contender XID for the lock check. It never sends an end request or BranchRegister for the old transaction. A returned retry-timeout status cannot be accepted as Finished. [Raw seeded records and startup results](../../../docs/phase-0/evidence/local-file-retry-timeout/README.md).
+
+## Evidence boundary
+
+The `src/payload/` modules compile only under `cfg(test)`. They implement typed, independent V1 encode/decode for the 25 message types in the frozen 29-payload corpus. Tests compare independent field expectations and original bytes; malformed-input checks reject truncation, trailing data, invalid UTF-8/lengths/enums and excessive sizes. Run with `cargo test --manifest-path tools/java-tc-integration/rust-client/Cargo.toml` from repository root.
+
+These test codecs are separate from the live probe paths and are not a production API. Registration response `wire_version=None` records absent bytes; `java_version(java_current)` models Java's retained constructor default. Nullable GlobalReport status uses the legitimate `0xff` sentinel. See [evidence and limits](../../../docs/phase-0/evidence/local-rust-payloads-20261112/README.md).
+
+`handler_runtime_tests.rs` additionally verifies all78 captured real Java handler/auth response contexts against independent normalized wire fields and original bytes. It also tests every truncated prefix/trailing byte. Default fixtures are under `tests/fixtures/protocol/v1/handler_matrix`; set `SEATA_IT_HANDLER_WIRE_DIR` to use a fresh capture. [Capture and same-directory Go/Rust reproduction](../../java-handler-wires/README.md); this remains test-only code and does not imply live authentication or production readiness.
+
+Unit tests use deterministic byte streams. They do not prove a live TC received anything. A live run must additionally record the Java commit, process/configuration, port, XIDs, decoded response statuses and exit code.
+
+`--query-raft-timeout` is a read-only native V1 mode driven by the [three-node RAFT runner](../raft_recovery/README.md). It registers TM only, queries two distinct original XIDs once, and checks the explicit timeout/control status pair. It creates no observer transaction and sends no original mutation or RM registration. JRaft replica/snapshot and exception evidence comes from the separate runner, not from Rust unit tests.
+
+The opt-in `--auth-default`, `--auth-denied`, `--auth-accepted` and `--auth-bypass` modes are driven by the [owned authentication runner](../auth_validation/README.md) on loopback28091. They exercise the original registration processors with a separate test-only SPI extension. `--auth-accepted` requires fresh runner-owned readiness/continuation paths and a TC-observed old-channel disconnect before callbacks; invoke the runner rather than starting that mode by hand. This validates the bounded auth-hook/reconnect behavior, not a production credential system or durable RM recovery.
+
+The `--lifecycle` mode alone does NOT validate BranchRegister, RM phase-two callbacks, MySQL writes, Undo Log, AT compensation, authentication, restart recovery, compression or arbitrary header maps. Separate modes have separate evidence and limits. The response reader intentionally rejects unsupported envelopes rather than guessing.

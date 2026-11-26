@@ -1,0 +1,54 @@
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+error[E0432]: unresolved imports `seata_tm::TmOperation`, `seata_tm::TransactionCompletion`, `seata_tm::TransactionManager`
+ --> crates\seata_tm\tests\manager_calls.rs:9:58
+  |
+9 | use seata_tm::{GlobalTransactionRole,RootContext,TmError,TmOperation,TransactionCompletion,TransactionConfig,TransactionManager,Xid};
+  |                                                          ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^ no `TransactionManager` in the root
+  |                                                          |           |
+  |                                                          |           no `TransactionCompletion` in the root
+  |                                                          no `TmOperation` in the root
+  |
+help: a similar name exists in the module
+  |
+9 - use seata_tm::{GlobalTransactionRole,RootContext,TmError,TmOperation,TransactionCompletion,TransactionConfig,TransactionManager,Xid};
+9 + use seata_tm::{GlobalTransactionRole,RootContext,TmError,TmOperation,TransactionContext,TransactionConfig,TransactionManager,Xid};
+  |
+help: a similar name exists in the module
+  |
+9 - use seata_tm::{GlobalTransactionRole,RootContext,TmError,TmOperation,TransactionCompletion,TransactionConfig,TransactionManager,Xid};
+9 + use seata_tm::{GlobalTransactionRole,RootContext,TmError,TmOperation,TransactionCompletion,TransactionConfig,TransactionContext,Xid};
+  |
+
+error[E0599]: no variant named `DefiniteRejected` found for enum `TmError`
+  --> crates\seata_tm\tests\manager_calls.rs:57:27
+   |
+57 |     match error {TmError::DefiniteRejected {operation,xid,response,status}=>{assert_eq!(operation,TmOperation::Commit);assert_eq!(xi...
+   |                           ^^^^^^^^^^^^^^^^ variant not found in `TmError`
+
+error[E0599]: no variant named `ProtocolFailure` found for enum `TmError`
+  --> crates\seata_tm\tests\manager_calls.rs:65:86
+   |
+65 | ...ap_err();assert!(matches!(error,TmError::ProtocolFailure {operation:TmOperation::Begin,may_have_effect:true,..}));assert!(error.i...
+   |                                             ^^^^^^^^^^^^^^^ variant not found in `TmError`
+
+error[E0599]: no variant named `UnknownOutcome` found for enum `TmError`
+  --> crates\seata_tm\tests\manager_calls.rs:72:86
+   |
+72 | ...rap_err();assert!(matches!(error,TmError::UnknownOutcome {operation:TmOperation::Begin,..}));assert!(error.xid().is_none());tm.sh...
+   |                                              ^^^^^^^^^^^^^^ variant not found in `TmError`
+
+error[E0599]: no variant named `ProtocolFailure` found for enum `TmError`
+   --> crates\seata_tm\tests\manager_calls.rs:105:163
+    |
+105 | ....xid()));assert!(matches!(error,TmError::ProtocolFailure {may_have_effect:true,..}));assert!(tx.has_unknown_outcome());tm.shutdo...
+    |                                             ^^^^^^^^^^^^^^^ variant not found in `TmError`
+
+error[E0599]: no variant named `LocalFailureBeforeSend` found for enum `TmError`
+   --> crates\seata_tm\tests\manager_calls.rs:111:136
+    |
+111 | ...rr();assert!(matches!(error,TmError::LocalFailureBeforeSend {operation:TmOperation::Begin,..}));assert!(!error.is_unknown_outcom...
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^ variant not found in `TmError`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-tm` (test "manager_calls") due to 6 previous errors

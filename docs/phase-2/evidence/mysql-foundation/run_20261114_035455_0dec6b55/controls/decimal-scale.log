@@ -1,0 +1,29 @@
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_mysql_foundation_20261114_035455_0dec6b55\decimal-scale\crates\seata_datasource)
+warning: unused variable: `s`
+  --> crates\seata_datasource\src\struct\column_meta.rs:40:75
+   |
+40 |             && !matches!((numeric_precision,numeric_scale), (Some(p),Some(s)) if p>0 && p<=65 && true)
+   |                                                                           ^ help: if this is intentional, prefix it with an underscore: `_s`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-datasource` (lib) generated 1 warning (run `cargo fix --lib -p seata-datasource` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running tests\metadata_contract.rs (D:/cargo-target/seata-mysql-controls\debug\deps\metadata_contract-02cf8ed652b1e5ea.exe)
+
+running 1 test
+
+thread 'decimal_metadata_and_schema_budgets_are_checked' (79956) panicked at crates\seata_datasource\tests\metadata_contract.rs:98:5:
+assertion failed: ColumnMeta::new("v".into(), ColumnType::Decimal, false, 1, None, None,
+        Some(10), Some(11)).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test decimal_metadata_and_schema_budgets_are_checked ... FAILED
+
+failures:
+
+failures:
+    decimal_metadata_and_schema_budgets_are_checked
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-datasource --test metadata_contract`

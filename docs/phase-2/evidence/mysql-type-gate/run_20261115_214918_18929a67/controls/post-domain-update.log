@@ -1,0 +1,22 @@
+   Compiling seata-datasource v0.1.0 (D:\codex-builds\seata_mysql_type_20261115_214918_18929a67\post-domain-update\crates\seata_datasource)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.68s
+     Running tests\mysql_type_identity.rs (D:/cargo-target/seata-mysql-type-controls\debug\deps\mysql_type_identity-e3c015e0226c076b.exe)
+
+running 1 test
+
+thread 'changing_domain_cannot_invalidate_existing_native_identity' (62264) panicked at crates\seata_datasource\tests\mysql_type_identity.rs:66:5:
+assertion failed: column.with_domain(ColumnDomain::Integer {
+            bits: 16,
+            unsigned: false,
+        }).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test changing_domain_cannot_invalidate_existing_native_identity ... FAILED
+
+failures:
+
+failures:
+    changing_domain_cannot_invalidate_existing_native_identity
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-datasource --test mysql_type_identity`

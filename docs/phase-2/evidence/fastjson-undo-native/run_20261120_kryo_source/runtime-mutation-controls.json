@@ -1,0 +1,74 @@
+[
+  {
+    "label": "corrupt-kryo-string-reference",
+    "target": "kryo_source_test_encode_and_decode",
+    "scratch": "D:\\codex-builds\\seata_compare_mutants_osek19lz",
+    "mutated_file": "crates/seata_at/src/undo/parser/kryo_writer.rs",
+    "original_sha256": "f4e1f9934b5594f8684dc92666e05292653f9250cfc93ca45e10d01943f8f672",
+    "mutant_sha256": "d51c9c604a67fb31811c5b0709512e1cb0b2a4f86bb755170f95461c081a6124",
+    "cmd": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-at",
+      "--test",
+      "kryo_undo_source",
+      "--",
+      "kryo_source_test_encode_and_decode",
+      "--exact",
+      "--nocapture",
+      "--include-ignored"
+    ],
+    "exit": 101
+  },
+  {
+    "label": "drop-kryo-timestamp-nanos",
+    "target": "kryo_source_test_timestamp_encode_and_decode",
+    "scratch": "D:\\codex-builds\\seata_compare_mutants_osek19lz",
+    "mutated_file": "crates/seata_at/src/undo/parser/kryo_undo_log_parser.rs",
+    "original_sha256": "1a96a2a7f4cc3a0f439becfdd42e03a6091ef4c11e17c430f5a2f30c916183ee",
+    "mutant_sha256": "290c85e6796c7879c2f0bd84c3cbecfbe2ab488d0df91950c490f07810e7510f",
+    "cmd": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-at",
+      "--test",
+      "kryo_undo_source",
+      "--",
+      "kryo_source_test_timestamp_encode_and_decode",
+      "--exact",
+      "--nocapture",
+      "--include-ignored"
+    ],
+    "exit": 101
+  },
+  {
+    "label": "omit-kryo-numeric-budget",
+    "target": "kryo_counts_numeric_payload_in_single_and_total_scalar_budgets",
+    "scratch": "D:\\codex-builds\\seata_compare_mutants_osek19lz",
+    "mutated_file": "crates/seata_at/src/undo/parser/kryo_reader.rs",
+    "original_sha256": "ebe9fe3050f6026f6f166c480a40055b18531beccc78dd9767cf933f10d78968",
+    "mutant_sha256": "ff4296733eb552e832b55967299fea945e187ce652cccb8bcb0c85c0183a8bf2",
+    "cmd": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-at",
+      "--test",
+      "kryo_undo_source",
+      "--",
+      "kryo_counts_numeric_payload_in_single_and_total_scalar_budgets",
+      "--exact",
+      "--nocapture",
+      "--include-ignored"
+    ],
+    "exit": 101
+  }
+]

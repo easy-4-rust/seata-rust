@@ -1,0 +1,93 @@
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+error[E0432]: unresolved imports `seata_transport::RegistrationIdentity`, `seata_transport::RegistrationStatus`, `seata_transport::ResourceKey`, `seata_transport::ResourceRegistry`, `seata_transport::SessionRegistration`
+ --> crates\seata_transport\tests\registered_pool.rs:8:99
+  |
+8 | ...,ReconnectPolicy,RegistrationIdentity,RegistrationStatus,ResourceKey,ResourceRegistry,SessionRegistration,TransportError};
+  |                     ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ no `SessionRegistration` in the root
+  |                     |                    |                  |           |
+  |                     |                    |                  |           no `ResourceRegistry` in the root
+  |                     |                    |                  no `ResourceKey` in the root
+  |                     |                    no `RegistrationStatus` in the root
+  |                     no `RegistrationIdentity` in the root
+
+error[E0599]: no associated function or constant named `start_registered` found for struct `ConnectionPool` in the current scope
+  --> crates\seata_transport\tests\registered_pool.rs:43:30
+   |
+43 |     let pool=ConnectionPool::start_registered(settings(address),SessionRegistration::tm(identity(),Duration::from_secs(1)).unwrap())...
+   |                              ^^^^^^^^^^^^^^^^ associated function or constant not found in `ConnectionPool`
+   |
+note: if you're trying to build a new `ConnectionPool`, consider using `ConnectionPool::start` which returns `Result<ConnectionPool, TransportError>`
+  --> crates\seata_transport\src\netty\connection_pool.rs:20:5
+   |
+20 |     pub fn start(config: ConnectionPoolConfig) -> Result<Self, TransportError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no variant, associated function, or constant named `Registering` found for enum `PoolSlotState` in the current scope
+  --> crates\seata_transport\tests\registered_pool.rs:45:104
+   |
+45 |     assert_eq!(handle.snapshot().ready(),0);assert_eq!(handle.snapshot().slots[0].state,PoolSlotState::Registering);
+   |                                                                                                        ^^^^^^^^^^^ variant, associated function, or constant not found in `PoolSlotState`
+
+error[E0599]: no associated function or constant named `start_registered` found for struct `ConnectionPool` in the current scope
+  --> crates\seata_transport\tests\registered_pool.rs:54:30
+   |
+54 |     let pool=ConnectionPool::start_registered(settings(address),SessionRegistration::rm(identity(),registry(&["db-a","db-b","db-c"])...
+   |                              ^^^^^^^^^^^^^^^^ associated function or constant not found in `ConnectionPool`
+   |
+note: if you're trying to build a new `ConnectionPool`, consider using `ConnectionPool::start` which returns `Result<ConnectionPool, TransportError>`
+  --> crates\seata_transport\src\netty\connection_pool.rs:20:5
+   |
+20 |     pub fn start(config: ConnectionPoolConfig) -> Result<Self, TransportError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `start_registered` found for struct `ConnectionPool` in the current scope
+  --> crates\seata_transport\tests\registered_pool.rs:67:30
+   |
+67 |     let pool=ConnectionPool::start_registered(settings(address),SessionRegistration::rm(identity(),registry(&["db-a","db-b"]),Durati...
+   |                              ^^^^^^^^^^^^^^^^ associated function or constant not found in `ConnectionPool`
+   |
+note: if you're trying to build a new `ConnectionPool`, consider using `ConnectionPool::start` which returns `Result<ConnectionPool, TransportError>`
+  --> crates\seata_transport\src\netty\connection_pool.rs:20:5
+   |
+20 |     pub fn start(config: ConnectionPoolConfig) -> Result<Self, TransportError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `start_registered` found for struct `ConnectionPool` in the current scope
+  --> crates\seata_transport\tests\registered_pool.rs:80:60
+   |
+80 | ...let pool=ConnectionPool::start_registered(settings(address),SessionRegistration::rm(identity(),cache.clone(),Duration::from_secs(...
+   |                             ^^^^^^^^^^^^^^^^ associated function or constant not found in `ConnectionPool`
+   |
+note: if you're trying to build a new `ConnectionPool`, consider using `ConnectionPool::start` which returns `Result<ConnectionPool, TransportError>`
+  --> crates\seata_transport\src\netty\connection_pool.rs:20:5
+   |
+20 |     pub fn start(config: ConnectionPoolConfig) -> Result<Self, TransportError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `start_registered` found for struct `ConnectionPool` in the current scope
+  --> crates\seata_transport\tests\registered_pool.rs:92:30
+   |
+92 |     let pool=ConnectionPool::start_registered(settings(address),SessionRegistration::rm(identity(),registry(&["db-a"]),Duration::fro...
+   |                              ^^^^^^^^^^^^^^^^ associated function or constant not found in `ConnectionPool`
+   |
+note: if you're trying to build a new `ConnectionPool`, consider using `ConnectionPool::start` which returns `Result<ConnectionPool, TransportError>`
+  --> crates\seata_transport\src\netty\connection_pool.rs:20:5
+   |
+20 |     pub fn start(config: ConnectionPoolConfig) -> Result<Self, TransportError> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `start_registered` found for struct `ConnectionPool` in the current scope
+   --> crates\seata_transport\tests\registered_pool.rs:102:34
+    |
+102 | ...   let pool=ConnectionPool::start_registered(settings(address),SessionRegistration::rm(identity(),registry(&["db-a"]),Duration::...
+    |                                ^^^^^^^^^^^^^^^^ associated function or constant not found in `ConnectionPool`
+    |
+note: if you're trying to build a new `ConnectionPool`, consider using `ConnectionPool::start` which returns `Result<ConnectionPool, TransportError>`
+   --> crates\seata_transport\src\netty\connection_pool.rs:20:5
+    |
+ 20 |     pub fn start(config: ConnectionPoolConfig) -> Result<Self, TransportError> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-transport` (test "registered_pool") due to 8 previous errors

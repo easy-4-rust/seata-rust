@@ -1,0 +1,342 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+15:27:53.326  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+15:27:53.372  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+15:27:53.393  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 47056 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\seata backend retry timeout\20261112_152511_3907a673\redis)
+15:27:53.394  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+15:27:54.378  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+15:27:54.401  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: redis
+15:27:54.610  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 1.965 seconds (process running for 3.123)
+15:27:55.311  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: redis
+15:27:55.405  INFO --- [nPool.commonPool-worker-1] [orage.redis.JedisPooledFactory] [getJedisPoolInstance]  [] : initialization of the build redis connection pool is complete
+15:27:55.538  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 28091
+15:27:55.557  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/seata backend retry timeout/20261112_152511_3907a673/redis/logs.
+15:27:55.557  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 939 millSeconds
+15:27:56.000  INFO --- [ttyServerNIOWorker_1_3_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData=''},channel:[id: 0x7e447f82, L:/127.0.0.1:28091 - R:/127.0.0.1:54419],client version:1.1.0,client protocol-version:null
+15:27:56.007  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='mysql://backend-retry-redis-0', version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData='null'},channel:[id: 0xfdcb5ef9, L:/127.0.0.1:28091 - R:/127.0.0.1:54420],client version:1.1.0
+15:27:56.013  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920000', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.025  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=CommitRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.031  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.036  INFO --- [rverHandlerThread_1_3_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010627] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010627
+15:27:56.036  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010627', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.043  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010627', branchType=AT, resourceId='mysql://backend-retry-redis-0', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.043  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=false, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.049  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010627', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.057  INFO --- [rverHandlerThread_1_5_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010627] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010627.
+15:27:56.058  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.066  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920000', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.072  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=CommitRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.112  INFO --- [HTTPHandlerThread_1_2_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920000
+15:27:56.117  INFO --- [HTTPHandlerThread_1_2_100] [.core.rpc.netty.ChannelManager] [          getChannel]  [] : Choose [id: 0xfdcb5ef9, L:/127.0.0.1:28091 - R:/127.0.0.1:54420] on the same IP[127.0.0.1] as alternative of backend-retry-probe:127.0.0.1:1
+15:27:56.119  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920000', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.119 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@708dfe10 when dispatching event: GlobalTransactionEvent{id=920000, role='tc', name='retry-timeout', applicationId='backend-retry-probe', group='default_tx_group', beginTime=1794468468119, endTime=null, status='CommitRetryTimeout', retryGlobal=true, retryBranch=false}
+==> 
+java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+	at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+	at org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+	at org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)
+	at org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:85)
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:142)
+	at com.google.common.eventbus.Subscriber.lambda$dispatchEvent$0(Subscriber.java:71)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+15:27:56.125  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=CommitRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.125  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchCommitResponse{xid='127.0.0.1:28091:920000', branchId=930000, branchStatus=PhaseTwo_Committed, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.133  INFO --- [HTTPHandlerThread_1_2_100] [server.coordinator.DefaultCore] [bda$doGlobalCommit$1]  [] : Commit branch transaction successfully, xid = 127.0.0.1:28091:920000 branchId = 930000
+15:27:56.147  INFO --- [HTTPHandlerThread_1_2_100] [server.coordinator.DefaultCore] [      doGlobalCommit]  [] : Committing global transaction is successfully done, xid = 127.0.0.1:28091:920000.
+15:27:56.172  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920000', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.178  INFO --- [rverHandlerThread_1_9_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010632] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010632
+15:27:56.179  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.179  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.179  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010632', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.179  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010632', branchType=AT, resourceId='mysql://backend-retry-redis-0', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.186  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=true, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.186  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010632', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.189  INFO --- [verHandlerThread_1_11_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010632] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010632.
+15:27:56.190  INFO --- [ttyServerNIOWorker_1_3_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54419 to server channel inactive.
+15:27:56.190  INFO --- [ttyServerNIOWorker_1_4_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54420 to server channel inactive.
+15:27:56.190  INFO --- [ttyServerNIOWorker_1_3_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x7e447f82, L:/127.0.0.1:28091 ! R:/127.0.0.1:54419]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54419', channel=[id: 0x7e447f82, L:/127.0.0.1:28091 ! R:/127.0.0.1:54419], resourceSets=null}
+15:27:56.190  INFO --- [ttyServerNIOWorker_1_4_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xfdcb5ef9, L:/127.0.0.1:28091 ! R:/127.0.0.1:54420]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54420', channel=[id: 0xfdcb5ef9, L:/127.0.0.1:28091 ! R:/127.0.0.1:54420], resourceSets=[]}
+15:27:56.191  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.219  INFO --- [HTTPHandlerThread_1_4_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920000
+15:27:56.221 ERROR --- [HTTPHandlerThread_1_4_100] [netty.http.HttpDispatchHandler] [  executeFinalAction]  [] : Exception occurred while processing HTTP request: null
+==> 
+java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.executeFinalAction(HttpDispatchHandler.java:132)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:41)
+	at org.apache.seata.server.filter.XSSHttpRequestFilter.doFilter(XSSHttpRequestFilter.java:117)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:37)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.lambda$channelRead0$1(HttpDispatchHandler.java:110)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.IllegalArgumentException: Global session is not exist, may be finished
+	at org.apache.seata.server.console.impl.AbstractService.checkGlobalSession(AbstractService.java:97)
+	at org.apache.seata.server.console.impl.AbstractGlobalService.changeGlobalStatus(AbstractGlobalService.java:145)
+	at org.apache.seata.server.console.controller.GlobalSessionController.changeGlobalStatus(GlobalSessionController.java:136)
+	... 13 common frames omitted
+ <==
+15:27:56.256  INFO --- [HTTPHandlerThread_1_7_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010627
+15:27:56.269  INFO --- [HTTPHandlerThread_1_7_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010627.
+15:27:56.310  INFO --- [TTPHandlerThread_1_10_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010632
+15:27:56.324  INFO --- [TTPHandlerThread_1_10_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010632.
+15:27:56.402  INFO --- [tyServerNIOWorker_1_16_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData=''},channel:[id: 0xb11354df, L:/127.0.0.1:28091 - R:/127.0.0.1:54432],client version:1.1.0,client protocol-version:null
+15:27:56.404  INFO --- [verHandlerThread_1_12_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='mysql://backend-retry-redis-1', version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData='null'},channel:[id: 0x4092df4d, L:/127.0.0.1:28091 - R:/127.0.0.1:54433],client version:1.1.0
+15:27:56.405  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920001', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.411  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.411  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.413  INFO --- [verHandlerThread_1_14_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010640] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010640
+15:27:56.416  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010640', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.416  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010640', branchType=AT, resourceId='mysql://backend-retry-redis-1', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.416  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=false, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.416  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010640', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.422  INFO --- [verHandlerThread_1_16_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010640] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010640.
+15:27:56.422  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.430  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920001', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.435  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.482  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920001', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.489  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.525  INFO --- [HTTPHandlerThread_1_3_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920001
+15:27:56.529  INFO --- [HTTPHandlerThread_1_3_100] [.core.rpc.netty.ChannelManager] [          getChannel]  [] : Choose [id: 0x4092df4d, L:/127.0.0.1:28091 - R:/127.0.0.1:54433] on the same IP[127.0.0.1] as alternative of backend-retry-probe:127.0.0.1:1
+15:27:56.530 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@708dfe10 when dispatching event: GlobalTransactionEvent{id=920001, role='tc', name='retry-timeout', applicationId='backend-retry-probe', group='default_tx_group', beginTime=1794468468164, endTime=null, status='RollbackRetryTimeout', retryGlobal=true, retryBranch=false}
+==> 
+java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+	at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+	at org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+	at org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackRetryTimeout(MetricsSubscriber.java:196)
+	at org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:85)
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:142)
+	at com.google.common.eventbus.Subscriber.lambda$dispatchEvent$0(Subscriber.java:71)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+15:27:56.531  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='127.0.0.1:28091:920001', branchId=930001, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.538  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920001', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.538  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.543  INFO --- [HTTPHandlerThread_1_3_100] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [] : Rollback branch transaction successfully, xid = 127.0.0.1:28091:920001 branchId = 930001
+15:27:56.556  INFO --- [HTTPHandlerThread_1_3_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 127.0.0.1:28091:920001.
+15:27:56.590  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920001', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.596  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.596  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.596  INFO --- [verHandlerThread_1_21_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010646] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010646
+15:27:56.601  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010646', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.601  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010646', branchType=AT, resourceId='mysql://backend-retry-redis-1', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.601  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=true, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.601  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010646', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.607  INFO --- [verHandlerThread_1_23_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010646] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010646.
+15:27:56.607  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.607  INFO --- [tyServerNIOWorker_1_16_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54432 to server channel inactive.
+15:27:56.607  INFO --- [tyServerNIOWorker_1_16_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xb11354df, L:/127.0.0.1:28091 ! R:/127.0.0.1:54432]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54432', channel=[id: 0xb11354df, L:/127.0.0.1:28091 ! R:/127.0.0.1:54432], resourceSets=null}
+15:27:56.608  INFO --- [tyServerNIOWorker_1_17_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54433 to server channel inactive.
+15:27:56.608  INFO --- [tyServerNIOWorker_1_17_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x4092df4d, L:/127.0.0.1:28091 ! R:/127.0.0.1:54433]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54433', channel=[id: 0x4092df4d, L:/127.0.0.1:28091 ! R:/127.0.0.1:54433], resourceSets=[]}
+15:27:56.650  INFO --- [HTTPHandlerThread_1_5_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920001
+15:27:56.651 ERROR --- [HTTPHandlerThread_1_5_100] [netty.http.HttpDispatchHandler] [  executeFinalAction]  [] : Exception occurred while processing HTTP request: null
+==> 
+java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.executeFinalAction(HttpDispatchHandler.java:132)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:41)
+	at org.apache.seata.server.filter.XSSHttpRequestFilter.doFilter(XSSHttpRequestFilter.java:117)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:37)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.lambda$channelRead0$1(HttpDispatchHandler.java:110)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.IllegalArgumentException: Global session is not exist, may be finished
+	at org.apache.seata.server.console.impl.AbstractService.checkGlobalSession(AbstractService.java:97)
+	at org.apache.seata.server.console.impl.AbstractGlobalService.changeGlobalStatus(AbstractGlobalService.java:145)
+	at org.apache.seata.server.console.controller.GlobalSessionController.changeGlobalStatus(GlobalSessionController.java:136)
+	... 13 common frames omitted
+ <==
+15:27:56.697  INFO --- [HTTPHandlerThread_1_8_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010640
+15:27:56.709  INFO --- [HTTPHandlerThread_1_8_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010640.
+15:27:56.735  INFO --- [HTTPHandlerThread_1_1_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010646
+15:27:56.748  INFO --- [HTTPHandlerThread_1_1_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010646.
+15:27:56.832  INFO --- [tyServerNIOWorker_1_29_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData=''},channel:[id: 0xe8f30b5f, L:/127.0.0.1:28091 - R:/127.0.0.1:54446],client version:1.1.0,client protocol-version:null
+15:27:56.834  INFO --- [verHandlerThread_1_24_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='mysql://backend-retry-redis-2', version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData='null'},channel:[id: 0x54586576, L:/127.0.0.1:28091 - R:/127.0.0.1:54447],client version:1.1.0
+15:27:56.835  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920002', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.840  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=CommitRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.840  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.841  INFO --- [verHandlerThread_1_26_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010654] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010654
+15:27:56.846  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010654', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.846  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010654', branchType=AT, resourceId='mysql://backend-retry-redis-2', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.846  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=true, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.846  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010654', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.851  INFO --- [verHandlerThread_1_28_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010654] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010654.
+15:27:56.851  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.860  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920002', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.867  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=CommitRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.913  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920002', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.919  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=CommitRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.950  INFO --- [HTTPHandlerThread_1_4_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920002
+15:27:56.953 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@708dfe10 when dispatching event: GlobalTransactionEvent{id=920002, role='tc', name='retry-timeout', applicationId='backend-retry-probe', group='default_tx_group', beginTime=1794468468191, endTime=null, status='CommitRetryTimeout', retryGlobal=true, retryBranch=false}
+==> 
+java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+	at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+	at org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+	at org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusCommitRetryTimeout(MetricsSubscriber.java:189)
+	at org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+	at jdk.internal.reflect.GeneratedMethodAccessor12.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:85)
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:142)
+	at com.google.common.eventbus.Subscriber.lambda$dispatchEvent$0(Subscriber.java:71)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+15:27:56.965  INFO --- [HTTPHandlerThread_1_4_100] [server.coordinator.DefaultCore] [      doGlobalCommit]  [] : Committing global transaction is successfully done, xid = 127.0.0.1:28091:920002.
+15:27:56.965  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920002', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.970  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.970  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.971  INFO --- [verHandlerThread_1_32_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010659] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010659
+15:27:56.976  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010659', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.976  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010659', branchType=AT, resourceId='mysql://backend-retry-redis-2', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.976  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=true, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.976  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010659', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.982  INFO --- [verHandlerThread_1_34_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010659] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010659.
+15:27:56.982  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:56.983  INFO --- [tyServerNIOWorker_1_29_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54446 to server channel inactive.
+15:27:56.983  INFO --- [tyServerNIOWorker_1_30_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54447 to server channel inactive.
+15:27:56.983  INFO --- [tyServerNIOWorker_1_29_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xe8f30b5f, L:/127.0.0.1:28091 ! R:/127.0.0.1:54446]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54446', channel=[id: 0xe8f30b5f, L:/127.0.0.1:28091 ! R:/127.0.0.1:54446], resourceSets=null}
+15:27:56.983  INFO --- [tyServerNIOWorker_1_30_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x54586576, L:/127.0.0.1:28091 ! R:/127.0.0.1:54447]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54447', channel=[id: 0x54586576, L:/127.0.0.1:28091 ! R:/127.0.0.1:54447], resourceSets=[]}
+15:27:57.012  INFO --- [HTTPHandlerThread_1_6_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920002
+15:27:57.013 ERROR --- [HTTPHandlerThread_1_6_100] [netty.http.HttpDispatchHandler] [  executeFinalAction]  [] : Exception occurred while processing HTTP request: null
+==> 
+java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.executeFinalAction(HttpDispatchHandler.java:132)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:41)
+	at org.apache.seata.server.filter.XSSHttpRequestFilter.doFilter(XSSHttpRequestFilter.java:117)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:37)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.lambda$channelRead0$1(HttpDispatchHandler.java:110)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.IllegalArgumentException: Global session is not exist, may be finished
+	at org.apache.seata.server.console.impl.AbstractService.checkGlobalSession(AbstractService.java:97)
+	at org.apache.seata.server.console.impl.AbstractGlobalService.changeGlobalStatus(AbstractGlobalService.java:145)
+	at org.apache.seata.server.console.controller.GlobalSessionController.changeGlobalStatus(GlobalSessionController.java:136)
+	... 13 common frames omitted
+ <==
+15:27:57.040  INFO --- [HTTPHandlerThread_1_9_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010654
+15:27:57.051  INFO --- [HTTPHandlerThread_1_9_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010654.
+15:27:57.091  INFO --- [HTTPHandlerThread_1_2_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010659
+15:27:57.107  INFO --- [HTTPHandlerThread_1_2_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010659.
+15:27:57.176  INFO --- [tyServerNIOWorker_1_42_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData=''},channel:[id: 0xd401b40c, L:/127.0.0.1:28091 - R:/127.0.0.1:54459],client version:1.1.0,client protocol-version:null
+15:27:57.178  INFO --- [verHandlerThread_1_35_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='mysql://backend-retry-redis-3', version='1.1.0', applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', extraData='null'},channel:[id: 0xffc374cd, L:/127.0.0.1:28091 - R:/127.0.0.1:54460],client version:1.1.0
+15:27:57.178  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920003', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.184  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.184  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.184  INFO --- [verHandlerThread_1_37_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010667] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010667
+15:27:57.189  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010667', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.189  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010667', branchType=AT, resourceId='mysql://backend-retry-redis-3', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.189  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=true, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.189  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010667', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.195  INFO --- [verHandlerThread_1_39_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010667] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010667.
+15:27:57.195  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.202  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920003', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.208  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.255  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920003', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.260  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=RollbackRetryTimeout, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.301  INFO --- [HTTPHandlerThread_1_5_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920003
+15:27:57.303 ERROR --- [                   tc_1_1] [le.common.eventbus.EventBus.tc] [     handleException]  [] : Exception thrown by subscriber method recordGlobalTransactionEventForMetrics(org.apache.seata.core.event.GlobalTransactionEvent) on subscriber org.apache.seata.server.metrics.MetricsSubscriber@708dfe10 when dispatching event: GlobalTransactionEvent{id=920003, role='tc', name='retry-timeout', applicationId='backend-retry-probe', group='default_tx_group', beginTime=1794468468204, endTime=null, status='RollbackRetryTimeout', retryGlobal=true, retryBranch=false}
+==> 
+java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "org.apache.seata.core.event.GlobalTransactionEvent.getEndTime()" is null
+	at org.apache.seata.server.metrics.MetricsSubscriber.increaseTimer(MetricsSubscriber.java:111)
+	at org.apache.seata.server.metrics.MetricsSubscriber.reportFailed(MetricsSubscriber.java:213)
+	at org.apache.seata.server.metrics.MetricsSubscriber.processGlobalStatusTimeoutRollbackRetryTimeout(MetricsSubscriber.java:196)
+	at org.apache.seata.server.metrics.MetricsSubscriber.recordGlobalTransactionEventForMetrics(MetricsSubscriber.java:219)
+	at jdk.internal.reflect.GeneratedMethodAccessor12.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:85)
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:142)
+	at com.google.common.eventbus.Subscriber.lambda$dispatchEvent$0(Subscriber.java:71)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+15:27:57.307  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920003', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.313  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.315  INFO --- [HTTPHandlerThread_1_5_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 127.0.0.1:28091:920003.
+15:27:57.360  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='127.0.0.1:28091:920003', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.367  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.367  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='backend-lock-contender', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.367  INFO --- [verHandlerThread_1_44_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:28091:4045076377674010673] : Begin new global transaction applicationId: backend-retry-probe,transactionServiceGroup: default_tx_group, transactionName: backend-lock-contender,timeout:60000,xid:198.18.0.1:28091:4045076377674010673
+15:27:57.372  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:28091:4045076377674010673', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.372  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalLockQueryRequest{xid='198.18.0.1:28091:4045076377674010673', branchType=AT, resourceId='mysql://backend-retry-redis-3', lockKey='orders:1', applicationData='{}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.372  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalLockQueryResponse{lockable=true, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.372  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:28091:4045076377674010673', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.378  INFO --- [verHandlerThread_1_46_500] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:28091:4045076377674010673] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010673.
+15:27:57.378  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalRollbackResponse{globalStatus=Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:27:57.379  INFO --- [tyServerNIOWorker_1_43_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54460 to server channel inactive.
+15:27:57.379  INFO --- [tyServerNIOWorker_1_42_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54459 to server channel inactive.
+15:27:57.379  INFO --- [tyServerNIOWorker_1_43_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xffc374cd, L:/127.0.0.1:28091 ! R:/127.0.0.1:54460]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54460', channel=[id: 0xffc374cd, L:/127.0.0.1:28091 ! R:/127.0.0.1:54460], resourceSets=[]}
+15:27:57.379  INFO --- [tyServerNIOWorker_1_42_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xd401b40c, L:/127.0.0.1:28091 ! R:/127.0.0.1:54459]context:RpcContext{applicationId='backend-retry-probe', transactionServiceGroup='default_tx_group', clientId='backend-retry-probe:127.0.0.1:54459', channel=[id: 0xd401b40c, L:/127.0.0.1:28091 ! R:/127.0.0.1:54459], resourceSets=null}
+15:27:57.406  INFO --- [HTTPHandlerThread_1_7_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920003
+15:27:57.407 ERROR --- [HTTPHandlerThread_1_7_100] [netty.http.HttpDispatchHandler] [  executeFinalAction]  [] : Exception occurred while processing HTTP request: null
+==> 
+java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.executeFinalAction(HttpDispatchHandler.java:132)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:41)
+	at org.apache.seata.server.filter.XSSHttpRequestFilter.doFilter(XSSHttpRequestFilter.java:117)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:37)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.lambda$channelRead0$1(HttpDispatchHandler.java:110)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.IllegalArgumentException: Global session is not exist, may be finished
+	at org.apache.seata.server.console.impl.AbstractService.checkGlobalSession(AbstractService.java:97)
+	at org.apache.seata.server.console.impl.AbstractGlobalService.changeGlobalStatus(AbstractGlobalService.java:145)
+	at org.apache.seata.server.console.controller.GlobalSessionController.changeGlobalStatus(GlobalSessionController.java:136)
+	... 13 common frames omitted
+ <==
+15:27:57.437  INFO --- [TTPHandlerThread_1_10_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010667
+15:27:57.451  INFO --- [TTPHandlerThread_1_10_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010667.
+15:27:57.476  INFO --- [HTTPHandlerThread_1_3_100] [roller.GlobalSessionController] [sendCommitOrRollback]  [] : manual operation to commit or rollback the global session, xid: 198.18.0.1:28091:4045076377674010673
+15:27:57.488  INFO --- [HTTPHandlerThread_1_3_100] [server.coordinator.DefaultCore] [    doGlobalRollback]  [] : Rollback global transaction successfully, xid = 198.18.0.1:28091:4045076377674010673.

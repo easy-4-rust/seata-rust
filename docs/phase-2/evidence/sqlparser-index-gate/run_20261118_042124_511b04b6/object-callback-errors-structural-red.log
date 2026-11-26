@@ -1,0 +1,83 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+error[E0432]: unresolved import `seata_sqlparser::JavaObjectError`
+ --> crates\seata_test\tests\object_callback_errors.rs:2:59
+  |
+2 | use seata_sqlparser::{ColumnList, ColumnMeta, JavaObject, JavaObjectError, JavaString, MetadataError};
+  |                                                           ^^^^^^^^^^^^^^^ no `JavaObjectError` in the root
+  |
+help: a similar name exists in the module
+  |
+2 - use seata_sqlparser::{ColumnList, ColumnMeta, JavaObject, JavaObjectError, JavaString, MetadataError};
+2 + use seata_sqlparser::{ColumnList, ColumnMeta, JavaObject, JavaObject, JavaString, MetadataError};
+  |
+
+error[E0053]: method `java_equals` has an incompatible type for trait
+ --> crates\seata_test\tests\object_callback_errors.rs:9:55
+  |
+9 | ...her: &dyn JavaObject) -> Result<bool, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+  |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `bool`, found `Result<bool, MetadataError>`
+  |
+  = note: expected signature `fn(&FailingValue, &_) -> bool`
+             found signature `fn(&FailingValue, &_) -> Result<bool, MetadataError>`
+help: change the output type to match the trait
+  |
+9 -     fn java_equals(&self, _other: &dyn JavaObject) -> Result<bool, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+9 +     fn java_equals(&self, _other: &dyn JavaObject) -> bool { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+  |
+
+error[E0053]: method `java_hash_code` has an incompatible type for trait
+  --> crates\seata_test\tests\object_callback_errors.rs:10:33
+   |
+10 |     fn java_hash_code(&self) -> Result<i32, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+   |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `i32`, found `Result<i32, MetadataError>`
+   |
+   = note: expected signature `fn(&FailingValue) -> i32`
+              found signature `fn(&FailingValue) -> Result<i32, MetadataError>`
+help: change the output type to match the trait
+   |
+10 -     fn java_hash_code(&self) -> Result<i32, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+10 +     fn java_hash_code(&self) -> i32 { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+   |
+
+error[E0053]: method `java_to_string` has an incompatible type for trait
+  --> crates\seata_test\tests\object_callback_errors.rs:11:33
+   |
+11 |     fn java_to_string(&self) -> Result<Option<JavaString>, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+   |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `Option<JavaString>`, found `Result<Option<JavaString>, _>`
+   |
+   = note: expected signature `fn(&FailingValue) -> Option<_>`
+              found signature `fn(&FailingValue) -> Result<Option<_>, MetadataError>`
+help: change the output type to match the trait
+   |
+11 -     fn java_to_string(&self) -> Result<Option<JavaString>, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+11 +     fn java_to_string(&self) -> Option<JavaString> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+   |
+
+error[E0599]: no variant, associated function, or constant named `ObjectException` found for enum `MetadataError` in the current scope
+ --> crates\seata_test\tests\object_callback_errors.rs:9:104
+  |
+9 | ... { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+  |                          ^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `MetadataError`
+
+error[E0599]: no variant, associated function, or constant named `ObjectException` found for enum `MetadataError` in the current scope
+  --> crates\seata_test\tests\object_callback_errors.rs:10:81
+   |
+10 |     fn java_hash_code(&self) -> Result<i32, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+   |                                                                                 ^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `MetadataError`
+
+error[E0599]: no variant, associated function, or constant named `ObjectException` found for enum `MetadataError` in the current scope
+  --> crates\seata_test\tests\object_callback_errors.rs:11:96
+   |
+11 |     fn java_to_string(&self) -> Result<Option<JavaString>, MetadataError> { Err(MetadataError::ObjectException(Arc::clone(&self.0))) }
+   |                                                                                                ^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `MetadataError`
+
+error[E0599]: no method named `object_exception` found for enum `MetadataError` in the current scope
+  --> crates\seata_test\tests\object_callback_errors.rs:24:28
+   |
+24 |         let actual = error.object_exception().ok_or("Original exception missing")?;
+   |                            ^^^^^^^^^^^^^^^^ method not found in `MetadataError`
+
+Some errors have detailed explanations: E0053, E0432, E0599.
+For more information about an error, try `rustc --explain E0053`.
+error: could not compile `seata-test` (test "object_callback_errors") due to 8 previous errors

@@ -1,0 +1,260 @@
+{
+  "succeeded": true,
+  "requires_frozen_runtime_and_this_additional_gate": true,
+  "actual_evidence_tests": 20,
+  "legacy_runtime_verifier_red_failures": 18,
+  "legacy_runtime_verifier_red_controls": 2,
+  "normalized_tests": 12,
+  "normalized_red_kind": "Disabled-guard adapter control only, not original production behavior",
+  "normalized_red_failures": 11,
+  "normalized_red_controls": 1,
+  "total_new_python_tests": 32,
+  "result": {
+    "java_xid": "198.18.0.1:28091:4045076607423524865",
+    "go_xid": "198.18.0.1:28091:4045076607423524867",
+    "java_branch": 4045076607423524866,
+    "go_branch": 4045076607423524868,
+    "java_resource": "jdbc:mysql://127.0.0.1:28093/seata_shared_a6c19a03",
+    "go_resource": "root:seata_shared_lock_fixture_only@tcp(127.0.0.1:28093)/seata_shared_a6c19a03",
+    "java_lock": "accounts:1",
+    "go_lock": "ACCOUNTS:1;",
+    "java_balance": 900,
+    "both_balance": 800,
+    "final_balance": 800,
+    "java_undo_branches": [
+      4045076607423524866
+    ],
+    "both_undo_branches": [
+      4045076607423524866,
+      4045076607423524868
+    ],
+    "final_undo_rows": 0,
+    "tm_counts": {
+      "java": [
+        1,
+        1,
+        0
+      ],
+      "go": [
+        1,
+        1,
+        0
+      ]
+    },
+    "original_accepted_branches": true,
+    "before": {
+      "java-java": false,
+      "go-java": true,
+      "java-go": true,
+      "go-go": true
+    },
+    "after": {
+      "java-java": false,
+      "go-java": true,
+      "java-go": true,
+      "go-go": false
+    },
+    "final": {
+      "java-java": true,
+      "go-java": true,
+      "java-go": true,
+      "go-go": true
+    },
+    "expected_defect_reproduced": true,
+    "shared_global_mutex_certified": false,
+    "original_branches": [
+      {
+        "actor": "java",
+        "xid": "198.18.0.1:28091:4045076607423524865",
+        "branch_id": 4045076607423524866,
+        "resource": "jdbc:mysql://127.0.0.1:28093/seata_shared_a6c19a03",
+        "lock_key": "accounts:1"
+      },
+      {
+        "actor": "go",
+        "xid": "198.18.0.1:28091:4045076607423524867",
+        "branch_id": 4045076607423524868,
+        "resource": "root:seata_shared_lock_fixture_only@tcp(127.0.0.1:28093)/seata_shared_a6c19a03",
+        "lock_key": "ACCOUNTS:1;"
+      }
+    ],
+    "wire_frame_counts": {
+      "java": 12,
+      "go": 48
+    },
+    "native_query_count": 12,
+    "native_frame_count": 72,
+    "scope": "Actual original default Java/Go namespace divergence on one physical MySQL row; diagnostic only, not safe shared locking or Undo interchange.",
+    "additional_tm_and_reports": [
+      {
+        "actor": "java",
+        "begin_xid_bound": true,
+        "commit_target_bound": true,
+        "commit_success": true,
+        "tm_identified": true,
+        "phase_one_reports": 0,
+        "report_acks": 0
+      },
+      {
+        "actor": "go",
+        "begin_xid_bound": true,
+        "commit_target_bound": true,
+        "commit_success": true,
+        "tm_identified": true,
+        "phase_one_reports": 1,
+        "report_acks": 1
+      }
+    ],
+    "actual_protocol_versions": {
+      "java": [
+        2
+      ],
+      "go": [
+        1
+      ]
+    },
+    "actual_class_origins": [
+      {
+        "actor": "java",
+        "type": "SharedLockJavaActor",
+        "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-go-at-shared-lock/run_20261113_070224_d7adfec7/compiled/",
+        "line": "[0.113s][info][class,load] SharedLockJavaActor source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-go-at-shared-lock/run_20261113_070224_d7adfec7/compiled/"
+      },
+      {
+        "actor": "java",
+        "type": "org.apache.seata.rm.datasource.DataSourceProxy",
+        "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/",
+        "line": "[1.182s][info][class,load] org.apache.seata.rm.datasource.DataSourceProxy source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/"
+      },
+      {
+        "actor": "java",
+        "type": "org.apache.seata.rm.datasource.ConnectionProxy",
+        "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/",
+        "line": "[1.497s][info][class,load] org.apache.seata.rm.datasource.ConnectionProxy source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/"
+      },
+      {
+        "actor": "java",
+        "type": "org.apache.seata.rm.datasource.initializer.db.MysqlResourceIdInitializer",
+        "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/",
+        "line": "[1.421s][info][class,load] org.apache.seata.rm.datasource.initializer.db.MysqlResourceIdInitializer source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm-datasource/target/classes/"
+      },
+      {
+        "actor": "java",
+        "type": "org.apache.seata.tm.TMClient",
+        "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/",
+        "line": "[0.717s][info][class,load] org.apache.seata.tm.TMClient source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/"
+      },
+      {
+        "actor": "java",
+        "type": "org.apache.seata.tm.api.DefaultGlobalTransaction",
+        "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/",
+        "line": "[1.451s][info][class,load] org.apache.seata.tm.api.DefaultGlobalTransaction source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/tm/target/classes/"
+      },
+      {
+        "actor": "java",
+        "type": "org.apache.seata.rm.RMClient",
+        "source": "file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm/target/classes/",
+        "line": "[1.111s][info][class,load] org.apache.seata.rm.RMClient source: file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/rm/target/classes/"
+      },
+      {
+        "actor": "java",
+        "type": "com.mysql.cj.jdbc.MysqlDataSource",
+        "source": "file:/E:/Java/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar",
+        "line": "[1.142s][info][class,load] com.mysql.cj.jdbc.MysqlDataSource source: file:/E:/Java/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.server.storage.file.lock.FileLockManager",
+        "source": "jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/",
+        "line": "[1.823s][info][class,load] org.apache.seata.server.storage.file.lock.FileLockManager source: jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.server.transaction.at.ATCore",
+        "source": "jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/",
+        "line": "[2.106s][info][class,load] org.apache.seata.server.transaction.at.ATCore source: jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.server.session.SessionHolder",
+        "source": "jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/",
+        "line": "[2.109s][info][class,load] org.apache.seata.server.session.SessionHolder source: jar:nested:/E:/workspaces/workspace-github-easy-4-rust/seata-java-phase09-oracle/server/target/seata-server.jar/!BOOT-INF/classes/!/"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.core.rpc.netty.ProtocolDetectHandler",
+        "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+        "line": "[2.487s][info][class,load] org.apache.seata.core.rpc.netty.ProtocolDetectHandler source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.core.protocol.detector.IncrementalProtocolDetector",
+        "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+        "line": "[2.489s][info][class,load] org.apache.seata.core.protocol.detector.IncrementalProtocolDetector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.core.protocol.detector.SeataDetector",
+        "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+        "line": "[2.489s][info][class,load] org.apache.seata.core.protocol.detector.SeataDetector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.core.protocol.detector.HttpDetector",
+        "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+        "line": "[2.489s][info][class,load] org.apache.seata.core.protocol.detector.HttpDetector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+      },
+      {
+        "actor": "tc",
+        "type": "org.apache.seata.core.protocol.detector.Http2Detector",
+        "source": "file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/",
+        "line": "[2.489s][info][class,load] org.apache.seata.core.protocol.detector.Http2Detector source: file:/E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-0/evidence/local-java-preface-candidate/run_20261112_221159_a16eafb1/overlay/"
+      }
+    ],
+    "compiled_actor_classes": [
+      {
+        "path": "SharedLockJavaActor.class",
+        "sha256": "b0198197a3e91ea69719638cdffb580a813bac6b7168c2c360e002e9e4f086b1"
+      }
+    ],
+    "requires_frozen_runtime_and_additional_gate": true
+  },
+  "original_java_client_provenance": [
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/DataSourceProxy.java",
+      "pinned_lf_sha256": "a38a82adfa7732c8ed83a1e3a2adcf5ee693ca7fa4319b7d211f525960b27555",
+      "compiled_sha256": "43662315b5a388adc5538efa9b3632bb4fa492384d604b9bdea359037c924af7",
+      "original_reference_class_sha256": "43662315b5a388adc5538efa9b3632bb4fa492384d604b9bdea359037c924af7"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/ConnectionProxy.java",
+      "pinned_lf_sha256": "c9060cb17a6bf462f6fe1e83ada6ece70d2fa610836ba220284d9caa7cae8fc2",
+      "compiled_sha256": "0d8053f56e059758cbcd7420370c37c5dc8ac5862307379aa7f36473fd621159",
+      "original_reference_class_sha256": "0d8053f56e059758cbcd7420370c37c5dc8ac5862307379aa7f36473fd621159"
+    },
+    {
+      "source": "rm-datasource/src/main/java/org/apache/seata/rm/datasource/initializer/db/MysqlResourceIdInitializer.java",
+      "pinned_lf_sha256": "04bee5612e3ae4729c66784e607fa11c8a6e8156b701c5b0deca1cfed5ebbf6b",
+      "compiled_sha256": "f98698eccf829c699da1f2f4d77a2723928b6fef08329fce9cff5a3efcd38ec7",
+      "original_reference_class_sha256": "f98698eccf829c699da1f2f4d77a2723928b6fef08329fce9cff5a3efcd38ec7"
+    },
+    {
+      "source": "tm/src/main/java/org/apache/seata/tm/TMClient.java",
+      "pinned_lf_sha256": "360b2c1829ac9e93ef1d68b0b9f7b2b27a29fa6a927776955a5fc37065360a2a",
+      "compiled_sha256": "71bf8ea53d3df004ad90daae92d111480b78f8fbbb030a28ec8c95bb809d7bf6",
+      "original_reference_class_sha256": "71bf8ea53d3df004ad90daae92d111480b78f8fbbb030a28ec8c95bb809d7bf6"
+    },
+    {
+      "source": "tm/src/main/java/org/apache/seata/tm/api/DefaultGlobalTransaction.java",
+      "pinned_lf_sha256": "14e6c97a0dc00d739c0cb3192cfe58dfed3e07879a9828227a167acd07cf2a5f",
+      "compiled_sha256": "912ab96f51d2e04a9b92b5c4f5eb5d1687939a246212435fb38bde0237fd9a5b",
+      "original_reference_class_sha256": "912ab96f51d2e04a9b92b5c4f5eb5d1687939a246212435fb38bde0237fd9a5b"
+    },
+    {
+      "source": "rm/src/main/java/org/apache/seata/rm/RMClient.java",
+      "pinned_lf_sha256": "41aaf308133b9fdde205d053d9ff1de0244db839cd6929dea256f71cf9308cce",
+      "compiled_sha256": "3ab35479c6c6e1edfae63d71d6b733737583170a9a0553e5206ba3baa6875de3",
+      "original_reference_class_sha256": "3ab35479c6c6e1edfae63d71d6b733737583170a9a0553e5206ba3baa6875de3"
+    }
+  ]
+}

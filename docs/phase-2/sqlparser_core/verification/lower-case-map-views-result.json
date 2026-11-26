@@ -1,0 +1,103 @@
+{
+  "status": "LIVE_MAP_VIEW_BEHAVIORS_VERIFIED_WITH_OPEN_REENTRY_DIFFERENCE",
+  "evidence": "docs/phase-2/evidence/sqlparser-map-views/run_20261118",
+  "previous_catalog_sha256": "f719f5e4dce15b44bf0d9afe150bf659280cab8c0e00d67640e46024dcba7383",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "original_object_states": {
+    "PARTIAL": 5,
+    "IMPLEMENTED": 13,
+    "MISSING": 13
+  },
+  "original_cases_MATCH": 76,
+  "original_JUnit_run_inherited": true,
+  "java_view_observations_MATCH": 35,
+  "additional_reentry_observations_MISMATCH": 1,
+  "mutant_clearing_origins_rejected": true,
+  "rust_toolchains": [
+    "1.99",
+    "1.85"
+  ],
+  "workspace_passed_per_toolchain": 482,
+  "workspace_ignored_per_toolchain": 143,
+  "doc_tests_per_toolchain": 4,
+  "harness_per_toolchain": 101,
+  "registry_dependencies_changed": false,
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "remaining_P1": 0,
+    "remaining_P2": 1,
+    "open_P2": "EntrySet.remove callback clears map: captured Java node still removed; Rust identity check returns false"
+  },
+  "limitations": [
+    "EntrySet.remove structural equality callback reentry, including JDK corrupted size behavior",
+    "Full Java Map default methods and collection surface",
+    "LinkedHashMap treeification entry replacement",
+    "KeySet returned as an ordered snapshot with no Java HashSet mutation interface",
+    "Default Locale and enhanced service loader compatibility"
+  ],
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "2291f92cd29dda37fa9a559e84cca5ce62a98c3fe8adf087e222b2bc3d0b8920"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_entry_cursor.rs",
+      "sha256": "4ccf49a39fd348b48e9bd65d60dce9d48e6f497383ac73be1e30bb94f3e5e557"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_entry_set.rs",
+      "sha256": "f641c5aeee7694419821d3e8517ef28ca023be71dc4a2739f3d4911efac999a3"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_live_entry.rs",
+      "sha256": "3f0142caefbcd3faaffd0f470753374a2ed8b9eaaafaf3f3fe7747fab0e316ce"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_values.rs",
+      "sha256": "2e1c95316aa80284331b4afe12140cc615482706708e6b17d02dd564504546ae"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_error.rs",
+      "sha256": "7b2bc40e1e8f3bfb65f45ef52d2ef6a11358b9d7c4987cf0a6943571d2a75c01"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/metadata_map_value.rs",
+      "sha256": "1caefded4145a0d2e340e95f8092dadea8900beba214ef0f56ae9cb9f0e2bbf7"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/primary_key_map.rs",
+      "sha256": "c4c48b54d7e2b604ad66b32ffbf6ddd9acd16d37612954a315c09cff572031f4"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/util/lower_case_link_hash_map.rs",
+      "sha256": "eaf0855df78f038300d07432800c1e9e65acce2549659415bd167d3715eff78a"
+    },
+    {
+      "path": "crates/seata_test/tests/map_views_java.rs",
+      "sha256": "0288b324acd8bc2f3fc63f77e5237ca5f585f01f5d558c77059980a466d5edc9"
+    },
+    {
+      "path": "crates/seata_test/tests/fixtures/sqlparser_core/map-views-java.tsv",
+      "sha256": "ba9500fb726aceca58c590347ce5f21cac4b57517effdc6e1507b63a1a40347b"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/MapViewsOracle.java",
+      "sha256": "85d39a2de6ff6dbe5d9837553ea1c0a57de0b1d12472796b55a55eb6ea83d2f2"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/MapViewReentryOracle.java",
+      "sha256": "db013d0b1fe8fe823861ff1c0ce5c999ca1c94f643eca11d5185c00307df4b5d"
+    }
+  ],
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

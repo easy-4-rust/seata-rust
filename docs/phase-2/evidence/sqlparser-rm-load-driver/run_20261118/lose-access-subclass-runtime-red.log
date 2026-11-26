@@ -1,0 +1,36 @@
+   Compiling seata-db-mysql v0.1.0 (D:\codex-builds\seata_jdbc_load_driver_mutant_hka4v2_2\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.82s
+     Running tests\jdbc_load_driver.rs (D:/cargo-target/seata-rust-load-driver-mutants\debug\deps\jdbc_load_driver-2005157c46c3fde1.exe)
+
+running 1 test
+test loader_dispatch_matches_original_java_profiles ... FAILED
+
+failures:
+
+---- loader_dispatch_matches_original_java_profiles stdout ----
+SEATA_JDBC_LOAD	context-driver	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	no-context	false	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-missing-default-driver	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-null-class	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-selected-class	true	driver:org.h2.Driver	
+SEATA_JDBC_LOAD	context-linkage	true	java.lang.LinkageError	context-linkage
+SEATA_JDBC_LOAD	missing-class	true	java.sql.SQLException>java.lang.ClassNotFoundException	com.invalid.NonExistentDriver
+SEATA_JDBC_LOAD	empty-class	true	java.sql.SQLException>java.lang.ClassNotFoundException	
+SEATA_JDBC_LOAD	null-class-name	false	java.lang.NullPointerException	<null>
+SEATA_JDBC_LOAD	private-constructor	true	java.sql.SQLException>java.lang.IllegalAccessException	class org.apache.seata.rm.datasource.util.JdbcUtils cannot access a member of class JdbcRmDriverLoadOracle$PrivateDriver with modifiers "private"
+SEATA_JDBC_LOAD	abstract-class	true	java.sql.SQLException>java.lang.InstantiationException	<null>
+SEATA_JDBC_LOAD	missing-constructor	true	java.sql.SQLException>java.lang.InstantiationException>java.lang.NoSuchMethodException	JdbcRmDriverLoadOracle$MissingConstructor
+
+thread 'loader_dispatch_matches_original_java_profiles' (532) panicked at crates\seata_db_mysql\tests\jdbc_load_driver.rs:148:9:
+assertion `left == right` failed: constructor-access-subclass
+  left: "JdbcRmDriverLoadOracle$AccessFailure"
+ right: "java.sql.SQLException>JdbcRmDriverLoadOracle$AccessFailure"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    loader_dispatch_matches_original_java_profiles
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test jdbc_load_driver`

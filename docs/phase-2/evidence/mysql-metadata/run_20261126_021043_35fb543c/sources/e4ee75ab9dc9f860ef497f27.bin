@@ -1,0 +1,31 @@
+-- 独立 TM Launcher 来源；不复用 RM 006/007 身份，也不直接授予公开 XID 结束权。
+-- 原 XID 可达 32767 字节，以摘要建立唯一索引，读取时仍须核对完整原文。
+CREATE TABLE seata_rs_tm_launcher_v1 (
+    schema_version SMALLINT UNSIGNED NOT NULL,
+    xid_digest BINARY(32) NOT NULL,
+    xid MEDIUMBLOB NOT NULL,
+    tc_endpoint VARBINARY(128) NOT NULL,
+    application_id MEDIUMBLOB NOT NULL,
+    service_group MEDIUMBLOB NOT NULL,
+    begin_exception_code TINYINT UNSIGNED NOT NULL,
+    begin_extra_data MEDIUMBLOB NULL,
+    business_intent VARBINARY(256) NOT NULL,
+    deadline_at DATETIME(6) NOT NULL,
+    owner_epoch BIGINT UNSIGNED NOT NULL DEFAULT 1,
+    end_operation TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    send_started TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    created_at DATETIME(6) NOT NULL,
+    modified_at DATETIME(6) NOT NULL,
+    PRIMARY KEY (xid_digest),
+    CONSTRAINT chk_tm_launcher_version CHECK (schema_version = 1),
+    CONSTRAINT chk_tm_launcher_xid CHECK (OCTET_LENGTH(xid) BETWEEN 1 AND 32767),
+    CONSTRAINT chk_tm_launcher_endpoint CHECK (OCTET_LENGTH(tc_endpoint) BETWEEN 1 AND 128),
+    CONSTRAINT chk_tm_launcher_application CHECK (OCTET_LENGTH(application_id) BETWEEN 1 AND 32767),
+    CONSTRAINT chk_tm_launcher_group CHECK (OCTET_LENGTH(service_group) BETWEEN 1 AND 32767),
+    CONSTRAINT chk_tm_launcher_extra CHECK (begin_extra_data IS NULL OR OCTET_LENGTH(begin_extra_data) <= 32767),
+    CONSTRAINT chk_tm_launcher_intent CHECK (OCTET_LENGTH(business_intent) BETWEEN 1 AND 256),
+    CONSTRAINT chk_tm_launcher_deadline CHECK (deadline_at > created_at),
+    CONSTRAINT chk_tm_launcher_epoch CHECK (owner_epoch > 0),
+    CONSTRAINT chk_tm_launcher_operation CHECK (end_operation IN (0, 1, 2)),
+    CONSTRAINT chk_tm_launcher_send CHECK (send_started IN (0, 1) AND (send_started = 0 OR end_operation <> 0))
+) ENGINE=InnoDB;

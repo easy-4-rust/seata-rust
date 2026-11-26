@@ -1,0 +1,18 @@
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+error[E0432]: unresolved imports `seata_sqlparser::MetadataLocale`, `seata_sqlparser::TableMeta`
+ --> crates\seata_test\tests\table_meta.rs:4:65
+  |
+4 | use seata_sqlparser::{ColumnList,ColumnMeta,IndexMeta,IndexType,MetadataLocale,TableMeta};
+  |                                                                 ^^^^^^^^^^^^^^ ^^^^^^^^^ no `TableMeta` in the root
+  |                                                                 |
+  |                                                                 no `MetadataLocale` in the root
+
+error[E0599]: no method named `same_reference` found for struct `Arc<ColumnMeta>` in the current scope
+  --> crates\seata_test\tests\table_meta.rs:33:159
+   |
+33 | ...ref()))?;assert!(equal);assert!(value.same_reference(actual.as_ref()));record("testGetColumnMeta",&[equal.to_string()])
+   |                                          ^^^^^^^^^^^^^^ method not found in `Arc<ColumnMeta>`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-test` (test "table_meta") due to 2 previous errors

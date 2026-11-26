@@ -1,0 +1,18 @@
+
+running 1 test
+test registration_guard_cases::lossy_row_tokens_abort_before_registration_and_safe_tokens_keep_the_original_wire ... FAILED
+
+failures:
+
+---- registration_guard_cases::lossy_row_tokens_abort_before_registration_and_safe_tokens_keep_the_original_wire stdout ----
+
+thread 'registration_guard_cases::lossy_row_tokens_abort_before_registration_and_safe_tokens_keep_the_original_wire' (26708) panicked at crates\seata_db_mysql\tests\support\registration_guard_cases.rs:73:9:
+semicolon: Registration(UnknownOutcome { operation: BranchRegister, request: BranchRegisterRequest(BranchRegisterRequest { xid_present: true, branch_type: At, resource_id_present: true, lock_key_present: true, application_data_present: false, .. }), source: UnknownOutcome { generation: ConnectionGeneration(1), request_id: 2, reason: ResponseTimeout } })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    registration_guard_cases::lossy_row_tokens_abort_before_registration_and_safe_tokens_keep_the_original_wire
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 1.19s
+

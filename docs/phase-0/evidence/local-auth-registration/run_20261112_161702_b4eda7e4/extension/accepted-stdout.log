@@ -1,0 +1,14 @@
+AUTH_RESPONSE role=TM identified=true serverVersion=2.8.0-SNAPSHOT
+AUTH_RESPONSE role=RM identified=true serverVersion=2.8.0-SNAPSHOT
+AUTH_PREPARED xid=198.18.0.1:28091:4045076390250651649 branchId=4045076390250651650 resource=mysql://auth-a
+AUTH_PREPARED xid=198.18.0.1:28091:4045076390250651651 branchId=4045076390250651652 resource=mysql://auth-b
+AUTH_RESPONSE role=RM identified=true serverVersion=2.8.0-SNAPSHOT
+AUTH_RECONNECTED oldPort=64479 newPort=64480 resources=mysql://auth-a,mysql://auth-b
+AUTH_CALLBACK xid=198.18.0.1:28091:4045076390250651649 branchId=4045076390250651650 resource=mysql://auth-a kind=3 requestId=1 actions=1
+AUTH_STATUS xid=198.18.0.1:28091:4045076390250651649 expectedTerminal=9 observedStatus=8
+AUTH_STATUS xid=198.18.0.1:28091:4045076390250651649 expectedTerminal=9 observedStatus=15
+AUTH_FINISHED xid=198.18.0.1:28091:4045076390250651649 observedStatus=15
+AUTH_CALLBACK xid=198.18.0.1:28091:4045076390250651651 branchId=4045076390250651652 resource=mysql://auth-b kind=5 requestId=2 actions=1
+AUTH_STATUS xid=198.18.0.1:28091:4045076390250651651 expectedTerminal=11 observedStatus=15
+AUTH_FINISHED xid=198.18.0.1:28091:4045076390250651651 observedStatus=15
+PASS AUTH_ACCEPTED reconnect=true cachedResources=2 originalBranchCallbacks=2 branchReregistrations=0

@@ -1,0 +1,16 @@
+{
+  "reviewer": "/root/inflight_review",
+  "mode": "Read-only source, actual SQL/frame/class metadata and negative in-memory verifier review; no independent full run",
+  "findings": [
+    "Recovery proxy faults/registration/connection-ID order not checked",
+    "Two equal empty SQL snapshots accepted and query exits unchecked",
+    "Java loader path checked without overlay byte hashes"
+  ],
+  "resolutions": [
+    "Explicit prepared-process EOF/reset event; all other proxy errors rejected; actual103/104 before5 and exact5/6 connection+ID",
+    "Both SQL exits required0; exact2 nonempty rows bind oldXID/branch/status/blobsha/content",
+    "Pinned sealed Java catalog\u2192inventory\u219210class chain; snapshot and before/after per-case hashes plus actual origins"
+  ],
+  "negative_controls": 16,
+  "scope": "Actual full SDK, real MySQL normal AT/reconnect/duplicate and normal persistent replay. Not retry-timeout16/17 recovery, fault atomicity matrix, mixed-language resource safety, production Rust, full client or WP00 completion."
+}

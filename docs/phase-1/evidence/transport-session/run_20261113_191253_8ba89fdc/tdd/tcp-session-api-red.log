@@ -1,0 +1,41 @@
+   Compiling windows-link v0.2.1
+   Compiling pin-project-lite v0.2.17
+   Compiling bytes v1.12.1
+   Compiling thiserror v2.0.21
+   Compiling windows-sys v0.61.2
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+   Compiling mio v1.2.4
+   Compiling socket2 v0.6.5
+   Compiling tokio v1.54.1
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+error[E0432]: unresolved import `seata_transport::ConnectionConfig`
+ --> crates\seata_transport\tests\support\session_peer.rs:6:5
+  |
+6 | use seata_transport::ConnectionConfig;
+  |     ^^^^^^^^^^^^^^^^^----------------
+  |                      |
+  |                      no `ConnectionConfig` in the root
+
+error[E0432]: unresolved imports `seata_transport::CallError`, `seata_transport::TcpConnection`
+ --> crates\seata_transport\tests\tcp_session.rs:8:23
+  |
+8 | use seata_transport::{CallError,TcpConnection,TransportError};
+  |                       ^^^^^^^^^ ^^^^^^^^^^^^^ no `TcpConnection` in the root
+  |                       |
+  |                       no `CallError` in the root
+
+error[E0599]: no variant named `UnexpectedResponse` found for enum `TransportError`
+  --> crates\seata_transport\tests\tcp_session.rs:86:78
+   |
+86 |     assert!(matches!(error,CallError::UnknownOutcome {reason:TransportError::UnexpectedResponse{..},..}));
+   |                                                                              ^^^^^^^^^^^^^^^^^^ variant not found in `TransportError`
+
+error[E0599]: no variant, associated function, or constant named `Overloaded` found for enum `TransportError` in the current scope
+   --> crates\seata_transport\tests\tcp_session.rs:125:144
+    |
+125 | ...reason:TransportError::Overloaded,..})));
+    |                           ^^^^^^^^^^ variant, associated function, or constant not found in `TransportError`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-transport` (test "tcp_session") due to 4 previous errors

@@ -1,0 +1,45 @@
+[
+  {
+    "name": "bypass-discovery",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_parser_spi",
+      "--",
+      "--test-threads=1"
+    ],
+    "cwd": "D:\\codex-builds\\seata_jdbc_spi_mutant_0ni_kx0h",
+    "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+    "baseline_sha256": "d3ea95dc537acf28b4c64e0640ade505414de8549b07012d474f5aa2b322b7e5",
+    "mutant_sha256": "ba63d882016f9fb5c56f49b8ba5336af1db332e650f40567bf563fc6557e7621",
+    "expected_failure": "test rm_uses_the_highest_order_provider_with_the_druid_name ... FAILED",
+    "exit_code": 101
+  },
+  {
+    "name": "omit-provider",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "jdbc_utils_source",
+      "test_db_type_parser_loading",
+      "--",
+      "--exact"
+    ],
+    "cwd": "D:\\codex-builds\\seata_jdbc_spi_mutant_0ni_kx0h",
+    "path": "crates/seata_sqlparser/src/druid/druid_delegating_db_type_parser.rs",
+    "baseline_sha256": "7735a5e30a5c7b353709a31593b0392ac2c3ae0b7ed276e9cbfeebb898a535ae",
+    "mutant_sha256": "c051b0cbb77ea6c5de3ec627c4dfca85454432509d6cbd38f38c1dc7c9277e31",
+    "expected_failure": "test test_db_type_parser_loading ... FAILED",
+    "exit_code": 101
+  }
+]

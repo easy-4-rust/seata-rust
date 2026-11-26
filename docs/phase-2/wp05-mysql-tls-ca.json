@@ -1,0 +1,84 @@
+{
+  "status": "SELECTED_MYSQL_TLS_CA_AND_SERVER_IDENTITY_PROFILE_VERIFIED",
+  "mysql": "8.4.13",
+  "image": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+  "rust": {
+    "1.99": {
+      "workspace_passed": 634,
+      "ignored": 187,
+      "options_passed": 4,
+      "live_tls_passed": 1,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "workspace_passed": 634,
+      "ignored": 187,
+      "options_passed": 4,
+      "live_tls_passed": 1,
+      "strict_clippy": true
+    }
+  },
+  "effective_mutation_controls": [
+    "Required bypasses trust verification",
+    "HostRewrite canonicalizes original hostname to matching IP"
+  ],
+  "inconclusive_control": "VerifyCa retained hostname rejection in current fixed driver/rustls behavior; excluded from effective controls",
+  "coverage": [
+    "Bounded PEM CA list with nonempty certificate parsing, mutual exclusion with disabled TLS, and redacted Debug",
+    "Trusted CA + exact IP identity connects to TLS-only MySQL; same options survive pool and auxiliary metadata connections",
+    "Missing CA, wrong CA, wrong hostname and plaintext are rejected",
+    "Independent TLS alias connectivity and server UUID prevent DNS/IPv6 errors being mistaken for hostname rejection",
+    "Native MySQL observer confirms secure transport, TLS 1.3 and restored original business value"
+  ],
+  "trust_semantics": "Configured CA certificates supplement fixed SQLx WebPKI roots; VerifyIdentity remains mandatory",
+  "remaining": [
+    "Other certificate chains, expiry and rotation/revocation profiles",
+    "Client certificate and production authentication profiles",
+    "Complete original WP05/WP06 and all remaining plan gates"
+  ],
+  "sha256": {
+    "Cargo.lock": "21459760f5f3338182baa1feafe023d4b96a7c61303236a7ad8e7609d603ff97",
+    "crates/seata_db_mysql/Cargo.toml": "7e01daac910e3226cc755a781ad024801cf4b312c0c312ea3452224ae0ceac0e",
+    "crates/seata_db_mysql/src/mysql_options.rs": "dc56d085ae08956612669bee1f22c2322106085772a1a0ffce5398451069062d",
+    "crates/seata_db_mysql/tests/live_tls.rs": "2556f030c7b86ff25c76ec715e935cde9785806cbda36b4fd69a252a87e2374e",
+    "crates/seata_db_mysql/tests/options_contract.rs": "a515888b87cfc0b233aacf5b422ffc78e9dffcf735c9be5e65af63f95e4af203",
+    "docs/phase-2/evidence/mysql-tls-ca/1.85-clippy.log": "a0a09f1c24750e8bd77604ce36d298c5ef0aef21a5955c99a3d76e8d00fadbb3",
+    "docs/phase-2/evidence/mysql-tls-ca/1.85-live.log": "e06857eb31f2eb338301d5548e2bd0d7fe9e39a414b505bf315d4b18975e9771",
+    "docs/phase-2/evidence/mysql-tls-ca/1.85-options.log": "506161cd0e848f652d1ded89edae937e4a0179b21b7c824a68ae05a8d0c5a966",
+    "docs/phase-2/evidence/mysql-tls-ca/1.85-workspace-disk-full.log": "8e7cf675ed9eeeb83d4f29f3fef47efcadf912a31c0d96c116de84adfc41c381",
+    "docs/phase-2/evidence/mysql-tls-ca/1.85-workspace.log": "252db1b8d3fbf4a61084fcc8343adcffe7f32bdb49dd4d93c8c04a581c768aff",
+    "docs/phase-2/evidence/mysql-tls-ca/1.99-clippy.log": "a0adc9a28f0a153fde0266117fb07bc2cb0cde3b4aa42cd29be0f59071a53629",
+    "docs/phase-2/evidence/mysql-tls-ca/1.99-live.log": "d53ec80179b30d3802e2343c4f24ad744564b381459e953d2b5a95bcb78ee58c",
+    "docs/phase-2/evidence/mysql-tls-ca/1.99-options.log": "d0bf343474cbbaaf619fc1b48b53d1ae9980087c96c20e37d69760d5d8c7bab6",
+    "docs/phase-2/evidence/mysql-tls-ca/1.99-workspace.log": "0fc93c049a42051a20710c11faac2b34099b7c209a6d0d926b781e98302e4474",
+    "docs/phase-2/evidence/mysql-tls-ca/ca.pem": "72e7d93e577fefadcac135840aa47a2e3b81b2d5909fd1144360051cdfaaaa04",
+    "docs/phase-2/evidence/mysql-tls-ca/cleanup-runtime.sh": "ca1bacbd74c176ee149e75843691e5eb7ce62f565a6482713231382744dab97a",
+    "docs/phase-2/evidence/mysql-tls-ca/cleanup.log": "04235b66dd23f896436ae244c25416ace569c709f89b500c214c9439871dd8c8",
+    "docs/phase-2/evidence/mysql-tls-ca/duplicate-root-extension-setup.log": "1404018d73b541911c84407fdd195e734fc81ad209533830c090b119abf4f108",
+    "docs/phase-2/evidence/mysql-tls-ca/expired-debug-cache-removed.json": "28d620618fa2c233b8f8bb20c5ca944bf07d8094c67094e06f1a50adbd6adbad",
+    "docs/phase-2/evidence/mysql-tls-ca/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-tls-ca/image.log": "726da8a1d7b1309b5168bf2467f856ae95a2b190e1976cfc9ec38b602afef98d",
+    "docs/phase-2/evidence/mysql-tls-ca/independent-server.log": "f01c12b083f8cbec5090302691a140f3db452a61c72b5692f1345141685eb0d0",
+    "docs/phase-2/evidence/mysql-tls-ca/mutation-HostRewrite.log": "a9f66f38640d2c2af0c17787e1ee52f12f40bc14bc8bc7a6974a1e64bee7e5a3",
+    "docs/phase-2/evidence/mysql-tls-ca/mutation-Required.log": "31faeb48859ee4e7448b2fb84ec691b2b8d0c607e5c653e32a14ad753228396a",
+    "docs/phase-2/evidence/mysql-tls-ca/mutation-run.log": "f9066c9d9a252857cdef006e03f098e308bd9ee41261d3b9b47611f408b1d4ea",
+    "docs/phase-2/evidence/mysql-tls-ca/mutation-VerifyCa.log": "f0341065aeeaf7c60f190a5458eeda87d9b27fb69aa104f07be6fe96d750fd38",
+    "docs/phase-2/evidence/mysql-tls-ca/openssl-ca-rejection.log": "bcea62faa3abd84735e966ef8cb2828cdb293ff98f7833fd2d3b060853aa834c",
+    "docs/phase-2/evidence/mysql-tls-ca/openssl-hostname-rejection.log": "28d2fb617399ab9f0c998741cd95c569fba07a3e9559de558ea189798462d633",
+    "docs/phase-2/evidence/mysql-tls-ca/other-ca.pem": "0dc569e81973c5f46c8f5e31745d73bcce22d4d9fd84c51c2f0436e5c74f50ce",
+    "docs/phase-2/evidence/mysql-tls-ca/pem-red.log": "36751dcbe010244b99f1ceeca647b3e9a956c379570363d6df6877dd6fa04f82",
+    "docs/phase-2/evidence/mysql-tls-ca/README.md": "3b5aa107f6278de8439d923939db26e49d57efebaa68f0a6fa0dc3cc038b42b4",
+    "docs/phase-2/evidence/mysql-tls-ca/red.log": "018b12b4fdfe023cfb63dce8ba52234df31a55f875de6da5cf19499575cafefd",
+    "docs/phase-2/evidence/mysql-tls-ca/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-tls-ca/review.md": "51607f939edc6a8b7aa3634f01ff498c1342c76255e727b43b81b2609c2f8039",
+    "docs/phase-2/evidence/mysql-tls-ca/run-live.ps1": "f3bd4581857da69c268ec952384c33efce84183a796a8d25fe8000efe2f2dcd1",
+    "docs/phase-2/evidence/mysql-tls-ca/run-msrv-retry.ps1": "69bf4ec18567cc127665ea9708e1675b96d977b613c555a129846687a79fa660",
+    "docs/phase-2/evidence/mysql-tls-ca/run-mutations.py": "46027938691f01c57aef0caf431e0424572134d90f847c1626db8fb9d5b7415f",
+    "docs/phase-2/evidence/mysql-tls-ca/run-workspace.ps1": "77b962e3e70ed363ae55f2f5b4fd75639da8fc5ee169c4dcba74d894a01f00b9",
+    "docs/phase-2/evidence/mysql-tls-ca/runtime.log": "8bd754d68f60c4a44e6c3f67f4518db530863ed6497841e9bc75364d84ee822e",
+    "docs/phase-2/evidence/mysql-tls-ca/server.pem": "08f768b8dd734d48a97682e0651bc59a5f10096a4976b5e6469227b2703460d4",
+    "docs/phase-2/evidence/mysql-tls-ca/start-runtime.sh": "fe7b76c4b93addfabe1caa128f6ef4a537babe2e26ddbfa428c32856f82f70ff",
+    "docs/phase-2/evidence/mysql-tls-ca/verify.py": "90df5614b4c86ebe9e85256313c23ba3728f21140abee5e36395b3e2f6e0db1e",
+    "docs/phase-2/mysql-foundation-contract.md": "a7b04de68c5f929d79d72b14ca6e6326a04e861b80217640be0ea9d222ea028a"
+  }
+}

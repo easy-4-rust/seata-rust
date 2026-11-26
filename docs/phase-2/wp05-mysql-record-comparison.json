@@ -1,0 +1,78 @@
+{
+  "status": "MYSQL_UNDO_RECORD_COMPARISON_REQUIRES_ONE_TO_ONE_PRIMARY_KEYS",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "rust": {
+    "1.99": {
+      "ordinary": 511,
+      "ignored": 159,
+      "doc": 4,
+      "harnesses": 112,
+      "targeted": 2,
+      "core_source_MATCH": 76,
+      "existing_rm_jdbc_unit_cases_MATCH": 10
+    },
+    "1.85": {
+      "ordinary": 511,
+      "ignored": 159,
+      "doc": 4,
+      "harnesses": 112,
+      "targeted": 2,
+      "core_source_MATCH": 76,
+      "existing_rm_jdbc_unit_cases_MATCH": 10
+    }
+  },
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "rust_evidence": "docs/phase-2/evidence/mysql-record-comparison/run_20261119",
+  "raw_java_evidence": "docs/phase-2/evidence/mysql-record-comparison/seata_data_compare_auxk2cke",
+  "java_catalog_sha256": "437c427bc4fae7dff8018cde11f2bca9e02661178b239fb59632d10ba00cffa8",
+  "java_catalog_members": 34,
+  "raw_java_observations": {
+    "right_duplicate": "false",
+    "left_duplicate": "true",
+    "both_duplicate": "true",
+    "colliding_key_reordered": "false",
+    "different_composite_key": "false",
+    "colliding_mapper_rows": "1"
+  },
+  "original_java_cases_passed": 12,
+  "new_source_cases_MATCH": 0,
+  "global_rust_source_MATCH": 97,
+  "original_fixture_failure": "docs/phase-2/evidence/mysql-record-comparison/seata_data_compare_lw4z2gbl/original-junit.jsonl",
+  "original_fixture_failure_reason": "original test resources absent",
+  "red_test_sha256": "3c70795f83408dd1c4808ff39bbfb447f028bab356307169e098450a85983fd0",
+  "red_production_source_sha256": "d2257e4d9616eaed5510b22a094fde93fe432f210d38d6981c71cc7849083a14",
+  "evidence_digests": {
+    "1.85-clippy.log": "32fe5ecbe7ec3e700ac4a24bc298066cc231d97ad2062d40e8e223e5df9b87e2",
+    "1.85-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-doc.log": "54acf5f63a488fb65bffe4c819b8924046728f07411c019517ee2092253f567e",
+    "1.85-targeted.log": "23ab797a4cab3c11f894e7b45a592f1cf7c5ecd1c3d3570db020c9edd1c08c1f",
+    "1.85-tests.log": "c004811d75492011bdc6c7d44ea09ce0ba36b09de628126292e279e1a7d854f4",
+    "1.99-clippy.log": "b80bbc76d8b1cd7cc0c55bafbf2cdf5d5d3f74d87c2e071ff5da2abb30cce8c4",
+    "1.99-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-doc.log": "2c89daab19ee7013219bacfc6b0bc5071ac7d4afc42c1deb44e7f9464611b925",
+    "1.99-targeted.log": "b37e35d45698a524339ef0332098ece7d815d80422ca456dcbb9496399488bac",
+    "1.99-tests.log": "aedaf2df452ef97e35443e86d666acb241463e96ae503a29c77318e3f6c4135a",
+    "fixture-compilation.log": "fab0b6d75beff41bf0cffcaf5263a063acd8989c5c0a18b6354a3dd34df7ede2",
+    "fixture-domain.log": "042ca5600b758df060a07401245a4231b633ea95ddab3ca28582012dc8b831eb",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rust-red.log": "3c70795f83408dd1c4808ff39bbfb447f028bab356307169e098450a85983fd0"
+  },
+  "source_inputs": {
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "crates/seata_db_mysql/src/data_compare_utils.rs": "82f3b1995cd31e709148e5c4131152e1b92367b69763d5d449045446f413eef9",
+    "crates/seata_db_mysql/src/data_compare_utils_tests.rs": "d9249a3ee08e7295a78b98985614ec8dedd64cf3aa7dff57ac9ef2e91f4ff2c2",
+    "crates/seata_at/src/undo/sql_undo_log.rs": "9b3045a88bb421185200b8944779e692dffcaeb79cad0e77002ed8d313fe8c30",
+    "tools/formal-source-junit/data_compare_identity.py": "90a69c16b60781b00091f8070cbf296bf67edb117dc7ffb1f01e2bede5e615da",
+    "tools/formal-source-junit/DataCompareIdentityOracle.java": "0f204e38efe914d10ef3788bd65b16d28b95bdaff0d131de189940cc600e6a4d"
+  },
+  "actual_mysql_rollback_rerun": false,
+  "review": {
+    "status": "READ_ONLY_REVIEW_NO_BLOCKING_FINDINGS",
+    "evidence": "docs/phase-2/evidence/mysql-record-comparison/readonly-review-20261119.json",
+    "sha256": "fcba0d0d6d85c338cdee4a82aebe6667f432d19c593839672ca87703c669e3d1"
+  },
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "live_recheck_environment": "Docker Desktop Linux Engine HTTP 500 on info"
+}

@@ -1,0 +1,82 @@
+{
+  "status": "ORIGINAL_RM_JDBC_UTILS_TEST_ALL_CASES_MATCH",
+  "spec": "docs/phase-2/source-junit-contract.md",
+  "evidence": "docs/phase-2/evidence/sqlparser-rm-jdbc-init-source/seata_jdbc_driver_jvm_m79edduv",
+  "catalog_sha256": "3c5e43b753975e9771717578a8134178630ae70f5854d3589e11f338620e29f1",
+  "catalog_members": 40,
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "baseline_catalog_sha256": "42eb747c3ae8bbcff58739f5b73980cb19d0dfbf37e3bb290823082c0630193d",
+  "complete_case_bindings": "docs/phase-2/evidence/sqlparser-rm-jdbc-init-source/complete-jdbc-utils-test-case-bindings.json",
+  "complete_case_bindings_sha256": "6dd5d97f03687cdaa784dd59228ba0410516709cf97d1aed7f898206ed911fd5",
+  "h2_sha256": "44673ff2834428fdb7f11dac3b9d679fb3039ea32194a69452971fdd7150a08b",
+  "mysql_fixture_driver_sha256": "c86718705c79caf26a5772d1d28d938df02911a55941393acfdd7b57e0a23768",
+  "original_junit_passed": 21,
+  "rust": {
+    "1.99": {
+      "ordinary": 509,
+      "ignored": 159,
+      "doc": 4,
+      "harnesses": 112,
+      "core_source_MATCH": 76,
+      "existing_rm_jdbc_MATCH": 10,
+      "jvm_driver_source_MATCH": 4,
+      "resource_init_source_MATCH": 7
+    },
+    "1.85": {
+      "ordinary": 509,
+      "ignored": 159,
+      "doc": 4,
+      "harnesses": 112,
+      "core_source_MATCH": 76,
+      "existing_rm_jdbc_MATCH": 10,
+      "jvm_driver_source_MATCH": 4,
+      "resource_init_source_MATCH": 7
+    }
+  },
+  "rm_jdbc_source_MATCH": 21,
+  "rm_jdbc_source_remaining": 0,
+  "sqlparser_core_source_MATCH": 76,
+  "global_rust_source_MATCH": 97,
+  "global_methods_remaining": 1038,
+  "global_cases_remaining": 1230,
+  "original_method_floor": 1135,
+  "original_case_floor": 1327,
+  "datasource_connection_model": "mocked JDBC and XA connections matching original tests",
+  "driver_primitive_host_test_scope": true,
+  "production_jvm_host": false,
+  "workspace_evidence": "docs/phase-2/evidence/sqlparser-rm-jdbc-init-source/workspace_20261119",
+  "workspace_artifacts": {
+    "1.85-clippy.log": "617f9dbc35f50cec47c62888703be083df90813f17b6ba2615ce9e0ea8accae5",
+    "1.85-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.85-doc.log": "6de2e9d92443ccd027008d646437b89a79c9fb4f2f3c27fc457ee762aa6cb5bc",
+    "1.85-tests.log": "2f28218ec9bed55439791d982f4d6c152320fd7ba6b52c7e35bbe42f629e5ba1",
+    "1.99-clippy.log": "a3c1c4d1b2c3177a5db57f85594516be99f78d359e01d5d7f54fbff26228f9bf",
+    "1.99-core.tsv": "64fcebbb0766c2dcea96710c85ddef8e6453349f81a696a266d5844c1cfc3f9d",
+    "1.99-doc.log": "4be75098b7b98bb3642b4d97fe7f3019af2d47ecfd573a671a7c2b439fc9fa6e",
+    "1.99-tests.log": "77188bdb5b853308dbbcb0f83edc0ebfab384d89594afcd264fbd81de1169bd3",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "source_inputs": {
+    "tools/formal-source-junit/JdbcDriverPrimitiveHost.java": "371ba6840894050f07a3021b600012be9e79da8ab18b43c80e0f071061ee6df9",
+    "tools/formal-source-junit/JdbcDriverCaseOracle.java": "38f83760cfb63f7626cc967e4028bb5f77f6eaca60b04ef62b98b65abdae2829",
+    "crates/seata_db_mysql/tests/jdbc_driver_jvm_source.rs": "af778e3b7bf2e145e44d50ed09399566ced660134f405a170fda54d05e291d3f",
+    "crates/seata_db_mysql/tests/support/jdbc_driver_primitive_host.rs": "d5346bf12539e74ebf9a3e4296dc4e22e1d254089e6d30edbcf17c8f8b89eaaf",
+    "crates/seata_db_mysql/src/util/jdbc_utils.rs": "e1774c3a035af75460cb63a0963f14c327942b6ef4c454e59d835ce5775713a9",
+    "Cargo.lock": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338",
+    "tools/formal-source-junit/jdbc_driver_jvm.py": "bc80948b81a3c21d25a6b664d6cd99b072bcec8ec99e153d3bae62dbe381c123",
+    "tools/formal-source-junit/JdbcInitCaseOracle.java": "0000ae00a5779c33d56442194a9f7219f127d6d00446587a1bb03854fb3c514c",
+    "crates/seata_db_mysql/tests/jdbc_resource_init_source.rs": "b105f8d7833cca9a5c85516bfacce983dacba94029d0dd1dee0e9b516a650c5e"
+  },
+  "runtime_negative_controls": [
+    "original H2 JAR absent",
+    "original MySQL driver JAR absent"
+  ],
+  "review": {
+    "status": "READ_ONLY_REVIEW_NO_BLOCKING_FINDINGS",
+    "evidence": "docs/phase-2/evidence/sqlparser-rm-jdbc-init-source/readonly-review-20261119.json",
+    "sha256": "cd473c9fa21942ddf6aabb830448f98fed16ae50a015f28a40cbed86279b36d9"
+  },
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false
+}

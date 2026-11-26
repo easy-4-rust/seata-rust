@@ -1,0 +1,71 @@
+{
+  "status": "PRODUCTION_ROLLBACK_SQLX_CONNECTION_CLEANUP_VERIFIED_ON_LOOPBACK",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-rollback-failure.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_rollback_sqlx",
+  "wire_driver": "SQLx MySQL 0.8.6",
+  "peer": "scripted TCP loopback; explicitly constructed test pool exercising production rollback entry point",
+  "initial_execute_error": {
+    "sqlstate": "42000",
+    "code": 1142,
+    "stage": "metadata visibility"
+  },
+  "verified": [
+    "SHOW GRANTS prepared and executed on first connection",
+    "explicit wait for ROLLBACK on same connection",
+    "rollback server error or no reply",
+    "original identity and first SQLSTATE/error number",
+    "no COMMIT",
+    "first connection retired before replacement handshake",
+    "watchdog bounds fixture"
+  ],
+  "independent_review": "Added a reply barrier distinguishing explicit await from destructor-triggered ROLLBACK and an independent watchdog",
+  "global_rust_source_MATCH": 150,
+  "global_rust_methods_match": 129,
+  "rust": {
+    "1.99": {
+      "ordinary": 604,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "loopback_fault_tests": 2,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 604,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "loopback_fault_tests": 2,
+      "strict_clippy": true
+    }
+  },
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "3807b41d46fed0b371a1933198e8199ad54194a03b9814facd8dc528e79599f4",
+    "crates/seata_db_mysql/src/undo_rollback_attempt.rs": "9c85783209d2be5e8a165aa5fd62dac6cfc3f48e1d669bc0c202837c11c52189",
+    "crates/seata_db_mysql/src/data_source_proxy_rollback_sqlx_tests.rs": "c2cd4319f2e31017887a1aeb1d3b445ff788bd771bb619f94cc67b7e53d429b5"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "a5bc8a13623f0fbbb70deab8b36ffc72069a0ea6696769814ba4f378341d45c1",
+    "1.85-doc.log": "09a27729be8291a400f856c76d74a17280e4f5b0c1c15f22c8011e08457eaa35",
+    "1.85-targeted.log": "2b47200ca87444f30803a47c0e7b9c8462181cf7432622eaf02bc7cfdf66cc71",
+    "1.85-tests.log": "e33c7a8a66217656f868d51c7b1cfc2be0fc008b31b48803cd05628a8f1cc165",
+    "1.99-clippy.log": "32414ccec9196b1e2593669213467fdf520efd52c8cd43d52a5708de71cc5f66",
+    "1.99-doc.log": "28b6d08f1720dbe3abfe395a28bca2e438eb3ba6f9a979b5b24218217d2ca7e5",
+    "1.99-targeted.log": "793649fd91d1358a0665d2f17e1f2890bb68175dd2a169f0ec1da5f2aa0daa81",
+    "1.99-tests.log": "8a973622afa9922feb0718fd9d36bf710530667fca88ffb8e39ccf52d8c6a889",
+    "docker-guest-proxy.log": "1a11fa32aba429d8564913b435468a883f46e24b20a3703c61e5eae7b2e7f974",
+    "docker-wsl.log": "184fff6ca08f84a433152d12bedcbc97db85ead52a5b01cf1947287f9cd3f930",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-replace-observed-error-at-cleanup-deadline.stderr": "1e856c09b524b0905414183864e3e67536f4a6d088e118b5ba2d903aa4829c9a",
+    "mutant-replace-observed-error-at-cleanup-deadline.stdout": "13b87417536ab5cc7736958db2fd0c4e68d25deed21f04d3e0d5bb872580b028",
+    "mutant-return-before-cleanup-reply.stderr": "72ddff15c6700d81df8fbb0f9024af8d8b17cd7e29edfdaa38b211544c18d58f",
+    "mutant-return-before-cleanup-reply.stdout": "4e279193b2aecef96acf03852cd9a003cd180cbd9d532fff89fc8cc52915487c",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "runtime-mutation-controls.json": "e7b6fae59ebe9ff215b2e6de9d8e0f64338162d0d5344b29cbfaa5ee87a93734"
+  }
+}

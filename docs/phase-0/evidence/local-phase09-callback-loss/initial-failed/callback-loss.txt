@@ -1,0 +1,17 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.76s
+     Running `D:\cargo-target\seata-phase09\debug\seata-java-tc-it.exe --callback-loss`
+PASS RegisterTM identified=true protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS RegisterRM identified=true resourceId=mysql://orders protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS live Java TC registration smoke: TM + RM
+GlobalBegin xid=198.18.0.1:28091:4045076257592823809 scenario=branch-commit
+BranchRegister xid=198.18.0.1:28091:4045076257592823809 branchId=4045076257592823810 resource=mysql://orders
+INJECT drop-first-callback-response xid=198.18.0.1:28091:4045076257592823809 branchId=4045076257592823810 type=3 requestId=1 simulatedActions=1
+PASS TC redelivery xid=198.18.0.1:28091:4045076257592823809 branchId=4045076257592823810 type=3 firstRequestId=1 retryRequestId=2 deliveries=2 simulatedActions=1
+PASS branch-commit xid=198.18.0.1:28091:4045076257592823809 branchId=4045076257592823810 responseStatus=9 observedStatus=15 callbackLoss=true; simulated RM only
+GlobalBegin xid=198.18.0.1:28091:4045076257592823811 scenario=branch-rollback
+BranchRegister xid=198.18.0.1:28091:4045076257592823811 branchId=4045076257592823812 resource=mysql://orders
+INJECT drop-first-callback-response xid=198.18.0.1:28091:4045076257592823811 branchId=4045076257592823812 type=5 requestId=3 simulatedActions=1
+PASS TC redelivery xid=198.18.0.1:28091:4045076257592823811 branchId=4045076257592823812 type=5 firstRequestId=3 retryRequestId=4 deliveries=2 simulatedActions=1
+Error: Custom { kind: InvalidData, error: "TC rejected type 9, xid=198.18.0.1:28091:4045076257592823811: TransactionResult { success: false, error_code: 0, message: Some(\"TransactionException[org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:28091:4045076257592823811 branchId = 4045076257592823812]\"), status: 5 }" }
+error: process didn't exit successfully: `D:\cargo-target\seata-phase09\debug\seata-java-tc-it.exe --callback-loss` (exit code: 1)

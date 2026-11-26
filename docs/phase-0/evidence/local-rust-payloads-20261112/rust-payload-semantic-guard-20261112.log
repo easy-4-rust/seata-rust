@@ -1,0 +1,24 @@
+   Compiling seata-java-tc-it v0.1.0 (D:\codex-builds\rust-payload-semantic-mutant-20261112\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.52s
+     Running unittests src\main.rs (D:/cargo-target/seata-payload-mutant\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test payload::tests::golden_global_begin_request ... FAILED
+
+failures:
+
+---- payload::tests::golden_global_begin_request stdout ----
+
+thread 'payload::tests::golden_global_begin_request' (70452) panicked at src\payload\tests.rs:107:1:
+assertion `left == right` failed: independent semantic contract: GlobalBeginRequest
+  left: GlobalBeginRequest(GlobalBeginRequest { timeout: 2001, transaction_name: Some("SeataGoTransaction") })
+ right: GlobalBeginRequest(GlobalBeginRequest { timeout: 2000, transaction_name: Some("SeataGoTransaction") })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    payload::tests::golden_global_begin_request
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 70 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

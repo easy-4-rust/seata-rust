@@ -1,0 +1,15 @@
+
+running 1 test
+test wait_cases::actual_enrollment_and_undo_waits_preserve_known_receipt_and_cancelled_scope ... 
+thread 'wait_cases::actual_enrollment_and_undo_waits_preserve_known_receipt_and_cancelled_scope' (46624) panicked at crates\seata_db_mysql\tests\support\first_phase_wait_cases.rs:121:17:
+actual error=Enrollment { receipt: RegisteredBranch { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: Some(19) }, lock_key_bytes: Some(11), result_code: Success, .. }, source: BeforeCommit { identity: BranchIdentity { xid_bytes: 12, branch_id: 42, resource: ResourceKey { branch_type: At, resource_id_bytes: 46 }, application_data_bytes: Some(19) }, source: Deadline { operation: "RM recovery" } } }, enrollment=true
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    wait_cases::actual_enrollment_and_undo_waits_preserve_known_receipt_and_cancelled_scope
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 9 filtered out; finished in 3.05s
+

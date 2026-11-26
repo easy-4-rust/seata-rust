@@ -1,0 +1,665 @@
+{
+  "status": "module_migration_incomplete",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "scope": "All source files/assets under sqlparser/*/src/test; file inventory only, not expanded concrete-case parity",
+  "objects": [
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLType.java",
+      "source_sha256": "1c732a46d1f1135fea61f37b1d8051792bae91ccd09a387734585f8746478ca2",
+      "target": "crates/seata_at/src/sql_type.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLRecognizer.java",
+      "source_sha256": "c0dc327ca13055cf6ec1eff18a46a79148b53c9e3ebc961f9538634756ba1751",
+      "target": "crates/seata_at/src/sql_recognizer.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLRecognizerFactory.java",
+      "source_sha256": "7c85c977706fc3d4913caf1261e8c05fd698949e578908f2face6ccc3ed7bae0",
+      "target": "crates/seata_at/src/sql_recognizer_factory.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/main/java/org/apache/seata/sqlparser/SQLParsingException.java",
+      "source_sha256": "83b12074da72da445a1e9fc554e33e3525457ed2a6d0df8d87660db08e2fc902",
+      "target": "crates/seata_at/src/exception/sql_error.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/main/java/org/apache/seata/sqlparser/druid/mysql/BaseMySQLRecognizer.java",
+      "source_sha256": "5682120387ac43365b078b0a4c12daf7484d0f8aa16c382abaceef90a595bf42",
+      "target": "crates/seata_at/src/mysql/base_mysql_recognizer.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/main/java/org/apache/seata/sqlparser/druid/mysql/MySQLInsertRecognizer.java",
+      "source_sha256": "ce84f522445b4e13970ec9a303e35bd4f2da8310f9ebf1fd725b9a4829eb758d",
+      "target": "crates/seata_at/src/mysql/mysql_insert_recognizer.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/main/java/org/apache/seata/sqlparser/druid/mysql/MySQLUpdateRecognizer.java",
+      "source_sha256": "66b0589329e0914e344129a76a90232e82f028836ab1c40ff0abed050a7ef726",
+      "target": "crates/seata_at/src/mysql/mysql_update_recognizer.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/main/java/org/apache/seata/sqlparser/druid/mysql/MySQLDeleteRecognizer.java",
+      "source_sha256": "157606cd909bc30216892d907a5282d39bd50870c9dace4aecb407032e0bdece",
+      "target": "crates/seata_at/src/mysql/mysql_delete_recognizer.rs",
+      "state": "PARTIAL",
+      "reason": "Selected MySQL AT recognition profile only; complete Java API, other SQL and source-test differential remain unverified"
+    }
+  ],
+  "source_test_files": [
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/AntlrIsolationTest.java",
+      "sha256": "f227136f25d8b011d846f38ca7093b9225b21748223344bcb9ff6af4b9634870",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/mysql/AntlrMySQLDeleteRecognizerTest.java",
+      "sha256": "9e0f18fcd1616321bbdf4247f98f9ea204a94a229e657f5fa06df0b6aad6e596",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/mysql/AntlrMySQLInsertRecognizerTest.java",
+      "sha256": "7b5fa330fbda84d06cb2c01f6213b61186c5cdeb9d0aa4e92b47cc06d42c0f3e",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/mysql/AntlrMySQLUpdateRecognizerTest.java",
+      "sha256": "f42039f3eeb96c94635f1ecedb9d69afdd3336cd9164d13d26ddd2fa0b039818",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/MySQLDeleteRecognizerTest.java",
+      "sha256": "33073ffe3422edf97b2ae879eeb0bfe7c706c3920318f239d5643092029f0a0a",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/MySQLInsertRecognizerTest.java",
+      "sha256": "26e6e3e3c0d29cc9e3a870780a85cbe22b71811074ef14f6c4d5455163b45da0",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/MySQLSelectForUpdateRecognizerForListenerTest.java",
+      "sha256": "f26b8e060e3fdae142a06507a52d6cf406d00d2199fc182b4c3cf58988ad5f63",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-antlr/src/test/java/org/apache/seata/sqlparser/antlr/MySQLUpdateRecognizerTest.java",
+      "sha256": "183bb55be65ceac4dc82df8cb572f7a8ed8c43b4384e146727f0eb0e281ab88d",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/EscapeSymbolTest.java",
+      "sha256": "8e2b3429da740603a2d8ad911fea0560e105b88e9b847b1a4766f8de2947acb2",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLParsingExceptionTest.java",
+      "sha256": "1184fd961d61308e3f08378d985134eb4ee8ef11f3d6794ac5e5149516deccdd",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/SQLTypeTest.java",
+      "sha256": "7af0e119b58465cb9f284c045e6d2a5d010b5afdf08cc6f6b84b409fe6578cde",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/ColumnMetaTest.java",
+      "sha256": "922d7870760c3a937687afa540d68660136161e9dff558267e5a09eee46f85d4",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexMetaTest.java",
+      "sha256": "656e2ee5283f63c9eafb04cc83a622f827b6f32fd6654fd081816f1a67ec4af6",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/IndexTypeTest.java",
+      "sha256": "11a2df072b888927423468aa10b3e1e91a532c9fd9cb9df9e1c344b51556b85a",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NotPlaceHolderExprTest.java",
+      "sha256": "3a85dfb507021834f3bf3eadcdbc5516673cf09f876098e119a23c0203c05fc8",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/NullTest.java",
+      "sha256": "340a501f19d310568b5398f2246b7a4a4a74805b360c065355d98c6ec8b41f80",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlDefaultExprTest.java",
+      "sha256": "d94fa32204fe895f5bf09e26905238d897ebe2e5c1065fb6953387ae455fca5f",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlMethodExprTest.java",
+      "sha256": "48c64cef7d7edb62a63d8b07faa9b46a085fbd74e4438474af725102a8bc174f",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/SqlSequenceExprTest.java",
+      "sha256": "547ec4ff5ab4883b242858691ccaa26ee850d1f71ce3241768b4008534dbb99f",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-core/src/test/java/org/apache/seata/sqlparser/struct/TableMetaTest.java",
+      "sha256": "7e8b9417ff164964aa0f456fcf38c7f0b5047061f0ed61070e7b7c3fc098abe2",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/AbstractRecognizerTest.java",
+      "sha256": "b561458141dbc42c4bc4c5511db0f881300a0c188d319940d4731fe8f9ae84ca",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/DialectInsertBehaviorTest.java",
+      "sha256": "bc7479d67e65fa541196a360cb622432c5eab04e1fe41d72c4967a01ee21ac4e",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/DialectMutationBehaviorTest.java",
+      "sha256": "41403cddbd99b1e6512066f1d7f5c0ab53434ba6073f137239b03f3c469833cc",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/DialectSelectBehaviorTest.java",
+      "sha256": "d4da3089e02b95c6f33377d3adee6e1195788025e90a4290b3ac00b514fb1f25",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/dm/DmDeleteRecognizerTest.java",
+      "sha256": "c51179fe50a777e431b64dbab651f1a9ee078ea047764688a2c2a9581bce159a",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/dm/DmInsertRecognizerTest.java",
+      "sha256": "ed8c3412464b213b94f5e8b07c585824b3b6f888beb005ea1d729156829e8f88",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/dm/DmSelectForUpdateRecognizerTest.java",
+      "sha256": "01ced371fa58ab77c4db25d3bfb5b3b3357d87f421f59b41f3ec25896c597ac6",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/dm/DmUpdateRecognizerTest.java",
+      "sha256": "5835a24fcbe9001b09d10e464f44b1ecf0d71306895651b0d9c7b6a585e48ac6",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/DruidDbTypeParserTest.java",
+      "sha256": "5d6567e0c5ec0ca2eebc972d678ab91296160f30843d2527bb93245bd0731d79",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/DruidIsolationTest.java",
+      "sha256": "aea2db92dc36348631b9105b9e574602bcc3904bf266dfdd8deeaff61594dc03",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/DruidLoaderForTest.java",
+      "sha256": "96f76e25c8ed03a1353cb208a20a6d4c338e0a26251bf0fed00513ed9636661e",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/DruidSQLRecognizerFactoryTest.java",
+      "sha256": "419a2630cbb5669efb5839d275f124dd400a271429e04693449a932620f236c6",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/kingbase/KingbaseConditionsBehaviorTest.java",
+      "sha256": "00b4a64d7f661cf2e190410fb90c8fb1727b5f8d015ce27e488f9ac898638110",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/kingbase/KingbaseDeleteRecognizerTest.java",
+      "sha256": "9e56254d8bcdc6e1993f60e77309023a285bb53462648efa2d751ab287c20ce6",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/kingbase/KingbaseInsertRecognizerTest.java",
+      "sha256": "52c8e880fbb9c466ef0d90ac5afaf06616f0fcd88a05ecac947ed63637e6adf1",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/kingbase/KingbaseSelectForUpdateRecognizerTest.java",
+      "sha256": "ca359731e869f814e484f49ba2b59cdc3949c9fbe698bb0ac58306dc135809bc",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/kingbase/KingbaseUpdateRecognizerTest.java",
+      "sha256": "28e112ff8042e986aba2f83d5e0c2ad8262dc5205295013a45f80a2b2c4c2400",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mariadb/MariadbDeleteRecognizerTest.java",
+      "sha256": "b26b53abe5e17571e20c1135c232574561ea59019b14106bb006f3a4c85f8bb7",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mariadb/MariadbInsertRecognizerTest.java",
+      "sha256": "a4fca7b9ba9c138c0adc0f72e7accc98dd169afa070e0d42ba5ae485b339d766",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mariadb/MariadbSelectForUpdateRecognizerTest.java",
+      "sha256": "5609404ced8b36f24dd3a05d0d727166d54df957b869fb3cbef058e8ddf366d6",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mariadb/MariadbUpdateRecognizerTest.java",
+      "sha256": "9871fe33b9d243610616e361925807fa51cb2f553b8578239434f59584ee0ea9",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mysql/MySQLConditionsBehaviorTest.java",
+      "sha256": "1a30def785780866df9b48035a313f74d0fb786c2ecf4a5ebd01e8179585f5cf",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mysql/MySQLDeleteRecognizerTest.java",
+      "sha256": "2b141f773fcfe93578d5c1ee29b9429d5dc95e3d1e702ee02910d35f3cad556f",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mysql/MySQLInsertRecognizerTest.java",
+      "sha256": "3f4a3540b00ab33859276a0c8605a37d5bf534f43cbd982f4d93b7d555f8d85e",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mysql/MySQLJoinBehaviorTest.java",
+      "sha256": "c8cf9f751266b20d71c43c582a4a7665d1a6db82adecd0f850ea79e886f8c497",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mysql/MySQLSelectForUpdateRecognizerTest.java",
+      "sha256": "78a8927f486f41468304653c9d8c1545079e03e74a77c2b1944b8e8655c9f267",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/mysql/MySQLUpdateRecognizerTest.java",
+      "sha256": "0077c8e59ced0c8f496628845b5f4e437ced052875668de33637e02f513c1860",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oceanbase/OceanBaseConditionsBehaviorTest.java",
+      "sha256": "a1ba323e6d185fba4004dc666b250eff0b809a33bb35eb16582ddc10698a77c9",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oceanbase/OceanBaseDeleteRecognizerTest.java",
+      "sha256": "b59c66bc9fac5b106e8f73def363166943073e1e85c04a3b8f1d98bf4c62e338",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oceanbase/OceanBaseInsertRecognizerTest.java",
+      "sha256": "e1a66f48c2c414925324817f58f492ab4baa60aeeeedbbe25ee50303c12e03cb",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oceanbase/OceanBaseOperateRecognizerHolderTest.java",
+      "sha256": "ca090dd98eb5cb1b8a66ea8c85d2fbdb59224154204a7eb1995610d102bfb439",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oceanbase/OceanBaseSelectForUpdateRecognizerTest.java",
+      "sha256": "d8a7f1ddc9dd29393e8e3d8222577ad7828a68f744193b80fb5cff4fbbb1a114",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oceanbase/OceanBaseUpdateRecognizerTest.java",
+      "sha256": "3e7f2117d924f4847ca4f79e32573dd5fed821d80569f305797f04e353e1ef43",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oracle/OracleConditionsBehaviorTest.java",
+      "sha256": "2a5b14f0c423f85cc7d4ac11cc7c7f2e3d70188b49a513c95255c2516a1c1a5a",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oracle/OracleDeleteRecognizerTest.java",
+      "sha256": "72deb635a13d6e7499a6f713ad8453e601c24d5114b587b58753c1cdb315a054",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oracle/OracleInsertRecognizerTest.java",
+      "sha256": "b5a6b519903797aed463626ddc05149520e35c09b426843cd402b550f47d940a",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oracle/OracleMultiInsertBehaviorTest.java",
+      "sha256": "b8ca9b10dd3878a9f915b847ba1b7d03c1c2f40e17604c1f19cb709f3fa674d9",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oracle/OracleMultiInsertRecognizerTest.java",
+      "sha256": "178917ea0df7e2dd17bf628bddd7ab5df3d6eae41faa98b0724c137a4254bf45",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oracle/OracleSelectForUpdateRecognizerTest.java",
+      "sha256": "f510ad3251c734430960b752c66b49a839009cb4f0c2e211f18f1bb1856c7b26",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oracle/OracleUpdateRecognizerTest.java",
+      "sha256": "a477280a9b96725b910cc739dc6c60019ab632e0046e827020c1d96435ba4aea",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oscar/AbstractOscarRecognizerTest.java",
+      "sha256": "e72cd19fba00c0c637f9dac9fdbe26b9cbfef5dc0a73cac48d25ce4750f60c57",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oscar/OscarConditionsBehaviorTest.java",
+      "sha256": "0752ca45022bc0aa62994b9bb49ca3bdaa6415fde51271dbd80bc75b5560e13e",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oscar/OscarDeleteRecognizerTest.java",
+      "sha256": "f074f1fcbb843ab9c195c797b2b4c5b75491d4240467985a5b9ba6bd3b12a0fe",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oscar/OscarInsertRecognizerTest.java",
+      "sha256": "ba912ec870400b63cbb9560e9524b38f73f31ccb729df8ef2c68bb635a396631",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oscar/OscarOperateRecognizerHolderTest.java",
+      "sha256": "036c23e7192df6af6f68afac614d1e226e2fb83de98ef46881916c3083fe1f1c",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oscar/OscarSelectForUpdateRecognizerTest.java",
+      "sha256": "48d848386990a4a7495f3ccee553be879e8ccc98f5299693668ee0e90fa3fb6c",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/oscar/OscarUpdateRecognizerTest.java",
+      "sha256": "f838cfcbba6601b7df82574a97e781746b25b06f2a879cf8c42f1c03c74e426a",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/polardbx/AbstractPolarDBXRecognizerTest.java",
+      "sha256": "34383431082b7ec11e6d39151cfbcac8894e970f3af90b1c83a3f53904a1b1c1",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/polardbx/PolarDBXDeleteRecognizerTest.java",
+      "sha256": "c8ccc6d4a836e782a924c32967f2d7736fb3089e0ae19777a3f4f22cd084a9b0",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/polardbx/PolarDBXInsertRecognizerTest.java",
+      "sha256": "9402d4927f38d901f72854092f94953801e84fb3c744f05052c40d20892a2180",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/polardbx/PolarDBXOperateRecognizerHolderTest.java",
+      "sha256": "bc9512a2723eda5827154af3bb6403c84b34cee1376f5ac407551a2e94edcab0",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/polardbx/PolarDBXSelectForUpdateRecognizerTest.java",
+      "sha256": "153e455e7850a782d62353365a29689a25ad280fdebeeae8d27fc6ad555306e5",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/polardbx/PolarDBXUpdateRecognizerTest.java",
+      "sha256": "af0bec7c3a796fb069ea0ee3ddeae3bace1f1caa62270e552bd54c692ea11483",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/postgresql/PostgresqlConditionsBehaviorTest.java",
+      "sha256": "a45abb6f197b4172f89976301fb368ff2dec95a2200f37473a30e4e24c8b03d0",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/postgresql/PostgresqlDeleteRecognizerTest.java",
+      "sha256": "d354e01097488bfc6b836ffdbeee1e684fe06ff136875ac4c86d295051311c23",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/postgresql/PostgresqlInsertRecognizerTest.java",
+      "sha256": "b0f428c24c39f0fe0314aa9bda96110c9a019b8dc59bfaa292cefa83f22ed5d3",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/postgresql/PostgresqlSelectForUpdateRecognizerTest.java",
+      "sha256": "16ded0eb364617c345dddd3e407c229644c65ab8422910665569c301234fe6c2",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/postgresql/PostgresqlUpdateRecognizerTest.java",
+      "sha256": "49c78499ca1613988641df7af98166446b0ad4903467294ebbee876afbfa3aaf",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/RecognizerFactoryBehaviorTest.java",
+      "sha256": "27b21c45b7b74224b6713292c2813fe7b6224c82c47a658b381b073713f33b2b",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/sqlserver/SqlServerDeleteRecognizerTest.java",
+      "sha256": "d8da8034c156912632e68f9f31c61fb63e0968aeb8209866d65c627a59057d44",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/sqlserver/SqlServerInsertRecognizerTest.java",
+      "sha256": "f58cea5066ec5e2802d9a298f001775ada34c9d2ff9f33ac4b13a44f98a4089e",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/sqlserver/SqlServerOperateRecognizerHolderTest.java",
+      "sha256": "e3dbb1e7599654cca26ae8aa1076e8d2635bd7e8e874c108bcdacfab5f50ff39",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/sqlserver/SqlServerSelectForUpdateRecognizerTest.java",
+      "sha256": "ced6c65bd8ba1abca868af162f6a30d60dc1d94a9303a0d11c4bc79133f7e8df",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/sqlserver/SqlServerUpdateRecognizerTest.java",
+      "sha256": "4fbd1ac01a4a604c04773ac96dce6b22992e4de47684bd7091d8f29a907cc652",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    },
+    {
+      "source": "sqlparser/seata-sqlparser-druid/src/test/java/org/apache/seata/sqlparser/druid/SupportSqlWhereMethodTest.java",
+      "sha256": "6a43837a48765648b99ea491455387fb80cab45cf58f26722b359e1ee4e9a63e",
+      "state": "MISSING",
+      "concrete_source_cases_expanded": false,
+      "differential": "NOT_RUN"
+    }
+  ],
+  "source_test_assets": [],
+  "SOURCE_PARITY_complete": false,
+  "Java_execution": false,
+  "golden_or_live_diff": false,
+  "Rust_obligation_tests": "crates/seata_at/tests/mysql_sql_recognition.rs"
+}

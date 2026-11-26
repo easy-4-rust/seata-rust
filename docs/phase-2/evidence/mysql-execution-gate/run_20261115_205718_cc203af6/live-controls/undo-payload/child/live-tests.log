@@ -1,0 +1,16 @@
+
+running 1 test
+test execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements ... 
+thread 'execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements' (84048) panicked at crates\seata_db_mysql\tests\support\execution_failures.rs:361:5:
+assertion failed: matches!(tx.execute(&sql, &[FieldValue::Binary(vec![9; 1_000_000])]).await,
+    Err(DbError::Image(ImageError::Budget { .. })))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 16 filtered out; finished in 2.67s
+

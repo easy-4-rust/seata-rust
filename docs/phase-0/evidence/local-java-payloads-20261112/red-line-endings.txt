@@ -1,0 +1,28 @@
+test_bad_type_prefix_prevents_any_output (test_export_payload_fixtures.FixtureExportTest.test_bad_type_prefix_prevents_any_output) ... ok
+test_crlf_and_lf_checkout_export_the_same_manifest (test_export_payload_fixtures.FixtureExportTest.test_crlf_and_lf_checkout_export_the_same_manifest) ... FAIL
+test_differing_existing_file_prevents_partial_update (test_export_payload_fixtures.FixtureExportTest.test_differing_existing_file_prevents_partial_update) ... ok
+test_duplicate_or_path_traversal_sample_names_are_rejected (test_export_payload_fixtures.FixtureExportTest.test_duplicate_or_path_traversal_sample_names_are_rejected) ... ok
+test_exports_all_payloads_with_type_prefix_and_stable_manifest (test_export_payload_fixtures.FixtureExportTest.test_exports_all_payloads_with_type_prefix_and_stable_manifest) ... ok
+
+======================================================================
+FAIL: test_crlf_and_lf_checkout_export_the_same_manifest (test_export_payload_fixtures.FixtureExportTest.test_crlf_and_lf_checkout_export_the_same_manifest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-golden-vectors\test_export_payload_fixtures.py", line 69, in test_crlf_and_lf_checkout_export_the_same_manifest
+    after = export_fixtures(self.source, self.destination)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-golden-vectors\export_payload_fixtures.py", line 52, in export_fixtures
+    raise ValueError(f"Refusing to overwrite different artifact: {path}")
+ValueError: Refusing to overwrite different artifact: E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\target\payload_export_vsk18uin\payloads\manifest.json
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-golden-vectors\test_export_payload_fixtures.py", line 71, in test_crlf_and_lf_checkout_export_the_same_manifest
+    self.fail(f"Line-ending-only changes must preserve the exported corpus: {error}")
+AssertionError: Line-ending-only changes must preserve the exported corpus: Refusing to overwrite different artifact: E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\target\payload_export_vsk18uin\payloads\manifest.json
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.035s
+
+FAILED (failures=1)

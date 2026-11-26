@@ -1,0 +1,103 @@
+{
+  "status": "UNDO_CURRENT_CONSTRAINTS_CHECKED_BEFORE_COMPENSATION",
+  "mysql": "8.4.13",
+  "image": "sha256:0f1a0ccadda3a1734d1db557e203ec58621d56fa248525016e85fe4f631311ec",
+  "rust": {
+    "1.99": {
+      "workspace_passed": 633,
+      "ignored": 186,
+      "undo_live_passed": 16,
+      "managed_live_passed": 11,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "workspace_passed": 633,
+      "ignored": 186,
+      "undo_live_passed": 16,
+      "managed_live_passed": 11,
+      "strict_clippy": true
+    }
+  },
+  "red": {
+    "consumed_business_rows": 0,
+    "remaining_undo_rows": 0,
+    "unexpected_trigger_rows": 1
+  },
+  "coverage": [
+    "Server metadata_locks proves business MDL wait after original Undo dictionary snapshot",
+    "Locker publishes late trigger/outgoing FK/incoming cascade FK before releasing business table",
+    "Independent Undo rejects before control COMMIT with original identity, original Undo bytes and business/child/effect state intact",
+    "Both independent and managed entry points use original connection options and original operation deadlines",
+    "All document tables verified and bound before first compensating business DML",
+    "Managed 11-test regression includes atomic terminal, dirty retry, cancellation and exact recovery child process"
+  ],
+  "limits": [
+    "One temporary out-of-pool connection per active table check",
+    "Stable single-primary routing required",
+    "Late-constraint race exercised through independent entry; managed entry wiring reviewed and full existing suite run"
+  ],
+  "remaining": [
+    "Other WP05/WP06 gates and remaining original plan",
+    "Other MySQL versions and routing profiles"
+  ],
+  "sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/current_table_constraints.rs": "7b5196546a116f0123a4dcc0e94f716b924aef654bd3b729c78b2b34389e78f8",
+    "crates/seata_db_mysql/src/data_source_manager.rs": "c7a8abfe48ac3681a6897df43d816432545b803f87248b5e29b400a3d9d2a0c9",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "177a9fd5428a631197c74b1ce43b32b20da4e48818155bfba3cadb5da519fa50",
+    "crates/seata_db_mysql/src/undo/abstract_undo_log_manager.rs": "6be96db2d72eeb48fdf35fa4c086dbcf01e969cfbb00ec9486503fce7b2dcee1",
+    "crates/seata_db_mysql/tests/live_undo_rollback.rs": "c56e2e8a9cda4364d5f6629ab69a9dd5f906c513dcea78b4172c3902d2e69b3a",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85/cancelled-dispatch-child.json": "06e195475a9e7b803b2d83cd6ece3d84e9c68066b5695a16298fb5a6bfe325dd",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85/child-recovery.json": "bcba4e80dacdf50f8b266243659ca08f90f3c9afa8312414cab6272e331eaddb",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85/late-undo-inbound.json": "0eedcadcf92d1cf2681b40d467743a0482b0eb244a8e768211bfc0e89dbeb719",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85/late-undo-outbound.json": "0eedcadcf92d1cf2681b40d467743a0482b0eb244a8e768211bfc0e89dbeb719",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85/late-undo-trigger.json": "a167c5396b56bbb2b6d871b5758a84829576748c7a3d039280286a534ad4405c",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85/rm-concurrent-observation.json": "3e230cfe4269a736e285003804131b9888b2b0ae4df46c6e80b18bc7522262b9",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85/rm-denial-observation.json": "f15d75c461b85ba68bf21f216c5e8dfe6afaebedfcdfa3accee9968cc2ec3f05",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85-child-build.log": "17354e9243f35edc6b72bdadfc5333f5b1336b83f4b3c504e18a283d14afa693",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85-clippy.log": "86b5ff2cd10633a7b5f5573bc03f42ea27e4447dd636809f51c2f790ebdfb78b",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85-live_rm_recovery-output-path.txt": "c4e72913300fed01249256303666f1ae2bfe780ec241b93e43230674949c6035",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85-live_rm_recovery.log": "e8bc59f31e51431cc92c50c36878bf9b605ab7377b5b96499969d9a63c6cb3c4",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85-live_undo_rollback-output-path.txt": "bdf203c61ef050b5fd9bde44a46999ef759eae28db86e6497c1a1bc68008b85e",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85-live_undo_rollback.log": "495c003ce6fb959d2480cfefa9d141f99fad279dbcfb8e1a29b0f63784a46fe9",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.85-workspace.log": "76f93893a664a4c8c75246342bf9cc957cb76c05565713418038efdd9e8e81e8",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99/cancelled-dispatch-child.json": "06e195475a9e7b803b2d83cd6ece3d84e9c68066b5695a16298fb5a6bfe325dd",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99/child-recovery.json": "b76a8ada734ff011d95cf4d5d80a4c8ba3458a24ccf1eecbea20c5136775df1c",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99/late-undo-inbound.json": "0eedcadcf92d1cf2681b40d467743a0482b0eb244a8e768211bfc0e89dbeb719",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99/late-undo-outbound.json": "0eedcadcf92d1cf2681b40d467743a0482b0eb244a8e768211bfc0e89dbeb719",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99/late-undo-trigger.json": "a167c5396b56bbb2b6d871b5758a84829576748c7a3d039280286a534ad4405c",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99/rm-concurrent-observation.json": "3e230cfe4269a736e285003804131b9888b2b0ae4df46c6e80b18bc7522262b9",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99/rm-denial-observation.json": "f15d75c461b85ba68bf21f216c5e8dfe6afaebedfcdfa3accee9968cc2ec3f05",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-child-build.log": "a905345a90ddc157b63ecbee3cde890835d78819c7377bd2c2edc186eb82ade1",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-clippy.log": "dfc9bd7c2bd83b7b00a68fa88c7c45fc60a11b64886718fff86a6ba0b9d60d49",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-live.log": "477ba39fc50c63b864791cb4b6d664864d7c64681662168fc5a7e4f7c6a6cf78",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-live_rm_recovery-existing-fixture-user.log": "bace356e0a07c0b644defa0a8e56a4e784bc9a8cac7d847fd03ed75533a74ab9",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-live_rm_recovery-missing-child-env.log": "5fd0395eb2228ab0d4b46b15b1d13c51b1a6f26579aab2446719c3fdce6acfe9",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-live_rm_recovery-output-path.txt": "651d448b285e4c699dadc31acec287710ed924ab2f4fdee577ba5a51a794269a",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-live_rm_recovery-reused-journal.log": "96a8d1f38e25c9f7d09fa4c455fbb0701ad3753cf7ff984a412be699cd76ec5c",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-live_rm_recovery.log": "6f34d3b6698cfd3d7986c310e26658b386f7d020b9716657a3d51f2ebb57b409",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-live_undo_rollback.log": "a1002c676758ca3dd35d54913525bf444c6e60e40a4f502b090d9a8f27cca9f1",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/1.99-workspace.log": "809d1dcd2cb189602de253047567376ef53955a76964e39d3feb7d6b5470697f",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/cleanup-runtime.sh": "b559319d0df85407cbbd647bce9c7ca934297e28373773ec6fe0e81fb68a513c",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/cleanup.log": "4107ff5da2009789928dcf400664472250a118335ba90b9796f6ca20b2d5fa89",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/image.log": "45bbe0edd9b155e75bf9f474183f883e454af0b0925e49fcc78c7e1fb028ad35",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/java-source-pin.log": "efd3daf1c8ec0df2003e89cfc74ba9e240617a760c02fd78574d4d2416b3e982",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/README.md": "6bda26c76ed25c51c4a4a93f757106d3d9f972c1bde206c0997dd7f169fd1ca1",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/red-database.log": "f5f038585a49748e7befa99b3fcded393352899205e152b8d31307cd022520ac",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/red-observation.json": "b8af5cb27c338f35df5aa0967bab98c516345d873cbba92b9a4321c0f13f2f59",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/red.log": "103252ca4267de03307fd64cacf034dcf3eba8757b88c0831060598181774a48",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/relay.log": "58ccb9b9bbae920eafab92c443255d6a7ebaa74f780121fdfdadc4b2a79692f7",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/review.md": "1fe128d2a88ff85b387cf6c6ba9a3f716138ba7476267401b550ee288fa84613",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/run-clippy-final.ps1": "9902e07460ef9c95b443e8388fb9198af69fc02ff1a8146443ac00bdf2726b81",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/run-live.ps1": "579234df5dbf0f7cf08eb49876b07146435b503f06cf6c70aedaa52423ece79c",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/run-supplemental-live.ps1": "c76125fbb90b8caee8b11d9d27222a2d771e65a289979ed86140a33a1b4dbe1b",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/run-workspace.ps1": "f781eca189640dd874b91e4e291feebaf94e5ccab68bf4210f212741d7471ce8",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/runtime.log": "168df31173bfc9a04cc05484bd8be57e00b65d1bf95f9e474703828042ec64fc",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/server.log": "0e620b26638e5a8bd3cf8e238325aef81bd28b67215a272f5210ae297efcdfae",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/start-runtime.sh": "94cc16aa536ebbc5eb71af4aa2acc388c3cbf46cb4beeed7b97256f136ce82df",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/undo-schema.sql": "8dcd994e28d31d494b0d3f90663c74d788fdb7250ef6ce0b8267b66170e91ce9",
+    "docs/phase-2/evidence/mysql-undo-current-constraints/verify.py": "bae57052018c40b1b32bce1b6024ef9f8805f671a0ed8ed6a811d186f8f1c751",
+    "docs/phase-2/mysql-undo-rollback-contract.md": "47fe2bc623241d0b22cf16cf726185c46ebadbc2644b1932ed99966289bf9129"
+  }
+}

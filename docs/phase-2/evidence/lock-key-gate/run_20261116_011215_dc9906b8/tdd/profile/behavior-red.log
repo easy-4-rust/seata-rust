@@ -1,0 +1,19 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.47s
+     Running tests\global_lock_keys.rs (D:/cargo-target/seata-rust-production\debug\deps\global_lock_keys-c66946167ab58dcc.exe)
+
+running 1 test
+
+thread 'one_transaction_cannot_mix_jdbc_profiles_even_when_the_current_key_bytes_match' (77048) panicked at crates\seata_at\tests\global_lock_keys.rs:156:5:
+assertion failed: context.append_undo(&log, MySqlJdbcProfile::Connector8Default).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test one_transaction_cannot_mix_jdbc_profiles_even_when_the_current_key_bytes_match ... FAILED
+
+failures:
+
+failures:
+    one_transaction_cannot_mix_jdbc_profiles_even_when_the_current_key_bytes_match
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test global_lock_keys`

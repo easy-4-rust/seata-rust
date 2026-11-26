@@ -1,0 +1,68 @@
+
+running 11 tests
+test fastjson_branch_envelope_keeps_null_and_empty_logs_distinct ... ok
+test fastjson_preflight_authorizes_table_lookup_before_physical_binding ... ok
+test fastjson_preflight_rejects_unbound_identity_and_unqueryable_tables ... ok
+test fastjson_rejects_malformed_or_unbound_native_values_before_returning_logs ... ok
+test fastjson_source_test_decode_default_content ... SEATA_FASTJSON_DEFAULT	{}	true	true	0	true
+ok
+test fastjson_source_test_write_class_name ... SEATA_FASTJSON_WRITE_CLASS	true	true	true	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"PRIMARY_KEY","name":"id","type":-5,"value":0L},{"keyType":"NULL","name":"money","type":3,"value":1.}]}],"tableName":"t1"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"table_name"}],"xid":"xiddddddddddd"}
+ok
+test fastjson_string_escapes_match_original_writer ... SEATA_FASTJSON_ESCAPE	"\u0000\u0001\b\t\n\u000B\f\r\u000E\u001F \"/\\~\u007F\u0080\u009F \u2028\u2029蟹"
+SEATA_FASTJSON_LONG_OVERFLOW	java.math.BigInteger
+ok
+test original_fastjson_restores_complete_ordered_insert_update_delete ... SEATA_FASTJSON_NATIVE	LOG	INSERT	undo_fixture
+SEATA_FASTJSON_NATIVE	IMAGE	0
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	696e736572742de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	LOG	UPDATE	undo_fixture
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	696e736572742de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	7570646174652de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	LOG	DELETE	undo_fixture
+SEATA_FASTJSON_NATIVE	IMAGE	1
+SEATA_FASTJSON_NATIVE	FIELD	id	-5	PRIMARY_KEY	3
+SEATA_FASTJSON_NATIVE	FIELD	small	4	NULL	-7
+SEATA_FASTJSON_NATIVE	FIELD	wide	-5	NULL	-9223372036854775808
+SEATA_FASTJSON_NATIVE	FIELD	unsigned	-5	NULL	18446744073709551615
+SEATA_FASTJSON_NATIVE	FIELD	decimal	3	NULL	-0.0000001200
+SEATA_FASTJSON_NATIVE	FIELD	whole	3	NULL	42
+SEATA_FASTJSON_NATIVE	FIELD	text	12	NULL	7570646174652de89e83e89fb9
+SEATA_FASTJSON_NATIVE	FIELD	bytes	-3	NULL	00ff7f
+SEATA_FASTJSON_NATIVE	FIELD	nullable	12	NULL	null
+SEATA_FASTJSON_NATIVE	IMAGE	0
+ok
+test serial_array_source::fastjson_source_test_direct_serial_array_serialization ... SEATA_FASTJSON_ARRAY_DIRECT	-5	int8	[1, 2, 3, 4, 5]	{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1,2,3,4,5]}
+ok
+test serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array ... SEATA_FASTJSON_ARRAY_EMBEDDED	true	-5	int8	[1, 2, 3, 4, 5]	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"NULL","name":"dept_ids","type":2003,"value":{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1L,2L,3L,4L,5L]}}]}],"tableName":"test_table"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"test_table"}],"xid":"test_xid"}
+ok
+test serial_array_source::fastjson_source_test_serialize_and_deserialize_serial_array_with_nulls ... SEATA_FASTJSON_ARRAY_NULLS	true	3	[1, null, 3]	{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":123456,"sqlUndoLogs":[{"afterImage":{"rows":[{"fields":[{"keyType":"NULL","name":"nullable_array","type":2003,"value":{"@type":"org.apache.seata.rm.datasource.sql.serial.SerialArray","baseType":-5,"baseTypeName":"int8","elements":[1L,null,3L]}}]}],"tableName":"test_table"},"beforeImage":{"rows":[]},"sqlType":"INSERT","tableName":"test_table"}],"xid":"test_xid"}
+ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

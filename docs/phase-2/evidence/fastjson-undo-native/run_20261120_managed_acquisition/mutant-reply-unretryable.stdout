@@ -1,0 +1,22 @@
+
+running 1 test
+test data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending ... FAILED
+
+failures:
+
+---- data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending stdout ----
+
+thread 'data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending' (50612) panicked at crates\seata_db_mysql\src\data_source_manager_rollback_sqlx_tests.rs:171:13:
+assertion failed: matches!(response.body, Some(Message::BranchRollbackResponse(value)) if
+    value.xid.as_deref() == Some(identity.xid()) && value.branch_id ==
+    identity.branch_id() && value.response.result_code == ResultCode::Failed
+    && value.branch_status == BranchStatus::PhaseTwoRollbackFailedRetryable &&
+    value.branch_status.to_java_v1() == 9)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 38 filtered out; finished in 0.15s
+

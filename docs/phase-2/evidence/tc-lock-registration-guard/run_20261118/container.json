@@ -1,0 +1,31 @@
+{
+  "owner": "d3bda771b1e1488a9c18ced8d4567267",
+  "name": "seata-lock-registration-guard-d3bda771b1e1",
+  "database": "undo_d3bda771b1e1",
+  "image": "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+  "scratch": "D:\\codex-builds\\seata_lock_registration_guard_3jxotsy3",
+  "id": "bdd8fb55a88e2a8f7c6d4747afc347a28833c9289eec247e893efe7414010dde",
+  "argv": [
+    "docker",
+    "run",
+    "-d",
+    "--pull=never",
+    "--name",
+    "seata-lock-registration-guard-d3bda771b1e1",
+    "--label",
+    "seata.fixture.owner=d3bda771b1e1488a9c18ced8d4567267",
+    "-p",
+    "127.0.0.1::3306",
+    "--mount",
+    "type=bind,source=D:\\codex-builds\\seata_lock_registration_guard_3jxotsy3\\data,target=/var/lib/mysql",
+    "-e",
+    "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+    "-e",
+    "MYSQL_ROOT_HOST=%",
+    "-e",
+    "MYSQL_DATABASE=undo_d3bda771b1e1",
+    "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+    "--innodb-flush-log-at-trx-commit=1",
+    "--performance-schema=ON"
+  ]
+}

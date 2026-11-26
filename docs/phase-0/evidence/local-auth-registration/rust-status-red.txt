@@ -1,0 +1,22 @@
+   Compiling seata-java-tc-it v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\java-tc-integration\rust-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.94s
+     Running unittests src\main.rs (D:/cargo-target/seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test auth_probe::tests::asynchronous_end_is_observed_until_finished_with_only_status_queries ... FAILED
+
+failures:
+
+---- auth_probe::tests::asynchronous_end_is_observed_until_finished_with_only_status_queries stdout ----
+
+thread 'auth_probe::tests::asynchronous_end_is_observed_until_finished_with_only_status_queries' (76672) panicked at src\auth_probe.rs:318:68:
+called `Result::unwrap()` on an `Err` value: Custom { kind: InvalidData, error: "authenticated target not finished" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    auth_probe::tests::asynchronous_end_is_observed_until_finished_with_only_status_queries
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 102 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`

@@ -1,0 +1,62 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+warning: missing documentation for the crate
+   --> crates\seata_at\tests\mysql_sql_recognition.rs:1:1
+    |
+  1 | / use seata_at::{SqlError, SqlRecognizerFactory, SqlType};
+  2 | |
+  3 | | #[test]
+  4 | | fn insert_retains_table_columns_rows_original_sql_and_real_parameters() {
+...   |
+144 | |     assert!(matches!(SqlRecognizerFactory::recognize(&sql), Err(SqlError::Budget { limit: "SQL operators" })));
+145 | | }
+    | |_^
+    |
+    = note: requested on the command line with `-W missing-docs`
+
+warning: `seata-at` (test "mysql_sql_recognition") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s
+     Running tests\mysql_sql_recognition.rs (D:/cargo-target/seata-rust-production\debug\deps\mysql_sql_recognition-02986bf229d8be6e.exe)
+
+running 13 tests
+test insert_retains_table_columns_rows_original_sql_and_real_parameters ... ok
+test raw_budget_is_enforced_before_parsing_and_errors_redact_sql_values ... ok
+test conditional_comments_hints_and_mysql_mode_ambiguous_text_are_rejected ... ok
+test exact_identifiers_are_validated_without_case_folding_or_sql_injection ... ok
+test duplicate_columns_and_ragged_values_are_rejected ... ok
+test public_debug_does_not_disclose_literal_sql_or_predicate_values ... ok
+test update_separates_assignment_parameters_from_where_image_parameters ... ok
+test delete_supports_bounded_predicates_and_absent_where_without_inventing_one ... ok
+test in_values_cannot_silently_expand_the_declared_constant_or_bound_value_matrix ... FAILED
+test ignored_non_mysql_from_keyword_cannot_survive_as_an_accepted_original_sql ... FAILED
+test rejects_entire_unsupported_statement_before_exposing_an_executable_plan ... ok
+test flat_operator_budget_is_checked_before_constructing_a_deep_ast ... FAILED
+test deep_or_over_budget_expressions_are_rejected_without_stack_failure ... ok
+
+failures:
+
+---- in_values_cannot_silently_expand_the_declared_constant_or_bound_value_matrix stdout ----
+
+thread 'in_values_cannot_silently_expand_the_declared_constant_or_bound_value_matrix' (15096) panicked at crates\seata_at\tests\mysql_sql_recognition.rs:131:5:
+assertion failed: SqlRecognizerFactory::recognize("DELETE FROM accounts WHERE id IN (balance)").is_err()
+
+---- ignored_non_mysql_from_keyword_cannot_survive_as_an_accepted_original_sql stdout ----
+
+thread 'ignored_non_mysql_from_keyword_cannot_survive_as_an_accepted_original_sql' (78404) panicked at crates\seata_at\tests\mysql_sql_recognition.rs:137:9:
+accepted UPDATE accounts SET balance=1 FROM
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- flat_operator_budget_is_checked_before_constructing_a_deep_ast stdout ----
+
+thread 'flat_operator_budget_is_checked_before_constructing_a_deep_ast' (80076) panicked at crates\seata_at\tests\mysql_sql_recognition.rs:144:5:
+assertion failed: matches!(SqlRecognizerFactory::recognize(&sql),
+    Err(SqlError::Budget { limit: "SQL operators" }))
+
+
+failures:
+    flat_operator_budget_is_checked_before_constructing_a_deep_ast
+    ignored_non_mysql_from_keyword_cannot_survive_as_an_accepted_original_sql
+    in_values_cannot_silently_expand_the_declared_constant_or_bound_value_matrix
+
+test result: FAILED. 10 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-at --test mysql_sql_recognition`

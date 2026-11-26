@@ -1,0 +1,18 @@
+
+running 1 test
+test original_java_tc_changed_commit_timeout_recycles_both_pool_slots ... FAILED
+
+failures:
+
+---- original_java_tc_changed_commit_timeout_recycles_both_pool_slots stdout ----
+
+thread 'original_java_tc_changed_commit_timeout_recycles_both_pool_slots' (46708) panicked at crates\seata_db_mysql\tests\live_commit_check_java.rs:556:64:
+held original changed COMMIT OK must leave the business result unknown: RegisteredBranch { identity: BranchIdentity { xid_bytes: 36, branch_id: 4045081156678004739, resource: ResourceKey { branch_type: At, resource_id_bytes: 80 }, application_data_bytes: None }, lock_key_bytes: Some(11), result_code: Success, .. }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_java_tc_changed_commit_timeout_recycles_both_pool_slots
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 39 filtered out; finished in 1.01s
+

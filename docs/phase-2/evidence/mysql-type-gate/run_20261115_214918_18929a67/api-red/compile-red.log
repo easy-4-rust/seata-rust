@@ -1,0 +1,94 @@
+   Compiling seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+error[E0432]: unresolved import `seata_datasource::MySqlType`
+ --> crates\seata_datasource\tests\mysql_type_identity.rs:3:76
+  |
+3 | use seata_datasource::{CharacterSet, ColumnDomain, ColumnMeta, ColumnType, MySqlType};
+  |                                                                            ^^^^^^^^^ no `MySqlType` in the root
+
+error[E0599]: no method named `mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:11:27
+   |
+11 |     assert_eq!(integer(8).mysql_type(),None);
+   |                           ^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:17:34
+   |
+17 |         let column=integer(bits).with_mysql_type(kind).unwrap();
+   |                                  ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:19:51
+   |
+19 |         assert!(integer(if bits==8 {16} else {8}).with_mysql_type(kind).is_err());
+   |                                                   ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:21:28
+   |
+21 |     let boolean=integer(8).with_mysql_type(MySqlType::TinyInt{display_width_one:true}).unwrap();
+   |                            ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:22:28
+   |
+22 |     let numeric=integer(8).with_mysql_type(MySqlType::TinyInt{display_width_one:false}).unwrap();
+   |                            ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:27:27
+   |
+27 |     let column=integer(8).with_mysql_type(MySqlType::TinyInt{display_width_one:false}).unwrap();
+   |                           ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:33:25
+   |
+33 |     assert!(unqualified.with_mysql_type(MySqlType::Int).is_err());
+   |                         ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:34:25
+   |
+34 |     assert!(integer(32).with_mysql_type(MySqlType::VarChar).is_err());
+   |                         ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:41:33
+   |
+41 |         assert_eq!(text.clone().with_mysql_type(kind).unwrap().mysql_type(),Some(kind));
+   |                                 ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:43:18
+   |
+43 |     assert!(text.with_mysql_type(MySqlType::VarChar).is_err());
+   |                  ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:46:29
+   |
+46 |     assert!(varchar.clone().with_mysql_type(MySqlType::VarChar).is_ok());
+   |                             ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:47:21
+   |
+47 |     assert!(varchar.with_mysql_type(MySqlType::Char).is_err());
+   |                     ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:54:35
+   |
+54 |         assert_eq!(column.clone().with_mysql_type(kind).unwrap().mysql_type(),Some(kind));
+   |                                   ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+error[E0599]: no method named `with_mysql_type` found for struct `ColumnMeta` in the current scope
+  --> crates\seata_datasource\tests\mysql_type_identity.rs:56:20
+   |
+56 |     assert!(column.with_mysql_type(MySqlType::Binary).is_err());
+   |                    ^^^^^^^^^^^^^^^ method not found in `ColumnMeta`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-datasource` (test "mysql_type_identity") due to 15 previous errors

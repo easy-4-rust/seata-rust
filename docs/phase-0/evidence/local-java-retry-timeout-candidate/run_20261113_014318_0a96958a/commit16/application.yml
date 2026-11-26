@@ -1,0 +1,27 @@
+server:
+  port: 28091
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/jrf_20261113_014318_0a96958a/commit16/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28091
+    enable-check-auth: false
+    rollback-retry-timeout-unlock-enable: false
+    rollback-failed-unlock-enable: false
+  store:
+    mode: file
+    session:
+      mode: file
+    lock:
+      mode: file
+    file:
+      dir: D:/codex-builds/jrf_20261113_014318_0a96958a/commit16/store
+      flush-disk-mode: sync

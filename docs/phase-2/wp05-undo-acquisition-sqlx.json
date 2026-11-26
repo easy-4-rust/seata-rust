@@ -1,0 +1,93 @@
+{
+  "status": "UNDO_ACQUISITION_DISTINCT_DEADLINES_AND_AUTH_DIAGNOSTICS_VERIFIED",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-rollback-failure.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_acquisition",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_original_cases_reexecuted": 15,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.UndoLogManagerBehaviorTest]/[method:connectionAcquisitionFailureIsRetriable()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.UndoLogManagerBehaviorTest",
+      "status": "PARTIAL",
+      "rust_tests": [
+        "data_source_proxy::rollback_sqlx_tests::undo_acquisition_authentication_rejection_keeps_original_identity_and_diagnostics",
+        "data_source_proxy::rollback_sqlx_tests::undo_acquisition_pool_deadline_is_reported_before_begin",
+        "data_source_proxy::rollback_sqlx_tests::undo_acquisition_obeys_shorter_operation_deadline"
+      ],
+      "covered": [
+        "Original XID xid and branch 42",
+        "Connection acquisition failure before any SQL",
+        "Original server number and state preserved"
+      ],
+      "remaining": [
+        "Java exception object identity",
+        "Explicit Java retriable code and TC callback behavior"
+      ]
+    }
+  ],
+  "verified": [
+    "MySQL authentication rejection 1045/28000 retains original diagnostics and sends no SQL",
+    "Pool deadline identifies acquisition; earlier outer deadline identifies the whole rollback",
+    "Borrowed sole connection is not interrupted and no second physical connection is opened"
+  ],
+  "compatibility": "PoolTimedOut in standalone Undo rollback now becomes Deadline with acquisition stage rather than an uncategorized Driver error",
+  "independent_review": "Verified SQLx ownership and phase separation; added reverse deadline test after review",
+  "rust": {
+    "1.99": {
+      "ordinary": 627,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "rollback_sqlx_tests": 7,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 627,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "rollback_sqlx_tests": 7,
+      "strict_clippy": true
+    }
+  },
+  "mutation_controls": 2,
+  "global_rust_source_MATCH": 152,
+  "global_rust_methods_match": 131,
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/src/data_source_proxy.rs": "b0bf179240c611ee2e1d262ab982dfdd2cef5d049fc48365fad0882a98f2ba9d",
+    "crates/seata_db_mysql/src/data_source_proxy_rollback_sqlx_tests.rs": "fec4c3158503cdd5cc6c21eafa3d42b378be48b01476a43aa026989f4146dcc2",
+    "crates/seata_db_mysql/src/db_error.rs": "b61e298554f09eabfc49ecdae7e8e216bb37c8fbf8d50ef308b8eadbfe42bf8d",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "0c29d139a33391908bfebd1e6c84e869dc12f40f66f9ec327bbb184d5252563a",
+    "crates/seata_db_mysql/src/undo_rollback_attempt.rs": "6eef00ae2f6ea36cb09c8bc1dac696cb19f537eea5c51aa347ee467d8cb38da7",
+    "crates/seata_db_mysql/src/undo_rollback_error.rs": "f29a58d6236d8da567d6aec2db285195c2a860f30d360e6a460ba4b512047c2b"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "371da92c4f519fd045a6b96c7919a006a1b5ffdab9caa9d3aaf309000c5969f4",
+    "1.85-doc.log": "26fb488ae28f0ac7ab5a823344035160f80f047588baf8c04f99e87c021eb693",
+    "1.85-targeted.log": "93f2c4dd2935a709bb8401a42101e6970cffa2ea8c327c90334b9ac38499987d",
+    "1.85-tests.log": "e04d589a96460cd9b22548c2389eca8eb2eed4fd03c521955504c3260e77d592",
+    "1.99-clippy.log": "e220ed11f00beb6b217f7ce3f2f6d534e52e8dc46fa1b80279355235ec86e244",
+    "1.99-doc.log": "f0a323808400299544e4bf523f422a84303db9addc7ba8d5ec61174a0fb084ae",
+    "1.99-targeted.log": "f0da678d2926f0e680cee0c883e069f617abf58d347a0518d20e774b681e3ec1",
+    "1.99-tests.log": "9de8b55c5ff8042017756fb9ac428f035d4a2d3311d7b3361067de1f8ef77590",
+    "commands.json": "48b848879407993ed04b976a102a56a62f35e26cd80b77c416cc87642de1526d",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-discard-pool-deadline.stderr": "881076a90c8968b3e3e04eb7d9525f6f4c3614ffa0497ac9a0fe5cb46b8387cb",
+    "mutant-discard-pool-deadline.stdout": "8892099d718a247873ce4c565e015f2a2098c6d51ba29450bca64fef6f8ee5f4",
+    "mutant-extend-operation-timeout.stderr": "f98aad0196daa4f180a49fac513574952f4b11adf17d5fbd37ca7f2f6281bb8d",
+    "mutant-extend-operation-timeout.stdout": "257d4bb539b8b8f9e38637ca7bee4a9de3e668dd2238de7c5597d9bf29264b7e",
+    "mysql-environment.log": "21b265507da1c962fac8abe46058a75e3e038590d1c0df306f11d3065c7af21a",
+    "original-inputs.json": "d6f5ed1f5259a3e5a8469f86e37ac53a74e2c534fd81e259109f9108631b88ca",
+    "original-junit.jsonl": "291f8b44be3c382548b2fda404b12b7554da457d5e9084c62cce52abb1836e29",
+    "original-junit.log": "5845ea8eb4df6e6b322726a24925826b5415289ea1a9d2f3edfd8c6117a30040",
+    "pre-fix-red.log": "660e63b7dc4a317c04c73af7fd526a31dee6d2301c70f0d3e408ec3d05250cc0",
+    "runtime-mutation-controls.json": "c89edd906463c140a74ec9e426567c3a4f4d4b8e3ba3a265c2d0f7e65c83f2a2",
+    "UndoLogManagerBehaviorTest.java": "d37e49333647e7f444fc4fafa26a235dd575d84b1ae4acc7c07654e595117eb4"
+  }
+}

@@ -1,0 +1,23 @@
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+error[E0432]: unresolved import `seata_rm::ResourceManager`
+ --> crates\seata_rm\tests\support\rm_peer.rs:6:122
+  |
+6 | ...anchStore,JournalOptions,ResourceCatalog,ResourceManager,RmError};
+  |                                             ^^^^^^^^^^^^^^^ no `ResourceManager` in the root
+  |
+help: a similar name exists in the module
+  |
+6 - use seata_rm::{BranchIdentity,BranchPhase,BranchResolution,BranchResource,FileBranchStore,JournalOptions,ResourceCatalog,ResourceManager,RmError};
+6 + use seata_rm::{BranchIdentity,BranchPhase,BranchResolution,BranchResource,FileBranchStore,JournalOptions,ResourceCatalog,ResourceCatalog,RmError};
+  |
+
+error[E0432]: unresolved import `seata_rm::RmCallError`
+ --> crates\seata_rm\tests\native_calls.rs:8:5
+  |
+8 | use seata_rm::RmCallError;
+  |     ^^^^^^^^^^-----------
+  |               |
+  |               no `RmCallError` in the root
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-rm` (test "native_calls") due to 2 previous errors

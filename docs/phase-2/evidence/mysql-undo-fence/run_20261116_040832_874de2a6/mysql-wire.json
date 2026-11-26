@@ -1,0 +1,166 @@
+{
+  "mode": "block_commit",
+  "claimed": false,
+  "events": [
+    {
+      "connection": 1,
+      "kind": "greeting",
+      "qpc_ns": 649655572955200,
+      "mysql_connection_id": 11
+    },
+    {
+      "connection": 1,
+      "kind": "query",
+      "qpc_ns": 649655580319300,
+      "sql": "SET sql_mode=(SELECT CONCAT(@@sql_mode, ',PIPES_AS_CONCAT,NO_ENGINE_SUBSTITUTION')),time_zone='+00:00',NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    },
+    {
+      "connection": 1,
+      "kind": "prepare",
+      "qpc_ns": 649655581498400,
+      "sql": "SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES', transaction_isolation='REPEATABLE-READ', innodb_lock_wait_timeout=2, lock_wait_timeout=2, max_execution_time=2000"
+    },
+    {
+      "connection": 1,
+      "kind": "execute",
+      "qpc_ns": 649655582699500,
+      "statement": 1,
+      "sql": "SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES', transaction_isolation='REPEATABLE-READ', innodb_lock_wait_timeout=2, lock_wait_timeout=2, max_execution_time=2000"
+    },
+    {
+      "connection": 1,
+      "kind": "prepare",
+      "qpc_ns": 649655584081700,
+      "sql": "SELECT VERSION() AS version, DATABASE() AS db, @@transaction_isolation AS isolation_level, @@sql_mode AS sql_mode, @@character_set_connection AS charset"
+    },
+    {
+      "connection": 1,
+      "kind": "execute",
+      "qpc_ns": 649655584953700,
+      "statement": 2,
+      "sql": "SELECT VERSION() AS version, DATABASE() AS db, @@transaction_isolation AS isolation_level, @@sql_mode AS sql_mode, @@character_set_connection AS charset"
+    },
+    {
+      "connection": 2,
+      "kind": "greeting",
+      "qpc_ns": 649655588663100,
+      "mysql_connection_id": 12
+    },
+    {
+      "connection": 2,
+      "kind": "query",
+      "qpc_ns": 649655594394400,
+      "sql": "SET sql_mode=(SELECT CONCAT(@@sql_mode, ',PIPES_AS_CONCAT,NO_ENGINE_SUBSTITUTION')),time_zone='+00:00',NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655595253900,
+      "sql": "SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES', transaction_isolation='REPEATABLE-READ', innodb_lock_wait_timeout=2, lock_wait_timeout=2, max_execution_time=2000"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655595868300,
+      "statement": 1,
+      "sql": "SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES', transaction_isolation='REPEATABLE-READ', innodb_lock_wait_timeout=2, lock_wait_timeout=2, max_execution_time=2000"
+    },
+    {
+      "connection": 2,
+      "kind": "query",
+      "qpc_ns": 649655596440500,
+      "sql": "BEGIN"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655596991000,
+      "sql": "SHOW GRANTS"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655597685900,
+      "statement": 2,
+      "sql": "SHOW GRANTS"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655598445300,
+      "sql": "SELECT branch_id FROM undo_log WHERE 1=0 FOR UPDATE"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655599201800,
+      "statement": 3,
+      "sql": "SELECT branch_id FROM undo_log WHERE 1=0 FOR UPDATE"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655599843000,
+      "sql": "SELECT CAST(ENGINE AS CHAR CHARACTER SET utf8mb4) AS engine,CAST(TABLE_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME='undo_log'"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655602051500,
+      "statement": 4,
+      "sql": "SELECT CAST(ENGINE AS CHAR CHARACTER SET utf8mb4) AS engine,CAST(TABLE_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME='undo_log'"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655602966000,
+      "sql": "SELECT (SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA=? AND EVENT_OBJECT_TABLE='undo_log')+(SELECT COUNT(*) FROM information_schema.INNODB_FOREIGN WHERE FOR_NAME=CONCAT(?,'/undo_log') OR REF_NAME=CONCAT(?,'/undo_log'))"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655604519700,
+      "statement": 5,
+      "sql": "SELECT (SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA=? AND EVENT_OBJECT_TABLE='undo_log')+(SELECT COUNT(*) FROM information_schema.INNODB_FOREIGN WHERE FOR_NAME=CONCAT(?,'/undo_log') OR REF_NAME=CONCAT(?,'/undo_log'))"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655605790200,
+      "sql": "SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS name,CAST(DATA_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind,CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4) AS full_type,CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4) AS nullable,CAST(EXTRA AS CHAR CHARACTER SET utf8mb4) AS extra,CAST(CHARACTER_SET_NAME AS CHAR CHARACTER SET utf8mb4) AS charset,CAST(CHARACTER_MAXIMUM_LENGTH AS SIGNED) AS chars,CAST(DATETIME_PRECISION AS SIGNED) AS precision_value FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='undo_log' ORDER BY ORDINAL_POSITION LIMIT 8"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655608227400,
+      "statement": 6,
+      "sql": "SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS name,CAST(DATA_TYPE AS CHAR CHARACTER SET utf8mb4) AS kind,CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4) AS full_type,CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4) AS nullable,CAST(EXTRA AS CHAR CHARACTER SET utf8mb4) AS extra,CAST(CHARACTER_SET_NAME AS CHAR CHARACTER SET utf8mb4) AS charset,CAST(CHARACTER_MAXIMUM_LENGTH AS SIGNED) AS chars,CAST(DATETIME_PRECISION AS SIGNED) AS precision_value FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='undo_log' ORDER BY ORDINAL_POSITION LIMIT 8"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655609939100,
+      "sql": "SELECT COUNT(*) FROM (SELECT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME='undo_log' AND NON_UNIQUE=0 GROUP BY INDEX_NAME HAVING COUNT(*)=2 AND GROUP_CONCAT(COLUMN_NAME ORDER BY SEQ_IN_INDEX)='xid,branch_id' AND COUNT(SUB_PART)=0 AND SUM(IS_VISIBLE='YES')=2) AS original_identity"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655611414400,
+      "statement": 7,
+      "sql": "SELECT COUNT(*) FROM (SELECT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME='undo_log' AND NON_UNIQUE=0 GROUP BY INDEX_NAME HAVING COUNT(*)=2 AND GROUP_CONCAT(COLUMN_NAME ORDER BY SEQ_IN_INDEX)='xid,branch_id' AND COUNT(SUB_PART)=0 AND SUM(IS_VISIBLE='YES')=2) AS original_identity"
+    },
+    {
+      "connection": 2,
+      "kind": "prepare",
+      "qpc_ns": 649655612669900,
+      "sql": "SELECT @@GLOBAL.innodb_flush_log_at_trx_commit"
+    },
+    {
+      "connection": 2,
+      "kind": "execute",
+      "qpc_ns": 649655613637200,
+      "statement": 8,
+      "sql": "SELECT @@GLOBAL.innodb_flush_log_at_trx_commit"
+    }
+  ]
+}

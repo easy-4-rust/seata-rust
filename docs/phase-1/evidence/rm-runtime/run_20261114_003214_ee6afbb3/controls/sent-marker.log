@@ -1,0 +1,22 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_runtime_20261114_003214_ee6afbb3\sent-marker\crates\seata_rm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.07s
+     Running tests\native_calls.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\native_calls-f0efa2a6a5e8bf87.exe)
+
+running 1 test
+test wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection ... FAILED
+
+failures:
+
+---- wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection stdout ----
+
+thread 'wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection' (67236) panicked at crates\seata_rm\tests\native_calls.rs:217:5:
+assertion failed: matches!(error, RmCallError::ProtocolFailure { may_have_effect: true, .. })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-rm --test native_calls`

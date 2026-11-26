@@ -1,0 +1,43 @@
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchCommit
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchRollback
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/requestKindWithReplyBody
+ERROR: invalid Java V1 response: Java V1 reply inconsistent; transaction outcome unknown: response envelope/body kind differs
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/onewayKindWithReplyBody
+ERROR: invalid Java V1 response: Java V1 reply inconsistent; transaction outcome unknown: response envelope/body kind differs
+=== RUN   TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/replyKindWithRequestBody
+ERROR: invalid Java V1 response: Java V1 reply inconsistent; transaction outcome unknown: response envelope/body kind differs
+--- PASS: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType (0.00s)
+    --- PASS: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchCommit (0.00s)
+    --- PASS: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/unregisteredBranchRollback (0.00s)
+    --- PASS: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/requestKindWithReplyBody (0.00s)
+    --- PASS: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/onewayKindWithReplyBody (0.00s)
+    --- PASS: TestJavaV1SDKInconsistentEnvelopeAndUnregisteredReplyType/replyKindWithRequestBody (0.00s)
+=== RUN   TestJavaV1SDKConcurrentMergeRepliesCannotMixChildren
+--- PASS: TestJavaV1SDKConcurrentMergeRepliesCannotMixChildren (0.04s)
+=== RUN   TestJavaV1SDKDeliversWholeMergedReplyToOuterFuture
+--- PASS: TestJavaV1SDKDeliversWholeMergedReplyToOuterFuture (0.00s)
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/shortResults
+ERROR: response processor failed: Java V1 reply inconsistent; transaction outcome unknown: Java V1 reply inconsistent; transaction outcome unknown: merged result count/type differs
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/missingIds
+ERROR: response processor failed: Java V1 reply inconsistent; transaction outcome unknown: merged request ID count differs
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/extraResults
+ERROR: response processor failed: Java V1 reply inconsistent; transaction outcome unknown: Java V1 reply inconsistent; transaction outcome unknown: merged result count/type differs
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/duplicateIds
+ERROR: response processor failed: Java V1 reply inconsistent; transaction outcome unknown: duplicate merged request ID
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/wrongResultType
+ERROR: response processor failed: Java V1 reply inconsistent; transaction outcome unknown: Java V1 reply inconsistent; transaction outcome unknown: merged result child1 differs
+=== RUN   TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/nilResult
+ERROR: response processor failed: Java V1 reply inconsistent; transaction outcome unknown: Java V1 reply inconsistent; transaction outcome unknown: merged result child1 differs
+--- PASS: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion (0.00s)
+    --- PASS: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/shortResults (0.00s)
+    --- PASS: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/missingIds (0.00s)
+    --- PASS: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/extraResults (0.00s)
+    --- PASS: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/duplicateIds (0.00s)
+    --- PASS: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/wrongResultType (0.00s)
+    --- PASS: TestJavaV1SDKRejectsInconsistentLegacyMergeBeforeCompletion/nilResult (0.00s)
+=== RUN   TestJavaV1SDKLegacyMergeRetainsIdsAndDropsDuplicates
+--- PASS: TestJavaV1SDKLegacyMergeRetainsIdsAndDropsDuplicates (0.00s)
+PASS
+ok  	seata.apache.org/seata-go/v2/pkg/remoting/getty	1.608s

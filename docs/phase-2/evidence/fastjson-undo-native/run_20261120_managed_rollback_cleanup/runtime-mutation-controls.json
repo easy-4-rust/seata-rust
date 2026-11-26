@@ -1,0 +1,38 @@
+[
+  {
+    "label": "drop-only",
+    "target": "managed_sqlx_preserves_metadata_failure",
+    "cmd": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-db-mysql",
+      "--lib",
+      "managed_sqlx_preserves_metadata_failure"
+    ],
+    "exit": 101,
+    "mutated_file": "crates/seata_db_mysql/src/data_source_manager.rs",
+    "original_sha256": "9dfd441597d1eac26bcc8e3e54be6db76df5b1687384657c3a38f87a2fb47dad",
+    "mutant_sha256": "eaf7920276c2ebd8adbb93ad7a31722b6e40a37d21e272b6f98c1e5277bc6680"
+  },
+  {
+    "label": "deadline-before-first-failure",
+    "target": "managed_sqlx_preserves_metadata_failure_after_rollback_timeout",
+    "cmd": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "seata-db-mysql",
+      "--lib",
+      "managed_sqlx_preserves_metadata_failure_after_rollback_timeout"
+    ],
+    "exit": 101,
+    "mutated_file": "crates/seata_db_mysql/src/data_source_manager.rs",
+    "original_sha256": "9dfd441597d1eac26bcc8e3e54be6db76df5b1687384657c3a38f87a2fb47dad",
+    "mutant_sha256": "e38927f889f7c12cf9386e629f4601a2821beb9605cb2dc878152f82ae059a82"
+  }
+]

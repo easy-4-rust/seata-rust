@@ -1,0 +1,37 @@
+
+running 7 tests
+test already_restored_and_equal_images_skip_dml_then_follow_original_missing_log_fence ... ok
+test jdbc_profile_or_original_document_identity_mismatch_never_changes_business ... 
+thread 'jdbc_profile_or_original_document_identity_mismatch_never_changes_business' (55300) panicked at crates\seata_db_mysql\tests\support\undo_rollback_fixture.rs:33:58:
+called `Result::unwrap()` on an `Err` value: Budget { limit: "1..1024 columns" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes ... 
+thread 'later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes' (33540) panicked at crates\seata_db_mysql\tests\support\undo_rollback_fixture.rs:33:58:
+called `Result::unwrap()` on an `Err` value: Budget { limit: "1..1024 columns" }
+FAILED
+test mixed_logs_run_in_reverse_and_consume_only_original_branch ... 
+thread 'mixed_logs_run_in_reverse_and_consume_only_original_branch' (74608) panicked at crates\seata_db_mysql\tests\support\undo_rollback_fixture.rs:33:58:
+called `Result::unwrap()` on an `Err` value: Budget { limit: "1..1024 columns" }
+FAILED
+test real_packet_chunks_are_validated_reassembled_and_deleted_with_their_original_root ... 
+thread 'real_packet_chunks_are_validated_reassembled_and_deleted_with_their_original_root' (85932) panicked at crates\seata_db_mysql\tests\support\undo_rollback_fixture.rs:33:58:
+called `Result::unwrap()` on an `Err` value: Budget { limit: "1..1024 columns" }
+FAILED
+test stored_insert_undo_restores_business_and_consumes_original_row_atomically ... ok
+test update_and_delete_restore_original_values_without_pk_cartesian_products ... 
+thread 'update_and_delete_restore_original_values_without_pk_cartesian_products' (32524) panicked at crates\seata_db_mysql\tests\support\undo_rollback_fixture.rs:33:58:
+called `Result::unwrap()` on an `Err` value: Unsupported { feature: "expression/function/subquery/variable" }
+FAILED
+
+failures:
+
+failures:
+    jdbc_profile_or_original_document_identity_mismatch_never_changes_business
+    later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes
+    mixed_logs_run_in_reverse_and_consume_only_original_branch
+    real_packet_chunks_are_validated_reassembled_and_deleted_with_their_original_root
+    update_and_delete_restore_original_values_without_pk_cartesian_products
+
+test result: FAILED. 2 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.36s
+

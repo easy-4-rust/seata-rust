@@ -1,0 +1,31 @@
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+error[E0432]: unresolved imports `seata_transport::ConnectionPool`, `seata_transport::ConnectionPoolConfig`, `seata_transport::ReconnectPolicy`
+ --> crates\seata_transport\tests\connection_pool.rs:8:33
+  |
+8 | use seata_transport::{CallError,ConnectionPool,ConnectionPoolConfig,ReconnectPolicy,TransportError};
+  |                                 ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ no `ReconnectPolicy` in the root
+  |                                 |              |
+  |                                 |              no `ConnectionPoolConfig` in the root
+  |                                 no `ConnectionPool` in the root
+  |
+help: a similar name exists in the module
+  |
+8 - use seata_transport::{CallError,ConnectionPool,ConnectionPoolConfig,ReconnectPolicy,TransportError};
+8 + use seata_transport::{CallError,ConnectionPool,ConnectionConfig,ReconnectPolicy,TransportError};
+  |
+
+error[E0599]: no variant, associated function, or constant named `PoolAcquireTimeout` found for enum `TransportError` in the current scope
+  --> crates\seata_transport\tests\connection_pool.rs:38:155
+   |
+38 | ...on:TransportError::PoolAcquireTimeout,..})));
+   |                       ^^^^^^^^^^^^^^^^^^ variant, associated function, or constant not found in `TransportError`
+
+error[E0599]: no variant, associated function, or constant named `PoolClosed` found for enum `TransportError` in the current scope
+  --> crates\seata_transport\tests\connection_pool.rs:60:129
+   |
+60 | ...reason:TransportError::PoolClosed,..})));server.await.unwrap();
+   |                           ^^^^^^^^^^ variant, associated function, or constant not found in `TransportError`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-transport` (test "connection_pool") due to 3 previous errors

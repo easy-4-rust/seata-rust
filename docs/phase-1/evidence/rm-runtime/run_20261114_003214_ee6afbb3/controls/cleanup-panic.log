@@ -1,0 +1,25 @@
+   Compiling seata-rm v0.1.0 (D:\codex-builds\formal_rm_runtime_20261114_003214_ee6afbb3\cleanup-panic\crates\seata_rm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.15s
+     Running tests\native_edge_cases.rs (D:/cargo-target/seata-rust-rm-negative\debug\deps\native_edge_cases-5c8e79e177787e10.exe)
+
+running 1 test
+test shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain ... FAILED
+
+failures:
+
+---- shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain stdout ----
+
+thread 'shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain' (74256) panicked at crates\seata_rm\tests\support\rm_peer.rs:31:9:
+fixture adapter cleanup panicked
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain' (74256) panicked at crates\seata_rm\tests\native_edge_cases.rs:167:5:
+resource cleanup panic was discarded as successful shutdown
+
+
+failures:
+    shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-rm --test native_edge_cases`

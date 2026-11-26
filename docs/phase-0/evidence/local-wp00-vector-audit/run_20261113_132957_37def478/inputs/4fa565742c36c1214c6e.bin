@@ -1,0 +1,81 @@
+/* Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0. */
+package org.apache.seata.serializer.seata;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HexFormat;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import org.apache.seata.core.protocol.AbstractMessage;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
+
+/** 直接执行现有独立断言并捕获原编码输出。对应 Java: SeataSerializer/ProtocolEncoderV1。 */
+public final class FrozenCorpusProbe {
+    private static Map<String, Object> row(Object... values) {
+        Map<String, Object> out = new LinkedHashMap<>();
+        for (int i = 0; i < values.length; i += 2) out.put((String) values[i], values[i + 1]);
+        return out;
+    }
+
+    /** 参数为 JSON 输出路径；执行 29 载荷/6 帧断言，失败时记录身份并返回退出码 1。 */
+    public static void main(String[] args) throws Exception {
+        List<Object> checks = new ArrayList<>();
+        List<Object> payloads = new ArrayList<>();
+        int failures = 0;
+        List<DynamicTest> cases = new PayloadGoldenCorpusTest().allGoPayloadsDecodeAndReencodeWithJavaSemantics();
+        for (DynamicTest test : cases) {
+            try {
+                test.getExecutable().execute();
+                checks.add(row("name", test.getDisplayName(), "passed", true));
+            } catch (Throwable error) {
+                failures++;
+                checks.add(row("name", test.getDisplayName(), "passed", false, "error", error.toString()));
+            }
+        }
+        Class<?> frameClass = Class.forName("org.apache.seata.core.rpc.netty.v1.ProtocolV1GoldenFrameTest");
+        var constructor = frameClass.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        Object frames = constructor.newInstance();
+        Set<String> expectedFrames = Set.of("decodesAndReencodesGoGoldenGlobalBeginRequestFrame",
+            "decodesAndReencodesGoGoldenGlobalBeginRequestWithHeadMapFrame", "decodesAndReencodesGoGoldenFailedGlobalBeginResponseFrame",
+            "decodesAndReencodesGoGoldenGlobalBeginResponseFrame", "decodesAndReencodesGoGoldenRegisterTMRequestFrame",
+            "decodesAndReencodesGoGoldenRegisterRMRequestFrame");
+        Set<String> actualFrames = new TreeSet<>();
+        for (Method method : frameClass.getDeclaredMethods()) {
+            if (!method.isAnnotationPresent(Test.class)) continue;
+            actualFrames.add(method.getName());
+            method.setAccessible(true);
+            try {
+                method.invoke(frames);
+                checks.add(row("name", method.getName(), "passed", true));
+            } catch (ReflectiveOperationException error) {
+                failures++;
+                checks.add(row("name", method.getName(), "passed", false, "error", error.getCause().toString()));
+            }
+        }
+        if (cases.size() != 29 || !actualFrames.equals(expectedFrames)) throw new IllegalStateException("Incomplete test identity set");
+        ObjectMapper json = new ObjectMapper();
+        JsonNode inputs = json.readTree(FrozenCorpusProbe.class.getResourceAsStream("/seata-rust-payload-vectors.json"));
+        SeataSerializer serializer = new SeataSerializer((byte) 1);
+        for (JsonNode input : inputs) {
+            AbstractMessage decoded = serializer.deserialize(HexFormat.of().parseHex(input.get("serialized_hex").asText()));
+            byte[] encoded = serializer.serialize(decoded);
+            payloads.add(row("name", input.get("name").asText(), "type_id", decoded.getTypeCode(),
+                "serialized_hex", HexFormat.of().formatHex(encoded), "body_hex", HexFormat.of().formatHex(Arrays.copyOfRange(encoded, 2, encoded.length)),
+                "fields", json.valueToTree(decoded)));
+        }
+        Files.write(Path.of(args[0]), json.writerWithDefaultPrettyPrinter().writeValueAsBytes(row(
+            "execution_kind", "direct_existing_assertion_bodies_without_junit_engine", "checks", checks, "payloads", payloads,
+            "passed", checks.size() - failures, "failed", failures)));
+        if (failures > 0) System.exit(1);
+    }
+}

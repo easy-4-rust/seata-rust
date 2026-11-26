@@ -1,0 +1,41 @@
+test_active_timeout (test_cluster.ClusterGuards.test_active_timeout) ... ok
+test_actual_raft_term_changed (test_cluster.ClusterGuards.test_actual_raft_term_changed) ... ok
+test_commit_lock_must_remain_available (test_cluster.ClusterGuards.test_commit_lock_must_remain_available) ... ok
+test_context_changed_across_replicas (test_cluster.ClusterGuards.test_context_changed_across_replicas) ... ok
+test_control (test_cluster.ClusterGuards.test_control) ... ERROR
+test_election_term_did_not_increase (test_cluster.ClusterGuards.test_election_term_did_not_increase) ... ok
+test_fake_election_same_peer (test_cluster.ClusterGuards.test_fake_election_same_peer) ... ok
+test_final_clean_control (test_cluster.ClusterGuards.test_final_clean_control) ... ok
+test_follower_claims_actual_leadership (test_cluster.ClusterGuards.test_follower_claims_actual_leadership) ... ok
+test_follower_peer_replaced (test_cluster.ClusterGuards.test_follower_peer_replaced) ... ok
+test_follower_term_changed (test_cluster.ClusterGuards.test_follower_term_changed) ... ok
+test_missing_reload (test_cluster.ClusterGuards.test_missing_reload) ... ok
+test_no_quorum (test_cluster.ClusterGuards.test_no_quorum) ... ok
+test_original_branch_replaced (test_cluster.ClusterGuards.test_original_branch_replaced) ... ok
+test_original_resource_replaced (test_cluster.ClusterGuards.test_original_resource_replaced) ... ok
+test_recorded_process_replaced (test_cluster.ClusterGuards.test_recorded_process_replaced) ... ok
+test_repeated_leader_changed (test_cluster.ClusterGuards.test_repeated_leader_changed) ... ok
+test_replica_behind (test_cluster.ClusterGuards.test_replica_behind) ... ok
+test_replica_wrong_leader (test_cluster.ClusterGuards.test_replica_wrong_leader) ... ok
+test_two_leaders (test_cluster.ClusterGuards.test_two_leaders) ... ok
+test_unexpected_record (test_cluster.ClusterGuards.test_unexpected_record) ... ok
+
+======================================================================
+ERROR: test_control (test_cluster.ClusterGuards.test_control)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-commit-timeout\test_cluster.py", line 18, in test_control
+    def test_control(self):self.check()
+                           ^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-commit-timeout\test_cluster.py", line 14, in check
+    def check(self,value=None,final=False):return verify_stage(value or self.good(),self.phase(),final)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\go-java-v1-raft-commit-timeout\cluster_checks.py", line 27, in verify_stage
+    if node['all_sessions']!=(0 if final else 1) or len(node['records'])!=(0 if final else 1) or node['lockable'] is not final:raise RuntimeError('Actual original session/lock state differs')
+                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Actual original session/lock state differs
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.002s
+
+FAILED (errors=1)

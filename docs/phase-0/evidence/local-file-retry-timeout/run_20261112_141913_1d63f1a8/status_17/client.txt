@@ -1,0 +1,5 @@
+PASS RegisterTM identified=true protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS RegisterRM identified=true resourceId=mysql://timeout-file protocol=V1 serverVersion=2.8.0-SNAPSHOT
+PASS live Java TC registration smoke: TM + RM
+FILE_QUERY xid=127.0.0.1:28091:900017 status=15 expected=15
+PASS FILE_QUERY xid=127.0.0.1:28091:900017 status=15 contenderXid=198.18.0.1:28091:4045076361394810881 lockable=true targetMutationCount=0

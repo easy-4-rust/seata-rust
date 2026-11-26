@@ -1,0 +1,51 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0599]: no method named `default_content` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:304:24
+    |
+304 |     let bytes = parser.default_content();
+    |                        ^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_branch` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:305:25
+    |
+305 |     let branch = parser.decode_branch(bytes).unwrap();
+    |                         ^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_branch` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:321:20
+    |
+321 |     assert!(parser.decode_branch(b"null").unwrap().is_none());
+    |                    ^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_branch` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:322:24
+    |
+322 |     let empty = parser.decode_branch(br#"{"sqlUndoLogs":[]}"#).unwrap().unwrap();
+    |                        ^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_branch` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:324:27
+    |
+324 |     let original = parser.decode_branch(FIXTURE).unwrap().unwrap();
+    |                           ^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_branch` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:328:20
+    |
+328 |     assert!(parser.decode_branch(br#"{"sqlUndoLogs":{}}"#).is_err());
+    |                    ^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_branch` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:329:20
+    |
+329 |     assert!(parser.decode_branch(br#"{"@type":"unexpected"}"#).is_err());
+    |                    ^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `default_content` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:330:46
+    |
+330 |     assert!(parser.decode_for_restore(parser.default_content(), XID, 42).is_err());
+    |                                              ^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-at` (test "fastjson_undo_native") due to 8 previous errors

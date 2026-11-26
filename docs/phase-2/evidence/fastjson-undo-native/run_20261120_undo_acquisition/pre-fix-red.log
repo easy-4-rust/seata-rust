@@ -1,0 +1,23 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.60s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 2 tests
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_authentication_rejection_keeps_original_identity_and_diagnostics ... ok
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_pool_deadline_is_reported_before_begin ... FAILED
+
+failures:
+
+---- data_source_proxy::rollback_sqlx_tests::undo_acquisition_pool_deadline_is_reported_before_begin stdout ----
+
+thread 'data_source_proxy::rollback_sqlx_tests::undo_acquisition_pool_deadline_is_reported_before_begin' (44540) panicked at crates\seata_db_mysql\src\data_source_proxy_rollback_sqlx_tests.rs:86:9:
+lost pool acquisition deadline: BeforeCommit { xid_bytes: 3, branch_id: 42, source: Driver { operation: "Undo rollback acquire", sql_state: None, code: None, io_source: None } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    data_source_proxy::rollback_sqlx_tests::undo_acquisition_pool_deadline_is_reported_before_begin
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 34 filtered out; finished in 0.11s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

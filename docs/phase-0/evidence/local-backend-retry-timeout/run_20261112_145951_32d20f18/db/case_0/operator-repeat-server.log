@@ -1,0 +1,23 @@
+15:02:05.541  INFO --- [HTTPHandlerThread_1_4_100] [roller.GlobalSessionController] [  changeGlobalStatus]  [] : manual operation to change the global session, xid: 127.0.0.1:28091:920000
+15:02:05.542 ERROR --- [HTTPHandlerThread_1_4_100] [netty.http.HttpDispatchHandler] [  executeFinalAction]  [] : Exception occurred while processing HTTP request: null
+==> 
+java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.executeFinalAction(HttpDispatchHandler.java:132)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:41)
+	at org.apache.seata.server.filter.XSSHttpRequestFilter.doFilter(XSSHttpRequestFilter.java:117)
+	at org.apache.seata.core.rpc.netty.http.filter.HttpRequestFilterChain.doFilter(HttpRequestFilterChain.java:37)
+	at org.apache.seata.core.rpc.netty.http.HttpDispatchHandler.lambda$channelRead0$1(HttpDispatchHandler.java:110)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.IllegalArgumentException: Global session is not exist, may be finished
+	at org.apache.seata.server.console.impl.AbstractService.checkGlobalSession(AbstractService.java:97)
+	at org.apache.seata.server.console.impl.AbstractGlobalService.changeGlobalStatus(AbstractGlobalService.java:145)
+	at org.apache.seata.server.console.controller.GlobalSessionController.changeGlobalStatus(GlobalSessionController.java:136)
+	... 13 common frames omitted
+ <==

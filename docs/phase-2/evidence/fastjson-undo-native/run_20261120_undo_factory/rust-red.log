@@ -1,0 +1,18 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved imports `seata_at::UndoLogParser`, `seata_at::UndoLogParserFactory`, `seata_at::UndoLogParserSelectionError`
+ --> crates\seata_at\tests\undo_log_parser_selection_source.rs:2:16
+  |
+2 | use seata_at::{UndoLogParser, UndoLogParserFactory, UndoLogParserSelectionError as Error};
+  |                ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ---------------------------^^^^^^^^^
+  |                |              |                     |
+  |                |              |                     no `UndoLogParserSelectionError` in the root
+  |                |              no `UndoLogParserFactory` in the root
+  |                no `UndoLogParser` in the root
+  |
+help: a similar name exists in the module
+  |
+2 | use seata_at::{ForyUndoLogParser, UndoLogParserFactory, UndoLogParserSelectionError as Error};
+  |                ++++
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "undo_log_parser_selection_source") due to 1 previous error

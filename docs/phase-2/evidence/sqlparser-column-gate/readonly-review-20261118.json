@@ -1,0 +1,33 @@
+{
+  "reviewer": "/root/sqlparser_values_review",
+  "mode": "READ_ONLY",
+  "date": "2026-11-18",
+  "confirmed_remaining_P1": 0,
+  "confirmed_remaining_P2": 0,
+  "confirmed_and_fixed_P2": [
+    "Debug calls user formatting while holding a metadata read lock",
+    "Whole-state snapshot loses tail changes made by Object.equals/hashCode/toString callbacks"
+  ],
+  "verified": [
+    "All483 gate members and441 parent members",
+    "All422 frozen inputs and219 original runtime inputs",
+    "Oracle source/class binding, actualJUnit76 and13 negative controls",
+    "Both toolchains406 ordinary/85 harness/143 ignored/4doc",
+    "Actual41 source and21 edge observations independently decoded and compared",
+    "Five mutants with8 real runtime failures;8 comparison controls recomputed",
+    "Original18 ColumnMeta assertions and rawUTF16/cause identity/old API preservation"
+  ],
+  "cohesive_file": {
+    "path": "crates/seata_sqlparser/src/struct/column_meta.rs",
+    "lines": 606,
+    "conclusion": "One Java ColumnMeta and private state; field accessors plus equals/hash/toString; reviewed501–800 line exception"
+  },
+  "scope": {
+    "IMPLEMENTED": 12,
+    "MISSING": 19,
+    "original_cases_MATCH": 41,
+    "original_cases_MISSING": 35
+  },
+  "full_core_complete": false,
+  "full_V1_complete": false
+}

@@ -1,0 +1,23 @@
+{
+  "reviewer": "/root/go_sdk_profile_review",
+  "mode": "Read-only source review plus inspection of targeted results; no independent full run",
+  "findings": [
+    "P1 concurrent duplicate merge containers mixed child results",
+    "P2 legacy errors did not reach callers",
+    "P2 reply types4/6 bypassed validation",
+    "P2 normal reply envelope kind unchecked",
+    "P2 invalid initial profile/compression could churn connections"
+  ],
+  "resolutions": [
+    "Single batch ownership via mutex/LoadAndDelete, coherent CAS success/error publication",
+    "Typed unknown errors delivered only to known cached IDs; unrelated IDs untouched",
+    "Original processor registers4/6, listener envelope guard blocks replies disguised as requests and vice versa",
+    "Copied config; upfront init rejection; captured owner and registry checks before/after EOF reconnect delay"
+  ],
+  "lifecycle_regressions": [
+    "Stale owner does not replace new client",
+    "Registry removal during delay prevents resurrection"
+  ],
+  "final_actionable_findings": [],
+  "scope": "Real SDK remoting selected paths only; TC-bound first-byte fragmentation remains known failing, full client/production Rust/RM Undo not delivered"
+}

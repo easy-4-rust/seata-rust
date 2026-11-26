@@ -1,0 +1,30 @@
+-- 在目标业务 schema 中由部署账号安装。部署时用锁定登录的专用定义者替换 CREATE DEFINER='metadata_definer'@'localhost' FUNCTION 的定义者，
+-- 并仅为定义者配置直接全局 PROCESS 与当前 schema 的直接 TRIGGER。
+-- 运行账号仅获准直接 EXECUTE 此函数，既不拥有定义者凭据也不维护该函数。
+CREATE FUNCTION seata_rs_at_constraint_flags_v1(p_table VARCHAR(64) CHARACTER SET utf8mb4)
+RETURNS BIGINT UNSIGNED
+READS SQL DATA
+SQL SECURITY DEFINER
+RETURN CASE WHEN
+    EXISTS (
+        SELECT 1 FROM information_schema.USER_PRIVILEGES
+        WHERE PRIVILEGE_TYPE='PROCESS' AND GRANTEE=CONCAT(
+            QUOTE(LEFT(CURRENT_USER(), LENGTH(CURRENT_USER()) - LENGTH(SUBSTRING_INDEX(CURRENT_USER(),'@',-1)) - 1)),
+            '@', QUOTE(SUBSTRING_INDEX(CURRENT_USER(),'@',-1)))
+    )
+    AND EXISTS (
+        SELECT 1 FROM information_schema.SCHEMA_PRIVILEGES
+        WHERE TABLE_SCHEMA=DATABASE() AND PRIVILEGE_TYPE='TRIGGER' AND GRANTEE=CONCAT(
+            QUOTE(LEFT(CURRENT_USER(), LENGTH(CURRENT_USER()) - LENGTH(SUBSTRING_INDEX(CURRENT_USER(),'@',-1)) - 1)),
+            '@', QUOTE(SUBSTRING_INDEX(CURRENT_USER(),'@',-1)))
+    )
+    THEN
+        EXISTS (
+            SELECT 1 FROM information_schema.TRIGGERS
+            WHERE TRIGGER_SCHEMA=DATABASE() AND EVENT_OBJECT_TABLE=p_table
+        ) + 2 * EXISTS (
+            SELECT 1 FROM information_schema.INNODB_FOREIGN
+            WHERE FOR_NAME=CONCAT(DATABASE(),'/',p_table) OR REF_NAME=CONCAT(DATABASE(),'/',p_table)
+        )
+    ELSE NULL
+END;

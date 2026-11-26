@@ -1,0 +1,52 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_metadata_case_20261118_044136_88a7c63f\mutants\verification_20261118_044147_055702\host-unicode\crates\seata_sqlparser)
+warning: constant `DATA` is never used
+ --> crates\seata_sqlparser\src\java_case_mapping.rs:4:7
+  |
+4 | const DATA: &[u8] = include_bytes!("data/java17_character_case.bin");
+  |       ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `RECORD_BYTES` is never used
+ --> crates\seata_sqlparser\src\java_case_mapping.rs:5:7
+  |
+5 | const RECORD_BYTES: usize = 12;
+  |       ^^^^^^^^^^^^
+
+warning: function `integer` is never used
+ --> crates\seata_sqlparser\src\java_case_mapping.rs:7:4
+  |
+7 | fn integer(offset: usize) -> u32 {
+  |    ^^^^^^^
+
+warning: function `mapped` is never used
+  --> crates\seata_sqlparser\src\java_case_mapping.rs:16:4
+   |
+16 | fn mapped(code_point: u32, field: usize) -> u32 {
+   |    ^^^^^^
+
+warning: `seata-sqlparser` (lib) generated 4 warnings
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_metadata_case_20261118_044136_88a7c63f\mutants\verification_20261118_044147_055702\host-unicode\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.91s
+     Running tests\table_primary_set.rs (D:/cargo-target/seata-table-set-mutants\debug\deps\table_primary_set-09028fad64b9dc13.exe)
+
+running 1 test
+test all_java17_comparisons_match_including_raw_surrogates ... FAILED
+
+failures:
+
+---- all_java17_comparisons_match_including_raw_surrogates stdout ----
+
+thread 'all_java17_comparisons_match_including_raw_surrogates' (44808) panicked at crates\seata_test\tests\table_primary_set.rs:55:9:
+assertion `left == right` failed: comparison 45: 0061 vs 00df
+  left: -18
+ right: -126
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    all_java17_comparisons_match_including_raw_surrogates
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test table_primary_set`

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "partial_tcp_bytes_refresh_reader",
+    "candidate": "D:\\codex-builds\\seata-heartbeat-controls-86048c230a7f",
+    "source_sha256": "74be1f8ae55c88e784056e39be089dd5760f211d14180f83d453dcdfb3876ff9",
+    "source_patch": {
+      "old": "        let mut input = &buffer[..count];",
+      "new": "        idle.reset();\n        let mut input = &buffer[..count];"
+    },
+    "test": "partial_frame_drips_cannot_keep_a_generation_alive",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "business_writes_do_not_refresh_writer",
+    "candidate": "D:\\codex-builds\\seata-heartbeat-controls-86048c230a7f",
+    "source_sha256": "2964014e22a8053516312dab6ba6bfc20ca1eb95ed11e58d6cb2ab49c60e200f",
+    "source_patch": {
+      "old": "                if written {\n                    idle.reset();",
+      "new": "                if written {"
+    },
+    "test": "sustained_business_writes_reset_writer_idle_and_suppress_probes",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "pong_writes_do_not_refresh_writer",
+    "candidate": "D:\\codex-builds\\seata-heartbeat-controls-86048c230a7f",
+    "source_sha256": "2964014e22a8053516312dab6ba6bfc20ca1eb95ed11e58d6cb2ab49c60e200f",
+    "source_patch": {
+      "old": "                if written {\n                    idle.reset();",
+      "new": "                if written {"
+    },
+    "test": "outbound_pong_replies_reset_writer_idle_and_suppress_own_probes",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  },
+  {
+    "name": "skipped_requests_refresh_writer",
+    "candidate": "D:\\codex-builds\\seata-heartbeat-controls-86048c230a7f",
+    "source_sha256": "11943e53247d40477ae54935678baee5fe5c0eb350131afb2d638082d34c80fd",
+    "source_patch": {
+      "old": "                        return Ok(false);",
+      "new": "                        return Ok(true);"
+    },
+    "test": "netty::tcp_connection::tests::skipped_cancelled_queue_entries_do_not_reset_writer_idle",
+    "exit_code": 101,
+    "actual_runtime_assertion_failed": true,
+    "original_product_defect": false
+  }
+]

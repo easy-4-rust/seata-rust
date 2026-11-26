@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_table_metadata_20261118_104202_22dfe6a4\mutants\verification_20261118_105307_432416\ignore-locale-lowercase\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_table_metadata_20261118_104202_22dfe6a4\mutants\verification_20261118_105307_432416\ignore-locale-lowercase\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.28s
+     Running tests\table_java_diff.rs (D:/cargo-target/seata-table-mutants\debug\deps\table_java_diff-740d0dfac559283e.exe)
+
+running 1 test
+test actual_language_specific_lowercase_map_keys_values_and_insertion_order_match ... FAILED
+
+failures:
+
+---- actual_language_specific_lowercase_map_keys_values_and_insertion_order_match stdout ----
+
+thread 'actual_language_specific_lowercase_map_keys_values_and_insertion_order_match' (40068) panicked at crates\seata_test\tests\table_java_diff.rs:269:9:
+assertion `left == right` failed: map-language/en
+  left: ["0049:1;0069:2;0130:3;0131:4;00410e200e320e290e3203a3:5", "5"]
+ right: ["0069:2;00690307:3;0131:4;00610e200e320e290e3203c2:5", "4"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    actual_language_specific_lowercase_map_keys_values_and_insertion_order_match
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test table_java_diff`

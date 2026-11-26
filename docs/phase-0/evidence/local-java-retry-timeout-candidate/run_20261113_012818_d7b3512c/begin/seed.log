@@ -1,0 +1,24 @@
+PROCESS mode=seed identity=46548@Home-wandl
+01:28:22.944 [main] INFO org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+01:28:23.044 [main] INFO org.apache.seata.config.ConfigurationFactory -- load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:106)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:64)
+	at org.springframework.boot.loader.launch.PropertiesLauncher.main(PropertiesLauncher.java:580)
+Caused by: java.lang.ExceptionInInitializerError
+	at org.apache.seata.server.storage.file.session.FileSessionManager.<clinit>(FileSessionManager.java:62)
+	at org.apache.seata.server.session.FileRetryTimeoutStoreProbe.seed(FileRetryTimeoutStoreProbe.java:67)
+	at org.apache.seata.server.session.FileRetryTimeoutStoreProbe.main(FileRetryTimeoutStoreProbe.java:56)
+	... 7 more
+Caused by: java.lang.NullPointerException: Cannot invoke "org.springframework.core.env.ConfigurableEnvironment.getProperty(String, java.lang.Class)" because "environment" is null
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.getConfigFromEnvironment(SpringBootConfigurationProvider.java:230)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:74)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.getConfig(<generated>)
+	at org.apache.seata.config.ConfigurationFactory.getConfigType(ConfigurationFactory.java:148)
+	at org.apache.seata.config.ConfigurationFactory.maybeNeedOriginFileInstance(ConfigurationFactory.java:133)
+	at org.apache.seata.config.ConfigurationFactory.<clinit>(ConfigurationFactory.java:64)
+	... 10 more

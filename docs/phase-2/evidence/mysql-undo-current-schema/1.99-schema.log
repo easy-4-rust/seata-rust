@@ -1,0 +1,16 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.40s
+     Running tests\live_undo_store.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_undo_store-8643e22ed6631df9.exe)
+
+running 1 test
+late Undo schema rejected without writes or side effects: CREATE TRIGGER late_undo_log AFTER INSERT ON undo_log FOR EACH ROW INSERT INTO undo_side_effect VALUES(NEW.branch_id)
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log DROP INDEX ux_undo_log
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log MODIFY xid VARCHAR(129) NOT NULL
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log ADD COLUMN hidden_value INT NULL INVISIBLE
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log MODIFY log_status INT UNSIGNED NOT NULL
+late Undo schema rejected without writes or side effects: ALTER TABLE undo_log ADD CONSTRAINT late_undo_fk FOREIGN KEY(xid) REFERENCES undo_parent(xid)
+late Undo schema rejected without writes or side effects: CREATE TABLE undo_child(xid VARCHAR(128) NOT NULL,branch_id BIGINT NOT NULL,FOREIGN KEY(xid,branch_id) REFERENCES undo_log(xid,branch_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+test undo_current_schema_rejects_late_constraints_columns_and_identity_index_changes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 5.55s
+

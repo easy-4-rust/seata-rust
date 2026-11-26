@@ -1,0 +1,7 @@
+java_source,rust_source,state,scope
+org.apache.seata.rm.datasource.ConnectionProxy,crates/seata_db_mysql/src/connection_proxy.rs,PARTIAL,保存可绑定资源和准备前健康状态核对；原低层begin不增加资源名渲染失败
+org.apache.seata.rm.datasource.DataSourceProxy,crates/seata_db_mysql/src/data_source_proxy.rs,PARTIAL,本地事务记录原单主机资源信息；原失败路径关闭策略保持
+org.apache.seata.rm.datasource.DataSourceManager,crates/seata_db_mysql/src/data_source_manager.rs,PARTIAL,正式资源上的消费式准备入口；不提交业务
+RUST_EXTENSION,crates/seata_db_mysql/src/mysql_transaction_preparer.rs,RUST_EXTENSION,原单次注册和受管理登记及同事务Undo的绝对期限编排
+RUST_EXTENSION,crates/seata_db_mysql/src/mysql_prepared_transaction.rs,RUST_EXTENSION,拥有尚未提交原事务与真实回执的不可解封准备对象
+RUST_EXTENSION,crates/seata_db_mysql/src/mysql_prepare_error.rs,RUST_EXTENSION,区分注册未知和登记或Undo失败并保留真实已知回执

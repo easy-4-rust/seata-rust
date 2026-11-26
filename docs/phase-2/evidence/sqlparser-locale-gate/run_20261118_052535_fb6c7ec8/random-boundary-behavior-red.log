@@ -1,0 +1,32 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests\locale_casing.rs (D:/cargo-target/seata-rust-production\debug\deps\locale_casing-734947b3a23a8a25.exe)
+
+running 2 tests
+test word_boundaries_match_original_root_and_thai_dictionary_profiles ... FAILED
+test contextual_string_lower_and_upper_match_original_jdk17 ... FAILED
+
+failures:
+
+---- word_boundaries_match_original_root_and_thai_dictionary_profiles stdout ----
+
+thread 'word_boundaries_match_original_root_and_thai_dictionary_profiles' (47204) panicked at crates\seata_test\tests\locale_casing.rs:77:9:
+assertion `left == right` failed: case//33 input 03a3d800dc000041
+  left: "10001"
+ right: "10011"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- contextual_string_lower_and_upper_match_original_jdk17 stdout ----
+
+thread 'contextual_string_lower_and_upper_match_original_jdk17' (40924) panicked at crates\seata_test\tests\locale_casing.rs:54:9:
+assertion `left == right` failed: case//1411 input dc000049d801006103c200df0e20006a004ad800dc28005f03a3005f00270000006100df01310e20006a004a0e04
+  left: ["dc000069d801006103c200df0e20006a006ad800dc28005f03c2005f00270000006100df01310e20006a006a0e04", "dc000049d801004103a3005300530e20004a004ad800dc28005f03a3005f0027000000410053005300490e20004a004a0e04"]
+ right: ["dc000069d801006103c200df0e20006a006ad800dc28005f03c3005f00270000006100df01310e20006a006a0e04", "dc000049d801004103a3005300530e20004a004ad800dc28005f03a3005f0027000000410053005300490e20004a004a0e04"]
+
+
+failures:
+    contextual_string_lower_and_upper_match_original_jdk17
+    word_boundaries_match_original_root_and_thai_dictionary_profiles
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p seata-test --test locale_casing`

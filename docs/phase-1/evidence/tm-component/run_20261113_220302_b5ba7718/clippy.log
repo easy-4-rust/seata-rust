@@ -1,0 +1,20 @@
+    Checking seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+error: redundant guard
+   --> crates\seata_tm\examples\tm_live.rs:101:15
+    |
+101 |         }) if error == "business-failed" => {
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#redundant_guards
+    = note: `-D clippy::redundant-guards` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::redundant_guards)]`
+help: try
+    |
+ 98 ~             error: "business-failed",
+ 99 |             xid: Some(xid),
+100 |             rollback: Some(Ok(completion)),
+101 ~         }) => {
+    |
+
+error: could not compile `seata-tm` (example "tm_live") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

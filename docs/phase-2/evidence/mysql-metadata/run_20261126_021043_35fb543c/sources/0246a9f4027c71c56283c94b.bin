@@ -1,0 +1,658 @@
+use crate::{
+    recovery_action::RecoveryAction, recovery_schema::RecoverySchema,
+    rm_branch_store::RmBranchStore, undo_rollback_attempt::UndoRollbackAttempt, DbError,
+    MySqlDataSource, MySqlRecoveryError, UndoRollbackObservation,
+};
+use seata_at::MySqlJdbcProfile;
+use seata_protocol::BranchType;
+use seata_rm::{
+    BranchIdentity, BranchPhase, BranchResolution, BranchResource, RegisteredBranch, RmError,
+};
+use seata_transport::ResourceKey;
+use std::{future::Future, pin::Pin};
+use tokio::time::{timeout_at, Instant};
+
+/// 原资源精确匹配的 MySQL RM 回滚适配器；独立恢复行与补偿原子提交。
+/// 对应 Java: org.apache.seata.rm.datasource.DataSourceManager#branchRollback（部分实现）。
+/// 提交清理要求显式迁移及正式回调的持久授权；不提供一阶段业务 COMMIT，也不返回 NotApplied。
+#[derive(Clone, Debug)]
+pub struct MySqlDataSourceManager {
+    source: MySqlDataSource,
+    key: ResourceKey,
+    profile: MySqlJdbcProfile,
+}
+impl MySqlDataSourceManager {
+    /// 无参数；返回原准备管理器使用的同物理数据源克隆，供持久提交交接。
+    pub(crate) fn source_clone(&self) -> MySqlDataSource {
+        self.source.clone()
+    }
+    /// 消耗参数原事务，按实际镜像单次登记并同事务准备 Undo；返回只读身份／回滚作用域。
+    /// 原 XID 和应用数据不规范化；失败或取消不允许取回原事务继续写入，不提供业务 COMMIT。
+    pub async fn prepare_transaction(
+        &self,
+        transaction: crate::MySqlLocalTransaction,
+        client: &seata_rm::ResourceClient,
+        xid: &str,
+        application_data: Option<String>,
+    ) -> Result<crate::MySqlPreparedTransaction, crate::MySqlPrepareError> {
+        crate::mysql_transaction_preparer::MySqlTransactionPreparer::prepare(
+            self,
+            transaction,
+            client,
+            xid,
+            application_data,
+            self.profile,
+            None,
+        )
+        .await
+    }
+    /// 消耗原事务并用调用方错误槽观察登记进度；正常返回时错误槽为空，结果携带最终分类。
+    /// 参数为原事务、RM 客户端、原 XID、应用数据与初始为空的错误槽。
+    /// 登记等待被取消时保留可能生效状态，收到回执后保留原身份；不能据此确认本地回滚。
+    /// 复用非空错误槽会在任何准备动作前 panic。
+    pub async fn prepare_transaction_with_progress(
+        &self,
+        transaction: crate::MySqlLocalTransaction,
+        client: &seata_rm::ResourceClient,
+        xid: &str,
+        application_data: Option<String>,
+        progress_slot: &mut Option<crate::MySqlPrepareError>,
+    ) -> Result<crate::MySqlPreparedTransaction, crate::MySqlPrepareError> {
+        assert!(
+            progress_slot.is_none(),
+            "a fresh preparation slot is required"
+        );
+        let result = crate::mysql_transaction_preparer::MySqlTransactionPreparer::prepare(
+            self,
+            transaction,
+            client,
+            xid,
+            application_data,
+            self.profile,
+            Some(&mut *progress_slot),
+        )
+        .await;
+        // 正常返回已携带准备结果；中间态仅供调用 Future 被取消后的外部观察。
+        let _ = progress_slot.take();
+        result
+    }
+    #[cfg(feature = "experimental_changed_commit")]
+    /// 消耗原事务并准备 Undo；明确回滚确认且已有真实分支时自动单次报告 PhaseOne_Failed。
+    /// 参数为原事务、RM 客户端、XID、应用数据和调用方持有的空错误槽；成功返回准备作用域。
+    /// 注册或报告等待被取消后，错误槽保留已知的原回执或可能生效状态；取消不确认本地回滚。
+    /// 错误槽必须初始为空；复用非空槽会在任何准备动作前 panic。
+    pub async fn prepare_transaction_and_report_failure(
+        &self,
+        transaction: crate::MySqlLocalTransaction,
+        client: &seata_rm::ResourceClient,
+        xid: &str,
+        application_data: Option<String>,
+        failure_slot: &mut Option<crate::MySqlPrepareError>,
+    ) -> Result<crate::MySqlPreparedTransaction, crate::MySqlPrepareReportedError> {
+        let prepared = self
+            .prepare_transaction_with_progress(
+                transaction,
+                client,
+                xid,
+                application_data,
+                failure_slot,
+            )
+            .await;
+        crate::MySqlPrepareReportedError::complete(prepared, failure_slot, client).await
+    }
+    /// 参数为已连接单主机数据源与固定 JDBC 配置；返回精确资源适配器，不执行迁移或注册。
+    pub fn new(source: MySqlDataSource, profile: MySqlJdbcProfile) -> Result<Self, DbError> {
+        let key = ResourceKey::new(BranchType::At, source.resource_id()?).map_err(|_| {
+            DbError::Invalid {
+                reason: "MySQL RM resource identity",
+            }
+        })?;
+        Ok(Self {
+            source,
+            key,
+            profile,
+        })
+    }
+    /// 无参数；返回本资源所有准备阶段共享的绝对操作期限预算。
+    pub(crate) fn operation_timeout(&self) -> std::time::Duration {
+        self.source.operation_timeout()
+    }
+    /// 无参数；返回准备管理器为其连接池确认的物理实例 UUID。
+    pub(crate) fn server_uuid(&self) -> &str {
+        &self.source.server_uuid
+    }
+    /// 无参数；返回管理器要求的登记前校验，供原业务事务合并执行。
+    pub(crate) fn registration_checks(
+        &self,
+    ) -> crate::mysql_at_registration_checks::MySqlAtRegistrationChecks {
+        self.source.registration_checks
+    }
+
+    fn valid(&self, id: &BranchIdentity) -> bool {
+        id.resource() == &self.key && id.xid().len() <= 128
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    /// 参数为原回执与事务配置；返回当前独立观察者是否绑定同一资源和 JDBC 配置。
+    pub(crate) fn accepts_commit_receipt(
+        &self,
+        receipt: &RegisteredBranch,
+        profile: MySqlJdbcProfile,
+    ) -> bool {
+        self.valid(receipt.identity()) && self.profile == profile
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    /// 按原 XID/BranchId 从独立 006 表读取已核验的 Armed 记录；不构造可重报的 TC 回执。
+    /// 参数为原始身份字段；None 只表示本资源无记录，不证明旧事务未提交。
+    pub async fn load_commit_attempt(
+        &self,
+        xid: &str,
+        branch_id: i64,
+    ) -> Result<Option<crate::MySqlCommitAttempt>, DbError> {
+        crate::mysql_commit_attempt_store::MySqlCommitAttemptStore::load(
+            &self.source,
+            xid,
+            branch_id,
+            &self.key,
+            self.profile,
+        )
+        .await
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    /// 按原 006 身份抢占持久成功报告门闩；返回 Some 仅在门闩 COMMIT 已确认时。
+    /// None 表示报告已可能发送，任何数据库错误均禁止发包。
+    pub(crate) async fn claim_success_report(
+        &self,
+        xid: &str,
+        branch_id: i64,
+    ) -> Result<Option<crate::MySqlCommitAttempt>, DbError> {
+        let attempt = self
+            .load_commit_attempt(xid, branch_id)
+            .await?
+            .ok_or(DbError::RecoveryConflict)?;
+        if crate::mysql_commit_attempt_store::MySqlCommitAttemptStore::claim_report(
+            &self.source,
+            &attempt,
+        )
+        .await?
+        {
+            Ok(Some(attempt))
+        } else {
+            Ok(None)
+        }
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    /// 新进程仅在原 006/004 与 Normal Undo 确认 Applied 后，持久抢占并单次报告原 TC。
+    /// 参数为原 XID/BranchId 与正式 RM 客户端；错误保留未知/明确围栏/已尝试报告的区别。
+    /// 门闩确认后即使响应丢失、调用取消或进程退出，也不得重新发送。
+    pub async fn report_recovered_applied(
+        &self,
+        client: &seata_rm::ResourceClient,
+        xid: &str,
+        branch_id: i64,
+    ) -> Result<(), crate::MySqlRecoveredReportError> {
+        use crate::{MySqlCommitRecoveryOutcome, MySqlRecoveredReportError as Error};
+        use seata_protocol::{transaction::BranchReportRequest, BranchStatus};
+        match self.recover_commit_attempt(xid, branch_id).await? {
+            MySqlCommitRecoveryOutcome::Applied => {}
+            MySqlCommitRecoveryOutcome::NotAppliedFenced => {
+                return Err(Error::NotAppliedFenced);
+            }
+        }
+        let attempt = self
+            .claim_success_report(xid, branch_id)
+            .await
+            .map_err(|source| Error::Claim { source })?
+            .ok_or(Error::AlreadyStarted)?;
+        let identity = attempt.identity();
+        client
+            .branch_report(BranchReportRequest {
+                xid: Some(identity.xid().to_owned()),
+                branch_id: identity.branch_id(),
+                status: BranchStatus::PhaseOneDone,
+                resource_id: Some(identity.resource().resource_id().to_owned()),
+                application_data: identity.application_data().map(str::to_owned),
+                branch_type: identity.resource().branch_type(),
+            })
+            .await
+            .map_err(|source| Error::Report {
+                source: Box::new(source),
+            })?;
+        Ok(())
+    }
+
+    /// 用原登记回执在独立连接读取本地业务提交见证。
+    /// true 表示原本地事务已持久提交，false 表示尚未观察到见证；数据库或身份错误独立返回。
+    /// 对应 Java: 一阶段提交结果确认的 Rust 恢复扩展。
+    pub async fn first_phase_commit_observed(
+        &self,
+        receipt: &RegisteredBranch,
+    ) -> Result<bool, DbError> {
+        self.observe_first_phase_identity(receipt.identity(), receipt.lock_key(), false)
+            .await
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    /// 参数为从 006 读取的原尝试；独立核对 004 见证和未终结 Normal Undo。
+    /// 返回 true 仅表示原本地一阶段提交已持久观察，不代表二阶段完成。
+    pub async fn commit_attempt_observed(
+        &self,
+        attempt: &crate::MySqlCommitAttempt,
+    ) -> Result<bool, DbError> {
+        if attempt.profile() != self.profile {
+            return Err(DbError::RecoveryConflict);
+        }
+        self.observe_first_phase_identity(attempt.identity(), attempt.lock_key(), true)
+            .await
+    }
+
+    #[cfg(feature = "experimental_changed_commit")]
+    /// 按原 XID/BranchId 重新加载 006 尝试，先观察 004 见证，再以原 Undo 唯一键持久围栏。
+    /// 参数不能替代原 TC 回执；仅返回 Applied 或已确认 guard 且见证为零的 NotAppliedFenced。
+    /// 任何缺行、冲突、查询/围栏错误及总期限取消均返回 Unknown 错误，不重放业务或 TC 请求。
+    pub async fn recover_commit_attempt(
+        &self,
+        xid: &str,
+        branch_id: i64,
+    ) -> Result<crate::MySqlCommitRecoveryOutcome, crate::MySqlCommitRecoveryError> {
+        use crate::{MySqlCommitRecoveryError as Error, MySqlCommitRecoveryOutcome as Outcome};
+        let deadline = Instant::now() + self.source.operation_timeout();
+        let expired = || Error::Observation {
+            source: DbError::Deadline {
+                operation: "recover commit attempt",
+            },
+        };
+        let result = timeout_at(deadline, async {
+            let attempt = self
+                .load_commit_attempt(xid, branch_id)
+                .await
+                .map_err(|source| Error::Observation { source })?
+                .ok_or(Error::MissingAttempt)?;
+            if self
+                .commit_attempt_observed(&attempt)
+                .await
+                .map_err(|source| Error::Observation { source })?
+            {
+                return Ok(Outcome::Applied);
+            }
+            // 原 Undo 唯一键同时约束旧业务提交和本次 guard；围栏未知时绝不发布否定结果。
+            let fenced = self
+                .source
+                .fence_undo_log(attempt.identity().xid(), attempt.identity().branch_id())
+                .await
+                .map_err(|source| Error::Fence { source })?;
+            let observed = self
+                .commit_attempt_observed(&attempt)
+                .await
+                .map_err(|source| Error::Observation { source })?;
+            if observed {
+                return Ok(Outcome::Applied);
+            }
+            match fenced {
+                crate::UndoFenceObservation::Fenced { .. } => Ok(Outcome::NotAppliedFenced),
+                crate::UndoFenceObservation::UndoPresent => Err(Error::Observation {
+                    source: DbError::RecoveryConflict,
+                }),
+            }
+        })
+        .await
+        .map_err(|_| expired())?;
+        if Instant::now() >= deadline {
+            return Err(expired());
+        }
+        result
+    }
+
+    async fn observe_first_phase_identity(
+        &self,
+        identity: &BranchIdentity,
+        lock_key: Option<&str>,
+        require_record: bool,
+    ) -> Result<bool, DbError> {
+        if !self.valid(identity) {
+            return Err(DbError::RecoveryConflict);
+        }
+        let deadline = Instant::now() + self.source.operation_timeout();
+        let expired = || DbError::Deadline {
+            operation: "observe first-phase witness",
+        };
+        let result = timeout_at(deadline, async {
+            let mut connection = self
+                .source
+                .control_pool()
+                .acquire()
+                .await
+                .map_err(|e| DbError::driver("first-phase witness acquire", e))?;
+            connection.close_on_drop();
+            let mut tx = sqlx::Transaction::begin(connection, None)
+                .await
+                .map_err(|e| DbError::driver("first-phase witness begin", e))?;
+            let schema = RmBranchStore::validate_table(
+                &mut tx,
+                &self.source.control_pool().connect_options(),
+                self.source.database(),
+            )
+            .await?;
+            let observed = RmBranchStore::observe_first_phase_witness_identity(
+                &mut tx,
+                identity,
+                lock_key,
+                self.profile,
+                schema,
+            )
+            .await?;
+            // 对普通回执保留“缺行暂未观察到”的历史语义；006 恢复者缺原行必须保持未知。
+            let observed = if require_record {
+                observed.ok_or(DbError::RecoveryConflict)?
+            } else {
+                observed.unwrap_or(false)
+            };
+            tx.rollback()
+                .await
+                .map_err(|e| DbError::driver("first-phase witness release", e))?;
+            Ok(observed)
+        })
+        .await
+        .map_err(|_| expired())?;
+        if Instant::now() >= deadline {
+            return Err(expired());
+        }
+        result
+    }
+    /// 参数为正式客户端成功注册回执；独立持久登记原身份与锁键，重复核对，不证明业务提交。
+    /// 取消或 COMMIT 确认丢失后可持同一回执核对登记，禁止重新向 TC 申请编号。
+    pub async fn enroll(&self, receipt: &RegisteredBranch) -> Result<(), MySqlRecoveryError> {
+        let id = receipt.identity();
+        if !self.valid(id) {
+            return Err(MySqlRecoveryError::InvalidIdentity);
+        }
+        self.control(
+            id,
+            RecoveryAction::Enroll(receipt),
+            Instant::now() + self.source.operation_timeout(),
+        )
+        .await
+        .map(|_| ())
+    }
+    async fn control(
+        &self,
+        id: &BranchIdentity,
+        action: RecoveryAction<'_>,
+        deadline: Instant,
+    ) -> Result<BranchResolution, MySqlRecoveryError> {
+        let mut commit_attempted = false;
+        let mut rollback_attempt = UndoRollbackAttempt::default();
+        let cleanup_failed_rollback = matches!(action, RecoveryAction::Rollback);
+        let value = timeout_at(deadline, async {
+            let mut connection = self
+                .source
+                .control_pool()
+                .acquire()
+                .await
+                .map_err(|source| DbError::acquisition("RM recovery acquire", source))?;
+            // 任何 await 取消都关闭实际租约；不将半事务/半协议连接放回池。
+            connection.close_on_drop();
+            let mut tx = sqlx::Transaction::begin(connection, None)
+                .await
+                .map_err(|e| DbError::driver("RM recovery begin", e))?;
+            let prepared = async {
+                let schema = RmBranchStore::validate_table(
+                    &mut tx,
+                    &self.source.control_pool().connect_options(),
+                    self.source.database(),
+                )
+                .await?;
+                let (resolution, commit) = match action {
+                    RecoveryAction::Enroll(receipt) => {
+                        RmBranchStore::enroll(&mut tx, receipt, self.profile, schema).await?;
+                        (BranchResolution::Unknown, true)
+                    }
+                    RecoveryAction::Observe(receipt) => {
+                        let commit =
+                            RmBranchStore::observe_callback(&mut tx, receipt, self.profile, schema)
+                                .await?;
+                        (BranchResolution::Unknown, commit)
+                    }
+                    other => match RmBranchStore::lock(&mut tx, id, self.profile, schema).await? {
+                        None => (BranchResolution::Unknown, false),
+                        Some(record) => match other {
+                            RecoveryAction::Bind(phase) => {
+                                if record.phase != 0 && record.phase != RmBranchStore::phase(phase)
+                                {
+                                    return Err(DbError::RecoveryConflict);
+                                }
+                                if phase == BranchPhase::Commit
+                                    && schema.has_commit_decision()
+                                    && !record.commit_authorized
+                                {
+                                    // 旧 phase1 也可能来自公开手工调用，不能据此合成正式 TC 决定。
+                                    (BranchResolution::Unknown, false)
+                                } else if record.phase == 0 {
+                                    RmBranchStore::bind(&mut tx, id, phase).await?;
+                                    (BranchResolution::Unknown, true)
+                                } else {
+                                    (
+                                        if record.terminal {
+                                            BranchResolution::Applied
+                                        } else {
+                                            BranchResolution::Unknown
+                                        },
+                                        false,
+                                    )
+                                }
+                            }
+                            RecoveryAction::Rollback => {
+                                if record.phase != 2 {
+                                    return Err(DbError::RecoveryConflict);
+                                }
+                                if record.terminal {
+                                    (BranchResolution::Applied, false)
+                                } else {
+                                    // 锁内无终态证明本适配器没有提交旧补偿；原 Undo 检查、补偿与终态共用这一物理事务。
+                                    let (undo, _) = crate::undo::AbstractUndoLogManager::prepare(
+                                        &mut tx,
+                                        &self.source.control_pool().connect_options(),
+                                        self.source.database(),
+                                        id.xid(),
+                                        id.branch_id(),
+                                        self.profile,
+                                    )
+                                    .await?;
+                                    if schema == RecoverySchema::FirstPhaseWitness
+                                        && matches!(undo, UndoRollbackObservation::Consumed { .. })
+                                    {
+                                        // 持有原唯一键与恢复行直到控制提交，已消费身份继续阻止晚到 Normal。
+                                        crate::mysql::MySqlUndoLogManager::insert_guard(
+                                            &mut tx,
+                                            id.xid(),
+                                            id.branch_id(),
+                                        )
+                                        .await?;
+                                    }
+                                    RmBranchStore::complete_rollback(&mut tx, id).await?;
+                                    (BranchResolution::Applied, true)
+                                }
+                            }
+                            RecoveryAction::Commit => {
+                                if record.phase == 2 {
+                                    return Err(DbError::RecoveryConflict);
+                                }
+                                if !schema.has_commit_decision() || !record.commit_authorized {
+                                    (BranchResolution::Unknown, false)
+                                } else if record.terminal {
+                                    (BranchResolution::Applied, false)
+                                } else {
+                                    crate::mysql::MySqlUndoLogManager::delete_committed(
+                                        &mut tx,
+                                        &self.source.control_pool().connect_options(),
+                                        self.source.database(),
+                                        id.xid(),
+                                        id.branch_id(),
+                                    )
+                                    .await?;
+                                    RmBranchStore::complete_commit(&mut tx, id).await?;
+                                    (BranchResolution::Applied, true)
+                                }
+                            }
+                            RecoveryAction::Enroll(_) | RecoveryAction::Observe(_) => {
+                                return Err(DbError::Input {
+                                    reason: "invalid recovery action",
+                                })
+                            }
+                        },
+                    },
+                };
+                Ok((resolution, commit))
+            }
+            .await;
+            let (resolution, commit) = match prepared {
+                Ok(prepared) => prepared,
+                Err(source) if cleanup_failed_rollback && Instant::now() < deadline => {
+                    // 先保存补偿失败，再在同一期限内释放控制事务。
+                    rollback_attempt.abort(source, tx.rollback()).await;
+                    return Ok(BranchResolution::Unknown);
+                }
+                Err(source) => return Err(source),
+            };
+            if Instant::now() >= deadline {
+                return Err(DbError::Deadline {
+                    operation: "RM recovery",
+                });
+            }
+            if commit {
+                commit_attempted = true;
+                tx.commit()
+                    .await
+                    .map_err(|e| DbError::driver("RM recovery commit", e))?;
+            } else {
+                tx.rollback()
+                    .await
+                    .map_err(|e| DbError::driver("RM recovery read rollback", e))?;
+            }
+            Ok(resolution)
+        })
+        .await;
+        let value = if let Some(source) = rollback_attempt.into_failure() {
+            Err(source)
+        } else if Instant::now() >= deadline {
+            Err(DbError::Deadline {
+                operation: "RM recovery",
+            })
+        } else {
+            value.unwrap_or(Err(DbError::Deadline {
+                operation: "RM recovery",
+            }))
+        };
+        value.map_err(|source| {
+            if commit_attempted {
+                MySqlRecoveryError::CommitOutcomeUnknown {
+                    identity: Box::new(id.clone()),
+                    source,
+                }
+            } else {
+                MySqlRecoveryError::BeforeCommit {
+                    identity: Box::new(id.clone()),
+                    source,
+                }
+            }
+        })
+    }
+    async fn reconcile(
+        &self,
+        id: &BranchIdentity,
+        phase: BranchPhase,
+    ) -> Result<BranchResolution, RmError> {
+        if !self.valid(id) {
+            return Err(RmError::Invalid {
+                reason: "MySQL RM identity does not match resource or XID capacity",
+            });
+        }
+        // 两个独立控制事务共用一个绝对期限。方向一旦确认，即使补偿失败也不可切换。
+        let deadline = Instant::now() + self.source.operation_timeout();
+        if let Err(error) = self
+            .control(id, RecoveryAction::Bind(phase), deadline)
+            .await
+        {
+            return Self::resolution(error);
+        }
+        let action = match phase {
+            BranchPhase::Commit => RecoveryAction::Commit,
+            BranchPhase::Rollback => RecoveryAction::Rollback,
+        };
+        self.control(id, action, deadline)
+            .await
+            .or_else(Self::resolution)
+    }
+    fn resolution(error: MySqlRecoveryError) -> Result<BranchResolution, RmError> {
+        match error {
+            MySqlRecoveryError::BeforeCommit {
+                source: DbError::RecoveryConflict,
+                ..
+            } => Err(RmError::IdentityConflict),
+            MySqlRecoveryError::BeforeCommit {
+                source: DbError::UndoDirty,
+                ..
+            } => Ok(BranchResolution::ManualInterventionRequired),
+            _ => Ok(BranchResolution::Unknown),
+        }
+    }
+}
+impl BranchResource for MySqlDataSourceManager {
+    fn callback_observer(&self) -> Option<&dyn seata_rm::BranchCallbackObserver> {
+        Some(self)
+    }
+    fn key(&self) -> &ResourceKey {
+        &self.key
+    }
+    fn apply<'a>(
+        &'a self,
+        identity: &'a BranchIdentity,
+        phase: BranchPhase,
+    ) -> Pin<Box<dyn Future<Output = Result<BranchResolution, RmError>> + Send + 'a>> {
+        Box::pin(self.reconcile(identity, phase))
+    }
+    fn recover<'a>(
+        &'a self,
+        identity: &'a BranchIdentity,
+        phase: BranchPhase,
+    ) -> Pin<Box<dyn Future<Output = Result<BranchResolution, RmError>> + Send + 'a>> {
+        Box::pin(self.reconcile(identity, phase))
+    }
+}
+impl seata_rm::BranchCallbackObserver for MySqlDataSourceManager {
+    fn observe<'a>(
+        &'a self,
+        receipt: &'a seata_rm::BranchCallbackReceipt,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RmError>> + Send + 'a>> {
+        Box::pin(async move {
+            if !self.valid(receipt.identity()) {
+                return Err(RmError::Invalid {
+                    reason: "MySQL callback identity does not match resource or XID capacity",
+                });
+            }
+            self.control(
+                receipt.identity(),
+                RecoveryAction::Observe(receipt),
+                Instant::now() + self.source.operation_timeout(),
+            )
+            .await
+            .map(|_| ())
+            .map_err(|error| match error {
+                MySqlRecoveryError::BeforeCommit {
+                    source: DbError::RecoveryConflict,
+                    ..
+                } => RmError::IdentityConflict,
+                _ => RmError::Unavailable {
+                    reason: "MySQL callback ownership not durably confirmed",
+                },
+            })
+        })
+    }
+}
+
+#[cfg(test)]
+#[path = "data_source_manager_rollback_sqlx_tests.rs"]
+pub(crate) mod rollback_sqlx_tests;

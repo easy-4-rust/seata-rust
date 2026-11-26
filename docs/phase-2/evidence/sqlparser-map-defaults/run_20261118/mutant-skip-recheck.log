@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-map-defaults-mutant\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-map-defaults-mutant\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.38s
+     Running tests\map_defaults_java.rs (D:/cargo-target/seata-map-views-mutant\debug\deps\map_defaults_java-d4cf4a57a19bd861.exe)
+
+running 1 test
+test lower_case_map_defaults_match_original_callback_and_null_semantics ... FAILED
+
+failures:
+
+---- lower_case_map_defaults_match_original_callback_and_null_semantics stdout ----
+
+thread 'lower_case_map_defaults_match_original_callback_and_null_semantics' (33516) panicked at crates\seata_test\tests\map_defaults_java.rs:392:9:
+assertion `left == right` failed: compute-rechecks-after-callback
+  left: Some("null:true")
+ right: Some("null:false")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lower_case_map_defaults_match_original_callback_and_null_semantics
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-test --test map_defaults_java`

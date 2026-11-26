@@ -1,0 +1,28 @@
+   Compiling seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+   Compiling seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0308]: mismatched types
+  --> crates\seata_db_mysql\src\data_compare_utils_tests.rs:31:47
+   |
+31 |             .map(|(column, value)| Field::new(column.clone(), FieldValue::Text(value.into())))
+   |                                    ---------- ^^^^^^^^^^^^^^ expected `&ColumnMeta`, found `ColumnMeta`
+   |                                    |
+   |                                    arguments to this function are incorrect
+   |
+note: associated function defined here
+  --> crates\seata_datasource\src\struct\field.rs:12:12
+   |
+12 |     pub fn new(column: &ColumnMeta, value: FieldValue) -> Result<Self, ImageError> {
+   |            ^^^
+help: consider borrowing here
+   |
+31 |             .map(|(column, value)| Field::new(&column.clone(), FieldValue::Text(value.into())))
+   |                                               +
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `seata-db-mysql` (lib test) due to 1 previous error

@@ -1,0 +1,77 @@
+{
+  "java_xid": "198.18.0.1:28091:4045076607423524865",
+  "go_xid": "198.18.0.1:28091:4045076607423524867",
+  "java_branch": 4045076607423524866,
+  "go_branch": 4045076607423524868,
+  "java_resource": "jdbc:mysql://127.0.0.1:28093/seata_shared_a6c19a03",
+  "go_resource": "root:seata_shared_lock_fixture_only@tcp(127.0.0.1:28093)/seata_shared_a6c19a03",
+  "java_lock": "accounts:1",
+  "go_lock": "ACCOUNTS:1;",
+  "java_balance": 900,
+  "both_balance": 800,
+  "final_balance": 800,
+  "java_undo_branches": [
+    4045076607423524866
+  ],
+  "both_undo_branches": [
+    4045076607423524866,
+    4045076607423524868
+  ],
+  "final_undo_rows": 0,
+  "tm_counts": {
+    "java": [
+      1,
+      1,
+      0
+    ],
+    "go": [
+      1,
+      1,
+      0
+    ]
+  },
+  "original_accepted_branches": true,
+  "before": {
+    "java-java": false,
+    "go-java": true,
+    "java-go": true,
+    "go-go": true
+  },
+  "after": {
+    "java-java": false,
+    "go-java": true,
+    "java-go": true,
+    "go-go": false
+  },
+  "final": {
+    "java-java": true,
+    "go-java": true,
+    "java-go": true,
+    "go-go": true
+  },
+  "expected_defect_reproduced": true,
+  "shared_global_mutex_certified": false,
+  "original_branches": [
+    {
+      "actor": "java",
+      "xid": "198.18.0.1:28091:4045076607423524865",
+      "branch_id": 4045076607423524866,
+      "resource": "jdbc:mysql://127.0.0.1:28093/seata_shared_a6c19a03",
+      "lock_key": "accounts:1"
+    },
+    {
+      "actor": "go",
+      "xid": "198.18.0.1:28091:4045076607423524867",
+      "branch_id": 4045076607423524868,
+      "resource": "root:seata_shared_lock_fixture_only@tcp(127.0.0.1:28093)/seata_shared_a6c19a03",
+      "lock_key": "ACCOUNTS:1;"
+    }
+  ],
+  "wire_frame_counts": {
+    "java": 12,
+    "go": 48
+  },
+  "native_query_count": 12,
+  "native_frame_count": 72,
+  "scope": "Actual original default Java/Go namespace divergence on one physical MySQL row; diagnostic only, not safe shared locking or Undo interchange."
+}

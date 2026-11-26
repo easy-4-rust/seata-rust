@@ -1,0 +1,61 @@
+{
+  "status": "READ_ONLY_REVIEW_PASSED",
+  "updated_local": "2026-11-16T02:10:30",
+  "reviewer": "/root/inflight_review",
+  "remaining_P1_P2": [],
+  "evidence": {
+    "source": {
+      "path": "docs/phase-2/evidence/tc-lock-source/run_20261116_013725_d46fee3c",
+      "catalog_sha256": "ae17ddd3e0c05d1ea0162de5533e707f6a0b3b121644ce11b3fef06bbcf46544",
+      "members": 307
+    },
+    "live": {
+      "path": "docs/phase-2/evidence/tc-lock-live/run_20261116_020229_df8ce4db",
+      "catalog_sha256": "58b48297821a70c461f6bca502a6597c9f83c5f8c4cd713b8b40b395c31eede2",
+      "members": 12016
+    },
+    "controls": {
+      "path": "docs/phase-2/evidence/tc-lock-controls/run_20261116_020525_d6b970d3",
+      "catalog_sha256": "86d8b58b6a94933a1dd9dcf3e8f413aec8d8b85a5ba009a330000bde11c05258",
+      "members": 5
+    },
+    "msrv_client": {
+      "path": "docs/phase-2/evidence/tc-lock-msrv-client/run_20261116_020646_d344d84a",
+      "catalog_sha256": "08e6db586718e2c41b0546351f5077085e0af58f71e00a4c4201b9f6bfd156d9",
+      "members": 7
+    },
+    "lock_peer": {
+      "path": "docs/phase-2/evidence/lock-key-peer/run_20261116_020428_034cfb32",
+      "catalog_sha256": "ec9d361e0a0417e2bc99ca21bb16f12b3e47316a1ab95fb08def14c9f8dbfa9c",
+      "members": 323
+    },
+    "document_peer": {
+      "path": "docs/phase-2/evidence/undo-document-peer/run_20261116_020428_8d5b0ba4",
+      "catalog_sha256": "8fbbc99f5a66b07534d8c11d2252f84b10d8d1df6f95d0210be8903706f9f413",
+      "members": 489
+    }
+  },
+  "reviewed_counts": {
+    "actual_XIDs": 16,
+    "Begin": 16,
+    "BranchRegister": 16,
+    "GlobalLockQuery": 8,
+    "GlobalRollback": 16,
+    "callbacks": 13,
+    "DB_checkpoints": 25,
+    "negative_controls": 16
+  },
+  "findings_fixed": [
+    "原Java typed-list与JDBC PK值/类型/顺序及生成键的独立绑定",
+    "回滚分支码8与全局回滚码11、客户端Observed结构和Finished15时序绑定",
+    "源码/归档/解包集合在首编译前冻结并前后逐SHA验证",
+    "原注册身份/identified与物理连接先登记后业务",
+    "owner DB观察完成后争锁查询再登记的跨观察者QPC顺序、global状态1、branch资源与physical row_key核对"
+  ],
+  "scope": "原TC排他锁缺陷观察，retry-dead-threshold1000ms、原JAR与外部JDBC8.0.33，本机非TLS",
+  "TC_safety_gate_passed": false,
+  "SQL_Undo_atomicity_verified": false,
+  "TC_registration_gate_passed": false,
+  "public_COMMIT_available": false,
+  "external_tc_risk_accepted": false
+}

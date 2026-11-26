@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.00s
+     Running tests\sql_server_table_meta.rs (D:/cargo-target/seata-rust-production\debug\deps\sql_server_table_meta-34c11b608d4ab561.exe)
+
+running 1 test
+test sql_server_metadata_matches_original_inherited_dispatch ... FAILED
+
+failures:
+
+---- sql_server_metadata_matches_original_inherited_dispatch stdout ----
+
+thread 'sql_server_metadata_matches_original_inherited_dispatch' (19768) panicked at crates\seata_test\tests\sql_server_table_meta.rs:57:5:
+assertion `left == right` failed
+  left: "identity\tfalse\ttrue\tfalse\tfalse\nequals\tfalse\ttrue\tfalse\tfalse\tfalse\tfalse\nhash\t1299\t1299\t1299\ninherited\tevents\ttrue\tfalse\tfalse\tfalse\n"
+ right: "identity\tfalse\ttrue\tfalse\tfalse\nequals\ttrue\ttrue\ttrue\ttrue\tfalse\tfalse\nhash\t1299\t1299\t1299\ninherited\tevents\ttrue\tfalse\tfalse\ttrue\n"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    sql_server_metadata_matches_original_inherited_dispatch
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test sql_server_table_meta`

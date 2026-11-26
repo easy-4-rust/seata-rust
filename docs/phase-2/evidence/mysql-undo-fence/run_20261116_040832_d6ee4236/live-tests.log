@@ -1,0 +1,51 @@
+
+running 9 tests
+test cancellation_during_actual_identity_wait_publishes_no_guard ... 
+thread 'cancellation_during_actual_identity_wait_publishes_no_guard' (12968) panicked at crates\seata_db_mysql\tests\live_undo_fence.rs:235:44:
+fence ended before actual lock wait: Err(BeforeCommit { xid_bytes: 9, branch_id: 42, source: Driver { operation: "Undo fence durability", sql_state: None, code: None } })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test committed_normal_is_preserved_as_opaque_pending_work ... 
+thread 'committed_normal_is_preserved_as_opaque_pending_work' (82160) panicked at crates\seata_db_mysql\tests\live_undo_fence.rs:112:50:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { xid_bytes: 9, branch_id: 42, source: Driver { operation: "Undo fence durability", sql_state: None, code: None } }
+FAILED
+test deadline_during_actual_identity_wait_stays_before_commit ... 
+thread 'deadline_during_actual_identity_wait_stays_before_commit' (83264) panicked at crates\seata_db_mysql\tests\live_undo_fence.rs:235:44:
+fence ended before actual lock wait: Err(BeforeCommit { xid_bytes: 9, branch_id: 42, source: Driver { operation: "Undo fence durability", sql_state: None, code: None } })
+FAILED
+test durable_guard_blocks_two_original_late_normal_writers_without_replaying_business ... 
+thread 'durable_guard_blocks_two_original_late_normal_writers_without_replaying_business' (69072) panicked at crates\seata_db_mysql\tests\live_undo_fence.rs:42:64:
+called `Result::unwrap()` on an `Err` value: BeforeCommit { xid_bytes: 9, branch_id: 42, source: Driver { operation: "Undo fence durability", sql_state: None, code: None } }
+FAILED
+test invalid_identity_has_no_sql_effect_and_debug_hides_xid ... ok
+test malformed_or_unknown_guard_never_becomes_a_fence ... ok
+test original_normal_winner_is_observed_after_actual_lock_arbitration ... 
+thread 'original_normal_winner_is_observed_after_actual_lock_arbitration' (69740) panicked at crates\seata_db_mysql\tests\live_undo_fence.rs:235:44:
+fence ended before actual lock wait: Err(BeforeCommit { xid_bytes: 9, branch_id: 42, source: Driver { operation: "Undo fence durability", sql_state: None, code: None } })
+FAILED
+test relaxed_flush_configuration_is_rejected_without_guard ... 
+thread 'relaxed_flush_configuration_is_rejected_without_guard' (86948) panicked at crates\seata_db_mysql\tests\live_undo_fence.rs:215:5:
+assertion failed: matches!(result,
+    Err(UndoFenceError::BeforeCommit
+    { source: DbError::Unsupported { .. }, .. }))
+FAILED
+test two_control_attempts_have_one_durable_identity_without_automatic_retry ... 
+thread 'two_control_attempts_have_one_durable_identity_without_automatic_retry' (68940) panicked at crates\seata_db_mysql\tests\live_undo_fence.rs:340:5:
+assertion `left == right` failed
+  left: 0
+ right: 1
+FAILED
+
+failures:
+
+failures:
+    cancellation_during_actual_identity_wait_publishes_no_guard
+    committed_normal_is_preserved_as_opaque_pending_work
+    deadline_during_actual_identity_wait_stays_before_commit
+    durable_guard_blocks_two_original_late_normal_writers_without_replaying_business
+    original_normal_winner_is_observed_after_actual_lock_arbitration
+    relaxed_flush_configuration_is_rejected_without_guard
+    two_control_attempts_have_one_durable_identity_without_automatic_retry
+
+test result: FAILED. 2 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.89s
+

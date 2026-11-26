@@ -1,8 +1,12 @@
 # Phase 0 — V1 Payload Golden Vectors
 
-> **Status: Go-runtime-verified vectors; Java all-message and Rust conformance remain pending.**
+> **Status: all 29 frozen samples pass Go, pinned Java V1, and the independent Rust test codecs.**
 >
-> These vectors specify the Seata-Go v2 native message **body payload** bytes for deterministic fixtures. They are not complete TCP frames. The 29 fixture payloads have been generated/checked by the pinned Go encoder in GitHub Actions Run #8. Java cross-decoding currently covers the four complete V1 frame fixtures only; all-message Java and Rust conformance remain pending.
+> These vectors specify native message **body payload** bytes for deterministic fixtures, not complete TCP frames. The scope is 25 base types plus four failure variants, not all possible variants. Java and Rust independently assert field semantics and byte-identical re-encoding. [Java evidence](evidence/local-java-payloads-20261112/README.md); [Rust and optionality evidence](evidence/local-rust-payloads-20261112/README.md); [binary fixtures](../../tests/fixtures/protocol/v1/README.md). Rust codecs are test-only proof code, not a production protocol crate.
+
+**Supplemental failures:** seven separate cases now have native Go and Java/Rust evidence: four compatible pairs, **three OPEN divergences**. Go type14/22 failed error-text lengths differ from Java, and Go fail-fast error19 differs from Java20. [Exact matrix](known-go-v1-failure-divergences.md) and [runtime evidence](evidence/local-failure-variants-20261112/README.md). The original29 files remain unchanged; diagnostic success must not be counted as interoperability for mismatching cases.
+
+**Actual handler outputs:** a separate135-test Java run captures all79 selected handler/auth contexts and exports78 real serialized responses plus independent wire-field expectations. All78 pass Rust; pinned Go classifies62 compatible/6 known length differences/1 known ordinal difference/9 opaque-state cases. [Capture and hashes](evidence/local-handler-runtime-20261112/README.md); [binary fixtures](../../tests/fixtures/protocol/v1/handler_matrix/README.md). These context counts include repeated byte values and do not replace the frozen29 or certify all business states.
 
 ## 1. Scope and provenance
 
@@ -41,7 +45,7 @@
 
 ## 3. Candidate payload vectors
 
-All integers below use the Go codec's big-endian byte writers. Length-prefixed strings are UTF-8 byte lengths, not character counts. Hex values below are generated from the pinned Go codec field order and deterministic fixture values; the source encoder must still be executed to certify them.
+All integers below use big-endian byte writers. Length-prefixed strings count UTF-8 bytes. These originally source-derived samples now have Go runtime verification and Java cross-decode/re-encode evidence; certification remains bounded to the recorded input values.
 
 | Message | Type ID | Bytes | Payload hex |
 |---|---:|---:|---|
@@ -78,7 +82,7 @@ The 25 rows above cover the core TM/RM request/response codecs present in the pi
 | Java message ID | Message family | Current Phase 0 disposition |
 |---:|---|---|
 | 105 / 106 | Unregister RM / result | Java IDs exist; no corresponding Go native codec was found in the pinned Go codec registry. Investigate whether Go relies on channel teardown/resource lifecycle instead. Not part of the initial required vector set until semantics are confirmed. |
-| 59 / 60 | Seata merge / merge result | Optional message batching family; defer until core request/response compatibility is complete. |
+| 59 / 60 | Seata merge / merge result | Six Java/Rust control samples executed separately; original Go has no native codecs. GO-V1-MERGE-001 OPEN; not three-way golden vectors. |
 | 120 | Heartbeat | Transport control frame; request/response types 3/4 carry no ordinary serialized body. Validate at the frame layer, not as a body payload vector. |
 | 121 | Batch result | Optional batching result; defer with merge support. |
 
@@ -109,23 +113,27 @@ Do not pass a body-only vector directly as the V1 frame body. The V1 frame body 
 
 - GlobalBeginRequest: timeout is converted from Go `time.Duration` to milliseconds and written as uint32, followed by transaction name as string16.
 - Global end request (commit, rollback, status): XID string16 + extra data string16.
-- GlobalReportRequest: common global-end request + one GlobalStatus byte.
+- GlobalReportRequest: common global-end request + one GlobalStatus byte; Java encodes null status as `0xff`, distinct from Unknown=0.
 - BranchRegisterRequest and GlobalLockQueryRequest use the same field layout: XID string16, BranchType byte, Resource ID string16, LockKey string32, ApplicationData string32.
 - BranchReportRequest: XID string16, Branch ID uint64, BranchStatus byte, Resource ID string16, ApplicationData string32, BranchType byte.
 - BranchCommit/Rollback request: XID string16, Branch ID uint64, BranchType byte, Resource ID string16, ApplicationData string32.
 - Global end responses: ResultCode byte, optional error string16 when failed, TransactionErrorCode byte, GlobalStatus byte.
 - BranchRegister response: ResultCode byte, optional error string16 when failed, TransactionErrorCode byte, Branch ID uint64.
 - BranchCommit/Rollback response: ResultCode byte, optional error string16 when failed, TransactionErrorCode byte, XID string16, Branch ID uint64, BranchStatus byte.
-- BranchReport response: ResultCode byte, optional error string8 when failed, TransactionErrorCode byte.
-- GlobalLockQuery response: ResultCode byte, optional error string8 when failed, TransactionErrorCode byte, lockable uint16 (0 or 1).
+- BranchReport response (Java V1): ResultCode byte, optional error string16 when failed, TransactionErrorCode byte.
+- GlobalLockQuery response (Java V1): ResultCode byte, optional error string16 when failed, TransactionErrorCode byte, lockable uint16 (0 or 1).
 - TM registration request: Version, ApplicationId, TransactionServiceGroup, ExtraData; each string16.
 - RM registration request: same identity fields plus ResourceIds string32.
 - TM/RM registration response: Identified byte (0/1) + Version string16.
 - UndoLogDelete request: BranchType byte, ResourceId string16, SaveDays uint16.
 
+Java scalar semantics: timeout is signed int32, BranchId signed int64 and SaveDays signed int16; the positive corpus values share the same bytes with Go's unsigned representations. Java string16 lengths are signed short (safe range 0..32767 UTF-8 bytes). All Java transaction failure messages use **string16**, including BranchReport/GlobalLockQuery. Dedicated cross-language runtime samples now prove the fixed Go codecs use string8 for these two failures; see the OPEN matrix above.
+
+For registration responses, absent wire version is not Java `version=null`: the Java constructor supplies `Version.getCurrent()` (this pinned build: `2.8.0-SNAPSHOT`), and its decoder retains that value. Java re-encoding therefore normalizes an absent version into explicit version bytes. The Rust test model keeps `wire_version: Option<String>` for original byte provenance and exposes `java_version(java_current)` for Java object semantics. Three additional Java oracle tests verify this distinction and nullable report status; they do not change the frozen 29-vector corpus.
+
 ### Failure response coverage
 
-The vector set has been expanded with four explicit negative-result responses: GlobalBegin failure, GlobalCommit failure, BranchRegister lock conflict, and retryable BranchCommit failure. These assert that ResultCode, message text, TransactionErrorCode, XID, BranchId and status fields remain in the correct wire order. The pinned Go runner passed these four failure-response codecs in Run #8. Java cross-decoding of these specific failure response types remains pending except for the failed GlobalBegin frame.
+The frozen vector set includes GlobalBegin failure, GlobalCommit failure, BranchRegister lock conflict, and retryable BranchCommit failure. The separate seven-case matrix adds failed BranchRollback, GlobalRollback, BranchReport, GlobalStatus, GlobalReport, GlobalLockQuery and a fail-fast ordinal comparison. Every ordinary transaction response family now has at least one failure sample under the Java authority, but three supplemental cases differ from Go. This does not cover every exception code or failure variant.
 
 ## 4.1 Reproducible Seata-Go verification harness
 
@@ -148,15 +156,15 @@ bash tools/go-golden-vectors/verify.sh
 
 The payload bytes above do not include the outer remoting envelope. The Java V1 envelope separately includes magic `DA DA`, protocol version, full length, header length, message type, serializer, compressor, request ID, optional head map and body. Heartbeats have no ordinary body.
 
-The following are still unverified:
+The recorded samples do not establish these broader claims:
 
-1. Java Seata 2.x V1 decoder accepts the Go V1 frame under the selected server configuration.
-2. Java Seata's selected serializer produces exactly the same body bytes for every message.
-3. Serializer and compressor identifiers/defaults match the chosen Java server.
-4. Header-map serialization and optional metadata match.
-5. Go and Java response edge cases (failed result, optional error message, long message truncation) match all fixtures.
-6. Rust decoder rejects malformed lengths and unknown enum values safely.
-7. The Java branch and global status enum values in all payload positions are mapped exactly.
+1. Every optional frame/message family and server configuration is interoperable; six complete frames and selected live TM/RM paths have separate evidence.
+2. All field-value variants of every Java message match Go; the 29 current samples pass, not every possible input.
+3. All serializer/compressor combinations/defaults match; current tests use V1/SEATA/NONE.
+4. Arbitrary header maps and optional metadata match; the existing single HeadMap frame is a bounded case.
+5. Every failed result, optional error-message and long-message boundary matches; only four failure variants are in this corpus.
+6. A production Rust decoder rejects arbitrary hostile traffic safely. The independent test codecs cover every truncated prefix, trailing bytes, known/unknown enum ranges, malformed lengths/UTF-8, size boundaries and exhaustive single-byte corpus mutations; this is bounded verification, not a general fuzzing proof.
+7. Every business combination of branch/global status and error in every payload position is interoperable. Fixed enum mappings and covered samples do not establish all combinations.
 
 ## 6. Required certification process
 
@@ -170,4 +178,9 @@ For each row:
 6. Store the raw binary fixture under `tests/fixtures/protocol/v1/` with JSON metadata: source commit, message type, codec, serializer, compressor, fixture input and SHA-256.
 7. Add negative fixtures for truncated length prefixes, oversized strings, invalid enums, invalid status codes, malformed frames and unknown message types.
 
-**Certification rule:** a row is **Go-verified** only after running Go; **Java-compatible** only after Java cross-decoding; **Rust-conformant** only after Rust produces/consumes identical bytes. The Go payload and serializer vectors are runtime-verified. Java all-message serializer equivalence and Rust codec conformance are still unverified.
+**Certification rule:** a row is **Go-verified** only after running Go; **Java-compatible** only after Java cross-decoding; **Rust-conformant for the sample** only after Rust produces/consumes identical bytes. All 29 current samples now have this evidence and binary fixtures at the required path. Formal Rust protocol implementation, every variant and wider malformed/fault matrices remain separate gates. [Control-envelope evidence](evidence/local-control-envelopes/README.md) adds three heartbeat byte-compatible samples and six Java/Rust merge samples with missing Go59/60 codecs; its per-case certification must not be read as all-family interoperability.
+
+
+## 2026-11-13 原语料当前复核
+
+[原29/6最新运行](evidence/local-wp00-vector-audit/README.md)逐字节核对文档25行、29二进制/manifest/JSON；新执行原Go29/6、原Java35断言体（直接调用，非Maven/JUnit引擎）及Rust117。有效timeout2000→2001在Java/Rust各精确触发独立语义失败；原样例未改。643输入含实际外部classpath来源XML，475依赖JAR及158原Seata实际类、编译/执行产物前后一致；16动态生成类另列。只完成原语料复核，不重定义any-mismatch任务、补充差异或全部字段认证，完整WP00仍开放。

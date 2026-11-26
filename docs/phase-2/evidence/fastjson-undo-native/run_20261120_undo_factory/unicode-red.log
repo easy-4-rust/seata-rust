@@ -1,0 +1,24 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.96s
+     Running tests\undo_log_parser_selection_source.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\undo_log_parser_selection_source-533a715193b8f7e2.exe)
+
+running 1 test
+test rust_matches_original_selection_trace ... FAILED
+
+failures:
+
+---- rust_matches_original_selection_trace stdout ----
+
+thread 'rust_matches_original_selection_trace' (34556) panicked at crates\seata_at\tests\undo_log_parser_selection_source.rs:94:5:
+assertion `left == right` failed
+  left: ["DEFAULT\tJacksonUndoLogParser", "FACTORY\tfastjson\tFastjsonUndoLogParser\ttrue", "SPI\tfastjson\tFastjsonUndoLogParser\ttrue", "FACTORY\tjackson\tJacksonUndoLogParser\ttrue", "SPI\tjackson\tJacksonUndoLogParser\ttrue", "FACTORY\tprotostuff\tProtostuffUndoLogParser\ttrue", "SPI\tprotostuff\tProtostuffUndoLogParser\ttrue", "FACTORY\tkryo\tKryoUndoLogParser\ttrue", "SPI\tkryo\tKryoUndoLogParser\ttrue", "FACTORY\tfastjson2\tFastjson2UndoLogParser\ttrue", "SPI\tfastjson2\tFastjson2UndoLogParser\ttrue", "FACTORY\tfory\tForyUndoLogParser\ttrue", "SPI\tfory\tForyUndoLogParser\ttrue", "FACTORY\tFURY\tForyUndoLogParser\ttrue", "SPI\tFURY\tEnhancedServiceNotFoundException", "FACTORY\tJaCkSoN\tJacksonUndoLogParser\ttrue", "SPI\tJaCkSoN\tJacksonUndoLogParser\ttrue", "FACTORY\tjacKson\tEnhancedServiceNotFoundException", "SPI\tjacKson\tEnhancedServiceNotFoundException", "FACTORY\tKryo\tEnhancedServiceNotFoundException", "SPI\tKryo\tEnhancedServiceNotFoundException", "FACTORY\tfst\tIllegalArgumentException", "SPI\tfst\tEnhancedServiceNotFoundException", "FACTORY\tFST\tIllegalArgumentException", "SPI\tFST\tEnhancedServiceNotFoundException", "FACTORY\tfſt\tIllegalArgumentException", "SPI\tfſt\tEnhancedServiceNotFoundException", "FACTORY\tadadad\tEnhancedServiceNotFoundException", "SPI\tadadad\tEnhancedServiceNotFoundException", "FACTORY\t\tIllegalArgumentException", "SPI\t\tIllegalArgumentException", "FACTORY\t jackson\tEnhancedServiceNotFoundException", "SPI\t jackson\tEnhancedServiceNotFoundException", "FACTORY\t<null>\tNullPointerException", "SPI\t<null>\tIllegalArgumentException", "ALIAS\ttrue"]
+ right: ["DEFAULT\tJacksonUndoLogParser", "FACTORY\tfastjson\tFastjsonUndoLogParser\ttrue", "SPI\tfastjson\tFastjsonUndoLogParser\ttrue", "FACTORY\tjackson\tJacksonUndoLogParser\ttrue", "SPI\tjackson\tJacksonUndoLogParser\ttrue", "FACTORY\tprotostuff\tProtostuffUndoLogParser\ttrue", "SPI\tprotostuff\tProtostuffUndoLogParser\ttrue", "FACTORY\tkryo\tKryoUndoLogParser\ttrue", "SPI\tkryo\tKryoUndoLogParser\ttrue", "FACTORY\tfastjson2\tFastjson2UndoLogParser\ttrue", "SPI\tfastjson2\tFastjson2UndoLogParser\ttrue", "FACTORY\tfory\tForyUndoLogParser\ttrue", "SPI\tfory\tForyUndoLogParser\ttrue", "FACTORY\tFURY\tForyUndoLogParser\ttrue", "SPI\tFURY\tEnhancedServiceNotFoundException", "FACTORY\tJaCkSoN\tJacksonUndoLogParser\ttrue", "SPI\tJaCkSoN\tJacksonUndoLogParser\ttrue", "FACTORY\tjacKson\tJacksonUndoLogParser\ttrue", "SPI\tjacKson\tJacksonUndoLogParser\ttrue", "FACTORY\tKryo\tKryoUndoLogParser\ttrue", "SPI\tKryo\tKryoUndoLogParser\ttrue", "FACTORY\tfst\tIllegalArgumentException", "SPI\tfst\tEnhancedServiceNotFoundException", "FACTORY\tFST\tIllegalArgumentException", "SPI\tFST\tEnhancedServiceNotFoundException", "FACTORY\tfſt\tIllegalArgumentException", "SPI\tfſt\tEnhancedServiceNotFoundException", "FACTORY\tadadad\tEnhancedServiceNotFoundException", "SPI\tadadad\tEnhancedServiceNotFoundException", "FACTORY\t\tIllegalArgumentException", "SPI\t\tIllegalArgumentException", "FACTORY\t jackson\tEnhancedServiceNotFoundException", "SPI\t jackson\tEnhancedServiceNotFoundException", "FACTORY\t<null>\tNullPointerException", "SPI\t<null>\tIllegalArgumentException", "ALIAS\ttrue"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    rust_matches_original_selection_trace
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-at --test undo_log_parser_selection_source`

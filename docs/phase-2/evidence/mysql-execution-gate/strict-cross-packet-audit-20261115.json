@@ -1,0 +1,153 @@
+{
+  "status": "strict_cross_packet_and_failure_reason_audit_passed",
+  "parent": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\mysql-execution-gate\\run_20261115_205718_cc203af6",
+  "catalog_sha256": "07bed67b72f1501d5dcc7877aa498b1dc0fd186f67696571b00fc14293a45d5e",
+  "sealed_members": 10996,
+  "frozen_parent_inputs": 7971,
+  "audit_source_sha256": "ed67b209ef6c97313652aa0d0504aa01f19c0a83c0e3d460657cdcb896d06c88",
+  "positives": [
+    {
+      "rust": "1.99",
+      "suite": "metadata",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "94704599e0252a6c3c357fd9483bcaaebe43062e47984838cb6c10df5991d5c3",
+      "executed_artifact_sha256": "877c0608f8558dbc38c49224a1aa8eccbc909aa1e06198cbaed3e87d0882db8b"
+    },
+    {
+      "rust": "1.99",
+      "suite": "row_images",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "70a04580c8a677ae2f964b1f7bdbc5157059130c1ffd2b7e5f231ccb23c9c559",
+      "executed_artifact_sha256": "c92eb57854c270e8b6863f9b853e9989f8b5418739f75f2d03a508ae5f238fb1"
+    },
+    {
+      "rust": "1.99",
+      "suite": "image_race",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "a28fc8b20794efd01cac242544841ffb59b8b2b63eb786a9c9b8d6e137698122",
+      "executed_artifact_sha256": "6d0baebe486f4a63393c7b87248caee2db45e4eecc03b02e4c3e8b18283acd32"
+    },
+    {
+      "rust": "1.99",
+      "suite": "execution",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "4bf709dbedac759366661912975a96d1e66835b609884991c1ff239a495793dc",
+      "executed_artifact_sha256": "34de86e64c0efdc72cb8ba1f61fed4678f2c4ecaf2673928b96e1fbd451102a3"
+    },
+    {
+      "rust": "1.85",
+      "suite": "metadata",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "6ad0145da1902b8092864371e0b35d0be6e6f2d9bd9dc3e12f48784b4edcb8ad",
+      "executed_artifact_sha256": "f1db7bbe6f88092dbb52f4611976b5c3bd61fdc9e60915a320f438e39f03ebf9"
+    },
+    {
+      "rust": "1.85",
+      "suite": "row_images",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "15e54105b3ca9e87445f153ab39fc6fb8cbd90182f630e5dfd81ae41b9c86370",
+      "executed_artifact_sha256": "863782fab7f572736a557e17c33268761bb561f900bb9f1ddaa4eaef5c02c54f"
+    },
+    {
+      "rust": "1.85",
+      "suite": "image_race",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "1e0033c26ea18a2bf4c32984488361cab72f19d12d4907243cafe06ffb2e9080",
+      "executed_artifact_sha256": "0e24ab7cad85b9df3bb88680258c0fd1770bb97d12b4ae11855b768e99af414c"
+    },
+    {
+      "rust": "1.85",
+      "suite": "execution",
+      "source_inputs_bound": 260,
+      "catalog_sha256": "68c9e6f5e636e3eca24bd10e4384194cc07fede643268d0ac1314a914c2da286",
+      "executed_artifact_sha256": "521dcf0dc375c028afa73185f2747bd9aa58e69368e82214e7af604b63b3ae4b"
+    }
+  ],
+  "negatives": [
+    {
+      "name": "literal-cast",
+      "target": "decimal_text_primary_assignment_cannot_capture_an_adjacent_old_row",
+      "unchanged_inputs_bound": 259,
+      "mutated_inputs": 1,
+      "mutation_sha256": "978e6c0f31557f60045f04d69b13ff46767cb5c9923e7371e0161ed3359515a3",
+      "executed_artifact_sha256": "6636db50d4778fbbaa960ea5343b1d134decdbe10097ad22202523624cca4b2a",
+      "failure_kind": "explicit_target_assertion",
+      "expected_diagnostics": [
+        "adjacent_old_row_captured=true",
+        "assertion `left == right` failed"
+      ]
+    },
+    {
+      "name": "undo-count-poison",
+      "target": "pending_undo_record_limit_poisons_and_forces_full_rollback",
+      "unchanged_inputs_bound": 259,
+      "mutated_inputs": 1,
+      "mutation_sha256": "c966e6cdc4170d92a8f49ce9c11c4464a92b94715a72fc720e3dac67285a19ab",
+      "executed_artifact_sha256": "82479a4be28aa47a2d01a4bba85fd7a874103414fa69f380bc75a0e0587a89da",
+      "failure_kind": "explicit_target_assertion",
+      "expected_diagnostics": [
+        "assertion failed: matches!(tx.table_meta(\"execution_work\").await, Err(DbError::Poisoned))"
+      ]
+    },
+    {
+      "name": "undo-payload",
+      "target": "execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements",
+      "unchanged_inputs_bound": 259,
+      "mutated_inputs": 1,
+      "mutation_sha256": "41eba0f7cb899b62504a3c79b8b99d6e384c9bacb5b2ae3de70cd684544e1b48",
+      "executed_artifact_sha256": "8a7d960adb0f4a30604e7214f622d26904bf8ff22b3d9dcc783ecde7360db3df",
+      "failure_kind": "explicit_target_assertion",
+      "expected_diagnostics": [
+        "assertion failed: matches!(tx.execute",
+        "Err(DbError::Image(ImageError::Budget"
+      ]
+    },
+    {
+      "name": "after-original-where",
+      "target": "update_after_image_uses_original_keys_when_the_where_column_changes_then_delete_is_empty",
+      "unchanged_inputs_bound": 259,
+      "mutated_inputs": 1,
+      "mutation_sha256": "a92fb97bfb48d4dbffc194052fdc714ecc703c72ae61dc3f315f5465824ffd18",
+      "executed_artifact_sha256": "6d6d7c75bfdeb887d3f53024c0f2b6a8f8ae061bc9df835f1d9ffce206791c5a",
+      "failure_kind": "explicit_target_assertion",
+      "expected_diagnostics": [
+        "after image must follow captured primary keys",
+        "Undo image direction or ordered primary identities"
+      ]
+    },
+    {
+      "name": "execute-transaction-owner",
+      "target": "execution_failures::cancellation_after_key_assignment_cleans_temp_and_rolls_back_prior_business",
+      "unchanged_inputs_bound": 259,
+      "mutated_inputs": 1,
+      "mutation_sha256": "a7d10434caf9a1d550c98d9e5e3847f590ad9de3f11723266e19a906e3a988dc",
+      "executed_artifact_sha256": "32247ac65cc37da5cee7b955f32c5b7325f345c5d577e798878a8e4244fcd1a0",
+      "failure_kind": "expected_cleanup_timeout_assertion",
+      "expected_diagnostics": [
+        "cancel_query_packet_hex=",
+        "actual server session must clean temporary objects without proxy shutdown: Elapsed"
+      ]
+    },
+    {
+      "name": "temporary-shadow",
+      "target": "execution_failures::business_table_matching_next_internal_name_is_not_shadowed_or_dropped",
+      "unchanged_inputs_bound": 259,
+      "mutated_inputs": 1,
+      "mutation_sha256": "4498e38cec98cd619fb225b6c19a6d63ad41e3e7d32777e4fd70e424a521c016",
+      "executed_artifact_sha256": "9ffb80d192cc4a74dd3786be1d258d6997512291ce0d64782289e7a41ae4ce1e",
+      "failure_kind": "explicit_target_assertion",
+      "expected_diagnostics": [
+        "assertion failed: !temporary.starts_with(&format!(\"CREATE TEMPORARY TABLE `{business}` \"))"
+      ]
+    }
+  ],
+  "additional_live_only_input": {
+    "path": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle\\script\\client\\at\\db\\mysql.sql",
+    "sha256": "66818919ee2b08020c8414a8f37a5cee2426ac6bc8bd90a27d2f7d09911fdc33",
+    "original_sealed_fixture": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\mysql-metadata\\run_20261114_045946_8cef695b\\java-undo.sql",
+    "baseline_catalog_sha256": "10285b1534c237d5f1eab8944aa039851a70a9798eedd0f80a66bccdb1993ea6"
+  },
+  "note": "Standalone verifier: six target failures are tied to declared mutations and expected diagnostics, not generic panic counts.",
+  "source_case_parity_complete": false,
+  "WP05_complete": false
+}

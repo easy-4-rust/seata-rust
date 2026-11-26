@@ -1,0 +1,33 @@
+server:
+  port: 28091
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/fto_20261113_031814_82ad5745/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 28091
+    enable-check-auth: false
+    max-rollback-retry-timeout: 5000
+    rollback-retry-timeout-unlock-enable: false
+    rollback-failed-unlock-enable: false
+    retry-dead-threshold: 500
+    recovery:
+      rollbacking-retry-period: 200
+  store:
+    mode: file
+    session:
+      mode: file
+    lock:
+      mode: file
+    file:
+      dir: D:/codex-builds/fto_20261113_031814_82ad5745/store
+      flush-disk-mode: sync
+  transport:
+    rpc-tc-request-timeout: 750

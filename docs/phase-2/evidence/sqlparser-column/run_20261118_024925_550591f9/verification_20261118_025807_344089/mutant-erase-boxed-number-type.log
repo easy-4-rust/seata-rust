@@ -1,0 +1,23 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_column_metadata_20261118_024925_550591f9\mutants\verification_20261118_025807_344089\erase-boxed-number-type\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_column_metadata_20261118_024925_550591f9\mutants\verification_20261118_025807_344089\erase-boxed-number-type\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running tests\column_meta_obligations.rs (D:/cargo-target/seata-column-mutants\debug\deps\column_meta_obligations-82ffb276e37346ef.exe)
+
+running 1 test
+test object_field_preserves_boxed_types_and_null ... FAILED
+
+failures:
+
+---- object_field_preserves_boxed_types_and_null stdout ----
+
+thread 'object_field_preserves_boxed_types_and_null' (49016) panicked at crates\seata_test\tests\column_meta_obligations.rs:51:5:
+assertion failed: !left.java_equals(Some(&right))?
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    object_field_preserves_boxed_types_and_null
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test column_meta_obligations`

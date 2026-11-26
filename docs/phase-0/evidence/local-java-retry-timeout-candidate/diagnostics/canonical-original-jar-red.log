@@ -1,0 +1,963 @@
+01:40:39,233 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:40:39,238 |-INFO in ch.qos.logback.classic.util.ContextInitializer@54e041a4 - No custom configurators were discovered as a service.
+01:40:39,238 |-INFO in ch.qos.logback.classic.util.ContextInitializer@54e041a4 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:39,241 |-INFO in ch.qos.logback.classic.util.ContextInitializer@54e041a4 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:39,243 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:40:39,243 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:40:39,245 |-INFO in ch.qos.logback.classic.util.ContextInitializer@54e041a4 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 3 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:40:39,245 |-INFO in ch.qos.logback.classic.util.ContextInitializer@54e041a4 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:39,246 |-INFO in ch.qos.logback.classic.util.ContextInitializer@54e041a4 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:39,247 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:40:39,247 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:40:39,510 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:40:39,511 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:40:39,630 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:40:39,630 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:40:39,630 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:40:39,630 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:40:39,630 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:40:39,632 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@2c78324b - End of configuration.
+01:40:39,634 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@79defdc - Registering current configuration as safe fallback point
+01:40:39,634 |-INFO in ch.qos.logback.classic.util.ContextInitializer@54e041a4 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 388 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:40:39,856 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:40:39,883 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-11-13 01:40:43,379 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+2026-11-13 01:40:43,383 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+2026-11-13 01:40:43,387 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+2026-11-13 01:40:43,391 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+2026-11-13 01:40:43,398 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+2026-11-13 01:41:29,758 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+
+Test run finished after 50849 ms
+[         7 containers found      ]
+[         0 containers skipped    ]
+[         7 containers started    ]
+[         0 containers aborted    ]
+[         7 containers successful ]
+[         0 containers failed     ]
+[        37 tests found           ]
+[         0 tests skipped         ]
+[        37 tests started         ]
+[         0 tests aborted         ]
+[        14 tests successful      ]
+[        23 tests failed          ]
+
+
+Failures (23):
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:fileRetainsOperatorOrActiveRecords(GlobalStatus):[3] RollbackRetryTimeout
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'fileRetainsOperatorOrActiveRecords', methodParameterTypes = 'org.apache.seata.core.model.GlobalStatus']
+    => org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:40)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:179)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.fileRetainsOperatorOrActiveRecords(RetryTimeoutRetentionCandidateTest.java:166)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(SessionMode, boolean):[1] FILE, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(RetryTimeoutRetentionCandidateTest.java:111)
+       [...]
+     Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.lambda$commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks$0(RetryTimeoutRetentionCandidateTest.java:111)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(SessionMode, boolean):[2] FILE, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(RetryTimeoutRetentionCandidateTest.java:111)
+       [...]
+     Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.lambda$commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks$0(RetryTimeoutRetentionCandidateTest.java:111)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(SessionMode, boolean):[3] RAFT, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(RetryTimeoutRetentionCandidateTest.java:111)
+       [...]
+     Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.lambda$commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks$0(RetryTimeoutRetentionCandidateTest.java:111)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(SessionMode, boolean):[4] RAFT, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean']
+    => org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+       org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks(RetryTimeoutRetentionCandidateTest.java:111)
+       [...]
+     Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled CommitRetryTimeout
+       org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.lambda$commitTimeoutRemainsOperatorControlledWithoutReacquiringCommitLocks$0(RetryTimeoutRetentionCandidateTest.java:111)
+       org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:failedLockAcquisitionIsNotReportedAsSafeRestore()
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'failedLockAcquisitionIsNotReportedAsSafeRestore', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout ==> expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:40)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:210)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.failedLockAcquisitionIsNotReportedAsSafeRestore(RetryTimeoutRetentionCandidateTest.java:125)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[1] FILE, true, false, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:40:46,242 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:40:46,247 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:40:46,247 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:46,249 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:46,250 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:40:46,251 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:40:46,252 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 3 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:40:46,252 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:46,253 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:46,255 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:40:46,255 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:40:46,469 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:40:46,469 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:40:46,572 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:40:46,572 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:40:46,572 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:40:46,572 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:40:46,572 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:40:46,573 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:40:46,575 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:40:46,575 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 322 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:40:46,766 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:40:46,803 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:40:47,785 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[2] FILE, false, false, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:40:50,540 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:40:50,545 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:40:50,545 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:50,547 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:50,548 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:40:50,549 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:40:50,550 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 3 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:40:50,551 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:50,551 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:50,552 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:40:50,552 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:40:50,746 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:40:50,746 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:40:50,814 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:40:50,814 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:40:50,814 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:40:50,814 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:40:50,814 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:40:50,815 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:40:50,816 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:40:50,816 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 265 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:40:51,003 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:40:51,031 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:40:52,049 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[3] RAFT, true, false, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:40:54,015 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:40:54,017 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:40:54,017 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:54,018 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:54,019 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:40:54,020 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:40:54,020 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:40:54,020 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:54,021 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:54,023 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:40:54,023 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:40:54,151 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:40:54,151 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:40:54,207 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:40:54,207 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:40:54,207 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:40:54,208 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:40:54,208 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:40:54,208 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:40:54,209 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:40:54,209 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 188 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:40:54,323 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:40:54,339 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:40:55,146 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[4] RAFT, false, false, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:40:56,946 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:40:56,949 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:40:56,949 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:56,950 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:40:56,952 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:40:56,953 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:40:56,954 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 4 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:40:56,954 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:56,954 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:40:56,955 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:40:56,955 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:40:57,081 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:40:57,081 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:40:57,127 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:40:57,127 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:40:57,127 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:40:57,128 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:40:57,128 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:40:57,129 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:40:57,129 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:40:57,129 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 175 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:40:57,274 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:40:57,295 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:40:58,055 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[5] FILE, true, true, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:00,026 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:00,030 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:00,030 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:00,032 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:00,034 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:00,035 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:00,036 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 4 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:00,036 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:00,037 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:00,039 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:00,039 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:00,234 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:00,234 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:00,298 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:00,298 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:00,298 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:00,298 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:00,298 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:00,299 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:00,300 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:00,300 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 263 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:00,476 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:00,503 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:01,414 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[6] FILE, false, true, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:03,059 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:03,062 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:03,062 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:03,063 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:03,064 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:03,064 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:03,065 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:03,065 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:03,065 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:03,065 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:03,065 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:03,181 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:03,181 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:03,222 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:03,222 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:03,222 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:03,222 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:03,222 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:03,223 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:03,223 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:03,223 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 158 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:03,330 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:03,346 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:04,016 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[7] RAFT, true, true, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:05,634 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:05,636 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:05,636 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:05,637 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:05,638 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:05,638 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:05,639 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:05,639 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:05,639 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:05,640 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:05,640 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:05,761 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:05,761 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:05,802 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:05,802 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:05,802 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:05,802 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:05,802 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:05,803 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:05,803 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:05,803 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 164 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:05,919 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:05,936 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:06,650 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[8] RAFT, false, true, false
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:08,373 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:08,377 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:08,377 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:08,379 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:08,380 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:08,380 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:08,381 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:08,381 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:08,381 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:08,382 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:08,382 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:08,521 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:08,521 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:08,575 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:08,575 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:08,575 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:08,575 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:08,575 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:08,576 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:08,577 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:08,577 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 196 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:08,703 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:08,719 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:09,530 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[9] FILE, true, false, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:11,133 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:11,135 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:11,135 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:11,136 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:11,136 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:11,137 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:11,137 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 1 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:11,137 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:11,138 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:11,138 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:11,138 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:11,256 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:11,256 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:11,296 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:11,296 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:11,296 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:11,296 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:11,296 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:11,296 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:11,297 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:11,297 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 159 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:11,404 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:11,419 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:12,204 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[10] FILE, false, false, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:13,950 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:13,952 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:13,952 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:13,953 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:13,954 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:13,954 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:13,955 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:13,955 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:13,956 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:13,956 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:13,956 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:14,098 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:14,098 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:14,150 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:14,150 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:14,150 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:14,150 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:14,150 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:14,151 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:14,152 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:14,152 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 196 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:14,282 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:14,303 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:15,080 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[11] RAFT, true, false, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:16,565 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:16,567 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:16,567 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:16,568 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:16,569 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:16,570 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:16,570 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:16,570 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:16,570 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:16,571 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:16,571 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:16,683 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:16,683 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:16,725 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:16,725 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:16,725 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:16,725 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:16,725 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:16,725 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:16,726 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:16,726 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 156 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:16,824 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:16,839 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:17,520 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[12] RAFT, false, false, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:18,982 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:18,984 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:18,984 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:18,985 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:18,985 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:18,986 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:18,987 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:18,987 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:18,987 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:18,988 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:18,988 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:19,098 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:19,098 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:19,139 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:19,139 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:19,139 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:19,139 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:19,139 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:19,139 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:19,141 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:19,141 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 154 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:19,234 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:19,248 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:19,931 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[13] FILE, true, true, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:21,390 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:21,392 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:21,392 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:21,393 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:21,393 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:21,394 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:21,395 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:21,395 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:21,395 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:21,396 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:21,396 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:21,522 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:21,522 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:21,570 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:21,570 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:21,570 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:21,570 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:21,570 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:21,570 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:21,571 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:21,571 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 176 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:21,676 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:21,691 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:22,328 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[14] FILE, false, true, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:23,820 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:23,823 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:23,823 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:23,823 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:23,824 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:23,824 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:23,825 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:23,825 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:23,825 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:23,826 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:23,826 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:23,937 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:23,937 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:23,978 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:23,978 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:23,978 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:23,979 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:23,979 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:23,979 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:23,980 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:23,980 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 155 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:24,076 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:24,090 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:24,767 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[15] RAFT, true, true, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:26,220 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:26,221 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:26,221 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:26,222 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:26,223 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:26,223 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:26,224 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:26,224 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:26,224 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:26,225 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:26,225 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:26,339 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:26,339 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:26,381 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:26,381 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:26,381 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:26,381 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:26,381 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:26,381 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:26,382 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:26,382 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 158 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:26,481 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:26,497 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:27,167 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(SessionMode, boolean, boolean, boolean):[16] RAFT, false, true, true
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies', methodParameterTypes = 'org.apache.seata.common.store.SessionMode, boolean, boolean, boolean']
+    => org.opentest4j.AssertionFailedError: Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:41:28,652 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.3.14
+01:41:28,654 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - No custom configurators were discovered as a service.
+01:41:28,654 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:28,655 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+01:41:28,656 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+01:41:28,656 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+01:41:28,657 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 2 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+01:41:28,657 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:28,657 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+01:41:28,658 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+01:41:28,658 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/D:/codex-builds/jret_20261113_010005_fe3b7eb3/test-suite/test-new-version/target/test-classes/logback.xml]
+01:41:28,772 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+01:41:28,772 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+01:41:28,815 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+01:41:28,815 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+01:41:28,815 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+01:41:28,815 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+01:41:28,815 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+01:41:28,815 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@59a67c3a - End of configuration.
+01:41:28,816 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5003041b - Registering current configuration as safe fallback point
+01:41:28,816 |-INFO in ch.qos.logback.classic.util.ContextInitializer@1ee4730 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 159 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-11-13 01:41:28,918 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+2026-11-13 01:41:28,933 [SEATA] [main] INFO  org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader - Load compatible class io.seata.config.ConfigurationProvider
+2026-11-13 01:41:29,662 [SEATA] [main] ERROR org.apache.seata.server.session.SessionHolder - Could not handle the global session, xid: null
+Exception in thread "main" org.opentest4j.AssertionFailedError: Unexpected exception thrown: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:83)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:54)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.main(RetryTimeoutRetentionPolicyProbe.java:60)
+Caused by: org.apache.seata.common.exception.ShouldNeverHappenException: NOT properly handled RollbackRetryTimeout
+	at org.apache.seata.server.session.SessionHolder.reload(SessionHolder.java:268)
+	at org.apache.seata.server.session.RetryTimeoutRetentionPolicyProbe.lambda$main$0(RetryTimeoutRetentionPolicyProbe.java:60)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	... 3 more
+ ==> expected: <0> but was: <1>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+       org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+       org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:559)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.rollbackTimeoutRetainsIdentityAndHonorsBothUnlockPolicies(RetryTimeoutRetentionCandidateTest.java:92)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+  JUnit Jupiter:RetryTimeoutRetentionCandidateTest:raftCommitLockCleanupFailureRemainsVisible()
+    MethodSource [className = 'org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest', methodName = 'raftCommitLockCleanupFailureRemainsVisible', methodParameterTypes = '']
+    => org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+       org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:40)
+       org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+       org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:179)
+       org.apache.seata.server.session.RetryTimeoutRetentionCandidateTest.raftCommitLockCleanupFailureRemainsVisible(RetryTimeoutRetentionCandidateTest.java:151)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+       java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+       java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+       java.base/java.lang.reflect.Method.invoke(Method.java:568)
+       org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+       [...]
+RETENTION_JUNIT tests=37 started=37 succeeded=14 failed=23 skipped=0

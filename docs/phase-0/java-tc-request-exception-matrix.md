@@ -1,6 +1,6 @@
 # Java Seata 2.x — V1 Request Exception / Result Mapping Matrix
 
-> **Status:** pinned-source-derived; selected runtime cases passed in GitHub Actions Run #18. Remaining registration, lock-conflict and fallback-error cases are still pending.
+> **Status (2026-11-12):** all selected handler/processor paths and their actual serialized outputs are now compared: Java135/135; capture78 responses+1unencodable diagnostic; Rust83/83. Go78 native checks split62 compatible/6 length differences/1 ordinal difference/9 opaque-state cases. Live auth and known issues remain open. [Original handler evidence](evidence/local-java-handler-matrix-20261112/README.md); [runtime comparison](evidence/local-handler-runtime-20261112/README.md).
 >
 > Java baseline: `apache/incubator-seata@cba73e180fd8896a99df6415b859d275122feaa7`.
 >
@@ -37,8 +37,8 @@ Source:
 | BranchRegister | `handle(BranchRegisterRequest)` → `doBranchRegister` | no branch ID prefilled | wrapped as `FailedStore` | none | On failure preserve code/message; on timeout after send branch/lock outcome is unknown |
 | BranchReport | `handle(BranchReportRequest)` → `doBranchReport` | standard transaction response | wrapped as `FailedStore` | none | Do not discard failed response; retry/report reconciliation must account for possible already-persisted status |
 | GlobalLockQuery | `handle(GlobalLockQueryRequest)` → `doLockCheck` | standard transaction response; Lockable default false | wrapped as `FailedStore` | none | `Lockable=false` is a valid lock conflict result only with a decoded successful response; transport error is not false |
-| RegisterTM | remoting registration listener, not `AbstractTCInboundHandler` | `RegisterTMResponse(identified)` | listener catches Exception from auth/channel registration and returns identified=false plus message | none | Treat identified=false as registration rejection; connection loss means registration unknown |
-| RegisterRM | remoting registration listener, not `AbstractTCInboundHandler` | `RegisterRMResponse(identified)` | listener catches Exception from auth/channel registration and returns identified=false plus message | none | Same; registration is channel/resource association, repeat after reconnect |
+| RegisterTM | remoting registration listener, not `AbstractTCInboundHandler` | `RegisterTMResponse(identified)` | auth false/throw yields identified=false and Java-object message; V1 omits that message | none | Treat wire identified=false as rejection; Java decoded ResultCode can remain Success because that field is not transmitted |
+| RegisterRM | remoting registration listener, not `AbstractTCInboundHandler` | `RegisterRMResponse(identified)` | same separate IdentifyResponse control plane | none | Same; registration is channel/resource association, repeat after reconnect |
 | BranchCommit / BranchRollback | TC → RM phase-2 instruction, not a TM/RM request handled by TC inbound `AbstractTCInboundHandler` | RM returns branch status/result | not applicable to TC inbound request matrix | TC consumes RM response and decides branch removal/retry/global outcome | Rust RM must return Java-compatible BranchStatus and be idempotent under duplicate instruction |
 
 ### 2.1 Global status fallback is intentionally narrow
@@ -50,7 +50,7 @@ It performs:
 - `SessionHolder.findGlobalSession(xid, false)`;
 - if present, sets response.GlobalStatus to the session's current status;
 - if absent, sets response.GlobalStatus to `Finished`;
-- if the lookup itself throws, logs the exception and leaves the previous response status unchanged.
+- if the lookup or session status getter throws, logs the exception and leaves the previous response status unchanged. If the core callback already changed it before failing, that changed value is retained; this is not always the initial Committing/Rollbacking/UnKnown value.
 
 It is not used by GlobalBegin, GlobalReport, BranchRegister, BranchReport or GlobalLockQuery.
 
@@ -82,6 +82,8 @@ The Java remoting listener handles RegisterTM and RegisterRM separately from tra
 3. Register the channel with `ChannelManager.registerTMChannel` or `registerRMChannel`.
 4. Store client protocol version on the channel.
 5. Catch registration exceptions and return an identified=false response with optional message.
+
+Here "message" is a Java-object field only: native V1 IdentifyResponse writes identified+version. Runtime tests prove the error text is lost on this wire encoding. Deserialization constructs the default-success response object and changes identified without reading ResultCode, so **identified=false with Java ResultCode.Success** can occur after decode. Clients must inspect identified, not the inherited ResultCode.
 
 The registration response's `Identified` flag is not the same field as the transaction `ResultCode`. Rust should model these as separate response types.
 
@@ -116,12 +118,20 @@ Combined with the four V1 frame tests, Maven reports **12 tests, 0 failures, 0 e
 ## 6. Verification tasks
 
 - [x] Overlay JUnit tests for selected request TransactionException, RuntimeException and StoreException behavior (GlobalBegin, GlobalCommit, GlobalStatus, GlobalReport, BranchRegister); see runtime result above.
-- [ ] Extend runtime tests to GlobalRollback, BranchReport and GlobalLockQuery.
-- [ ] Verify Commit/Rollback/Status status fallback when session exists and when it is absent.
-- [ ] Verify status fallback lookup itself throws and leaves initial status unchanged.
-- [ ] Verify BranchRegister lock conflict maps LockKeyConflict and returns failed result.
-- [ ] Verify RegisterTM/RM auth rejection produces Identified=false independently of ResultCode.
-- [ ] Verify malformed/empty response payload cannot be interpreted as success.
-- [ ] Compare all observed response bytes against Go and Rust codecs after the runtime harness executes.
+- [x] Extend runtime tests to GlobalRollback, BranchReport and GlobalLockQuery — all eight handlers × four outcomes =32 cases.
+- [x] Verify Commit/Rollback/Status fallback with present/absent session — all three failure kinds.
+- [x] Verify lookup/getter throws retain the previous status, including callback-modified status —36 additional fallback cases cover four edge scenarios × three handlers × three failure kinds.
+- [x] Verify BranchRegister both LockKeyConflict and LockKeyConflictFailFast return failed result/code, not a fabricated BranchId.
+- [x] Verify actual RegTM/RM auth-hook allow/false/throw and V1 Identified semantics independently of inherited ResultCode —7 processor unit cases including closed denied RM cleanup. This is not live credential authentication.
+- [x] Verify malformed/empty payload rejection for the independent Rust probe's supported samples — every-prefix/trailing/enum/length tests, original29 and supplemental failure evidence. This is bounded negative testing, not arbitrary-fuzz proof or formal production decoder certification.
+- [x] Compare all78 observed serialized handler/registration outputs against Go and Rust after a fresh Java run. Require all79 named contexts, recording the null-report encoding failure without fabricated bytes; classify Go differences/opaque states rather than calling them compatible. See runtime evidence above.
 
-No test execution is claimed by this source audit.
+## 7. Runtime matrix increment and open boundary
+
+`TCInboundFailureMatrixTest` adds72 actual-handler tests:32 main outcomes +36 fallback edge cases +2 conflict codes +successful lockable=false +null-report diagnostic. It asserts independent error text/code, status/identity/lock fields and manual full V1 bytes for every serializable ordinary outcome. The missing three injection paths in the old-style test fixture were first deliberately left inactive; new assertions failed as expected, then the fixture was completed. This RED proves the guard detects absent fault injection; it is not a Java production bug fix.
+
+`RegistrationProcessorAuthTest` adds7 actual-processor cases, verifying auth invocation, no channel-registration calls on rejection, allowed calls, RM closed-channel cleanup and actual encoded/decoded flag/version semantics. Mocks isolate SPI loading/channel bookkeeping; they do not establish a live authenticated server or real global channel-map behavior.
+
+**JAVA-V1-REPORT-NULL-001 remains OPEN:** a GlobalReport request can carry null status (legal request sentinel `0xff`), and a failed handler response retains null. The pinned GlobalReportResponse codec dereferences that status and throws NullPointerException while encoding. The diagnostic asserts Failed/null and the actual exception; it does not claim a usable wire error response. Future API guards/error handling need an explicit verified policy, not silent conversion to Unknown or successful report.
+
+Combined selected Java target135/135 passed, zero failures/errors/skips;91-module BUILD SUCCESS. The earlier8 exception cases remain and are not replaced. A later fresh135 run now captures every serializable output and compares all78 against Go/Rust, requiring full case identities rather than relying on previous fixed examples. Rust fields and bytes match; Go diagnostic preserves explicit differences and opaque-state limits. The selected matrix's tests/comparison are complete, while Phase0/WP00, known issues and the complete delivery goal stay open.

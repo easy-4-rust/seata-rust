@@ -1,0 +1,32 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.72s
+     Running tests\live_tls_lifecycle.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\live_tls_lifecycle-840b69fa6bbb88f4.exe)
+
+running 3 tests
+test expired_and_future_client_certificates_are_rejected_by_x509_account ... X509 rejected client lifetime: client-expired.pem
+independent lifecycle business value=10
+X509 rejected client lifetime: client-future.pem
+independent lifecycle business value=10
+valid client identity accepted after lifetime rejection controls
+ok
+
+thread 'expired_and_future_server_certificates_reject_new_and_auxiliary_sessions' (39964) panicked at crates\seata_db_mysql\tests\live_tls_lifecycle.rs:32:75:
+called `Result::unwrap()` on an `Err` value: Database(MySqlDatabaseError { code: Some("HY000"), number: 3888, message: "Failed to set up SSL because of the following SSL library error: Invalid certificates" })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test expired_and_future_server_certificates_reject_new_and_auxiliary_sessions ... FAILED
+test leaf_and_ca_rotation_keep_new_connection_trust_and_original_transaction_atomicity ... TLS reload certificate=renewed.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+same CA renewed leaf accepted by new pool and auxiliary connections
+TLS reload certificate=rotated.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+independent lifecycle business value=10
+CA rotation rejected old trust, accepted overlap and replacement trust; old observer stayed connected
+TLS reload certificate=server.pem, server_not_after=Nov 25 15:33:56 2026 GMT
+ok
+
+failures:
+
+failures:
+    expired_and_future_server_certificates_reject_new_and_auxiliary_sessions
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.80s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_tls_lifecycle`

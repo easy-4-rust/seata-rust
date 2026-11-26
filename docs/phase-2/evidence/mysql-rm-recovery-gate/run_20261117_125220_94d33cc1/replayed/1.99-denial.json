@@ -1,0 +1,29 @@
+{
+  "result": {
+    "status": "ACTUAL_DML_SUCCEEDED_BEFORE_TERMINAL_DENIAL_AND_ROLLED_BACK",
+    "denied_physical_connection": 16,
+    "recovered_physical_connection": 18
+  },
+  "negative_controls": [
+    {
+      "mutation": "missing_all_commit_ACKs",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "truncated_commit_ACK",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "unclassified_ROLLBACK",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "intermediate_BEGIN",
+      "status": "REJECTED"
+    },
+    {
+      "mutation": "fake_fault_without_ACK",
+      "status": "REJECTED"
+    }
+  ]
+}

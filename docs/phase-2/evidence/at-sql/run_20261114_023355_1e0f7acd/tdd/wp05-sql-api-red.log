@@ -1,0 +1,17 @@
+     Locking 2 packages to highest compatible versions
+      Adding log v0.4.27 (available: v0.4.35)
+      Adding sqlparser v0.52.0
+   Compiling log v0.4.27
+   Compiling sqlparser v0.52.0
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0432]: unresolved imports `seata_at::SqlError`, `seata_at::SqlRecognizerFactory`, `seata_at::SqlType`
+ --> crates\seata_at\tests\mysql_sql_recognition.rs:1:16
+  |
+1 | use seata_at::{SqlError, SqlRecognizerFactory, SqlType};
+  |                ^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^ no `SqlType` in the root
+  |                |         |
+  |                |         no `SqlRecognizerFactory` in the root
+  |                no `SqlError` in the root
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `seata-at` (test "mysql_sql_recognition") due to 1 previous error

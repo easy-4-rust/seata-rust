@@ -1,0 +1,57 @@
+SLF4J(W): Class path contains multiple SLF4J providers.
+SLF4J(W): Found provider [ch.qos.logback.classic.spi.LogbackServiceProvider@346d61be]
+SLF4J(W): Found provider [org.slf4j.simple.SimpleServiceProvider@55536d9e]
+SLF4J(W): See https://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J(I): Actual provider is of type [ch.qos.logback.classic.spi.LogbackServiceProvider@346d61be]
+17:12:06.276 [main] INFO org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader -- Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+17:12:06.332 [main] INFO org.apache.seata.config.ConfigurationFactory -- load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+17:12:06.341 [main] ERROR org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider -- Get config 'seata.transport.serialization' default value from the property object failed:
+org.apache.seata.common.exception.ShouldNeverHappenException: PropertyClass for prefix: [seata.transport] should not be null.
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.getDefaultValueFromPropertyObject(SpringBootConfigurationProvider.java:123)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:95)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.getConfig(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.config.ConfigurationCache.lambda$proxy$0(ConfigurationCache.java:92)
+	at jdk.proxy2/jdk.proxy2.$Proxy2.getConfig(Unknown Source)
+	at org.apache.seata.config.FileConfiguration.addConfigListener(FileConfiguration.java:258)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:112)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.addConfigListener(<generated>)
+	at org.apache.seata.config.ConfigurationCache.lambda$proxy$0(ConfigurationCache.java:90)
+	at jdk.proxy2/jdk.proxy2.$Proxy2.getConfig(Unknown Source)
+	at org.apache.seata.core.serializer.SerializerServiceLoader.getSupportedSerializers(SerializerServiceLoader.java:148)
+	at org.apache.seata.core.serializer.SerializerServiceLoader.getDefaultSerializerType(SerializerServiceLoader.java:162)
+	at org.apache.seata.core.protocol.ProtocolConstants.<clinit>(ProtocolConstants.java:94)
+	at org.apache.seata.core.rpc.netty.v1.ProtocolEncoderV1.encode(ProtocolEncoderV1.java:74)
+	at org.easy4rust.seata.oracle.FormalFrameOracle.capture(FormalFrameOracle.java:103)
+	at org.easy4rust.seata.oracle.FormalFrameOracle.main(FormalFrameOracle.java:58)
+17:12:06.347 [main] ERROR org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider -- Get config 'seata.transport.compressor' default value from the property object failed:
+org.apache.seata.common.exception.ShouldNeverHappenException: PropertyClass for prefix: [seata.transport] should not be null.
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.getDefaultValueFromPropertyObject(SpringBootConfigurationProvider.java:123)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:95)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.getConfig(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.config.ConfigurationCache.lambda$proxy$0(ConfigurationCache.java:92)
+	at jdk.proxy2/jdk.proxy2.$Proxy2.getConfig(Unknown Source)
+	at org.apache.seata.config.FileConfiguration.addConfigListener(FileConfiguration.java:258)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:112)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.addConfigListener(<generated>)
+	at org.apache.seata.config.ConfigurationCache.lambda$proxy$0(ConfigurationCache.java:90)
+	at jdk.proxy2/jdk.proxy2.$Proxy2.getConfig(Unknown Source)
+	at org.apache.seata.core.protocol.ProtocolConstants.<clinit>(ProtocolConstants.java:102)
+	at org.apache.seata.core.rpc.netty.v1.ProtocolEncoderV1.encode(ProtocolEncoderV1.java:74)
+	at org.easy4rust.seata.oracle.FormalFrameOracle.capture(FormalFrameOracle.java:103)
+	at org.easy4rust.seata.oracle.FormalFrameOracle.main(FormalFrameOracle.java:58)

@@ -1,0 +1,18 @@
+
+running 1 test
+test lock_guard_cases::native_registration_guard_preserves_exclusive_tc_lock_and_releases_on_original_rollback ... FAILED
+
+failures:
+
+---- lock_guard_cases::native_registration_guard_preserves_exclusive_tc_lock_and_releases_on_original_rollback stdout ----
+
+thread 'lock_guard_cases::native_registration_guard_preserves_exclusive_tc_lock_and_releases_on_original_rollback' (57660) panicked at crates\seata_db_mysql\tests\support\java_lock_storage_cases.rs:135:23:
+unexpected registration result for pk-37: Err(Registration(DefiniteRejected { operation: BranchRegister, request: BranchRegisterRequest(BranchRegisterRequest { xid_present: true, branch_type: At, resource_id_present: true, lock_key_present: true, application_data_present: false, .. }), response: RpcMessage { id: 3, message_type: Response, codec: Seata, compressor: None, header_entries: 0, body: Some(BranchRegisterResponse(BranchRegisterResponse { response: AbstractTransactionResponse { result_code: Failed, msg_present: true, transaction_exception_code: FailedStore, .. }, branch_id: 0, .. })) } }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    lock_guard_cases::native_registration_guard_preserves_exclusive_tc_lock_and_releases_on_original_rollback
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 2.32s
+

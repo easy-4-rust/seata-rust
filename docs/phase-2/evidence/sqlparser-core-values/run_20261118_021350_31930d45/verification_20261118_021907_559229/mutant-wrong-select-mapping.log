@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (D:\codex-builds\seata_core_values_20261118_021350_31930d45\mutants\verification_20261118_021907_559229\wrong-select-mapping\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (D:\codex-builds\seata_core_values_20261118_021350_31930d45\mutants\verification_20261118_021907_559229\wrong-select-mapping\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.44s
+     Running tests\core_values.rs (D:/cargo-target/seata-core-value-mutants\debug\deps\core_values-b0a2c9d4acdf30a0.exe)
+
+running 1 test
+test sql_type_value_of ... FAILED
+
+failures:
+
+---- sql_type_value_of stdout ----
+
+thread 'sql_type_value_of' (47296) panicked at crates\seata_test\tests\core_values.rs:81:5:
+assertion `left == right` failed
+  left: INSERT
+ right: SELECT
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    sql_type_value_of
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test core_values`

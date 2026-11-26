@@ -1,0 +1,90 @@
+{
+  "status": "JAVA_ORIGINAL_OVERSIZED_UNDO_INSERT_MATCHES_LAYOUT_AND_SQLX_LOOPBACK",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-undo-fragment-layout.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_undo_fragment_sqlx",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_original_cases_reexecuted": 3,
+  "source_case_bindings": [
+    {
+      "case_id": "[engine:junit-jupiter]/[class:org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest]/[method:oversizedLogIsSplitAndMainRecordReferencesAllFragments()]",
+      "declaring_class": "org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManagerBehaviorTest",
+      "rust_tests": [
+        "mysql::undo_fragment_layout_tests::original_oversized_log_has_java_fragments_and_exact_root_references",
+        "mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement"
+      ],
+      "status": "MATCH"
+    }
+  ],
+  "mysql_pinned_driver": "SQLx 0.8.6",
+  "fixture_scope": "production write_fragments using scripted loopback with validated Java layout; test owns the transaction",
+  "verified": [
+    "actual prepared INSERT statement with literal Normal status",
+    "exact identifier, XID, context and BLOB execute parameters",
+    "child-before-root and each prepared handle closed",
+    "second child error with no root or COMMIT and caller ROLLBACK"
+  ],
+  "independent_review": "Original layout and SQLx loopback together cover Java assertion set; actual live InnoDB gate remains",
+  "global_rust_source_MATCH": 151,
+  "global_rust_methods_match": 130,
+  "rust": {
+    "1.99": {
+      "ordinary": 609,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "targeted_wire_tests": 2,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 609,
+      "ignored": 173,
+      "harnesses": 121,
+      "doc": 4,
+      "targeted_wire_tests": 2,
+      "strict_clippy": true
+    }
+  },
+  "live_mysql_executed": false,
+  "live_mysql_blocker": "Docker Engine /v1.56/version HTTP 500",
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/tests/fixtures/undo_fragment_layout_java.tsv": "f8dc78bf22b0318c3fa9636f396a2b4c2e5de955f26904682c0db738dd7c217e",
+    "crates/seata_db_mysql/src/lib.rs": "20ee3690bd124f7a970efa0a1dd2d4c10f489b37b613c9ca052dd1ed84372a16",
+    "crates/seata_db_mysql/src/mysql_loopback_fixture.rs": "860299b9f81818e5969bddc4181ac54d8671419e85b94961403d4c5a820bf4a7",
+    "crates/seata_db_mysql/src/data_source_proxy_rollback_sqlx_tests.rs": "8c9d918e0263a07cf29e159f4cca82d4dc9108383e9188c49894b74d00673c7a",
+    "crates/seata_db_mysql/src/mysql/mod.rs": "ed3d3251616d4e5b5b3be547edef6db034389024732688dbd8181634db48b352",
+    "crates/seata_db_mysql/src/mysql/mysql_undo_log_manager.rs": "b27d6bf94ba13f513a1fbfd8639a4a6aa6ecc0d6e023f0e1695c284c66b9d85e",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_layout.rs": "b234d6a6ee5ac8b39fd17976c426f205c6d048ced58687648d39abf2ee2e2c3f",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_layout_tests.rs": "632c8af572d995823f41fa6c811d2a248e1184b1673fde7c4e65b1771b7085c1",
+    "crates/seata_db_mysql/src/mysql/undo_fragment_sqlx_tests.rs": "f135083058e9588106702e10615749f2df2f717dc3ddc745db4f36e7fa55e175"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "6ba937e5c7e490a998225e9ab07b08e5eec62e6bd7a623de404a3bf4de66d467",
+    "1.85-doc.log": "bc9b2c6c282bd831de6a3ccd074b1bea269477d194f3e34d72190fb0666f6b5e",
+    "1.85-targeted.log": "768beb3869c76ca353b6cb86cbe773374fe08a85fbfab1523698c988b157bfa3",
+    "1.85-tests.log": "4c284348403804669bafdc79ecd825bc6e3256f89522d4d8d72f10f1c9a289fd",
+    "1.99-clippy.log": "cd6108be3ce6eead9d0a069ac4f9fb92e2bde5540cbb2b58f416a628f6ce8311",
+    "1.99-doc.log": "7b7422d217010fc9a49b56989e571d0b01d42a3525d16e571401c66720c8e119",
+    "1.99-targeted.log": "63813bbe60346bfe39615f23694093487d18e96d7999dd21ff50ddde1ea2baef",
+    "1.99-tests.log": "2315d51df7690c575e442c7268b10ad713bcf3c068549726d35ba1d89be7fcba",
+    "api-red.log": "eba4c81535fed05f83acf6214cc0978460a6f1b822cedab179fc33045810a7c7",
+    "commands.json": "585ddd07be2f761d3a84546004f0a46b3207231388490f7fa603fe14fd106b05",
+    "compile-original.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutant-cache-insert-statement.stderr": "315c9f190f30efa6ad392d56d5db07624c15d7db0b5f46a4edde2d84b674bc98",
+    "mutant-cache-insert-statement.stdout": "b08e0825872e90a69592d997d9b684a4ea1fb3213719b6c1627383db311304dc",
+    "mutant-continue-after-child-write-error.stderr": "cc0a383a85177f60332ef0644909899148ef657b94d3e634a37d513d51de966d",
+    "mutant-continue-after-child-write-error.stdout": "090a394589277e42d1acea693ce94b191d718b0da01f3ccaa666f92effe0fcbf",
+    "mutant-write-non-normal-status.stderr": "370ea11c994d8b21726a9a857164e548141b38e906c3228d7d8d568c9a82bd01",
+    "mutant-write-non-normal-status.stdout": "b08e0825872e90a69592d997d9b684a4ea1fb3213719b6c1627383db311304dc",
+    "mysql-environment.log": "a18d3a9450809d267095c175be8b1e9755a29f314ed1de789f89c88c154e3335",
+    "MySQLUndoLogManagerBehaviorTest.java": "369e52c346830fefd6617c6843c7220dcede0e02cb95a867585910d41823d846",
+    "original-inputs.json": "1cdebefbdf5c185066eaf9bec3050cfc0072881527c78a2287a729f210ceb751",
+    "original-junit.jsonl": "7b596d230fb648db3e345155183a681f751143aa5335f59a575fcb5f1f297ca2",
+    "original-junit.log": "cdadaf3fcc4cd90f0ed928fb6a0ac1f9fca45242bfc58a151174005a39d8643e",
+    "runtime-mutation-controls.json": "cb850088e33ccda632e0cb369982ce4d626535811fc814ac4cbec30feba2e8b2",
+    "statement-release-red.log": "93f4aed56238a40d7265cee5b821b9951b99d850e9daf843217fbe72a9ed5d94"
+  }
+}

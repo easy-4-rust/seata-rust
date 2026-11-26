@@ -1,0 +1,234 @@
+{
+  "status": "PINNED_JAVA_TC_FILE_RETRIES_REAL_MYSQL_COMPENSATION_AFTER_ACQUISITION_REJECTION",
+  "spec": "docs/phase-2/mysql-undo-rollback-contract.md",
+  "predecessor": "docs/phase-2/wp05-owned-wsl-mysql-validation.json",
+  "evidence": "docs/phase-2/evidence/fastjson-undo-native/run_20261120_owned_wsl_java_tc",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "java_jar_sha256": "aef2e8386c97deb78b45c6ad662ad601447def6f5c23537b7d5b1a314654c5d5",
+  "java_auth_fixture": {
+    "fixture": "D:\\codex-builds\\seata-wsl-java-auth-20261120\\candidate-12",
+    "source_sha256": "11aefc7205fc73b1350729792e54947205d8951a82297b9c7dcb21672c17366f",
+    "class_sha256": "c29b94a5e025d2aa1d9f5cda6f124ad8f53e8847718877ce7fa2f62c6b4deba1",
+    "service_sha256": "ee5786b21c1991698ab5bdf4f979da8db55bad7ec51cfcecf2300e787277dce1",
+    "options": [
+      "--release",
+      "8",
+      "-g",
+      "-parameters"
+    ]
+  },
+  "tc_storage": "FILE",
+  "mysql_version": "8.4.13",
+  "mysql_runtime": "Verified pinned image in isolated D-backed Ubuntu WSL",
+  "fixture_scope": "Fixed Java TC, production Rust TM and RM, and real InnoDB; initial committed business and Normal Undo rows reconstructed in an owned admin transaction after rolling back the original local prepared transaction",
+  "rust": {
+    "1.99": {
+      "ordinary": 629,
+      "ignored": 175,
+      "harnesses": 121,
+      "doc": 4,
+      "original_java_retry": 1,
+      "strict_clippy": true
+    },
+    "1.85": {
+      "ordinary": 629,
+      "ignored": 175,
+      "harnesses": 121,
+      "doc": 4,
+      "original_java_retry": 1,
+      "strict_clippy": true
+    }
+  },
+  "cases": {
+    "1.99": {
+      "branch_id": 4045079127816556546,
+      "first": {
+        "business_rows": 1,
+        "origin": 1,
+        "phase": 2,
+        "terminal": 0,
+        "undo_preserved": true
+      },
+      "final": {
+        "business_rows": 0,
+        "file": "Completed",
+        "origin": 1,
+        "phase": 2,
+        "terminal": 1,
+        "undo_rows": 0
+      },
+      "validation": {
+        "original_callbacks": 2,
+        "original_branch": 4045079127816556546,
+        "original_tm_rollbacks": 1,
+        "callback_statuses": [
+          9,
+          8
+        ],
+        "journal_states": [
+          1,
+          3
+        ],
+        "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+        "negative_controls": [
+          "first-reply-changed-to-terminal",
+          "tc-retry-and-reply-removed",
+          "changed-original-branch",
+          "final-status-queried-for-another-xid",
+          "changed-journal-crc"
+        ]
+      }
+    },
+    "1.85": {
+      "branch_id": 4045079127991119874,
+      "first": {
+        "business_rows": 1,
+        "origin": 1,
+        "phase": 2,
+        "terminal": 0,
+        "undo_preserved": true
+      },
+      "final": {
+        "business_rows": 0,
+        "file": "Completed",
+        "origin": 1,
+        "phase": 2,
+        "terminal": 1,
+        "undo_rows": 0
+      },
+      "validation": {
+        "original_callbacks": 2,
+        "original_branch": 4045079127991119874,
+        "original_tm_rollbacks": 1,
+        "callback_statuses": [
+          9,
+          8
+        ],
+        "journal_states": [
+          1,
+          3
+        ],
+        "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+        "negative_controls": [
+          "first-reply-changed-to-terminal",
+          "tc-retry-and-reply-removed",
+          "changed-original-branch",
+          "final-status-queried-for-another-xid",
+          "changed-journal-crc"
+        ]
+      }
+    }
+  },
+  "verified": [
+    "One TM rollback, two original TC callbacks on the same RM generation, responses 9 then 8",
+    "Original branch identity and seven-column snapshots, business row retained after fault",
+    "Independent file decode validates Pending then Completed; final Finished paired with original XID"
+  ],
+  "independent_review": "Verified raw pairing, corrected final-status correlation and archived the separately queried after-fault snapshot",
+  "actual_java_registration_loss_regression": "1.99 passed with original validation",
+  "limits": [
+    "Test-only auth SPI",
+    "No public first-phase business COMMIT",
+    "Only FILE TC storage"
+  ],
+  "cleanup": {
+    "java_listener_released": true,
+    "mysql_container_removed": true,
+    "relay_stopped": true,
+    "isolated_engine_stopped": true
+  },
+  "global_rust_source_MATCH": 152,
+  "global_rust_methods_match": 131,
+  "wp05_closed": false,
+  "source_inputs_sha256": {
+    "Cargo.lock": "8cc102dc7dc7ee3553e617395a8726235bb04931c4fc697acf7952251b2257f1",
+    "crates/seata_db_mysql/tests/live_commit_direction_java.rs": "64703d51846475d2929c8d89e3bd6d3000362592e9b363b3519e49dfd98e8ecc",
+    "crates/seata_db_mysql/tests/live_callback_java.rs": "df9ed517a6f0d1a308ec30f8c7a0d0397f5d98d76f42a381794189d56dceaa0c",
+    "crates/seata_db_mysql/src/data_source_manager.rs": "7974e93eea45c13e1a17f0a8264393b598d612d1037e21558dd21830941b1f85",
+    "crates/seata_db_mysql/tests/support/undo_rollback_fixture.rs": "126606e166ab0339981209be01a290c5a9f4175d175a8bbbd1ff91a5efb59166",
+    "tools/formal-commit-direction/java_runtime.py": "e247a8758824b072a9351b2aedfadf3220ab3a1de64dc8e9a8ca12feca3d6013",
+    "tools/formal-commit-direction/java_proxy.py": "8fe795a44f5dbb572a47d3efb4008ef51a15c158664c17d6a13e2c1babd74fed",
+    "tools/formal-callback-ownership/java_runtime.py": "179420e0e96eb2fc27cad3a585911ccab375563274bdaf2a63c3929b08a6714d",
+    "tools/formal-rm-java/validate.py": "6ac65c201dbad7c785cd870e4aa43faf826e57bc26cff89956588ec62801ae14",
+    "tools/java-v1-golden/Phase0CredentialCheckAuthHandler.java": "11aefc7205fc73b1350729792e54947205d8951a82297b9c7dcb21672c17366f"
+  },
+  "evidence_sha256": {
+    "1.85-clippy.log": "78202a8daf8ac5519d0faea7028a0f8dc58631ce1efaec6dc8c3630140539d2c",
+    "1.85-doc.log": "febcc5536638c844e267989a7a1f8c1273b367696cf445836e55c78c01106c9b",
+    "1.85-targeted.log": "e9e39cb4395a26f367c577d3ab9abf8aff09f33fa2a903cb1b1f4afaeab895aa",
+    "1.85-tests.log": "5e7603add938775208a4b19d6cf949f1c6a609937a21dbf6d35fdc2c822a7ccc",
+    "1.99-clippy.log": "7422c148ad15bee509cefbf8aeb80f4a1ee90748e61569766d8cc39e2c8705fa",
+    "1.99-doc.log": "ebd92929fcb8a177686f847cae9c83eeb607df5080ee2cb533ee3687889d913b",
+    "1.99-targeted.log": "9038d7e0e4e1dc1632c2922ecf908c8f7fb247223d7d1391cf7d448424143eb8",
+    "1.99-tests.log": "4eb019da73764736d7c23fe3188a7bfdcd6eb4d896f7a24d7eda40d4a8206369",
+    "auth-fixture-restoration.json": "ccc317b086640921026eb2e76fb9258632fbe501742fa30dc2f93ce7c92d3d72",
+    "cleanup.log": "0c113bb60e40e2aa937e324951e087d56c65f22af1805bb680cac5f59246f66f",
+    "compensation-retry-1.85-verified3/java-tc/application.yml": "9ef31c669def12c7fcda1b5330e9ac3a0bfa2b2b004b253f3cb5dbf4212ac64c",
+    "compensation-retry-1.85-verified3/java-tc/auth-binding.json": "df68f119db8dccf4baded75e6030cc3f12c2287c625a18b63f31668009b72ca6",
+    "compensation-retry-1.85-verified3/java-tc/auth-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.85-verified3/java-tc/CallbackOwnershipAuthHandler.class": "cd82f210ac31fb5fe797f0d83d63a3a24670e80bb5814875c347e6249987066b",
+    "compensation-retry-1.85-verified3/java-tc/class-load.log": "49d53fd12d79a0dd06a16f35d1eae662c044ac1ec113448a9f3bd31af36c0992",
+    "compensation-retry-1.85-verified3/java-tc/cleanup.json": "2a3215bc11c9443388b89546551198d72191457d39a8f32fc230b8ed51833ce4",
+    "compensation-retry-1.85-verified3/java-tc/owned-processes.json": "27d98317a5e557b45acbe7695e206826b75ee66b2c28a7ac9359e6ff8c12c42c",
+    "compensation-retry-1.85-verified3/java-tc/RM-events.jsonl": "d6c6af8e5ba39602abcf2653bd3047c8ffd61fb2b4ca861e393bc7ded60929bd",
+    "compensation-retry-1.85-verified3/java-tc/RM-proxy-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.85-verified3/java-tc/RM-proxy-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.85-verified3/java-tc/rollback-retry-validation.json": "9c3198cc2afff0f27162370fd2c5ee0edd80a7ad224b7759eb24ce403b848152",
+    "compensation-retry-1.85-verified3/java-tc/tc-stderr.log": "782be60e3ed9b8386001cd90c0f6bc904022e5bc2b33cc3a5262438c0559f124",
+    "compensation-retry-1.85-verified3/java-tc/tc-stdout.log": "3e55b7eaa9c0d88906e73eeab4bfde8b5be0a6e80980f29dfd52a7570f225a72",
+    "compensation-retry-1.85-verified3/java-tc/TM-events.jsonl": "c49ba7bdc74f127db4c6ff893ec499974ede22fef572610e0ac84a719c6c5783",
+    "compensation-retry-1.85-verified3/java-tc/TM-proxy-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.85-verified3/java-tc/TM-proxy-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.85-verified3/observations/java-branches.log": "a9b2ee7d0496bae1fade443aafb44f8e65324228002418491ab94c2e7d0d7ddd",
+    "compensation-retry-1.85-verified3/observations/java-rollback-acquisition.json": "b39f5b0bf1b7313f222776bd85655f38bba42a5dba24d84a873f2f67f47c5827",
+    "compensation-retry-1.85-verified3/observations/normal-after-fault.json": "1b76aab20d94f25dc4b182a755fbf9ee5544cda864261b5deea6be7d28b4d97b",
+    "compensation-retry-1.85-verified3/observations/normal-before-fault.json": "1b76aab20d94f25dc4b182a755fbf9ee5544cda864261b5deea6be7d28b4d97b",
+    "compensation-retry-1.85-verified3/test.log": "3b352c72bc19aaa4bc5fe0c1e45cf4c5e629d3e8871a499a60fe6dde0343605e",
+    "compensation-retry-1.99-verified3/java-tc/application.yml": "9ef31c669def12c7fcda1b5330e9ac3a0bfa2b2b004b253f3cb5dbf4212ac64c",
+    "compensation-retry-1.99-verified3/java-tc/auth-binding.json": "ddfadd60814f4f1677b7d8bc9b7a7dfc115388c3be036ff7cceded01ddaab924",
+    "compensation-retry-1.99-verified3/java-tc/auth-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.99-verified3/java-tc/CallbackOwnershipAuthHandler.class": "cd82f210ac31fb5fe797f0d83d63a3a24670e80bb5814875c347e6249987066b",
+    "compensation-retry-1.99-verified3/java-tc/class-load.log": "4fc082f9c4fb47ba3cc57e1375147afb056ad12809443694fb68c9ad998ec6c6",
+    "compensation-retry-1.99-verified3/java-tc/cleanup.json": "bf51747b1048dd7981d9c3bcc5afc2eb9865de85d7d14d03a580bc0b591fd568",
+    "compensation-retry-1.99-verified3/java-tc/owned-processes.json": "291c4ba9c32c484c66def342097b11edb01bb709eba66267f4187d5f309a8769",
+    "compensation-retry-1.99-verified3/java-tc/RM-events.jsonl": "cd7837e4dd887c95d7d163e98de7b761494572a64d874894a213f703ece5e7a1",
+    "compensation-retry-1.99-verified3/java-tc/RM-proxy-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.99-verified3/java-tc/RM-proxy-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.99-verified3/java-tc/rollback-retry-validation.json": "72b505d047ac94a55c254423e849013b5016687d9fbbfa8b798045a656f6c3be",
+    "compensation-retry-1.99-verified3/java-tc/tc-stderr.log": "f1dade708172acbb395de13071f69c6301cf094cb8f0215735786c220f49547c",
+    "compensation-retry-1.99-verified3/java-tc/tc-stdout.log": "7d4ef3ca4d826d85ab7b352b2ae01de20bfffa12dbb8567339a8bbeef6770f9a",
+    "compensation-retry-1.99-verified3/java-tc/TM-events.jsonl": "2974ca6940613e0fbb5825de6836b1d83510d1eb45780569668385019bb6d3d5",
+    "compensation-retry-1.99-verified3/java-tc/TM-proxy-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.99-verified3/java-tc/TM-proxy-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compensation-retry-1.99-verified3/observations/java-branches.log": "3f071d9479aecf59d80fe55e60f53174f8c581f6f00598b7a5a0e6fa57900978",
+    "compensation-retry-1.99-verified3/observations/java-rollback-acquisition.json": "bf962dd4c692f0aa2a94488580fc93506c1a6c8c92fc0274e1287011fafd76ec",
+    "compensation-retry-1.99-verified3/observations/normal-after-fault.json": "5ab442be9b93915f98eaa7800ad77c1fcc48caf8e0e732110e6f383e35fa929b",
+    "compensation-retry-1.99-verified3/observations/normal-before-fault.json": "5ab442be9b93915f98eaa7800ad77c1fcc48caf8e0e732110e6f383e35fa929b",
+    "compensation-retry-1.99-verified3/test.log": "1b5be99d886384c51d7ac1758ddaefd05262ced5963c24e5e0d62c8e46ac07dd",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "registration-loss-1.99-verified/java-tc/application.yml": "9ef31c669def12c7fcda1b5330e9ac3a0bfa2b2b004b253f3cb5dbf4212ac64c",
+    "registration-loss-1.99-verified/java-tc/auth-binding.json": "688295f54215479879a86659371627175088b8490502e9fdd685e36402c21612",
+    "registration-loss-1.99-verified/java-tc/auth-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "registration-loss-1.99-verified/java-tc/CallbackOwnershipAuthHandler.class": "cd82f210ac31fb5fe797f0d83d63a3a24670e80bb5814875c347e6249987066b",
+    "registration-loss-1.99-verified/java-tc/class-load.log": "c6eb454413cd519794de2d1827fca20b63e95e99470b155bef153264dee89b75",
+    "registration-loss-1.99-verified/java-tc/cleanup.json": "867b0fd728ced44c8c25e7b4cfdf5c4659f6496f3fa663ce49ce9fd3e7aabc79",
+    "registration-loss-1.99-verified/java-tc/negative-controls.json": "c00758c0217845b150773a4c68a16be2266958f9e8f02213c94133b4fb2e23a9",
+    "registration-loss-1.99-verified/java-tc/owned-processes.json": "fa91b73c9a9d4a32eec0606ae30bbc5495981398f87d0e77de63bc9c4359eecb",
+    "registration-loss-1.99-verified/java-tc/RM-events.jsonl": "6b188d3e6ec8d400e1227fc464590185b7e1e9286bc31148dd7bc722addc621f",
+    "registration-loss-1.99-verified/java-tc/RM-proxy-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "registration-loss-1.99-verified/java-tc/RM-proxy-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "registration-loss-1.99-verified/java-tc/tc-stderr.log": "9df88772c2a99746ed3e7328f91523b3e569fed5277491375b4a2d1f237cec58",
+    "registration-loss-1.99-verified/java-tc/tc-stdout.log": "1c772ffe764a94ded34f369b38e5de5e9f188282b170424ecf656ec9d1f46fc8",
+    "registration-loss-1.99-verified/java-tc/TM-events.jsonl": "84967bb99bc85eeb4119931c05f7e6b415313dd4fffd4f6c01ef2e037d4e22fb",
+    "registration-loss-1.99-verified/java-tc/TM-proxy-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "registration-loss-1.99-verified/java-tc/TM-proxy-stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "registration-loss-1.99-verified/java-tc/validation.json": "91f174a45ae4092028f03708ce1fa8e27c3d5b144460f9aafb642ff453298d2d",
+    "registration-loss-1.99-verified/observations/java-branches.log": "219c7a89d9b30fc653ef1e337b98fccd09f88aeeed6aae56f5cb4c33f02c38e6",
+    "registration-loss-1.99-verified/observations/java-callback-ownership.json": "960df4fa49c20a0883e211bd1f38db29163ea3603ab24465ac5193f792392d9b",
+    "registration-loss-1.99-verified/test.log": "0977b680a58eb3bc777c67d47717e8688633156ddf4d772f45d10139fe2a6d24",
+    "run-java-tc.py": "c4d90f1e9ee21f98d3135353cffa40ebb64f2fbe4d1c910aab3698978e080a68",
+    "runtime-start.log": "6e31d3f975ade57ca80f152b013bd4ba07cdd694b82e78697a5ba1a0ce19eaca",
+    "server-before.txt": "114a509a96a9aa2e0eeacf48a132359eee49ce604e8ab634e0d99dbdf948b936",
+    "validate-rollback-retry.py": "45e94ae951403b20effeab1b92e7bcce600eff24dd07da3f4632b476d867da8f"
+  }
+}

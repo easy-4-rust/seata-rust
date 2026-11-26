@@ -1,0 +1,29 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running tests\live_metadata.rs (D:/cargo-target/seata-rust-production\debug\deps\live_metadata-f1b878f2dff3c31a.exe)
+
+running 7 tests
+test drop_releases_real_metadata_lock_without_a_business_commit ... ok
+test exact_metadata_has_physical_order_composite_primary_order_and_unsigned_precision ... 
+thread 'exact_metadata_has_physical_order_composite_primary_order_and_unsigned_precision' (36384) panicked at crates\seata_db_mysql\tests\live_metadata.rs:43:48:
+called `Result::unwrap()` on an `Err` value: Driver { operation: "column length", sql_state: None, code: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test metadata_lock_blocks_actual_ddl_until_the_same_transaction_rolls_back ... ok
+test metadata_visibility_is_required_before_interpreting_missing_triggers_as_absence ... ok
+test schema_partial_revocation_cannot_be_overridden_by_a_global_trigger_grant ... 
+thread 'schema_partial_revocation_cannot_be_overridden_by_a_global_trigger_grant' (54684) panicked at crates\seata_db_mysql\tests\live_metadata.rs:195:5:
+partial revoke was not rejected: Ok(TableMeta { name: "with_trigger", columns: [ColumnMeta { name: "id", kind: SignedInteger, nullable: false, ordinal: 1, primary_key_ordinal: Some(1), char_octet_length: None, numeric_precision: Some(10), numeric_scale: Some(0) }, ColumnMeta { name: "v", kind: SignedInteger, nullable: true, ordinal: 2, primary_key_ordinal: None, char_octet_length: None, numeric_precision: Some(10), numeric_scale: Some(0) }], primary_indices: [0] })
+FAILED
+test unsafe_tables_and_unknown_types_fail_closed_and_poison_the_local_scope ... ok
+test withheld_database_response_obeys_the_client_deadline_and_discards_the_transaction ... MYSQL_PROXY_HELD bytes=43 cleanup_ok=true
+ok
+
+failures:
+
+failures:
+    exact_metadata_has_physical_order_composite_primary_order_and_unsigned_precision
+    schema_partial_revocation_cannot_be_overridden_by_a_global_trigger_grant
+
+test result: FAILED. 5 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.66s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_metadata`

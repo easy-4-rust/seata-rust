@@ -1,0 +1,25 @@
+   Compiling seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-jdbc-db-type-mutant\crates\seata_sqlparser)
+   Compiling seata-test v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\.seata-jdbc-db-type-mutant\crates\seata_test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.05s
+     Running tests\jdbc_db_type_java.rs (D:/cargo-target/seata-map-views-mutant\debug\deps\jdbc_db_type_java-1542150fc77a0def.exe)
+
+running 1 test
+test native_jdbc_parser_matches_original_druid_for_all_prefixes_and_boundaries ... FAILED
+
+failures:
+
+---- native_jdbc_parser_matches_original_druid_for_all_prefixes_and_boundaries stdout ----
+
+thread 'native_jdbc_parser_matches_original_druid_for_all_prefixes_and_boundaries' (42364) panicked at crates\seata_test\tests\jdbc_db_type_java.rs:24:9:
+assertion `left == right` failed: input UTF-16 units: 006a006400620063003a0070006f006c00610072006400620032003a
+  left: Some(JavaString { units: [112, 111, 108, 97, 114, 100, 98], utf8: Some("polardb") })
+ right: Some(JavaString { units: [112, 111, 108, 97, 114, 100, 98, 50], utf8: Some("polardb2") })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    native_jdbc_parser_matches_original_druid_for_all_prefixes_and_boundaries
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-test --test jdbc_db_type_java`

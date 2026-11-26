@@ -1,0 +1,590 @@
+diff --git a/pkg/remoting/config/config.go b/pkg/remoting/config/config.go
+--- a/pkg/remoting/config/config.go
++++ b/pkg/remoting/config/config.go
+@@ -20,6 +20,8 @@
+ import "flag"
+ 
+ type Config struct {
++	// JavaV1Profile 显式启用Java V1严格适配，默认关闭；manager创建时捕获。
++	JavaV1Profile     bool          `yaml:"java-v1-profile" json:"java-v1-profile" koanf:"java-v1-profile"`
+ 	ReconnectInterval int           `yaml:"reconnect-interval" json:"reconnect-interval" koanf:"reconnect-interval"`
+ 	ConnectionNum     int           `yaml:"connection-num" json:"connection-num" koanf:"connection-num"`
+ 	LoadBalanceType   string        `yaml:"load-balance-type" json:"load-balance-type" koanf:"load-balance-type"`
+@@ -29,6 +31,7 @@
+ 
+ // RegisterFlagsWithPrefix for Config.
+ func (cfg *Config) RegisterFlagsWithPrefix(prefix string, f *flag.FlagSet) {
++	f.BoolVar(&cfg.JavaV1Profile, prefix+".java-v1-profile", false, "Explicit Java V1 compatibility profile.")
+ 	f.IntVar(&cfg.ReconnectInterval, prefix+".reconnect-interval", 0, "Reconnect interval.")
+ 	f.IntVar(&cfg.ConnectionNum, prefix+".connection-num", 1, "The getty_session pool.")
+ 	f.StringVar(&cfg.LoadBalanceType, prefix+".load-balance-type", "XID", "Default load balance type for remoting.")
+diff --git a/pkg/remoting/getty/session_manager.go b/pkg/remoting/getty/session_manager.go
+--- a/pkg/remoting/getty/session_manager.go
++++ b/pkg/remoting/getty/session_manager.go
+@@ -50,6 +50,7 @@
+ )
+ 
+ type SessionManager struct {
++	javaV1Profile bool // 初始化时捕获，重连不重新读取调用方选择。
+ 	// serverAddress -> rpc_client.Session -> bool
+ 	serverSessions        sync.Map
+ 	allSessions           sync.Map
+@@ -105,10 +106,17 @@
+ func initSessionManager(gettyConfig *config.Config, seataConfig *config.SeataConfig) {
+ 	if sessionManager == nil {
+ 		onceSessionManager.Do(func() {
++			if gettyConfig.JavaV1Profile {
++				snapshot := *gettyConfig
++				gettyConfig = &snapshot
++				seataSnapshot := *seataConfig
++				seataConfig = &seataSnapshot
++			}
+ 			sessionManager = &SessionManager{
+ 				allSessions:    sync.Map{},
+ 				serverSessions: sync.Map{},
+ 				gettyConf:      gettyConfig,
++				javaV1Profile:  gettyConfig.JavaV1Profile,
+ 				seataConfig:    seataConfig,
+ 			}
+ 			sessionManager.init()
+@@ -211,7 +219,7 @@
+ 	if g.startClient != nil {
+ 		client = g.startClient(instance)
+ 	} else {
+-		client = g.startGettyClient(instance)
++		client = g.startGettyClient(instance, entry)
+ 	}
+ 	if client == nil {
+ 		g.serverClients.CompareAndDelete(address, entry)
+@@ -236,7 +244,7 @@
+ 	entry.Close()
+ }
+ 
+-func (g *SessionManager) startGettyClient(instance *discovery.ServiceInstance) getty.Client {
++func (g *SessionManager) startGettyClient(instance *discovery.ServiceInstance, entry *serverClientEntry) getty.Client {
+ 	gettyClient := getty.NewTCPClient(
+ 		getty.WithServerAddress(serverAddress(instance)),
+ 		// todo if read c.gettyConf.ConnectionNum, will cause the connect to fail
+@@ -244,7 +252,11 @@
+ 		getty.WithReconnectInterval(g.gettyConf.ReconnectInterval),
+ 		getty.WithClientTaskPool(gxsync.NewTaskPoolSimple(0)),
+ 	)
+-	go gettyClient.RunEventLoop(g.newSession)
++	if g.javaV1Profile {
++		go gettyClient.RunEventLoop(func(s getty.Session) error { s.SetAttribute(javaV1OwnerKey, entry); return g.newSession(s) })
++	} else {
++		go gettyClient.RunEventLoop(g.newSession)
++	}
+ 	return gettyClient
+ }
+ 
+@@ -269,10 +281,10 @@
+ 	return net.JoinHostPort(instance.Addr, strconv.Itoa(instance.Port))
+ }
+ 
+-func (g *SessionManager) setSessionConfig(session getty.Session) {
++func (g *SessionManager) setSessionConfig(session getty.Session, handler getty.ReadWriter) {
+ 	session.SetName(g.gettyConf.SessionConfig.SessionName)
+ 	session.SetMaxMsgLen(g.gettyConf.SessionConfig.MaxMsgLen)
+-	session.SetPkgHandler(rpcPkgHandler)
++	session.SetPkgHandler(handler)
+ 	session.SetEventListener(GetGettyClientHandlerInstance())
+ 	session.SetReadTimeout(g.gettyConf.SessionConfig.TCPReadTimeout)
+ 	session.SetWriteTimeout(g.gettyConf.SessionConfig.TCPWriteTimeout)
+@@ -282,6 +294,10 @@
+ }
+ 
+ func (g *SessionManager) newSession(session getty.Session) error {
++	handler, profileErr := g.sessionPackageHandler()
++	if profileErr != nil {
++		return profileErr
++	}
+ 	var (
+ 		ok      bool
+ 		tcpConn *net.TCPConn
+@@ -292,7 +308,7 @@
+ 		session.SetCompressType(getty.CompressZip)
+ 	}
+ 	if _, ok = session.Conn().(*tls.Conn); ok {
+-		g.setSessionConfig(session)
++		g.setSessionConfig(session, handler)
+ 		log.Debugf("server accepts new tls session:%s\n", session.Stat())
+ 		return nil
+ 	}
+@@ -324,7 +340,7 @@
+ 		}
+ 	}
+ 
+-	g.setSessionConfig(session)
++	g.setSessionConfig(session, handler)
+ 	log.Debugf("rpc_client new session:%s\n", session.Stat())
+ 
+ 	return nil
+@@ -444,6 +460,11 @@
+ 		session.Close()
+ 	}
+ 	atomic.AddInt32(&g.sessionSize, -1)
++	if g.javaV1Profile {
++		if owner, ok := session.GetAttribute(javaV1OwnerKey).(*serverClientEntry); ok {
++			go g.reconnectJavaV1(session.RemoteAddr(), owner)
++		}
++	}
+ }
+ 
+ func (g *SessionManager) registerSession(session getty.Session) {
+diff --git a/pkg/remoting/getty/getty_client.go b/pkg/remoting/getty/getty_client.go
+--- a/pkg/remoting/getty/getty_client.go
++++ b/pkg/remoting/getty/getty_client.go
+@@ -35,8 +35,9 @@
+ )
+ 
+ type GettyRemotingClient struct {
+-	idGenerator   *atomic.Uint32
+-	gettyRemoting *GettyRemoting
++	mergeReplyMutex sync.Mutex // 同一批结果只允许一个处理器分发，包含失败路径。
++	idGenerator     *atomic.Uint32
++	gettyRemoting   *GettyRemoting
+ }
+ 
+ func GetGettyRemotingClient() *GettyRemotingClient {
+@@ -52,8 +53,12 @@
+ }
+ 
+ func (client *GettyRemotingClient) SendAsyncRequest(msg interface{}) error {
++	plan, err := javaV1PlanFor(msg)
++	if err != nil {
++		return err
++	}
+ 	rpcMessage := newAsyncRequestMessage(int32(client.idGenerator.Inc()), msg)
+-	return client.gettyRemoting.SendAsync(rpcMessage, nil, client.asyncCallback)
++	return client.gettyRemoting.SendAsync(rpcMessage, nil, client.javaV1Callback(plan, true))
+ }
+ 
+ func newAsyncRequestMessage(id int32, msg interface{}) message.RpcMessage {
+@@ -84,6 +89,10 @@
+ }
+ 
+ func (client *GettyRemotingClient) SendSyncRequest(msg interface{}) (interface{}, error) {
++	plan, err := javaV1PlanFor(msg)
++	if err != nil {
++		return nil, err
++	}
+ 	rpcMessage := message.RpcMessage{
+ 		ID:         int32(client.idGenerator.Inc()),
+ 		Type:       message.RequestTypeRequestSync,
+@@ -91,7 +100,7 @@
+ 		Compressor: 0,
+ 		Body:       msg,
+ 	}
+-	return client.gettyRemoting.SendSync(rpcMessage, nil, client.syncCallback)
++	return client.gettyRemoting.SendSync(rpcMessage, nil, client.javaV1Callback(plan, false))
+ }
+ 
+ func (g *GettyRemotingClient) asyncCallback(reqMsg message.RpcMessage, respMsg *message.MessageFuture) (interface{}, error) {
+diff --git a/pkg/remoting/processor/client/client_on_response_processor.go b/pkg/remoting/processor/client/client_on_response_processor.go
+--- a/pkg/remoting/processor/client/client_on_response_processor.go
++++ b/pkg/remoting/processor/client/client_on_response_processor.go
+@@ -61,6 +61,8 @@
+ 		grpc.GetGrpcClientHandlerInstance().RegisterProcessor(message.MessageTypeGlobalStatusResult, clientOnResponseProcessor)
+ 		grpc.GetGrpcClientHandlerInstance().RegisterProcessor(message.MessageTypeRegCltResult, clientOnResponseProcessor)
+ 	default:
++		getty.GetGettyClientHandlerInstance().RegisterProcessor(message.MessageTypeBranchCommitResult, clientOnResponseProcessor)
++		getty.GetGettyClientHandlerInstance().RegisterProcessor(message.MessageTypeBranchRollbackResult, clientOnResponseProcessor)
+ 		getty.GetGettyClientHandlerInstance().RegisterProcessor(message.MessageTypeSeataMergeResult, clientOnResponseProcessor)
+ 		getty.GetGettyClientHandlerInstance().RegisterProcessor(message.MessageTypeBranchRegisterResult, clientOnResponseProcessor)
+ 		getty.GetGettyClientHandlerInstance().RegisterProcessor(message.MessageTypeBranchStatusReportResult, clientOnResponseProcessor)
+@@ -122,23 +124,12 @@
+ }
+ 
+ func (f *clientOnResponseProcessor) handleSeataOnResponse(rpcMessage message.RpcMessage) error {
++	if rpcMessage.Type != message.RequestTypeResponse {
++		return getty.GetGettyRemotingClient().RejectJavaV1Response(rpcMessage.ID, "not a response envelope")
++	}
+ 	gettyRemotingClient := getty.GetGettyRemotingClient()
+-	if mergedResult, ok := rpcMessage.Body.(message.MergeResultMessage); ok {
+-		mergedMessage := gettyRemotingClient.GetMergedMessage(rpcMessage.ID)
+-		if mergedMessage != nil {
+-			for i := 0; i < len(mergedMessage.Msgs); i++ {
+-				msgID := mergedMessage.MsgIds[i]
+-				response := gettyRemotingClient.GetMessageFuture(msgID)
+-				if response != nil {
+-					if !response.Complete(mergedResult.Msgs[i]) {
+-						log.Warnf("merged response dropped for msg ID: %d because the future was already signaled", msgID)
+-					}
+-					gettyRemotingClient.RemoveMessageFuture(msgID)
+-				}
+-			}
+-			gettyRemotingClient.RemoveMergedMessageFuture(rpcMessage.ID)
+-		}
+-		return nil
++	if _, ok := rpcMessage.Body.(message.MergeResultMessage); ok {
++		return gettyRemotingClient.HandleJavaV1MergedResponse(rpcMessage)
+ 	} else {
+ 		// 如果是请求消息，做处理逻辑
+ 		msgFuture := gettyRemotingClient.GetMessageFuture(rpcMessage.ID)
+diff --git a/pkg/remoting/getty/listener.go b/pkg/remoting/getty/listener.go
+--- a/pkg/remoting/getty/listener.go
++++ b/pkg/remoting/getty/listener.go
+@@ -99,10 +99,17 @@
+ 		return
+ 	}
+ 
++	if err := GetGettyRemotingClient().checkJavaV1Envelope(rpcMessage); err != nil {
++		log.Errorf("invalid Java V1 response: %v", err)
++		return
++	}
++
+ 	if mm, ok := rpcMessage.Body.(message.MessageTypeAware); ok {
+ 		processor := g.processorMap[mm.GetTypeCode()]
+ 		if processor != nil {
+-			processor.Process(ctx, rpcMessage)
++			if err := processor.Process(ctx, rpcMessage); err != nil {
++				log.Errorf("response processor failed: %v", err)
++			}
+ 		} else {
+ 			log.Errorf("This message type %v has no processor.", mm.GetTypeCode())
+ 		}
+diff --git a/pkg/remoting/getty/getty_init.go b/pkg/remoting/getty/getty_init.go
+--- a/pkg/remoting/getty/getty_init.go
++++ b/pkg/remoting/getty/getty_init.go
+@@ -20,9 +20,18 @@
+ import (
+ 	"seata.apache.org/seata-go/v2/pkg/protocol/codec"
+ 	"seata.apache.org/seata-go/v2/pkg/remoting/config"
++	"seata.apache.org/seata-go/v2/pkg/util/log"
+ )
+ 
+ func InitGetty(gettyConfig *config.Config, seataConfig *config.SeataConfig) {
++	if gettyConfig == nil || seataConfig == nil {
++		log.Errorf("invalid Getty initialization configuration")
++		return
++	}
++	if gettyConfig.JavaV1Profile && gettyConfig.SessionConfig.CompressEncoding {
++		log.Errorf("Java V1 profile requires Getty compression disabled")
++		return
++	}
+ 	codec.Init()
+ 	initSessionManager(gettyConfig, seataConfig)
+ }
+diff --git a/pkg/protocol/message/other_message.go b/pkg/protocol/message/other_message.go
+--- a/pkg/protocol/message/other_message.go
++++ b/pkg/protocol/message/other_message.go
+@@ -56,10 +56,16 @@
+ // false without touching Response, rather than racing the winner's write or
+ // clobbering it after the waiter has already read it.
+ func (f *MessageFuture) Complete(response interface{}) bool {
++	return f.CompleteWithError(response, nil)
++}
++
++// CompleteWithError 使用同一CAS原子发布Response与Err，然后唤醒等待者。
++func (f *MessageFuture) CompleteWithError(response interface{}, err error) bool {
+ 	if !f.completed.CompareAndSwap(false, true) {
+ 		return false
+ 	}
+ 	f.Response = response
++	f.Err = err
+ 	f.Done <- struct{}{}
+ 	return true
+ }
+diff --git a/pkg/remoting/getty/java_v1_reply_plan.go b/pkg/remoting/getty/java_v1_reply_plan.go
+new file mode 100644
+--- /dev/null
++++ b/pkg/remoting/getty/java_v1_reply_plan.go
+@@ -0,0 +1,221 @@
++// Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0.
++package getty
++
++import (
++	"fmt"
++	"reflect"
++	"seata.apache.org/seata-go/v2/pkg/protocol/message"
++	"seata.apache.org/seata-go/v2/pkg/util/log"
++)
++
++// javaV1ReplyPlan 在发送前快照预期类型，不保留调用方可修改的子消息切片。
++type javaV1ReplyPlan struct {
++	merged bool
++	types  []message.MessageType
++}
++
++var javaV1ReplyKinds = map[message.MessageType]message.MessageType{1: 2, 3: 4, 5: 6, 7: 8, 9: 10, 11: 12, 13: 14, 15: 16, 17: 18, 21: 22, 101: 102, 103: 104}
++
++func javaV1SDKValue(body interface{}) (interface{}, bool) {
++	v := reflect.ValueOf(body)
++	if !v.IsValid() {
++		return nil, false
++	}
++	if v.Kind() == reflect.Ptr {
++		if v.IsNil() {
++			return nil, false
++		}
++		v = v.Elem()
++	}
++	return v.Interface(), true
++}
++func javaV1SDKKind(body interface{}) (message.MessageType, bool) {
++	value, ok := javaV1SDKValue(body)
++	if !ok {
++		return 0, false
++	}
++	aware, ok := value.(message.MessageTypeAware)
++	if !ok {
++		return 0, false
++	}
++	return aware.GetTypeCode(), true
++}
++func javaV1PlanFor(body interface{}) (*javaV1ReplyPlan, error) {
++	value, ok := javaV1SDKValue(body)
++	if !ok {
++		return nil, nil
++	}
++	if request, ok := value.(message.MergedWarpMessage); ok {
++		if len(request.Msgs) > 1024 || (len(request.MsgIds) != 0 && len(request.MsgIds) != len(request.Msgs)) {
++			return nil, fmt.Errorf("invalid Java V1 merged request shape")
++		}
++		plan := &javaV1ReplyPlan{merged: true, types: make([]message.MessageType, len(request.Msgs))}
++		for i, child := range request.Msgs {
++			kind, known := javaV1SDKKind(child)
++			expected, mapped := javaV1ReplyKinds[kind]
++			if !known || !mapped {
++				return nil, fmt.Errorf("unsupported Java V1 merged request child%d", i)
++			}
++			plan.types[i] = expected
++		}
++		return plan, nil
++	}
++	kind, known := javaV1SDKKind(value)
++	if !known {
++		return nil, nil
++	}
++	if expected, mapped := javaV1ReplyKinds[kind]; mapped {
++		return &javaV1ReplyPlan{types: []message.MessageType{expected}}, nil
++	}
++	// 普通原有/单向消息沿用原SDK路径；合并子项才要求可确定的响应契约。
++	return nil, nil
++}
++func (p *javaV1ReplyPlan) validate(body interface{}) error {
++	if p == nil {
++		return nil
++	}
++	value, ok := javaV1SDKValue(body)
++	if !ok {
++		return &JavaV1UnknownReplyError{Reason: "nil response"}
++	}
++	if p.merged {
++		response, ok := value.(message.MergeResultMessage)
++		if !ok || len(response.Msgs) != len(p.types) {
++			return &JavaV1UnknownReplyError{Reason: "merged result count/type differs"}
++		}
++		for i, child := range response.Msgs {
++			kind, ok := javaV1SDKKind(child)
++			if !ok || kind != p.types[i] {
++				return &JavaV1UnknownReplyError{Reason: fmt.Sprintf("merged result child%d differs", i)}
++			}
++		}
++		return nil
++	}
++	kind, ok := javaV1SDKKind(value)
++	if !ok || kind != p.types[0] {
++		return &JavaV1UnknownReplyError{Reason: "response type differs"}
++	}
++	return nil
++}
++func (c *GettyRemotingClient) javaV1Callback(plan *javaV1ReplyPlan, async bool) callbackMethod {
++	if plan == nil {
++		if async {
++			return c.asyncCallback
++		}
++		return c.syncCallback
++	}
++	await := func(req message.RpcMessage, future *message.MessageFuture) (interface{}, error) {
++		response, e := c.syncCallback(req, future)
++		if e != nil {
++			return nil, e
++		}
++		if e = plan.validate(response); e != nil {
++			return nil, e
++		}
++		return response, nil
++	}
++	if !async {
++		return await
++	}
++	return func(req message.RpcMessage, future *message.MessageFuture) (interface{}, error) {
++		go func() {
++			if _, e := await(req, future); e != nil {
++				log.Errorf("Java V1 async response: %v", e)
++			}
++		}()
++		return nil, nil
++	}
++}
++
++// HandleJavaV1MergedResponse 按外层future或旧逐子请求缓存分发60结果；不重发事务。
++// 参数rpc必须是已解码的响应；返回值为关联/契约错误，错误时不部分完成子future。
++func (c *GettyRemotingClient) HandleJavaV1MergedResponse(rpc message.RpcMessage) error {
++	c.mergeReplyMutex.Lock()
++	defer c.mergeReplyMutex.Unlock()
++	request := c.claimJavaV1Merge(rpc.ID)
++	value, ok := javaV1SDKValue(rpc.Body)
++	if !ok {
++		return c.failJavaV1Reply(rpc.ID, request, "nil merge response")
++	}
++	reply, ok := value.(message.MergeResultMessage)
++	if !ok || rpc.Type != message.RequestTypeResponse {
++		return c.failJavaV1Reply(rpc.ID, request, "not a merge response")
++	}
++	if request == nil {
++		// 显式SendSyncRequest发送完整容器时，原SDK只创建外层future，没有逐子请求缓存。
++		if c.GetMessageFuture(rpc.ID) != nil {
++			c.NotifyRpcMessageResponse(rpc)
++			c.RemoveMessageFuture(rpc.ID)
++		}
++		return nil
++	}
++	if len(request.MsgIds) != len(request.Msgs) {
++		return c.failJavaV1Reply(rpc.ID, request, "merged request ID count differs")
++	}
++	seen := make(map[int32]bool, len(request.MsgIds))
++	for _, id := range request.MsgIds {
++		if seen[id] {
++			return c.failJavaV1Reply(rpc.ID, request, "duplicate merged request ID")
++		}
++		seen[id] = true
++	}
++	plan, e := javaV1PlanFor(*request)
++	if e != nil {
++		return c.failJavaV1Reply(rpc.ID, request, e.Error())
++	}
++	if e = plan.validate(reply); e != nil {
++		return c.failJavaV1Reply(rpc.ID, request, e.Error())
++	}
++	for i, id := range request.MsgIds {
++		if c.GetMessageFuture(id) != nil {
++			c.NotifyRpcMessageResponse(message.RpcMessage{ID: id, Type: 1, Body: reply.Msgs[i]})
++			c.RemoveMessageFuture(id)
++		}
++	}
++	return nil
++}
++
++func (c *GettyRemotingClient) claimJavaV1Merge(id int32) *message.MergedWarpMessage {
++	value, ok := c.gettyRemoting.mergeMsgMap.LoadAndDelete(id)
++	if !ok {
++		return nil
++	}
++	request, _ := value.(*message.MergedWarpMessage)
++	return request
++}
++
++// 调用方持有mergeReplyMutex；所有已知子项只发布同一个未知错误，绝不部分成功。
++func (c *GettyRemotingClient) failJavaV1Reply(id int32, request *message.MergedWarpMessage, reason string) error {
++	err := &JavaV1UnknownReplyError{Reason: reason}
++	ids := []int32{id}
++	if request != nil {
++		ids = append(ids, request.MsgIds...)
++	}
++	seen := make(map[int32]bool)
++	for _, child := range ids {
++		if seen[child] {
++			continue
++		}
++		seen[child] = true
++		if future := c.GetMessageFuture(child); future != nil {
++			future.CompleteWithError(nil, err)
++			c.RemoveMessageFuture(child)
++		}
++	}
++	return err
++}
++
++// RejectJavaV1Response 向对应等待者发布类型化未知错误，不修改事务状态或重发请求。
++func (c *GettyRemotingClient) RejectJavaV1Response(id int32, reason string) error {
++	c.mergeReplyMutex.Lock()
++	defer c.mergeReplyMutex.Unlock()
++	return c.failJavaV1Reply(id, c.claimJavaV1Merge(id), reason)
++}
++func (c *GettyRemotingClient) checkJavaV1Envelope(rpc message.RpcMessage) error {
++	kind, known := javaV1SDKKind(rpc.Body)
++	reply := known && (kind == 2 || kind == 4 || kind == 6 || kind == 8 || kind == 10 || kind == 12 || kind == 14 || kind == 16 || kind == 18 || kind == 22 || kind == 60 || kind == 102 || kind == 104)
++	if (rpc.Type == message.RequestTypeResponse && !reply) || (rpc.Type != message.RequestTypeResponse && reply) {
++		return c.RejectJavaV1Response(rpc.ID, "response envelope/body kind differs")
++	}
++	return nil
++}
+diff --git a/pkg/remoting/getty/java_v1_session_profile.go b/pkg/remoting/getty/java_v1_session_profile.go
+new file mode 100644
+--- /dev/null
++++ b/pkg/remoting/getty/java_v1_session_profile.go
+@@ -0,0 +1,55 @@
++// Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0.
++package getty
++
++import (
++	"fmt"
++	getty "github.com/apache/dubbo-getty"
++	"net"
++	"seata.apache.org/seata-go/v2/pkg/discovery"
++	"seata.apache.org/seata-go/v2/pkg/protocol/codec"
++	"strconv"
++	"time"
++)
++
++const javaV1OwnerKey = "seata-java-v1-client-entry"
++
++// 原Getty把EOF标记为不自动重连；显式入口在独立goroutine更换已断开的客户端。
++// entry是会话创建时捕获的所有者，避免迟到回调关闭或复活另一个连接代际。
++func (g *SessionManager) reconnectJavaV1(address string, entry *serverClientEntry) {
++	if !g.isServerAddressAvailable(address) || !g.serverClients.CompareAndDelete(address, entry) {
++		return
++	}
++	entry.Close()
++	delay := time.Duration(g.gettyConf.ReconnectInterval)
++	if delay <= 0 {
++		delay = 300 * time.Millisecond
++	}
++	time.Sleep(delay)
++	if !g.isServerAddressAvailable(address) {
++		return
++	}
++	host, port, e := net.SplitHostPort(address)
++	if e != nil {
++		return
++	}
++	number, e := strconv.Atoi(port)
++	if e != nil {
++		return
++	}
++	g.ensureServerClient(&discovery.ServiceInstance{Addr: host, Port: number})
++}
++
++// sessionPackageHandler 为真实会话创建显式适配；选择在manager创建时捕获，重连保持相同选择。
++func (g *SessionManager) sessionPackageHandler() (getty.ReadWriter, error) {
++	if !g.javaV1Profile {
++		return rpcPkgHandler, nil
++	}
++	if g.gettyConf.SessionConfig.CompressEncoding {
++		return nil, fmt.Errorf("Java V1 profile requires Getty compression disabled")
++	}
++	profile, e := codec.NewJavaV1MessageProfile(codec.GetCodecManager())
++	if e != nil {
++		return nil, e
++	}
++	return &RpcPackageHandler{PayloadCodec: profile}, nil
++}
+diff --git a/pkg/remoting/getty/java_v1_unknown_reply_error.go b/pkg/remoting/getty/java_v1_unknown_reply_error.go
+new file mode 100644
+--- /dev/null
++++ b/pkg/remoting/getty/java_v1_unknown_reply_error.go
+@@ -0,0 +1,11 @@
++// Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0.
++package getty
++
++// JavaV1UnknownReplyError 表示响应与请求不一致，不能据此认定事务被拒绝或安全重发。
++// 对应Java: NettyClient同步请求/合并结果关联边界；生产Rust错误API另行实现。
++type JavaV1UnknownReplyError struct{ Reason string }
++
++// Error 返回包含“结果未知”语义的说明。
++func (e *JavaV1UnknownReplyError) Error() string {
++	return "Java V1 reply inconsistent; transaction outcome unknown: " + e.Reason
++}

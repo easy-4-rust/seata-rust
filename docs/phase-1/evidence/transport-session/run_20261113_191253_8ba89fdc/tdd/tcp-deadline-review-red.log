@@ -1,0 +1,23 @@
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.76s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-production\debug\deps\seata_transport-451e99b60f2a96ab.exe)
+
+running 1 test
+test netty::pending_requests::tests::response_after_absolute_deadline_is_late_even_if_caller_timer_was_not_polled ... FAILED
+
+failures:
+
+---- netty::pending_requests::tests::response_after_absolute_deadline_is_late_even_if_caller_timer_was_not_polled stdout ----
+
+thread 'netty::pending_requests::tests::response_after_absolute_deadline_is_late_even_if_caller_timer_was_not_polled' (54128) panicked at crates\seata_transport\src\netty\pending_requests_tests.rs:147:5:
+assertion failed: matches!(receiver.try_recv().unwrap(),Err(CallError::UnknownOutcome
+    {reason:TransportError::ResponseTimeout,..}))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    netty::pending_requests::tests::response_after_absolute_deadline_is_late_even_if_caller_timer_was_not_polled
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-transport --lib`

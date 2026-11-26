@@ -1,0 +1,138 @@
+// Copyright 2026 Seata-Rust contributors. Licensed under the Apache License, Version 2.0.
+package getty
+
+import (
+	"context"
+	getty "github.com/apache/dubbo-getty"
+	"seata.apache.org/seata-go/v2/pkg/protocol/message"
+)
+
+type javaV1ResponseGuardKey struct{}
+
+// javaV1ResponseGuard 在入站时捕获对象身份；处理器暂停后也不能按重用的ID重新寻找等待者。
+type javaV1ResponseGuard struct {
+	id        int32
+	future    *message.MessageFuture
+	request   *message.MergedWarpMessage
+	ids       []int32
+	children  []*message.MessageFuture
+	plan      *javaV1ReplyPlan
+	planError error
+}
+
+func javaV1ReplyBody(body interface{}) bool {
+	kind, known := javaV1SDKKind(body)
+	if !known {
+		return false
+	}
+	switch kind {
+	case 2, 4, 6, 8, 10, 12, 14, 16, 18, 22, 60, 102, 104:
+		return true
+	}
+	return false
+}
+func javaV1ReplyEnvelopeError(r message.RpcMessage) error {
+	reply := javaV1ReplyBody(r.Body)
+	if (r.Type == message.RequestTypeResponse && !reply) || (r.Type != message.RequestTypeResponse && reply) {
+		return &JavaV1UnknownReplyError{Reason: "response envelope/body kind differs"}
+	}
+	return nil
+}
+
+// bindJavaV1Response 捕获确切future/旧合并缓存；合法TC→RM请求使用独立ID空间，不能被响应过滤。
+func (c *GettyRemotingClient) bindJavaV1Response(ctx context.Context, s getty.Session, r message.RpcMessage) (context.Context, bool) {
+	if !javaV1TransportEnabled() || (r.Type != message.RequestTypeResponse && !javaV1ReplyBody(r.Body)) {
+		return ctx, true
+	}
+	guard := &javaV1ResponseGuard{id: r.ID}
+	c.gettyRemoting.javaV1StateMutex.Lock()
+	defer c.gettyRemoting.javaV1StateMutex.Unlock()
+	if value, found := c.gettyRemoting.javaV1Pending.Load(r.ID); found {
+		entry := value.(*javaV1Pending)
+		if entry.session != s {
+			return ctx, false
+		}
+		guard.future = entry.future
+	} else {
+		phase0PauseBind()
+guard.future = c.GetMessageFuture(r.ID)
+	}
+	c.mergeReplyMutex.Lock()
+	guard.request = c.GetMergedMessage(r.ID)
+	if guard.request != nil {
+		guard.ids = append([]int32(nil), guard.request.MsgIds...)
+		guard.plan, guard.planError = javaV1PlanFor(*guard.request)
+		for _, id := range guard.ids {
+			guard.children = append(guard.children, c.GetMessageFuture(id))
+		}
+	}
+	c.mergeReplyMutex.Unlock()
+	// 即使当前无等待者也保留空guard，防止暂停后的晚到响应完成此后出现的新ID所有者。
+	return context.WithValue(ctx, javaV1ResponseGuardKey{}, guard), true
+}
+
+// HandleJavaV1BoundResponse 由原response processor调用，发布至入站时捕获的对象，绝不重新按ID查找。
+// 返回handled=false表示非本模式/旧调用上下文，应继续原处理路径。
+func (c *GettyRemotingClient) HandleJavaV1BoundResponse(ctx context.Context, r message.RpcMessage) (bool, error) {
+	guard, found := ctx.Value(javaV1ResponseGuardKey{}).(*javaV1ResponseGuard)
+	if !found {
+		return false, nil
+	}
+	err := javaV1ReplyEnvelopeError(r)
+	if r.ID != guard.id {
+		err = &JavaV1UnknownReplyError{Reason: "response context ID differs"}
+	}
+	if guard.future != nil {
+		if err != nil {
+			guard.future.CompleteWithError(nil, err)
+		} else {
+			guard.future.Complete(r.Body)
+		}
+		c.gettyRemoting.futures.CompareAndDelete(guard.id, guard.future)
+		if guard.request != nil {
+			c.gettyRemoting.mergeMsgMap.CompareAndDelete(guard.id, guard.request)
+		}
+		return true, err
+	}
+	if guard.request == nil {
+		return true, err
+	}
+	c.mergeReplyMutex.Lock()
+	defer c.mergeReplyMutex.Unlock()
+	if !c.gettyRemoting.mergeMsgMap.CompareAndDelete(guard.id, guard.request) {
+		return true, nil
+	}
+	if guard.planError != nil {
+		err = &JavaV1UnknownReplyError{Reason: guard.planError.Error()}
+	}
+	seen := make(map[int32]bool, len(guard.ids))
+	if guard.plan == nil || len(guard.ids) != len(guard.plan.types) {
+		err = &JavaV1UnknownReplyError{Reason: "merged request ID count differs"}
+	}
+	for _, id := range guard.ids {
+		if seen[id] {
+			err = &JavaV1UnknownReplyError{Reason: "duplicate merged request ID"}
+		}
+		seen[id] = true
+	}
+	if err == nil {
+		err = guard.plan.validate(r.Body)
+	}
+	var reply message.MergeResultMessage
+	if err == nil {
+		value, _ := javaV1SDKValue(r.Body)
+		reply = value.(message.MergeResultMessage)
+	}
+	for i, future := range guard.children {
+		if future == nil {
+			continue
+		}
+		if err != nil {
+			future.CompleteWithError(nil, err)
+		} else {
+			future.Complete(reply.Msgs[i])
+		}
+		c.gettyRemoting.futures.CompareAndDelete(guard.ids[i], future)
+	}
+	return true, err
+}

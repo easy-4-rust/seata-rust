@@ -1,0 +1,26 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.34s
+     Running unittests src\lib.rs (D:/cargo-target/seata-rust-load-driver\debug\deps\seata_db_mysql-f1d1dd3de5bb39d6.exe)
+
+running 3 tests
+test mysql::undo_fragment_sqlx_tests::insert_prepare_rejection_preserves_server_diagnostics ... ok
+test mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause ... FAILED
+test mysql::undo_fragment_read_sqlx_tests::child_batch_prepare_rejection_preserves_server_diagnostics ... ok
+
+failures:
+
+---- mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause stdout ----
+
+thread 'mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause' (59132) panicked at crates\seata_db_mysql\src\mysql\undo_fragment_sqlx_tests.rs:99:13:
+assertion `left == right` failed: lost INSERT PREPARE I/O cause: Driver { operation: "Undo insert", sql_state: None, code: None }
+  left: None
+ right: Some(UnexpectedEof)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 30 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-db-mysql --lib`

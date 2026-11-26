@@ -1,0 +1,115 @@
+{
+  "status": "JDBC_DRIVER_CLASS_RESOLUTION_AND_RM_RESOURCE_ID_VERIFIED",
+  "evidence": "docs/phase-2/evidence/sqlparser-jdbc-driver/run_20261118_v2",
+  "previous_catalog_sha256": "0611f7dd8ee5a8bfa8ce4e015dacc27935839b97035b4aa2eef6ca087e8b29dd",
+  "java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "druid_version": "1.2.28",
+  "original_object_states": {
+    "IMPLEMENTED": 14,
+    "PARTIAL": 5,
+    "MISSING": 12
+  },
+  "original_cases_MATCH": 76,
+  "original_JUnit_run_inherited": true,
+  "druid_driver_prefixes": 64,
+  "original_url_inputs_per_availability_profile": 465,
+  "driver_observations_MATCH": 930,
+  "resource_id_observations_MATCH": 930,
+  "cached_driver_observations_MATCH": 4,
+  "reentrant_driver_observations_MATCH": 6,
+  "reentrant_runtime_test_failed_before_fix_and_passed_after": true,
+  "verification": {
+    "1.99": {
+      "cargo": "cargo 1.99.0 (5f94df478 2026-08-27)",
+      "workspace_passed": 488,
+      "workspace_ignored": 143,
+      "harnesses": 106,
+      "doc_passed": 4,
+      "original_cases_MATCH": 76
+    },
+    "1.85": {
+      "cargo": "cargo 1.85.0 (d73d2caf9 2024-12-31)",
+      "workspace_passed": 488,
+      "workspace_ignored": 143,
+      "harnesses": 106,
+      "doc_passed": 4,
+      "original_cases_MATCH": 76
+    }
+  },
+  "registry_dependencies_changed": false,
+  "review": {
+    "reviewer": "/root/sqlparser_values_review",
+    "mode": "READ_ONLY",
+    "new_P1": 0,
+    "new_P2": 0
+  },
+  "remaining": [
+    "JVM driver construction and classloader/domain lifecycle",
+    "RM JDBC resource registration and other original integration paths",
+    "Process default Locale and remaining collection behavior, including EntrySet.remove structural reentry"
+  ],
+  "verified_inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "42cbfe15dc092e659956a15447dfa4fa82ac0f3f6794d4895a6338f04271a338"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/lib.rs",
+      "sha256": "d7015f6a503af8d2668608ec6a6affa81d7825b60ffd52018314b454dc751e4d"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/mod.rs",
+      "sha256": "92fb45ddef92d421ce26ff59fd167f0a13df442b921130d7d8ac7553fe80079a"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/druid_db_type_parser_impl.rs",
+      "sha256": "ad90ac0bd013c17a3cc2ea27ff3aee18ebebc5c410b46ead9027272813a810e6"
+    },
+    {
+      "path": "crates/seata_sqlparser/src/druid/druid_jdbc_driver_resolver.rs",
+      "sha256": "a165a21cc4b858a8d5f4fbfb7f9c629cebae813fd2335255646f1be8867001a8"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/lib.rs",
+      "sha256": "420000ca6d7e0e9dd3d45458b7ddfef4cf406703dc19212886e8410be23c16f2"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/mod.rs",
+      "sha256": "b03099cf32b6cfd365090221c7287f5cd61c6ad2a30ec0d5069907ba30523f92"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/util/jdbc_utils.rs",
+      "sha256": "66146e53c7ceddfb96165267fa7c853d9b62c254e761f69d03cfd7bd2b7cde97"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/jdbc_driver_java.rs",
+      "sha256": "f65ccdb7436168184976952cb7d7efcc82957aa2e4b780f3a0e10f88ec7972a5"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/fixtures/jdbc-driver-absent-java.tsv",
+      "sha256": "aa45a3be57bc6b25e45e7858c2d1a6a783b0cbf2994a88a97a42831ef761775c"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/fixtures/jdbc-driver-present-java.tsv",
+      "sha256": "aa747803bd9f38aef18ef9fc9901770ab9ad4d785e81d17b1c08e9f1a3fda252"
+    },
+    {
+      "path": "crates/seata_db_mysql/tests/fixtures/jdbc-driver-reentry-java.tsv",
+      "sha256": "7a24054f62a0ab7b234f63d591e602048031e8f95bb5067f902428cc3882c0d2"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/JdbcDriverOracle.java",
+      "sha256": "e1e17c1488e2f930b3636da4f481db7e1a6f60d40cd274e2dab7c122bdf8aea7"
+    },
+    {
+      "path": "tools/formal-sqlparser-core/JdbcDriverReentryOracle.java",
+      "sha256": "d20c2693acea552a30d9e58807191a9c59dfbce2ae8e10481eadbdd37127f25d"
+    }
+  ],
+  "full_core_complete": false,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "full_V1_complete": false,
+  "TC_safety_gate_passed": false,
+  "external_TC_risk_accepted": false
+}

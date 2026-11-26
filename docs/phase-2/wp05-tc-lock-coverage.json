@@ -1,0 +1,104 @@
+{
+  "status": "SELECTED_ORIGINAL_TC_OBSERVATIONS_VERIFIED_SAFETY_GATES_OPEN",
+  "updated_local": "2026-11-16T02:10:30",
+  "contract": "docs/phase-2/tc-lock-coverage-contract.md",
+  "evidence": {
+    "source": {
+      "path": "docs/phase-2/evidence/tc-lock-source/run_20261116_013725_d46fee3c",
+      "catalog_sha256": "ae17ddd3e0c05d1ea0162de5533e707f6a0b3b121644ce11b3fef06bbcf46544",
+      "members": 307
+    },
+    "live": {
+      "path": "docs/phase-2/evidence/tc-lock-live/run_20261116_020229_df8ce4db",
+      "catalog_sha256": "58b48297821a70c461f6bca502a6597c9f83c5f8c4cd713b8b40b395c31eede2",
+      "members": 12016
+    },
+    "controls": {
+      "path": "docs/phase-2/evidence/tc-lock-controls/run_20261116_020525_d6b970d3",
+      "catalog_sha256": "86d8b58b6a94933a1dd9dcf3e8f413aec8d8b85a5ba009a330000bde11c05258",
+      "members": 5
+    },
+    "msrv_client": {
+      "path": "docs/phase-2/evidence/tc-lock-msrv-client/run_20261116_020646_d344d84a",
+      "catalog_sha256": "08e6db586718e2c41b0546351f5077085e0af58f71e00a4c4201b9f6bfd156d9",
+      "members": 7
+    },
+    "lock_peer": {
+      "path": "docs/phase-2/evidence/lock-key-peer/run_20261116_020428_034cfb32",
+      "catalog_sha256": "ec9d361e0a0417e2bc99ca21bb16f12b3e47316a1ab95fb08def14c9f8dbfa9c",
+      "members": 323
+    },
+    "document_peer": {
+      "path": "docs/phase-2/evidence/undo-document-peer/run_20261116_020428_8d5b0ba4",
+      "catalog_sha256": "8fbbc99f5a66b07534d8c11d2252f84b10d8d1df6f95d0210be8903706f9f413",
+      "members": 489
+    }
+  },
+  "review": "docs/phase-2/evidence/tc-lock-live/readonly-review-20261116.json",
+  "review_sha256": "fa6ca343116a7c7e2eea4496cd825b49dcd07f96d774c76c2a7e97d28b02bb3e",
+  "source_observations": 15,
+  "native_SQL_key_cases": 8,
+  "actual_original_TC_processes": 1,
+  "actual_original_XIDs": 16,
+  "actual_TC_database_checkpoints": 25,
+  "negative_controls": 16,
+  "actual_registry_packages": 150,
+  "registry_archive_candidates": 185,
+  "unchanged_crate_inputs": 280,
+  "Rust199_fixture_tests": 2,
+  "Rust185_fixture_tests": 2,
+  "Rust185_fresh_network_cases": 0,
+  "inherited_ordinary_tests_per_toolchain": 325,
+  "inherited_other_DB_scenarios_per_toolchain": 38,
+  "these_inherited_suites_freshly_executed": false,
+  "observed_issues": [
+    "空串/ASCII空白/U+2003主键可登记而没有锁行",
+    "多行中空串被漏锁",
+    "实际主键分号片段提前结束，后续真实行z未持锁",
+    "二进制列表被逗号拆分，不同原值共享片段而额外冲突"
+  ],
+  "retained_unfinished_decoder_case": "utf8mb4_0900_bin文本准备镜像读取返回text image错误，未关闭覆盖缺口",
+  "runtime": {
+    "mysql": "8.4.13",
+    "Java": "17.0.12",
+    "TC_external_JDBC": "8.0.33",
+    "TC_retry_dead_threshold_ms": 1000,
+    "text_collation": "utf8mb4_0900_as_cs",
+    "TLS": "non_TLS_loopback_fixture"
+  },
+  "failed_attempts_excluded": [
+    {
+      "run": "tc-lock-live/run_20261116_015112_e850cd78",
+      "reason": "原TC未提供外部MySQL JDBC，启动失败，已清理"
+    },
+    {
+      "run": "tc-lock-live/run_20261116_015313_b7b836a6",
+      "reason": "bin文本collation准备镜像读取失败，已清理，保留未完成"
+    },
+    {
+      "run": "tc-lock-live/run_20261116_015648_fe4401fe",
+      "reason": "缓存无.cargo-checksum.json，资格化脚本失败，未启动服务"
+    },
+    {
+      "run": "tc-lock-live/run_20261116_015722_d7bf638a",
+      "reason": "默认70秒清理阈值下20秒查询预算不足，已清理；不声称默认时序验收"
+    }
+  ],
+  "WP05_original_checklist_completed": 0,
+  "WP05_original_checklist_total": 14,
+  "WP05_complete": false,
+  "WP06_complete": false,
+  "TC_safety_gate_passed": false,
+  "TC_registration_gate_passed": false,
+  "SQL_Undo_atomicity_verified": false,
+  "full_original_Java_JUnit_executed": false,
+  "public_COMMIT_available": false,
+  "external_tc_risk_accepted": false,
+  "shared_lock_issue": "deferred_by_user",
+  "next": [
+    "保持原键兼容并形成原TC排他覆盖候选/身份支持策略，不修改已批准核心验收",
+    "补全原源具体案例与文本collation解码覆盖",
+    "继续同连接Undo持久化、真实登记与持久围栏/提交未知恢复",
+    "继续WP06及原后续全部Phase"
+  ]
+}

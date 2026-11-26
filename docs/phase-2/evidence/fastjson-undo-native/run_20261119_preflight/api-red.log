@@ -1,0 +1,57 @@
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+error[E0599]: no method named `decode_for_restore` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:232:26
+    |
+232 |     let decoded = parser.decode_for_restore(FIXTURE, XID, 42).unwrap();
+    |                          ^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_for_restore` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:237:22
+    |
+237 |     let two = parser.decode_for_restore(first_undo.as_bytes(), XID, 42).unwrap();
+    |                      ^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `restore_document` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:239:20
+    |
+239 |     assert!(parser.restore_document(&decoded, "wrong", 42, &[schema()], PROFILE).is_err());
+    |                    ^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `restore_document` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:240:20
+    |
+240 |     assert!(parser.restore_document(&decoded, XID, 42, &[], PROFILE).is_err());
+    |                    ^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `restore_document` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:242:24
+    |
+242 |     let split = parser.restore_document(&decoded, XID, 42, &[schema()], PROFILE).unwrap();
+    |                        ^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_for_restore` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:250:20
+    |
+250 |     assert!(parser.decode_for_restore(FIXTURE, "wrong", 42).is_err());
+    |                    ^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_for_restore` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:251:20
+    |
+251 |     assert!(parser.decode_for_restore(FIXTURE, XID, 0).is_err());
+    |                    ^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_for_restore` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:260:24
+    |
+260 |         assert!(parser.decode_for_restore(edited.as_bytes(), XID, 42).is_err());
+    |                        ^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+error[E0599]: no method named `decode_for_restore` found for struct `FastjsonUndoLogParser` in the current scope
+   --> crates\seata_at\tests\fastjson_undo_native.rs:262:20
+    |
+262 |     assert!(parser.decode_for_restore(br#"{"@type":"org.apache.seata.rm.datasource.undo.BranchUndoLog","branchId":42,"xid":"fastjso...
+    |                    ^^^^^^^^^^^^^^^^^^ method not found in `FastjsonUndoLogParser`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-at` (test "fastjson_undo_native") due to 9 previous errors

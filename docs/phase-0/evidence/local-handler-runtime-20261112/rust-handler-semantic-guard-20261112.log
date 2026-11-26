@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running unittests src\main.rs (D:/cargo-target/seata-phase09\debug\deps\seata_java_tc_it-e41b43d47d625aea.exe)
+
+running 1 test
+test payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes ... FAILED
+
+failures:
+
+---- payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes stdout ----
+
+thread 'payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes' (57352) panicked at src\payload\handler_runtime_tests.rs:163:9:
+assertion `left == right` failed: independent runtime fields: auth_tm_allow
+  left: "REG_TM\t1\t0\t\t-1\t\t0\t0\t322e382e302d534e415053484f54"
+ right: "REG_TM\t1\t0\t\t-1\t\t0\t0\t332e382e302d534e415053484f54"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    payload::handler_runtime_tests::every_runtime_handler_response_matches_independent_fields_and_bytes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 82 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--bin seata-java-tc-it`
