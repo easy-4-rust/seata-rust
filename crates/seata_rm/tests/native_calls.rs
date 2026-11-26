@@ -316,3 +316,51 @@ async fn ambiguous_empty_optional_input_is_rejected_before_the_business_frame_an
         Err(RmCallError::LocalFailureBeforeSend { .. })
     ));
 }
+
+#[tokio::test]
+async fn shutdown_keeps_a_received_report_unknown_and_closes_all_client_clones() {
+    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let (rm, _) = manager(&listener, Duration::from_secs(10)).await;
+    let client = rm.client();
+    let pending_client = client.clone();
+    let report = BranchReportRequest {
+        xid: Some("tc:shutdown-report".into()),
+        branch_id: 73,
+        status: BranchStatus::PhaseOneDone,
+        resource_id: Some("mysql://exact-resource".into()),
+        application_data: Some("shutdown-original-data".into()),
+        branch_type: BranchType::At,
+    };
+    let original = report.clone();
+    let pending = tokio::spawn(async move { pending_client.branch_report(report).await });
+    let mut socket = registered(&listener).await;
+    let received = peer::read(&mut socket).await;
+    assert_eq!(
+        received.body,
+        Some(Message::BranchReportRequest(original.clone()))
+    );
+    // 对端已收到请求且未发送响应；关闭不能把它改成明确未发送或成功。
+    tokio::time::timeout(Duration::from_secs(2), rm.shutdown())
+        .await
+        .unwrap()
+        .unwrap();
+    let error = tokio::time::timeout(Duration::from_secs(2), pending)
+        .await
+        .unwrap()
+        .unwrap()
+        .unwrap_err();
+    assert!(matches!(&error, RmCallError::UnknownOutcome { request, .. }
+        if request.as_ref() == &Message::BranchReportRequest(original.clone())));
+    assert!(error.is_unknown_outcome());
+    peer::eof(&mut socket).await;
+    assert!(matches!(
+        client.branch_report(original).await,
+        Err(RmCallError::LocalFailureBeforeSend { .. })
+    ));
+    // 原连接关闭后不再建立新登记会话，也不重发原报告。
+    assert!(
+        tokio::time::timeout(Duration::from_millis(100), listener.accept())
+            .await
+            .is_err()
+    );
+}

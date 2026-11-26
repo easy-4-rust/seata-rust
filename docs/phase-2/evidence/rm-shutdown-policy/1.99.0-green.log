@@ -1,0 +1,30 @@
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+    Finished `test` profile [unoptimized] target(s) in 1.98s
+     Running tests\native_callbacks.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\native_callbacks-d9620068493e8eed.exe)
+
+running 9 tests
+test missing_or_wrong_branch_type_resource_returns_explicit_failure_with_original_identity ... ok
+test an_unsupported_later_batch_child_rejects_before_the_first_resource_effect ... ok
+test dropping_manager_synchronously_closes_the_pool_for_all_client_clones ... ok
+test shutdown_owns_cancelled_resource_tasks_and_leaves_durable_pending ... ok
+test contradictory_directions_inside_one_batch_reject_before_any_resource_effect ... ok
+test duplicate_callbacks_keep_signed_id_nullable_headers_and_exact_branch_identity_without_reexecution ... ok
+test flat_batch_preserves_order_and_exact_duplicate_children_apply_only_once ... ok
+test shutdown_reports_an_external_journal_lease_instead_of_claiming_drain ... ok
+test callback_deadline_cancels_resource_future_and_next_instruction_recovers_without_replaying ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+     Running tests\native_calls.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\native_calls-ef717e80a625f85f.exe)
+
+running 7 tests
+test registered_rm_registers_reports_and_observes_lock_false_without_losing_fields ... ok
+test failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean ... ok
+test ambiguous_empty_optional_input_is_rejected_before_the_business_frame_and_closed_clients_stay_closed ... ok
+test lost_registration_response_preserves_original_request_and_reconnect_never_replays_it ... ok
+test wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection ... ok
+test failed_phase_one_report_rejection_keeps_original_request_and_does_not_retry ... ok
+test shutdown_keeps_a_received_report_unknown_and_closes_all_client_clones ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+

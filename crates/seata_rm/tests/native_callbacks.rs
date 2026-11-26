@@ -283,3 +283,48 @@ async fn dropping_manager_synchronously_closes_the_pool_for_all_client_clones() 
         Err(seata_rm::RmCallError::LocalFailureBeforeSend { .. })
     ));
 }
+
+#[tokio::test]
+async fn shutdown_reports_an_external_journal_lease_instead_of_claiming_drain() {
+    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let resource = fixture::resource();
+    let catalog = ResourceCatalog::new(1, 4096).unwrap();
+    catalog.register(resource.clone()).unwrap();
+    let store = fixture::journal().await;
+    let identity =
+        BranchIdentity::new("tc:external-lease".into(), 91, resource.key.clone(), None).unwrap();
+    let lease = store
+        .lease(identity.clone(), BranchPhase::Commit)
+        .await
+        .unwrap();
+    let rm = ResourceManager::builder(
+        fixture::settings(listener.local_addr().unwrap()),
+        fixture::registration(),
+        catalog,
+        store.clone(),
+    )
+    .callback_timeout(Duration::from_millis(100))
+    .build()
+    .unwrap();
+    let client = rm.client();
+    let mut socket = registered(&listener).await;
+    let result = tokio::time::timeout(Duration::from_secs(2), rm.shutdown())
+        .await
+        .unwrap();
+    assert!(matches!(
+        result,
+        Err(seata_rm::RmError::Unavailable {
+            reason: "RM journal work has not drained"
+        })
+    ));
+    peer::eof(&mut socket).await;
+    drop(client);
+    drop(lease);
+    tokio::time::timeout(
+        Duration::from_secs(2),
+        store.lease(identity, BranchPhase::Commit),
+    )
+    .await
+    .unwrap()
+    .unwrap();
+}

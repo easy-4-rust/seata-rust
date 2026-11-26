@@ -1,0 +1,45 @@
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+warning: field `store` is never read
+  --> crates\seata_rm\src\manager\resource_manager.rs:17:5
+   |
+13 | pub struct ResourceManager {
+   |            --------------- field in this struct
+...
+17 |     store: FileBranchStore,
+   |     ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `wait_idle` is never used
+  --> crates\seata_rm\src\store\file_branch_store.rs:65:25
+   |
+59 | impl FileBranchStore {
+   | -------------------- method in this implementation
+...
+65 |     pub(crate) async fn wait_idle(&self) -> Result<(), RmError> {
+   |                         ^^^^^^^^^
+
+warning: `seata-rm` (lib) generated 2 warnings
+    Finished `test` profile [unoptimized] target(s) in 2.68s
+     Running tests\native_callbacks.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\native_callbacks-d9620068493e8eed.exe)
+
+running 1 test
+test shutdown_reports_an_external_journal_lease_instead_of_claiming_drain ... FAILED
+
+failures:
+
+---- shutdown_reports_an_external_journal_lease_instead_of_claiming_drain stdout ----
+
+thread 'shutdown_reports_an_external_journal_lease_instead_of_claiming_drain' (61428) panicked at crates\seata_rm\tests\native_callbacks.rs:311:5:
+assertion failed: matches!(result,
+    Err(seata_rm::RmError::Unavailable
+    { reason: "RM journal work has not drained" }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    shutdown_reports_an_external_journal_lease_instead_of_claiming_drain
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p seata-rm --test native_callbacks`
