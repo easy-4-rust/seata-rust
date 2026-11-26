@@ -8,3 +8,6 @@ pub use resource_manager::{ResourceManager, ResourceManagerBuilder};
 mod rm_dispatch_guard;
 mod rm_metrics_sampler;
 pub use rm_metrics_sampler::RmMetricsSampler;
+mod rm_call_guard;
+mod rm_call_metrics_sampler;
+pub use rm_call_metrics_sampler::RmCallMetricsSampler;

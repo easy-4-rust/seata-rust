@@ -16,11 +16,27 @@ pub struct ResourceClient {
     pub(crate) pool: PoolHandle,
     pub(crate) catalog: ResourceCatalog,
     pub(crate) timeout: Duration,
+    pub(crate) metrics: super::RmCallMetricsSampler,
 }
 impl ResourceClient {
+    /// 无参数；返回同管理器全部客户端克隆共享的只读调用计数，不授予发送或关闭能力。
+    /// 管理器关闭后，保留客户端的本地调用仍可增加拒绝或未发送计数。
+    pub fn call_metrics_sampler(&self) -> super::RmCallMetricsSampler {
+        self.metrics.clone()
+    }
+
     /// 参数为原始分支申请；仅在单次注册获得匹配成功响应与真实正编号后返回不可公开构造的回执。
     /// 错误沿用 ADR-0008；响应丢失不合成身份、不重发，原低层 branch_register 接口保持兼容。
     pub async fn branch_register_with_receipt(
+        &self,
+        request: BranchRegisterRequest,
+    ) -> Result<crate::RegisteredBranch, RmCallError> {
+        let guard = self.metrics.begin(RmOperation::BranchRegister);
+        let result = self.branch_register_with_receipt_inner(request).await;
+        guard.finish(&result);
+        result
+    }
+    async fn branch_register_with_receipt_inner(
         &self,
         request: BranchRegisterRequest,
     ) -> Result<crate::RegisteredBranch, RmCallError> {
@@ -33,7 +49,7 @@ impl ResourceClient {
             true,
         )?;
         let original = request.clone();
-        let response = self.branch_register(request).await?;
+        let response = self.branch_register_inner(request).await?;
         let identity = crate::BranchIdentity::from_fields(
             original.xid.as_deref().ok_or(RmCallError::Invalid {
                 reason: "XID required",
@@ -67,6 +83,15 @@ impl ResourceClient {
         &self,
         request: BranchRegisterRequest,
     ) -> Result<BranchRegisterResponse, RmCallError> {
+        let guard = self.metrics.begin(RmOperation::BranchRegister);
+        let result = self.branch_register_inner(request).await;
+        guard.finish(&result);
+        result
+    }
+    async fn branch_register_inner(
+        &self,
+        request: BranchRegisterRequest,
+    ) -> Result<BranchRegisterResponse, RmCallError> {
         self.validate(
             request.xid.as_deref(),
             request.resource_id.as_deref(),
@@ -88,6 +113,15 @@ impl ResourceClient {
     }
     /// 参数为完整分支状态报告；允许Java原生可选资源字段为None，不自行填充；只发送一次。
     pub async fn branch_report(
+        &self,
+        request: BranchReportRequest,
+    ) -> Result<BranchReportResponse, RmCallError> {
+        let guard = self.metrics.begin(RmOperation::BranchReport);
+        let result = self.branch_report_inner(request).await;
+        guard.finish(&result);
+        result
+    }
+    async fn branch_report_inner(
         &self,
         request: BranchReportRequest,
     ) -> Result<BranchReportResponse, RmCallError> {
@@ -113,6 +147,15 @@ impl ResourceClient {
     }
     /// 参数为普通锁查询；成功时保留lockable=false，Failed或协议/传输异常独立返回。
     pub async fn lock_query(
+        &self,
+        request: GlobalLockQueryRequest,
+    ) -> Result<GlobalLockQueryResponse, RmCallError> {
+        let guard = self.metrics.begin(RmOperation::LockQuery);
+        let result = self.lock_query_inner(request).await;
+        guard.finish(&result);
+        result
+    }
+    async fn lock_query_inner(
         &self,
         request: GlobalLockQueryRequest,
     ) -> Result<GlobalLockQueryResponse, RmCallError> {

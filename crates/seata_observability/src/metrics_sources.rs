@@ -1,4 +1,4 @@
-use seata_rm::{BranchPhase, RmMetricsSampler};
+use seata_rm::{BranchPhase, RmCallMetricsSampler, RmMetricsSampler, RmOperation};
 use seata_tm::{TmMetricsSampler, TmOperation};
 use seata_transport::{PoolSampler, PoolSlotState};
 
@@ -10,6 +10,7 @@ pub struct MetricsSources {
     rm: Option<PoolSampler>,
     tm_calls: Option<TmMetricsSampler>,
     rm_branches: Option<RmMetricsSampler>,
+    rm_calls: Option<RmCallMetricsSampler>,
 }
 
 impl MetricsSources {
@@ -20,6 +21,7 @@ impl MetricsSources {
             rm,
             tm_calls: None,
             rm_branches: None,
+            rm_calls: None,
         }
     }
 
@@ -51,11 +53,25 @@ impl MetricsSources {
         self
     }
 
+    /// 参数为当前 RM 管理器及客户端克隆的只读调用源；返回增加固定调用指标的新来源。
+    /// 源不持有池或资源权限，既可单独提供，也可与连接及分支指标组合。
+    ///
+    ///     use seata_observability::MetricsSources;
+    ///     use seata_rm::ResourceClient;
+    ///     fn sources(client: &ResourceClient) -> MetricsSources {
+    ///         MetricsSources::default().with_rm_calls(client.call_metrics_sampler())
+    ///     }
+    pub fn with_rm_calls(mut self, source: RmCallMetricsSampler) -> Self {
+        self.rm_calls = Some(source);
+        self
+    }
+
     pub(crate) fn is_empty(&self) -> bool {
         self.tm.is_none()
             && self.rm.is_none()
             && self.tm_calls.is_none()
             && self.rm_branches.is_none()
+            && self.rm_calls.is_none()
     }
 
     pub(crate) fn render(&self) -> String {
@@ -187,6 +203,33 @@ impl MetricsSources {
                 ] {
                     output.push_str(&format!("seata_rm_resource_attempts_total{{phase=\"{name}\",operation=\"{operation}\"}} {count}\n"));
                 }
+            }
+        }
+        if let Some(source) = &self.rm_calls {
+            for (operation, name) in [
+                (RmOperation::BranchRegister, "branch_register"),
+                (RmOperation::BranchReport, "branch_report"),
+                (RmOperation::LockQuery, "lock_query"),
+            ] {
+                let counts = source.snapshot(operation);
+                output.push_str(&format!(
+                    "seata_rm_calls_active{{operation=\"{name}\"}} {}\n",
+                    counts.active
+                ));
+                for (outcome, count) in [
+                    ("observed", counts.observed),
+                    ("tc_rejected", counts.tc_rejected),
+                    ("unknown", counts.unknown),
+                    ("not_sent", counts.not_sent),
+                    ("local_rejected", counts.local_rejected),
+                    ("cancelled", counts.cancelled),
+                ] {
+                    output.push_str(&format!("seata_rm_calls_total{{operation=\"{name}\",outcome=\"{outcome}\"}} {count}\n"));
+                }
+                output.push_str(&format!(
+                    "seata_rm_protocol_errors_total{{operation=\"{name}\"}} {}\n",
+                    counts.protocol_errors
+                ));
             }
         }
         output

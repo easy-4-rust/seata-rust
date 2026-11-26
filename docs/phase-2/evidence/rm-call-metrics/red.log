@@ -1,0 +1,69 @@
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+error[E0599]: no method named `call_metrics_sampler` found for struct `ResourceManager` in the current scope
+  --> crates\seata_rm\tests\call_metrics.rs:50:20
+   |
+50 |     let metrics=rm.call_metrics_sampler();
+   |                    ^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `metrics_sampler` with a similar name
+   |
+50 -     let metrics=rm.call_metrics_sampler();
+50 +     let metrics=rm.metrics_sampler();
+   |
+
+error[E0599]: no method named `call_metrics_sampler` found for struct `ResourceClient` in the current scope
+  --> crates\seata_rm\tests\call_metrics.rs:76:23
+   |
+76 |     assert_eq!(client.call_metrics_sampler().snapshot(RmOperation::BranchReport),metrics.snapshot(RmOperation::BranchReport));
+   |                       ^^^^^^^^^^^^^^^^^^^^ method not found in `ResourceClient`
+
+error[E0599]: no method named `call_metrics_sampler` found for struct `ResourceManager` in the current scope
+  --> crates\seata_rm\tests\call_metrics.rs:83:20
+   |
+83 |     let metrics=rm.call_metrics_sampler();let client=rm.client();
+   |                    ^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `metrics_sampler` with a similar name
+   |
+83 -     let metrics=rm.call_metrics_sampler();let client=rm.client();
+83 +     let metrics=rm.metrics_sampler();let client=rm.client();
+   |
+
+error[E0599]: no method named `call_metrics_sampler` found for struct `ResourceManager` in the current scope
+   --> crates\seata_rm\tests\call_metrics.rs:110:24
+    |
+110 |         let metrics=rm.call_metrics_sampler();let client=rm.client();
+    |                        ^^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `metrics_sampler` with a similar name
+    |
+110 -         let metrics=rm.call_metrics_sampler();let client=rm.client();
+110 +         let metrics=rm.metrics_sampler();let client=rm.client();
+    |
+
+error[E0599]: no method named `call_metrics_sampler` found for struct `ResourceManager` in the current scope
+   --> crates\seata_rm\tests\call_metrics.rs:128:24
+    |
+128 |         let metrics=rm.call_metrics_sampler();let client=rm.client();
+    |                        ^^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `metrics_sampler` with a similar name
+    |
+128 -         let metrics=rm.call_metrics_sampler();let client=rm.client();
+128 +         let metrics=rm.metrics_sampler();let client=rm.client();
+    |
+
+error[E0599]: no method named `call_metrics_sampler` found for struct `ResourceManager` in the current scope
+   --> crates\seata_rm\tests\call_metrics.rs:153:20
+    |
+153 |     let metrics=rm.call_metrics_sampler();
+    |                    ^^^^^^^^^^^^^^^^^^^^
+    |
+help: there is a method `metrics_sampler` with a similar name
+    |
+153 -     let metrics=rm.call_metrics_sampler();
+153 +     let metrics=rm.metrics_sampler();
+    |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-rm` (test "call_metrics") due to 6 previous errors

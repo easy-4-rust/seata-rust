@@ -1,0 +1,16 @@
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+   Compiling seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+error[E0599]: no method named `with_rm_calls` found for struct `MetricsSources` in the current scope
+  --> crates\seata_observability\tests\rm_call_metrics.rs:48:35
+   |
+48 |         MetricsSources::default().with_rm_calls(rm.call_metrics_sampler()),
+   |                                   ^^^^^^^^^^^^^
+   |
+help: there is a method `with_tm_calls` with a similar name
+   |
+48 -         MetricsSources::default().with_rm_calls(rm.call_metrics_sampler()),
+48 +         MetricsSources::default().with_tm_calls(rm.call_metrics_sampler()),
+   |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-observability` (test "rm_call_metrics") due to 1 previous error

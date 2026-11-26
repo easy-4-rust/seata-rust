@@ -22,6 +22,8 @@ mod java_pool_probe;
 #[cfg(feature = "experimental_changed_commit")]
 #[path = "support/java_report_claim_child.rs"]
 mod java_report_claim_child;
+#[path = "support/java_rm_call_metrics.rs"]
+mod java_rm_call_metrics;
 #[cfg(feature = "experimental_changed_commit")]
 #[path = "support/java_rm_restart.rs"]
 mod java_rm_restart;
@@ -1051,6 +1053,9 @@ async fn original_java_tc_changed_commit(
             "rm-branch-metrics-final.json",
             &java_rm_restart::value(rm.metrics_sampler().snapshot(seata_rm::BranchPhase::Commit)),
         );
+    }
+    if std::env::var("SEATA_RM_CALL_METRICS").as_deref() == Ok("1") {
+        java_rm_call_metrics::save(&rm.call_metrics_sampler(), "rm-call-metrics.json");
     }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();

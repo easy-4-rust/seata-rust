@@ -26,8 +26,15 @@ async fn original_java_tc_single_slot_pool_recovers_after_commit_timeout() {
     exercise(Scenario::PoolRecovery).await;
 }
 
+#[tokio::test]
+#[ignore = "requires pinned original Java TC and owned MySQL"]
+async fn original_java_tc_rejects_finished_branch_with_exact_rm_call_metrics() {
+    exercise(Scenario::CallRejected).await;
+}
+
 #[derive(Clone, Copy)]
 enum Scenario {
+    CallRejected,
     Commit,
     AckLoss,
     PoolRecovery,
@@ -35,7 +42,7 @@ enum Scenario {
 
 async fn exercise(scenario: Scenario) {
     let recycle = matches!(scenario, Scenario::PoolRecovery);
-    let lose_ack = !matches!(scenario, Scenario::Commit);
+    let lose_ack = matches!(scenario, Scenario::AckLoss | Scenario::PoolRecovery);
     let mut admin = fixture::reset().await;
     for migration in [
         include_str!("../../migrations/001_seata_rs_at_branch_v1.sql"),
@@ -179,6 +186,21 @@ async fn exercise(scenario: Scenario) {
     }
     crate::java_pool_probe::wait_for_snapshot(&observations, "java-no-change-end-permitted").await;
 
+    if matches!(scenario, Scenario::CallRejected) {
+        let reply = rm
+            .client()
+            .lock_query(seata_protocol::transaction::GlobalLockQueryRequest {
+                xid: Some(xid.as_str().into()),
+                branch_type: seata_protocol::BranchType::At,
+                resource_id: Some(adapter.key().resource_id().into()),
+                lock_key: Some("undo_work:1".into()),
+                application_data: None,
+            })
+            .await
+            .unwrap();
+        assert!(reply.lockable);
+    }
+
     // 原 TM 保持全局结束权；本地响应不确定时，走原 XID 的回滚入口。
     let completion = if lose_ack {
         global.rollback().await
@@ -223,6 +245,23 @@ async fn exercise(scenario: Scenario) {
             "xid": xid.as_str(), "observed_global_end": outcome.status().to_java_v1(), "status_queries": statuses,
         }),
     );
+    if matches!(scenario, Scenario::CallRejected) {
+        let result = rm
+            .client()
+            .branch_register_with_receipt(seata_protocol::transaction::BranchRegisterRequest {
+                xid: Some(xid.as_str().into()),
+                branch_type: seata_protocol::BranchType::At,
+                resource_id: Some(adapter.key().resource_id().into()),
+                lock_key: Some("undo_work:1".into()),
+                application_data: None,
+            })
+            .await;
+        assert!(matches!(
+            result,
+            Err(seata_rm::RmCallError::DefiniteRejected { .. })
+        ));
+        crate::java_rm_call_metrics::save(&rm.call_metrics_sampler(), "rm-call-metrics.json");
+    }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
     source.close().await.unwrap();

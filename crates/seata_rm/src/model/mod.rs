@@ -16,3 +16,5 @@ pub use registered_branch::RegisteredBranch;
 pub use rm_operation::RmOperation;
 mod rm_branch_metrics;
 pub use rm_branch_metrics::RmBranchMetrics;
+mod rm_operation_metrics;
+pub use rm_operation_metrics::RmOperationMetrics;

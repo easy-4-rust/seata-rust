@@ -32,6 +32,12 @@ pub struct ResourceManagerBuilder {
     maximum_batch: usize,
 }
 impl ResourceManager {
+    /// 无参数；返回当前管理器及所有客户端克隆共享的只读出站调用计数。
+    /// 它不持有连接池或发送能力；重建管理器会创建新的累计源。
+    pub fn call_metrics_sampler(&self) -> crate::RmCallMetricsSampler {
+        self.client.call_metrics_sampler()
+    }
+
     /// 无参数；返回当前日志打开周期的只读分支采样器，不持有日志文件或分派能力。
     /// 同日志的手工和回调分派共享计数；状态 gauge 不等于 TC 活跃分支数量。
     pub fn metrics_sampler(&self) -> crate::RmMetricsSampler {
@@ -173,6 +179,7 @@ impl ResourceManagerBuilder {
                 }
             })?;
         let client = ResourceClient {
+            metrics: super::RmCallMetricsSampler::new(),
             pool: pool.handle(),
             catalog: self.catalog.clone(),
             timeout: self.request_timeout,

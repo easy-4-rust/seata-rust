@@ -18,6 +18,7 @@ OWNER = "seata-wsl-java-tc-full-profile-20261124"
 LABEL = "seata-java-tc-full-profile-validation-20261124"
 SOCKET = "unix:///run/seata-validation-20261120/docker.sock"
 TESTS = {
+    "rm_call_rejected": "java_no_change_commit::original_java_tc_rejects_finished_branch_with_exact_rm_call_metrics",
     "no_change_commit": "java_no_change_commit::original_java_tc_no_change_commit_leaves_no_branch",
     "no_change_ack_loss": "java_no_change_commit::original_java_tc_no_change_lost_ack_remains_unknown_without_branch",
     "no_change_pool_recovery": "java_no_change_commit::original_java_tc_single_slot_pool_recovers_after_commit_timeout",
@@ -99,7 +100,7 @@ def run(version, scenario="commit"):
     terminal_permission = scenario == "commit_permission"
     changed_pool = scenario == "changed_pool_recovery"
     pool_recovery = scenario == "no_change_pool_recovery"
-    no_change = pool_recovery or scenario in ("no_change_commit", "no_change_ack_loss")
+    no_change = pool_recovery or scenario in ("no_change_commit", "no_change_ack_loss", "rm_call_rejected")
     no_change_loss = pool_recovery or scenario == "no_change_ack_loss"
     fence_ack_lost = scenario == "armed_child_fence_ack_loss"
     witness_query_failure = scenario == "armed_child_query_failure"
@@ -281,6 +282,9 @@ seata:
                SEATA_MYSQL_DATABASE=db, SEATA_UNDO_SCHEMA_PATH=str(work / "client-schema.sql"),
                SEATA_UNDO_STORE_OUT=str(observations), SEATA_RM_ENDPOINT=f"127.0.0.1:{rm}",
                SEATA_TM_ENDPOINT=f"127.0.0.1:{tm}")
+    env.pop("SEATA_RM_CALL_METRICS", None)
+    if scenario in ("commit", "commit_report_loss", "rm_call_rejected"):
+        env["SEATA_RM_CALL_METRICS"] = "1"
     env.pop("SEATA_CALLBACK_ROLLBACK_SHUTDOWN", None)
     if scenario in ("callback_rollback_shutdown", "rollback_commit_in_flight_shutdown"):
         env["SEATA_CALLBACK_ROLLBACK_SHUTDOWN"] = "1"
@@ -591,6 +595,10 @@ seata:
             print(f"PASS original Java TC durable TM {scenario} {version}: {out}", flush=True)
             return
         assert all(p.wait(timeout=12) == 0 for p in processes[1:3]), "frame observers did not finish"
+        if scenario in ("commit", "commit_report_loss", "rm_call_rejected"):
+            from rm_call_metrics import validate as validate_rm_call_metrics
+            validate_rm_call_metrics(observations,out,scenario,guard.save)
+
         if scenario in ("rollback_commit_in_flight_shutdown", "callback_rollback_shutdown", "callback_commit_in_flight_shutdown", "callback_commit_shutdown", "graceful_rm_restart"):
             mysql_wire = db_observer.stop()
             db_observer = None
@@ -682,7 +690,7 @@ seata:
             guard.save(out / "no-change-ended.json", ended)
             verified = verify_no_change(mysql, db, env, out, mysql_wire, ended,
                                         (observations / "java-no-change-branches.log").read_bytes(),
-                                        lose_ack=no_change_loss, artifact=artifact, recycled=pool_recovery)
+                                        lose_ack=no_change_loss, artifact=artifact, recycled=pool_recovery, rejected_register=scenario == "rm_call_rejected")
             if pool_recovery:
                 from mysql_pool_recovery import verify_pool_probe
 

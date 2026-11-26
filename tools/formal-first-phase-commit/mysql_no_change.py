@@ -51,7 +51,7 @@ def allow_global_end(client, observations, mysql, db, env, out, lose_ack):
 
 
 
-def verify_no_change(mysql, db, env, out, wire, ended, journal, *, lose_ack, artifact, recycled=False):
+def verify_no_change(mysql, db, env, out, wire, ended, journal, *, lose_ack, artifact, recycled=False, rejected_register=False):
     verification = load("no_change_native_frames", TOOLS / "formal-rm-java/validate.py")
     raw = load("no_change_raw_mysql", TOOLS / "formal-undo-rollback-loss/validate.py")
 
@@ -70,8 +70,18 @@ def verify_no_change(mysql, db, env, out, wire, ended, journal, *, lose_ack, art
         assert (request["connection"], request["request_id"]) == (response["connection"], response["request_id"])
 
     # RM 本身已登记，随后没有任何分支操作或 TC 分支回调。
-    rm_request, rm_reply = frames("RM")
+    rm_request, rm_reply, *rm_calls = frames("RM")
     pair(rm_request, rm_reply, 103, 104)
+    if rejected_register:
+        lock, lock_reply, branch, branch_reply = rm_calls
+        pair(lock, lock_reply, 21, 22)
+        pair(branch, branch_reply, 11, 12)
+        assert lock_reply["body"][2:] == b"\x01\x00\x00\x01"
+        assert branch_reply["body"][2] == 0
+        assert guard.support.string(lock["body"],2)[0] == ended["xid"]
+        assert guard.support.string(branch["body"],2)[0] == ended["xid"]
+    else:
+        assert not rm_calls
     assert rm_reply["body"][2] == 1 and journal == b"SRMJNL01"
     register_tm, tm_registered, begin, begun, end, finished, *queries = frames("TM")
     pair(register_tm, tm_registered, 101, 102)
@@ -90,6 +100,9 @@ def verify_no_change(mysql, db, env, out, wire, ended, journal, *, lose_ack, art
         assert len(answer["body"]) == 5 and answer["body"][2:4] == b"\x01\x00"
         observed_statuses.append(answer["body"][-1])
     assert observed_statuses == ended["status_queries"] and observed_statuses[-1] == 15
+    if rejected_register:
+        assert lock_reply["monotonic_ns"] < end["monotonic_ns"]
+        assert queries[-1]["monotonic_ns"] < branch["monotonic_ns"]
     expected_interim = (4, 11) if lose_ack else (2, 8, 9)
     assert all(code in expected_interim for code in observed_statuses[:-1])
 

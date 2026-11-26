@@ -22,3 +22,10 @@ FileBranchStore::metrics_sampler 和 ResourceManager::metrics_sampler 签发 RmM
 Completed gauge 表示已同步的保留日志条目，不等于 TC 活跃分支数或 SQL/Undo 的原子性证明。分派取消后后台磁盘任务仍可能完成，gauge 可以随后更新；取消只记 cancelled，不推断资源未执行。journal_faulted 表示追加写入/同步失败，此时仅保留最后确认的 gauge；journal_closed 表示所有者进入销毁，不是文件锁释放证明。并发快照逐字段采样，累计饱和不回绕。
 
 seata-observability 的 with_rm_branches 导出固定 34 条 RM 序列。双版本测试、写入前误发布的失败对照、原 TC/MySQL 停机恢复及重叠回调证据见 [RM 指标验收](../../docs/phase-2/evidence/rm-branch-metrics/README.md)。完整生产指标、告警及部署门槛继续。
+
+
+## 只读出站调用指标
+
+ResourceManager::call_metrics_sampler 与 ResourceClient::call_metrics_sampler 返回 RmCallMetricsSampler，按三种 RmOperation 读取 RmOperationMetrics。同管理器全部客户端克隆共享固定计数，注册回执只计一次；重建管理器归零。active 为在途调用，结果区分 observed、tc_rejected、unknown、not_sent、local_rejected、cancelled，protocol_errors 为可重叠的附加计数。LockQuery 成功响应中的 false 仍计 observed；取消不证明请求未发送。管理器关闭后保留客户端的本地调用仍可增加计数。
+
+采样器不保留通讯或资源能力，with_rm_calls 可导出固定 24 条序列。接口、默认功能与 Java 可选字段语义保持兼容。见 [双版本调用指标证据](../../docs/phase-2/evidence/rm-call-metrics/README.md)。

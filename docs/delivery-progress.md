@@ -1146,3 +1146,9 @@ Rust 1.99/1.85 各 89 项 `seata-transport` 测试、全目标严格 Clippy、�
 Rust 1.99/1.85 的四组原 Java TC/MySQL 现场通过：原物理 COMMIT 在 RM 关闭前后仍在执行，Pending 保留；旧调用取消，新会话 recover 确认后只同步一次 Completed，资源 apply/recover 各一次。额外自然重叠现场有两个旧回调等待同一分支，取消数为 2 而 apply 仍为 1。修正验收脚本固定回调基数的假设，改用实际原始帧计数和完整身份约束。该额外现场还保留 15.039 秒后返回的 Failed/RollbackRetrying，原 TM 的 10 秒请求已保持 Unknown；原帧重放检查关联、时序和后续只读 Finished，并拒绝四种迟到失败证据削弱。其初轮未执行外部最终数据库计数，作为诊断重放保留，不冒充第五次完整现场成功。
 
 双版本全工作区全功能各 697 项通过、313 项 ignored；最后加强日志重开累计归零断言后，双版本 journal 目标测试及 RM/observability/MySQL 全目标严格 Clippy 另行通过。最终四组现场、九种计数/原连接反例及源代码写前误发布变异见 [RM 指标证据](phase-2/evidence/rm-branch-metrics/README.md)。RM 出站结果、完整 MySQL 本地状态、生产采集/告警和 WP05–07 全部门禁继续。
+
+## 2026-11-27：RM 出站调用结果与原 TC 三类响应
+
+正式 RM 新增管理器/客户端克隆共享的只读 RmCallMetricsSampler，三种操作区分有效成功、TC Failed、未知、未发送、本地拒绝和取消，维护 active 与协议错误计数；注册回执只计一次，成功 LockQuery false 仍属于 observed。认证 HTTP 增加固定 24 条序列，无业务身份标签，保持 Java 可选字段和原重试策略。
+
+Rust 1.99/1.85 的正常提交、报告成功回包丢失、Finished XID 注册拒绝共六组固定原 Java TC/MySQL 现场全部通过，原帧实际投递与固定计数逐字段核对，各五个证据削弱反例均拒绝。双版本全工作区全功能各 705 项通过、314 项 ignored；RM/observability/MySQL 全目标严格 Clippy 通过。重复回执源代码变异使 observed=2 的目标测试实际失败，恢复后通过。三次验收脚本诊断失败单独保留，不计完整现场成功。见 [RM 出站指标证据](phase-2/evidence/rm-call-metrics/README.md)。WP05–07、完整 MySQL 状态、生产采集告警和整体计划继续开放。

@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 1180, in <module>
+    run(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else "commit")
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 600, in run
+    validate_rm_call_metrics(observations,out,scenario,guard.save)
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\rm_call_metrics.py", line 69, in validate
+    try:verify(changed,native,scenario)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\rm_call_metrics.py", line 47, in verify
+    assert metrics==expected(rows,scenario), "RM call metrics disagree with native TC response/delivery"
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\rm_call_metrics.py", line 12, in expected
+    frames=[decoder.envelope(row) for row in rows if row.get("event")=="frame"]
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-rm-java\validate.py", line 43, in envelope
+    need(row.get('action') in actions and row['delivery_count']==actions[row['action']],'Action and actual delivery count disagree')
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-rm-java\validate.py", line 9, in need
+    if not condition:raise ValueError(reason)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Action and actual delivery count disagree

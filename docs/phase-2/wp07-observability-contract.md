@@ -107,3 +107,12 @@ RM gauge 只统计已确认索引；取消中的后台追加若随后同步完�
 原 TC 允许旧会话上有多个同身份回调。现场计数必须按原始帧实际数量核对停机后的 cancelled，所有旧请求必须保持完整原身份、没有旧会话成功回包，replacement 只允许一次完成响应；资源 apply 仍严格一次。首次快照是并发观测，active 可处于 1 到旧会话最终请求数之间，不能将它伪装为原始帧总数。
 
 所测回滚场景原 TM RPC 期限固定 10 秒。若原 TC 在期限后返回 Failed/RollbackRetrying，客户端原 Unknown 仍保留；线缆验收只在原请求关联、到达晚于期限、错误消息含原 XID/BranchId、状态为 RollbackRetrying，且后续只读状态为 Finished 时接受这一记录。提前 Failed、错误状态/身份及把已观察结果伪装成未知均拒绝。这是原 TCP 观测的校验规则，不变更客户端期限和重试策略。
+
+
+## RM 出站调用计数契约
+
+ResourceManager 和 ResourceClient::call_metrics_sampler 签发 RmCallMetricsSampler，按三种固定 RmOperation 读取 RmOperationMetrics。每个管理器与其全部客户端克隆共享一份；重建管理器归零，不与日志作用域的分派累计混用。采样器只持有固定原子计数，不持有池、目录、资源、文件或发送能力。管理器关闭后，保留的客户端仍可产生本地拒绝/未发送计数；全部客户端退出后累计保持最终值。
+
+每次已轮询的 BranchRegister、BranchReport、LockQuery 路径维护 active。注册回执接口包括其语义校验，嵌套低层调用不得重复计数。有效权威成功响应为 observed，正分支号才可计注册成功；成功 LockQuery 的 lockable=false 仍为 observed。其余结果互斥区分 tc_rejected、unknown、not_sent、local_rejected、cancelled。协议错误另外计数，写后协议错误同时属于 unknown。取消不推断传输边界，也不伪造 TC 结果；原请求、可选字段、错误分类和重试策略保持原有语义。
+
+认证 HTTP 通过 with_rm_calls 增加固定三种 operation 与六种 outcome，加 active 和 protocol_errors，共 24 条序列。不得记录 XID、BranchId、资源、请求编号、锁键、application_data 或凭据。采样逐字段读取，累计饱和不回绕。验收包括共享克隆、单次回执、明确 Failed、无效分支号、丢响应、取消、未发送、原字段保留、关闭后调用、认证 HTTP 与固定原 Java TC 场景。

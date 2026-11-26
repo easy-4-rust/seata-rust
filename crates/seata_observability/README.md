@@ -31,3 +31,6 @@ observed 只表示有效权威成功响应，包含 AsyncCommitting、Rollbackin
 RM 分支来源通过 with_rm_branches(resource_manager.metrics_sampler()) 或 FileBranchStore 的同名采样器接入，也可单独作为来源。固定 34 条序列包括两种 phase 下的四种保留日志 state、dispatch active、九种分派 outcome、两种资源调用 operation，以及 journal_faulted/journal_closed。所有标签来自固定枚举，不导出分支身份、文件路径或凭据。
 
 日志 gauge 从同步索引更新并在重开时重建；counter 属于一次日志打开周期。采样器保留不会延长日志文件锁寿命。RM 关闭后外部仍持有日志时，journal_closed 仍为 0。详见 [双版本原连接回调、HTTP 与原 Java TC 证据](../../docs/phase-2/evidence/rm-branch-metrics/README.md)。RM 出站调用结果、MySQL 本地状态和生产采集/告警仍待验收。
+
+
+RM 出站来源通过 with_rm_calls(resource_manager.call_metrics_sampler()) 或客户端同名方法接入，可独立使用。固定 24 条序列为三种 operation 的 calls_active、六种 outcome 的 calls_total 和 protocol_errors_total；不包含业务身份。注册回执只计一次，LockQuery false 仍是 observed，取消不推断发送边界。该来源与日志作用域的 with_rm_branches 独立；管理器关闭后保留客户端的本地调用仍可能增加计数。见 [双版本 TCP、HTTP 和原 Java TC 证据](../../docs/phase-2/evidence/rm-call-metrics/README.md)。MySQL 本地状态、生产采集、告警和完整 WP07 仍开放。
