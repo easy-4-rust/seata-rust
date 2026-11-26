@@ -11,3 +11,16 @@ Rust 1.99.0 和 1.85.0 各执行 native_calls 七项与 native_callbacks 九项�
 削弱对照临时绕过 wait_idle，外部租约测试因关闭错误返回成功而失败。[失败日志](drain-bypass-red.log)。对照结束后原源码已逐字节恢复，双版本回归和严格 Clippy 均针对恢复后的正式源码运行。
 
 用例使用正式 RM、传输和文件日志，TCP 对端为受控协议夹具。原 Java TC、真实数据库的停机故障，以及生产信号和应用流量排空继续验收。
+
+
+## 原 Java TC 与 MySQL 的同进程 RM 重建
+
+固定原 Java TC 与 MySQL 8.4.13 下，原 RM 先完成真实业务的本地提交与一次成功报告，随后消费 shutdown。独立 SQL 核对 004、013 摘要及 007 均保留，旧池采样确认关闭。同一进程以同一数据源适配器和现有 FileBranchStore 重建 RM，完成新会话登记与原 XID 的锁查询后，原 TM 才发起 GlobalCommit。
+
+原始 Seata 帧核对两个不同 RM 连接各完成一次服务登记。原报告及成功响应位于旧连接，唯一提交回调及成功响应位于新连接，身份保持原 XID、BranchId、资源和分支类型。MySQL 原始报文核对业务 INSERT 及原业务 COMMIT 各一次，最终保留原业务行，Undo 与 TC 会话、分支和锁清空。
+
+[Rust 1.99](../java-tc-changed-commit-report/run-graceful_rm_restart-1.99-a892ecd2/graceful-replacement-wire.json) · [Rust 1.85](../java-tc-changed-commit-report/run-graceful_rm_restart-1.85-d2b13d2d/graceful-replacement-wire.json)
+
+场景 graceful_rm_restart 可通过原 run_desktop.ps1 复跑。两个工具链严格 Clippy 通过。证据回放拒绝把回调改到旧会话、缺失旧登记、缺失原业务 INSERT 和重复原业务 COMMIT。
+
+本场景在一阶段报告完成后、全局结束前重建 RM，沿用当前进程已有的数据源和日志对象。进程间重建、运行中的数据库 COMMIT 停机及生产信号处理仍按各自验收项继续。首次运行曾因校验器参数更新不一致而中断，修复后以上两份完整现场记录通过。
