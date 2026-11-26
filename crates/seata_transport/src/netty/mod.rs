@@ -66,3 +66,8 @@ pub use resource_registry_snapshot::ResourceRegistrySnapshot;
 pub use session_registration::SessionRegistration;
 pub use session_registration_report::SessionRegistrationReport;
 pub use tcp_connection::TcpConnection;
+
+#[cfg(feature = "tls")]
+mod tls_client_config;
+#[cfg(feature = "tls")]
+pub use tls_client_config::TlsClientConfig;

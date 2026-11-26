@@ -32,15 +32,41 @@ impl ConnectionPool {
         config: ConnectionPoolConfig,
         registration: Option<SessionRegistration>,
     ) -> Result<Self, TransportError> {
+        let core = match registration {
+            None => PoolCore::new(config),
+            Some(registration) => PoolCore::with_registration(config, registration),
+        };
+        Self::start_core(core)
+    }
+    /// 参数为池配置及显式 mTLS 配置；返回每次重连都验证同一对端身份的 raw 池。
+    #[cfg(feature = "tls")]
+    pub fn start_tls(
+        config: ConnectionPoolConfig,
+        tls: crate::TlsClientConfig,
+    ) -> Result<Self, TransportError> {
+        let mut core = PoolCore::new(config);
+        core.tls = Some(tls);
+        Self::start_core(core)
+    }
+    /// 参数为池配置、原登记策略及 mTLS 配置；返回握手和登记均完成后才 Ready 的池。
+    #[cfg(feature = "tls")]
+    pub fn start_registered_tls(
+        config: ConnectionPoolConfig,
+        registration: SessionRegistration,
+        tls: crate::TlsClientConfig,
+    ) -> Result<Self, TransportError> {
+        let mut core = PoolCore::with_registration(config, registration);
+        core.tls = Some(tls);
+        Self::start_core(core)
+    }
+    fn start_core(core: PoolCore) -> Result<Self, TransportError> {
         if tokio::runtime::Handle::try_current().is_err() {
             return Err(TransportError::InvalidConfiguration {
                 reason: "Tokio I/O and time runtime required",
             });
         }
-        let core = Arc::new(match registration {
-            None => PoolCore::new(config),
-            Some(registration) => PoolCore::with_registration(config, registration),
-        });
+        let config = core.config;
+        let core = Arc::new(core);
         let (sender, inbound) = mpsc::channel(config.inbound);
         let mut owner = Self {
             handle: PoolHandle {
@@ -120,6 +146,13 @@ async fn supervise_slot(
         let attempt = async {
             if !core.connecting(slot) {
                 return None;
+            }
+            #[cfg(feature = "tls")]
+            if let Some(tls) = &core.tls {
+                return Some(
+                    TcpConnection::connect_tls(core.config.endpoint, core.config.connection, tls)
+                        .await,
+                );
             }
             Some(TcpConnection::connect(core.config.endpoint, core.config.connection).await)
         };

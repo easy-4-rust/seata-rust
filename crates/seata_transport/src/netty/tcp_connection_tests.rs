@@ -363,3 +363,77 @@ async fn skipped_cancelled_queue_entries_do_not_reset_writer_idle() {
     peer.read_to_end(&mut remaining).await.unwrap();
     assert!(remaining.is_empty());
 }
+
+#[tokio::test(start_paused = true)]
+async fn buffered_response_is_not_complete_until_flush_drains_the_original_writer() {
+    let ReplyFixture {
+        config,
+        core,
+        handle,
+        rx,
+        stop,
+        request,
+        body,
+        expected,
+    } = reply_setup();
+    let (stream, mut peer) = tokio::io::duplex(1);
+    let writer = tokio::io::BufWriter::with_capacity(65536, stream);
+    let guard = WorkerExitGuard::new(core.clone());
+    let worker = tokio::spawn(write_loop(writer, core.clone(), rx, stop, config, guard));
+    let call =
+        tokio::spawn(async move { handle.respond(&request, body, Duration::from_secs(1)).await });
+    while core.snapshot().response_write_attempted == 0 {
+        tokio::task::yield_now().await;
+    }
+    assert!(
+        !call.is_finished(),
+        "buffered plaintext acceptance cannot publish a completed response"
+    );
+    assert_eq!(core.snapshot().responses_written, 0);
+    let mut actual = vec![0; expected.len()];
+    peer.read_exact(&mut actual).await.unwrap();
+    assert_eq!(actual, expected);
+    call.await.unwrap().unwrap();
+    assert_eq!(core.snapshot().responses_written, 1);
+    core.terminate(TransportError::ConnectionClosed);
+    worker.await.unwrap();
+}
+
+#[tokio::test(start_paused = true)]
+async fn blocked_flush_expires_the_same_write_budget_and_keeps_response_unknown() {
+    let ReplyFixture {
+        mut config,
+        core,
+        handle,
+        rx,
+        stop,
+        request,
+        body,
+        ..
+    } = reply_setup();
+    config.write_timeout = Duration::from_millis(30);
+    let (stream, _peer) = tokio::io::duplex(1);
+    let writer = tokio::io::BufWriter::with_capacity(65536, stream);
+    let guard = WorkerExitGuard::new(core.clone());
+    let worker = tokio::spawn(write_loop(writer, core.clone(), rx, stop, config, guard));
+    let call =
+        tokio::spawn(async move { handle.respond(&request, body, Duration::from_secs(1)).await });
+    while core.snapshot().response_write_attempted == 0 {
+        tokio::task::yield_now().await;
+    }
+    assert!(
+        !call.is_finished(),
+        "buffered response must wait for the physical writer"
+    );
+    tokio::time::advance(Duration::from_millis(30)).await;
+    assert!(matches!(
+        call.await.unwrap(),
+        Err(crate::CallError::UnknownOutcome {
+            reason: TransportError::WriteTimeout,
+            ..
+        })
+    ));
+    assert_eq!(core.snapshot().responses_written, 0);
+    assert!(core.snapshot().closed);
+    worker.await.unwrap();
+}

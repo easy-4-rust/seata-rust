@@ -1,0 +1,313 @@
+{
+  "status": "MUTUAL_TLS_BOUND_TO_ORIGINAL_TC_FRAMES",
+  "evidence": "docs\\phase-2\\evidence\\transport-tls\\java_20261127_053628_6d3dabfb",
+  "catalog_sha256": "efca67745fe991089ac9ac9494bcf641154b2c7c3ff11534a6ed558c90bbfd4f",
+  "client_certificate_sha256": "cd6ee9d67a17f5cde9cfea02e4b6854ff99763d9f6c47379f3d06527a3dd9534",
+  "qualified": [
+    {
+      "Rust": "1.99",
+      "scenario": "commit",
+      "sessions": [
+        {
+          "role": "TM",
+          "mutual_TLS_sessions": 1,
+          "original_native_connections": 1
+        },
+        {
+          "role": "RM",
+          "mutual_TLS_sessions": 1,
+          "original_native_connections": 1
+        }
+      ],
+      "callback_write": {
+        "callbacks": 1,
+        "local_writes": 1,
+        "TC_dropped_replies": 0,
+        "distinct_generations": 1
+      }
+    },
+    {
+      "Rust": "1.99",
+      "scenario": "commit_callback_reply_loss",
+      "sessions": [
+        {
+          "role": "TM",
+          "mutual_TLS_sessions": 1,
+          "original_native_connections": 1
+        },
+        {
+          "role": "RM",
+          "mutual_TLS_sessions": 2,
+          "original_native_connections": 2
+        }
+      ],
+      "callback_write": {
+        "callbacks": 2,
+        "local_writes": 2,
+        "TC_dropped_replies": 1,
+        "distinct_generations": 2
+      }
+    },
+    {
+      "Rust": "1.99",
+      "scenario": "rollback_callback_reply_loss",
+      "sessions": [
+        {
+          "role": "TM",
+          "mutual_TLS_sessions": 2,
+          "original_native_connections": 2
+        },
+        {
+          "role": "RM",
+          "mutual_TLS_sessions": 2,
+          "original_native_connections": 2
+        }
+      ],
+      "callback_write": {
+        "callbacks": 2,
+        "local_writes": 2,
+        "TC_dropped_replies": 1,
+        "distinct_generations": 2
+      }
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "commit",
+      "sessions": [
+        {
+          "role": "TM",
+          "mutual_TLS_sessions": 1,
+          "original_native_connections": 1
+        },
+        {
+          "role": "RM",
+          "mutual_TLS_sessions": 1,
+          "original_native_connections": 1
+        }
+      ],
+      "callback_write": {
+        "callbacks": 1,
+        "local_writes": 1,
+        "TC_dropped_replies": 0,
+        "distinct_generations": 1
+      }
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "commit_callback_reply_loss",
+      "sessions": [
+        {
+          "role": "TM",
+          "mutual_TLS_sessions": 1,
+          "original_native_connections": 1
+        },
+        {
+          "role": "RM",
+          "mutual_TLS_sessions": 2,
+          "original_native_connections": 2
+        }
+      ],
+      "callback_write": {
+        "callbacks": 2,
+        "local_writes": 2,
+        "TC_dropped_replies": 1,
+        "distinct_generations": 2
+      }
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "rollback_callback_reply_loss",
+      "sessions": [
+        {
+          "role": "TM",
+          "mutual_TLS_sessions": 2,
+          "original_native_connections": 2
+        },
+        {
+          "role": "RM",
+          "mutual_TLS_sessions": 2,
+          "original_native_connections": 2
+        }
+      ],
+      "callback_write": {
+        "callbacks": 2,
+        "local_writes": 2,
+        "TC_dropped_replies": 1,
+        "distinct_generations": 2
+      }
+    }
+  ],
+  "negative_controls": {
+    "1.99": [
+      "no_mutual_auth",
+      "wrong_protocol",
+      "untrusted_client",
+      "plaintext_backend_policy",
+      "missing_reconnect",
+      "forged_forwarded_bytes",
+      "boolean_byte_count",
+      "active_socket_leak",
+      "handshake_error_hidden"
+    ],
+    "1.85": [
+      "no_mutual_auth",
+      "wrong_protocol",
+      "untrusted_client",
+      "plaintext_backend_policy",
+      "missing_reconnect",
+      "forged_forwarded_bytes",
+      "boolean_byte_count",
+      "active_socket_leak",
+      "handshake_error_hidden"
+    ]
+  },
+  "copied_primary_observations": [
+    {
+      "path": "1.99-commit/TM-frames.jsonl",
+      "sha256": "3f55bc92ff9d24c37240f2a19454d46efda98b9b2c9dffce1c45a564d504fc48"
+    },
+    {
+      "path": "1.99-commit/RM-frames.jsonl",
+      "sha256": "9bcdb713cba6b107d698b2efb86e9949a848989b5742685200ddefa12968097f"
+    },
+    {
+      "path": "1.99-commit/rm-callback-write-events.json",
+      "sha256": "13e77655a8f04dead3b5961f66cbf756ac97d0ee2248de673f39a6f65b05f397"
+    },
+    {
+      "path": "1.99-commit/transport-tls.json",
+      "sha256": "78b1259fb951969b2304b03e0fe4ad20cbfd80fde5ea0eda9c70f65d5bba58e2"
+    },
+    {
+      "path": "1.99-commit/verified.json",
+      "sha256": "9e39dcd69b3377d9fdefe2e1d7a96e8fff6a2018fbb756489ffd3c13470d42f1"
+    },
+    {
+      "path": "1.99-commit/process-cleanup.json",
+      "sha256": "5c1186756b0d46d7064d4e6b1923306ecbbb87ff1aa750dc5005226c484c52ce"
+    },
+    {
+      "path": "1.99-commit_callback_reply_loss/TM-frames.jsonl",
+      "sha256": "df81d0b1a9e59a27373050e8c4f6df9b3481a15edd066d582dae54d4977aa079"
+    },
+    {
+      "path": "1.99-commit_callback_reply_loss/RM-frames.jsonl",
+      "sha256": "997ce1e97a2f1126ae70bd0859af92a705ade6c157dcbb7d53b5064bf162265b"
+    },
+    {
+      "path": "1.99-commit_callback_reply_loss/rm-callback-write-events.json",
+      "sha256": "be5bfe67952b8cfa073c32c8eea6fe24ccaf6d10eb376d74a95ee1346a7b2b20"
+    },
+    {
+      "path": "1.99-commit_callback_reply_loss/transport-tls.json",
+      "sha256": "faf692347f5128a7fe9647b8d4a8a11bd8721500e3f58273e9d7c8211574013d"
+    },
+    {
+      "path": "1.99-commit_callback_reply_loss/verified.json",
+      "sha256": "c8b59bc7157e18d3d5c20755045d2a3583155a16d6f0a60da869f7715c5d0ef9"
+    },
+    {
+      "path": "1.99-commit_callback_reply_loss/process-cleanup.json",
+      "sha256": "960023dd7fc53c27c70d406585a1b7694cf645442d8c3511264928432c88440b"
+    },
+    {
+      "path": "1.99-rollback_callback_reply_loss/TM-frames.jsonl",
+      "sha256": "3632225e23ffd667e189e942c74494f844f01e457cdf8be6f2cc46c199df8e81"
+    },
+    {
+      "path": "1.99-rollback_callback_reply_loss/RM-frames.jsonl",
+      "sha256": "dff9542d82d79286056fcd8e2330bda7bd277fb7f4fac3cb4f8c3af34adff25c"
+    },
+    {
+      "path": "1.99-rollback_callback_reply_loss/rm-callback-write-events.json",
+      "sha256": "172e40ac8ddcd1c1f260f799860b6fdc6ac8a10c8b8048830e3fc603a0fd2b49"
+    },
+    {
+      "path": "1.99-rollback_callback_reply_loss/transport-tls.json",
+      "sha256": "740cfe5d75c968494507963878f02cf345730551a853a6ed3b3f8bc91c6e86c3"
+    },
+    {
+      "path": "1.99-rollback_callback_reply_loss/verified.json",
+      "sha256": "27d5286f5ed36fd573b956e7a513f11b1f6a7e229e8688d318b4a0f9e92414ef"
+    },
+    {
+      "path": "1.99-rollback_callback_reply_loss/process-cleanup.json",
+      "sha256": "9332cc71cb990f98b1e1134e70f0c4cb36d684baaa48fb914914fd87bee62391"
+    },
+    {
+      "path": "1.85-commit/TM-frames.jsonl",
+      "sha256": "802d5d9975699685239dbf3a0d49a1dbc37fefcf7b7833bfdca1ac47aa5876b1"
+    },
+    {
+      "path": "1.85-commit/RM-frames.jsonl",
+      "sha256": "d33946419197e223fa17855dbc81be113a9f477a169f1fdbc464bcac11617ebf"
+    },
+    {
+      "path": "1.85-commit/rm-callback-write-events.json",
+      "sha256": "7d87c2a6c913fae9aada824c06aa65471f6a5401c226dd94213a9dc9cf9e9a1f"
+    },
+    {
+      "path": "1.85-commit/transport-tls.json",
+      "sha256": "da2967cae0e615a31fc6771aeb8e92286de9167ecaac496c561014da2e3c79bf"
+    },
+    {
+      "path": "1.85-commit/verified.json",
+      "sha256": "e067f0578f9d45806ba4f7ddab50005700d5da3bfbf3d12f77bfa370de0f300e"
+    },
+    {
+      "path": "1.85-commit/process-cleanup.json",
+      "sha256": "6ea81a90e2a7da3a5f6644ec800b7892d55d3216c5e81b3e5ef678fd48da6f3f"
+    },
+    {
+      "path": "1.85-commit_callback_reply_loss/TM-frames.jsonl",
+      "sha256": "b6221d1952d18bef181ac09de2b366f202a0a4ad56b8f23583f347cdcbb2a36a"
+    },
+    {
+      "path": "1.85-commit_callback_reply_loss/RM-frames.jsonl",
+      "sha256": "428977a80e097db294e805e764e30694a3f73fea0257498c2d76a972f3761099"
+    },
+    {
+      "path": "1.85-commit_callback_reply_loss/rm-callback-write-events.json",
+      "sha256": "b0e55e2b9f357545d9fc1371172c9cd25402e1a4721c2941f047aba8a430589d"
+    },
+    {
+      "path": "1.85-commit_callback_reply_loss/transport-tls.json",
+      "sha256": "bab0f81615687b899122791477ed369440988c9abe55d8026dc1070a6c3df40d"
+    },
+    {
+      "path": "1.85-commit_callback_reply_loss/verified.json",
+      "sha256": "7624f91f9bd589e0326663764d5c8fb2298b1c743045015eaa0f6751db9efcc5"
+    },
+    {
+      "path": "1.85-commit_callback_reply_loss/process-cleanup.json",
+      "sha256": "4bd4320639cc117170e6cb63a49328756afc634f82bd9d4e2776d3484a41702b"
+    },
+    {
+      "path": "1.85-rollback_callback_reply_loss/TM-frames.jsonl",
+      "sha256": "939f78d91b7035e4d512d194522fd59801cf27c08c8c020e4faca04c9e050ef0"
+    },
+    {
+      "path": "1.85-rollback_callback_reply_loss/RM-frames.jsonl",
+      "sha256": "093df604128346947e9403ff3c1c947c423a6a5600e065927ea37bea4cbc8525"
+    },
+    {
+      "path": "1.85-rollback_callback_reply_loss/rm-callback-write-events.json",
+      "sha256": "15867354e1a4af0abf28483cc317412468fe44a5a78023cd3abe1546df2290d9"
+    },
+    {
+      "path": "1.85-rollback_callback_reply_loss/transport-tls.json",
+      "sha256": "1050afea678f5b77dcb5681603933bc62fd4ad833bec81f74653cb388618ed93"
+    },
+    {
+      "path": "1.85-rollback_callback_reply_loss/verified.json",
+      "sha256": "3ade08304d86c185d6f1c76c6e1f36fcd240e3238e4a04a285feae3781802edd"
+    },
+    {
+      "path": "1.85-rollback_callback_reply_loss/process-cleanup.json",
+      "sha256": "4831d6684b659c5d1aed5e95b32a1a2ff5094357f6f5a94556f7baf3a02e9f74"
+    }
+  ],
+  "original_Java_TC_native_TLS_claimed": false,
+  "independent_external_review": "OPEN",
+  "WP07_complete": false
+}

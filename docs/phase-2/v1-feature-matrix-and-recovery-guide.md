@@ -10,6 +10,7 @@
 |---|---|---|
 | 原生 Java V1 消息与帧 | 初期 peer profile 已验证 | [WP01](../phase-1/evidence/protocol-peer-profile/README.md)覆盖批准的类型和显式 Go 适配；原 Go 默认路径差异、完整 WP00-R 与外部 TC 风险未结。 |
 | TCP 连接、登记、请求关联与回包 | 初期 peer profile 已验证 | [WP02](../phase-1/evidence/transport-recovery/README.md)含原 TC 响应丢失；生产 TLS/认证策略和端点发现仍开放。 |
+| Seata 传输 TLS 1.3 / mTLS | 显式选择的代理终止 profile 已验证 | 原生连接、登记池及 TM/RM builder 支持双向认证且不回退；[双版本原 TC 证据](evidence/transport-tls/README.md)核对重连、回包丢失及写出 flush。代理后端只限同机回环，生产证书/身份授权与部署门禁开放；不声称 Java TC 原生 TLS。 |
 | Rust TM Begin/Commit/Rollback、传播、同进程未知结果恢复 | 初期 TM profile 已验证 | [WP03](../phase-1/evidence/tm-gate/README.md)通过原 Java TC；`recover_unknown` 只接受原管理器的内存凭证，不能作 TM 跨进程 Launcher 接管。 |
 | Rust RM 登记、分支报告、回调与持久状态 | 初期 RM profile 已验证 | [WP04](../phase-1/evidence/rm-gate/README.md)验证重复与重连；其资源动作夹具不证明 MySQL Undo 原子性。 |
 | MySQL AT SQL/Undo 准备及真实数据库局部行为 | 实施与验证中 | [WP05 各增量](../phase-0/v1-implementation-acceptance-checklist.md#wp-05--mysql-at-phase-1)包含真实 MySQL 与固定 TC 选定场景；完整 SQL 支持矩阵、外部写入器锁覆盖和一阶段故障门禁未结。 |

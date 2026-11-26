@@ -36,6 +36,9 @@ mod java_rm_call_metrics;
 #[path = "support/java_rm_restart.rs"]
 mod java_rm_restart;
 #[cfg(feature = "experimental_changed_commit")]
+#[path = "support/java_transport_tls.rs"]
+mod java_transport_tls;
+#[cfg(feature = "experimental_changed_commit")]
 #[path = "support/java_undo_dirty.rs"]
 mod java_undo_dirty;
 #[cfg(feature = "experimental_changed_commit")]
@@ -554,10 +557,10 @@ async fn original_java_tc_changed_commit(
     let rm_mysql_port = std::env::var("SEATA_JAVA_RM_MYSQL_PORT")
         .ok()
         .map(|port| port.parse().unwrap());
-    let tm = TransactionManager::builder(
+    let tm = java_transport_tls::tm(TransactionManager::builder(
         pool(&std::env::var("SEATA_TM_ENDPOINT").unwrap()),
         registration(),
-    )
+    ))
     .request_timeout(Duration::from_secs(if callback_reply_loss {
         25
     } else {
@@ -612,12 +615,12 @@ async fn original_java_tc_changed_commit(
     .unwrap();
     let catalog = ResourceCatalog::new(4, 32767).unwrap();
     catalog.register(adapter.clone()).unwrap();
-    let mut rm = ResourceManager::builder(
+    let mut rm = java_transport_tls::rm(ResourceManager::builder(
         pool(&std::env::var("SEATA_RM_ENDPOINT").unwrap()),
         registration(),
         catalog,
         store.clone(),
-    )
+    ))
     .request_timeout(Duration::from_secs(3))
     .callback_timeout(Duration::from_secs(5))
     .build()

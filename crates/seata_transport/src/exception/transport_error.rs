@@ -12,6 +12,9 @@ pub enum TransportError {
         /// 标准库错误种类。
         kind: std::io::ErrorKind,
     },
+    /// TLS 证书、对端身份或加密握手失败；不包含证书或底层错误详情。
+    #[error("TLS 身份验证或握手失败")]
+    TlsHandshakeFailed,
     /// TCP建立尚未完成，不曾写入请求帧。
     #[error("TCP连接超时")]
     ConnectTimeout,

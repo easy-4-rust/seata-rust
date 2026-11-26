@@ -1,0 +1,32 @@
+
+running 27 tests
+test netty::connection_generation::tests::generation_counter_never_wraps_or_reuses_zero ... ok
+test netty::reconnect_backoff::tests::backoff_caps_without_wrap_and_short_lived_connections_do_not_reset ... ok
+test netty::request_id_allocator::tests::final_two_ids_of_a_valid_full_space_epoch_exhaust_without_reuse ... ok
+test netty::pool_handle::tests::unpublished_short_generation_is_counted_once_after_withdrawal ... ok
+test netty::pending_requests::tests::completed_response_is_available_before_losing_deadline_branch_can_observe_removal ... ok
+test netty::idle_timer::tests::disabled_timer_never_fires_or_expires ... ok
+test netty::pending_requests::tests::close_classifies_each_pending_by_its_own_write_marker ... ok
+test netty::idle_timer::tests::absolute_boundary_is_inclusive_and_reset_moves_it_forward ... ok
+test netty::pool_handle::tests::absolute_dispatch_deadline_survives_delay_before_session_first_poll ... ok
+test netty::pending_requests::tests::response_before_first_write_closes_connection_without_claiming_business_rejection ... ok
+test netty::idle_timer::tests::delayed_scheduler_resets_from_now_without_catch_up_burst ... ok
+test netty::idle_timer::tests::complete_activity_suppresses_probe_across_many_original_windows ... ok
+test netty::pool_handle::tests::unpolled_pool_worker_exit_stops_acquisition_and_owns_no_reconnect ... ok
+test netty::pending_requests::tests::queued_expiry_is_local_and_never_reaches_write_marker ... ok
+test netty::write_receipt::tests::closure_and_full_write_arbitrate_before_unpolled_caller_observes_result ... ok
+test netty::session_registration::tests::initialization_steps_share_one_deadline_and_leave_later_resources_unattempted ... ok
+test netty::tcp_connection::tests::response_queue_budget_and_prewrite_expiry_or_cancel_skip_all_reply_bytes ... ok
+test netty::tcp_connection::tests::skipped_cancelled_queue_entries_do_not_reset_writer_idle ... ok
+test netty::tcp_connection::tests::blocked_flush_expires_the_same_write_budget_and_keeps_response_unknown ... ok
+test netty::pool_handle::tests::acquisition_time_is_part_of_one_absolute_request_budget ... ok
+test netty::tcp_connection::tests::dropping_unpolled_response_writer_resolves_receipt_and_releases_budget ... ok
+test netty::pending_requests::tests::unpolled_worker_guard_and_poisoned_lock_both_clear_pending ... ok
+test netty::tcp_connection::tests::response_partial_write_survives_deadline_or_cancellation_and_closure_never_reuses_stream ... ok
+test netty::tcp_connection::tests::buffered_response_is_not_complete_until_flush_drains_the_original_writer ... ok
+test netty::pending_requests::tests::writer_skips_queued_frame_whose_deadline_already_elapsed ... ok
+test netty::pending_requests::tests::synchronous_pending_lock_wait_is_included_in_request_deadline ... ok
+test netty::pending_requests::tests::response_after_absolute_deadline_is_late_even_if_caller_timer_was_not_polled ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.00s
+

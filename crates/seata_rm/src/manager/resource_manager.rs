@@ -21,6 +21,8 @@ pub struct ResourceManager {
 /// 对应 Java: RM客户端配置及ResourceManager初始化职责。
 #[derive(Debug)]
 pub struct ResourceManagerBuilder {
+    #[cfg(feature = "tls")]
+    transport_tls: Option<seata_transport::TlsClientConfig>,
     connection: ConnectionPoolConfig,
     identity: RegistrationIdentity,
     catalog: ResourceCatalog,
@@ -52,6 +54,8 @@ impl ResourceManager {
         store: FileBranchStore,
     ) -> ResourceManagerBuilder {
         ResourceManagerBuilder {
+            #[cfg(feature = "tls")]
+            transport_tls: None,
             connection,
             identity,
             catalog,
@@ -118,6 +122,12 @@ impl std::fmt::Debug for ResourceManager {
     }
 }
 impl ResourceManagerBuilder {
+    /// 参数为显式 mTLS 配置；返回每个连接代际都验证相同 TLS 身份的构建器，不回退明文。
+    #[cfg(feature = "tls")]
+    pub fn transport_tls(mut self, tls: seata_transport::TlsClientConfig) -> Self {
+        self.transport_tls = Some(tls);
+        self
+    }
     /// 参数为单次出站及响应写入预算，返回更新后的构建器。
     pub fn request_timeout(mut self, value: Duration) -> Self {
         self.request_timeout = value;
@@ -172,12 +182,24 @@ impl ResourceManagerBuilder {
         .map_err(|_| RmError::Invalid {
             reason: "invalid RM registration policy",
         })?;
-        let pool =
-            ConnectionPool::start_registered(self.connection, registration).map_err(|_| {
-                RmError::Unavailable {
-                    reason: "RM registered pool unavailable",
+        let pool = {
+            #[cfg(feature = "tls")]
+            {
+                match self.transport_tls {
+                    Some(tls) => {
+                        ConnectionPool::start_registered_tls(self.connection, registration, tls)
+                    }
+                    None => ConnectionPool::start_registered(self.connection, registration),
                 }
-            })?;
+            }
+            #[cfg(not(feature = "tls"))]
+            {
+                ConnectionPool::start_registered(self.connection, registration)
+            }
+        }
+        .map_err(|_| RmError::Unavailable {
+            reason: "RM registered pool unavailable",
+        })?;
         let client = ResourceClient {
             metrics: super::RmCallMetricsSampler::new(),
             pool: pool.handle(),

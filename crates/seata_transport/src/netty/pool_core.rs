@@ -10,6 +10,8 @@ use tokio::sync::watch;
 pub(crate) struct PoolCore {
     pub(crate) config: ConnectionPoolConfig,
     pub(crate) registration: Option<SessionRegistration>,
+    #[cfg(feature = "tls")]
+    pub(crate) tls: Option<crate::TlsClientConfig>,
     inner: Mutex<PoolState>,
     changed: watch::Sender<u64>,
     shutdown: watch::Sender<bool>,
@@ -40,6 +42,8 @@ impl PoolCore {
         Self {
             config,
             registration,
+            #[cfg(feature = "tls")]
+            tls: None,
             inner: Mutex::new(PoolState {
                 snapshot: PoolSnapshot {
                     closed: false,

@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 1226, in <module>
+    run(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else "commit")
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 531, in run
+    assert processes[-1].wait(timeout=75) == 0, (out / "client-stdout.log").read_text(errors="replace")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 
+running 1 test
+test original_java_tc_changed_commit_reports_then_commits_original_branch ... FAILED
+
+failures:
+
+---- original_java_tc_changed_commit_reports_then_commits_original_branch stdout ----
+
+thread 'original_java_tc_changed_commit_reports_then_commits_original_branch' (60888) panicked at crates\seata_db_mysql\tests\live_commit_check_java.rs:630:38:
+called `Result::unwrap()` on an `Err` value: LocalFailureBeforeSend { operation: Begin, xid: None, source: LocalFailureBeforeSend { generation: None, request_id: None, reason: PoolAcquireTimeout } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_java_tc_changed_commit_reports_then_commits_original_branch
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 45 filtered out; finished in 10.57s
+
+

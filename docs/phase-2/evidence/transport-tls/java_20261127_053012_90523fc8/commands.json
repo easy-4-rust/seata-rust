@@ -1,0 +1,169 @@
+[
+  {
+    "label": "generate-test-material",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-transport",
+      "--features",
+      "tls",
+      "--test",
+      "tls_transport",
+      "--offline",
+      "--locked",
+      "export_java_tls_material",
+      "--",
+      "--ignored",
+      "--exact"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-transport-tls-java-20261127-053012-90523fc8",
+      "--label",
+      "seata.fixture.owner=java-tc-report",
+      "--label",
+      "seata.transport.tls.owner=7d86d3baf04042d2bdac06ce10e8dc10",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_transport_tls_java_20261127_053012_90523fc8/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:43318:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "e3bdaca48cf871c0a1b4e7d9dd71fc6dee3a7021f5693f659295febeadbe4d53"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit",
+    "argv": [
+      "C:\\Users\\hnxyh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-first-phase-commit\\java_tc_report.py",
+      "1.99",
+      "commit"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit_callback_reply_loss",
+    "argv": [
+      "C:\\Users\\hnxyh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-first-phase-commit\\java_tc_report.py",
+      "1.99",
+      "commit_callback_reply_loss"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-rollback_callback_reply_loss",
+    "argv": [
+      "C:\\Users\\hnxyh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-first-phase-commit\\java_tc_report.py",
+      "1.99",
+      "rollback_callback_reply_loss"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit",
+    "argv": [
+      "C:\\Users\\hnxyh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-first-phase-commit\\java_tc_report.py",
+      "1.85",
+      "commit"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit_callback_reply_loss",
+    "argv": [
+      "C:\\Users\\hnxyh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-first-phase-commit\\java_tc_report.py",
+      "1.85",
+      "commit_callback_reply_loss"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-rollback_callback_reply_loss",
+    "argv": [
+      "C:\\Users\\hnxyh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-first-phase-commit\\java_tc_report.py",
+      "1.85",
+      "rollback_callback_reply_loss"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect-owned",
+    "argv": [
+      "docker",
+      "inspect",
+      "e3bdaca48cf871c0a1b4e7d9dd71fc6dee3a7021f5693f659295febeadbe4d53"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "e3bdaca48cf871c0a1b4e7d9dd71fc6dee3a7021f5693f659295febeadbe4d53"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "e3bdaca48cf871c0a1b4e7d9dd71fc6dee3a7021f5693f659295febeadbe4d53"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "e3bdaca48cf871c0a1b4e7d9dd71fc6dee3a7021f5693f659295febeadbe4d53"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "e3bdaca48cf871c0a1b4e7d9dd71fc6dee3a7021f5693f659295febeadbe4d53"
+    ],
+    "exit_code": 1
+  }
+]

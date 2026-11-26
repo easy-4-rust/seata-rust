@@ -8,12 +8,17 @@ license.workspace = true
 repository.workspace = true
 publish = false
 
+[features]
+tls = ["dep:tokio-rustls"]
+
 [dependencies]
 seata-protocol = { path = "../seata_protocol" }
+tokio-rustls = { version = "=0.26.4", default-features = false, features = ["ring"], optional = true }
 thiserror.workspace = true
 tokio.workspace = true
 
 [dev-dependencies]
+rcgen = { version = "=0.14.0", default-features = false, features = ["ring"] }
 tokio = { workspace = true, features = ["test-util"] }
 
 [lints]

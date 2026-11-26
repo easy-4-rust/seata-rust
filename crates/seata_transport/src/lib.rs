@@ -16,3 +16,6 @@ pub use netty::{
     ConnectionPool, ConnectionPoolConfig, PoolCounters, PoolHandle, PoolInbound, PoolSampler,
     PoolSlotSnapshot, PoolSlotState, PoolSnapshot, ReconnectPolicy,
 };
+
+#[cfg(feature = "tls")]
+pub use netty::TlsClientConfig;

@@ -1,0 +1,79 @@
+{
+  "status": "SELECTED_TLS13_MUTUAL_AUTH_TRANSPORT_PROFILE_VERIFIED",
+  "specification": "docs/phase-2/wp07-transport-tls-contract.md",
+  "features": {
+    "seata-transport": "tls",
+    "seata-tm": "tls",
+    "seata-rm": "tls",
+    "seata-db-mysql": "transport_tls"
+  },
+  "default_transport_security_changed": false,
+  "plaintext_fallback_allowed": false,
+  "profile": "Rust TLS1.3 mTLS to loopback TLS gateway; same-host loopback Seata V1 backend",
+  "Java_TC_native_TLS_claimed": false,
+  "native_tls_tests_per_version": {
+    "passed": 8,
+    "ignored_exporter": 1
+  },
+  "transport_library_tests_per_version": 27,
+  "workspace_tests_per_version": {
+    "passed": 742,
+    "ignored": 324
+  },
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "original_java_tc_cases_per_version": 3,
+  "evidence_negative_controls_per_version": 9,
+  "source_mutations_per_version": [
+    "registered pool bypasses TLS",
+    "writer omits flush before successful receipt"
+  ],
+  "restored_targets_passed_per_version": true,
+  "TLS_flush_uses_original_write_deadline": true,
+  "late_client_certificate_rejection_keeps_original_write_boundary": true,
+  "default_seata_transport_rustls_dependency": false,
+  "private_fixture_keys_only_on_D": true,
+  "strict_Clippy_packages": [
+    "seata-transport",
+    "seata-tm",
+    "seata-rm",
+    "seata-db-mysql"
+  ],
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "production certificate issuance, rotation and revocation",
+    "production gateway client identity authorization and deployment",
+    "native Java TC TLS or other deployment profiles",
+    "complete security/load/operational gates and independent review",
+    "remaining WP05-07 and Phase4-7 plan"
+  ],
+  "evidence": {
+    "original_java_tc": {
+      "path": "docs/phase-2/evidence/transport-tls/java_20261127_053628_6d3dabfb",
+      "catalog_sha256": "efca67745fe991089ac9ac9494bcf641154b2c7c3ff11534a6ed558c90bbfd4f"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/transport-tls/validation_20261127_054039_0010c496",
+      "catalog_sha256": "2569ada8f598994fdee65a2d09c7f000cadf4f406da5133b62e0eb3ed9568ca9"
+    },
+    "native": {
+      "path": "docs/phase-2/evidence/transport-tls/native_20261127_054039_3be44bd5",
+      "catalog_sha256": "66869db90c069a42fcf70ffc71019ebcca4ed9db4ab6b7bdf8955890928a6783"
+    },
+    "regression_1.99": {
+      "path": "docs/phase-2/evidence/transport-tls/regression_1.99_20261127_053847_6efd17fa",
+      "catalog_sha256": "4f895e0efbd7496d028eb3f5fd0d4b2f9517ae7f128a5b037c91367cb2aa97ff"
+    },
+    "regression_1.85": {
+      "path": "docs/phase-2/evidence/transport-tls/regression_1.85_20261127_054125_1f35c3a2",
+      "catalog_sha256": "ed35c4667b9db2fe0e495479beea3d59b9949e0b4b824e788e53fa89b1299d05"
+    },
+    "default_features": {
+      "path": "docs/phase-2/evidence/transport-tls/default_20261127_054520_e92cd152",
+      "catalog_sha256": "bb8f41e5a3d0c96361042f0858b967b47eec59c764273181c5f10aa26fce5ae8"
+    }
+  }
+}

@@ -1214,3 +1214,10 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 正式回调以原信封编号和连接代际记录单次本地响应写入，区分完整本地写入、明确未发送、写后未知和作用域取消，不把本地写完成称作 TC 接收。分支决策也保留原代际，批次多个决策只对应一次信封写入。
 
 双 Rust 的真实 TCP 批次/重复/反向/旧代际关闭和作用域分类测试通过；固定原 Java TC 各三场景核对普通提交和 Commit/Rollback 回包实际丢弃后的新连接重试，每版本九项证据削弱拒绝。移除正式结算目标失败，恢复原字节后通过。两版本 RM 各 77 passed / 1 ignored，全工作区各 732 passed / 323 ignored，受影响 RM/MySQL 严格 Clippy 和格式检查通过。见 [本地写入证据](phase-2/evidence/rm-callback-write-events/README.md)。生产采集、完整状态事件、独立审查、WP05–07 和后续 Phase 保持开放。
+
+
+## 2026-11-27：Seata 传输 TLS 1.3 双向认证
+
+正式单连接、连接池及 TM/RM 构建器新增默认关闭的显式 mTLS 入口；证书/SAN 校验、原绝对握手期限及 TLS 重连均无明文回退。写入还需在同一期限内 flush 加密/缓冲记录，不能在接受明文时提前发布完成；确定性受阻 flush 先 RED 后 GREEN。
+
+双 Rust 各八组真实 TLS 目标、27 传输库测试及三组原 Java TC/MySQL 场景通过；会话证书摘要、协商协议及字节总数逐连接绑定原 V1 帧。两项正式源代码变异各失败，恢复后通过；每版本九项证据削弱拒绝。全工作区全功能各 742 passed / 324 ignored，四组件严格 Clippy、默认特性测试/严格检查和默认传输依赖检查通过。见 [传输 TLS 证据](phase-2/evidence/transport-tls/README.md)。这是同主机 TLS 终止代理 profile，不声明 Java TC 原生 TLS 或完整生产认证；证书运维/代理部署授权、独立审查、WP05–07 和 Phase4–7 继续。

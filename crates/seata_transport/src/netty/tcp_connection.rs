@@ -10,8 +10,7 @@ use seata_protocol::{CompressorType, Message, RequestType, SerializerType};
 use std::fmt;
 use std::net::SocketAddr;
 use std::sync::Arc;
-use tokio::io::{AsyncReadExt, AsyncWrite, AsyncWriteExt};
-use tokio::net::tcp::OwnedReadHalf;
+use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
 use tokio::net::TcpStream;
 use tokio::sync::{mpsc, watch, Semaphore};
 use tokio::task::JoinHandle;
@@ -59,6 +58,55 @@ impl TcpConnection {
         stream
             .set_nodelay(true)
             .map_err(|error| local(TransportError::Io { kind: error.kind() }))?;
+        let (reader, writer) = stream.into_split();
+        Self::from_halves(reader, writer, generation, config)
+    }
+    /// 参数为原端点、预算及显式 mTLS 配置；返回验证后的 TLS 1.3 会话，失败绝不回退明文。
+    /// 同一绝对连接预算覆盖 TCP 与握手；失败时没有任何 V1 帧或请求编号。
+    #[cfg(feature = "tls")]
+    pub async fn connect_tls(
+        address: SocketAddr,
+        config: ConnectionConfig,
+        tls: &crate::TlsClientConfig,
+    ) -> Result<Self, CallError> {
+        let generation =
+            ConnectionGeneration::next().map_err(|reason| CallError::local(None, None, reason))?;
+        let local = |reason| CallError::local(Some(generation), None, reason);
+        if tokio::runtime::Handle::try_current().is_err() {
+            return Err(local(TransportError::InvalidConfiguration {
+                reason: "Tokio I/O and time runtime required",
+            }));
+        }
+        let deadline = Instant::now()
+            .checked_add(config.connect_timeout)
+            .ok_or_else(|| {
+                local(TransportError::InvalidConfiguration {
+                    reason: "connect deadline overflow",
+                })
+            })?;
+        let stream = match tokio::time::timeout_at(deadline, TcpStream::connect(address)).await {
+            Ok(Ok(stream)) => stream,
+            Ok(Err(error)) => return Err(local(TransportError::Io { kind: error.kind() })),
+            Err(_) => return Err(local(TransportError::ConnectTimeout)),
+        };
+        stream
+            .set_nodelay(true)
+            .map_err(|error| local(TransportError::Io { kind: error.kind() }))?;
+        let stream = tls.connect(stream, deadline).await.map_err(local)?;
+        let (reader, writer) = tokio::io::split(stream);
+        Self::from_halves(reader, writer, generation, config)
+    }
+    fn from_halves<R, W>(
+        reader: R,
+        writer: W,
+        generation: ConnectionGeneration,
+        config: ConnectionConfig,
+    ) -> Result<Self, CallError>
+    where
+        R: AsyncRead + Unpin + Send + 'static,
+        W: AsyncWrite + Unpin + Send + 'static,
+    {
+        let local = |reason| CallError::local(Some(generation), None, reason);
         let (shutdown, stop) = watch::channel(false);
         let core = Arc::new(PendingRequests::new(generation, config, shutdown).map_err(local)?);
         let (outbound, commands) = mpsc::channel(config.maximum_pending + 1);
@@ -70,7 +118,6 @@ impl TcpConnection {
             response_permits: Arc::new(Semaphore::new(config.maximum_pending)),
             config,
         };
-        let (reader, writer) = stream.into_split();
         // 守卫作为future参数在首次poll前已构造，任务从未poll就被abort也能传播关闭。
         let read_exit = WorkerExitGuard::new(Arc::clone(&core));
         let write_exit = WorkerExitGuard::new(Arc::clone(&core));
@@ -138,8 +185,8 @@ impl Drop for TcpConnection {
     }
 }
 
-async fn read_loop(
-    mut reader: OwnedReadHalf,
+async fn read_loop<R: AsyncRead + Unpin>(
+    mut reader: R,
     core: Arc<PendingRequests>,
     outbound: mpsc::Sender<OutboundCommand>,
     incoming: mpsc::Sender<RpcMessage>,
@@ -275,7 +322,10 @@ async fn write_loop<W: AsyncWrite + Unpin>(
                     &response.bytes
                 }
             };
-            writer.write_all(bytes).await.map(|()| true)
+            writer.write_all(bytes).await?;
+            // TLS/缓冲流接受明文不等于密文已写出；flush 共享原写期限，完成后才发布回执。
+            writer.flush().await?;
+            Ok::<bool, std::io::Error>(true)
         };
         let result = tokio::select! {biased; _=stop.changed()=>return, result=tokio::time::timeout_at(deadline,write)=>result};
         match result {

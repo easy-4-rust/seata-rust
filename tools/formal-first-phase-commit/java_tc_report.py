@@ -275,6 +275,8 @@ seata:
     build = [cargo, "test", "--offline", "--locked", "-p", "seata-db-mysql"]
     if not no_change and (not tm_durable_mode or tm_at):
         build += ["--features", "experimental_changed_commit"]
+    if env.get("SEATA_TRANSPORT_TLS_MATERIAL"):
+        build += ["--features", "transport_tls"]
     build += ["--test", target, "--no-run", "--message-format=json"]
     artifact_output = guard.reg.command(build, env, timeout=180)
     artifact, = [Path(row["executable"]) for line in artifact_output.splitlines() if line.startswith(b"{")
@@ -319,6 +321,7 @@ seata:
                    SEATA_TM_ATTESTATION_CREDENTIALS=str(signer_material / "recovery"))
     stop = work / "stop"
     processes = []
+    tls_frontends = []
     signer_created = False
     db_observer = None
     commit_gate = None
@@ -424,6 +427,14 @@ seata:
                 proxy.append("--supervised-tm")
             processes.append(guard.support.spawn(proxy, work, env, out, role))
             guard.support.wait_owned(processes[-1], listen, env)
+        if env.get("SEATA_TRANSPORT_TLS_MATERIAL"):
+            assert scenario in ("commit", "commit_callback_reply_loss", "rollback_callback_reply_loss")
+            from transport_tls import Frontend
+            for role in ("TM", "RM"):
+                key = "SEATA_" + role + "_ENDPOINT"
+                frontend = Frontend(env["SEATA_TRANSPORT_TLS_MATERIAL"], env[key], role)
+                tls_frontends.append(frontend)
+                env[key] = "127.0.0.1:" + str(frontend.port)
         if mysql_tls:
             from mysql_tls_admission import aborted_connects, permit_trusted_ca
 
@@ -941,6 +952,8 @@ seata:
             guard.put(stop, "cleanup\n")
         for process in reversed(processes):
             guard.support.stop(process)
+        if tls_frontends:
+            guard.save(out / "transport-tls.json", [frontend.stop() for frontend in tls_frontends])
         if db_observer:
             guard.save(out / "mysql-wire.json", db_observer.stop())
         if signer_created:

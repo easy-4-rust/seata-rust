@@ -30,6 +30,8 @@ pub struct TransactionManager {
 /// 对应 Java: TM客户端配置及DefaultTransactionManager初始化。
 #[derive(Debug)]
 pub struct TransactionManagerBuilder {
+    #[cfg(feature = "tls")]
+    transport_tls: Option<seata_transport::TlsClientConfig>,
     connection: ConnectionPoolConfig,
     identity: RegistrationIdentity,
     request_timeout: Duration,
@@ -177,6 +179,8 @@ impl TransactionManager {
         identity: RegistrationIdentity,
     ) -> TransactionManagerBuilder {
         TransactionManagerBuilder {
+            #[cfg(feature = "tls")]
+            transport_tls: None,
             connection,
             identity,
             request_timeout: Duration::from_secs(5),
@@ -441,6 +445,12 @@ impl TransactionManager {
     }
 }
 impl TransactionManagerBuilder {
+    /// 参数为显式 mTLS 配置；返回每个连接代际都验证相同 TLS 身份的构建器，不回退明文。
+    #[cfg(feature = "tls")]
+    pub fn transport_tls(mut self, tls: seata_transport::TlsClientConfig) -> Self {
+        self.transport_tls = Some(tls);
+        self
+    }
     /// 指定持久事务来源的部署信任域。此值须与本节点停止证明签发方配置一致。
     pub fn launcher_stop_scope(mut self, scope: [u8; 32]) -> Self {
         self.owner_stop_scope = Some(scope);
@@ -477,8 +487,22 @@ impl TransactionManagerBuilder {
         let identity = self.identity.clone();
         let registration = SessionRegistration::tm(self.identity, self.registration_timeout)
             .map_err(|e| TmError::Infrastructure(Box::new(e)))?;
-        let pool = ConnectionPool::start_registered(self.connection, registration)
-            .map_err(|e| TmError::Infrastructure(Box::new(e)))?;
+        let pool = {
+            #[cfg(feature = "tls")]
+            {
+                match self.transport_tls {
+                    Some(tls) => {
+                        ConnectionPool::start_registered_tls(self.connection, registration, tls)
+                    }
+                    None => ConnectionPool::start_registered(self.connection, registration),
+                }
+            }
+            #[cfg(not(feature = "tls"))]
+            {
+                ConnectionPool::start_registered(self.connection, registration)
+            }
+        }
+        .map_err(|e| TmError::Infrastructure(Box::new(e)))?;
         Ok(TransactionManager {
             pool,
             metrics: super::TmMetricsSampler::new(),
