@@ -7,15 +7,21 @@ from mysql_phase_two_fault import TOOLS, load
 
 def permit_shutdown(client, observations, mysql, db, env, out, observer):
     rollback = env.get("SEATA_CALLBACK_ROLLBACK_SHUTDOWN") == "1"
+    in_flight = env.get("SEATA_CALLBACK_IN_FLIGHT") == "1"
     deadline = time.monotonic() + 15
     while True:
         with observer.lock:
-            held = [row.copy() for row in observer.events if row["kind"] == "commit_ack_held"]
+            held = [row.copy() for row in observer.events if row["kind"] == ("commit_in_flight_closed" if in_flight else "commit_ack_held")]
         if held:
             break
         assert client.poll() is None and time.monotonic() < deadline, "callback COMMIT OK was not held"
         time.sleep(.02)
     event, = held
+    if in_flight:
+        assert (out / "mysql-before-rm-shutdown.tsv").read_bytes() == (out / "mysql-after-rm-shutdown.tsv").read_bytes()
+        binding = json.loads((out / "callback-shutdown-permitted.json").read_bytes())
+        assert binding["in_flight"] and binding["commit_mysql_session"] == event["mysql_connection_id"]
+        return
     state = guard.reg.command(mysql + [db, "-e",
         "SELECT HEX(xid),branch_id,phase,commit_authorized,commit_terminal,first_phase_committed,"
         "(SELECT COUNT(*) FROM undo_log),(SELECT COUNT(*) FROM undo_work),OCTET_LENGTH(undo_sha256) "
@@ -63,7 +69,7 @@ def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False, in_flight=
         assert before == (out / "mysql-after-rm-shutdown.tsv").read_bytes()
         state = before.decode().strip().split("\t")
         assert state[:4] == [str(binding["commit_mysql_session"]), "Query", "COMMIT", "waiting for handler commit"]
-        assert state[4:] == [result["xid"].encode().hex().upper(), str(result["branch_id"]), "1","1","0","1","0","0","1"]
+        assert state[4:] == [result["xid"].encode().hex().upper(), str(result["branch_id"]), "1","1","0","2" if rollback else "1","0","0","1"]
     else:
         state = (out / "callback-commit-before-shutdown.tsv").read_text().strip().split("\t")
         assert state == [result["xid"].encode().hex().upper(), str(result["branch_id"]),

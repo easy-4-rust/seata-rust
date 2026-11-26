@@ -63,3 +63,16 @@ Rust 1.99.0 和 1.85.0 各执行 native_calls 七项与 native_callbacks 九项�
 两套工具链严格 Clippy 通过。首轮用例观察期限未覆盖固定 TC 的 15 秒回调等待，另一轮汇总缺少新场景映射，修复后以上完整记录通过。Windows CIM 监听查询曾反复超时，运行器现在回退 netstat 并继续核对真实监听 PID，仍拒绝其他进程占用目标端口。
 
 本轮覆盖 Commit 方向。Rollback 的 COMMIT 执行中关闭、生产信号及应用业务排空继续验收。
+
+
+## 原回滚回调 COMMIT 执行期间关闭 RM
+
+场景 rollback_commit_in_flight_shutdown 使用同一组提交等待和两次独立 SQL 快照。在 RM 关闭前后，原 MySQL 物理连接均处于 waiting for handler commit，原 XID/BranchId 保持一致。可见状态为业务行仍在、Normal Undo 仍在、无围栏、phase=2、terminal=0，说明回滚控制事务尚未对外提交。
+
+关闭后保留原 Rollback Pending，再由重新登记的 RM 接收同一原回调。原 COMMIT 最终持久化一次补偿、一次 Normal Undo 删除、一次防悬挂插入和一次终态写入。新会话读取终态后只确认原分支完成。原 TM 请求若先到期，保留未知并只读查询原 XID，始终仅一次 GlobalRollback。
+
+[Rust 1.99](../java-tc-changed-commit-report/run-rollback_commit_in_flight_shutdown-1.99-f00afe9a/verified.json) · [Rust 1.85](../java-tc-changed-commit-report/run-rollback_commit_in_flight_shutdown-1.85-843229e8/verified.json) · [反例回放](../java-tc-changed-commit-report/run-rollback_commit_in_flight_shutdown-1.99-f00afe9a/shutdown-replay-controls.json)
+
+双工具链严格 Clippy 通过。回放拒绝缺失原补偿、重复防悬挂写入、错误物理提交连接以及关闭后的快照已完成 COMMIT 的变体。Commit 方向按同一共享运行器另行回归。
+
+Commit 与 Rollback 的 COMMIT 执行中及确认滞留窗口现在都有原 TC/MySQL 现场证据。生产信号处理、应用业务流量排空及完整部署验收继续。

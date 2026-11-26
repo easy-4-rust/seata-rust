@@ -2,10 +2,11 @@
 import json
 import time
 import live_guard as guard
-from mysql_phase_two_fault import TOOLS, delay_handler_commit, load
+from mysql_phase_two_fault import ROLLBACK_TERMINAL, TOOLS, delay_handler_commit, load
 
 
 def start_observer(upstream, mysql, db, env, out, observations):
+    rollback = env.get("SEATA_CALLBACK_ROLLBACK_SHUTDOWN") == "1"
     proxy = load("shutdown_in_flight_proxy", TOOLS / "formal-commit-direction/proxy.py")
 
     def snapshot(physical_id=None, *, prepare=False):
@@ -27,7 +28,7 @@ def start_observer(upstream, mysql, db, env, out, observations):
             packet = guard.reg.command(mysql + [db, "-e", sql], env, timeout=4)
             fields = packet.decode().strip().split("\t")
             assert fields[:4] == [str(physical_id), "Query", "COMMIT", "waiting for handler commit"], packet
-            assert fields[6:] == ["1", "1", "0", "1", "0", "0", "1"], packet
+            assert fields[6:] == ["1", "1", "0", "2" if rollback else "1", "0", "0", "1"], packet
             return packet
 
         before = observe()
@@ -52,4 +53,5 @@ def start_observer(upstream, mysql, db, env, out, observations):
         guard.reg.command(mysql + ["-e", "SET GLOBAL binlog_group_commit_sync_delay=0"], env, timeout=4)
         guard.put(observations / "java-rm-closed-snapshot-recorded", "Original COMMIT still executing after RM shutdown\n")
 
-    return proxy.UndoRollbackCommitObserver(upstream, "in_flight", on_fault=snapshot)
+    return proxy.UndoRollbackCommitObserver(upstream, "in_flight",
+        ROLLBACK_TERMINAL if rollback else proxy.COMMIT_TERMINAL, on_fault=snapshot)
