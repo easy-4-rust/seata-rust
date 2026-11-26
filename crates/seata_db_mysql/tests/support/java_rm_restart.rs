@@ -23,7 +23,14 @@ pub(super) async fn restart(
     assert!(sampler.snapshot().closed);
     let identity = BranchIdentity::new(xid.as_str().into(), branch_id, key.clone(), None).unwrap();
     let pending = store
-        .lease(identity, BranchPhase::Commit)
+        .lease(
+            identity,
+            if std::env::var("SEATA_CALLBACK_ROLLBACK_SHUTDOWN").as_deref() == Ok("1") {
+                BranchPhase::Rollback
+            } else {
+                BranchPhase::Commit
+            },
+        )
         .await
         .unwrap()
         .state()

@@ -43,6 +43,7 @@ TESTS = {
     "rollback_missing_undo_reply_loss": "original_java_tc_rollback_with_missing_undo_preserves_original_guard",
     "commit": "original_java_tc_changed_commit_reports_then_commits_original_branch",
     "commit_recovered": "original_java_tc_recovered_commit_reports_then_commits_original_branch",
+    "callback_rollback_shutdown": "original_java_tc_completes_branch_after_graceful_rm_restart",
     "callback_commit_shutdown": "original_java_tc_completes_branch_after_graceful_rm_restart",
     "graceful_rm_restart": "original_java_tc_completes_branch_after_graceful_rm_restart",
     "undo_checksum_legacy": "original_java_tc_recovered_commit_reports_then_commits_original_branch",
@@ -124,7 +125,7 @@ def run(version, scenario="commit"):
     tm_durable_mode = tm_recovery or scenario in ("tm_durable_commit_loss", "tm_durable_rollback_loss")
     tm_rollback = scenario in ("tm_durable_rollback_loss", "tm_recovered_rollback_loss", "tm_recovered_at_rollback_loss", "tm_attested_at_rollback_loss")
     tm_drop_reply = tm_durable_mode and scenario not in ("tm_recovered_commit", "tm_recovered_at_commit", "tm_attested_at_commit")
-    commit_mode = scenario in ("callback_commit_shutdown", "graceful_rm_restart", "undo_checksum_legacy", "undo_checksum", "commit", "commit_recovered", "commit_cross_process", "commit_cross_process_race", "commit_distinct_process_race", "commit_report_loss")
+    commit_mode = scenario in ( "callback_commit_shutdown", "graceful_rm_restart", "undo_checksum_legacy", "undo_checksum", "commit", "commit_recovered", "commit_cross_process", "commit_cross_process_race", "commit_distinct_process_race", "commit_report_loss")
     report_loss_mode = scenario in ("report_loss", "commit_report_loss", "undo_report_loss", "enroll_duplicate_report_loss")
     enroll_duplicate_mode = scenario in ("enroll_duplicate", "enroll_duplicate_report_loss")
     token = uuid.uuid4().hex[:8]
@@ -278,8 +279,11 @@ seata:
                SEATA_MYSQL_DATABASE=db, SEATA_UNDO_SCHEMA_PATH=str(work / "client-schema.sql"),
                SEATA_UNDO_STORE_OUT=str(observations), SEATA_RM_ENDPOINT=f"127.0.0.1:{rm}",
                SEATA_TM_ENDPOINT=f"127.0.0.1:{tm}")
+    env.pop("SEATA_CALLBACK_ROLLBACK_SHUTDOWN", None)
+    if scenario == "callback_rollback_shutdown":
+        env["SEATA_CALLBACK_ROLLBACK_SHUTDOWN"] = "1"
     env.pop("SEATA_CALLBACK_SHUTDOWN", None)
-    if scenario == "callback_commit_shutdown":
+    if scenario in ("callback_commit_shutdown", "callback_rollback_shutdown"):
         env["SEATA_CALLBACK_SHUTDOWN"] = "1"
     env.pop("SEATA_CHECKSUM_LEGACY", None)
     if scenario == "undo_checksum_legacy":
@@ -350,10 +354,14 @@ seata:
             assert db_observer.port not in (tc, rm, tm)
             env["SEATA_JAVA_RM_MYSQL_PORT"] = str(db_observer.port)
             resource = f"jdbc:mysql://127.0.0.1:{db_observer.port}/{db}"
-        elif scenario == "callback_commit_shutdown":
+        elif scenario in ("callback_commit_shutdown", "callback_rollback_shutdown"):
             from mysql_phase_two_fault import TOOLS, load
             proxy = load("callback_shutdown_observer", TOOLS / "formal-commit-direction/proxy.py")
-            db_observer = proxy.UndoRollbackCommitObserver(43318, "hold_commit_ack")
+            terminal = proxy.COMMIT_TERMINAL
+            if scenario == "callback_rollback_shutdown":
+                from mysql_phase_two_fault import ROLLBACK_TERMINAL
+                terminal = ROLLBACK_TERMINAL
+            db_observer = proxy.UndoRollbackCommitObserver(43318, "hold_commit_ack", terminal)
             env["SEATA_JAVA_RM_MYSQL_PORT"] = str(db_observer.port)
             resource = f"jdbc:mysql://127.0.0.1:{db_observer.port}/{db}"
         elif db_fault or mixed_at or missing_undo or terminal_permission or scenario == "graceful_rm_restart":
@@ -375,7 +383,7 @@ seata:
         guard.support.wait_owned(processes[-1], tc, env)
         for role, listen in (("TM", tm),) if tm_durable_mode and not tm_at else (("RM", rm), ("TM", tm)):
             observer_mode = ("cross_process_race" if role == "RM" and scenario == "commit_distinct_process_race"
-                             else "cross_process" if role == "RM" and (business_child_exit or scenario in ("callback_commit_shutdown", "graceful_rm_restart", "commit_cross_process", "commit_cross_process_race"))
+                             else "cross_process" if role == "RM" and (business_child_exit or scenario in ("callback_rollback_shutdown", "callback_commit_shutdown", "graceful_rm_restart", "commit_cross_process", "commit_cross_process_race"))
                              else "report_loss" if role == "RM" and report_loss_mode else "basic")
             if role == "TM" and tm_drop_reply:
                 observer_mode = "tm_rollback_loss" if tm_rollback else "tm_end_loss"
@@ -398,7 +406,7 @@ seata:
             aborted_before = aborted_connects(mysql, env)
         processes.append(guard.support.spawn([artifact, TESTS[scenario], "--ignored", "--exact", "--test-threads=1"],
                                              ROOT, env, out, "client"))
-        if scenario == "callback_commit_shutdown":
+        if scenario in ("callback_commit_shutdown", "callback_rollback_shutdown"):
             from mysql_callback_shutdown import permit_shutdown
             permit_shutdown(processes[-1], observations, mysql, db, env, out, db_observer)
         if scenario in ("undo_checksum", "undo_checksum_rollback"):
@@ -562,10 +570,27 @@ seata:
             print(f"PASS original Java TC durable TM {scenario} {version}: {out}", flush=True)
             return
         assert all(p.wait(timeout=12) == 0 for p in processes[1:3]), "frame observers did not finish"
-        if scenario in ("callback_commit_shutdown", "graceful_rm_restart"):
+        if scenario in ("callback_rollback_shutdown", "callback_commit_shutdown", "graceful_rm_restart"):
             mysql_wire = db_observer.stop()
             db_observer = None
             guard.save(out / "mysql-wire.json", mysql_wire)
+        if scenario == "callback_rollback_shutdown":
+            from mysql_callback_shutdown import verify_shutdown
+            result = json.loads((observations / "java-callback-shutdown-rollback.json").read_bytes())
+            restart = json.loads((observations / "java-graceful-rm-restart.json").read_bytes())
+            guard.save(out / "graceful-rm-restart.json", restart)
+            guard.save(out / "observation.json", result)
+            journal = (observations / "java-changed-report-branches.log").read_bytes()
+            guard.put(out / "branches.log", journal)
+            rm_rows = [json.loads(line) for line in (out / "RM-frames.jsonl").read_text().splitlines()]
+            verify_shutdown(rm_rows, result, out, mysql_wire, rollback=True)
+            final = verify_at_terminal(mysql, db, env, out, True)
+            counts = guard.reg.command(mysql + [db, "-e", "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table)"], env)
+            assert counts.strip().split(b"\t") == [b"0"] * 3
+            guard.save(out / "verified.json", dict(scenario=scenario, xid=result["xid"], branch_id=result["branch_id"],
+                       final_tc_counts=[0,0,0], at_terminal_state=final))
+            print(f"PASS original Java TC callback rollback shutdown {version}: {out}", flush=True)
+            return
         if scenario == "undo_checksum_rollback":
             result = json.loads((observations / "java-checksum-rollback.json").read_bytes())
             journal = (observations / "java-changed-report-branches.log").read_bytes()
@@ -794,7 +819,7 @@ seata:
             assert (callback_replies[0]["connection"], callback_replies[0]["request_id"]) == (
                 callbacks[0]["connection"], callbacks[0]["request_id"])
             assert guard.support.payload(callback_replies[0])[2:4] == b"\x01\x00"
-        if scenario == "callback_commit_shutdown":
+        if scenario in ("callback_commit_shutdown", "callback_rollback_shutdown"):
             from mysql_callback_shutdown import verify_shutdown
             verify_shutdown(rm_rows, result, out, mysql_wire)
         if scenario == "graceful_rm_restart":

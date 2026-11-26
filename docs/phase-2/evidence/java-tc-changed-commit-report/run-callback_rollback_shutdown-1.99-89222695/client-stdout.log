@@ -1,0 +1,18 @@
+
+running 1 test
+test original_java_tc_completes_branch_after_graceful_rm_restart ... FAILED
+
+failures:
+
+---- original_java_tc_completes_branch_after_graceful_rm_restart stdout ----
+
+thread 'original_java_tc_completes_branch_after_graceful_rm_restart' (28196) panicked at crates\seata_db_mysql\tests\live_commit_check_java.rs:938:30:
+called `Result::unwrap()` on an `Err` value: UnknownOutcome { operation: Rollback, xid: Some(Xid { bytes: 36, .. }), source: UnknownOutcome { generation: ConnectionGeneration(1), request_id: 3, reason: ResponseTimeout }, recovery: Some(RecoveryToken { .. }) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_java_tc_completes_branch_after_graceful_rm_restart
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 43 filtered out; finished in 11.29s
+

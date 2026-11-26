@@ -35,3 +35,16 @@ Rust 1.99.0 和 1.85.0 各执行 native_calls 七项与 native_callbacks 九项�
 [Rust 1.99](../java-tc-changed-commit-report/run-callback_commit_shutdown-1.99-be58b1cf/callback-shutdown-wire.json) · [Rust 1.85](../java-tc-changed-commit-report/run-callback_commit_shutdown-1.85-b5e81b15/callback-shutdown-wire.json)
 
 两工具链严格 Clippy 通过。回放验证器拒绝旧会话成功响应、缺失原 OK 截留、重复 Undo 删除及重复终态写入。Rust 1.85 首次启动阶段的 Windows 监听进程查询超时，清理该轮夹具后重跑通过。原 COMMIT 尚在数据库执行时的关闭、Rollback 方向及生产信号处理继续验收。
+
+
+## 回滚回调 COMMIT 确认滞留期间关闭 RM
+
+场景 callback_rollback_shutdown 在同一原 Java TC/MySQL 配置上扣留回滚事务的真实 COMMIT OK。独立 SQL 核对 phase=2、terminal=1、业务行已补偿删除、一个 Undo 防悬挂记录和原 32 字节摘要后才允许关闭。Rust 在等待原 GlobalRollback 响应的同时按该标记关闭旧 RM，原日志保持 Rollback Pending。
+
+替换 RM 重新登记后，原 TC 在新会话上重试同一原回调，返回状态 8。原始 MySQL 参数核对一次业务补偿 DELETE、一次 Normal Undo 删除、一次防悬挂 INSERT 和一次回滚终态更新，这些动作位于同一原连接和 COMMIT。替换会话只观察已持久终态，日志状态为 Pending、Completed，TC 会话、分支和锁最终为零。
+
+[Rust 1.99](../java-tc-changed-commit-report/run-callback_rollback_shutdown-1.99-e7dc02c0/verified.json) · [Rust 1.85](../java-tc-changed-commit-report/run-callback_rollback_shutdown-1.85-7224554d/verified.json) · [反例回放](../java-tc-changed-commit-report/run-callback_rollback_shutdown-1.99-e7dc02c0/shutdown-replay-controls.json)
+
+原 TM 回滚请求可能先到本地期限。用例保留原 UnknownOutcome，并只查询原 XID 等待 TC 完成，始终仅一个 GlobalRollback。首次现场曾要求该请求必须获得成功响应，实际暴露了此未知窗口，修正用例的结果分类后双版本通过。验证器拒绝缺失补偿、重复围栏、旧会话成功回包和伪造原 OK 已交付的报文。
+
+本轮覆盖已持久化且响应滞留的窗口。数据库仍在执行 COMMIT 时的关闭及生产信号处理继续验收。

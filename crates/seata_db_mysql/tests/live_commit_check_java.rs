@@ -925,6 +925,51 @@ async fn original_java_tc_changed_commit(
     if terminal_permission {
         java_mysql_permission::wait_for_baseline(&folder, xid.as_str(), branch_id).await;
     }
+    if shutdown_callback && std::env::var("SEATA_CALLBACK_ROLLBACK_SHUTDOWN").as_deref() == Ok("1")
+    {
+        let observed_end = {
+            let call = global.rollback();
+            tokio::pin!(call);
+            tokio::select! {
+                value = &mut call => panic!("original rollback completed before held callback shutdown: {value:?}"),
+                _ = java_pool_probe::wait_for_snapshot(&folder, "java-callback-shutdown-permitted") => {}
+            }
+            rm = java_rm_restart::restart(rm, &adapter, &store, &mut admin, &xid, branch_id).await;
+            match call.await {
+                Ok(TransactionCompletion::Observed { outcome, .. }) => {
+                    Some(outcome.status().to_java_v1())
+                }
+                Err(error) if error.is_unknown_outcome() => None,
+                other => panic!("{other:?}"),
+            }
+        };
+        let deadline = tokio::time::Instant::now() + Duration::from_secs(20);
+        while tm.get_status(&xid).await.unwrap().status() != GlobalStatus::Finished {
+            assert!(tokio::time::Instant::now() < deadline);
+            tokio::time::sleep(Duration::from_millis(50)).await;
+        }
+        assert_eq!(fixture::count(&mut admin, "undo_work").await, 0);
+        let identity =
+            BranchIdentity::new(xid.as_str().into(), branch_id, key.clone(), None).unwrap();
+        assert_eq!(
+            store
+                .lease(identity, BranchPhase::Rollback)
+                .await
+                .unwrap()
+                .state(),
+            Some(BranchRecordState::Completed)
+        );
+        fixture::save(
+            "java-callback-shutdown-rollback.json",
+            &serde_json::json!({
+                "xid":xid.as_str(),"branch_id":branch_id,"resource_id":key.resource_id(),"observed_end":observed_end
+            }),
+        );
+        rm.shutdown().await.unwrap();
+        tm.shutdown().await.unwrap();
+        ds.close().await.unwrap();
+        return;
+    }
     match global.commit().await.unwrap() {
         TransactionCompletion::Observed { outcome, .. } => {
             assert_eq!(outcome.status(), GlobalStatus::Committed)
