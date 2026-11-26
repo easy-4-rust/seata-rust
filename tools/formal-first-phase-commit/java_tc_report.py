@@ -953,6 +953,8 @@ seata:
         # Preserve supplemental fixed stage counters after all original processes stop.
         for stage_metrics in sorted(observations.glob("phase-one-stage-*.json")):
             guard.put(out / stage_metrics.name, stage_metrics.read_bytes())
+        for event_file in observations.glob("rm-callback-write-events.json"):
+            guard.put(out / event_file.name, event_file.read_bytes())
         guard.save(out / "process-cleanup.json", {"stopped": all(p.poll() is not None for p in processes),
                                                   "signer_removed": signer_created,
                                                   "pids": [p.pid for p in processes]})

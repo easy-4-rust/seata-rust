@@ -2,6 +2,8 @@
 
 本文件按当前工作树和[原 V1 验收清单](../phase-0/v1-implementation-acceptance-checklist.md)列出可核验能力及故障时的安全动作。**尚无可声明为生产可用的完整 V1 配置**：WP05、WP06、WP07 和完整 WP00-R 仍开放。表中的“已验证”只适用于对应证据所写的原 Java TC 版本、工具链和测试环境。
 
+回调响应现有[原代际本地写入事件](evidence/rm-callback-write-events/README.md)，可关联原请求和决策；本地写入成功仍不能证明 TC 收到。
+
 ## 能力矩阵
 
 | 能力 | 当前状态 | 已有证据与实际边界 |

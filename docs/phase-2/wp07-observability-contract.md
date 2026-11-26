@@ -149,3 +149,13 @@ MySqlDataSource 及使用同一数据源克隆的 MySqlDataSourceManager 签发 
 固定五种 operation、22 种类型化 outcome，其中仅导出各阶段适用结果及 active，共 31 条固定序列。默认构建的实验阶段为零不代表已启用能力；实验有变化提交仍默认关闭。快照逐字段读取，累计饱和不回绕，无身份、SQL、资源 URL 或凭据标签，不授予连接、关闭、报告或恢复权限。此增量不计业务 DML、显式回滚及失败报告的全部层级，亦不关闭生产采集、日志、告警或 WP05–07。验收要求真实 MySQL/原 TC 成功与未知/失败分层、取消、授权 HTTP、有效源代码反例、双版本回归和默认依赖检查。
 
 所选范围双工具链现场、原 Java TC 六场景、结算变异和八项负控已验证；全工作区各 729 passed / 323 ignored 及严格检查见 [一阶段指标证据](evidence/mysql-phase-one-metrics/README.md)。本轮不关闭上述剩余范围。
+
+
+## RM 原连接回调响应写入事件（实施基线，2026-11-27）
+
+对已完成整批校验并形成响应的回调信封，进入原 PoolInbound::respond 时建立唯一事件作用域。使用独立 seata_rm::callback_write target，字段为原 signed request_id、connection_generation、response_count 及 outcome；固定 outcome 为 local_written、not_sent、unknown、cancelled。local_written 仅表示传输层确认本地完整写入，绝不表示 TC 接收、确认或全局完成。unknown 来自原 CallError::UnknownOutcome；not_sent 来自明确写前失败；作用域取消/解栈只记 cancelled，不推断写入阶段。无效整批不产生写入事件。
+
+每个外层信封结算一次，平面批次不按分支重复记录写入。原 rm_callback_decision 同时携带 connection_generation，以原请求 ID 和代际关联本地分支决策与信封写入。事件不记录响应、原始错误、头、资源、应用数据、SQL 或凭据，不改变原回包、超时、重试、业务效果及停机行为。验收覆盖真实 TCP 单次/重复/反向/批次、原代际关闭、取消/写后未知分类、双工具链回归及固定 Java TC 原帧对照；完整生产采集管线仍另行验收。
+
+
+该选定范围现已通过双工具链真实 TCP、原 Java TC 普通提交及两方向实际回包丢失重试验证；九项证据削弱及实际结算源代码变异均拒绝。写后未知的新增测试属于原错误类型分类，不等于真实 socket 写超时注入。全工作区各 732 passed / 323 ignored，详情见 [回调本地写入事件证据](evidence/rm-callback-write-events/README.md)。生产 subscriber/收集与剩余事件边界继续。

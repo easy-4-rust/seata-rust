@@ -416,6 +416,31 @@ async fn callback_decisions_emit_original_branch_identity_without_replaying_effe
             })
             .collect();
         assert_eq!(callbacks.len(), 3);
+        let writes: Vec<_> = events
+            .iter()
+            .filter(|fields| {
+                fields
+                    .get("target")
+                    .is_some_and(|v| v == "seata_rm::callback_write")
+            })
+            .collect();
+        assert_eq!(writes.len(), 3);
+        for (index, fields) in writes.iter().enumerate() {
+            assert_eq!(
+                fields.get("request_id").map(String::as_str),
+                Some(["-31", "-32", "-33"][index])
+            );
+            assert_eq!(
+                fields.get("outcome").map(String::as_str),
+                Some("local_written")
+            );
+            assert_eq!(fields.get("response_count").map(String::as_str), Some("1"));
+            assert_eq!(
+                fields.get("connection_generation"),
+                callbacks[index].get("connection_generation")
+            );
+            assert_eq!(fields.len(), 6);
+        }
         for (index, fields) in callbacks.into_iter().enumerate() {
             assert!(fields.get("xid").unwrap().contains("tc:callback-event"));
             assert!(fields.get("branch_id").unwrap().contains("91"));
@@ -445,7 +470,15 @@ async fn callback_decisions_emit_original_branch_identity_without_replaying_effe
                 .get("resource_sha256")
                 .unwrap()
                 .contains("b979c9643e641c11d295b0df0d3f7ac98505f0e881e22676601048700d3e1792"));
-            assert_eq!(fields.len(), 9);
+            assert_eq!(fields.len(), 10);
+            assert!(
+                fields
+                    .get("connection_generation")
+                    .unwrap()
+                    .parse::<u64>()
+                    .unwrap()
+                    > 0
+            );
             assert!(!format!("{fields:?}").contains("callback-secret"));
             assert!(!format!("{fields:?}").contains("mysql://exact-resource"));
         }
@@ -487,9 +520,12 @@ async fn invalid_callback_batch_emits_no_branch_decision() {
     }
     assert_eq!(resource.actions.load(Ordering::SeqCst), 0);
     assert!(!captured.lock().unwrap().iter().any(|fields| {
-        fields
-            .get("target")
-            .is_some_and(|value| value == "seata_rm::callback")
+        fields.get("target").is_some_and(|value| {
+            value == "seata_rm::callback" || value == "seata_rm::callback_write"
+        })
     }));
     rm.shutdown().await.unwrap();
 }
+
+#[path = "support/callback_write_cases.rs"]
+mod callback_write_cases;

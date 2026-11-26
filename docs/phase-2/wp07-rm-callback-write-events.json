@@ -1,0 +1,60 @@
+{
+  "status": "SELECTED_RM_CALLBACK_LOCAL_WRITE_EVENTS_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "target": "seata_rm::callback_write",
+  "outcomes": [
+    "local_written",
+    "not_sent",
+    "unknown",
+    "cancelled"
+  ],
+  "TC_delivery_inferred": false,
+  "one_event_per_outer_envelope": true,
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "native_rm_tests_per_version": {
+    "passed": 77,
+    "ignored": 1
+  },
+  "workspace_tests_per_version": {
+    "passed": 732,
+    "ignored": 323
+  },
+  "original_java_tc_cases_per_version": 3,
+  "negative_controls_per_version": 9,
+  "actual_settlement_mutation_rejected_and_restored_per_version": true,
+  "unknown_outcome_verification": "typed original CallError classification; no claim of real socket write-timeout injection in this increment",
+  "cancellation_verification": "polled event scope dropped and panic unwind; no inference about actual network write",
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "production subscriber and collection/export pipeline",
+    "remaining transport, durable branch and MySQL structured events",
+    "full security and deployment acceptance",
+    "WP05-07 and Phase4-7 remaining plan"
+  ],
+  "evidence": {
+    "original_java_tc": {
+      "path": "docs/phase-2/evidence/rm-callback-write-events/java_20261127_050607_56c0d181",
+      "catalog_sha256": "fba66491de2228344c62232f4b8025f52de4781e0753f639285a77752f0552fd"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/rm-callback-write-events/validation_20261127_050949_96cc60fa",
+      "catalog_sha256": "a66a81d4e209513aed3c5ad2cfe26d20fdd7c8bf2a538a42fbdbca64d06d1a8d"
+    },
+    "native": {
+      "path": "docs/phase-2/evidence/rm-callback-write-events/native_20261127_050950_35e477bd",
+      "catalog_sha256": "3ab312561392411212f5bbb27b951af459ec09a1e819b9b27efcb83fcc0c0153"
+    },
+    "regression_1.99": {
+      "path": "docs/phase-2/evidence/rm-callback-write-events/regression_1.99_20261127_051020_58466770",
+      "catalog_sha256": "ef7507ec9913acfdd10f26de18d56d9952a81c7850163e7d9ce1ff86b143e5b0"
+    },
+    "regression_1.85": {
+      "path": "docs/phase-2/evidence/rm-callback-write-events/regression_1.85_20261127_051020_12f5056d",
+      "catalog_sha256": "0db3698892ba1c59786ec684b4bfca0ab338ace4aaeff6db2ad89d29f04b10bd"
+    }
+  }
+}

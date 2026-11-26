@@ -1,3 +1,4 @@
+use super::callback_write_event::CallbackWriteEvent;
 use crate::{BranchDispatcher, BranchIdentity, BranchKey, BranchPhase, RmError};
 use seata_protocol::protocol::MergeResultMessage;
 use seata_protocol::transaction::{
@@ -26,6 +27,7 @@ impl CallbackHandler {
             inbound.connection().close();
             return;
         };
+        let generation = inbound.connection().generation().value();
         let request = inbound.message();
         if request.message_type != RequestType::RequestSync {
             inbound.connection().close();
@@ -103,7 +105,7 @@ impl CallbackHandler {
                 }
             };
             // 逐子请求记录已形成的本地决策；后续回包写入及TC接收另行判定。
-            tracing::info!(target: "seata_rm::callback", request_id = request.id, xid = identity.xid(), branch_id = identity.branch_id(), resource_sha256 = %format!("{:x}", Sha256::digest(identity.resource().resource_id().as_bytes())), phase = ?phase, branch_status = ?branch_status, result_code = ?response.result_code, "rm_callback_decision");
+            tracing::info!(target: "seata_rm::callback", request_id = request.id, connection_generation = generation, xid = identity.xid(), branch_id = identity.branch_id(), resource_sha256 = %format!("{:x}", Sha256::digest(identity.resource().resource_id().as_bytes())), phase = ?phase, branch_status = ?branch_status, result_code = ?response.result_code, "rm_callback_decision");
             responses.push(match phase {
                 BranchPhase::Commit => Message::BranchCommitResponse(BranchCommitResponse {
                     response,
@@ -119,6 +121,8 @@ impl CallbackHandler {
                 }),
             });
         }
+        let response_count = responses.len();
+        let request_id = request.id;
         let body = if batch {
             Message::MergeResultMessage(MergeResultMessage {
                 msgs: Some(responses),
@@ -131,7 +135,9 @@ impl CallbackHandler {
             value
         };
         // respond消费原能力，传输层再次核对消息族和完整分支身份；本地写完成不等于TC已确认。
-        let _ = inbound.respond(body, self.response_timeout).await;
+        let event = CallbackWriteEvent::new(request_id, generation, response_count);
+        let result = inbound.respond(body, self.response_timeout).await;
+        event.finish(&result);
     }
 }
 fn parse(

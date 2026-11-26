@@ -1,0 +1,81 @@
+{
+  "status": "ORIGINAL_TC_LOCAL_WRITE_EVENTS_BOUND_TO_RAW_FRAMES",
+  "evidence": "docs\\phase-2\\evidence\\rm-callback-write-events\\java_20261127_050607_56c0d181",
+  "catalog_sha256": "fba66491de2228344c62232f4b8025f52de4781e0753f639285a77752f0552fd",
+  "qualified": [
+    {
+      "Rust": "1.99",
+      "scenario": "commit",
+      "callbacks": 1,
+      "local_writes": 1,
+      "TC_dropped_replies": 0,
+      "distinct_generations": 1
+    },
+    {
+      "Rust": "1.99",
+      "scenario": "commit_callback_reply_loss",
+      "callbacks": 2,
+      "local_writes": 2,
+      "TC_dropped_replies": 1,
+      "distinct_generations": 2
+    },
+    {
+      "Rust": "1.99",
+      "scenario": "rollback_callback_reply_loss",
+      "callbacks": 2,
+      "local_writes": 2,
+      "TC_dropped_replies": 1,
+      "distinct_generations": 2
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "commit",
+      "callbacks": 1,
+      "local_writes": 1,
+      "TC_dropped_replies": 0,
+      "distinct_generations": 1
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "commit_callback_reply_loss",
+      "callbacks": 2,
+      "local_writes": 2,
+      "TC_dropped_replies": 1,
+      "distinct_generations": 2
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "rollback_callback_reply_loss",
+      "callbacks": 2,
+      "local_writes": 2,
+      "TC_dropped_replies": 1,
+      "distinct_generations": 2
+    }
+  ],
+  "negative_controls": {
+    "1.99": [
+      "local_write_as_delivered",
+      "secret_field",
+      "wrong_request_id",
+      "wrong_resource_digest",
+      "conflated_generations",
+      "duplicate_event",
+      "missing_write",
+      "forged_TC_delivery",
+      "broken_original_frame"
+    ],
+    "1.85": [
+      "local_write_as_delivered",
+      "secret_field",
+      "wrong_request_id",
+      "wrong_resource_digest",
+      "conflated_generations",
+      "duplicate_event",
+      "missing_write",
+      "forged_TC_delivery",
+      "broken_original_frame"
+    ]
+  },
+  "independent_external_review": "OPEN",
+  "WP07_complete": false
+}

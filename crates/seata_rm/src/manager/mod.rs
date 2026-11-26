@@ -11,3 +11,5 @@ pub use rm_metrics_sampler::RmMetricsSampler;
 mod rm_call_guard;
 mod rm_call_metrics_sampler;
 pub use rm_call_metrics_sampler::RmCallMetricsSampler;
+
+mod callback_write_event;

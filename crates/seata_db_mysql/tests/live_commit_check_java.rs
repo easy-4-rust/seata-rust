@@ -6,6 +6,9 @@ mod fixture;
 #[path = "support/java_affected_image_guard.rs"]
 mod java_affected_image_guard;
 #[cfg(feature = "experimental_changed_commit")]
+#[path = "support/java_callback_write_events.rs"]
+mod java_callback_write_events;
+#[cfg(feature = "experimental_changed_commit")]
 #[path = "support/java_checksum_events.rs"]
 mod java_checksum_events;
 #[cfg(feature = "experimental_changed_commit")]
@@ -354,7 +357,7 @@ async fn original_java_tc_missing_undo(current_schema: bool) {
 #[tokio::test]
 #[ignore = "requires pinned original Java TC, raw observers and owned MySQL DB lock store"]
 async fn original_java_tc_changed_commit_reports_then_commits_original_branch() {
-    original_java_tc_changed_commit(false, None, None).await;
+    java_callback_write_events::run(original_java_tc_changed_commit(false, None, None)).await;
 }
 
 #[cfg(feature = "experimental_changed_commit")]
@@ -389,7 +392,12 @@ async fn original_java_tc_retries_rollback_after_guarded_undo_root_is_restored()
 #[tokio::test]
 #[ignore = "requires pinned original Java TC, callback reply loss observer and owned MySQL"]
 async fn original_java_tc_retries_at_rollback_after_phase_two_fault() {
-    original_java_tc_changed_commit(false, None, Some(RollbackCase::ReplyLoss)).await;
+    java_callback_write_events::run(original_java_tc_changed_commit(
+        false,
+        None,
+        Some(RollbackCase::ReplyLoss),
+    ))
+    .await;
 }
 
 #[cfg(feature = "experimental_changed_commit")]
