@@ -29,10 +29,10 @@ impl AbstractUndoExecutor {
         if DataCompareUtils::records_equal(log.before_image(), log.after_image()) {
             return Ok(0);
         }
-        let undo_rows = if log.sql_type() == SqlType::Insert {
-            log.after_image()
-        } else {
-            log.before_image()
+        let undo_rows = match log.sql_type() {
+            SqlType::Insert => MySqlUndoInsertExecutor::get_undo_rows(log),
+            SqlType::Update => MySqlUndoUpdateExecutor::get_undo_rows(log),
+            SqlType::Delete => MySqlUndoDeleteExecutor::get_undo_rows(log),
         };
         let keys = MySqlImageReader::primary_values(undo_rows)?;
         let current = MySqlImageReader::read_keys(tx, &table, &keys).await?;

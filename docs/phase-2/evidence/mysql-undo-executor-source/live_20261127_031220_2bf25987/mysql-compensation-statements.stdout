@@ -1,0 +1,38 @@
+Prepare	DELETE FROM `undo_work` WHERE `id` = ?
+Execute	DELETE FROM `undo_work` WHERE `id` = 1
+Prepare	UPDATE `undo_business` SET `v` = ?, `amount` = ?, `payload` = ? WHERE `a` = ? AND `z` = ?
+Execute	UPDATE `undo_business` SET `v` = NULL, `amount` = 2.100000000000000000000000000000, `payload` = '\0\0' WHERE `a` = 'x' AND `z` = 2
+Execute	UPDATE `undo_business` SET `v` = 'original', `amount` = 123.000000000000000000000000000001, `payload` = '\0ÿ' WHERE `a` = 'x_y' AND `z` = 1
+Prepare	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES (?, ?, ?, ?, ?)
+Execute	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES (NULL, 2.100000000000000000000000000000, '\0\0', 'x', 2)
+Execute	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES ('original', 123.000000000000000000000000000001, '\0ÿ', 'x_y', 1)
+Prepare	INSERT INTO `undo_work` (`v`, `id`) VALUES (?, ?)
+Execute	INSERT INTO `undo_work` (`v`, `id`) VALUES ('after', 1)
+Prepare	DELETE FROM `undo_work` WHERE `id` = ?
+Execute	DELETE FROM `undo_work` WHERE `id` = 2
+Prepare	UPDATE `undo_work` SET `v` = ? WHERE `id` = ?
+Execute	UPDATE `undo_work` SET `v` = 'before' WHERE `id` = 1
+Prepare	DELETE FROM `undo_work` WHERE `id` = ?
+Execute	DELETE FROM `undo_work` WHERE `id` = 2
+Prepare	DELETE FROM `undo_work` WHERE `id` = ?
+Execute	DELETE FROM `undo_work` WHERE `id` = 1
+Prepare	UPDATE `undo_business` SET `v` = ?, `amount` = ?, `payload` = ? WHERE `a` = ? AND `z` = ?
+Execute	UPDATE `undo_business` SET `v` = NULL, `amount` = 2.100000000000000000000000000000, `payload` = '\0\0' WHERE `a` = 'x' AND `z` = 2
+Execute	UPDATE `undo_business` SET `v` = 'original', `amount` = 123.000000000000000000000000000001, `payload` = '\0ÿ' WHERE `a` = 'x_y' AND `z` = 1
+Prepare	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES (?, ?, ?, ?, ?)
+Execute	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES (NULL, 2.100000000000000000000000000000, '\0\0', 'x', 2)
+Execute	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES ('original', 123.000000000000000000000000000001, '\0ÿ', 'x_y', 1)
+Prepare	INSERT INTO `undo_work` (`v`, `id`) VALUES (?, ?)
+Execute	INSERT INTO `undo_work` (`v`, `id`) VALUES ('after', 1)
+Prepare	DELETE FROM `undo_work` WHERE `id` = ?
+Execute	DELETE FROM `undo_work` WHERE `id` = 2
+Prepare	UPDATE `undo_work` SET `v` = ? WHERE `id` = ?
+Execute	UPDATE `undo_work` SET `v` = 'before' WHERE `id` = 1
+Prepare	DELETE FROM `undo_work` WHERE `id` = ?
+Execute	DELETE FROM `undo_work` WHERE `id` = 2
+Prepare	UPDATE `undo_business` SET `v` = ?, `amount` = ?, `payload` = ? WHERE `a` = ? AND `z` = ?
+Execute	UPDATE `undo_business` SET `v` = NULL, `amount` = 2.100000000000000000000000000000, `payload` = '\0\0' WHERE `a` = 'x' AND `z` = 2
+Execute	UPDATE `undo_business` SET `v` = 'original', `amount` = 123.000000000000000000000000000001, `payload` = '\0ÿ' WHERE `a` = 'x_y' AND `z` = 1
+Prepare	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES (?, ?, ?, ?, ?)
+Execute	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES (NULL, 2.100000000000000000000000000000, '\0\0', 'x', 2)
+Execute	INSERT INTO `undo_business` (`v`, `amount`, `payload`, `a`, `z`) VALUES ('original', 123.000000000000000000000000000001, '\0ÿ', 'x_y', 1)

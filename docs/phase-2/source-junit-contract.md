@@ -148,3 +148,10 @@ Fory 三个原用例已在固定 Java 和两套 Rust 上匹配。类描述由固
 5,623 项完整输入已封存：固定原源码、编译类、资源、所有运行 JAR、观察器及解析器配置。新 D 盘目录仅使用封存输入和固定 JDK 重放同一组原案例，不调用原 Maven cache 或原 Java oracle；输入原字节保持不变。六项工具回归及类加载历史丢失的目标失败/修复验证通过。见 [当前便携基线与审查边界](source-junit-rebuild-portable.md)。
 
 这证明当前所选 Java 基线可执行、声明/案例闭合及可搬移，不证明剩余 Rust 原案例匹配。旧物理现场未恢复，全局 Rust MATCH 总数未重算；其他 JDK profile、原 Surefire test 生命周期、独立人工/另一 Agent 审查及 WP05–07 保持开放。
+
+
+## MySQL Undo 三执行器原案例
+
+固定原 MySQLUndoInsertExecutorTest、MySQLUndoUpdateExecutorTest、MySQLUndoDeleteExecutorTest 六例、13 处断言已与 Rust 1.99/1.85 逐项匹配。三个原类均传 SQLType.UPDATE，JDBC CHAR、KeyType、两行原字符串及前后镜像保持原输入；原测试与断言观察副本分开。正式 SQLx 回滚复用被测 SQL 构建及镜像选择方法。双版本各五组真实补偿、三个源代码反例及实际 MySQL 拒绝/恢复证明生产路径被覆盖。
+
+全工作区双版本各 723 passed / 318 ignored，MySQL 全目标全功能严格 Clippy 通过。程序只读复核通过；独立人工/另一 Agent 审查继续开放，六例记为断言匹配待审查，不据此宣称完整对象 API 或全局原案例迁移完成。见 [逐案账本](wp05-mysql-undo-executor-source.json) 与 [实际证据](evidence/mysql-undo-executor-source/README.md)。

@@ -1,0 +1,39 @@
+{
+  "status": "MYSQL_UNDO_EXECUTOR_ORIGINAL_ASSERTIONS_MATCH",
+  "oracle": "docs\\phase-2\\evidence\\mysql-undo-executor-source\\oracle_20261127_031157_0c4a414a",
+  "oracle_catalog_sha256": "28ec9b2edb37c8aa4da8c4667d409461e7645fa21dfa490d3d2032cdc00ce18e",
+  "Rust": {
+    "1.99": {
+      "cases": 6,
+      "assertions": 13,
+      "negative_controls": 7
+    },
+    "1.85": {
+      "cases": 6,
+      "assertions": 13,
+      "negative_controls": 7
+    }
+  },
+  "production_mutations": [
+    {
+      "mutation": "wrong-update-image",
+      "target": "original_mysql_undo_update_get_undo_rows",
+      "rejected": true,
+      "original_bytes_restored": true
+    },
+    {
+      "mutation": "wrong-delete-verb",
+      "target": "original_mysql_undo_insert_build_undo_sql",
+      "rejected": true,
+      "original_bytes_restored": true
+    },
+    {
+      "mutation": "wrong-insert-verb",
+      "target": "original_mysql_undo_delete_build_undo_sql",
+      "rejected": true,
+      "original_bytes_restored": true
+    }
+  ],
+  "independent_human_review": "OPEN",
+  "WP05_complete": false
+}

@@ -1,0 +1,21 @@
+{
+  "status": "MYSQL_UNDO_EXECUTOR_REAL_DATABASE_REGRESSION_VERIFIED",
+  "verified": true,
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "cases_per_version": 5,
+  "cases": [
+    "stored_insert_undo_restores_business_and_consumes_original_row_atomically",
+    "update_and_delete_restore_original_values_without_pk_cartesian_products",
+    "mixed_logs_run_in_reverse_and_consume_only_original_branch",
+    "later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes",
+    "already_restored_and_equal_images_skip_dml_then_follow_original_missing_log_fence"
+  ],
+  "native_SQL_builder_mutation_rejected": true,
+  "restored_target_passed": true,
+  "original_DDL_sha256": "8dcd994e28d31d494b0d3f90663c74d788fdb7250ef6ce0b8267b66170e91ce9",
+  "public_COMMIT_available": false,
+  "WP05_complete": false
+}

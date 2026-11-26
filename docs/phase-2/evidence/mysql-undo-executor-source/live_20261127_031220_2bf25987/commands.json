@@ -1,0 +1,356 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-undo-executor-20261127-031220-2bf25987",
+      "--label",
+      "seata-undo-executor-owner=b061e1631ad54480b8e5f37f95fed6a0",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_mysql_undo_executor_live_20261127_031220_2bf25987/data,target=/var/lib/mysql",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_mysql_undo_executor_live_20261127_031220_2bf25987/init,target=/docker-entrypoint-initdb.d,readonly",
+      "-p",
+      "127.0.0.1:63582:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_b061e1631ad5",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae",
+      "mysql",
+      "--protocol=TCP",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "undo_b061e1631ad5",
+      "-e",
+      "SELECT VERSION(),@@max_allowed_packet; SET GLOBAL log_output=\"TABLE\"; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_undo_rollback",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_undo_rollback-a9aaac2ff37444cd.exe",
+      "stored_insert_undo_restores_business_and_consumes_original_row_atomically",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-1",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_undo_rollback-a9aaac2ff37444cd.exe",
+      "update_and_delete_restore_original_values_without_pk_cartesian_products",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-2",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_undo_rollback-a9aaac2ff37444cd.exe",
+      "mixed_logs_run_in_reverse_and_consume_only_original_branch",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-3",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_undo_rollback-a9aaac2ff37444cd.exe",
+      "later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-4",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_undo_rollback-a9aaac2ff37444cd.exe",
+      "already_restored_and_equal_images_skip_dml_then_follow_original_missing_log_fence",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_undo_rollback",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_undo_rollback-ba1889a10d6c1bfb.exe",
+      "stored_insert_undo_restores_business_and_consumes_original_row_atomically",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-1",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_undo_rollback-ba1889a10d6c1bfb.exe",
+      "update_and_delete_restore_original_values_without_pk_cartesian_products",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-2",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_undo_rollback-ba1889a10d6c1bfb.exe",
+      "mixed_logs_run_in_reverse_and_consume_only_original_branch",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-3",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_undo_rollback-ba1889a10d6c1bfb.exe",
+      "later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-4",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_undo_rollback-ba1889a10d6c1bfb.exe",
+      "already_restored_and_equal_images_skip_dml_then_follow_original_missing_log_fence",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mutated-update-sql-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_undo_rollback",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mutated-update-sql-target",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_undo_rollback-a9aaac2ff37444cd.exe",
+      "update_and_delete_restore_original_values_without_pk_cartesian_products",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 101
+  },
+  {
+    "label": "restored-update-sql-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_undo_rollback",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "restored-update-sql-target",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_undo_rollback-a9aaac2ff37444cd.exe",
+      "update_and_delete_restore_original_values_without_pk_cartesian_products",
+      "--exact",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-compensation-statements",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae",
+      "mysql",
+      "--protocol=TCP",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "undo_b061e1631ad5",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Prepare','Execute') AND (argument LIKE '%UPDATE `%` SET%' OR argument LIKE '%INSERT INTO `%` (%' OR argument LIKE '%DELETE FROM `%` WHERE%' OR argument LIKE '%SELECT `%` SET%') ORDER BY event_time"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-after",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae",
+      "mysql",
+      "--protocol=TCP",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "undo_b061e1631ad5",
+      "-e",
+      "SELECT COUNT(*) FROM undo_log; SELECT COUNT(*) FROM information_schema.PROCESSLIST WHERE ID<>CONNECTION_ID() AND DB=DATABASE(); SET GLOBAL general_log=OFF"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect-owned",
+    "argv": [
+      "docker",
+      "inspect",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop-owned",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove-owned",
+    "argv": [
+      "docker",
+      "rm",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "5c617f6efce6d86fb86f706eff887e59e43bdad9f36b2c1bcb59ef54cf2e52ae"
+    ],
+    "exit_code": 1
+  }
+]

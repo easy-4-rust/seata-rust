@@ -28,3 +28,12 @@ mod undo_fragment_read_sqlx_tests;
 
 #[cfg(test)]
 mod undo_fragment_cleanup_sqlx_tests;
+
+#[cfg(test)]
+mod mysql_undo_delete_executor_test;
+#[cfg(test)]
+mod mysql_undo_executor_source;
+#[cfg(test)]
+mod mysql_undo_insert_executor_test;
+#[cfg(test)]
+mod mysql_undo_update_executor_test;
