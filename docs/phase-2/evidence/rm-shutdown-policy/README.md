@@ -48,3 +48,18 @@ Rust 1.99.0 和 1.85.0 各执行 native_calls 七项与 native_callbacks 九项�
 原 TM 回滚请求可能先到本地期限。用例保留原 UnknownOutcome，并只查询原 XID 等待 TC 完成，始终仅一个 GlobalRollback。首次现场曾要求该请求必须获得成功响应，实际暴露了此未知窗口，修正用例的结果分类后双版本通过。验证器拒绝缺失补偿、重复围栏、旧会话成功回包和伪造原 OK 已交付的报文。
 
 本轮覆盖已持久化且响应滞留的窗口。数据库仍在执行 COMMIT 时的关闭及生产信号处理继续验收。
+
+
+## 原提交回调 COMMIT 执行期间关闭 RM
+
+场景 callback_commit_in_flight_shutdown 在自有 MySQL 容器临时启用一秒 binlog 组提交等待。代理向原 MySQL 转发回调事务的 COMMIT，独立 SQL 将报文握手中的物理连接 ID 与 performance_schema 中的 Query、COMMIT、waiting for handler commit 以及原 XID/BranchId 绑定。此时业务行与 Normal Undo 仍在，提交终态仍为零。
+
+第一次 SQL 快照通过后才允许 Rust 消费原 RM 的 shutdown。旧池确认关闭后，Rust 发布关闭观察标记。第二次独立 SQL 仍查到同一个 MySQL COMMIT 正在执行，数据库可见状态与第一次完全相同。运行器记录快照后恢复该自有容器的组提交设置，再允许新 RM 登记与读取最终持久状态。
+
+原 TC 的固定回调等待结束后，在新会话重发原分支请求。日志由 Pending 转为 Completed，原 Undo 删除和终态写入各一次，最终业务保留、TC 会话/分支/锁清空。原 COMMIT 的成功响应未交付给旧 RM。
+
+[Rust 1.99](../java-tc-changed-commit-report/run-callback_commit_in_flight_shutdown-1.99-e705f1b6/verified.json) · [Rust 1.85](../java-tc-changed-commit-report/run-callback_commit_in_flight_shutdown-1.85-f7490596/verified.json) · [错误快照与重复动作控制](../java-tc-changed-commit-report/run-callback_commit_in_flight_shutdown-1.99-e705f1b6/shutdown-replay-controls.json)
+
+两套工具链严格 Clippy 通过。首轮用例观察期限未覆盖固定 TC 的 15 秒回调等待，另一轮汇总缺少新场景映射，修复后以上完整记录通过。Windows CIM 监听查询曾反复超时，运行器现在回退 netstat 并继续核对真实监听 PID，仍拒绝其他进程占用目标端口。
+
+本轮覆盖 Commit 方向。Rollback 的 COMMIT 执行中关闭、生产信号及应用业务排空继续验收。

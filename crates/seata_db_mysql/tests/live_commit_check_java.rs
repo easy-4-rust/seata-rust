@@ -981,7 +981,11 @@ async fn original_java_tc_changed_commit(
         rm = java_rm_restart::restart(rm, &adapter, &store, &mut admin, &xid, branch_id).await;
     }
     let deadline = tokio::time::Instant::now()
-        + Duration::from_secs(if callback_reply_loss { 30 } else { 15 });
+        + Duration::from_secs(if callback_reply_loss || shutdown_callback {
+            30
+        } else {
+            15
+        });
     loop {
         let row = sqlx::query("SELECT first_phase_committed,commit_authorized,commit_terminal FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=?")
             .bind(xid.as_str().as_bytes())

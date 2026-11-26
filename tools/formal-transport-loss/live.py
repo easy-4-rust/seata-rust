@@ -28,7 +28,17 @@ def command(args,env,log=None,cwd=ROOT,timeout=60):
     if value.returncode:raise RuntimeError(str(args[0])+': '+value.stdout[-1800:].decode(errors='replace'))
     return value.stdout
 def listeners(port,env):
-    raw=command(['powershell','-NoProfile','-Command',f'@(Get-NetTCPConnection -LocalPort {port} -State Listen -ErrorAction SilentlyContinue).OwningProcess | ConvertTo-Json -Compress'],env,timeout=10).decode('utf-8-sig').strip()
+    try:
+        raw=command(['powershell','-NoProfile','-Command',f'@(Get-NetTCPConnection -LocalPort {port} -State Listen -ErrorAction SilentlyContinue).OwningProcess | ConvertTo-Json -Compress'],env,timeout=10).decode('utf-8-sig').strip()
+    except subprocess.TimeoutExpired:
+        # Windows CIM 冷启动可能超时；回退仍须读取并核对真正的监听进程 PID。
+        rows=command(['netstat','-ano','-p','tcp'],env,timeout=10).decode(errors='replace').splitlines()
+        owners=[]
+        for row in rows:
+            fields=row.split()
+            if len(fields)==5 and fields[0].upper()=='TCP' and fields[3].upper()=='LISTENING' and fields[1].rsplit(':',1)[-1]==str(port):
+                owners.append(int(fields[4]))
+        return owners
     if not raw:return []
     value=json.loads(raw);return value if isinstance(value,list) else [value]
 def wait_owned(process,port,env):

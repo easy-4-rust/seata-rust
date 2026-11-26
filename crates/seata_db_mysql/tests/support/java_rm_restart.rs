@@ -21,6 +21,16 @@ pub(super) async fn restart(
     let sampler = rm.connection_sampler();
     rm.shutdown().await.unwrap();
     assert!(sampler.snapshot().closed);
+    if std::env::var("SEATA_CALLBACK_IN_FLIGHT").as_deref() == Ok("1") {
+        fixture::save(
+            "java-rm-owner-closed.json",
+            &serde_json::json!({"xid":xid.as_str(),"branch_id":branch_id}),
+        );
+        let folder = std::path::PathBuf::from(std::env::var("SEATA_UNDO_STORE_OUT").unwrap());
+        crate::java_pool_probe::wait_for_snapshot(&folder, "java-rm-closed-snapshot-recorded")
+            .await;
+    }
+
     let identity = BranchIdentity::new(xid.as_str().into(), branch_id, key.clone(), None).unwrap();
     let pending = store
         .lease(

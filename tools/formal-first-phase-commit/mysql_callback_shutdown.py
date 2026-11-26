@@ -29,7 +29,7 @@ def permit_shutdown(client, observations, mysql, db, env, out, observer):
     guard.put(observations / "java-callback-shutdown-permitted", "Original callback commit independently observed\n")
 
 
-def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False):
+def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False, in_flight=False):
     decoder = load("shutdown_callback_native", TOOLS / "formal-rm-java/validate.py")
     raw = load("shutdown_callback_mysql", TOOLS / "formal-undo-rollback-loss/validate.py")
     frames = [decoder.envelope(row) for row in rows if row.get("event") == "frame"]
@@ -58,24 +58,47 @@ def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False):
     binding = json.loads((out / "callback-shutdown-permitted.json").read_bytes())
     assert first["monotonic_ns"] < binding["held_ns"] < binding["shutdown_permitted_ns"] < new["monotonic_ns"]
     restarted = json.loads((out / "graceful-rm-restart.json").read_bytes())
-    state = (out / "callback-commit-before-shutdown.tsv").read_text().strip().split("\t")
-    assert state == [result["xid"].encode().hex().upper(), str(result["branch_id"]),
-                     * (["2", "0", "0", "1", "1", "0", "32", "1"] if rollback else ["1", "1", "1", "1", "0", "1", "32"])]
+    if in_flight:
+        before = (out / "mysql-before-rm-shutdown.tsv").read_bytes()
+        assert before == (out / "mysql-after-rm-shutdown.tsv").read_bytes()
+        state = before.decode().strip().split("\t")
+        assert state[:4] == [str(binding["commit_mysql_session"]), "Query", "COMMIT", "waiting for handler commit"]
+        assert state[4:] == [result["xid"].encode().hex().upper(), str(result["branch_id"]), "1","1","0","1","0","0","1"]
+    else:
+        state = (out / "callback-commit-before-shutdown.tsv").read_text().strip().split("\t")
+        assert state == [result["xid"].encode().hex().upper(), str(result["branch_id"]),
+                         * (["2", "0", "0", "1", "1", "0", "32", "1"] if rollback else ["1", "1", "1", "1", "0", "1", "32"])]
     assert restarted["pending_after_shutdown"] and restarted["old_pool_closed"]
-    assert mysql_wire["mode"] == "hold_commit_ack" and mysql_wire["claimed"]
+    assert mysql_wire["mode"] == ("in_flight" if in_flight else "hold_commit_ack") and mysql_wire["claimed"]
     events = mysql_wire["events"]
     assert not any(row["kind"] == "observer_error" for row in events)
     terminal_sql = "UPDATE seata_rs_at_branch_v1 SET terminal=1" if rollback else "UPDATE seata_rs_at_branch_v1 SET commit_terminal=1"
     terminal, = [row for row in events if row["kind"] == "execute" and (row.get("sql") or "").startswith(
         terminal_sql)]
     received, = [row for row in events if row["kind"] == "commit_received" and row["fault"]]
-    held, = [row for row in events if row["kind"] == "commit_ack_held"]
-    assert terminal["connection"] == received["connection"] == held["connection"] == binding["original_connection"]
+    held, = [row for row in events if row["kind"] == ("commit_in_flight_closed" if in_flight else "commit_ack_held")]
+    original_connection = held["connection"] if in_flight else binding["original_connection"]
+    assert terminal["connection"] == received["connection"] == held["connection"] == original_connection
+    if in_flight:
+        assert held["mysql_connection_id"] == binding["commit_mysql_session"]
+        assert raw.frame(received, 0) == b"\x03COMMIT"
+        forwarded, = [row for row in events if row["kind"] == "commit_forwarded"
+                      and row["connection"] == held["connection"] and row["qpc_ns"] > received["qpc_ns"]]
+        assert raw.frame(forwarded, 0) == b"\x03COMMIT"
+        greeting, = [row for row in events if row["kind"] == "greeting" and row["connection"] == held["connection"]]
+        packet = raw.frame(greeting, 0)
+        version_end = packet.index(0, 1)
+        assert int.from_bytes(packet[version_end+1:version_end+5], "little") == binding["commit_mysql_session"]
+
     assert raw.parameters(terminal, terminal["statement"], 2) == [result["xid"].encode(), result["branch_id"]]
-    original_ok, = [row for row in events if row["kind"] == "commit_reply"
-                    and row["connection"] == held["connection"] and row["qpc_ns"] > received["qpc_ns"]]
-    assert raw.frame(original_ok, 1)[:3] == b"\x00\x00\x00"
-    assert original_ok["qpc_ns"] < held["qpc_ns"]
+    if in_flight:
+        assert not any(row["kind"] == "commit_reply" and row["connection"] == held["connection"]
+                       and row["qpc_ns"] > received["qpc_ns"] for row in events)
+    else:
+        original_ok, = [row for row in events if row["kind"] == "commit_reply"
+                        and row["connection"] == held["connection"] and row["qpc_ns"] > received["qpc_ns"]]
+        assert raw.frame(original_ok, 1)[:3] == b"\x00\x00\x00"
+        assert original_ok["qpc_ns"] < held["qpc_ns"]
     assert not any(row["kind"] == "commit_reply_forwarded" and row["connection"] == held["connection"]
                    and row["qpc_ns"] > received["qpc_ns"] for row in events)
     deleted, = [row for row in events if row["kind"] == "dml_reply_forwarded"
@@ -110,4 +133,4 @@ def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False):
     guard.save(out / "callback-shutdown-wire.json", dict(
         original_connection=old["connection"], replacement_connection=new["connection"],
         callback_requests=2, callback_success_replies=1, original_undo_deletions=1,
-        original_terminal_writes=1, original_commit_ack_held=True, durable_pending_after_shutdown=True))
+        original_terminal_writes=1, original_commit_ack_held=not in_flight, original_commit_in_flight=in_flight, durable_pending_after_shutdown=True))
