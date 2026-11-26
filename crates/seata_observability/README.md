@@ -34,3 +34,6 @@ RM 分支来源通过 with_rm_branches(resource_manager.metrics_sampler()) 或 F
 
 
 RM 出站来源通过 with_rm_calls(resource_manager.call_metrics_sampler()) 或客户端同名方法接入，可独立使用。固定 24 条序列为三种 operation 的 calls_active、六种 outcome 的 calls_total 和 protocol_errors_total；不包含业务身份。注册回执只计一次，LockQuery false 仍是 observed，取消不推断发送边界。该来源与日志作用域的 with_rm_branches 独立；管理器关闭后保留客户端的本地调用仍可能增加计数。见 [双版本 TCP、HTTP 和原 Java TC 证据](../../docs/phase-2/evidence/rm-call-metrics/README.md)。MySQL 本地状态、生产采集、告警和完整 WP07 仍开放。
+
+
+显式 mysql Cargo 特性增加 with_mysql_recovery(source.recovery_metrics_sampler())，也接受管理器同名只读能力；默认关闭，默认运行依赖中没有 MySQL/SQLx。六种固定控制动作各导出 active、四种互斥 outcome 及两种成功 resolution，共 42 条序列。completed 仅表示控制事务返回 Ok；Applied 包含读取已有终态，不能推断实际业务效果次数。取消与 COMMIT 确认未知分开，不输出业务身份。见 [MySQL 控制指标证据](../../docs/phase-2/evidence/mysql-control-metrics/README.md)。

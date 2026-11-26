@@ -185,6 +185,7 @@ pub(crate) fn loopback_source(port: u16, acquire_timeout: Duration) -> MySqlData
         server_uuid: "fixture".into(),
         registration_checks: Default::default(),
         operation_timeout: Duration::from_millis(1_500),
+        recovery_metrics: crate::MySqlRecoveryMetricsSampler::new(),
     }
 }
 

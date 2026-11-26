@@ -1,0 +1,37 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0432]: unresolved import `seata_db_mysql::MySqlRecoveryOperation`
+  --> crates\seata_db_mysql\tests\live_recovery_metrics.rs:15:39
+   |
+15 | use seata_db_mysql::{MySqlDataSource, MySqlRecoveryOperation};
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^ no `MySqlRecoveryOperation` in the root
+   |
+help: a similar name exists in the module
+   |
+15 - use seata_db_mysql::{MySqlDataSource, MySqlRecoveryOperation};
+15 + use seata_db_mysql::{MySqlDataSource, MySqlRecoveryError};
+   |
+
+error[E0599]: no method named `recovery_metrics_sampler` found for struct `MySqlDataSource` in the current scope
+  --> crates\seata_db_mysql\tests\live_recovery_metrics.rs:31:22
+   |
+31 |     let sampler = ds.recovery_metrics_sampler();
+   |                      ^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `MySqlDataSource`
+
+error[E0599]: no method named `recovery_metrics_sampler` found for struct `Arc<MySqlDataSourceManager>` in the current scope
+  --> crates\seata_db_mysql\tests\live_recovery_metrics.rs:67:14
+   |
+66 | /         replacement
+67 | |             .recovery_metrics_sampler()
+   | |             -^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `Arc<MySqlDataSourceManager>`
+   | |_____________|
+   |
+
+error[E0599]: no method named `recovery_metrics_sampler` found for struct `Arc<MySqlDataSourceManager>` in the current scope
+  --> crates\seata_db_mysql\tests\live_recovery_metrics.rs:98:27
+   |
+98 |     let sampler = adapter.recovery_metrics_sampler();
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `Arc<MySqlDataSourceManager>`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `seata-db-mysql` (test "live_recovery_metrics") due to 4 previous errors

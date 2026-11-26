@@ -134,3 +134,11 @@ pub use undo_rollback_observation::UndoRollbackObservation;
 pub use util::{
     JdbcConnection, JdbcDriverLoader, JdbcResourceInitialization, JdbcUtils, JdbcXaConnection,
 };
+
+mod my_sql_control_guard;
+mod my_sql_control_metrics;
+mod my_sql_recovery_metrics_sampler;
+mod my_sql_recovery_operation;
+pub use my_sql_control_metrics::MySqlControlMetrics;
+pub use my_sql_recovery_metrics_sampler::MySqlRecoveryMetricsSampler;
+pub use my_sql_recovery_operation::MySqlRecoveryOperation;

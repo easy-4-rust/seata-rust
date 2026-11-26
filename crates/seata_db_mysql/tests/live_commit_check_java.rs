@@ -10,6 +10,9 @@ mod java_checksum_events;
 #[path = "support/java_checksum_probe.rs"]
 mod java_checksum_probe;
 #[cfg(feature = "experimental_changed_commit")]
+#[path = "support/java_mysql_control_metrics.rs"]
+mod java_mysql_control_metrics;
+#[cfg(feature = "experimental_changed_commit")]
 #[path = "support/java_mysql_permission.rs"]
 mod java_mysql_permission;
 #[cfg(feature = "experimental_changed_commit")]
@@ -875,6 +878,9 @@ async fn original_java_tc_changed_commit(
                 );
             }
         }
+        if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
+            java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
+        }
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
         ds.close().await.unwrap();
@@ -919,6 +925,9 @@ async fn original_java_tc_changed_commit(
                 "observed_end":observed_end
             }),
         );
+        if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
+            java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
+        }
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
         ds.close().await.unwrap();
@@ -974,6 +983,9 @@ async fn original_java_tc_changed_commit(
                     .snapshot(seata_rm::BranchPhase::Rollback),
             ),
         );
+        if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
+            java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
+        }
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
         ds.close().await.unwrap();
@@ -1056,6 +1068,9 @@ async fn original_java_tc_changed_commit(
     }
     if std::env::var("SEATA_RM_CALL_METRICS").as_deref() == Ok("1") {
         java_rm_call_metrics::save(&rm.call_metrics_sampler(), "rm-call-metrics.json");
+    }
+    if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
+        java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
     }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();

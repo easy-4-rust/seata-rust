@@ -1152,3 +1152,11 @@ Rust 1.99/1.85 的四组原 Java TC/MySQL 现场通过：原物理 COMMIT 在 RM
 正式 RM 新增管理器/客户端克隆共享的只读 RmCallMetricsSampler，三种操作区分有效成功、TC Failed、未知、未发送、本地拒绝和取消，维护 active 与协议错误计数；注册回执只计一次，成功 LockQuery false 仍属于 observed。认证 HTTP 增加固定 24 条序列，无业务身份标签，保持 Java 可选字段和原重试策略。
 
 Rust 1.99/1.85 的正常提交、报告成功回包丢失、Finished XID 注册拒绝共六组固定原 Java TC/MySQL 现场全部通过，原帧实际投递与固定计数逐字段核对，各五个证据削弱反例均拒绝。双版本全工作区全功能各 705 项通过、314 项 ignored；RM/observability/MySQL 全目标严格 Clippy 通过。重复回执源代码变异使 observed=2 的目标测试实际失败，恢复后通过。三次验收脚本诊断失败单独保留，不计完整现场成功。见 [RM 出站指标证据](phase-2/evidence/rm-call-metrics/README.md)。WP05–07、完整 MySQL 状态、生产采集告警和整体计划继续开放。
+
+## 2026-11-27：MySQL 恢复控制事务计数与确认丢失
+
+新增同一数据源全部克隆共享的 MySqlRecoveryMetricsSampler，六种内部控制动作按 completed、unknown_commit、before_commit_error、cancelled 结算，成功结果额外区分 Applied/Unknown；重复读取终态计观察，不计业务效果。显式 mysql 导出特性增加固定 42 条序列，默认导出器无 MySQL/SQLx 运行依赖。
+
+双版本真实 MySQL 各 2 项控制用例、1 项认证 HTTP 现场通过，取消前从 InnoDB 核实锁等待。移除结算的源代码变异在真实数据库目标断言失败，恢复后通过。四组固定原 Java TC/MySQL Commit/Rollback COMMIT OK 丢失现场通过：unknown_commit=1，原 TC 重试后读取终态，只产生一次实际数据库效果。自然重叠回调暴露旧验收脚本的额外串行假设，修正为逐请求关联与因果顺序；诊断原帧和八项反例重放保留，不冒充额外完整现场。
+
+Rust 1.99/1.85 全工作区全功能各 707 项通过、317 项 ignored；双版本全目标严格 Clippy、默认功能严格 Clippy 和默认依赖检查通过。见 [MySQL 控制指标证据](phase-2/evidence/mysql-control-metrics/README.md)。一阶段与独立 Undo 全指标、生产日志/采集/告警以及 WP05–07、后续 Phase 仍开放。

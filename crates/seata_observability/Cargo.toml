@@ -8,7 +8,11 @@ license.workspace = true
 repository.workspace = true
 publish = false
 
+[features]
+mysql = ["dep:seata-db-mysql"]
+
 [dependencies]
+seata-db-mysql = { path = "../seata_db_mysql", optional = true }
 seata-transport = { path = "../seata_transport" }
 seata-tm = { path = "../seata_tm" }
 seata-rm = { path = "../seata_rm" }
@@ -16,6 +20,7 @@ thiserror.workspace = true
 tokio.workspace = true
 
 [dev-dependencies]
+seata-at = { path = "../seata_at" }
 seata-protocol = { path = "../seata_protocol" }
 
 [lints]

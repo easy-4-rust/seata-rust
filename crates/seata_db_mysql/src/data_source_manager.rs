@@ -22,6 +22,11 @@ pub struct MySqlDataSourceManager {
     profile: MySqlJdbcProfile,
 }
 impl MySqlDataSourceManager {
+    /// 无参数；返回原数据源克隆共享的控制计数，重新构造管理器不清零。
+    pub fn recovery_metrics_sampler(&self) -> crate::MySqlRecoveryMetricsSampler {
+        self.source.recovery_metrics_sampler()
+    }
+
     /// 无参数；返回原准备管理器使用的同物理数据源克隆，供持久提交交接。
     pub(crate) fn source_clone(&self) -> MySqlDataSource {
         self.source.clone()
@@ -378,6 +383,26 @@ impl MySqlDataSourceManager {
         .map(|_| ())
     }
     async fn control(
+        &self,
+        id: &BranchIdentity,
+        action: RecoveryAction<'_>,
+        deadline: Instant,
+    ) -> Result<BranchResolution, MySqlRecoveryError> {
+        use crate::MySqlRecoveryOperation;
+        let operation = match action {
+            RecoveryAction::Enroll(_) => MySqlRecoveryOperation::Enroll,
+            RecoveryAction::Observe(_) => MySqlRecoveryOperation::Observe,
+            RecoveryAction::Bind(BranchPhase::Commit) => MySqlRecoveryOperation::BindCommit,
+            RecoveryAction::Bind(BranchPhase::Rollback) => MySqlRecoveryOperation::BindRollback,
+            RecoveryAction::Commit => MySqlRecoveryOperation::Commit,
+            RecoveryAction::Rollback => MySqlRecoveryOperation::Rollback,
+        };
+        let guard = self.recovery_metrics_sampler().begin(operation);
+        let result = self.control_inner(id, action, deadline).await;
+        guard.finish(&result);
+        result
+    }
+    async fn control_inner(
         &self,
         id: &BranchIdentity,
         action: RecoveryAction<'_>,

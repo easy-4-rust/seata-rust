@@ -116,3 +116,11 @@ ResourceManager 和 ResourceClient::call_metrics_sampler 签发 RmCallMetricsSam
 每次已轮询的 BranchRegister、BranchReport、LockQuery 路径维护 active。注册回执接口包括其语义校验，嵌套低层调用不得重复计数。有效权威成功响应为 observed，正分支号才可计注册成功；成功 LockQuery 的 lockable=false 仍为 observed。其余结果互斥区分 tc_rejected、unknown、not_sent、local_rejected、cancelled。协议错误另外计数，写后协议错误同时属于 unknown。取消不推断传输边界，也不伪造 TC 结果；原请求、可选字段、错误分类和重试策略保持原有语义。
 
 认证 HTTP 通过 with_rm_calls 增加固定三种 operation 与六种 outcome，加 active 和 protocol_errors，共 24 条序列。不得记录 XID、BranchId、资源、请求编号、锁键、application_data 或凭据。采样逐字段读取，累计饱和不回绕。验收包括共享克隆、单次回执、明确 Failed、无效分支号、丢响应、取消、未发送、原字段保留、关闭后调用、认证 HTTP 与固定原 Java TC 场景。
+
+## MySQL 恢复控制事务计数契约
+
+MySqlDataSource 及使用同一数据源克隆的 MySqlDataSourceManager 签发 MySqlRecoveryMetricsSampler，作用域为一次数据源创建及其全部克隆，不随管理器重建清零。六种固定控制动作是 enroll、observe、bind_commit、bind_rollback、commit、rollback；只计实际轮询进入内部 control 的调用，不把公开入口在 control 前的非法身份拒绝计为数据库操作。
+
+每次 control 维护 active，返回时互斥记录 completed、unknown_commit、before_commit_error；取消或 panic 记 cancelled。completed 只表示本次独立控制事务在期限内返回 Ok，可能仅确认登记、方向或只读回滚，不能证明业务提交。成功结果另按原 BranchResolution 记录 applied 或 unresolved；Applied 可来自读取已有终态，不作为业务执行次数或 SQL 重放计数。unknown_commit 仅来自原 MySqlRecoveryError::CommitOutcomeUnknown，before_commit_error 不证明旧业务未执行。取消后 MySQL 仍可能迟到提交，指标不得改变原恢复行为。
+
+采样器仅持固定原子计数，无池、资源、身份和恢复权限；逐字段采样，累计饱和不回绕，不查询数据库聚合。默认关闭的 observability mysql 特性可通过 with_mysql_recovery 导出六动作各 active、四结果以及 applied/unresolved，共 42 条固定序列；不含 XID、BranchId、URL、SQL、锁键或凭据。验收须包括实际 MySQL 持久化与重复读取、提交前错误、受阻取消、COMMIT 确认丢失及后续原分支恢复，不能以成功 HTTP 代替数据库事实。该增量不代表一阶段业务 COMMIT、独立 Undo API 或完整 MySQL 指标均已覆盖。

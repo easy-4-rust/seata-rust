@@ -282,6 +282,9 @@ seata:
                SEATA_MYSQL_DATABASE=db, SEATA_UNDO_SCHEMA_PATH=str(work / "client-schema.sql"),
                SEATA_UNDO_STORE_OUT=str(observations), SEATA_RM_ENDPOINT=f"127.0.0.1:{rm}",
                SEATA_TM_ENDPOINT=f"127.0.0.1:{tm}")
+    env.pop("SEATA_MYSQL_CONTROL_METRICS", None)
+    if scenario in ("commit_db_drop_ok","rollback_db_drop_ok"):
+        env["SEATA_MYSQL_CONTROL_METRICS"]="1"
     env.pop("SEATA_RM_CALL_METRICS", None)
     if scenario in ("commit", "commit_report_loss", "rm_call_rejected"):
         env["SEATA_RM_CALL_METRICS"] = "1"
@@ -595,6 +598,9 @@ seata:
             print(f"PASS original Java TC durable TM {scenario} {version}: {out}", flush=True)
             return
         assert all(p.wait(timeout=12) == 0 for p in processes[1:3]), "frame observers did not finish"
+        if scenario in ("commit_db_drop_ok","rollback_db_drop_ok"):
+            from mysql_control_metrics import validate as validate_mysql_control_metrics
+            validate_mysql_control_metrics(observations,out,scenario,guard.save)
         if scenario in ("commit", "commit_report_loss", "rm_call_rejected"):
             from rm_call_metrics import validate as validate_rm_call_metrics
             validate_rm_call_metrics(observations,out,scenario,guard.save)
@@ -1081,7 +1087,9 @@ def verify_at_retried_callback(mysql, db, env, out, result, resource, journal, *
         assert correlation(callback) == correlation(reply)
         assert previous < callback["index"] < reply["index"]
         if not armed_child:
-            previous = reply["index"]
+            # TC may retry while the first database COMMIT result is still pending.
+            # Preserve request order and each correlated response-after-request edge.
+            previous = callback["index"] if db_fault else reply["index"]
         target = guard.support.branch_identity(callback, True)
         assert (target["xid"], target["branch_id"], target["resource"], target["branch_type"],
                 target["data"]) == (xid, branch, resource, 0, "")

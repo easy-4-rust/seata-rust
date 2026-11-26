@@ -1,0 +1,28 @@
+    Finished `test` profile [unoptimized] target(s) in 0.27s
+     Running tests\live_recovery_metrics.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\live_recovery_metrics-bc878a51a3bb7823.exe)
+
+running 2 tests
+test blocked_control_cancel_is_separate_from_before_commit_error_and_keeps_no_effect ... FAILED
+test shared_control_counts_follow_durable_results_and_duplicate_terminal_reads ... FAILED
+
+failures:
+
+---- blocked_control_cancel_is_separate_from_before_commit_error_and_keeps_no_effect stdout ----
+
+thread 'blocked_control_cancel_is_separate_from_before_commit_error_and_keeps_no_effect' (55080) panicked at crates\seata_db_mysql\tests\support\undo_store_fixture.rs:24:70:
+called `Result::unwrap()` on an `Err` value: NotPresent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- shared_control_counts_follow_durable_results_and_duplicate_terminal_reads stdout ----
+
+thread 'shared_control_counts_follow_durable_results_and_duplicate_terminal_reads' (52212) panicked at crates\seata_db_mysql\tests\support\undo_store_fixture.rs:24:70:
+called `Result::unwrap()` on an `Err` value: NotPresent
+
+
+failures:
+    blocked_control_cancel_is_separate_from_before_commit_error_and_keeps_no_effect
+    shared_control_counts_follow_durable_results_and_duplicate_terminal_reads
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+error: test failed, to rerun pass `-p seata-db-mysql --test live_recovery_metrics`

@@ -1,8 +1,10 @@
+#[cfg(feature = "mysql")]
+use seata_db_mysql::{MySqlRecoveryMetricsSampler, MySqlRecoveryOperation};
 use seata_rm::{BranchPhase, RmCallMetricsSampler, RmMetricsSampler, RmOperation};
 use seata_tm::{TmMetricsSampler, TmOperation};
 use seata_transport::{PoolSampler, PoolSlotState};
 
-/// 固定 TM/RM 连接与 TM 调用的只读指标来源；没有用户提供的标签键或标签值。
+/// 固定 TM/RM 连接、调用、分支与可选 MySQL 控制事务的只读指标来源；没有用户提供的标签键或标签值。
 /// 对应 Java: TM/RM 客户端连接监控视图的组合职责。
 #[derive(Default)]
 pub struct MetricsSources {
@@ -11,6 +13,8 @@ pub struct MetricsSources {
     tm_calls: Option<TmMetricsSampler>,
     rm_branches: Option<RmMetricsSampler>,
     rm_calls: Option<RmCallMetricsSampler>,
+    #[cfg(feature = "mysql")]
+    mysql_recovery: Option<MySqlRecoveryMetricsSampler>,
 }
 
 impl MetricsSources {
@@ -22,6 +26,8 @@ impl MetricsSources {
             tm_calls: None,
             rm_branches: None,
             rm_calls: None,
+            #[cfg(feature = "mysql")]
+            mysql_recovery: None,
         }
     }
 
@@ -66,7 +72,19 @@ impl MetricsSources {
         self
     }
 
+    /// 参数为数据源签发的只读恢复控制计数；返回增加 42 条固定序列的新来源。
+    /// 不授予连接、恢复或关闭权限，也可独立提供，不输出业务身份。
+    #[cfg(feature = "mysql")]
+    pub fn with_mysql_recovery(mut self, source: MySqlRecoveryMetricsSampler) -> Self {
+        self.mysql_recovery = Some(source);
+        self
+    }
+
     pub(crate) fn is_empty(&self) -> bool {
+        #[cfg(feature = "mysql")]
+        if self.mysql_recovery.is_some() {
+            return false;
+        }
         self.tm.is_none()
             && self.rm.is_none()
             && self.tm_calls.is_none()
@@ -230,6 +248,34 @@ impl MetricsSources {
                     "seata_rm_protocol_errors_total{{operation=\"{name}\"}} {}\n",
                     counts.protocol_errors
                 ));
+            }
+        }
+        #[cfg(feature = "mysql")]
+        if let Some(source) = &self.mysql_recovery {
+            for (operation, name) in [
+                (MySqlRecoveryOperation::Enroll, "enroll"),
+                (MySqlRecoveryOperation::Observe, "observe"),
+                (MySqlRecoveryOperation::BindCommit, "bind_commit"),
+                (MySqlRecoveryOperation::BindRollback, "bind_rollback"),
+                (MySqlRecoveryOperation::Commit, "commit"),
+                (MySqlRecoveryOperation::Rollback, "rollback"),
+            ] {
+                let c = source.snapshot(operation);
+                output.push_str(&format!(
+                    "seata_mysql_control_active{{operation=\"{name}\"}} {}\n",
+                    c.active
+                ));
+                for (outcome, count) in [
+                    ("completed", c.completed),
+                    ("unknown_commit", c.unknown_commit),
+                    ("before_commit_error", c.before_commit_error),
+                    ("cancelled", c.cancelled),
+                ] {
+                    output.push_str(&format!("seata_mysql_control_total{{operation=\"{name}\",outcome=\"{outcome}\"}} {count}\n"));
+                }
+                for (resolution, count) in [("applied", c.applied), ("unresolved", c.unresolved)] {
+                    output.push_str(&format!("seata_mysql_control_resolutions_total{{operation=\"{name}\",resolution=\"{resolution}\"}} {count}\n"));
+                }
             }
         }
         output

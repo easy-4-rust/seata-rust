@@ -18,8 +18,14 @@ pub struct MySqlDataSource {
     pub(crate) server_uuid: Arc<str>,
     pub(crate) registration_checks: MySqlAtRegistrationChecks,
     operation_timeout: Duration,
+    recovery_metrics: crate::MySqlRecoveryMetricsSampler,
 }
 impl MySqlDataSource {
+    /// 无参数；返回同数据源克隆与管理器共享的只读控制事务计数，不授予数据库权限。
+    pub fn recovery_metrics_sampler(&self) -> crate::MySqlRecoveryMetricsSampler {
+        self.recovery_metrics.clone()
+    }
+
     /// 无参数；返回本单主机配置对应的原 Java 普通 MySQL JDBC 资源标识，不含认证或查询参数。
     /// 不规范化主机大小写或 DNS 别名；负载均衡 URL 尚不在此入口范围。
     pub fn resource_id(&self) -> Result<String, DbError> {
@@ -307,6 +313,7 @@ impl MySqlDataSource {
                     java_tc_mysql_lock_collation: options.java_tc_mysql_lock_collation,
                 },
                 operation_timeout: options.operation_timeout,
+                recovery_metrics: crate::MySqlRecoveryMetricsSampler::new(),
             }),
             Err(error) => {
                 // 最后Pool owner丢弃，所有租约已标记有限关闭，不在失败路径再做无界await。
