@@ -4,6 +4,9 @@
 #[allow(dead_code)]
 mod fixture;
 #[cfg(feature = "experimental_changed_commit")]
+#[path = "support/java_checksum_events.rs"]
+mod java_checksum_events;
+#[cfg(feature = "experimental_changed_commit")]
 #[path = "support/java_checksum_probe.rs"]
 mod java_checksum_probe;
 #[cfg(feature = "experimental_changed_commit")]

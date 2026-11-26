@@ -10,6 +10,9 @@ def restore_after_callback(client, observations, mysql, db, env, out):
     assert recovery["modified_recovery_rejected"] and recovery["original_bytes_restored"]
     assert recovery["missing_checksum_report_rejected"] and recovery["modified_undo_report_rejected"]
     guard.save(out / "checksum-recovery.json", recovery)
+    events = json.loads((observations / "java-undo-checksum-events.json").read_bytes())
+    assert len(events) == 3 and all(event["outcome"] == "unknown" for event in events)
+    guard.save(out / "checksum-events.json", events)
     state = read_client_observation(client, observations / "java-checksum-callback.json", out)
     rollback = env.get("SEATA_CHECKSUM_ROLLBACK") == "1"
     deadline = time.monotonic() + 12

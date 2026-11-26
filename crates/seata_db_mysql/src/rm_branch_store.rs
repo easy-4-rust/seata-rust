@@ -153,6 +153,14 @@ impl RmBranchStore {
             .map_err(|e| DbError::driver("Undo checksum digest", e))?;
         use sha2::{Digest, Sha256};
         if witness == 1 && expected.as_deref() != Some(Sha256::digest(bytes).as_slice()) {
+            tracing::warn!(
+                target: "seata_db_mysql::undo",
+                xid = identity.xid(),
+                branch_id = identity.branch_id(),
+                resource_digest = %format!("{:x}", Sha256::digest(identity.resource().resource_id().as_bytes())),
+                outcome = "unknown",
+                "mysql_undo_checksum_rejected"
+            );
             return Err(DbError::UndoChecksumMismatch);
         }
         Ok(())

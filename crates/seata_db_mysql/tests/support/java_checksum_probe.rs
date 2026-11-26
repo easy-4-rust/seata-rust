@@ -11,6 +11,9 @@ pub(super) async fn reject_modified_undo(
     xid: &str,
     branch_id: i64,
 ) {
+    let events = std::sync::Arc::new(std::sync::Mutex::new(Vec::new()));
+    let _capture =
+        tracing::subscriber::set_default(crate::java_checksum_events::EventCapture(events.clone()));
     let original: Vec<u8> =
         sqlx::query_scalar("SELECT rollback_info FROM undo_log WHERE xid=? AND branch_id=?")
             .bind(xid)
@@ -88,6 +91,36 @@ pub(super) async fn reject_modified_undo(
         .execute(&mut *admin)
         .await
         .unwrap();
+    let rejected = events
+        .lock()
+        .unwrap()
+        .iter()
+        .filter(|event| {
+            event
+                .get("target")
+                .is_some_and(|target| target == "seata_db_mysql::undo")
+        })
+        .cloned()
+        .collect::<Vec<_>>();
+    assert_eq!(
+        rejected.len(),
+        3,
+        "each rejected checksum observation must emit one event"
+    );
+    for event in &rejected {
+        assert_eq!(event.get("xid").map(String::as_str), Some(xid));
+        assert_eq!(event.get("branch_id"), Some(&branch_id.to_string()));
+        assert_eq!(event.get("outcome").map(String::as_str), Some("unknown"));
+        assert_eq!(event.get("resource_digest").unwrap().len(), 64);
+        assert_eq!(event.len(), 6);
+        let text = format!("{event:?}");
+        assert!(!text.contains("original_tc_report") && !text.contains("modified_tc_report"));
+        assert!(!text.contains("jdbc:mysql") && !text.contains("seata-mysql-fixture-only"));
+    }
+    fixture::save(
+        "java-undo-checksum-events.json",
+        &serde_json::json!(rejected),
+    );
     fixture::save(
         "java-undo-checksum.json",
         &serde_json::json!({

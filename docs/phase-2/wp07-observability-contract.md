@@ -68,3 +68,14 @@ flowchart LR
 4. 检查日志和导出的标签值不含密码、JDBC 凭据、SQL、原始报文及高基数字段。对照真实 Java TC 故障路径验收，保留外部 TC 指标缺陷的独立状态。
 
 完成以上实现、跨组件测试、部署导出验证和故障演练后，才可评估清单中的 WP07 指标及日志勾选项。本文件自身不是完成证据。
+
+
+## MySQL Undo 摘要拒绝事件
+
+生产校验入口在新记录的摘要缺失或不匹配时发出 WARN 事件，目标为 seata_db_mysql::undo，消息为 mysql_undo_checksum_rejected。关联字段只有 xid、branch_id、resource_digest 与 outcome=unknown。资源标识使用 SHA-256，正文、原 SQL、应用数据、账号凭据及两侧 Undo 摘要均不进入该事件。这个事件表示本次校验拒绝，原 TC 的后续重试仍可产生独立事件。
+
+固定 MySQL 和原 Java TC 的现场用例捕获三次拒绝，分别来自摘要缺失的恢复报告、改写 Undo 的独立恢复及其恢复报告。用例要求恰好三个事件和固定字段集合，检查资源 URL、业务值与夹具密码未出现在事件中。恢复原字节后，原分支仍完成一次报告与原 TC 提交。没有事件的旧实现先在目标断言失败。
+
+[失败对照](evidence/java-tc-changed-commit-report/run-undo_checksum-1.99-8a810468/client-stdout.log) · [Rust 1.99 事件](evidence/java-tc-changed-commit-report/run-undo_checksum-1.99-77ffe2fc/checksum-events.json) · [Rust 1.85 事件](evidence/java-tc-changed-commit-report/run-undo_checksum-1.85-d7c2f40c/checksum-events.json)
+
+应用仍需配置 tracing subscriber 和生产日志收集端。此增量覆盖摘要拒绝，完整 MySQL 提交状态事件、回调送达、指标与部署验收继续。
