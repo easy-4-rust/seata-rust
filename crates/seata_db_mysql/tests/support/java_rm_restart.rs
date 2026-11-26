@@ -19,7 +19,15 @@ pub(super) async fn restart(
 ) -> ResourceManager {
     let key = adapter.key().clone();
     let sampler = rm.connection_sampler();
+    let metrics = rm.metrics_sampler();
+    let phase = if std::env::var("SEATA_CALLBACK_ROLLBACK_SHUTDOWN").as_deref() == Ok("1") {
+        BranchPhase::Rollback
+    } else {
+        BranchPhase::Commit
+    };
+    let before_metrics = metrics.snapshot(phase);
     rm.shutdown().await.unwrap();
+    let after_metrics = metrics.snapshot(phase);
     assert!(sampler.snapshot().closed);
     if std::env::var("SEATA_CALLBACK_IN_FLIGHT").as_deref() == Ok("1") {
         fixture::save(
@@ -82,5 +90,28 @@ pub(super) async fn restart(
             "undo_checksum_bytes":retained.1.len(),"replacement_lock_query":true,"pending_after_shutdown":pending
         }),
     );
+    if std::env::var("SEATA_CALLBACK_SHUTDOWN").as_deref() == Ok("1") {
+        fixture::save(
+            "rm-branch-metrics-restart.json",
+            &serde_json::json!({
+                "before_shutdown":value(before_metrics),"after_shutdown":value(after_metrics)
+            }),
+        );
+    }
     rm
+}
+
+/// 将参数只读快照转为固定字段 JSON；返回值不包含身份、路径或凭据。
+pub(super) fn value(counts: seata_rm::RmBranchMetrics) -> serde_json::Value {
+    serde_json::json!({
+        "journal_pending":counts.journal_pending,"journal_completed":counts.journal_completed,
+        "journal_retry_safe":counts.journal_retry_safe,"journal_rejected":counts.journal_rejected,
+        "active":counts.active,"applied":counts.applied,"rejected":counts.rejected,
+        "retry_safe":counts.retry_safe,"unknown":counts.unknown,
+        "manual_intervention":counts.manual_intervention,"duplicate_completed":counts.duplicate_completed,
+        "duplicate_rejected":counts.duplicate_rejected,"errors":counts.errors,
+        "cancelled":counts.cancelled,"apply_attempts":counts.apply_attempts,
+        "recover_attempts":counts.recover_attempts,"journal_faulted":counts.journal_faulted,
+        "journal_closed":counts.journal_closed
+    })
 }

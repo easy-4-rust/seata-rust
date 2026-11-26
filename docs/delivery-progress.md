@@ -1137,3 +1137,12 @@ Rust 1.99/1.85 各 89 项 `seata-transport` 测试、全目标严格 Clippy、�
 沿用 WP07，正式 TM 新增仅能采样的固定操作计数能力，区分有效权威响应、TC Failed、未知、明确未发送、本地拒绝和取消，保留 active 及协议错误附加计数；观测不改写原结果，不发起重试。现有回环 Bearer 导出器增加固定 32 条 TM 序列，兼容原连接来源，关闭后可读取最终值。5 项 TCP 用例、真实认证 HTTP 和并行饱和边界验证通过，首次缺 API 与缺导出入口的失败记录保留。
 
 固定原 Java TC 与真实 MySQL 的 Commit/Rollback 成功响应丢失四组现场由 Rust 1.99/1.85 通过：原管理器 Begin observed=1、原 End unknown=1；新管理器只读原 XID，Status observed=1。原帧、原门闩与全部固定计数字段独立核对，各五个削弱反例均被拒绝。1.85 首轮 TC 因端口占用退出，确认清理后重跑通过，不计为客户端行为证据。两个版本各通过全工作区全功能 690 项回归，313 项需外部环境的用例保持 ignored；四组原 TC 是另外实际执行的现场，不能替代其余 ignored。TM、observability、MySQL 全目标严格 Clippy 通过。详见[TM 调用指标证据](phase-2/evidence/tm-call-metrics/README.md)。完整事务存活、RM 分支与 MySQL 状态指标、重试、生产代理/采集/告警以及 WP05–07 总门禁仍开放。
+
+
+## 2026-11-26：RM 日志状态、分派事件与原 TC 停机计数
+
+新增仅持有固定原子计数的 RmMetricsSampler / RmBranchMetrics，读取同一日志打开周期的保留状态 gauge 与分派结果、复用、错误、取消和 apply/recover 尝试 counter。同步索引后才更新 gauge，重开从原记录重建；旧采样器不保留文件锁，重开后已有非零分派累计归零。回环认证端点增加固定 34 条 RM 序列。缺 API 和缺导出入口先失败；将状态发布移动到真实写入/同步之前的变异在只读 OS 句柄故障用例中失败，恢复后通过。
+
+Rust 1.99/1.85 的四组原 Java TC/MySQL 现场通过：原物理 COMMIT 在 RM 关闭前后仍在执行，Pending 保留；旧调用取消，新会话 recover 确认后只同步一次 Completed，资源 apply/recover 各一次。额外自然重叠现场有两个旧回调等待同一分支，取消数为 2 而 apply 仍为 1。修正验收脚本固定回调基数的假设，改用实际原始帧计数和完整身份约束。该额外现场还保留 15.039 秒后返回的 Failed/RollbackRetrying，原 TM 的 10 秒请求已保持 Unknown；原帧重放检查关联、时序和后续只读 Finished，并拒绝四种迟到失败证据削弱。其初轮未执行外部最终数据库计数，作为诊断重放保留，不冒充第五次完整现场成功。
+
+双版本全工作区全功能各 697 项通过、313 项 ignored；最后加强日志重开累计归零断言后，双版本 journal 目标测试及 RM/observability/MySQL 全目标严格 Clippy 另行通过。最终四组现场、九种计数/原连接反例及源代码写前误发布变异见 [RM 指标证据](phase-2/evidence/rm-branch-metrics/README.md)。RM 出站结果、完整 MySQL 本地状态、生产采集/告警和 WP05–07 全部门禁继续。

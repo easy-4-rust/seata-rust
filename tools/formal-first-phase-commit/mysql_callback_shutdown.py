@@ -35,6 +35,23 @@ def permit_shutdown(client, observations, mysql, db, env, out, observer):
     guard.put(observations / "java-callback-shutdown-permitted", "Original callback commit independently observed\n")
 
 
+
+def verify_rollback_reply(end, ended, result):
+    assert (end["connection"], end["request_id"]) == (ended["connection"], ended["request_id"])
+    body = ended["body"]
+    assert len(body) >= 5
+    if body[2:4] == b"\x01\x00":
+        return False
+    # 本夹具的原 TM RPC 期限固定为 10 秒；过期报文不能改写原 Unknown。
+    assert result["observed_end"] is None
+    assert ended["monotonic_ns"] - end["monotonic_ns"] >= 10_000_000_000
+    assert body[2] == 0
+    message, at = guard.support.string(body, 3)
+    assert isinstance(message, str) and result["xid"] in message and str(result["branch_id"]) in message
+    assert body[at:] == b"\x00\x05", "late Failed must preserve RollbackRetrying"
+    return True
+
+
 def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False, in_flight=False):
     decoder = load("shutdown_callback_native", TOOLS / "formal-rm-java/validate.py")
     raw = load("shutdown_callback_mysql", TOOLS / "formal-undo-rollback-loss/validate.py")
@@ -50,9 +67,15 @@ def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False, in_flight=
         assert (request["connection"], request["request_id"]) == (response["connection"], response["request_id"])
         assert response["body"][2] == 1
     assert old["connection"] != new["connection"]
-    first, retry = select(5 if rollback else 3, "s2c")
-    assert first["connection"] == old["connection"] and retry["connection"] == new["connection"]
-    assert first["body"] == retry["body"]
+    callbacks = select(5 if rollback else 3, "s2c")
+    old_callbacks = [row for row in callbacks if row["connection"] == old["connection"]]
+    new_callbacks = [row for row in callbacks if row["connection"] == new["connection"]]
+    assert old_callbacks and len(new_callbacks) == 1
+    assert callbacks == old_callbacks + new_callbacks
+    first, retry = old_callbacks[0], new_callbacks[0]
+    assert len({(row["connection"], row["request_id"]) for row in callbacks}) == len(callbacks)
+    assert all(row["body"] == retry["body"] for row in old_callbacks)
+    assert not select(3 if rollback else 5, "s2c")
     completed, = select(6 if rollback else 4, "c2s")
     assert (completed["connection"], completed["request_id"]) == (retry["connection"], retry["request_id"])
     assert completed["body"][2:4] == b"\x01\x00" and completed["body"][-1] == (8 if rollback else 5)
@@ -127,16 +150,15 @@ def verify_shutdown(rows, result, out, mysql_wire, *, rollback=False, in_flight=
         if result["observed_end"] is not None:
             ended, = responses
             assert ended["body"][2:] == bytes((1,0,result["observed_end"]))
-        for ended in responses:
-            assert (end["connection"],end["request_id"]) == (ended["connection"],ended["request_id"])
-            assert ended["body"][2:4] == b"\x01\x00"
+        late_failed = [ended for ended in responses if verify_rollback_reply(end, ended, result)]
         final_status = [row for row in tm if row["kind"] == 16 and row["direction"] == "s2c"][-1]
         assert final_status["body"][2:] == b"\x01\x00\x0f"
+        assert all(final_status["monotonic_ns"] > ended["monotonic_ns"] for ended in late_failed)
         assert guard.support.string(end["body"],2)[0] == result["xid"]
         assert not any(row["kind"] == 7 and row["direction"] == "c2s" for row in tm)
         states = [record["state"] for record in decoder.journal_records((out / "branches.log").read_bytes(), first["body"])]
         assert states == [1,3]
     guard.save(out / "callback-shutdown-wire.json", dict(
         original_connection=old["connection"], replacement_connection=new["connection"],
-        callback_requests=2, callback_success_replies=1, original_undo_deletions=1,
+        callback_requests=len(callbacks), original_callback_requests=len(old_callbacks), replacement_callback_requests=1, callback_success_replies=1, original_undo_deletions=1,
         original_terminal_writes=1, original_commit_ack_held=not in_flight, original_commit_in_flight=in_flight, durable_pending_after_shutdown=True))

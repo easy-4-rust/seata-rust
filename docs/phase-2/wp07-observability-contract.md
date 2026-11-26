@@ -33,7 +33,7 @@ flowchart LR
 
 - TM/RM 所有者应能签发仅允许采样的句柄。它可随服务持有，不授予获取连接、发送请求、关闭池或事务恢复的能力；所有者关闭后仍可读取最终累计值。
 - 首期拉取服务只绑定回环地址，配置中要求 32–128 字节的可见 ASCII 访问令牌及至少一个 TM/RM 采样源；空源在绑定前拒绝，避免空的 200 响应。`GET /metrics` 必须携带唯一且匹配的 Bearer 凭据。拒绝非回环监听、重复/错误凭据、过长或超时的请求头；响应不回显令牌。远程采集须由部署侧经过认证和 TLS 的代理承担，本组件不能宣称已完成该部署门禁。
-- 连接文本导出只允许固定指标名，以及 `role=tm|rm`、配置有界的数字 `slot`、固定槽位状态标签；TM 调用扩展另允许下文固定四种 operation 与六种 outcome。池关闭、当前在途、槽位状态为 gauge；`PoolCounters` 字段为进程生命周期 counter。不得输出 XID、BranchId、请求 ID、资源 URL、凭据、SQL、锁键或原始帧，也不得把这些值用作指标标签。
+- 连接文本导出只允许固定指标名，以及 `role=tm|rm`、配置有界的数字 `slot`、固定槽位状态标签；TM 调用扩展另允许下文固定四种 operation 与六种 outcome；RM 分支扩展另允许下文固定的 phase/state/outcome/operation。池关闭、当前在途、槽位状态为 gauge；`PoolCounters` 字段为进程生命周期 counter。不得输出 XID、BranchId、请求 ID、资源 URL、凭据、SQL、锁键或原始帧，也不得把这些值用作指标标签。
 - 真实 TCP 测试需覆盖授权成功、未授权/错误令牌、超长请求头、断线重连后的累计和关闭后的最终样本；格式和字段断言须检查敏感哨兵不出现。该服务通过后仍需生产代理、采集端、权限、告警和故障演练验收。
 
 ## 最低观测面
@@ -89,3 +89,21 @@ TransactionManager 签发 TmMetricsSampler，只能按固定 TmOperation 读取 
 快照是并发原子字段逐项读取，不保证所有字段属于同一瞬间；累计计数饱和不回绕，active 是当前调用数。导出使用固定 operation=begin|commit|rollback|status 和六种固定 outcome，最多 32 条 TM 调用序列。可以单独提供 TM 调用采样器，原仅连接来源构造方式保持兼容。
 
 验收：真实 TCP 的有效非最终响应、TC Failed、响应丢失、无效响应、未发送和取消；Commit/Rollback 保留原结果且不重放；管理器关闭后最终快照；通过真实 Bearer HTTP 端点核对准确计数、固定序列上限、拒绝凭据和身份哨兵泄漏。原 Java TC 故障路径、RM 分支状态、生产采集和告警继续独立验收。
+
+
+## RM 日志状态与分派计数契约
+
+RmMetricsSampler 由 FileBranchStore 或 ResourceManager 签发，只持有有界原子计数，不持有日志文件、租约、目录或分派能力。统计作用域为一次日志打开：多个管理器/手工分派器共享同一日志时共享计数，重开后分派累计归零；状态 gauge 从校验通过的全部日志重放记录重建。关闭后旧采样器保留最终快照，不能阻止同一路径重新打开。
+
+固定 Commit/Rollback 各记录保留索引中的 Pending/Completed/RetrySafe/Rejected 数量。这是 RM 日志保留条目，不是原 TC 活跃分支数量。只有实际写入并同步后才能更改 gauge；写入故障保留最后确认值并标记 journal_faulted，不能把未确认的完成算入成功。journal_closed 表示日志所有者进入销毁；不是文件锁释放或数据库停机证明。
+
+分派事件区分 Applied、Rejected、NotApplied/RetrySafe、Unknown、ManualIntervention、复用 Completed、复用 Rejected、错误和取消；active 跟踪已轮询分派作用域。Apply/Recover 入口各记录尝试数，不把 recover 确认 Applied 误称为重新执行资源。错误和取消不推断没有资源效果，Pending 继续保留。统计覆盖同日志的正式回调及显式手工分派，不授予回调来源权限，也不能表示回包已经送达 TC。
+
+认证 HTTP 通过 with_rm_branches 增加固定 phase、state、outcome、operation 枚举维度，共 34 条序列，不用 XID、BranchId、资源、文件路径或凭据作标签。快照逐字段采样，累计饱和不回绕。验收覆盖实际日志重开与文件锁、同步失败、资源未决/恢复/重复/冲突/取消、原连接回调、HTTP 认证与字段边界，以及固定原 Java TC/MySQL 联试；生产采集与告警继续独立验收。
+
+
+RM gauge 只统计已确认索引；取消中的后台追加若随后同步完成，gauge 仍随索引更新，而原未返回分派只记 cancelled。Applied/Rejected/RetrySafe counter 仅统计已返回且确认相应日志同步的分派结果。重开验收先制造非零 duplicate_completed，再证明新采样器累计归零，旧采样器也未持有文件锁。
+
+原 TC 允许旧会话上有多个同身份回调。现场计数必须按原始帧实际数量核对停机后的 cancelled，所有旧请求必须保持完整原身份、没有旧会话成功回包，replacement 只允许一次完成响应；资源 apply 仍严格一次。首次快照是并发观测，active 可处于 1 到旧会话最终请求数之间，不能将它伪装为原始帧总数。
+
+所测回滚场景原 TM RPC 期限固定 10 秒。若原 TC 在期限后返回 Failed/RollbackRetrying，客户端原 Unknown 仍保留；线缆验收只在原请求关联、到达晚于期限、错误消息含原 XID/BranchId、状态为 RollbackRetrying，且后续只读状态为 Finished 时接受这一记录。提前 Failed、错误状态/身份及把已观察结果伪装成未知均拒绝。这是原 TCP 观测的校验规则，不变更客户端期限和重试策略。

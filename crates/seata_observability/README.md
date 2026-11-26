@@ -26,3 +26,8 @@ TmMetricsSampler 是管理器签发的只读调用能力，with_tm_calls 可独�
 observed 只表示有效权威成功响应，包含 AsyncCommitting、Rollbacking 等非最终状态。取消不推断写入边界，仍需结合原传输和持久恢复事实。管理器关闭后可采样最终累计值；重建管理器或进程重启归零。快照逐字段读取，不保证同一瞬间的一致总数，累计饱和不回绕。
 
 [双版本 TCP、HTTP、原 Java TC 故障路径及反例证据](../../docs/phase-2/evidence/tm-call-metrics/README.md)。完整 TM 事务存活状态、RM 持久分支状态、MySQL 本地结果、生产代理/权限、告警及故障演练仍需单独验收，不能据此关闭 WP07 门禁。
+
+
+RM 分支来源通过 with_rm_branches(resource_manager.metrics_sampler()) 或 FileBranchStore 的同名采样器接入，也可单独作为来源。固定 34 条序列包括两种 phase 下的四种保留日志 state、dispatch active、九种分派 outcome、两种资源调用 operation，以及 journal_faulted/journal_closed。所有标签来自固定枚举，不导出分支身份、文件路径或凭据。
+
+日志 gauge 从同步索引更新并在重开时重建；counter 属于一次日志打开周期。采样器保留不会延长日志文件锁寿命。RM 关闭后外部仍持有日志时，journal_closed 仍为 0。详见 [双版本原连接回调、HTTP 与原 Java TC 证据](../../docs/phase-2/evidence/rm-branch-metrics/README.md)。RM 出站调用结果、MySQL 本地状态和生产采集/告警仍待验收。

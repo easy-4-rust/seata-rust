@@ -32,6 +32,12 @@ pub struct ResourceManagerBuilder {
     maximum_batch: usize,
 }
 impl ResourceManager {
+    /// 无参数；返回当前日志打开周期的只读分支采样器，不持有日志文件或分派能力。
+    /// 同日志的手工和回调分派共享计数；状态 gauge 不等于 TC 活跃分支数量。
+    pub fn metrics_sampler(&self) -> crate::RmMetricsSampler {
+        self.store.metrics_sampler()
+    }
+
     /// 参数为连接配置、RM身份、资源目录及专属日志；返回默认5秒请求/登记、30秒回调构建器。
     pub fn builder(
         connection: ConnectionPoolConfig,

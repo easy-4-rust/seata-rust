@@ -1,0 +1,29 @@
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+error[E0599]: no method named `metrics_sampler` found for struct `FileBranchStore` in the current scope
+   --> crates\seata_rm\tests\dispatch.rs:371:29
+    |
+371 |         let metrics = store.metrics_sampler();
+    |                             ^^^^^^^^^^^^^^^ method not found in `FileBranchStore`
+
+error[E0599]: no method named `metrics_sampler` found for struct `FileBranchStore` in the current scope
+   --> crates\seata_rm\tests\journal.rs:376:25
+    |
+376 |     let metrics = store.metrics_sampler();
+    |                         ^^^^^^^^^^^^^^^ method not found in `FileBranchStore`
+
+error[E0599]: no method named `metrics_sampler` found for struct `FileBranchStore` in the current scope
+   --> crates\seata_rm\tests\journal.rs:399:26
+    |
+399 |     let fresh = reopened.metrics_sampler();
+    |                          ^^^^^^^^^^^^^^^ method not found in `FileBranchStore`
+
+error[E0599]: no method named `metrics_sampler` found for struct `FileBranchStore` in the current scope
+   --> crates\seata_rm\tests\dispatch.rs:410:25
+    |
+410 |     let metrics = store.metrics_sampler();
+    |                         ^^^^^^^^^^^^^^^ method not found in `FileBranchStore`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-rm` (test "dispatch") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `seata-rm` (test "journal") due to 2 previous errors

@@ -250,3 +250,8 @@ Rust 1.99 和 1.85 在固定原 Java TC 和 MySQL 8.4.13 下使用容量为 2 �
 ## TM 调用结果计数的原 TC 联试
 
 Rust 1.99/1.85 的 tm_durable_commit_loss 与 tm_durable_rollback_loss 新现场同时核对只读 TM 计数：原管理器 Begin observed=1、原结束 unknown=1；新观察管理器 Status observed=1。原始帧仍要求一次结束及匹配成功响应丢失，独立 SQL 保留原 008 门闩和操作。每组五种计数证据削弱均被拒绝。四组现场、首轮端口冲突、双版本回归及边界详见 [TM 指标验收](../tm-call-metrics/README.md)。此补充不代表原 TC 现场已经部署 HTTP 指标采集。
+
+
+## RM 日志与停机分派指标
+
+本轮 Commit/Rollback 的 COMMIT 执行中停机场景在 Rust 1.99/1.85 核对共享日志计数：旧分派取消保留 Pending，新 RM recover 确认后完成原分支，apply/recover 各一次。额外自然重叠现场按原始帧匹配两个被取消的旧回调，不把等待同一租约计为再次资源执行；并保留迟到 Failed/RollbackRetrying 的原 TM 未知结果。完整现场与诊断重放分开记录，见 [RM 指标验收](../rm-branch-metrics/README.md)。

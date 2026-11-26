@@ -13,3 +13,12 @@
 [运行组件验证](../../docs/phase-1/evidence/rm-runtime/README.md)在Rust1.99/最低1.85各执行45RM＋189已有组件测试及11隔离削弱检查，覆盖动态资源就绪、旧代际晚完成、批次、超时、关闭panic和真实恢复子进程。[完整首期WP04验收](../../docs/phase-1/evidence/rm-gate/README.md)现已通过：另有原JavaTC正常/重复/重连各提交回滚六例、38观察单测、10观察器削弱检查及双版本2项辅助资源测试；真实TC重试不重复资源效果，原未知不被迟到响应或Finished改写。SQL/Undo属于后续WP05/06，尚未实现。规格事实源仍为原 [WP04验收清单](../../docs/phase-0/v1-implementation-acceptance-checklist.md) 与 [RM实施契约](../../docs/phase-0/tm-tc-rm-call-chains.md)。外部TC风险未接受，共享锁问题暂缓，后续全部计划保留。
 
 验证：`cargo test --locked --offline -p seata-rm --all-targets`。测试文件及子进程证据均写入 D 盘专属目录。默认忽略的 `journal_process_child` 是父测试真实启动的子进程入口，不单独计作正式测试。
+
+
+## 只读日志与分派指标
+
+FileBranchStore::metrics_sampler 和 ResourceManager::metrics_sampler 签发 RmMetricsSampler，只持有固定原子计数，不持有日志文件、租约或资源分派能力。按 BranchPhase 读取 RmBranchMetrics，区分保留日志的四种状态 gauge，以及同一日志打开周期内的分派结果、取消、错误、复用和 apply/recover 尝试 counter。同日志的手工分派和正式回调共享计数；重开日志时从校验后的记录重建 gauge，分派累计归零。保留旧采样器不阻止原文件再次打开。
+
+Completed gauge 表示已同步的保留日志条目，不等于 TC 活跃分支数或 SQL/Undo 的原子性证明。分派取消后后台磁盘任务仍可能完成，gauge 可以随后更新；取消只记 cancelled，不推断资源未执行。journal_faulted 表示追加写入/同步失败，此时仅保留最后确认的 gauge；journal_closed 表示所有者进入销毁，不是文件锁释放证明。并发快照逐字段采样，累计饱和不回绕。
+
+seata-observability 的 with_rm_branches 导出固定 34 条 RM 序列。双版本测试、写入前误发布的失败对照、原 TC/MySQL 停机恢复及重叠回调证据见 [RM 指标验收](../../docs/phase-2/evidence/rm-branch-metrics/README.md)。完整生产指标、告警及部署门槛继续。

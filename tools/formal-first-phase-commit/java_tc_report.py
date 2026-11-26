@@ -595,6 +595,10 @@ seata:
             mysql_wire = db_observer.stop()
             db_observer = None
             guard.save(out / "mysql-wire.json", mysql_wire)
+        if scenario in ("callback_rollback_shutdown", "rollback_commit_in_flight_shutdown",
+                        "callback_commit_shutdown", "callback_commit_in_flight_shutdown"):
+            from rm_branch_metrics import validate as validate_rm_branch_metrics
+            validate_rm_branch_metrics(observations, out, guard.save, rollback=scenario in ("callback_rollback_shutdown", "rollback_commit_in_flight_shutdown"))
         if scenario in ("callback_rollback_shutdown", "rollback_commit_in_flight_shutdown"):
             from mysql_callback_shutdown import verify_shutdown
             result = json.loads((observations / "java-callback-shutdown-rollback.json").read_bytes())

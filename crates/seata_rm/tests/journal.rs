@@ -1,5 +1,7 @@
 //! 实际文件、独占锁、重开、串行租约及损坏拒绝；所有测试写入D盘专属目录。
 #![allow(clippy::unwrap_used)]
+#[path = "support/rm_peer.rs"]
+mod native_fixture;
 use seata_protocol::BranchType;
 use seata_rm::{BranchIdentity, BranchPhase, BranchRecordState, FileBranchStore, JournalOptions};
 use seata_transport::ResourceKey;
@@ -366,4 +368,79 @@ async fn empty_existing_file_is_corruption_and_not_a_new_journal() {
         .await
         .is_err());
     assert!(std::fs::read(file).unwrap().is_empty());
+}
+
+#[tokio::test]
+async fn metrics_replay_latest_states_and_retained_sampler_never_holds_the_file_lock() {
+    let file = path();
+    let store = FileBranchStore::open(file.clone(), options())
+        .await
+        .unwrap();
+    let metrics = store.metrics_sampler();
+    for (id, phase, target) in [
+        (1, BranchPhase::Commit, BranchRecordState::Pending),
+        (2, BranchPhase::Rollback, BranchRecordState::RetrySafe),
+        (3, BranchPhase::Commit, BranchRecordState::Completed),
+        (4, BranchPhase::Rollback, BranchRecordState::Rejected),
+    ] {
+        let mut lease = store.lease(branch(id), phase).await.unwrap();
+        lease.mark_pending().await.unwrap();
+        match target {
+            BranchRecordState::Pending => {}
+            BranchRecordState::RetrySafe => lease.mark_retry_safe().await.unwrap(),
+            BranchRecordState::Completed => lease.mark_completed().await.unwrap(),
+            BranchRecordState::Rejected => lease.mark_rejected().await.unwrap(),
+        }
+    }
+    let mut resource = native_fixture::resource();
+    std::sync::Arc::get_mut(&mut resource).unwrap().key = branch(3).resource().clone();
+    let catalog = seata_rm::ResourceCatalog::new(4, 4096).unwrap();
+    catalog.register(resource).unwrap();
+    let dispatcher = seata_rm::BranchDispatcher::new(catalog, store.clone());
+    dispatcher
+        .dispatch(branch(3), BranchPhase::Commit)
+        .await
+        .unwrap();
+    assert_eq!(metrics.snapshot(BranchPhase::Commit).duplicate_completed, 1);
+    drop(dispatcher);
+    let commit = metrics.snapshot(BranchPhase::Commit);
+    let rollback = metrics.snapshot(BranchPhase::Rollback);
+    assert_eq!(
+        (
+            commit.journal_pending,
+            commit.journal_completed,
+            rollback.journal_retry_safe,
+            rollback.journal_rejected
+        ),
+        (1, 1, 1, 1)
+    );
+    assert!(!commit.journal_closed);
+    drop(store);
+    assert!(metrics.snapshot(BranchPhase::Commit).journal_closed);
+    let reopened = FileBranchStore::open(file.clone(), options())
+        .await
+        .unwrap();
+    let fresh = reopened.metrics_sampler();
+    let fresh_commit = fresh.snapshot(BranchPhase::Commit);
+    let fresh_rollback = fresh.snapshot(BranchPhase::Rollback);
+    assert_eq!(
+        (
+            fresh_commit.journal_pending,
+            fresh_commit.journal_completed,
+            fresh_rollback.journal_retry_safe,
+            fresh_rollback.journal_rejected
+        ),
+        (1, 1, 1, 1)
+    );
+    assert_eq!(
+        (
+            fresh_commit.apply_attempts,
+            fresh_commit.active,
+            fresh_commit.applied
+        ),
+        (0, 0, 0)
+    );
+    assert_eq!(fresh_commit.duplicate_completed, 0);
+    assert!(!fresh_commit.journal_closed);
+    drop(reopened);
 }

@@ -95,7 +95,29 @@ async fn duplicate_callbacks_keep_signed_id_nullable_headers_and_exact_branch_id
         );
     }
     assert_eq!(resource.actions.load(Ordering::SeqCst), 2);
+    let metrics = rm.metrics_sampler();
+    let commit = metrics.snapshot(BranchPhase::Commit);
+    let rollback = metrics.snapshot(BranchPhase::Rollback);
+    assert_eq!(
+        (
+            commit.applied,
+            commit.duplicate_completed,
+            commit.apply_attempts,
+            commit.journal_completed
+        ),
+        (1, 1, 1, 1)
+    );
+    assert_eq!(
+        (
+            rollback.applied,
+            rollback.errors,
+            rollback.apply_attempts,
+            rollback.journal_completed
+        ),
+        (1, 1, 1, 1)
+    );
     rm.shutdown().await.unwrap();
+    assert!(metrics.snapshot(BranchPhase::Commit).journal_closed);
     peer::eof(&mut socket).await;
 }
 
@@ -215,6 +237,7 @@ async fn stalled(shutdown: bool) {
     )
     .await;
     resource.entered.notified().await;
+    let metrics = rm.metrics_sampler();
     if shutdown {
         rm.shutdown().await.unwrap();
         peer::eof(&mut socket).await;
@@ -237,6 +260,20 @@ async fn stalled(shutdown: bool) {
         rm.shutdown().await.unwrap();
     }
     assert_eq!(resource.actions.load(Ordering::SeqCst), 1);
+    let counts = metrics.snapshot(BranchPhase::Commit);
+    assert_eq!(
+        (
+            counts.active,
+            counts.cancelled,
+            counts.apply_attempts,
+            counts.journal_pending
+        ),
+        (0, 1, 1, 1)
+    );
+    assert_eq!(
+        (counts.unknown, counts.recover_attempts),
+        if shutdown { (0, 0) } else { (1, 1) }
+    );
     let identity = BranchIdentity::new(
         "tc:9007199254740993".into(),
         1,

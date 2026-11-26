@@ -1,0 +1,135 @@
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+    Finished `test` profile [unoptimized] target(s) in 4.89s
+     Running unittests src\lib.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\seata_rm-8aad5582fc877a85.exe)
+
+running 3 tests
+test manager::callback_handler::tests::validation_uses_the_original_absolute_deadline_instead_of_starting_a_new_budget ... ok
+test store::file_branch_store::tests::actual_write_failure_poison_prevents_a_later_false_completion ... ok
+test manager::callback_handler::tests::application_data_bounds_and_some_empty_are_checked_before_identity_construction ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\callback_ownership.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\callback_ownership-0ec2a7a6346d8ab9.exe)
+
+running 3 tests
+test invalid_later_batch_child_cannot_issue_first_child_callback_receipt ... ok
+test manual_dispatch_does_not_invoke_a_resource_callback_observer ... ok
+test cancelled_observer_leaves_pending_and_next_callback_recovers_without_apply ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests\dispatch.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\dispatch-2fb7219192590f39.exe)
+
+running 10 tests
+test adapter_errors_keep_pending_and_recovery_errors_do_not_allow_another_action ... ok
+test cancelled_apply_leaves_pending_and_a_separate_dispatcher_queries_before_any_new_action ... ok
+test catalog_never_announces_a_replacement_or_an_unhandled_resource ... ok
+test metrics_cancelled_resource_keeps_pending_and_sampler_does_not_own_journal ... ok
+test authoritative_no_effect_and_rejection_have_different_retry_behavior ... ok
+test exact_duplicate_uses_completed_record_but_identity_or_phase_changes_do_not_execute ... ok
+test only_authoritative_recovery_no_effect_permits_a_new_attempt ... ok
+test simultaneous_dispatchers_share_one_branch_lease_and_never_repeat_a_confirmed_action ... ok
+test pending_unknown_is_queried_without_action_and_authoritative_applied_finishes_without_replay ... ok
+test metrics_distinguish_resource_decisions_reuse_recovery_and_phase_conflict ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests\journal.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\journal-d30679ecfc9b4d3d.exe)
+
+running 13 tests
+test branch_identity_rejects_ambiguous_or_invalid_fields_and_redacts_debug ... ok
+test an_independent_owner_cannot_open_the_same_journal_while_it_is_owned ... ok
+test empty_existing_file_is_corruption_and_not_a_new_journal ... ok
+test completed_rows_are_not_evicted_and_repeated_completion_adds_no_record ... ok
+test cancelled_disk_operation_keeps_its_branch_and_budget_until_the_worker_really_finishes ... ok
+test damaged_version_checksum_or_partial_tail_is_never_silently_truncated ... ok
+test checksummed_but_invalid_sequence_state_and_identity_cannot_bypass_replay_validation ... ok
+test pending_and_completed_identity_survive_actual_close_and_reopen ... ok
+test original_identity_and_phase_cannot_be_changed_even_after_restart ... ok
+test record_and_file_budgets_fail_before_writing_or_acknowledging_completion ... ok
+test cancellation_or_owner_drop_leaves_durable_pending_instead_of_retry_permission ... ok
+test store_shared_leases_serialize_dispatchers_and_cancelled_waiters_release_budget ... ok
+test metrics_replay_latest_states_and_retained_sampler_never_holds_the_file_lock ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests\native_callbacks.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\native_callbacks-6d7e06df9fc05fd3.exe)
+
+running 9 tests
+test shutdown_owns_cancelled_resource_tasks_and_leaves_durable_pending ... ok
+test contradictory_directions_inside_one_batch_reject_before_any_resource_effect ... ok
+test dropping_manager_synchronously_closes_the_pool_for_all_client_clones ... ok
+test an_unsupported_later_batch_child_rejects_before_the_first_resource_effect ... ok
+test missing_or_wrong_branch_type_resource_returns_explicit_failure_with_original_identity ... ok
+test flat_batch_preserves_order_and_exact_duplicate_children_apply_only_once ... ok
+test duplicate_callbacks_keep_signed_id_nullable_headers_and_exact_branch_identity_without_reexecution ... ok
+test shutdown_reports_an_external_journal_lease_instead_of_claiming_drain ... ok
+test callback_deadline_cancels_resource_future_and_next_instruction_recovers_without_replaying ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+     Running tests\native_calls.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\native_calls-32a94709e2d77d6a.exe)
+
+running 7 tests
+test ambiguous_empty_optional_input_is_rejected_before_the_business_frame_and_closed_clients_stay_closed ... ok
+test wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection ... ok
+test failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean ... ok
+test registered_rm_registers_reports_and_observes_lock_false_without_losing_fields ... ok
+test lost_registration_response_preserves_original_request_and_reconnect_never_replays_it ... ok
+test failed_phase_one_report_rejection_keeps_original_request_and_does_not_retry ... ok
+test shutdown_keeps_a_received_report_unknown_and_closes_all_client_clones ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests\native_edge_cases.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\native_edge_cases-b434bef3214f824f.exe)
+
+running 7 tests
+test successful_registration_without_positive_issued_id_remains_protocol_uncertainty ... ok
+test shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain ... ok
+test failed_branch_registration_preserves_returned_id_message_exception_and_original_request ... ok
+test branch_report_preserves_java_absent_resource_and_application_data_without_filling_them ... ok
+test callback_worker_budget_one_does_not_start_queued_resource_actions_during_shutdown ... ok
+test dynamic_resource_buffers_callbacks_and_business_until_the_full_revision_is_ready ... ok
+test callback_started_on_old_connection_never_sends_its_reply_on_the_replacement_connection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests\process_restart.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\process_restart-6b4a87f6501e5b87.exe)
+
+running 3 tests
+test journal_process_child ... ignored, parent launches this exact helper in a separately owned process
+test commit_effect_survives_forced_process_exit_and_two_new_processes_do_not_repeat_it ... ok
+test rollback_effect_survives_forced_process_exit_and_two_new_processes_do_not_repeat_it ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running tests\registration_receipt.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\registration_receipt-e3c7936d86ddb2de.exe)
+
+running 3 tests
+test issued_receipt_keeps_original_identity_optional_fields_and_exact_long ... ok
+test rejection_and_invalid_issued_ids_cannot_create_receipts ... ok
+test lost_issued_response_has_no_receipt_and_reconnection_does_not_register_again ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests\structured_events.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\structured_events-50ee7e467e570329.exe)
+
+running 7 tests
+test credential_bearing_resource_is_hashed_in_rm_event ... ok
+test branch_report_rejection_stays_a_received_response ... ok
+test branch_report_event_uses_resource_digest_and_omits_application_data ... ok
+test branch_report_lost_response_emits_unknown_without_payload ... ok
+test invalid_callback_batch_emits_no_branch_decision ... ok
+test callback_decisions_emit_original_branch_identity_without_replaying_effect ... ok
+test branch_report_unreachable_peer_emits_not_sent_without_request_id ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+   Doc-tests seata_rm
+
+running 2 tests
+test crates\seata_rm\src\model\branch_callback_receipt.rs - model::branch_callback_receipt::BranchCallbackReceipt (line 7) - compile fail ... ok
+test crates\seata_rm\src\model\registered_branch.rs - model::registered_branch::RegisteredBranch (line 9) - compile fail ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+

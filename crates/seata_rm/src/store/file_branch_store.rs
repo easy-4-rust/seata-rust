@@ -1,4 +1,5 @@
 use super::branch_lease::LeaseGuards;
+use crate::RmMetricsSampler;
 use crate::{
     BranchIdentity, BranchKey, BranchLease, BranchPhase, BranchRecordState, JournalOptions, RmError,
 };
@@ -25,6 +26,7 @@ pub struct FileBranchStore {
 /// Store内部伴随状态；所有克隆共享文件锁与分支锁表，禁止分派器各自互斥而互相并发。
 /// 对应 Java: RM内部资源缓存/分支互斥职责；Rust持久协调扩展。
 struct StoreInner {
+    metrics: RmMetricsSampler,
     options: JournalOptions,
     journal: Mutex<Journal>,
     key_locks: Mutex<HashMap<BranchKey, Weak<Semaphore>>>,
@@ -33,6 +35,7 @@ struct StoreInner {
 /// Store内部持锁文件及已验证记录索引；仅在阻塞磁盘线程的同步临界区访问。
 /// 对应 Java: RM持久去重职责；Rust日志内部伴随对象。
 struct Journal {
+    metrics: RmMetricsSampler,
     file: File,
     entries: HashMap<BranchKey, StoredRecord>,
     bytes: u64,
@@ -57,6 +60,12 @@ impl fmt::Debug for FileBranchStore {
 }
 
 impl FileBranchStore {
+    /// 无参数；返回只读日志状态和分派采样器，不保留文件锁、租约或分派能力。
+    /// 多个同日志克隆共享计数；重开后分派累计归零，状态从重放索引重建。
+    pub fn metrics_sampler(&self) -> RmMetricsSampler {
+        self.inner.metrics.clone()
+    }
+
     /// 返回租约预算能否由Tokio整批许可表达，用于RM拥有者关闭校验。
     pub(crate) fn can_drain(&self) -> bool {
         u32::try_from(self.inner.options.max_leases).is_ok()
@@ -81,8 +90,10 @@ impl FileBranchStore {
     /// 文件父目录必须已存在；不从任何事务字段派生文件名。
     pub async fn open(path: PathBuf, options: JournalOptions) -> Result<Self, RmError> {
         let journal = blocking(move || Journal::open(path, options)).await?;
+        let metrics = journal.metrics.clone();
         Ok(Self {
             inner: Arc::new(StoreInner {
+                metrics,
                 options,
                 journal: Mutex::new(journal),
                 key_locks: Mutex::new(HashMap::new()),
@@ -231,6 +242,7 @@ impl Journal {
             bytes,
             sequence: 0,
             faulted: false,
+            metrics: RmMetricsSampler::new(),
         };
         let mut consumed = HEADER.len() as u64;
         while consumed < bytes {
@@ -297,6 +309,7 @@ impl Journal {
                     state,
                 },
             );
+            journal.metrics.transition(phase, previous, state);
             journal.sequence = sequence;
             consumed += total as u64;
         }
@@ -370,6 +383,7 @@ impl Journal {
         })();
         if let Err(error) = result {
             self.faulted = true;
+            self.metrics.faulted();
             return Err(error);
         }
         self.entries.insert(
@@ -380,9 +394,16 @@ impl Journal {
                 state,
             },
         );
+        self.metrics.transition(phase, previous, state);
         self.sequence = sequence;
         self.bytes = next_bytes;
         Ok(())
+    }
+}
+
+impl Drop for Journal {
+    fn drop(&mut self) {
+        self.metrics.closed();
     }
 }
 
@@ -519,6 +540,9 @@ mod tests {
             Err(RmError::Storage { .. })
         ));
         assert!(journal.faulted);
+        let counts = journal.metrics.snapshot(BranchPhase::Commit);
+        assert!(counts.journal_faulted);
+        assert_eq!((counts.journal_pending, counts.journal_completed), (1, 0));
         assert_eq!(
             journal.lookup(&identity, BranchPhase::Commit).unwrap(),
             Some(BranchRecordState::Pending)

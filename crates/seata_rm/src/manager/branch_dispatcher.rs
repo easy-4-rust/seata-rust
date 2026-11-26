@@ -10,11 +10,17 @@ use seata_protocol::BranchStatus;
 pub struct BranchDispatcher {
     catalog: ResourceCatalog,
     store: FileBranchStore,
+    metrics: super::RmMetricsSampler,
 }
 impl BranchDispatcher {
     /// 参数为目录及共享持久日志；返回不拥有网络重试调度的资源分派器。
     pub fn new(catalog: ResourceCatalog, store: FileBranchStore) -> Self {
-        Self { catalog, store }
+        let metrics = store.metrics_sampler();
+        Self {
+            catalog,
+            store,
+            metrics,
+        }
     }
     /// 参数为原始身份和TC方向；返回Java分支状态；错误不能解释为资源未执行。
     /// 取消/适配器错误保留Pending；相同完成请求不再调用资源，恢复Unknown不重放。
@@ -39,15 +45,31 @@ impl BranchDispatcher {
         phase: BranchPhase,
         callback: Option<&crate::BranchCallbackReceipt>,
     ) -> Result<BranchStatus, RmError> {
+        let mut guard = self.metrics.begin(phase);
+        let result = self
+            .dispatch_counted(identity, phase, callback, &mut guard)
+            .await;
+        guard.finish(&result);
+        result
+    }
+    async fn dispatch_counted(
+        &self,
+        identity: BranchIdentity,
+        phase: BranchPhase,
+        callback: Option<&crate::BranchCallbackReceipt>,
+        guard: &mut super::rm_dispatch_guard::RmDispatchGuard,
+    ) -> Result<BranchStatus, RmError> {
         let resource = self.catalog.lookup(identity.resource())?;
         let mut lease = self.store.lease(identity.clone(), phase).await?;
         let original_state = lease.state();
         match original_state {
             Some(BranchRecordState::Completed) => {
-                return Ok(status(phase, BranchResolution::Applied))
+                guard.reused(BranchRecordState::Completed);
+                return Ok(status(phase, BranchResolution::Applied));
             }
             Some(BranchRecordState::Rejected) => {
-                return Ok(status(phase, BranchResolution::Rejected))
+                guard.reused(BranchRecordState::Rejected);
+                return Ok(status(phase, BranchResolution::Rejected));
             }
             None | Some(BranchRecordState::RetrySafe) => {
                 lease.mark_pending().await?;
@@ -62,13 +84,20 @@ impl BranchDispatcher {
         }
         let resolution = match original_state {
             Some(BranchRecordState::Pending) => {
+                guard.recover();
                 match resource.recover(&identity, phase).await? {
                     // NotApplied必须围栏已取消的旧尝试；适配器承担此资源级证明。
-                    BranchResolution::NotApplied => resource.apply(&identity, phase).await?,
+                    BranchResolution::NotApplied => {
+                        guard.apply();
+                        resource.apply(&identity, phase).await?
+                    }
                     other => other,
                 }
             }
-            None | Some(BranchRecordState::RetrySafe) => resource.apply(&identity, phase).await?,
+            None | Some(BranchRecordState::RetrySafe) => {
+                guard.apply();
+                resource.apply(&identity, phase).await?
+            }
             Some(BranchRecordState::Completed | BranchRecordState::Rejected) => {
                 return Err(RmError::Unavailable {
                     reason: "terminal branch cannot reenter dispatch",
@@ -81,6 +110,7 @@ impl BranchDispatcher {
             BranchResolution::NotApplied => lease.mark_retry_safe().await?,
             BranchResolution::Unknown | BranchResolution::ManualInterventionRequired => {}
         }
+        guard.resolved(resolution);
         Ok(status(phase, resolution))
     }
 }

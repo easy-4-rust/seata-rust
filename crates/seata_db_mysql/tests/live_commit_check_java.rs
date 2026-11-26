@@ -965,6 +965,13 @@ async fn original_java_tc_changed_commit(
                 "xid":xid.as_str(),"branch_id":branch_id,"resource_id":key.resource_id(),"observed_end":observed_end
             }),
         );
+        fixture::save(
+            "rm-branch-metrics-final.json",
+            &java_rm_restart::value(
+                rm.metrics_sampler()
+                    .snapshot(seata_rm::BranchPhase::Rollback),
+            ),
+        );
         rm.shutdown().await.unwrap();
         tm.shutdown().await.unwrap();
         ds.close().await.unwrap();
@@ -1039,6 +1046,12 @@ async fn original_java_tc_changed_commit(
         },
         &serde_json::json!({"xid":xid.as_str(),"branch_id":branch_id,"resource_id":key.resource_id(),"before_commit":{"business":before.0,"normal_undo":before.1,"witness":before.2,"tc_lock":before.3},"attempt_rows":1,"report_response":if lose_reply {"Lost"} else {"Success"},"recovery_outcome":if recover_before_report {Some("Applied")} else {None},"local_commit_confirmed":true,"original_receipt_preserved":true,"global_result":"Committed","callback":"Completed","business_rows":1,"undo_rows":0,"first_phase_committed":1}),
     );
+    if std::env::var("SEATA_CALLBACK_SHUTDOWN").as_deref() == Ok("1") {
+        fixture::save(
+            "rm-branch-metrics-final.json",
+            &java_rm_restart::value(rm.metrics_sampler().snapshot(seata_rm::BranchPhase::Commit)),
+        );
+    }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
     ds.close().await.unwrap();

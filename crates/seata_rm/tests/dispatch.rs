@@ -361,3 +361,174 @@ async fn only_authoritative_recovery_no_effect_permits_a_new_attempt() {
     assert_eq!(resource.recovered.load(Ordering::SeqCst), 1);
     assert_eq!(resource.applied.load(Ordering::SeqCst), 1);
 }
+
+#[tokio::test]
+async fn metrics_distinguish_resource_decisions_reuse_recovery_and_phase_conflict() {
+    for phase in [BranchPhase::Commit, BranchPhase::Rollback] {
+        let resource = Resource::new(BranchType::At, "mysql://metrics-private-resource");
+        let store = store().await;
+        let metrics = store.metrics_sampler();
+        let dispatcher = BranchDispatcher::new(catalog(resource.clone()), store.clone());
+        for (id, answer) in [
+            (1, BranchResolution::Applied),
+            (2, BranchResolution::Rejected),
+            (3, BranchResolution::NotApplied),
+            (4, BranchResolution::Unknown),
+            (5, BranchResolution::ManualInterventionRequired),
+        ] {
+            *resource.apply_answer.lock().unwrap() = answer;
+            dispatcher
+                .dispatch(identity(&resource.key, id), phase)
+                .await
+                .unwrap();
+        }
+        let counts = metrics.snapshot(phase);
+        assert_eq!(
+            (
+                counts.journal_pending,
+                counts.journal_completed,
+                counts.journal_retry_safe,
+                counts.journal_rejected
+            ),
+            (2, 1, 1, 1)
+        );
+        assert_eq!(
+            (
+                counts.active,
+                counts.applied,
+                counts.rejected,
+                counts.retry_safe,
+                counts.unknown,
+                counts.manual_intervention
+            ),
+            (0, 1, 1, 1, 1, 1)
+        );
+        assert_eq!((counts.apply_attempts, counts.recover_attempts), (5, 0));
+        dispatcher
+            .dispatch(identity(&resource.key, 1), phase)
+            .await
+            .unwrap();
+        dispatcher
+            .dispatch(identity(&resource.key, 2), phase)
+            .await
+            .unwrap();
+        assert_eq!(resource.applied.load(Ordering::SeqCst), 5);
+        let counts = metrics.snapshot(phase);
+        assert_eq!(
+            (counts.duplicate_completed, counts.duplicate_rejected),
+            (1, 1)
+        );
+        dispatcher
+            .dispatch(identity(&resource.key, 4), phase)
+            .await
+            .unwrap();
+        assert_eq!(metrics.snapshot(phase).unknown, 2);
+        assert_eq!(resource.applied.load(Ordering::SeqCst), 5);
+        *resource.recover_answer.lock().unwrap() = BranchResolution::Applied;
+        dispatcher
+            .dispatch(identity(&resource.key, 4), phase)
+            .await
+            .unwrap();
+        let counts = metrics.snapshot(phase);
+        assert_eq!(
+            (
+                counts.journal_pending,
+                counts.journal_completed,
+                counts.applied
+            ),
+            (1, 2, 2)
+        );
+        assert_eq!((counts.apply_attempts, counts.recover_attempts), (5, 2));
+        let opposite = if phase == BranchPhase::Commit {
+            BranchPhase::Rollback
+        } else {
+            BranchPhase::Commit
+        };
+        assert!(dispatcher
+            .dispatch(identity(&resource.key, 1), opposite)
+            .await
+            .is_err());
+        let other = metrics.snapshot(opposite);
+        assert_eq!(
+            (
+                other.errors,
+                other.active,
+                other.apply_attempts,
+                other.journal_completed
+            ),
+            (1, 0, 0, 0)
+        );
+    }
+}
+
+#[tokio::test]
+async fn metrics_cancelled_resource_keeps_pending_and_sampler_does_not_own_journal() {
+    let mut resource = Resource::new(BranchType::At, "mysql://metrics-cancel");
+    Arc::get_mut(&mut resource).unwrap().stall = true;
+    let store = store().await;
+    let metrics = store.metrics_sampler();
+    let dispatcher = BranchDispatcher::new(catalog(resource.clone()), store.clone());
+    let mut call = Box::pin(dispatcher.dispatch(identity(&resource.key, 1), BranchPhase::Commit));
+    tokio::select! {
+        value = &mut call => panic!("unexpected completion: {value:?}"),
+        _ = resource.entered.notified() => {}
+    }
+    // 第二个同分支作用域只等待日志租约，仍应计入 active 而不重复调用资源。
+    let mut waiting =
+        Box::pin(dispatcher.dispatch(identity(&resource.key, 1), BranchPhase::Commit));
+    let mut context = std::task::Context::from_waker(std::task::Waker::noop());
+    assert!(Future::poll(waiting.as_mut(), &mut context).is_pending());
+    let before = metrics.snapshot(BranchPhase::Commit);
+    assert_eq!(
+        (before.active, before.journal_pending, before.apply_attempts),
+        (2, 1, 1)
+    );
+    drop(waiting);
+    drop(call);
+    let after = metrics.snapshot(BranchPhase::Commit);
+    assert_eq!(
+        (
+            after.active,
+            after.cancelled,
+            after.journal_pending,
+            after.applied
+        ),
+        (0, 2, 1, 0)
+    );
+    drop(dispatcher);
+    drop(store);
+    assert!(metrics.snapshot(BranchPhase::Commit).journal_closed);
+}
+
+#[tokio::test]
+async fn metrics_resource_error_keeps_pending_without_fabricating_a_resolution() {
+    let mut resource = Resource::new(BranchType::At, "mysql://metrics-error");
+    Arc::get_mut(&mut resource).unwrap().fail = true;
+    let store = store().await;
+    let metrics = store.metrics_sampler();
+    let dispatcher = BranchDispatcher::new(catalog(resource.clone()), store.clone());
+    for _ in 0..2 {
+        assert!(dispatcher
+            .dispatch(identity(&resource.key, 1), BranchPhase::Commit)
+            .await
+            .is_err());
+    }
+    let counts = metrics.snapshot(BranchPhase::Commit);
+    assert_eq!(
+        (
+            counts.errors,
+            counts.unknown,
+            counts.applied,
+            counts.journal_pending
+        ),
+        (2, 0, 0, 1)
+    );
+    assert_eq!(
+        (
+            counts.active,
+            counts.apply_attempts,
+            counts.recover_attempts
+        ),
+        (0, 1, 1)
+    );
+}
