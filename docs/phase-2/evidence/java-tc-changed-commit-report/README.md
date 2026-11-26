@@ -245,3 +245,8 @@ Rust 1.99 和 1.85 在固定原 Java TC 和 MySQL 8.4.13 下使用容量为 2 �
 新版本 4 分支的摘要被设为 NULL 时，直接调用 report_recovered_applied 返回 UndoChecksumMismatch。恢复摘要后再改写 Undo，该报告入口同样拒绝。两次拒绝后 007 门闩仍为零。恢复原字节后，原始帧总计仅一次 PhaseOne_Done，随后完成原 TC 提交。Rust 1.99 与 1.85 的新记录均保留 missing_checksum_report_rejected、modified_undo_report_rejected 字段。
 
 [Rust 1.99](run-undo_checksum-1.99-23edf93a/verified.json) · [Rust 1.85](run-undo_checksum-1.85-d11d60ef/verified.json)
+
+
+## TM 调用结果计数的原 TC 联试
+
+Rust 1.99/1.85 的 tm_durable_commit_loss 与 tm_durable_rollback_loss 新现场同时核对只读 TM 计数：原管理器 Begin observed=1、原结束 unknown=1；新观察管理器 Status observed=1。原始帧仍要求一次结束及匹配成功响应丢失，独立 SQL 保留原 008 门闩和操作。每组五种计数证据削弱均被拒绝。四组现场、首轮端口冲突、双版本回归及边界详见 [TM 指标验收](../tm-call-metrics/README.md)。此补充不代表原 TC 现场已经部署 HTTP 指标采集。

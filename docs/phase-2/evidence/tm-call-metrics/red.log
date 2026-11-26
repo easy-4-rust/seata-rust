@@ -1,0 +1,42 @@
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+error[E0599]: no method named `metrics_sampler` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\call_metrics.rs:16:22
+   |
+16 |     let metrics = tm.metrics_sampler();
+   |                      ^^^^^^^^^^^^^^^ method not found in `TransactionManager`
+
+error[E0609]: no field `message` on type `AbstractTransactionResponse`
+  --> crates\seata_tm\tests\call_metrics.rs:24:18
+   |
+24 |         response.message = Some("credential-sentinel".into());
+   |                  ^^^^^^^ unknown field
+   |
+   = note: available fields are: `result_code`, `msg`, `transaction_exception_code`
+
+error[E0599]: no method named `metrics_sampler` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\call_metrics.rs:51:26
+   |
+51 |         let metrics = tm.metrics_sampler();
+   |                          ^^^^^^^^^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `metrics_sampler` found for struct `TransactionManager` in the current scope
+  --> crates\seata_tm\tests\call_metrics.rs:81:22
+   |
+81 |     let metrics = tm.metrics_sampler();
+   |                      ^^^^^^^^^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `metrics_sampler` found for struct `TransactionManager` in the current scope
+   --> crates\seata_tm\tests\call_metrics.rs:109:22
+    |
+109 |     let metrics = tm.metrics_sampler();
+    |                      ^^^^^^^^^^^^^^^ method not found in `TransactionManager`
+
+error[E0599]: no method named `metrics_sampler` found for struct `TransactionManager` in the current scope
+   --> crates\seata_tm\tests\call_metrics.rs:117:22
+    |
+117 |     let metrics = tm.metrics_sampler();
+    |                      ^^^^^^^^^^^^^^^ method not found in `TransactionManager`
+
+Some errors have detailed explanations: E0599, E0609.
+For more information about an error, try `rustc --explain E0599`.
+error: could not compile `seata-tm` (test "call_metrics") due to 6 previous errors

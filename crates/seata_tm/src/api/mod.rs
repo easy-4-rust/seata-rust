@@ -43,3 +43,6 @@ pub use transaction_permit::TransactionPermit;
 mod application_signals;
 #[cfg(all(feature = "application_signals", any(windows, unix)))]
 pub use application_signals::ApplicationSignals;
+mod tm_call_guard;
+mod tm_metrics_sampler;
+pub use tm_metrics_sampler::TmMetricsSampler;

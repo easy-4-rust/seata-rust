@@ -1,0 +1,172 @@
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+   Compiling seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+    Finished `test` profile [unoptimized] target(s) in 6.23s
+     Running unittests src\lib.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\seata_observability-0118d8b0ec8596d5.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\loopback_metrics.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\loopback_metrics-70809825b3619a85.exe)
+
+running 4 tests
+test endpoint_requires_loopback_and_strong_visible_token ... ok
+test exporter_rejects_empty_sources_before_binding ... ok
+test authorized_pull_reports_retired_connection_without_sensitive_labels ... ok
+test endpoint_rejects_missing_wrong_duplicate_and_oversized_authorization ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.03s
+
+     Running tests\tm_call_metrics.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\tm_call_metrics-a1472c5a23800907.exe)
+
+running 1 test
+test authenticated_endpoint_exports_bounded_tm_results_and_final_counts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running unittests src\lib.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\seata_tm-bde6034dfcffce25.exe)
+
+running 1 test
+test api::tm_metrics_sampler::tests::concurrent_completions_saturate_without_losing_active_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\application_signals.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\application_signals-4aad32a4ab61f8fb.exe)
+
+running 1 test
+test real_os_signal_drains_native_tm_scope ... ignored, requires an isolated console and an externally delivered OS signal
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\call_metrics.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\call_metrics-349d6684394a7665.exe)
+
+running 5 tests
+test cancelled_wait_returns_active_to_zero_without_inventing_a_tc_result ... ok
+test status_counts_authoritative_rejection_unknown_and_stays_readable_after_close ... ok
+test begin_and_end_observed_counters_preserve_nonfinal_status_and_no_replay ... ok
+test unreachable_peer_is_not_sent_and_invalid_begin_is_protocol_unknown ... ok
+test lost_end_response_keeps_original_unknown_without_replay_or_opposite_end ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests\context_config.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\context_config-03ef3a83c5c3ff85.exe)
+
+running 7 tests
+test config_builder_keeps_tc_timeout_exact_and_defaults_required ... ok
+test config_rejects_lossy_zero_or_overflow_timeout_and_invalid_name ... ok
+test interleaved_futures_on_one_task_keep_independent_xids_each_poll ... ok
+test nested_context_is_restored_after_return_and_business_error ... ok
+test panic_or_cancellation_does_not_leak_context_into_worker_or_outer_scope ... ok
+test spawned_tasks_require_explicit_participant_capture_and_never_inherit_implicitly ... ok
+test xid_validation_preserves_exact_utf8_and_never_normalizes_or_synthesizes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests\durable_launcher.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\durable_launcher-a43d180cde8c2d01.exe)
+
+running 4 tests
+test recovered_end_authority_is_bound_to_its_manager ... ok
+test begin_source_must_be_confirmed_before_launcher_is_delivered ... ok
+test lost_commit_response_cannot_recover_through_old_memory_authority ... ok
+test failed_send_marker_never_emits_commit_frame ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests\manager_calls.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\manager_calls-581df374ed44154f.exe)
+
+running 13 tests
+test fabricated_protocol_diagnostic_cannot_mint_a_launcher_recovery_capability ... ok
+test successful_begin_without_xid_is_protocol_uncertainty_never_a_usable_launcher ... ok
+test failed_commit_preserves_exception_optional_message_and_authoritative_status ... ok
+test cancelled_end_keeps_original_operation_until_authoritative_reconciliation ... ok
+test failed_begin_preserves_reported_optional_fields_without_binding_a_launcher ... ok
+test malformed_end_response_is_protocol_failure_with_retained_xid_and_possible_effect ... ok
+test native_tm_begin_binds_only_lexical_scope_and_end_preserves_exact_xid ... ok
+test participant_never_sends_global_begin_commit_or_rollback ... ok
+test connection_unavailable_is_local_pre_send_not_tc_rejection_or_unknown ... ok
+test lost_begin_response_keeps_unknown_without_returned_xid_or_second_begin ... ok
+test failed_status_retry_timeout_revokes_prior_same_operation_retry_permission ... ok
+test failed_duplicate_with_finished_does_not_erase_original_commit_uncertainty ... ok
+test lost_commit_requires_same_xid_status_before_explicit_retry_and_finished_stays_unknown ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests\scoped_execution.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\scoped_execution-58aa8ced6b732695.exe)
+
+running 8 tests
+test business_error_and_rollback_rejection_are_both_returned_with_original_xid ... ok
+test required_nested_scope_participates_without_rewriting_outer_launcher_or_deadline ... ok
+test mandatory_never_and_supports_observe_context_before_business_or_network ... ok
+test requires_new_suspends_outer_and_not_supported_clears_then_restores_context ... ok
+test panic_and_cancel_restore_context_without_unowned_network_cleanup ... ok
+test expired_business_is_cancelled_and_rolls_back_once_without_commit ... ok
+test lost_scoped_commit_never_falls_through_to_rollback_or_background_retry ... ok
+test unknown_scoped_end_can_recover_original_intent_without_starting_a_new_transaction ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests\stop_attestation_exchange.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\stop_attestation_exchange-f78a348ee814d703.exe)
+
+running 4 tests
+test remote_signer_fixture ... ignored, only started by the recovering process fixture
+test stopped_worker_fixture ... ignored, only started by the remote signer fixture
+test rejects_wrong_version_truncation_and_stalled_reply ... ok
+
+running 1 test
+test remote_signer_fixture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.24s
+
+test verifies_stop_signature_received_from_separate_process ... ok
+
+test result: ok. 2 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.74s
+
+     Running tests\stop_attestation_tls.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\stop_attestation_tls-9d20a86b14d373c2.exe)
+
+running 6 tests
+test node::old_owner ... ignored, child of the isolated signing node
+test node::provision ... ignored, deployment runner provisions a fresh directory
+test node::recovery ... ignored, isolated recovery node
+test node::signer ... ignored, isolated signer node
+test tls_stopped_worker_fixture ... ignored, child of the TLS stop proof fixture
+test requires_mutual_tls_and_pinned_peer_before_exchanging_stop_proof ... ok
+
+test result: ok. 1 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+     Running tests\structured_events.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\structured_events-81b087a2bb97e270.exe)
+
+running 4 tests
+test tm_lost_status_response_emits_unknown_outcome_without_payload ... ok
+test tm_definite_rejection_is_logged_as_received_response ... ok
+test tm_status_response_emits_correlated_event_without_request_payload ... ok
+test tm_unreachable_peer_emits_not_sent_without_invented_request_id ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests\transaction_admission.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\transaction_admission-70cda8070ceb38a5.exe)
+
+running 7 tests
+test cancelled_and_panicking_workers_release_their_scopes ... ok
+test cancelling_drain_keeps_gate_closed_and_scope_owned ... ok
+test configuration_capacity_and_shared_close ... ok
+test drain_times_out_without_cancelling_scope_and_can_be_retried ... ok
+test multiple_drainers_wait_until_the_last_admitted_scope_exits ... ok
+test close_racing_with_admission_never_reopens_the_gate ... ok
+test admitted_native_tm_scope_finishes_before_owner_shutdown ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+   Doc-tests seata_observability
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests seata_tm
+
+running 2 tests
+test crates\seata_tm\src\api\transaction_admission.rs - api::transaction_admission::TransactionAdmission (line 12) ... ok
+test crates\seata_tm\src\api\application_signals.rs - api::application_signals::ApplicationSignals (line 14) ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s
+

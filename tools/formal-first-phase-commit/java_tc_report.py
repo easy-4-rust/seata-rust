@@ -563,6 +563,16 @@ seata:
             query, observation = queries[0], observations_from_tc[0]
             assert (query["connection"], query["request_id"]) == (observation["connection"], observation["request_id"])
             assert query["connection"] != ends[0]["connection"]
+            begins = [r for r in tm_rows if r.get("event") == "frame" and r["direction"] == "c2s" and r["kind"] == 1]
+            begin_replies = [r for r in tm_rows if r.get("event") == "frame" and r["direction"] == "s2c" and r["kind"] == 2]
+            assert len(begins) == len(begin_replies) == 1
+            assert (begins[0]["connection"], begins[0]["request_id"]) == (begin_replies[0]["connection"], begin_replies[0]["request_id"])
+            assert begin_replies[0]["delivery_count"] == 1
+            from tm_call_metrics import verify as verify_tm_metrics, controls as tm_metrics_controls
+            call_metrics = json.loads((observations / "tm-call-metrics.json").read_bytes())
+            verify_tm_metrics(call_metrics, tm_rollback)
+            guard.save(out / "tm-call-metrics.json", call_metrics)
+            guard.save(out / "tm-metrics-controls.json", tm_metrics_controls(call_metrics, tm_rollback))
             result = json.loads((observations / "java-tm-durable-loss.json").read_bytes())
             assert result["unknown"] and result["old_memory_recovery_denied"] and result["send_started"] == 1 and result["end_operation"] == operation
             query_frame = bytes.fromhex(query["frame_hex"])
@@ -576,7 +586,8 @@ seata:
             guard.save(out / "verified.json", dict(scenario=scenario, xid=result["xid"], original_tc_end_requests=1,
                         original_tc_end_success_replies=1, delivered_replies=0, durable_end_operation=operation,
                         durable_send_started=1, old_memory_recovery_denied=True, database_runtime=database_runtime,
-                        observed_status=result["observed_status"], original_tc_status_requests=1))
+                        observed_status=result["observed_status"], original_tc_status_requests=1,
+                        tm_call_metrics_verified=True))
             print(f"PASS original Java TC durable TM {scenario} {version}: {out}", flush=True)
             return
         assert all(p.wait(timeout=12) == 0 for p in processes[1:3]), "frame observers did not finish"

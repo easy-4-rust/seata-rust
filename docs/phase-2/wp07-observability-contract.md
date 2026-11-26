@@ -33,7 +33,7 @@ flowchart LR
 
 - TM/RM 所有者应能签发仅允许采样的句柄。它可随服务持有，不授予获取连接、发送请求、关闭池或事务恢复的能力；所有者关闭后仍可读取最终累计值。
 - 首期拉取服务只绑定回环地址，配置中要求 32–128 字节的可见 ASCII 访问令牌及至少一个 TM/RM 采样源；空源在绑定前拒绝，避免空的 200 响应。`GET /metrics` 必须携带唯一且匹配的 Bearer 凭据。拒绝非回环监听、重复/错误凭据、过长或超时的请求头；响应不回显令牌。远程采集须由部署侧经过认证和 TLS 的代理承担，本组件不能宣称已完成该部署门禁。
-- 文本导出只允许固定指标名，以及 `role=tm|rm`、配置有界的数字 `slot`、固定槽位状态标签。池关闭、当前在途、槽位状态为 gauge；`PoolCounters` 字段为进程生命周期 counter。不得输出 XID、BranchId、请求 ID、资源 URL、凭据、SQL、锁键或原始帧，也不得把这些值用作指标标签。
+- 连接文本导出只允许固定指标名，以及 `role=tm|rm`、配置有界的数字 `slot`、固定槽位状态标签；TM 调用扩展另允许下文固定四种 operation 与六种 outcome。池关闭、当前在途、槽位状态为 gauge；`PoolCounters` 字段为进程生命周期 counter。不得输出 XID、BranchId、请求 ID、资源 URL、凭据、SQL、锁键或原始帧，也不得把这些值用作指标标签。
 - 真实 TCP 测试需覆盖授权成功、未授权/错误令牌、超长请求头、断线重连后的累计和关闭后的最终样本；格式和字段断言须检查敏感哨兵不出现。该服务通过后仍需生产代理、采集端、权限、告警和故障演练验收。
 
 ## 最低观测面
@@ -79,3 +79,13 @@ flowchart LR
 [失败对照](evidence/java-tc-changed-commit-report/run-undo_checksum-1.99-8a810468/client-stdout.log) · [Rust 1.99 事件](evidence/java-tc-changed-commit-report/run-undo_checksum-1.99-77ffe2fc/checksum-events.json) · [Rust 1.85 事件](evidence/java-tc-changed-commit-report/run-undo_checksum-1.85-d7c2f40c/checksum-events.json)
 
 应用仍需配置 tracing subscriber 和生产日志收集端。此增量覆盖摘要拒绝，完整 MySQL 提交状态事件、回调送达、指标与部署验收继续。
+
+## TM 调用结果计数契约
+
+TransactionManager 签发 TmMetricsSampler，只能按固定 TmOperation 读取 TmOperationMetrics；没有发送、关闭、恢复或修改计数的公开能力。每个管理器一份进程内累计，采样器在管理器关闭后仍可读取，不跨重启持久化。固定四种操作不以 XID、BranchId、请求编号、资源或用户内容作标签。
+
+统计进入正式 Begin 和 End/Status 调用路径的尝试；参与方不发送的结束、持久来源存储阶段和业务自身结果不计作原生 RPC 结果。每次已轮询尝试增加 active，返回或取消时归还。正常返回互斥分类：observed（有效权威响应，包括 AsyncCommitting、Rollbacking 等非最终状态）、tc_rejected、unknown（包括 may_have_effect 的协议错误）、not_sent（有明确写前证据）、local_rejected（本地前提拒绝）。没有返回结果的 Future 取消或 panic 只记 cancelled；写前/写后取消需另看传输层，不把取消伪造成明确拒绝。protocol_errors 为可与上述分类重叠的附加计数。
+
+快照是并发原子字段逐项读取，不保证所有字段属于同一瞬间；累计计数饱和不回绕，active 是当前调用数。导出使用固定 operation=begin|commit|rollback|status 和六种固定 outcome，最多 32 条 TM 调用序列。可以单独提供 TM 调用采样器，原仅连接来源构造方式保持兼容。
+
+验收：真实 TCP 的有效非最终响应、TC Failed、响应丢失、无效响应、未发送和取消；Commit/Rollback 保留原结果且不重放；管理器关闭后最终快照；通过真实 Bearer HTTP 端点核对准确计数、固定序列上限、拒绝凭据和身份哨兵泄漏。原 Java TC 故障路径、RM 分支状态、生产采集和告警继续独立验收。

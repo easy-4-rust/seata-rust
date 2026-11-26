@@ -57,3 +57,10 @@ TransactionAdmission 为应用提供共享的正数容量与关闭边界。业�
 为 seata-tm 显式启用 application_signals 功能后，应用可在 Tokio 初始化阶段调用 ApplicationSignals::install，监听 Windows Ctrl-C/Ctrl-Break 或 Unix SIGINT/SIGTERM。recv 返回 ShutdownSignalKind，收到事件后调用共享准入的 drain；排空成功后再取走并 shutdown TM/RM 所有者。排空错误返回时仍须持有所有者，继续等待或执行明确的持久交接策略。
 
 默认构建不启用 Tokio signal 功能，也不会安装处理器。信号处理器是进程级资源，监听器 Drop 不保证恢复默认处理，连续事件可能合并；不会自动把第二次事件解释成强杀。此入口不接管 Windows 服务控制器及系统关机宽限期。[接口示例](src/api/application_signals.rs)与[真实 Windows 事件双版本证据](../../docs/phase-2/evidence/application-signals/README.md)可供应用接入。Unix 分支尚无现场运行证据，真实业务服务与部署验收继续。
+
+
+## 只读调用指标
+
+metrics_sampler 返回 TmMetricsSampler，只能按固定 TmOperation 读取 TmOperationMetrics。每次已轮询的正式 Begin 与 End/Status 路径维护 active，并在返回时区分有效权威响应、TC Failed、原错误分类的 unknown、明确未发送及本地前提拒绝。Future 未返回结果而退出只记 cancelled，不伪造 TC 结果；protocol_errors 是附加诊断计数。参与方无需发送的结束、业务自身结果和持久来源存储阶段不作为原生 RPC 结果计数。
+
+observed 不等于全局事务最终完成；原 GlobalStatus 与原 TmError 保持不变，没有事务重试。采样器无发送、关闭、恢复或公开写计数权限，管理器关闭后仍可读取最终值，不跨重启持久化。seata-observability 的 with_tm_calls 可导出固定 32 条序列。[验收记录](../../docs/phase-2/evidence/tm-call-metrics/README.md)包含双工具链原 Java TC Commit/Rollback 成功响应丢失时的一次 unknown 和新管理器的一次独立 Status。

@@ -55,6 +55,7 @@ async fn durable_tm_lost_end_reply(rollback: bool) {
         .await
         .unwrap();
     let xid = tx.xid().clone();
+    let original_metrics = tm.metrics_sampler();
     observe_lost_end(rollback, &tm, tx, &mut admin, endpoint).await;
     tm.shutdown().await.unwrap();
     let observer = TransactionManager::builder(pool, identity)
@@ -82,10 +83,42 @@ async fn durable_tm_lost_end_reply(rollback: bool) {
                 | GlobalStatus::Finished
         )
     });
+    let observer_metrics = observer.metrics_sampler();
     observer.shutdown().await.unwrap();
     let out = observation_dir();
+    std::fs::write(
+        out.join("tm-call-metrics.json"),
+        serde_json::json!({
+            "original": tm_metrics_value(&original_metrics),
+            "observer": tm_metrics_value(&observer_metrics),
+        })
+        .to_string(),
+    )
+    .unwrap();
     std::fs::write(out.join("java-tm-durable-loss.json"),serde_json::json!({"xid":xid.as_str(),"unknown":true,"old_memory_recovery_denied":true,"send_started":1,"end_operation":if rollback {2} else {1},"observed_status":format!("{observed:?}"),"observed_status_code":observed.to_java_v1()}).to_string()).unwrap();
     data_source.close().await.unwrap();
+}
+
+fn tm_metrics_value(sampler: &seata_tm::TmMetricsSampler) -> serde_json::Value {
+    let mut operations = serde_json::Map::new();
+    for (operation, name) in [
+        (TmOperation::Begin, "begin"),
+        (TmOperation::Commit, "commit"),
+        (TmOperation::Rollback, "rollback"),
+        (TmOperation::Status, "status"),
+    ] {
+        let counts = sampler.snapshot(operation);
+        operations.insert(
+            name.into(),
+            serde_json::json!({
+                "active":counts.active, "observed":counts.observed,
+                "tc_rejected":counts.tc_rejected, "unknown":counts.unknown,
+                "not_sent":counts.not_sent, "local_rejected":counts.local_rejected,
+                "cancelled":counts.cancelled, "protocol_errors":counts.protocol_errors,
+            }),
+        );
+    }
+    serde_json::Value::Object(operations)
 }
 
 async fn apply_launcher_schema(admin: &mut sqlx::MySqlConnection) {

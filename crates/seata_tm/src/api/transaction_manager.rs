@@ -18,6 +18,7 @@ use tokio::time::Instant;
 /// 对应 Java: org.apache.seata.tm.DefaultTransactionManager，重试边界按已批准ADR-0008。
 pub struct TransactionManager {
     pool: ConnectionPool,
+    metrics: super::TmMetricsSampler,
     request_timeout: Duration,
     tc_endpoint: std::net::SocketAddr,
     identity: RegistrationIdentity,
@@ -36,6 +37,12 @@ pub struct TransactionManagerBuilder {
     owner_stop_scope: Option<[u8; 32]>,
 }
 impl TransactionManager {
+    /// 无参数；返回只读调用计数采样器，关闭后仍可读取最终累计值。
+    /// 它不授予网络、关闭或事务恢复权限；计数不跨管理器或进程聚合。
+    pub fn metrics_sampler(&self) -> super::TmMetricsSampler {
+        self.metrics.clone()
+    }
+
     /// 返回此管理器的随机实例 ID；供受信进程监护器把停止证据与 008 来源对应，ID 本身不授予恢复权。
     pub const fn owner_instance_id(&self) -> &[u8; 32] {
         &self.owner_instance_id
@@ -182,6 +189,16 @@ impl TransactionManager {
         &self,
         config: &TransactionConfig,
     ) -> Result<GlobalTransaction<'_>, TmError> {
+        let guard = self.metrics.begin(TmOperation::Begin);
+        let result = self.begin_inner(config).await;
+        guard.finish(&result);
+        result
+    }
+
+    async fn begin_inner(
+        &self,
+        config: &TransactionConfig,
+    ) -> Result<GlobalTransaction<'_>, TmError> {
         if RootContext::current().is_some() {
             return Err(TmError::IllegalState {
                 xid: RootContext::current().map(|c| c.xid().clone()),
@@ -299,6 +316,17 @@ impl TransactionManager {
         self.get_status(xid).await
     }
     pub(crate) async fn status_call(
+        &self,
+        operation: TmOperation,
+        xid: &Xid,
+    ) -> Result<TransactionOutcome, TmError> {
+        let guard = self.metrics.begin(operation);
+        let result = self.status_call_inner(operation, xid).await;
+        guard.finish(&result);
+        result
+    }
+
+    async fn status_call_inner(
         &self,
         operation: TmOperation,
         xid: &Xid,
@@ -453,6 +481,7 @@ impl TransactionManagerBuilder {
             .map_err(|e| TmError::Infrastructure(Box::new(e)))?;
         Ok(TransactionManager {
             pool,
+            metrics: super::TmMetricsSampler::new(),
             request_timeout: self.request_timeout,
             tc_endpoint,
             identity,

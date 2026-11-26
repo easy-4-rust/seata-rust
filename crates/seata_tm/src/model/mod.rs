@@ -20,3 +20,5 @@ pub use xid::Xid;
 mod shutdown_signal_kind;
 #[cfg(all(feature = "application_signals", any(windows, unix)))]
 pub use shutdown_signal_kind::ShutdownSignalKind;
+mod tm_operation_metrics;
+pub use tm_operation_metrics::TmOperationMetrics;

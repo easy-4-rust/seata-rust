@@ -1130,3 +1130,10 @@ Rust 1.99/1.85 各 89 项 `seata-transport` 测试、全目标严格 Clippy、�
 ## 2026-11-26：可选应用停机信号与 Windows 原生事件
 
 在 WP07 契约下新增 application_signals 可选功能，由应用显式安装 ApplicationSignals 接收 Windows Ctrl-C/Ctrl-Break 或 Unix SIGINT/SIGTERM。默认 Tokio 功能图无 signal；接口不会隐式消耗 TM/RM 所有者。Rust 1.99/1.85 各在独立隐藏控制台接收真实 Ctrl-C 和 Ctrl-Break；原 Commit 响应仍被屏障持有时，关闭准入、排空超时且原作用域和通讯所有者仍有效。各例再次接收同种事件后仍保持原作用域，控制器放行原响应后仅一次 Commit、排空完成及 socket EOF。把 Ctrl-Break 错映射为 Ctrl-C 的变异现场被实际断言拒绝。两工具链各通过 47 项组件回归和 2 项接口示例，全目标严格 Clippy 与默认功能构建通过；8 项环境相关测试在普通回归中保持 ignored，其中新增信号用例已由外部运行器显式执行。见[原生事件证据](phase-2/evidence/application-signals/README.md)。Unix 实测、完整业务入口覆盖和真实部署验收仍开放，整体计划未完成。
+
+
+## 2026-11-26：TM 调用结果计数与原 TC 故障路径
+
+沿用 WP07，正式 TM 新增仅能采样的固定操作计数能力，区分有效权威响应、TC Failed、未知、明确未发送、本地拒绝和取消，保留 active 及协议错误附加计数；观测不改写原结果，不发起重试。现有回环 Bearer 导出器增加固定 32 条 TM 序列，兼容原连接来源，关闭后可读取最终值。5 项 TCP 用例、真实认证 HTTP 和并行饱和边界验证通过，首次缺 API 与缺导出入口的失败记录保留。
+
+固定原 Java TC 与真实 MySQL 的 Commit/Rollback 成功响应丢失四组现场由 Rust 1.99/1.85 通过：原管理器 Begin observed=1、原 End unknown=1；新管理器只读原 XID，Status observed=1。原帧、原门闩与全部固定计数字段独立核对，各五个削弱反例均被拒绝。1.85 首轮 TC 因端口占用退出，确认清理后重跑通过，不计为客户端行为证据。两个版本各通过全工作区全功能 690 项回归，313 项需外部环境的用例保持 ignored；四组原 TC 是另外实际执行的现场，不能替代其余 ignored。TM、observability、MySQL 全目标严格 Clippy 通过。详见[TM 调用指标证据](phase-2/evidence/tm-call-metrics/README.md)。完整事务存活、RM 分支与 MySQL 状态指标、重试、生产代理/采集/告警以及 WP05–07 总门禁仍开放。
