@@ -1,15 +1,14 @@
 {
-  "status": "AFFECTED_ROWS_REQUIRE_UNDO_IMAGE_GUARD_VERIFIED",
-  "scope": "pure invalid image shape and 17 live valid DML cases per Rust toolchain",
+  "status": "AFFECTED_ROWS_UNDO_IMAGE_NATIVE_DRIVER_BOUNDARY_VERIFIED",
+  "scope": "historical pure shape and valid DML evidence plus pinned original TC/native SQLx zero-row response faults, UPDATE/DELETE with and without prior uncommitted INSERT, Rust 1.99/1.85",
   "rust": [
     "1.99",
     "1.85"
   ],
   "remaining": [
-    "live fault injection of positive affected rows with empty Undo image",
-    "changed business and Undo COMMIT",
-    "old-attempt fence and original Java TC report",
-    "WP05/WP06/full plan gates"
+    "complete external writer lock coverage",
+    "public changed business and Undo COMMIT acceptance",
+    "all original Java cases and WP05/WP06/full plan gates"
   ],
   "sha256": {
     "crates/seata_db_mysql/src/connection_proxy.rs": "54ff62667effd4ed57a1058c3fa1afcf37a8826233b4f41a6f66d1d6f1c5237d",
@@ -29,5 +28,31 @@
     "docs\\phase-2\\evidence\\mysql-affected-image-guard\\README.md": "521d9e61ea87fdafdaa8c604689fa3c357bf4f048702d8ed4ea2a5c14b648b6a",
     "docs\\phase-2\\evidence\\mysql-affected-image-guard\\cleanup.log": "690c80254c326e45c74714b1147eba30a71272c33a67df093762123538e0ed07",
     "docs\\phase-2\\evidence\\mysql-affected-image-guard\\fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "sha256_scope": "historical evidence baseline; native increment has independent current source and input hashes",
+  "native_driver_fault": {
+    "contract": "docs/phase-2/mysql-first-phase-commit-contract.md",
+    "evidence": "docs/phase-2/evidence/mysql-affected-image-native/README.md",
+    "replay": "docs/phase-2/evidence/mysql-affected-image-native/independent-replay.json",
+    "combinations_per_version": 4,
+    "additional_restored_1_99_cases": 4,
+    "fault": "real MySQL zero affected OK; controlled relay changes only affected_rows to one",
+    "original_branch_requests": 0,
+    "local_commit_commands": 0,
+    "original_physical_sessions_drained": true,
+    "final_database_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "production_guard_mutation_rejected": true,
+    "controls_per_replayed_profile": 16,
+    "current_guard_sha256": "3c4b54c21eab39171dac1cd3a94c02d4150eed016027aa5eb2f30f835481742e",
+    "full_WP05_complete": false,
+    "full_plan_complete": false
   }
 }

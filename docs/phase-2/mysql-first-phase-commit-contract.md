@@ -105,7 +105,7 @@ sequenceDiagram
 
 固定原 Java TC 已补齐无变化路径双工具链默认构建联试。零行 UPDATE 后只发送一次本地 COMMIT。原 OK 正常送达时本地确认成功，原 TM 完成 GlobalCommit。MySQL OK 被截留时本地保持未知，原 TM 完成 GlobalRollback。两侧均核对原 XID、零分支报文与持久表终态。[现场证据](evidence/java-tc-changed-commit-report/README.md#无变化本地提交与确认丢失)。
 
-[影响行与镜像保护](evidence/mysql-affected-image-guard/README.md)另保证驱动报告有受影响行时，空 before/after 镜像不会让作用域被归为无变化。该保护已通过纯形状反例和双工具链真实 DML 正向回归，尚未注入“真实驱动错误返回正影响数但空镜像”的负向现场故障。
+[影响行与镜像保护](evidence/mysql-affected-image-guard/README.md)另保证驱动报告有受影响行时，空 before/after 镜像不会让作用域被归为无变化。该保护已通过纯形状反例和双工具链真实 DML 正向回归，原 Java TC / MySQL 的 [原生影响行故障证据](evidence/mysql-affected-image-native/README.md) 已补齐：双版本实际 SQLx 收到被受控改写为正数的零行 UPDATE/DELETE 响应，拒绝空镜像与后续准备，原物理会话退出后先前写入整体回滚；移除保护的真实驱动变异失败，恢复后通过。
 
 默认关闭的 `experimental_changed_commit` Cargo 特性现已提供消费式有变化本地 COMMIT：必须持原成功回执、非空 Undo、004 候选见证及匹配的独立观察者，在原连接一次 COMMIT 确认后按原回执读取持久见证。发送前缺前提返回明确拒绝并保留回执；驱动失败、独立观察失败或未见见证保守返回带原回执的未知结果。现有 `commit_changed` 只提交本地事务，不发送 TC 一阶段报告，也不重放业务 SQL。真实 MySQL 已验证业务/Undo/见证同时持久化、一次 COMMIT、旧表拒绝、原连接断开和提交后观察者不可用；详见[实验现场证据](evidence/mysql-changed-commit-lab/README.md)。新增代理在服务器已回 OK 后扣留原 COMMIT 响应，实验接口保守返回携原回执的 Unknown，而独立连接仍观察到业务、Undo 和持久见证；详见[OK 丢失证据](evidence/mysql-changed-commit-ok-loss/README.md)。实验特性不能替代原 TC 排他锁完整覆盖、旧尝试围栏和报告故障矩阵；默认生产构建仍不暴露有变化提交，验收门槛不变。
 
@@ -191,3 +191,9 @@ Rust 1.99/1.85 也验证了 MySQL 正在执行原 COMMIT 时原业务进程退�
 SHA-256 用于发现 Undo 内容变化。具有同时修改 Undo、摘要及版本字段权限的管理员仍可改写两者，生产角色必须隔离恢复表写权限。
 
 回滚方向的现场用例使用同一已报告分支，改写 Undo 后由原 TM 发出 GlobalRollback。原 TC 收到可重试状态 9。独立 SQL 在恢复原字节前核对持久摘要仍对应原内容，随后原 TC 重试并完成补偿和防悬挂终态。迁移兼容用例先用版本 3 提交真实业务和 Undo，再应用 013，确认原行版本仍为 3、摘要为 NULL，按原身份恢复并完成提交。
+
+### 原生 MySQL 影响行响应与空镜像的故障验收
+
+补齐既有影响行保护的驱动边界证据：固定原 Java TC、真实 MySQL 与默认功能 Rust 客户端保持同一测试事务。MySQL 实际完成零行 UPDATE/DELETE，受控中继只将目标执行 OK 包的一字节 affected_rows 从 0 改为 1，保留长度、序号、插入编号、状态、警告及其他正文；保留原始和实际交付字节。该故障不是声称真实 MySQL 自发返回错误影响行数。
+
+覆盖 UPDATE/DELETE 各有无先前未提交 INSERT 四种组合。目标返回精确镜像错误；后续业务执行与准备都以 Poisoned 拒绝，无 BranchRegister、BranchReport 或本地 COMMIT。原连接退出前不把独立连接查无业务当作回滚证明；等待所有目标物理会话在服务端消失后核对先前写入整体回滚、Undo/控制记录为空以及原全局事务完成。默认构建验证不得打开有变化实验特性。移除既有影响行保护后，同一驱动现场必须失败；恢复源码后通过。此补充不代替完整外部写入器、所有 SQL、WP05/WP06 或公开有变化提交门禁。

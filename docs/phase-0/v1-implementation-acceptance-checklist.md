@@ -325,6 +325,8 @@ Gate verification 2026-11-13: [formal peer-profile evidence](../phase-1/evidence
 **Undo checksum implementation increment.** Migration 013 adds a nullable SHA-256 field to the Rust recovery table. New version 4 records stage the digest in the original business transaction. Independent recovery and formal callbacks verify it before using Undo. Both Rust toolchains reject the altered image, preserve unknown recovery, and complete the same original TC branch after restoring the original bytes. Versions 1–3 retain their historical semantics. [Implementation and live evidence](../phase-2/evidence/java-tc-changed-commit-report/README.md#undo-sha-256-与同一分支恢复).
 
 
+**2026-11-27 native affected-row fault supplement.** Default-build Rust 1.99/1.85 each reject real SQLx responses whose zero-row UPDATE/DELETE OK affected count is changed to one, both with and without a prior uncommitted INSERT. Later DML and preparation stay poisoned, native RM frames have no branch operation, and no local COMMIT is sent. After all original physical MySQL sessions disappear, independent SQL verifies complete rollback and empty Undo/control records. Removing the production guard fails the same real-driver test; restoring exact bytes passes. Three complete retained profiles each reject sixteen final evidence weakenings; original default-proxy no-change COMMIT remains valid. See [native driver evidence](../phase-2/evidence/mysql-affected-image-native/README.md). This closes the previously missing native affected-count fault example only; full WP05 and downstream gates stay open.
+
 ### WP-06 — MySQL AT phase 2
 
 **Depends on:** WP-05.

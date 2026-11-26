@@ -3,6 +3,8 @@
 #[path = "support/undo_store_fixture.rs"]
 #[allow(dead_code)]
 mod fixture;
+#[path = "support/java_affected_image_guard.rs"]
+mod java_affected_image_guard;
 #[cfg(feature = "experimental_changed_commit")]
 #[path = "support/java_checksum_events.rs"]
 mod java_checksum_events;

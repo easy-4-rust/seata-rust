@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\mysql_no_change.py", line 30, in read_client_observation
+    return json.loads(path.read_bytes())
+                      ^^^^^^^^^^^^^^^^^
+  File "C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\codex-builds\\java-affected_image_guard-report-1.99-2c8c1180\\observations\\java-no-change-local.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 1208, in <module>
+    run(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else "commit")
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 456, in run
+    allow_global_end(processes[-1], observations, mysql, db, env, out, no_change_loss)
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\mysql_no_change.py", line 38, in allow_global_end
+    local = read_client_observation(client, observations / "java-no-change-local.json", out)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\mysql_no_change.py", line 32, in read_client_observation
+    assert client.poll() is None, (out / "client-stdout.log").read_text(errors="replace")
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 
+running 1 test
+test java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images ... FAILED
+
+failures:
+
+---- java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images stdout ----
+
+thread 'java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images' (40512) panicked at crates\seata_db_mysql\tests\support\java_affected_image_guard.rs:145:9:
+assertion `left == right` failed
+  left: Rollbacking
+ right: Finished
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.77s
+
+

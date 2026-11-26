@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 1208, in <module>
+    run(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else "commit")
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 520, in run
+    assert processes[-1].wait(timeout=75) == 0, (out / "client-stdout.log").read_text(errors="replace")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 
+running 1 test
+test java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images ... FAILED
+
+failures:
+
+---- java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images stdout ----
+
+thread 'java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images' (60488) panicked at crates\seata_db_mysql\tests\support\java_affected_image_guard.rs:105:14:
+native affected count without any image must be rejected: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.72s
+
+

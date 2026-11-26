@@ -1160,3 +1160,9 @@ Rust 1.99/1.85 的正常提交、报告成功回包丢失、Finished XID 注册�
 双版本真实 MySQL 各 2 项控制用例、1 项认证 HTTP 现场通过，取消前从 InnoDB 核实锁等待。移除结算的源代码变异在真实数据库目标断言失败，恢复后通过。四组固定原 Java TC/MySQL Commit/Rollback COMMIT OK 丢失现场通过：unknown_commit=1，原 TC 重试后读取终态，只产生一次实际数据库效果。自然重叠回调暴露旧验收脚本的额外串行假设，修正为逐请求关联与因果顺序；诊断原帧和八项反例重放保留，不冒充额外完整现场。
 
 Rust 1.99/1.85 全工作区全功能各 707 项通过、317 项 ignored；双版本全目标严格 Clippy、默认功能严格 Clippy 和默认依赖检查通过。见 [MySQL 控制指标证据](phase-2/evidence/mysql-control-metrics/README.md)。一阶段与独立 Undo 全指标、生产日志/采集/告警以及 WP05–07、后续 Phase 仍开放。
+
+## 2026-11-27：原生影响行响应与空镜像故障
+
+补齐 WP05 已记录的真实驱动负向缺口：固定 MySQL 实际零行 UPDATE/DELETE 后，中继只把目标 OK 的 affected_rows 由 0 改为 1。Rust 1.99/1.85 默认构建各通过有无先前未提交 INSERT 的四种组合；镜像错误后 DML 与准备均 Poisoned，原 RM 零分支请求，MySQL 零本地 COMMIT。原目标物理会话全部在服务端消失后，独立 SQL 证明先前写入整体回滚，Undo/控制记录为空，原 TC 四个 XID 只经一次回滚及只读观察收敛 Finished。
+
+移除原生产保护的真实驱动变异返回 Ok(1) 并触发目标失败；finally 恢复原字节后四例完整重跑通过。三个完整现场的保留原帧各拒绝十六种最终证据削弱；额外默认无变化提交对照通过。双版本全工作区全功能各 707 项通过、318 项 ignored，MySQL 全目标全功能严格 Clippy 通过。首轮异步 TC 状态/驱动屏障诊断独立保留，不计成功。见 [原生影响行证据](phase-2/evidence/mysql-affected-image-native/README.md)。本轮补充故障证据，不修改生产保护；公开有变化提交、完整外部写入器、WP05–07 及后续 Phase 仍开放。

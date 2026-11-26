@@ -7,10 +7,11 @@ import time
 COMMIT_TERMINAL = 'UPDATE seata_rs_at_branch_v1 SET commit_terminal=1,modified_at=now(6) WHERE xid=? AND branch_id=? AND phase=1 AND terminal=0 AND commit_authorized=1 AND commit_terminal=0'
 
 class UndoRollbackCommitObserver:
-    def __init__(self, upstream, mode, terminal_sql=COMMIT_TERMINAL, on_fault=None, *, follow_up_drop_ok_sql=None):
+    def __init__(self, upstream, mode, terminal_sql=COMMIT_TERMINAL, on_fault=None, *, follow_up_drop_ok_sql=None, dml_reply_transform=None):
         if mode not in ('drop_ok','block_commit','hold_commit','hold_commit_ack','delay_ok','block_terminal','in_flight','observe'): raise ValueError('unknown fault')
         if mode == 'in_flight' and on_fault is None: raise ValueError('Missing in-flight verification')
         self.upstream=upstream;self.mode=mode;self.terminal_sql=terminal_sql;self.on_fault=on_fault;self.lock=threading.Lock();self.events=[];self.claimed=False;self.stopping=False;self.sockets=[];self.threads=[]
+        self.dml_reply_transform = dml_reply_transform
         self.follow_up_drop_ok_sql = follow_up_drop_ok_sql
         self.follow_up_claimed = False
         self.listener=socket.socket();self.listener.bind(('127.0.0.1',0));self.listener.listen();self.listener.settimeout(.2);self.port=self.listener.getsockname()[1]
@@ -127,7 +128,13 @@ class UndoRollbackCommitObserver:
                             return
                         dml=state['dml_result'];state['dml_result']=None
                     if dml is not None:
-                        self.event(connection,'dml_reply',sql=dml,wire_hex=wire.hex());target.sendall(wire);self.event(connection,'dml_reply_forwarded',sql=dml,wire_hex=wire.hex());continue
+                        self.event(connection,'dml_reply',sql=dml,wire_hex=wire.hex())
+                        forwarded = wire if self.dml_reply_transform is None else self.dml_reply_transform(dml,wire)
+                        if forwarded != wire:
+                            self.event(connection,'dml_reply_transformed',sql=dml,original_wire_hex=wire.hex(),wire_hex=forwarded.hex())
+                        target.sendall(forwarded)
+                        self.event(connection,'dml_reply_forwarded',sql=dml,wire_hex=forwarded.hex())
+                        continue
                     with mutex:
                         greeting=state['greeting'];state['greeting']=False
                         rollback=state['rollback'];state['rollback']=False;prepare=state['prepare'];commit=state['commit'];commit_fault=state['commit_fault'];begin=state['begin'];state['begin']=False

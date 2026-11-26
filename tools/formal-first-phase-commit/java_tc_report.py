@@ -18,6 +18,7 @@ OWNER = "seata-wsl-java-tc-full-profile-20261124"
 LABEL = "seata-java-tc-full-profile-validation-20261124"
 SOCKET = "unix:///run/seata-validation-20261120/docker.sock"
 TESTS = {
+    "affected_image_guard": "java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images",
     "rm_call_rejected": "java_no_change_commit::original_java_tc_rejects_finished_branch_with_exact_rm_call_metrics",
     "no_change_commit": "java_no_change_commit::original_java_tc_no_change_commit_leaves_no_branch",
     "no_change_ack_loss": "java_no_change_commit::original_java_tc_no_change_lost_ack_remains_unknown_without_branch",
@@ -100,7 +101,8 @@ def run(version, scenario="commit"):
     terminal_permission = scenario == "commit_permission"
     changed_pool = scenario == "changed_pool_recovery"
     pool_recovery = scenario == "no_change_pool_recovery"
-    no_change = pool_recovery or scenario in ("no_change_commit", "no_change_ack_loss", "rm_call_rejected")
+    affected_image_guard = scenario == "affected_image_guard"
+    no_change = affected_image_guard or pool_recovery or scenario in ("no_change_commit", "no_change_ack_loss", "rm_call_rejected")
     no_change_loss = pool_recovery or scenario == "no_change_ack_loss"
     fence_ack_lost = scenario == "armed_child_fence_ack_loss"
     witness_query_failure = scenario == "armed_child_query_failure"
@@ -328,6 +330,11 @@ seata:
             assert db_observer.port not in (tc, rm, tm)
             env["SEATA_JAVA_RM_MYSQL_PORT"] = str(db_observer.port)
             resource = f"jdbc:mysql://127.0.0.1:{db_observer.port}/{db}"
+        elif affected_image_guard:
+            from mysql_affected_image_guard import start_observer
+            db_observer=start_observer(43318,out)
+            env["SEATA_JAVA_RM_MYSQL_PORT"]=str(db_observer.port)
+            resource=f"jdbc:mysql://127.0.0.1:{db_observer.port}/{db}"
         elif no_change:
             from mysql_no_change import start_no_change_observer
 
@@ -439,7 +446,7 @@ seata:
             from mysql_terminal_permission import restore_after_denial
 
             permission = restore_after_denial(processes[-1], observations, mysql, db, env, out)
-        elif no_change:
+        elif no_change and not affected_image_guard:
             from mysql_no_change import allow_global_end
 
             if pool_recovery:
@@ -685,6 +692,19 @@ seata:
             verified.update(verify_changed_pool(mysql, db, env, out, mysql_wire, result))
             guard.save(out / "verified.json", dict(scenario=scenario, database_runtime=database_runtime, **verified))
             print(f"PASS original Java TC AT changed pool recovery {version}: {out}", flush=True)
+            return
+        if affected_image_guard:
+            from mysql_affected_image_guard import verify
+            mysql_wire=db_observer.stop()
+            db_observer=None
+            guard.save(out/"mysql-wire.json",mysql_wire)
+            result=json.loads((observations/"java-affected-image-ended.json").read_bytes())
+            guard.save(out/"observation.json",result)
+            journal=(observations/"java-affected-image-branches.log").read_bytes()
+            guard.put(out/"branches.log",journal)
+            verified=verify(mysql,db,env,out,mysql_wire,result,journal,artifact)
+            guard.save(out/"verified.json",dict(scenario=scenario,database_runtime=database_runtime,**verified))
+            print(f"PASS original Java TC affected-image guard {version}: {out}",flush=True)
             return
         if no_change:
             from mysql_no_change import verify_no_change
