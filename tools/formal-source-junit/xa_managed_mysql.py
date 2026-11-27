@@ -64,7 +64,7 @@ def run(versions, red, case=None, expected_failure=None):
                 '--offline','--locked','--no-run','--message-format=json'],extra=dict(CARGO_TARGET_DIR=str(target)))
             artifacts=[Path(row['executable']) for line in build.stdout.splitlines() if line.startswith(b'{') and (row:=json.loads(line)).get('executable') and row['target']['name']=='live_xa_managed']
             need(len(artifacts)==1,'Unique native fixture artifact missing')
-            cases=[case] if case else ['registered_original_xa_prepares_and_completes_through_real_rm_callbacks','failed_or_lost_registration_cannot_start_mysql_xa','unsafe_claim_table_rejects_before_xa_start_and_keeps_original_receipt','bound_direction_closes_active_scope_and_absence_stays_unknown','persisted_original_identity_and_current_schema_guard_native_finish','changed_commit_durability_after_connect_blocks_xa_start','failure_cases::lost_native_commit_ok_preserves_rm_pending_and_does_not_replay','failure_cases::callback_before_registration_reply_stays_pending_until_original_prepare','failure_cases::lost_native_rollback_ok_recovers_original_prepared_intent_without_replay']
+            cases=[case] if case else ['registered_original_xa_prepares_and_completes_through_real_rm_callbacks','failed_or_lost_registration_cannot_start_mysql_xa','unsafe_claim_table_rejects_before_xa_start_and_keeps_original_receipt','bound_direction_closes_active_scope_and_absence_stays_unknown','persisted_original_identity_and_current_schema_guard_native_finish','changed_commit_durability_after_connect_blocks_xa_start','failure_cases::lost_native_commit_ok_preserves_rm_pending_and_does_not_replay','failure_cases::callback_before_registration_reply_stays_pending_until_original_prepare','failure_cases::lost_native_rollback_ok_recovers_original_prepared_intent_without_replay','failure_cases::original_active_scope_is_fenced_by_independent_rm_without_caller_drop']
             for index,selected in enumerate(cases):
                 command(version+'-'+str(index)+'-enable-log',mysql+["SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"])
                 observations=work/'observations'/version/('case-'+str(index));observations.mkdir(parents=True)
@@ -77,6 +77,9 @@ def run(versions, red, case=None, expected_failure=None):
                 command(version+'-case-'+str(index)+'-independent-prepared',mysql+['XA RECOVER CONVERT XID'])
                 command(version+'-case-'+str(index)+'-independent-witness',mysql+['SELECT HEX(xid),branch_id,phase,completed FROM '+database+'.seata_rs_xa_commit_witness_v1 ORDER BY xid,branch_id'])
                 command(version+'-case-'+str(index)+'-independent-intent',mysql+['SELECT HEX(xid),branch_id,phase,completed FROM '+database+'.seata_rs_xa_prepare_evidence_v1 ORDER BY xid,branch_id'])
+                command(version+'-case-'+str(index)+'-independent-guard',mysql+['SELECT HEX(xid),branch_id,phase,completed FROM '+database+'.seata_rs_xa_session_guard_v1 ORDER BY xid,branch_id'])
+                command(version+'-case-'+str(index)+'-independent-guard-enrollment',mysql+['SELECT HEX(xid),branch_id,phase,completed FROM '+database+'.seata_rs_xa_guard_enrollment_v1 ORDER BY xid,branch_id'])
+                command(version+'-case-'+str(index)+'-independent-kill',mysql+["SELECT command_type,argument FROM mysql.general_log WHERE command_type='Query' AND argument LIKE 'KILL %' ORDER BY event_time,thread_id"])
             save(out/(version+'-artifact.json'),dict(path=str(artifacts[0]),sha256=sha(artifacts[0])))
     finally:
         for file in (work/'observations').rglob('*'):

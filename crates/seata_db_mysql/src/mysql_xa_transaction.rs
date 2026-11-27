@@ -149,6 +149,51 @@ impl MySqlXaTransaction {
         self.poisoned = false;
         Ok(())
     }
+    /// 参数为原登记身份；对外暴露作用域前在原 ACTIVE 连接写入唯一 guard，失败/取消即中毒。
+    pub(crate) async fn insert_session_guard(
+        &mut self,
+        identity: &seata_rm::BranchIdentity,
+    ) -> Result<(), MySqlXaError> {
+        if self.poisoned
+            || identity.xid().as_bytes() != self.xid.get_global_transaction_id()
+            || identity.branch_id() != self.xid.get_branch_id()
+        {
+            return Err(MySqlXaError::Poisoned);
+        }
+        self.poisoned = true;
+        let mut connection = self.connection.take().ok_or(MySqlXaError::Poisoned)?;
+        let deadline = Instant::now() + self.source.source.operation_timeout();
+        timeout_at(
+            deadline,
+            crate::mysql_xa_session_fence::MySqlXaSessionFence::insert_guard(
+                &mut connection,
+                &self.source.source,
+                identity,
+            ),
+        )
+        .await
+        .map_err(|_| MySqlXaError::Unknown {
+            operation: XaOperation::Execute,
+            source: DbError::Deadline {
+                operation: "XA active guard",
+            },
+        })?
+        .map_err(|source| MySqlXaError::Unknown {
+            operation: XaOperation::Execute,
+            source,
+        })?;
+        if Instant::now() >= deadline {
+            return Err(MySqlXaError::Unknown {
+                operation: XaOperation::Execute,
+                source: DbError::Deadline {
+                    operation: "XA active guard",
+                },
+            });
+        }
+        self.connection = Some(connection);
+        self.poisoned = false;
+        Ok(())
+    }
     /// 消耗原 ACTIVE 作用域；返回原 END/PREPARE 明确确认的身份，Prepared 在原连接关闭后继续由 MySQL 持有。
     /// 失败/取消不能据此认定回滚；返回值不是 TC 登记回执，必须显式观察/解决同一身份。
     pub async fn prepare(mut self) -> Result<XaBranchXid, MySqlXaError> {

@@ -37,6 +37,8 @@ impl MySqlXaBranchStore {
         if table != Self::TABLE
             && table != crate::mysql_xa_commit_witness::MySqlXaCommitWitness::TABLE
             && table != crate::mysql_xa_prepare_evidence::MySqlXaPrepareEvidence::TABLE
+            && table != crate::mysql_xa_session_fence::MySqlXaSessionFence::ENROLLMENT
+            && table != crate::mysql_xa_session_fence::MySqlXaSessionFence::GUARD
         {
             return Err(DbError::RecoveryConflict);
         }
@@ -224,6 +226,7 @@ impl MySqlXaBranchStore {
         if changed.rows_affected() != 1 {
             return Err(DbError::RecoveryConflict);
         }
+        crate::mysql_xa_session_fence::MySqlXaSessionFence::enroll(&mut tx, source, id).await?;
         tx.commit()
             .await
             .map_err(|e| DbError::driver("XA branch claim commit", e))

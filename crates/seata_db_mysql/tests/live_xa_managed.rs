@@ -443,6 +443,11 @@ async fn bound_direction_closes_active_scope_and_absence_stays_unknown() {
         .await
         .unwrap();
     let identity = tx.registered_branch().identity().clone();
+    // 没有新协议标记的旧记录不能仅凭缺 Prepared 被补成成功。
+    sqlx::raw_sql("DELETE FROM seata_rs_xa_guard_enrollment_v1")
+        .execute(&mut admin)
+        .await
+        .unwrap();
     assert_eq!(
         adapter
             .apply(&identity, BranchPhase::Rollback)
@@ -469,9 +474,93 @@ async fn bound_direction_closes_active_scope_and_absence_stays_unknown() {
         BranchResolution::Unknown
     );
     assert!(adapter.apply(&identity, BranchPhase::Commit).await.is_err());
+    let uuid: String = sqlx::query_scalar("SELECT @@server_uuid")
+        .fetch_one(&mut admin)
+        .await
+        .unwrap();
+    // 恢复先前移除的原协议登记，再分别注入不可信控制记录验证拒绝。
+    sqlx::raw_sql("INSERT INTO seata_rs_xa_guard_enrollment_v1 SELECT xid,branch_id,resource_id,application_data,server_uuid,schema_version,0,0 FROM seata_rs_xa_branch_v1").execute(&mut admin).await.unwrap();
+    for assignment in [
+        "resource_id='wrong'",
+        "application_data='wrong'",
+        "server_uuid='wrong'",
+        "schema_version=9",
+        "phase=1",
+        "completed=1",
+    ] {
+        sqlx::raw_sql(&format!(
+            "UPDATE seata_rs_xa_guard_enrollment_v1 SET {assignment}"
+        ))
+        .execute(&mut admin)
+        .await
+        .unwrap();
+        assert!(
+            matches!(
+                adapter.recover(&identity, BranchPhase::Rollback).await,
+                Err(seata_rm::RmError::IdentityConflict)
+            ),
+            "invalid guard enrollment granted rollback authority"
+        );
+        sqlx::query("UPDATE seata_rs_xa_guard_enrollment_v1 SET resource_id=?,application_data=NULL,server_uuid=?,schema_version=1,phase=0,completed=0").bind(identity.resource().resource_id().as_bytes()).bind(uuid.as_bytes()).execute(&mut admin).await.unwrap();
+    }
+    for assignment in [
+        "resource_id='wrong'",
+        "application_data='wrong'",
+        "server_uuid='wrong'",
+        "schema_version=9",
+        "phase=0,completed=0",
+        "completed=0",
+    ] {
+        sqlx::raw_sql("INSERT INTO seata_rs_xa_session_guard_v1 SELECT xid,branch_id,resource_id,application_data,server_uuid,schema_version,2,1 FROM seata_rs_xa_branch_v1").execute(&mut admin).await.unwrap();
+        sqlx::raw_sql(&format!(
+            "UPDATE seata_rs_xa_session_guard_v1 SET {assignment}"
+        ))
+        .execute(&mut admin)
+        .await
+        .unwrap();
+        assert!(
+            matches!(
+                adapter.recover(&identity, BranchPhase::Rollback).await,
+                Err(seata_rm::RmError::IdentityConflict)
+            ),
+            "invalid or committed guard accepted as rollback fence"
+        );
+        sqlx::raw_sql("DELETE FROM seata_rs_xa_session_guard_v1")
+            .execute(&mut admin)
+            .await
+            .unwrap();
+    }
+    sqlx::raw_sql("ALTER TABLE seata_rs_xa_session_guard_v1 ADD KEY unexpected(resource_id)")
+        .execute(&mut admin)
+        .await
+        .unwrap();
+    assert!(
+        matches!(
+            adapter.recover(&identity, BranchPhase::Rollback).await,
+            Err(seata_rm::RmError::IdentityConflict)
+        ),
+        "unexpected guard index accepted"
+    );
+    sqlx::raw_sql("ALTER TABLE seata_rs_xa_session_guard_v1 DROP KEY unexpected")
+        .execute(&mut admin)
+        .await
+        .unwrap();
+    let incomplete: u8 = sqlx::query_scalar("SELECT completed FROM seata_rs_xa_branch_v1")
+        .fetch_one(&mut admin)
+        .await
+        .unwrap();
+    assert_eq!(incomplete, 0);
+    assert_eq!(
+        adapter
+            .recover(&identity, BranchPhase::Rollback)
+            .await
+            .unwrap(),
+        BranchResolution::Applied,
+        "valid original guard fence did not complete after repair"
+    );
     fixture::record(
         "bound-and-unknown",
-        serde_json::json!({"branch_id":identity.branch_id().to_string(),"rollback":"Unknown","business_after_binding_rejected":true,"opposite_direction_rejected":true}),
+        serde_json::json!({"branch_id":identity.branch_id().to_string(),"rollback":"Unknown","missing_guard_enrollment":"Unknown","enrollment_corruptions_rejected":6,"guard_corruptions_rejected":6,"guard_index_rejected":true,"restored_guard_fence":"Applied","business_after_binding_rejected":true,"opposite_direction_rejected":true}),
     );
     manager.shutdown().await.unwrap();
     server.await.unwrap();

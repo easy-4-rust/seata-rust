@@ -72,3 +72,15 @@ Rollback RM 只在实际观察原完整 Prepared 后，将匹配的原生产者�
 依据为原 XA 已进入不可重启的 Prepared、生产者已写入同事务见证、持久决定单向且登记不可复用；回滚释放事务内见证锁后，缺提交见证才排除 Commit。外部绕过受管理身份/权限的写入器、管理员破坏或恢复拓扑仍属于完整生产门禁。旧分支没有生产者证据时，原生 ACK 正常仍可确认；ACK 丢失仍未知。未 Prepared 的活动会话恢复及完整旧会话围栏继续开放。验收必须实际截留原 ROLLBACK OK，首次 Pending，后续原分支恢复完成且只发一次 ROLLBACK；删改结束意图和仅缺 Prepared 均不得确认。
 
 该增量最终证据见 [Prepared 回滚恢复](../phase-4/evidence/xa-managed/PREPARED_ROLLBACK.md) 及 [machine ledger](../phase-4/mysql-xa-prepared-rollback.json)。双 Rust 各九项受管理真实 MySQL、原 Java TC 两方向、全工作区各 785 passed / 367 ignored 和严格 XA/MySQL Clippy 通过；连续两个原 OK 截留、原身份意图损坏和缺失、冲突提交见证及新管理器恢复均有实际现场证据。完整生产和总计划仍开放。
+
+## ACTIVE 作用域资源围栏
+
+017 在原唯一登记控制事务中明确签发 guard 协议登记，不回填旧 014 分支。018 是相同原身份的事务内 guard：新生产者必须在原 XA START 后、任何业务及对外返回作用域之前，唯一插入 phase=0/completed=0 guard。原连接失败/取消关闭后 guard 与业务共同回滚；Prepared 或 Commit 持有/提交该唯一键。
+
+受管理作用域使用可取消的独占本地会话槽。仅关闭本库实际持有的连接，不按外部连接号执行 KILL。监视器在独立有界连接读取原物理实例/身份的持久决定，方向已绑定、原登记缺失或观察失败时封闭原槽；退出即关闭的原连接不能回池。取消覆盖等待门闩与在途业务/Prepare，不能在决定绑定后恢复旧作用域。
+
+Rollback 在无 Prepared、也没有既有 Prepared 回滚证明时，只能对匹配的 017 协议分支，持原门闩在 018 唯一键写 phase=2/completed=1 屏障。写入必须等待旧事务 guard 释放，旧已提交 guard 则拒绝；屏障竞争成功后再次确认无原 Prepared/提交见证，再将屏障与原 Rollback 终态同事务提交。迟到的原 guard 插入不能成功，故不能继续业务。没有协议登记不能套用该证明；被暂停/分区或未结束的旧会话不能取得 guard 时继续 Pending，不宣称可强制终止任意远程会话。
+
+验收：保留旧 ACTIVE 对象并已执行真实未提交业务，由独立数据源/正式回调完成原回滚；旧作用域后续 DML/Prepare 拒绝，原事务实际释放，屏障持久，无原生 END/PREPARE/ROLLBACK 或远程 KILL。缺协议、结构/身份冲突、等待失败不能确认；既有 Prepared 两方向及连续响应丢失回归继续通过。完整进程崩溃、网络分区强制清理、生产部署/权限和其余总计划继续开放。
+
+该增量最终选定证据见 [ACTIVE guard 围栏](../phase-4/evidence/xa-managed/ACTIVE_GUARD.md) 和 [machine ledger](../phase-4/mysql-xa-active-guard.json)。双版本十项真实 MySQL、原 Java TC 两方向通过，工作区每版各 785 passed / 368 ignored；最终存储负例改用独立常规期限管理器并核对 IdentityConflict 后，重跑双版本现场、源封存和严格 Clippy。健康作用域经过至少两次真实监视查询仍可更新，正式回调后实际回滚，后续业务/Prepare 拒绝。完整生产和总计划继续开放。

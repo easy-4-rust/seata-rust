@@ -11,6 +11,100 @@ use std::{sync::Arc, time::Duration};
 use tokio::net::TcpListener;
 
 #[tokio::test]
+#[ignore = "requires owned MySQL and live original ACTIVE scope"]
+async fn original_active_scope_is_fenced_by_independent_rm_without_caller_drop() {
+    fn send<F: Send>(future: F) -> F {
+        future
+    }
+    let (mut admin, source, producer) = fixture::seed().await;
+    let fresh_source = MySqlDataSource::connect(fixture::owned_mysql::options(None))
+        .await
+        .unwrap();
+    let fresh = Arc::new(MySqlXaResourceManager::new(fresh_source.clone()).unwrap());
+    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let (manager, store) = rm(fresh.clone(), &listener, "active-fence").await;
+    let key = fresh.key().clone();
+    let identity = BranchIdentity::new(
+        "xa:active-fence".into(),
+        9007199254741004,
+        key.clone(),
+        None,
+    )
+    .unwrap();
+    let original = identity.clone();
+    let (start, ready) = tokio::sync::oneshot::channel();
+    let (done, finished) = tokio::sync::oneshot::channel();
+    let server = tokio::spawn(async move {
+        let mut socket = bootstrap(&listener, key.resource_id()).await;
+        registered(
+            &mut socket,
+            key.resource_id(),
+            "xa:active-fence",
+            None,
+            9007199254741004,
+        )
+        .await;
+        ready.await.unwrap();
+        assert_eq!(
+            callback(&mut socket, -51, &original, BranchPhase::Rollback).await,
+            (ResultCode::Success, 8),
+            "live original ACTIVE scope was not fenced"
+        );
+        done.send(()).unwrap();
+        idle(&mut socket).await;
+    });
+    let client = manager.client();
+    let mut tx = send(producer.register_and_start(&client, identity.xid(), None))
+        .await
+        .unwrap();
+    let sql = SqlRecognizerFactory::recognize("INSERT INTO xa_managed(id,v) VALUES(1,42)").unwrap();
+    send(tx.execute(&sql, &[])).await.unwrap();
+    assert!(fixture::business(&mut admin).await.is_empty());
+    // 先实际观察两次 phase=0 监视查询，再确认健康旧作用域仍能执行业务。
+    let observations = tokio::time::timeout(Duration::from_secs(5), async {
+        loop {
+            let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM mysql.general_log WHERE command_type='Execute' AND argument LIKE 'SELECT phase,completed FROM seata_rs_xa_branch_v1 WHERE xid=%'").fetch_one(&mut admin).await.unwrap();
+            if count >= 2 { break count; }
+            tokio::time::sleep(Duration::from_millis(10)).await;
+        }
+    }).await.unwrap();
+    send(tx.execute(
+        &SqlRecognizerFactory::recognize("UPDATE xa_managed SET v=43 WHERE id=1").unwrap(),
+        &[],
+    ))
+    .await
+    .unwrap();
+    start.send(()).unwrap();
+    finished.await.unwrap();
+    assert_eq!(
+        store
+            .lease(identity.clone(), BranchPhase::Rollback)
+            .await
+            .unwrap()
+            .state(),
+        Some(BranchRecordState::Completed)
+    );
+    let error = tx.execute(&sql, &[]).await.unwrap_err();
+    assert_eq!(error.registered_branch().unwrap().identity(), &identity);
+    assert!(send(tx.prepare()).await.is_err());
+    assert!(fixture::business(&mut admin).await.is_empty());
+    let guard: (u8, u8) =
+        sqlx::query_as("SELECT phase,completed FROM seata_rs_xa_session_guard_v1")
+            .fetch_one(&mut admin)
+            .await
+            .unwrap();
+    assert_eq!(guard, (2, 1));
+    fixture::record(
+        "active-scope-fence",
+        serde_json::json!({"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"journal":"Completed","callback_status":8,"business":[],"guard":[2,1],"phase_zero_monitor_observations":observations,"caller_did_not_drop_before_callback":true,"independent_manager":true,"late_business_rejected":true,"late_prepare_rejected":true}),
+    );
+    manager.shutdown().await.unwrap();
+    server.await.unwrap();
+    fresh_source.close().await.unwrap();
+    source.close().await.unwrap();
+}
+
+#[tokio::test]
 #[ignore = "requires owned MySQL and original XA ROLLBACK OK loss"]
 async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_replay() {
     let (mut admin, plain, _) = fixture::seed().await;
@@ -111,6 +205,17 @@ async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_repla
             .state(),
         Some(BranchRecordState::Pending)
     );
+    // 故障代理原操作保留 750ms；独立常规管理器校验存储负例，不把调度抖动混入证据语义。
+    let fresh_source =
+        MySqlDataSource::connect(fixture::owned_mysql::options(Some(prepare_proxy.port)))
+            .await
+            .unwrap();
+    let fresh = MySqlXaResourceManager::new(fresh_source.clone()).unwrap();
+    // 此组验证旧 Prepared 意图路径，移除新 guard 协议，避免独立有效的 guard 证明替代该路径。
+    sqlx::raw_sql("DELETE FROM seata_rs_xa_guard_enrollment_v1")
+        .execute(&mut admin)
+        .await
+        .unwrap();
     let uuid: String = sqlx::query_scalar("SELECT @@server_uuid")
         .fetch_one(&mut admin)
         .await
@@ -140,10 +245,10 @@ async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_repla
         .await
         .unwrap();
         assert!(
-            adapter
-                .recover(&identity, BranchPhase::Rollback)
-                .await
-                .is_err(),
+            matches!(
+                fresh.recover(&identity, BranchPhase::Rollback).await,
+                Err(seata_rm::RmError::IdentityConflict)
+            ),
             "corrupt Prepared rollback intent accepted"
         );
         sqlx::query("UPDATE seata_rs_xa_prepare_evidence_v1 SET resource_id=?,application_data=NULL,server_uuid=?,schema_version=1,phase=2,completed=0").bind(identity.resource().resource_id().as_bytes()).bind(uuid.as_bytes()).execute(&mut admin).await.unwrap();
@@ -153,10 +258,10 @@ async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_repla
         .await
         .unwrap();
     assert!(
-        adapter
-            .recover(&identity, BranchPhase::Rollback)
-            .await
-            .is_err(),
+        matches!(
+            fresh.recover(&identity, BranchPhase::Rollback).await,
+            Err(seata_rm::RmError::IdentityConflict)
+        ),
         "unexpected intent index accepted"
     );
     sqlx::raw_sql("ALTER TABLE seata_rs_xa_prepare_evidence_v1 DROP KEY unexpected")
@@ -168,7 +273,7 @@ async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_repla
         .await
         .unwrap();
     assert_eq!(
-        adapter
+        fresh
             .recover(&identity, BranchPhase::Rollback)
             .await
             .unwrap(),
@@ -180,7 +285,7 @@ async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_repla
         .await
         .unwrap();
     assert_eq!(
-        adapter
+        fresh
             .recover(&identity, BranchPhase::Rollback)
             .await
             .unwrap(),
@@ -196,21 +301,17 @@ async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_repla
     sqlx::raw_sql("INSERT INTO seata_rs_xa_prepare_evidence_v1 SELECT xid,branch_id,resource_id,application_data,server_uuid,schema_version,2,0 FROM seata_rs_xa_branch_v1").execute(&mut admin).await.unwrap();
     sqlx::raw_sql("INSERT INTO seata_rs_xa_commit_witness_v1 SELECT xid,branch_id,resource_id,application_data,server_uuid,schema_version,1,1 FROM seata_rs_xa_branch_v1").execute(&mut admin).await.unwrap();
     assert!(
-        adapter
-            .recover(&identity, BranchPhase::Rollback)
-            .await
-            .is_err(),
+        matches!(
+            fresh.recover(&identity, BranchPhase::Rollback).await,
+            Err(seata_rm::RmError::IdentityConflict)
+        ),
         "visible Commit witness was accepted as rollback"
     );
     sqlx::raw_sql("DELETE FROM seata_rs_xa_commit_witness_v1")
         .execute(&mut admin)
         .await
         .unwrap();
-    let fresh_source =
-        MySqlDataSource::connect(fixture::owned_mysql::options(Some(prepare_proxy.port)))
-            .await
-            .unwrap();
-    let fresh = MySqlXaResourceManager::new(fresh_source.clone()).unwrap();
+
     assert_eq!(
         fresh
             .recover(&identity, BranchPhase::Rollback)
@@ -250,7 +351,7 @@ async fn lost_native_rollback_ok_recovers_original_prepared_intent_without_repla
     assert_eq!(count, 1);
     fixture::record(
         "native-rollback-loss",
-        serde_json::json!({"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"request":request,"held_original_ok":response,"actual_commands":count,"prepare_request":prepare_request,"held_prepare_ok":prepare_ok,"actual_prepare_commands":prepare_count,"prepare_ack_lost":true,"callback_statuses":[9,8],"intermediate_journal":"Pending","journal":"Completed","business":[],"commit_witness_rows":0,"intent_corruptions_rejected":6,"intent_extra_index_rejected":true,"staged_only":"Unknown","missing_intent":"Unknown","commit_witness_conflict_rejected":true,"fresh_manager_recovered":true}),
+        serde_json::json!({"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"request":request,"held_original_ok":response,"actual_commands":count,"prepare_request":prepare_request,"held_prepare_ok":prepare_ok,"actual_prepare_commands":prepare_count,"prepare_ack_lost":true,"callback_statuses":[9,8],"intermediate_journal":"Pending","journal":"Completed","business":[],"commit_witness_rows":0,"guard_protocol_removed_for_legacy_checks":true,"intent_corruptions_rejected":6,"intent_extra_index_rejected":true,"staged_only":"Unknown","missing_intent":"Unknown","commit_witness_conflict_rejected":true,"fresh_manager_recovered":true}),
     );
     source.close().await.unwrap();
     plain.close().await.unwrap();

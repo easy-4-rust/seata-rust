@@ -103,10 +103,11 @@ def mysql(folder):
     result = load(folder/'result.json')
     need(result['Rust_versions'] == ['1.99', '1.85'] and result['XA_RM_gate_complete'] is False and result['whole_plan_complete'] is False, 'Managed scope changed')
     for rust in result['Rust_versions']:
-        for index in range(9):
+        for index in range(10):
             prefix = rust+'-case-'+str(index)
             need(b'test result: ok. 1 passed;' in (folder/(prefix+'.stdout')).read_bytes(), 'Managed case did not execute')
             need(not (folder/(prefix+'-independent-prepared.stdout')).read_bytes().strip(), 'Managed Prepared remains')
+            need(not (folder/(prefix+'-independent-kill.stdout')).read_bytes().strip(), 'Managed recovery issued remote KILL')
             commands = (folder/(prefix+'-independent-native-commands.stdout')).read_bytes().splitlines()
             writes = [line for line in commands if b'XA RECOVER' not in line]
             if index in [1, 2, 5]:
@@ -127,6 +128,18 @@ def mysql(folder):
                 need((folder/(prefix+'-independent-state.stdout')).read_bytes().strip() == key+b'\t2\t1', 'Original rollback terminal differs')
                 need((folder/(prefix+'-independent-intent.stdout')).read_bytes().strip() == key+b'\t2\t0', 'Prepared rollback intent differs')
                 need(not (folder/(prefix+'-independent-witness.stdout')).read_bytes().strip() and not (folder/(prefix+'-independent-business.stdout')).read_bytes().strip(), 'Rollback retained witness/business')
+            if index == 3:
+                proof = load(folder/'observations'/rust/'case-3/proof/bound-and-unknown.json')
+                need(proof['missing_guard_enrollment'] == 'Unknown' and proof['enrollment_corruptions_rejected'] == 6 and proof['guard_corruptions_rejected'] == 6 and proof['guard_index_rejected'] is True and proof['restored_guard_fence'] == 'Applied', 'Guard negative controls missing')
+            if index == 9:
+                need(len(writes) == 1 and b'XA START ' in writes[0], 'Active fence sent native END/PREPARE/end command')
+                proof = load(folder/'observations'/rust/'case-9/proof/active-scope-fence.json')
+                active_proof(proof)
+                key = (proof['xid'].encode().hex().upper()+'\t'+proof['branch_id']).encode()
+                need((folder/(prefix+'-independent-state.stdout')).read_bytes().strip() == key+b'\t2\t1', 'Active rollback terminal differs')
+                need((folder/(prefix+'-independent-guard.stdout')).read_bytes().strip() == key+b'\t2\t1', 'Active guard tombstone differs')
+                need((folder/(prefix+'-independent-guard-enrollment.stdout')).read_bytes().strip() == key+b'\t0\t0', 'Original guard enrollment differs')
+                need(not (folder/(prefix+'-independent-business.stdout')).read_bytes().strip(), 'Old active business escaped fence')
     need(load(folder/'cleanup.json')['owned_container_removed'], 'Owned managed MySQL remains')
 
 
@@ -139,11 +152,18 @@ def rollback_proof(proof):
     need(int.from_bytes(request[:3], 'little') == len(request)-4 and request[3:] == b'\x00\x03'+expected, 'Captured original rollback identity differs')
     need(int.from_bytes(response[:3], 'little') == len(response)-4 and response[3:5] == b'\x01\x00', 'Original rollback OK missing')
     need(proof['prepare_ack_lost'] is True and proof['actual_prepare_commands'] == 1, 'Original Prepare uncertainty not exercised')
+    need(proof['guard_protocol_removed_for_legacy_checks'] is True, 'Legacy Prepared safety checks masked by guard proof')
     prepare = bytes(proof['prepare_request'])
     prepare_ok = bytes(proof['held_prepare_ok'])
     expected_prepare = expected.replace(b'XA ROLLBACK ', b'XA PREPARE ', 1)
     need(int.from_bytes(prepare[:3], 'little') == len(prepare)-4 and prepare[3:] == b'\x00\x03'+expected_prepare, 'Original Prepare identity differs')
     need(int.from_bytes(prepare_ok[:3], 'little') == len(prepare_ok)-4 and prepare_ok[3:5] == b'\x01\x00', 'Original Prepare OK missing')
+
+
+def active_proof(proof):
+    need(proof['journal'] == 'Completed' and proof['callback_status'] == 8 and proof['business'] == [] and proof['guard'] == [2, 1], 'Active scope not actually rolled back')
+    need(proof['caller_did_not_drop_before_callback'] is True and proof['independent_manager'] is True and proof['late_business_rejected'] is True and proof['late_prepare_rejected'] is True, 'Original active scope lifecycle not verified')
+    need(type(proof['phase_zero_monitor_observations']) is int and proof['phase_zero_monitor_observations'] >= 2, 'Healthy original phase-zero scope not retained across actual monitor observations')
 
 
 if __name__ == '__main__':

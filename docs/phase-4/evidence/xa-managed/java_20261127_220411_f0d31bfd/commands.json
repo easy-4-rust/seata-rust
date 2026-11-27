@@ -1,0 +1,590 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-xa-java-20261127-220411-f0d31bfd",
+      "--label",
+      "seata.xa.owner=e947f05dfee6445aa047ef79d3d0ddaf",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata-xa-java-20261127_220411_f0d31bfd/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:63069:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=xa_java_e947f05dfee6",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "install-server-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "xa_java_e947f05dfee6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "xa",
+      "--test",
+      "live_xa_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,completed FROM xa_java_e947f05dfee6.seata_rs_xa_branch_v1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM xa_java_e947f05dfee6.xa_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-independent-prepared",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "XA RECOVER CONVERT XID"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM xa_java_e947f05dfee6.global_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.branch_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type='Query' AND argument LIKE 'XA %' ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,completed FROM xa_java_e947f05dfee6.seata_rs_xa_branch_v1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM xa_java_e947f05dfee6.xa_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-rollback-independent-prepared",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "XA RECOVER CONVERT XID"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM xa_java_e947f05dfee6.global_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.branch_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type='Query' AND argument LIKE 'XA %' ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "xa",
+      "--test",
+      "live_xa_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,completed FROM xa_java_e947f05dfee6.seata_rs_xa_branch_v1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM xa_java_e947f05dfee6.xa_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit-independent-prepared",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "XA RECOVER CONVERT XID"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM xa_java_e947f05dfee6.global_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.branch_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type='Query' AND argument LIKE 'XA %' ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,completed FROM xa_java_e947f05dfee6.seata_rs_xa_branch_v1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM xa_java_e947f05dfee6.xa_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-rollback-independent-prepared",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "XA RECOVER CONVERT XID"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM xa_java_e947f05dfee6.global_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.branch_table),(SELECT COUNT(*) FROM xa_java_e947f05dfee6.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type='Query' AND argument LIKE 'XA %' ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "124a25a4208c35a82ad0643411f4b72ccce97f8dfe86d72700cb80dd3015e3af"
+    ],
+    "exit_code": 1
+  }
+]

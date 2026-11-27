@@ -1,0 +1,71 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "status": "ORIGINAL_ACTIVE_SCOPE_FENCED_BY_INDEPENDENT_RM_WITHOUT_CALLER_DROP",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "actual_managed_mysql_cases_per_version": 10,
+  "original_Java_global_transactions_per_version": 2,
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 368,
+    "successful_harness_summaries": 171,
+    "strict_xa_mysql_clippy": true
+  },
+  "final_fixture_adjustments_after_workspace": "storage-negative checks use independent ordinary-deadline manager and assert typed IdentityConflict; final dual-version live matrix, source archives and strict Clippy rerun",
+  "actual_phase_zero_observations_per_active_case_minimum": 2,
+  "source_producer_futures_Send_checked": true,
+  "original_active_caller_dropped_before_callback": false,
+  "independent_data_source_and_manager": true,
+  "native_active_case_commands": [
+    "START"
+  ],
+  "remote_KILL_commands": 0,
+  "negative_guard_enrollment_corruptions_per_version": 6,
+  "negative_guard_corruptions_per_version": 6,
+  "extra_guard_index_rejected": true,
+  "missing_guard_protocol_result": "Unknown",
+  "proof_weakenings_rejected_per_version": 9,
+  "explicit_migrations": [
+    "017_seata_rs_xa_guard_enrollment.sql",
+    "018_seata_rs_xa_session_guard.sql"
+  ],
+  "runtime_auto_migration": false,
+  "Java_Undo_or_legacy_records_changed": false,
+  "authority": {
+    "red": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql-red_20261127_215426_ee4c0caf",
+      "catalog_sha256": "5ce532b173cfc25cd80ebfdba4a21c2519f83f9ee32bdcace5c756941ba359ff"
+    },
+    "mysql": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql_20261127_220952_e3e37ff9",
+      "catalog_sha256": "3a6ed765b56c37b82aa99174e273953cb6d548b23e0d028d3015f1dc74724d1b"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/xa-managed/java_20261127_221031_4d991fa5",
+      "catalog_sha256": "d5b12635b675ac8f9f9d271d87c4c0d7943bab6c33dad819544ae74c13660fad"
+    },
+    "regression199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_220411_b63bf095",
+      "catalog_sha256": "4fb13f687873c0464065c87de805b75f5a1819f8039aadff5f6572abf7404de4"
+    },
+    "regression185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_220552_f107bce8",
+      "catalog_sha256": "55f2fd9895217190324cf236033085f4cff692a8d2cc36209338e6bd87a0ddf1"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/xa-managed/active_guard_validation_20261127_final",
+      "catalog_sha256": "f26580aa9af3902e3a744b9dc18bb8f582c2f16a6318af9363adaa5b34034de9"
+    }
+  },
+  "remaining": [
+    "Early original registration callback fence",
+    "Paused/partitioned old session liveness and forced cleanup",
+    "Real process-crash / concurrent callbacks / control-COMMIT loss / full original TC fault gate",
+    "Monitor performance, observability and lifecycle at scale; deployment/writer privileges/retention/recovery topology",
+    "All remaining AT/TCC/Phase5-7 plan gates"
+  ],
+  "full_XA_gate_complete": false,
+  "whole_plan_complete": false
+}

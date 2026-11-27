@@ -212,3 +212,8 @@ mod mysql_xa_commit_witness;
 
 #[cfg(feature = "xa")]
 mod mysql_xa_prepare_evidence;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_session;
+#[cfg(feature = "xa")]
+mod mysql_xa_session_fence;

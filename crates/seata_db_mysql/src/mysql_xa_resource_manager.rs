@@ -124,7 +124,7 @@ impl MySqlXaResourceManager {
                 receipt: known(),
                 source,
             })?;
-        let (gate, row) = MySqlXaBranchStore::lock(&self.native.source, receipt.identity())
+        let (mut gate, row) = MySqlXaBranchStore::lock(&self.native.source, receipt.identity())
             .await
             .map_err(|source| MySqlXaEnlistError::Control {
                 receipt: known(),
@@ -136,8 +136,18 @@ impl MySqlXaResourceManager {
                 source: DbError::RecoveryConflict,
             });
         }
+        MySqlXaBranchStore::validate_table(
+            &mut gate,
+            &self.native.source,
+            crate::mysql_xa_session_fence::MySqlXaSessionFence::GUARD,
+        )
+        .await
+        .map_err(|source| MySqlXaEnlistError::Control {
+            receipt: known(),
+            source,
+        })?;
         let identity = Self::xa_id(receipt.identity());
-        let transaction =
+        let mut transaction =
             self.native
                 .start(identity)
                 .await
@@ -145,6 +155,13 @@ impl MySqlXaResourceManager {
                     receipt: known(),
                     source,
                 })?;
+        transaction
+            .insert_session_guard(receipt.identity())
+            .await
+            .map_err(|source| MySqlXaEnlistError::Native {
+                receipt: known(),
+                source,
+            })?;
         gate.rollback()
             .await
             .map_err(|e| MySqlXaEnlistError::Control {
@@ -233,6 +250,32 @@ impl MySqlXaResourceManager {
                 gate.commit()
                     .await
                     .map_err(|e| DbError::driver("XA proved rollback terminal commit", e))?;
+                return Ok(BranchResolution::Applied);
+            }
+            if matches!(prepared, Ok(false))
+                && phase == BranchPhase::Rollback
+                && crate::mysql_xa_session_fence::MySqlXaSessionFence::fence(
+                    &mut gate,
+                    &self.native.source,
+                    id,
+                )
+                .await?
+            {
+                if !matches!(self.native.prepared_observed(&xid).await, Ok(false)) {
+                    return Ok(BranchResolution::Unknown);
+                }
+                if crate::mysql_xa_commit_witness::MySqlXaCommitWitness::committed(
+                    &self.native.source,
+                    id,
+                )
+                .await?
+                {
+                    return Err(DbError::RecoveryConflict);
+                }
+                MySqlXaBranchStore::complete(&mut gate, id, phase).await?;
+                gate.commit()
+                    .await
+                    .map_err(|e| DbError::driver("XA active guard terminal commit", e))?;
                 return Ok(BranchResolution::Applied);
             }
             if !matches!(prepared, Ok(true)) {

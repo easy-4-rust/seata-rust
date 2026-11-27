@@ -15,7 +15,7 @@ pub async fn seed() -> (
     Arc<MySqlXaResourceManager>,
 ) {
     let mut admin = owned_mysql::admin().await;
-    sqlx::raw_sql("DROP TABLE IF EXISTS seata_rs_xa_prepare_evidence_v1; DROP TABLE IF EXISTS seata_rs_xa_commit_witness_v1; DROP TABLE IF EXISTS seata_rs_xa_branch_v1; DROP TABLE IF EXISTS xa_managed; CREATE TABLE xa_managed(id INT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB").execute(&mut admin).await.unwrap();
+    sqlx::raw_sql("DROP TABLE IF EXISTS seata_rs_xa_session_guard_v1; DROP TABLE IF EXISTS seata_rs_xa_guard_enrollment_v1; DROP TABLE IF EXISTS seata_rs_xa_prepare_evidence_v1; DROP TABLE IF EXISTS seata_rs_xa_commit_witness_v1; DROP TABLE IF EXISTS seata_rs_xa_branch_v1; DROP TABLE IF EXISTS xa_managed; CREATE TABLE xa_managed(id INT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB").execute(&mut admin).await.unwrap();
     sqlx::raw_sql(include_str!("../../migrations/014_seata_rs_xa_branch.sql"))
         .execute(&mut admin)
         .await
@@ -28,6 +28,18 @@ pub async fn seed() -> (
     .unwrap();
     sqlx::raw_sql(include_str!(
         "../../migrations/016_seata_rs_xa_prepare_evidence.sql"
+    ))
+    .execute(&mut admin)
+    .await
+    .unwrap();
+    sqlx::raw_sql(include_str!(
+        "../../migrations/017_seata_rs_xa_guard_enrollment.sql"
+    ))
+    .execute(&mut admin)
+    .await
+    .unwrap();
+    sqlx::raw_sql(include_str!(
+        "../../migrations/018_seata_rs_xa_session_guard.sql"
     ))
     .execute(&mut admin)
     .await

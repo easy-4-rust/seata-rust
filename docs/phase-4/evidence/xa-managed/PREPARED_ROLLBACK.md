@@ -1,5 +1,7 @@
 # Prepared 回滚结束意图与连续响应丢失恢复
 
+后续 [017/018 ACTIVE 资源围栏](ACTIVE_GUARD.md) 已推进可运行旧作用域的取消/屏障；暂停或分区会话仍不假定已终止。以下保留本阶段的历史结果。
+
 规格事实源：[XA 契约](../../../phase-2/mysql-xa-contract.md)；最终证据目录和摘要见 [machine ledger](../../mysql-xa-prepared-rollback.json)。
 
 016 显式创建生产者/Prepared 结束意图表。生产者在原 ACTIVE 物理连接实际写入 015 提交见证后，先持久保存精确原登记的 phase=0/completed=0 证据，再重新获取原分支门闩，确认方向仍未绑定，才发送单次 END/PREPARE。该记录不表示 Prepared 已完成，更不表示业务结果。
