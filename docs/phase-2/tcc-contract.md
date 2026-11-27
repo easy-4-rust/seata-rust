@@ -49,3 +49,17 @@ RM apply/recover 都先核对当前物理表、持久原身份和实例；在持
 空 Cancel 仅由正式连接产生的不可伪造 BranchCallbackReceipt 经 Pending 之后的 observer 入口仲裁。缺行时唯一插入 SUSPENDED 并确认提交，随后 apply/recover 才能复用该终态。手工裸身份 apply/recover 不能创建空回滚屏障；并发 Try/Cancel 靠原唯一键和行锁仲裁，任何死锁/重复键/未知提交均保留未决，由原 TC 重试同一身份。迟到原登记回执不能穿过已提交 SUSPENDED。
 
 本增量选定实现已取得 [正式 MySQL TCC 验收证据](../phase-4/evidence/tcc-managed/README.md) 和 [machine ledger](../phase-4/mysql-tcc-managed.json)：双版本每版六项真实 MySQL、两项原 TC 全局事务，覆盖实际行锁等待、空 Cancel/迟到 Try、五类身份与四类结构拒绝、三阶段 COMMIT 原 OK 丢失和旧 Pending 恢复，无业务 DML 重放；134 项证据削弱拒绝。工作区各 791 passed / 380 ignored，严格检查通过。完整登记/TC 故障矩阵、进程/数据库恢复、动态报告和生产保留/权限/负载仍未完成，不能据本增量关闭第 2–6 项全部门禁或总计划。
+
+## 原 Java TC 的回调重复与重连
+
+在固定原 TC、原数据库 Session Store 和实际原 TCC 分支上，对 Confirm/Cancel 分别精确复制一次原回调，或扣留一次真实分支终态响应并关闭原 RM 会话。原 TC 自行重试同一原分支；RM 重连后重新登记同一资源。客户端不重发全局 End，不调用状态查询猜方向，不从 Finished 或 TC 行缺失推断成功。普通未注入路径继续要求原全局结束响应明确成功。
+
+故障下必须保留初次客户端结果，最终另以固定原 TC 的分支/全局成功日志、原始终态包、原 TCC 模式/动作/应用数据、Fence 和业务效果联合证明。general_log 必须显示 Try 和原二阶段业务各一次；重复/重连不能重放已提交业务。双 Rust 两方向各两种故障，源码封存、独立 SQL/原始包校验和有效证据削弱拒绝共同验收。这只是完整 TC 故障矩阵的一部分，不关闭生产或总计划。
+
+## 登记未决与主动取消
+
+非法原身份、超限和未显式启用 Fence 在登记前拒绝；TC 明确拒绝与已发送后无响应保持不同错误类型。二者都不能签发原成功回执或启动 Try。登记请求已实际到达后取消调用，迟到的成功响应不能继续已取消的 Try；原 TC 仍可回调同一原分支，原连接能力才允许空 Cancel 持久屏障。
+
+`try_registered` 的调用方须事先保留原回执，取消 Future 没有返回值，不能事后从裸字段重造回执。实际 Try/业务已持锁但尚未 COMMIT 时取消，旧事务释放后原 Cancel 才能确认 SUSPENDED，不能在旧会话仍持锁时猜空回滚。原 COMMIT OK 已真实到达代理而未交给调用方时取消，已提交的 TRIED/业务必须保留，由原 TC 的 Cancel 决定补偿；取消本身不证明事务未提交。两种边界均以实际独立 SQL/锁等待或原包核验，原回执晚到或克隆不能再次 Try。
+
+本轮选定边界已经取得 [原回调故障、登记和取消验收证据](../phase-4/evidence/tcc-managed/CALLBACK_REGISTRATION_CANCELLATION.md) 与 [本轮 ledger](../phase-4/mysql-tcc-callback-registration-cancellation.json)：双版本共 16 项真实 MySQL、4 项正常原 TC、8 项原 TC 回调故障事务，250 项证据削弱拒绝；工作区每版 791 passed / 382 ignored，严格检查通过。该证据补充上述六用例基线，完整 TCC 门禁及总计划保持未完成。

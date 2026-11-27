@@ -16,7 +16,7 @@ def load(path):
 
 def mysql_case(folder, version, index, alterations=None):
     prefix = version+'-case-'+str(index)
-    names = ['normal','failed-actions','early-cancel','identity','ack-loss','held-try']
+    names = ['normal','failed-actions','early-cancel','identity','ack-loss','held-try','registration-boundaries','cancelled-try']
     proof = load(folder/'observations'/version/('case-'+str(index))/'proof'/(names[index]+'.json'))
     facts = {name:(folder/(prefix+'-'+name+'.stdout')).read_bytes().strip().replace(b'\r',b'') for name in ['business','fence','undo','business-dml']}
     if alterations:
@@ -58,10 +58,26 @@ def mysql_case(folder, version, index, alterations=None):
         row = rows[-1]
         need(facts['fence'] == fence([(row['xid'],row['branch_id'],3)]), 'Original lost Cancel terminal differs')
         business, dml = b'', [insert(51),update(51),insert(52),update(52),insert(53),delete(53)]
-    else:
+    elif index == 5:
         need(proof['actual_innodb_wait_observed'] and proof['uncommitted_fence_and_business_invisible'] and proof['status'] == 3 and proof['late_try_rejected'], 'Try/Cancel race lacks actual database lock/invisibility evidence')
         need(facts['fence'] == fence([(proof['xid'],proof['branch_id'],3)]), 'Original held Try rollback differs')
         business, dml = b'', [insert(41),delete(41)]
+    elif index == 6:
+        rows = proof['cases']
+        need([r['mode'] for r in rows] == ['rejected','lost','cancelled'] and all(r['branch_id'] is None and r['successful_receipt_not_synthesized'] and r['invalid_inputs_rejected_before_registration'] == 6 and r['original_register_requests'] == 1 and r['try_business_rows'] == 0 for r in rows), 'Registration outcome guessed a successful receipt/branch or started Try')
+        need([r['fence_rows'] for r in rows] == [0,0,1] and [r['status'] for r in rows] == [None,None,4] and all(r['callback_branch_id'] is None for r in rows[:2]), 'Registration without authoritative callback minted Fence')
+        row = rows[-1]
+        need(row['callback_branch_id'] == '9202' and facts['fence'] == fence([(row['xid'],row['callback_branch_id'],4)]), 'Late registration reply did not preserve original callback Fence')
+        business, dml = b'', []
+    else:
+        rows = proof['cases']
+        need([r['stage'] for r in rows] == ['before_commit','after_commit'] and [r['status'] for r in rows] == [4,3] and all(r['known_receipt_retained'] and r['old_call_cancelled'] and r['late_try_rejected'] for r in rows), 'Cancelled Try did not preserve original receipt or distinct commit outcomes')
+        need(rows[0]['actual_innodb_wait_observed'] and rows[1]['committed_TRIED_and_business_observed'], 'Cancellation boundary not physically observed')
+        request,response = bytes(rows[1]['held_request']),bytes(rows[1]['held_original_ok'])
+        need(int.from_bytes(request[:3],'little') == len(request)-4 and request[3:] == b'\x00\x03COMMIT' and int.from_bytes(response[:3],'little') == len(response)-4 and response[3:5] == b'\x01\x00', 'Cancelled Try did not capture actual original COMMIT OK')
+        row = rows[-1]
+        need(facts['fence'] == fence([(row['xid'],row['branch_id'],3)]), 'Original cancelled committed Try terminal differs')
+        business, dml = b'', [insert(61),insert(62),delete(62)]
     need(facts['business'] == business, 'Independent TCC business differs')
     expected_business = [[int(v) for v in line.split(b'\t')] for line in business.splitlines()]
     need(proof['business'] == expected_business, 'Reported TCC business differs from physical result')
@@ -125,20 +141,20 @@ def verify(mysql, java, regressions):
         need(result['Rust_versions'] == ['1.99','1.85'] and result['TCC_full_gate_complete'] is result['whole_plan_complete'] is False and load(pair[0]/'cleanup.json')['owned_container_removed'], 'TCC runtime scope/cleanup changed')
     need(load(java[0]/'result.json')['Java_pin'] == guard.reg.PIN and load(java[0]/'result.json')['Java_jar_sha256'] == guard.reg.JAR_SHA, 'Original Java pin/artifact differs')
     for version in ['1.99','1.85']:
-        for index in range(6): mysql_case(mysql[0],version,index)
+        for index in range(8): mysql_case(mysql[0],version,index)
         for direction in ['commit','rollback']: java_case(java[0],version,direction)
     for version,(folder,_) in zip(['1.99','1.85'],regressions,strict=True):
         result = load(folder/'result.json')
-        need(result['Rust'] == version and result['passed'] == 791 and result['ignored'] == 380 and result['successful_test_harness_summaries'] == 177 and result['strict_tcc_all_targets_clippy'] and result['strict_xa_mysql_all_targets_clippy'], 'Full workspace regression differs')
+        need(result['Rust'] == version and result['passed'] == 791 and result['ignored'] == 382 and result['successful_test_harness_summaries'] == 177 and result['strict_tcc_all_targets_clippy'] and result['strict_xa_mysql_all_targets_clippy'], 'Full workspace regression differs')
         need(all(r['exit_code'] == 0 for r in load(folder/'commands.json')), 'Actual workspace/Clippy command failed')
         summaries = re.findall(rb'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;',(folder/'workspace.stdout').read_bytes())
-        need(len(summaries) == 177 and sum(int(r[0]) for r in summaries) == 791 and not any(int(r[1]) for r in summaries) and sum(int(r[2]) for r in summaries) == 380, 'Raw workspace totals differ')
+        need(len(summaries) == 177 and sum(int(r[0]) for r in summaries) == 791 and not any(int(r[1]) for r in summaries) and sum(int(r[2]) for r in summaries) == 382, 'Raw workspace totals differ')
 
 
 def weakenings(folder):
     rejected = 0
     for version in ['1.99','1.85']:
-        for index,name in enumerate(['normal','failed-actions','early-cancel','identity','ack-loss','held-try']):
+        for index,name in enumerate(['normal','failed-actions','early-cancel','identity','ack-loss','held-try','registration-boundaries','cancelled-try']):
             proof = load(folder/'observations'/version/('case-'+str(index))/'proof'/(name+'.json'))
             candidates = [{'facts':{'undo':b'1'}},{'facts':{'business':b'999\t999'}},{'facts':{'fence':b''}},{'facts':{'business-dml':b'Execute\tINSERT INTO tcc_managed(id,v) VALUES(999,999)'}}]
             changed = copy.deepcopy(proof)
@@ -147,7 +163,9 @@ def weakenings(folder):
             elif index == 2: changed['manual_missing_is_unknown'] = False
             elif index == 3: changed['row_corruptions_rejected'] = 0
             elif index == 4: changed['cases'][1]['old_journal'] = 'Completed'
-            else: changed['actual_innodb_wait_observed'] = False
+            elif index == 5: changed['actual_innodb_wait_observed'] = False
+            elif index == 6: changed['cases'][1]['branch_id'] = '9201'
+            else: changed['cases'][0]['status'] = 3
             candidates.append({'proof':changed})
             if index == 4:
                 for key,value in [('held_request',[0,0,0,0]),('held_original_ok',[0,0,0,1]),('database_status_before_recovery',0),('fresh_manager_and_source',False),('proxy_commit_commands',99)]:
@@ -156,7 +174,7 @@ def weakenings(folder):
                 try: mysql_case(folder,version,index,alteration)
                 except ValueError: rejected += 1
                 else: raise RuntimeError('TCC semantic weakening accepted')
-    need(rejected == 70, 'TCC semantic weakening matrix incomplete')
+    need(rejected == 90, 'TCC semantic weakening matrix incomplete')
     return rejected
 
 
@@ -205,4 +223,4 @@ if __name__ == '__main__':
     pairs = [(getattr(args,name),getattr(args,name+'_sha')) for name in ['mysql','java','rust199','rust185']]
     verify(pairs[0],pairs[1],pairs[2:])
     if args.weakenings: print('Rejected TCC evidence weakenings:',weakenings(pairs[0][0])+java_weakenings(pairs[1][0]))
-    print('Verified twelve MySQL TCC cases, four original Java global transactions and dual workspace evidence; full TCC gate remains open')
+    print('Verified sixteen MySQL TCC cases, four original Java global transactions and dual workspace evidence; full TCC gate remains open')

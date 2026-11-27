@@ -71,6 +71,35 @@ pub async fn reply_registered(socket: &mut TcpStream, id: i32, branch: i64) {
     )
     .await;
 }
+/// 参数为原连接和请求号；回复明确 Failed，不签发成功分支回执。
+pub async fn reject_registration(socket: &mut TcpStream, id: i32) {
+    let mut response = peer::success();
+    response.result_code = ResultCode::Failed;
+    peer::write(
+        socket,
+        peer::reply(
+            id,
+            Message::BranchRegisterResponse(BranchRegisterResponse {
+                response,
+                branch_id: 0,
+            }),
+        ),
+    )
+    .await;
+}
+/// 参数为当前自有连接；等待关闭并确认没有额外业务请求。
+pub async fn await_eof(socket: &mut TcpStream) {
+    use tokio::io::AsyncReadExt;
+    let mut byte = [0];
+    assert_eq!(
+        tokio::time::timeout(std::time::Duration::from_secs(5), socket.read(&mut byte))
+            .await
+            .unwrap()
+            .unwrap(),
+        0,
+        "unexpected duplicate business request"
+    );
+}
 
 pub async fn callback(
     socket: &mut TcpStream,

@@ -64,7 +64,7 @@ def run(versions, red, case=None, expected_failure=None):
                 '--offline','--locked','--no-run','--message-format=json'],extra=dict(CARGO_TARGET_DIR=str(target)))
             artifacts=[Path(row['executable']) for line in build.stdout.splitlines() if line.startswith(b'{') and (row:=json.loads(line)).get('executable') and row['target']['name']=='live_tcc']
             need(len(artifacts)==1,'Unique native fixture artifact missing')
-            cases=[case] if case else ['original_tcc_try_and_terminal_effects_are_atomic_and_idempotent','failed_actions_and_caught_transaction_errors_cannot_commit_fence_or_business','empty_cancel_from_original_callback_blocks_late_try_and_manual_identity_cannot_mint_fence','changed_original_fence_identity_or_current_schema_never_executes_business','ack_cases::lost_try_confirm_and_cancel_commit_ok_recover_original_fence_without_business_replay','original_cancel_waits_for_actual_uncommitted_try_then_fences_late_business']
+            cases=[case] if case else ['original_tcc_try_and_terminal_effects_are_atomic_and_idempotent','failed_actions_and_caught_transaction_errors_cannot_commit_fence_or_business','empty_cancel_from_original_callback_blocks_late_try_and_manual_identity_cannot_mint_fence','changed_original_fence_identity_or_current_schema_never_executes_business','ack_cases::lost_try_confirm_and_cancel_commit_ok_recover_original_fence_without_business_replay','original_cancel_waits_for_actual_uncommitted_try_then_fences_late_business','registration_cases::original_registration_rejection_loss_and_cancelled_reply_never_start_try','registration_cases::cancelled_try_before_commit_and_after_original_ok_preserves_distinct_database_outcomes']
             for index,selected in enumerate(cases):
                 command(version+'-'+str(index)+'-enable-log',mysql+["SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"])
                 observations=work/'observations'/version/('case-'+str(index));observations.mkdir(parents=True)
@@ -90,7 +90,7 @@ def run(versions, red, case=None, expected_failure=None):
             need(command('confirm-removed',['docker','inspect',container],expected=None).returncode!=0,'Owned container remains')
         save(out/'cleanup.json',dict(owned_container_removed=bool(container),D_data_retained=str(work)))
     for row in sources:need(sha(ROOT/row['path'])==row['sha256'],'Executed source drift')
-    save(out/'result.json',dict(status='TCC_MYSQL_BEHAVIOR_REPRODUCED' if red else 'EXPECTED_XA_MUTATION_FAILURE_OBSERVED' if expected_failure else 'TCC_ORIGINAL_REGISTRATION_AND_ATOMIC_FENCE_VERIFIED',Rust_versions=versions,selected_case=case,expected_failure=expected_failure,TCC_full_gate_complete=False,whole_plan_complete=False))
+    save(out/'result.json',dict(status='TCC_MYSQL_BEHAVIOR_REPRODUCED' if red else 'EXPECTED_TCC_MUTATION_FAILURE_OBSERVED' if expected_failure else 'TCC_ORIGINAL_REGISTRATION_AND_ATOMIC_FENCE_VERIFIED',Rust_versions=versions,selected_case=case,expected_failure=expected_failure,TCC_full_gate_complete=False,whole_plan_complete=False))
     shutil.copyfile(Path(__file__),out/Path(__file__).name)
     save(out/'catalog.json',[dict(path=p.relative_to(out).as_posix(),sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()])
     print(json.dumps(dict(evidence=str(out),catalog_sha256=sha(out/'catalog.json'))))

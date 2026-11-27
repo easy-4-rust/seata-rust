@@ -1,0 +1,83 @@
+{
+  "specification": "docs/phase-2/tcc-contract.md",
+  "status": "TCC_SELECTED_CALLBACK_REGISTRATION_AND_CANCELLATION_VERIFIED",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "production_API_or_migration_changed": false,
+  "Java_Undo_or_existing_AT_XA_records_changed": false,
+  "actual_mysql_cases_per_version": 8,
+  "normal_original_Java_transactions_per_version": 2,
+  "fault_original_Java_transactions_per_version": 4,
+  "original_TC_fault_modes": [
+    "duplicate",
+    "reconnect"
+  ],
+  "original_TC_directions": [
+    "commit",
+    "rollback"
+  ],
+  "registration_boundaries": [
+    "invalid_before_send",
+    "definite_rejected",
+    "sent_response_lost",
+    "cancelled_after_request_before_reply"
+  ],
+  "registration_without_successful_receipt_branch_id": null,
+  "callback_branch_id_recorded_separately": true,
+  "cancelled_Try_boundaries": [
+    "uncommitted_actual_lock_wait",
+    "original_COMMIT_OK_held_after_database_commit"
+  ],
+  "caller_retains_original_receipt_before_try_registered": true,
+  "business_replay_observed": false,
+  "evidence_weakenings_rejected": 250,
+  "workspace_per_version": {
+    "passed": 791,
+    "ignored": 382,
+    "successful_test_harness_summaries": 177,
+    "strict_tcc_xa_mysql_clippy": true
+  },
+  "authority": {
+    "mysql": {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_015120_8f809168",
+      "catalog_sha256": "d2d37f3c55f46408ebf1f79b91a4fe8499dff55156040cc1fed821a6f0ee919c"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/tcc-managed/java_20261128_015120_ff5cfb62",
+      "catalog_sha256": "b7c1141b9f89bd875e284eacb20553847a91b819ec0e5ed8ed9cd18f4dfa945c"
+    },
+    "java_fault": {
+      "path": "docs/phase-4/evidence/tcc-managed/java-fault_20261128_015120_a072f485",
+      "catalog_sha256": "ad5e1bc21b86ae5d2e7d338f28a5103474f28e304b82d51df5b0c3dbc05fa941"
+    },
+    "rust199": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.99_20261128_015120_e8c00508",
+      "catalog_sha256": "90dcca1f8286817f8b77b347d9d41b6c0446d05b89433c93042a2e75df64a664"
+    },
+    "rust185": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.85_20261128_015120_a6c3caa7",
+      "catalog_sha256": "449115bee543e0db1232774d1905b37f29156bc820c397acde0f7b69e4f54222"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/tcc-managed/validation_20261128_callback_registration_final",
+      "catalog_sha256": "ad5ac7d7c96d50c086b46d6cec342acd957e74a3de7ee4f0b2ccdcbe75f243ea"
+    }
+  },
+  "diagnostic_batches": [
+    "20261128_013454",
+    "20261128_013958",
+    "20261128_014216",
+    "20261128_014404"
+  ],
+  "TCC_full_gate_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "TCC writer process crash and MySQL crash/restart/recovery topology",
+    "Full registration, callback and concurrency fault matrix",
+    "Dynamic action-context reporting",
+    "Production privileges/retention/cleanup/observability/load and operations",
+    "Remaining AT/XA gates; Phase 5-7"
+  ]
+}
