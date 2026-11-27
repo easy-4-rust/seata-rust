@@ -1,0 +1,30 @@
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/seata-tcc-java-fault-20261128_021826_10ac82b1/1.99-duplicate-commit/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 61080
+    enable-check-auth: true
+    retry-dead-threshold: 1000
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:60892/tcc_java_7e2d0582b352?useSSL=false&allowPublicKeyRetrieval=true
+      user: root
+      password: seata-mysql-fixture-only
+      min-conn: 1
+      max-conn: 4

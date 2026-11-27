@@ -1,0 +1,85 @@
+{
+  "specification": "docs/phase-2/tcc-contract.md",
+  "status": "TCC_SELECTED_PROCESS_AND_DATABASE_RECOVERY_VERIFIED",
+  "actual_process_database_cases": 54,
+  "actual_mysql_regression_cases": 16,
+  "normal_original_Java_transactions": 4,
+  "fault_original_Java_transactions": 8,
+  "evidence_weakenings_rejected": 902,
+  "process_evidence_weakenings_rejected": 642,
+  "managed_evidence_weakenings_rejected": 154,
+  "Java_fault_evidence_weakenings_rejected": 106,
+  "workspace_per_version": {
+    "passed": 791,
+    "ignored": 384,
+    "successful_test_harness_summaries": 177,
+    "strict_tcc_xa_mysql_clippy": true
+  },
+  "TCC_full_gate_complete": false,
+  "whole_plan_complete": false,
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "writer_stages": [
+    "try_uncommitted",
+    "tried_commit",
+    "tried_cancel",
+    "try_ok",
+    "confirm_uncommitted",
+    "cancel_uncommitted",
+    "confirm_ok",
+    "cancel_ok",
+    "suspended_ok"
+  ],
+  "database_fault_modes": [
+    "none",
+    "restart",
+    "crash"
+  ],
+  "independent_OS_handle_observation": true,
+  "independent_SQL_at_cut_after_writer_exit_after_database_recovery_after_branch_recovery": true,
+  "original_COMMIT_OK_intercepted": true,
+  "original_journal_CRC_identity_pending_completed_checked": true,
+  "pre_and_post_recovery_business_DML_checked": true,
+  "original_Java_TC_used_in_process_matrix": false,
+  "Java_TC_natural_old_session_retry_overlap_observed": true,
+  "production_API_or_migration_changed": false,
+  "Java_Undo_or_existing_AT_XA_records_changed": false,
+  "authority": {
+    "process": {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_021414_f4cc4adf",
+      "catalog_sha256": "e19357cbd92edade11a3ca323e1d0c217d5582295bb2edca54acfd077db22388"
+    },
+    "mysql": {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_021539_a60322b0",
+      "catalog_sha256": "8dc1076a4801117d685f8397c096534a62e689f55cfed2c2a6cd4a1d2aa327ad"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/tcc-managed/java_20261128_021550_f52fc451",
+      "catalog_sha256": "a06efb9a8b05435b343eac224795bf74fd2839eca5230ab4b4cbd8f6dfd9a0cf"
+    },
+    "java_fault": {
+      "path": "docs/phase-4/evidence/tcc-managed/java-fault_20261128_021826_10ac82b1",
+      "catalog_sha256": "49c8110df4dcda8b925d52b80ba1652a749de58014456ba1bc7591fc1a7b43e6"
+    },
+    "rust199": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.99_20261128_021445_897954fa",
+      "catalog_sha256": "b530f4635dc98996cf4ed40897833c71889a5fd829033a367451a11aaffdb9d9"
+    },
+    "rust185": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.85_20261128_021456_b4810c6a",
+      "catalog_sha256": "e18f6cd9c3d5a4d030a1b0b8a313a95fb3eac8209ea8870b603a640d20f27df1"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/tcc-managed/validation_20261128_process_final",
+      "catalog_sha256": "03402ec2ff6aa7e5ab599b7cd9d3c4a3993ce5ac11bedae67b5df770ac0be735"
+    }
+  },
+  "remaining": [
+    "Original Java TC simultaneous writer/database crash and broader fault/concurrency/topology matrix",
+    "Dynamic action-context reporting",
+    "Production privileges/retention/cleanup/observability/load and operations",
+    "Remaining AT/XA gates; Phase 5-7"
+  ]
+}

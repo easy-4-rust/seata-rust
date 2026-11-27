@@ -9,6 +9,8 @@ mod command_proxy;
 mod fixture;
 #[path = "support/tcc_managed_peer.rs"]
 mod peer;
+#[path = "support/tcc_managed_process_cases.rs"]
+mod process_cases;
 #[path = "support/tcc_managed_registration_cases.rs"]
 mod registration_cases;
 use seata_db_mysql::MySqlTccResourceManager;

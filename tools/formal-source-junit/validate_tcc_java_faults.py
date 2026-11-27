@@ -60,10 +60,18 @@ def check_case(folder, prefix, mode, direction, alterations=None):
         need([r['action'] for r in replies] == ['hold','release_original'] and [r['delivery_count'] for r in replies] == [0,1], 'Duplicate replies not held/released exactly')
         need(replies[0]['frame_hex'] == replies[1]['frame_hex'] == replies[1]['released_frame_hex'] and summary['released'] == 1 and summary['closed'] == 0, 'Released reply not original bytes')
     else:
-        need(len(callbacks) == 2 and callbacks[0]['body'] == callbacks[1]['body'] and callbacks[0]['connection'] < callbacks[1]['connection'], 'TC did not retry original callback on new RM session')
         need([r['action'] for r in replies] == ['drop_and_close','forward'] and [r['delivery_count'] for r in replies] == [0,1] and summary['closed'] == 1 and summary['connections'] >= 2, 'Original terminal loss/close/reconnect missing')
-        need(len([r for r in events if r['event'] == 'fault_close']) == 1, 'Original RM session not actually closed')
-        need(any(r['kind'] == 103 and r['connection'] == callbacks[1]['connection'] for r in rm) and any(r['kind'] == 104 and r['connection'] == callbacks[1]['connection'] and r['body'][2:4] == b'\x01\x00' for r in rm), 'New RM session did not register again')
+        closes = [r for r in events if r['event'] == 'fault_close']
+        need(len(closes) == 1, 'Original RM session not actually closed')
+        old,new = replies[0]['connection'],replies[1]['connection']
+        need(old < new and callbacks[0]['connection'] == old and all(r['body'] == callbacks[0]['body'] and r['action'] == 'forward' and r['delivery_count'] == 1 for r in callbacks), 'TC did not retry original callback unchanged on new RM session')
+        correlations = [(r['connection'],r['request_id']) for r in callbacks]
+        need(len(correlations) == len(set(correlations)), 'Duplicate callback request correlation')
+        # 原 TC 同步结束与后台重试可能重叠：关闭前旧连接上的未答复请求只能保持未决。
+        old_callbacks = [r for r in callbacks if r['connection'] == old]
+        new_callbacks = [r for r in callbacks if r['connection'] == new]
+        need(len(old_callbacks)+len(new_callbacks) == len(callbacks) and all(r['monotonic_ns'] < closes[0]['monotonic_ns'] for r in old_callbacks) and len(new_callbacks) == 1 and new_callbacks[0]['request_id'] == replies[1]['request_id'], 'Unmatched callback not bounded by original closed session')
+        need(any(r['kind'] == 103 and r['connection'] == new for r in rm) and any(r['kind'] == 104 and r['connection'] == new and r['body'][2:4] == b'\x01\x00' for r in rm), 'New RM session did not register again')
     need(all(r['action'] == 'forward' and r['delivery_count'] == 1 for r in rm if r not in callbacks+replies), 'Unrelated RM message altered')
     need(tm_summary['mode'] == 'basic' and all(r['action'] == 'forward' and r['delivery_count'] == 1 for r in tm), 'TM decision altered')
     tm_wire = [(r['kind'],r['body'],r['direction']) for r in tm]
@@ -97,6 +105,7 @@ def verify(folder,digest):
 
 def weakenings(folder):
     rejected = 0
+    overlap_cases = 0
     for version in ['1.99','1.85']:
         for mode in ['duplicate','reconnect']:
             for direction in ['commit','rollback']:
@@ -111,11 +120,23 @@ def weakenings(folder):
                 changed = copy.deepcopy(rm);row = next(r for r in changed if r['kind'] == (4 if direction == 'commit' else 6));row['body'] = row['body'][:-1]+b'\x0a';changes.append({'rm':changed})
                 changed = [r for r in copy.deepcopy(rm) if r['kind'] != 11];changes.append({'rm':changed})
                 changes.extend([{'tc_logs':b'Finished'},{'facts':{'independent-state':b''}},{'facts':{'business-dml':b'Execute\tINSERT INTO tcc_managed(id,v) VALUES(999,999)'}},{'facts':{'independent-tc':b'1\t0\t0'}}])
+                if mode == 'reconnect':
+                    changed = copy.deepcopy(rm)
+                    next(r for r in reversed(changed) if r['kind'] == (3 if direction == 'commit' else 5))['connection'] = 1
+                    changes.append({'rm':changed})
+                    changes.append({'rm':[r for r in copy.deepcopy(rm) if r['kind'] != 103 or r['connection'] == 1]})
+                    old = [r for r in rm if r['kind'] == (3 if direction == 'commit' else 5) and r['connection'] == 1]
+                    if len(old) > 1:
+                        overlap_cases += 1
+                        for field,value in [('monotonic_ns',2**63),('request_id',old[0]['request_id'])]:
+                            changed = copy.deepcopy(rm)
+                            next(r for r in changed if r['index'] == old[1]['index'])[field] = value
+                            changes.append({'rm':changed})
                 for alteration in changes:
                     try:check_case(folder,prefix,mode,direction,alteration)
                     except ValueError:rejected += 1
                     else:raise RuntimeError('TCC original TC evidence weakening accepted')
-    need(rejected == 96, 'TCC fault weakening matrix incomplete')
+    need(rejected == 104+2*overlap_cases, 'TCC fault weakening matrix incomplete')
     return rejected
 
 

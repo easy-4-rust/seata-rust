@@ -1,0 +1,26 @@
+{
+  "diagnostic_only": [
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_020043_73ce62f2",
+      "purpose": "Nine writer exits without database fault; early runner without independent OS and stage SQL collection"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_020121_321cbc3d",
+      "purpose": "Nine graceful same-data restarts; early runner before independent OS/stage SQL collection"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_020315_ce4a22a5",
+      "purpose": "Nine SIGKILL same-data restarts and OS handle proof; before splitting pre/post-recovery DML exports"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/java-fault_20261128_021600_9818733f",
+      "purpose": "Failed fixture startup: proxy bind WinError 10013 / listener owner mismatch; owned processes and container cleaned; not acceptance evidence"
+    }
+  ],
+  "final_process_authority": "docs/phase-4/evidence/tcc-managed/process_20261128_021414_f4cc4adf",
+  "initial_fault_validation_rejection": {
+    "reason": "One original TC rollback naturally retried on the old session before fault close; exact-two-callback checker rejected three original callbacks",
+    "fix": "All identities/correlations and close timing checked; only unanswered pre-close old-session retries allowed; exactly one acknowledged callback on re-registered new session; added ten negative controls",
+    "raw_evidence_unchanged": true
+  }
+}

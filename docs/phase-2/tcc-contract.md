@@ -63,3 +63,11 @@ RM apply/recover 都先核对当前物理表、持久原身份和实例；在持
 `try_registered` 的调用方须事先保留原回执，取消 Future 没有返回值，不能事后从裸字段重造回执。实际 Try/业务已持锁但尚未 COMMIT 时取消，旧事务释放后原 Cancel 才能确认 SUSPENDED，不能在旧会话仍持锁时猜空回滚。原 COMMIT OK 已真实到达代理而未交给调用方时取消，已提交的 TRIED/业务必须保留，由原 TC 的 Cancel 决定补偿；取消本身不证明事务未提交。两种边界均以实际独立 SQL/锁等待或原包核验，原回执晚到或克隆不能再次 Try。
 
 本轮选定边界已经取得 [原回调故障、登记和取消验收证据](../phase-4/evidence/tcc-managed/CALLBACK_REGISTRATION_CANCELLATION.md) 与 [本轮 ledger](../phase-4/mysql-tcc-callback-registration-cancellation.json)：双版本共 16 项真实 MySQL、4 项正常原 TC、8 项原 TC 回调故障事务，250 项证据削弱拒绝；工作区每版 791 passed / 382 ignored，严格检查通过。该证据补充上述六用例基线，完整 TCC 门禁及总计划保持未完成。
+
+## 写入进程强制终止与同实例数据库恢复
+
+验收须使用父夹具实际创建的操作系统子进程句柄，在真实业务 DML 未提交、TRIED 已提交、Try/Confirm/Cancel 原 COMMIT OK 被截留、Confirm/Cancel DML 未提交及空 Cancel 原 OK 被截留时强制终止写入者。现场 PID、存活句柄、原成功登记回执、原 COMMIT/OK 字节或实际 InnoDB 排他锁分别证明对应边界；状态文件不能替代进程存活或提交证明。
+
+写入者真实退出后，分别保持数据库运行、正常重启或 SIGKILL 后启动同一自有 MySQL 数据目录。核对原 UUID 与原 Fence/业务，不能重建数据库、补写状态或换身份。新 RM/新连接重开旧持久日志，仅处理同一原回调，旧 Pending 在终态提交确认前不能变 Completed。未提交 Try 必须回滚后由原 Cancel 建立 SUSPENDED；已提交 TRIED 继续原 Confirm/Cancel，已提交终态复用完成。独立 general_log 应分别记录未提交尝试和恢复实际执行，重复回调不能再次执行已经提交的业务。原实例变化/损坏及更广生产拓扑仍按独立门禁处理。
+
+上述选定边界已取得 [进程与同库恢复证据](../phase-4/evidence/tcc-managed/PROCESS_DATABASE_RECOVERY.md) 及 [本轮 ledger](../phase-4/mysql-tcc-process-database-recovery.json)：双版本 54 个实际强杀/数据库恢复场景，16 项 MySQL、4 项正常原 TC、8 项原 TC 回调故障回归通过，902 项证据削弱被拒绝；每版工作区 791 passed / 384 ignored，严格检查通过。原 TC 的一次自然旧连接重试重叠按原身份、关联号及关闭时序校验，不把未答复请求算成功。完整 TCC 与总计划继续开放。

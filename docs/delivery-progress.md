@@ -1297,3 +1297,9 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 双 Rust 各 5 项身份、8 项真实 MySQL 场景通过，包含三种真实 OK 截留（各控制命令一次）、先观察实际行锁等待再取消、原进程退出、同一 MySQL 重启和新进程同身份恢复。全工作区各 785 passed / 356 ignored（169 摘要含 rustdoc），最终受影响目标及默认/仅 XA 严格检查通过；原生产字节未变，最后 native 观察补强后已重新执行全部现场/封存。七类生产源反例共十四次拒绝，每版本十二项弱化证据拒绝，独立 SQL/原帧/重启三分量均核验。[XA 契约](phase-2/mysql-xa-contract.md)、[native ledger](phase-4/mysql-xa-native.json)、[证据与诊断](phase-4/evidence/mysql-xa/README.md)。
 
 此为总计划中独立 XA 路径的基础增量，未关闭 XA Resource/RM/Java TC 全局门禁；AT 的外部写入器/TC 锁安全及默认有变化 COMMIT 门槛保持。持久 XA 所有权/方向、正式回调权威恢复、完整故障/SQL/部署门禁，TCC/Fence/空回滚/悬挂和全部 Phase 5–7 继续。
+
+## TCC 真实写入进程与同库恢复增量（2026-11-28）
+
+按现有 Phase 4/TCC contract 补齐双 Rust 的九个真实写入者强杀边界，分别联测数据库持续运行、正常重启与 SIGKILL 后同目录恢复，共 54 场景。独立 OS 句柄、原 COMMIT/OK、实际行锁、原 UUID/Fence/业务、旧日志 CRC 与恢复前后 DML 联合验证通过；16 项 MySQL、4 项正常原 Java TC、8 项原 TC 回调故障回归通过，902 项证据削弱拒绝。工作区各 791 passed / 384 ignored，严格检查通过。[证据](phase-4/evidence/tcc-managed/PROCESS_DATABASE_RECOVERY.md)、[ledger](phase-4/mysql-tcc-process-database-recovery.json)。生产 API、迁移、Java Undo/旧 AT/XA 记录未改动。
+
+该进程矩阵使用正式 RM 与原 V1 协议测试对端，不计作原 Java TC 同时崩溃联合验收。原 TC 一次自然旧连接重试重叠已有严格关联/时序及无业务重放证据。动态上下文报告、完整故障/并发/拓扑、生产权限/保留清理/负载/运维以及 AT/XA 剩余门禁、Phase 5–7 仍未完成，范围不缩减。
