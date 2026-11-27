@@ -181,3 +181,19 @@ MySqlDataSource 及使用同一数据源克隆的 MySqlDataSourceManager 签发 
 
 
 本节所选真实 MySQL/TCP 与原 Java TC 场景已通过双工具链验证；每版本八个 native 目标、一个认证 HTTP 及八个原 Java TC 场景。三个正式源结算反例均由实际计数断言拒绝，恢复后通过；每 Java profile 的 12 项证据削弱拒绝。全工作区各 743 passed / 340 ignored、默认依赖与严格检查、一次端口绑定诊断及单行共享测试助手 lint 差异的精确输入核对见 [失败报告证据](evidence/failure-report-metrics/README.md)。当前固定导出为 63 条；该增量不关闭完整 WP07 或其他阶段。
+
+
+## MySQL 恢复控制结果事件（实施基线，2026-11-27）
+
+正式 MySqlDataSourceManager::control 的每次已轮询调用产生一个 INFO 结构化 mysql_control_outcome 事件，target 为 seata_db_mysql::control。字段固定为 operation、requested_phase、xid、branch_id、resource_sha256、outcome、resolution、commit_attempted，以及静态 message；资源仅输出完整 SHA-256。operation 使用原六种控制动作；原控制入口前的非法身份拒绝不产生日志，不新造身份或请求编号。
+
+outcome 为 completed、unknown_commit、before_commit_error、cancelled；completed 只表示原控制 API 返回 Ok，可能为只读回滚或读取既有终态。resolution 只有原 Ok(Applied) 为 applied、Ok(Unknown) 为 unresolved，其余为 not_observed；不据此计算业务效果次数。commit_attempted 只在现有代码进入可能发送控制 COMMIT 的原位置设为 true，不能由 action 名称猜测：例如同一 Commit 动作读既有终态不发送 COMMIT。completed 且 commit_attempted=true 才表示该次控制 COMMIT 在原预算内确认，未知或取消即使服务器实际提交也不发布确认。
+
+取消/panic 由调用作用域销毁结算，保留已经到达的 COMMIT 尝试标记，不推断未发送；正常返回与销毁不得重复输出。日志不记录 SQL、Undo、锁键、application_data、资源 URL、账号、密码、原始错误/帧或两侧摘要，不新增数据库查询、重试、回滚、权限或持久状态。应用仍需配置 subscriber、收集和追踪上下文；本项不交付完整生产采集管线。
+
+验收须以真实 MySQL 控制写入/只读重复观察、提交前错误、实际锁等待取消及原 COMMIT OK 丢失/取消验证结果与尝试位，原字节恢复后同分支继续恢复；核对敏感哨兵缺席、source 反例、双 Rust 与固定原 Java TC 场景。
+
+requested_phase 为 none/commit/rollback，来自原请求动作；尤其 Observe 保留原回调方向。该字段不冒充数据库当前持久方向，冲突/未确认时仍只表示原请求意图。
+
+
+本节选定控制结果事件已通过双 Rust 的真实写入/重复读取、锁等待取消、原 COMMIT OK 截留后的未知/取消与同分支恢复，以及各三个固定原 Java TC 回调场景。原帧、事件和停止后的控制计数对照、每 profile 的 12 项证据削弱、三类正式源反例及当前源码逐字节绑定见 [控制结果事件证据](evidence/mysql-control-events/README.md)。全工作区各 744 passed / 343 ignored，受影响两组件全功能及默认严格检查通过；本项不关闭完整 WP07、生产管线或其余阶段。

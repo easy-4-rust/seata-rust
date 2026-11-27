@@ -1,0 +1,53 @@
+{
+  "actual_commit_packet": "0700000003434f4d4d4954",
+  "actual_ok_packet": "0700000100000002020000",
+  "after_recovery": [
+    1,
+    2,
+    1
+  ],
+  "before_recovery": [
+    1,
+    0,
+    0
+  ],
+  "business_rows": 0,
+  "events": [
+    {
+      "branch_id": "42",
+      "commit_attempted": "true",
+      "message": "mysql_control_outcome",
+      "operation": "enroll",
+      "outcome": "unknown_commit",
+      "requested_phase": "none",
+      "resolution": "not_observed",
+      "resource_sha256": "40330f4c07ae9dfdffd82a0cb5d03ab26339a20f83056e57c4a6ea8785cf6cdb",
+      "target": "seata_db_mysql::control",
+      "xid": "rollback:xid"
+    },
+    {
+      "branch_id": "42",
+      "commit_attempted": "true",
+      "message": "mysql_control_outcome",
+      "operation": "bind_rollback",
+      "outcome": "completed",
+      "requested_phase": "rollback",
+      "resolution": "unresolved",
+      "resource_sha256": "40330f4c07ae9dfdffd82a0cb5d03ab26339a20f83056e57c4a6ea8785cf6cdb",
+      "target": "seata_db_mysql::control",
+      "xid": "rollback:xid"
+    },
+    {
+      "branch_id": "42",
+      "commit_attempted": "true",
+      "message": "mysql_control_outcome",
+      "operation": "rollback",
+      "outcome": "completed",
+      "requested_phase": "rollback",
+      "resolution": "applied",
+      "resource_sha256": "40330f4c07ae9dfdffd82a0cb5d03ab26339a20f83056e57c4a6ea8785cf6cdb",
+      "target": "seata_db_mysql::control",
+      "xid": "rollback:xid"
+    }
+  ]
+}

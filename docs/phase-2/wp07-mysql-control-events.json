@@ -1,0 +1,79 @@
+{
+  "status": "SELECTED_MYSQL_CONTROL_RESULT_EVENTS_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "target": "seata_db_mysql::control",
+  "message": "mysql_control_outcome",
+  "event_fields": [
+    "operation",
+    "requested_phase",
+    "xid",
+    "branch_id",
+    "resource_sha256",
+    "outcome",
+    "resolution",
+    "commit_attempted"
+  ],
+  "native_live_tests_per_version": 3,
+  "actual_COMMIT_OK_faults_per_version": 2,
+  "original_java_profiles_per_version": 3,
+  "source_mutations_per_version": 3,
+  "java_evidence_negative_controls_per_profile": 12,
+  "workspace_tests_per_version": {
+    "passed": 744,
+    "ignored": 343
+  },
+  "strict_Clippy_packages": [
+    "seata-db-mysql",
+    "seata-observability"
+  ],
+  "default_checks_passed": true,
+  "default_observability_sqlx_dependency": false,
+  "all_executed_source_inputs_match_current_bytes": true,
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "remaining MySQL/durable branch events",
+    "production subscriber, collection, alerts and cross-process tracing",
+    "production authentication and complete security/load gates",
+    "independent external review",
+    "remaining WP05-07 and Phase4-7"
+  ],
+  "evidence": {
+    "red": {
+      "path": "docs/phase-2/evidence/mysql-control-events/red_20261127_145255_2b4816eb",
+      "catalog_sha256": "771f3af6b2a78a9cefd9037c6879164d868d5faeb2a5ae23fe673664da2d7cd6"
+    },
+    "native": {
+      "path": "docs/phase-2/evidence/mysql-control-events/run_20261127_153804_cd5a4ec2",
+      "catalog_sha256": "f742634920b671c8f2823fc6af8417390a120d3fd37a561e19139033d4b2c811"
+    },
+    "original_java_tc": {
+      "path": "docs/phase-2/evidence/mysql-control-events/java_20261127_153804_5be1c0cc",
+      "catalog_sha256": "5d5c59077312ef7796786d6e78249fac22f1c94bbbc827cb67a95b323716e97f"
+    },
+    "source_mutations": {
+      "path": "docs/phase-2/evidence/mysql-control-events/mutations_20261127_152506_38e763f4",
+      "catalog_sha256": "2eb82710f60bf92f3618c5334416e0b556738b9841fc8adab6c985ff5025cf4b"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/mysql-control-events/validation_20261127_154742_1c3c4dde",
+      "catalog_sha256": "2a6058856edb8ef1a4229311342b245f651934d8cf7e7bdb973ba7c45ddcd056"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/mysql-control-events/default_20261127_154033_33554c6a",
+      "catalog_sha256": "d36fdff76a94661d12c6a62276cbc141778483cd92bc45afc2195c48c22fda95"
+    },
+    "regression_199": {
+      "path": "docs/phase-2/evidence/mysql-control-events/regression_1.99_20261127_154033_e0611eb2",
+      "catalog_sha256": "a756cb3aeef4345a8c4b3126520952389f2b90818f464a14d8a1334ad67f814a"
+    },
+    "regression_185": {
+      "path": "docs/phase-2/evidence/mysql-control-events/regression_1.85_20261127_153804_9b7069c9",
+      "catalog_sha256": "f4a73e69ebb0297b9bd2067b02d08f8eada716238ca3aa26d6a1802ab93d8956"
+    }
+  }
+}

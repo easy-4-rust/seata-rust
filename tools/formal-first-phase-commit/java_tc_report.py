@@ -287,7 +287,7 @@ seata:
                SEATA_UNDO_STORE_OUT=str(observations), SEATA_RM_ENDPOINT=f"127.0.0.1:{rm}",
                SEATA_TM_ENDPOINT=f"127.0.0.1:{tm}")
     env.pop("SEATA_MYSQL_CONTROL_METRICS", None)
-    if scenario in ("commit_db_drop_ok","rollback_db_drop_ok"):
+    if scenario in ("commit_db_drop_ok","rollback_db_drop_ok") or env.get("SEATA_MYSQL_CONTROL_EVENTS") == "1":
         env["SEATA_MYSQL_CONTROL_METRICS"]="1"
     env.pop("SEATA_RM_CALL_METRICS", None)
     if scenario in ("commit", "commit_report_loss", "rm_call_rejected"):
@@ -968,6 +968,14 @@ seata:
             guard.put(out / stage_metrics.name, stage_metrics.read_bytes())
         for event_file in observations.glob("rm-callback-write-events.json"):
             guard.put(out / event_file.name, event_file.read_bytes())
+        for control_name in ("mysql-control-events.json", "mysql-control-metrics.json"):
+            control_file = observations / control_name
+            if control_file.is_file():
+                destination = out / control_name
+                if destination.exists():
+                    assert json.loads(destination.read_bytes()) == json.loads(control_file.read_bytes())
+                else:
+                    guard.put(destination, control_file.read_bytes())
         for binding_file in observations.glob("tm-transport-binding.json"):
             guard.put(out / binding_file.name, binding_file.read_bytes())
         guard.save(out / "process-cleanup.json", {"stopped": all(p.poll() is not None for p in processes),

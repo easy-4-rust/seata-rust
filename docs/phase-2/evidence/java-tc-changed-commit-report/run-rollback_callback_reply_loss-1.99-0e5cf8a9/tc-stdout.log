@@ -1,0 +1,100 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+15:39:34.940  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+15:39:34.990  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+15:39:35.010  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 27476 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\java-rollback_callback_reply_loss-report-1.99-0e5cf8a9)
+15:39:35.011  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+15:39:35.920  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+15:39:35.938  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+15:39:36.144  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 1.847 seconds (process running for 2.759)
+15:39:36.506  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+15:39:36.711  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+15:39:36.875  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 49535
+15:39:36.884  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/java-rollback_callback_reply_loss-report-1.99-0e5cf8a9/logs.
+15:39:36.884  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 732 millSeconds
+15:39:52.964  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='jdbc:mysql://127.0.0.1:43318/undo_java_rollback_callback_reply_loss_report_199_0e5cf8a9', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x3ad57834, L:/127.0.0.1:49535 - R:/127.0.0.1:58022],client version:1.1.0
+15:39:52.966  INFO --- [ttyServerNIOWorker_1_1_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0xe5911265, L:/127.0.0.1:49535 - R:/127.0.0.1:58020],client version:1.1.0,client protocol-version:null
+15:39:52.970  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='mysql-changed-report-original-tc', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:52.989  INFO --- [rverHandlerThread_1_2_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:49535:4045081688962166785] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: mysql-changed-report-original-tc,timeout:60000,xid:198.18.0.1:49535:4045081688962166785
+15:39:52.990  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:49535:4045081688962166785', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:53.035  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:49535:4045081688962166785', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:43318/undo_java_rollback_callback_reply_loss_report_199_0e5cf8a9', lockKey='undo_work:1', applicationData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:53.061  INFO --- [rverHandlerThread_1_3_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:49535:4045081688962166785] : Register branch successfully, xid = 198.18.0.1:49535:4045081688962166785, branchId = 4045081688962166787, resourceId = jdbc:mysql://127.0.0.1:43318/undo_java_rollback_callback_reply_loss_report_199_0e5cf8a9 ,lockKeys = undo_work:1
+15:39:53.062  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045081688962166787, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:53.274  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchReportRequest{xid='198.18.0.1:49535:4045081688962166785', branchId=4045081688962166787, resourceId='jdbc:mysql://127.0.0.1:43318/undo_java_rollback_callback_reply_loss_report_199_0e5cf8a9', status=PhaseOne_Done, applicationData='null', branchType=AT}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:53.283  INFO --- [rverHandlerThread_1_4_500] [erver.coordinator.AbstractCore] [        branchReport]  [198.18.0.1:49535:4045081688962166785] : Report branch status successfully, xid = 198.18.0.1:49535:4045081688962166785, branchId = 4045081688962166787
+15:39:53.283  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchReportResponse{resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:53.288  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalRollbackRequest{xid='198.18.0.1:49535:4045081688962166785', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:53.486  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:58022 to server channel inactive.
+15:39:53.486  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x3ad57834, L:/127.0.0.1:49535 ! R:/127.0.0.1:58022]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:58022', channel=[id: 0x3ad57834, L:/127.0.0.1:49535 ! R:/127.0.0.1:58022], resourceSets=[]}
+15:39:53.542  INFO --- [rverHandlerThread_1_6_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='jdbc:mysql://127.0.0.1:43318/undo_java_rollback_callback_reply_loss_report_199_0e5cf8a9', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x608c41f1, L:/127.0.0.1:49535 - R:/127.0.0.1:58049],client version:1.1.0
+15:39:54.068  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:49535:4045081688962166785] : Choose [id: 0x608c41f1, L:/127.0.0.1:49535 - R:/127.0.0.1:58049] on the same IP[127.0.0.1] as alternative of phase0-auth:127.0.0.1:58022
+15:39:54.071  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='198.18.0.1:49535:4045081688962166785', branchId=4045081688962166787, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:39:54.085  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [198.18.0.1:49535:4045081688962166785] : Rollback branch transaction successfully, xid = 198.18.0.1:49535:4045081688962166785 branchId = 4045081688962166787
+15:39:54.098  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:49535:4045081688962166785] : Rollback global transaction successfully, xid = 198.18.0.1:49535:4045081688962166785.
+15:40:08.296  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [  userEventTriggered]  [] : channel:[id: 0xe5911265, L:/127.0.0.1:49535 - R:/127.0.0.1:58020] read idle.
+15:40:08.296  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:58020 to server channel inactive.
+15:40:08.296  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xe5911265, L:/127.0.0.1:49535 - R:/127.0.0.1:58020]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:58020', channel=[id: 0xe5911265, L:/127.0.0.1:49535 - R:/127.0.0.1:58020], resourceSets=null}
+15:40:08.296  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [hannelHandlerContext]  [] : closeChannelHandlerContext channel:[id: 0xe5911265, L:/127.0.0.1:49535 - R:/127.0.0.1:58020]
+15:40:08.297  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:58020 to server channel inactive.
+15:40:08.297  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xe5911265, L:/127.0.0.1:49535 ! R:/127.0.0.1:58020]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:58020', channel=[id: 0xe5911265, L:/127.0.0.1:49535 ! R:/127.0.0.1:58020], resourceSets=null}
+15:40:08.310 ERROR --- [rverHandlerThread_1_5_500] [pc.netty.AbstractNettyRemoting] [            sendSync]  [198.18.0.1:49535:4045081688962166785] : wait response error:null ,cost: 15008 ms,ip:/127.0.0.1:58022,request:BranchRollbackRequest{xid='198.18.0.1:49535:4045081688962166785', branchId=4045081688962166787, branchType=AT, resourceId='jdbc:mysql://127.0.0.1:43318/undo_java_rollback_callback_reply_loss_report_199_0e5cf8a9', applicationData='null'}
+15:40:08.311 ERROR --- [rverHandlerThread_1_5_500] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:49535:4045081688962166785] : Rollback branch transaction exception, xid = 198.18.0.1:49535:4045081688962166785 ,branchId = 4045081688962166787 ,retrying=false ,exception = Send branch rollback failed, xid = 198.18.0.1:49535:4045081688962166785 branchId = 4045081688962166787, global rollback failed
+15:40:08.313 ERROR --- [rverHandlerThread_1_5_500] [ption.AbstractExceptionHandler] [eptionHandleTemplate]  [198.18.0.1:49535:4045081688962166785] : Catch TransactionException while do RPC, request: GlobalRollbackRequest{xid='198.18.0.1:49535:4045081688962166785', extraData='null'}
+==> 
+org.apache.seata.core.exception.TransactionException: global rollback request failed. xid=198.18.0.1:49535:4045081688962166785, msg=updateGlobalSessionStatus failed.
+	at org.apache.seata.server.AbstractTCInboundHandler$3.execute(AbstractTCInboundHandler.java:159)
+	at org.apache.seata.server.AbstractTCInboundHandler$3.execute(AbstractTCInboundHandler.java:150)
+	at org.apache.seata.core.exception.AbstractExceptionHandler.exceptionHandleTemplate(AbstractExceptionHandler.java:128)
+	at org.apache.seata.server.AbstractTCInboundHandler.handle(AbstractTCInboundHandler.java:149)
+	at org.apache.seata.core.protocol.transaction.GlobalRollbackRequest.handle(GlobalRollbackRequest.java:34)
+	at org.apache.seata.server.limit.AbstractTransactionRequestHandler.next(AbstractTransactionRequestHandler.java:44)
+	at org.apache.seata.server.limit.ratelimit.RateLimiterHandler.handle(RateLimiterHandler.java:75)
+	at org.apache.seata.server.limit.LimitRequestDecorator.handle(LimitRequestDecorator.java:44)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.onRequest(DefaultCoordinator.java:806)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.onRequestMessage(ServerOnRequestProcessor.java:216)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.process(ServerOnRequestProcessor.java:126)
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemoting.lambda$processMessage$2(AbstractNettyRemoting.java:315)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.apache.seata.common.exception.StoreException: updateGlobalSessionStatus failed.
+	at org.apache.seata.server.storage.db.session.DataBaseSessionManager.updateGlobalSessionStatus(DataBaseSessionManager.java:78)
+	at org.apache.seata.server.session.AbstractSessionManager.onStatusChange(AbstractSessionManager.java:133)
+	at org.apache.seata.server.session.GlobalSession.changeGlobalStatus(GlobalSession.java:252)
+	at org.apache.seata.server.session.GlobalSession.queueToRetryRollback(GlobalSession.java:893)
+	at org.apache.seata.server.coordinator.DefaultCore.lambda$doGlobalRollback$3(DefaultCore.java:492)
+	at org.apache.seata.server.session.SessionHelper.forEach(SessionHelper.java:395)
+	at org.apache.seata.server.coordinator.DefaultCore.doGlobalRollback(DefaultCore.java:433)
+	at org.apache.seata.server.coordinator.DefaultCore.rollback(DefaultCore.java:419)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.doGlobalRollback(DefaultCoordinator.java:351)
+	at org.apache.seata.server.AbstractTCInboundHandler$3.execute(AbstractTCInboundHandler.java:155)
+	... 15 common frames omitted
+ <==
+15:40:08.317 ERROR --- [rverHandlerThread_1_5_500] [pc.netty.AbstractNettyRemoting] [bda$processMessage$2]  [198.18.0.1:49535:4045081688962166785] : 0104
+==> 
+java.lang.RuntimeException: channel is error.
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemotingServer.sendAsyncResponse(AbstractNettyRemotingServer.java:124)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.onRequestMessage(ServerOnRequestProcessor.java:217)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.process(ServerOnRequestProcessor.java:126)
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemoting.lambda$processMessage$2(AbstractNettyRemoting.java:315)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==
+15:40:08.360  INFO --- [ttyServerNIOWorker_1_4_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0xa58cdc48, L:/127.0.0.1:49535 - R:/127.0.0.1:61152],client version:1.1.0,client protocol-version:null
+15:40:08.362  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalStatusRequest{xid='198.18.0.1:49535:4045081688962166785', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+15:40:08.364  INFO --- [ttyServerNIOWorker_1_3_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:58049 to server channel inactive.
+15:40:08.365  INFO --- [ttyServerNIOWorker_1_3_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x608c41f1, L:/127.0.0.1:49535 ! R:/127.0.0.1:58049]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:58049', channel=[id: 0x608c41f1, L:/127.0.0.1:49535 ! R:/127.0.0.1:58049], resourceSets=[]}
+15:40:08.365  INFO --- [ttyServerNIOWorker_1_4_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:61152 to server channel inactive.
+15:40:08.365  INFO --- [ttyServerNIOWorker_1_4_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xa58cdc48, L:/127.0.0.1:49535 ! R:/127.0.0.1:61152]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:61152', channel=[id: 0xa58cdc48, L:/127.0.0.1:49535 ! R:/127.0.0.1:61152], resourceSets=null}
+15:40:08.368  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalStatusResponse{globalStatus=Finished, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group

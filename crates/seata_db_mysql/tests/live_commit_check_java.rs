@@ -894,11 +894,11 @@ async fn original_java_tc_changed_commit(
                 );
             }
         }
+        rm.shutdown().await.unwrap();
+        tm.shutdown().await.unwrap();
         if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
             java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
         }
-        rm.shutdown().await.unwrap();
-        tm.shutdown().await.unwrap();
         phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
         ds.close().await.unwrap();
         return;
@@ -942,11 +942,11 @@ async fn original_java_tc_changed_commit(
                 "observed_end":observed_end
             }),
         );
+        rm.shutdown().await.unwrap();
+        tm.shutdown().await.unwrap();
         if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
             java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
         }
-        rm.shutdown().await.unwrap();
-        tm.shutdown().await.unwrap();
         phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
         ds.close().await.unwrap();
         return;
@@ -1001,11 +1001,11 @@ async fn original_java_tc_changed_commit(
                     .snapshot(seata_rm::BranchPhase::Rollback),
             ),
         );
+        rm.shutdown().await.unwrap();
+        tm.shutdown().await.unwrap();
         if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
             java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
         }
-        rm.shutdown().await.unwrap();
-        tm.shutdown().await.unwrap();
         phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
         ds.close().await.unwrap();
         return;
@@ -1088,11 +1088,11 @@ async fn original_java_tc_changed_commit(
     if std::env::var("SEATA_RM_CALL_METRICS").as_deref() == Ok("1") {
         java_rm_call_metrics::save(&rm.call_metrics_sampler(), "rm-call-metrics.json");
     }
+    rm.shutdown().await.unwrap();
+    tm.shutdown().await.unwrap();
     if std::env::var("SEATA_MYSQL_CONTROL_METRICS").as_deref() == Ok("1") {
         java_mysql_control_metrics::save(&ds.recovery_metrics_sampler());
     }
-    rm.shutdown().await.unwrap();
-    tm.shutdown().await.unwrap();
     phase_one_metrics_snapshot::save(&ds.phase_one_metrics_sampler());
     ds.close().await.unwrap();
 }

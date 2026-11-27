@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 621, in run
+    validate_mysql_control_metrics(observations,out,scenario,guard.save)
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\mysql_control_metrics.py", line 42, in validate
+    verify(metrics,rows,scenario)
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\mysql_control_metrics.py", line 36, in verify
+    assert metrics==expected(rows,scenario),"control metrics differ from original callbacks and COMMIT OK loss"
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\mysql_control_metrics.py", line 9, in expected
+    assert scenario in ("commit_db_drop_ok","rollback_db_drop_ok")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 1232, in <module>
+    run(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else "commit")
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-first-phase-commit\java_tc_report.py", line 974, in run
+    guard.put(out / control_name, control_file.read_bytes())
+  File "E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\tools\formal-transport-loss\live.py", line 23, in put
+    with path.open('xb') as stream:stream.write(data.encode('utf-8') if isinstance(data,str) else data)
+         ^^^^^^^^^^^^^^^
+  File "C:\Users\hnxyh\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileExistsError: [Errno 17] File exists: 'E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\java-tc-changed-commit-report\\run-commit-1.99-6cff966f\\mysql-control-metrics.json'

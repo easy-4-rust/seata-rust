@@ -135,6 +135,7 @@ pub use util::{
     JdbcConnection, JdbcDriverLoader, JdbcResourceInitialization, JdbcUtils, JdbcXaConnection,
 };
 
+mod my_sql_control_event;
 mod my_sql_control_guard;
 mod my_sql_control_metrics;
 mod my_sql_recovery_metrics_sampler;

@@ -1,0 +1,128 @@
+{
+  "status": "MYSQL_CONTROL_EVENTS_AND_ORIGINAL_TC_VERIFIED",
+  "source_mutations": 6,
+  "native": {
+    "1.99": {
+      "verified": true,
+      "selected_tests": 3,
+      "original_COMMIT_OK_faults": 2
+    },
+    "1.85": {
+      "verified": true,
+      "selected_tests": 3,
+      "original_COMMIT_OK_faults": 2
+    }
+  },
+  "java": [
+    {
+      "Rust": "1.99",
+      "scenario": "commit",
+      "negative_controls": [
+        "missing_event",
+        "duplicate_event",
+        "wrong_xid",
+        "wrong_branch",
+        "raw_resource",
+        "wrong_digest",
+        "SQL_payload",
+        "wrong_phase",
+        "false_unknown",
+        "no_commit_marker",
+        "metrics_boolean",
+        "false_delivery"
+      ]
+    },
+    {
+      "Rust": "1.99",
+      "scenario": "commit_callback_reply_loss",
+      "negative_controls": [
+        "missing_event",
+        "duplicate_event",
+        "wrong_xid",
+        "wrong_branch",
+        "raw_resource",
+        "wrong_digest",
+        "SQL_payload",
+        "wrong_phase",
+        "false_unknown",
+        "no_commit_marker",
+        "metrics_boolean",
+        "false_delivery"
+      ]
+    },
+    {
+      "Rust": "1.99",
+      "scenario": "rollback_callback_reply_loss",
+      "negative_controls": [
+        "missing_event",
+        "duplicate_event",
+        "wrong_xid",
+        "wrong_branch",
+        "raw_resource",
+        "wrong_digest",
+        "SQL_payload",
+        "wrong_phase",
+        "false_unknown",
+        "no_commit_marker",
+        "metrics_boolean",
+        "false_delivery"
+      ]
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "commit",
+      "negative_controls": [
+        "missing_event",
+        "duplicate_event",
+        "wrong_xid",
+        "wrong_branch",
+        "raw_resource",
+        "wrong_digest",
+        "SQL_payload",
+        "wrong_phase",
+        "false_unknown",
+        "no_commit_marker",
+        "metrics_boolean",
+        "false_delivery"
+      ]
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "commit_callback_reply_loss",
+      "negative_controls": [
+        "missing_event",
+        "duplicate_event",
+        "wrong_xid",
+        "wrong_branch",
+        "raw_resource",
+        "wrong_digest",
+        "SQL_payload",
+        "wrong_phase",
+        "false_unknown",
+        "no_commit_marker",
+        "metrics_boolean",
+        "false_delivery"
+      ]
+    },
+    {
+      "Rust": "1.85",
+      "scenario": "rollback_callback_reply_loss",
+      "negative_controls": [
+        "missing_event",
+        "duplicate_event",
+        "wrong_xid",
+        "wrong_branch",
+        "raw_resource",
+        "wrong_digest",
+        "SQL_payload",
+        "wrong_phase",
+        "false_unknown",
+        "no_commit_marker",
+        "metrics_boolean",
+        "false_delivery"
+      ]
+    }
+  ],
+  "independent_external_review": "OPEN",
+  "WP07_complete": false
+}

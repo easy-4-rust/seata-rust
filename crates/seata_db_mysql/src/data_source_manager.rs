@@ -400,16 +400,29 @@ impl MySqlDataSourceManager {
         deadline: Instant,
     ) -> Result<BranchResolution, MySqlRecoveryError> {
         use crate::MySqlRecoveryOperation;
-        let operation = match action {
-            RecoveryAction::Enroll(_) => MySqlRecoveryOperation::Enroll,
-            RecoveryAction::Observe(_) => MySqlRecoveryOperation::Observe,
-            RecoveryAction::Bind(BranchPhase::Commit) => MySqlRecoveryOperation::BindCommit,
-            RecoveryAction::Bind(BranchPhase::Rollback) => MySqlRecoveryOperation::BindRollback,
-            RecoveryAction::Commit => MySqlRecoveryOperation::Commit,
-            RecoveryAction::Rollback => MySqlRecoveryOperation::Rollback,
+        let (operation, phase) = match action {
+            RecoveryAction::Enroll(_) => (MySqlRecoveryOperation::Enroll, None),
+            RecoveryAction::Observe(receipt) => {
+                (MySqlRecoveryOperation::Observe, Some(receipt.phase()))
+            }
+            RecoveryAction::Bind(BranchPhase::Commit) => (
+                MySqlRecoveryOperation::BindCommit,
+                Some(BranchPhase::Commit),
+            ),
+            RecoveryAction::Bind(BranchPhase::Rollback) => (
+                MySqlRecoveryOperation::BindRollback,
+                Some(BranchPhase::Rollback),
+            ),
+            RecoveryAction::Commit => (MySqlRecoveryOperation::Commit, Some(BranchPhase::Commit)),
+            RecoveryAction::Rollback => (
+                MySqlRecoveryOperation::Rollback,
+                Some(BranchPhase::Rollback),
+            ),
         };
         let guard = self.recovery_metrics_sampler().begin(operation);
-        let result = self.control_inner(id, action, deadline).await;
+        let mut event = crate::my_sql_control_event::MySqlControlEvent::new(id, operation, phase);
+        let result = self.control_inner(id, action, deadline, &mut event).await;
+        event.finish(&result);
         guard.finish(&result);
         result
     }
@@ -418,6 +431,7 @@ impl MySqlDataSourceManager {
         id: &BranchIdentity,
         action: RecoveryAction<'_>,
         deadline: Instant,
+        event: &mut crate::my_sql_control_event::MySqlControlEvent,
     ) -> Result<BranchResolution, MySqlRecoveryError> {
         let mut commit_attempted = false;
         let mut rollback_attempt = UndoRollbackAttempt::default();
@@ -586,6 +600,7 @@ impl MySqlDataSourceManager {
             }
             if commit {
                 commit_attempted = true;
+                event.mark_commit_attempted();
                 tx.commit()
                     .await
                     .map_err(|e| DbError::driver("RM recovery commit", e))?;

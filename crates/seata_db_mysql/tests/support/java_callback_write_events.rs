@@ -11,6 +11,28 @@ pub(super) async fn run(future: impl Future<Output = ()>) {
         tracing::subscriber::set_default(super::java_checksum_events::EventCapture(events.clone()));
     future.await;
     let events = events.lock().unwrap();
+    if std::env::var("SEATA_MYSQL_CONTROL_EVENTS").as_deref() == Ok("1") {
+        let control: Vec<_> = events
+            .iter()
+            .filter(|event| {
+                event
+                    .get("target")
+                    .is_some_and(|target| target == "seata_db_mysql::control")
+            })
+            .collect();
+        assert!(
+            !control.is_empty(),
+            "original TC MySQL control events must be captured"
+        );
+        for event in &control {
+            assert_eq!(event.len(), 10);
+            assert_eq!(event["message"], "mysql_control_outcome");
+        }
+        super::fixture::save(
+            "mysql-control-events.json",
+            &serde_json::to_value(control).unwrap(),
+        );
+    }
     let selected: Vec<&BTreeMap<String, String>> = events
         .iter()
         .filter(|event| {

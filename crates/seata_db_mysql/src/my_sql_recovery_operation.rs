@@ -15,3 +15,17 @@ pub enum MySqlRecoveryOperation {
     /// 补偿回滚或读取既有回滚终态。
     Rollback,
 }
+
+impl MySqlRecoveryOperation {
+    /// 无参数；返回固定控制动作名称，不含业务身份或调用方输入。
+    pub const fn label(self) -> &'static str {
+        match self {
+            Self::Enroll => "enroll",
+            Self::Observe => "observe",
+            Self::BindCommit => "bind_commit",
+            Self::BindRollback => "bind_rollback",
+            Self::Commit => "commit",
+            Self::Rollback => "rollback",
+        }
+    }
+}
