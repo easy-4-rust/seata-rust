@@ -94,3 +94,11 @@ Rollback 在无 Prepared、也没有既有 Prepared 回滚证明时，只能对�
 验收覆盖真实早回调先完成、原登记响应后到仍禁止原启动、回执克隆不重启、手工入口不能签发否定屏障、独立管理器和重复回调终态，以及原登记/回调并发竞争；原 Java TC 与全部受影响回归保持通过。完整进程崩溃、分区、并发故障及生产/其余总计划继续开放。
 
 该增量证据见 [正式早回滚交接](../phase-4/evidence/xa-managed/EARLY_ROLLBACK.md) 和 [machine ledger](../phase-4/mysql-xa-early-rollback.json)。双版本每版十二项真实 MySQL（含三个登记竞争与五类孤立证据子场景）、原 Java TC 两方向、完整工作区各 785 passed / 370 ignored 及严格 XA/MySQL Clippy 通过。独立源码/原始包/SQL 校验和每版十八项证据削弱拒绝均已执行。手工缺行仍 Unknown，只有正式回调能力可以签发早否定屏障；完整生产和总计划继续开放。
+
+## 真实进程与控制提交响应丢失验证
+
+以独立执行进程实际完成原登记、guard 和业务/Prepare，不序列化或补造 RegisteredBranch；在可审计检查点强制终止自有进程，再由新数据源、正式新 RM 连接及持久日志恢复原身份。检查 guard 实际持锁、Prepared 在原进程死亡后仍存在、提交/回滚原 OK 已返回到透传代理但未送达，以及控制终态 COMMIT 已实际生效而文件日志仍 Pending 的边界。
+
+覆盖 enlist 后、活动业务后、Prepare 后两方向、原生 Commit/Rollback OK 截留后、两方向终态控制 COMMIT OK 截留后；另将自有写入进程事件循环停住，证实进程仍存活、guard 尚未释放时回调保持 Pending，实际终止后才能完成。所有终止均使用自有 Child 句柄，不按外部 PID 杀进程或发 SQL KILL。子进程 PID、原始请求/OK、旧日志状态、数据库前后状态、新 RM 回调和独立 general_log 一起封存。该故障矩阵验证现有恢复机制，不据单个进程测试关闭完整 XA/生产或总计划。
+
+最终证据见 [真实进程故障验证](../phase-4/evidence/xa-managed/PROCESS_CRASH.md) 和 [machine ledger](../phase-4/mysql-xa-process-crash.json)：双版本每版十三项受管理 MySQL、九个实际 writer 进程检查点，合计十八次实际进程退出/恢复；原生和终态控制 OK 截留后旧 Pending 日志恢复，无原生结束重放；无响应旧 guard 在实际释放前保持 Pending。工作区各 785 passed / 372 ignored，严格检查和原 Java TC 正常两方向回归通过，每版二十三项证据削弱被拒绝。该批验收没有新增运行时行为，完整 XA/生产及总计划继续开放。

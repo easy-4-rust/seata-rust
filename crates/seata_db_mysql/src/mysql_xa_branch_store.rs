@@ -259,7 +259,7 @@ impl MySqlXaBranchStore {
             .map_err(|e| DbError::driver("XA branch bind commit", e))?;
         Ok(true)
     }
-    /// 参数为持原行锁的控制事务、原身份及同方向；仅原生成功响应之后由调用者确认终态。
+    /// 参数为持原行锁的控制事务、原身份及同方向；仅在原生成功响应或完整持久资源证明之后由调用者确认终态。
     pub(crate) async fn complete(
         tx: &mut Transaction<'static, MySql>,
         id: &BranchIdentity,

@@ -103,7 +103,7 @@ def mysql(folder):
     result = load(folder/'result.json')
     need(result['Rust_versions'] == ['1.99', '1.85'] and result['XA_RM_gate_complete'] is False and result['whole_plan_complete'] is False, 'Managed scope changed')
     for rust in result['Rust_versions']:
-        for index in range(12):
+        for index in range(13):
             prefix = rust+'-case-'+str(index)
             need(b'test result: ok. 1 passed;' in (folder/(prefix+'.stdout')).read_bytes(), 'Managed case did not execute')
             need(not (folder/(prefix+'-independent-prepared.stdout')).read_bytes().strip(), 'Managed Prepared remains')
@@ -161,6 +161,17 @@ def mysql(folder):
                 suffix = ("X'"+row['xid'].encode().hex().upper()+"',X'"+('-'+row['branch_id']).encode().hex().upper()+"',9752").encode()
                 need(writes == [b'Query\tXA '+verb+b' '+suffix for verb in [b'START',b'END',b'PREPARE',b'ROLLBACK']], 'Orphan Prepared cleanup command sequence changed')
                 need(not (folder/(prefix+'-independent-business.stdout')).read_bytes().strip(), 'Orphan cleanup leaked business')
+            if index == 12:
+                proof = load(folder/'observations'/rust/'case-12/proof/process-crash-matrix.json')
+                process_proof(proof)
+                expected = []
+                for row in proof['cases']:
+                    suffix = ("X'"+row['xid'].encode().hex().upper()+"',X'"+('-'+row['branch_id']).encode().hex().upper()+"',9752").encode()
+                    verbs = [b'START'] if row['stage'] in ['enlisted','active','unresponsive'] else [b'START',b'END',b'PREPARE',b'COMMIT' if row['callback_status']==5 else b'ROLLBACK']
+                    expected.extend(b'Query\tXA '+verb+b' '+suffix for verb in verbs)
+                    checkpoint = load(folder/'observations'/rust/'case-12/processes'/row['stage']/'child/proof/process-checkpoint.json')
+                    need(checkpoint['rust_process_id'] == row['writer_pid'] and checkpoint['xid'] == row['xid'] and checkpoint['branch_id'] == row['branch_id'], 'Actual writer checkpoint identity differs')
+                need(writes == expected, 'Process recovery repeated or changed native command sequence')
     need(load(folder/'cleanup.json')['owned_container_removed'], 'Owned managed MySQL remains')
 
 
@@ -206,6 +217,36 @@ def orphan_proof(proof):
     for row in proof['cases']:
         need(row['first_status'] == (9 if row['kind'] == 'native_prepared' else 10) and row['provisional_denial_rows_after_failure'] == 0 and row['first_journal'] == 'Pending', 'Orphan evidence falsely committed denial')
         need(row['repaired_status'] == 8 and row['late_start_rejected'] is True and row['journal'] == 'Completed' and row['business'] == [], 'Orphan repair failed original rollback')
+
+
+def process_proof(proof):
+    stages = ['enlisted','active','prepared_commit','prepared_rollback','commit_ok','rollback_ok','terminal_commit_ok','terminal_rollback_ok','unresponsive']
+    need([row['stage'] for row in proof['cases']] == stages and proof['whole_plan_complete'] is False, 'Process crash matrix incomplete')
+    for index,row in enumerate(proof['cases']):
+        stage = row['stage']
+        commit = stage in ['prepared_commit','commit_ok','terminal_commit_ok']
+        intercepted = stage in ['commit_ok','rollback_ok','terminal_commit_ok','terminal_rollback_ok']
+        active = stage in ['enlisted','active','unresponsive']
+        phase = 1 if commit else 2
+        status = 5 if commit else 8
+        need(row['xid'] == 'xa:process:'+stage and row['branch_id'] == str(9007199254741100+index), 'Process original identity changed')
+        need(type(row['writer_pid']) is int and row['writer_pid'] > 0 and row['writer_pid'] == row['checkpoint_pid'] and row['writer_pid'] != row['recovery_pid'] == proof['rust_process_id'], 'Writer and recovery are not distinct real processes')
+        need(row['writer_exited'] is True and row['writer_exit_code'] != 0 and row['guard_locked_at_checkpoint'] is True, 'Owned writer did not crash while holding original guard')
+        need(row['prepared_at_checkpoint'] is (not active) and row['prepared_at_cut'] is stage.startswith('prepared_'), 'Physical Prepared boundary differs')
+        before = [phase,1 if stage.startswith('terminal_') else 0] if intercepted or stage=='unresponsive' else [0,0]
+        need(row['control_before_crash'] == before and row['business_at_cut'] == ([[1,42]] if stage in ['commit_ok','terminal_commit_ok'] else []), 'Physical effect/control cut differs')
+        need(row['old_journal'] == ('Pending' if intercepted else 'None') and row['journal'] == 'Completed', 'Old Pending journal was not recovered')
+        need(row['control_after'] == [phase,1] and row['business'] == ([[1,42]] if commit else []) and row['prepared_remaining'] is False and row['witness_after'] == int(commit), 'Process recovery effect differs')
+        need(row['guard_after'] == ([2,1] if active else [0,0] if commit else None), 'Process guard outcome differs')
+        need(row['callback_status'] == status and row['recovery_statuses'] and row['recovery_statuses'][-1] == status and set(row['recovery_statuses']) <= {status,6 if commit else 9}, 'New RM callback did not finish original branch')
+        need(row['recovery_source_created_after_exit'] is (stage!='unresponsive') and row['first_unresponsive_status'] == (9 if stage=='unresponsive' else None), 'Live unresponsive guard was prematurely completed')
+        if intercepted:
+            request,response = map(bytes,row['held_packet'])
+            command = b'COMMIT' if stage.startswith('terminal_') else ("XA "+('COMMIT' if commit else 'ROLLBACK')+" X'"+row['xid'].encode().hex().upper()+"',X'"+('-'+row['branch_id']).encode().hex().upper()+"',9752").encode()
+            need(int.from_bytes(request[:3],'little') == len(request)-4 and request[3:] == b'\x00\x03'+command and int.from_bytes(response[:3],'little') == len(response)-4 and response[3:5] == b'\x01\x00', 'Held native/control OK not original command')
+            need(type(row['matched_commands']) is int and (row['matched_commands'] >= (4 if commit else 5) if stage.startswith('terminal_') else row['matched_commands']==1), 'Native command replay or wrong control boundary')
+        else:
+            need(row['held_packet'] is None and row['matched_commands'] is None, 'Unexpected ACK fixture in plain crash')
 
 
 if __name__ == '__main__':

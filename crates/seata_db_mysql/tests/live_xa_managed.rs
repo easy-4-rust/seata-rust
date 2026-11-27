@@ -5,8 +5,12 @@
 mod failure_cases;
 #[path = "support/xa_managed_fixture.rs"]
 mod fixture;
+#[path = "support/xa_managed_process_cases.rs"]
+mod process_cases;
 #[path = "../../seata_rm/tests/support/rm_peer.rs"]
 mod rm_fixture;
+#[path = "support/xa_command_proxy.rs"]
+mod xa_command_proxy;
 use rm_fixture::peer;
 use seata_at::SqlRecognizerFactory;
 use seata_datasource::FieldValue;

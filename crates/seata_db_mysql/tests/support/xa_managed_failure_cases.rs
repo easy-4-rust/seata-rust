@@ -1,7 +1,6 @@
 //! 真实成功响应丢失及早于登记响应的回调；不得把暂时缺失误报为终态。
 #![allow(clippy::unwrap_used)]
-#[path = "xa_command_proxy.rs"]
-mod xa_command_proxy;
+use super::xa_command_proxy;
 use super::{bootstrap, callback, fixture, idle, peer, registered, rm};
 use seata_at::SqlRecognizerFactory;
 use seata_db_mysql::{MySqlDataSource, MySqlXaResourceManager};

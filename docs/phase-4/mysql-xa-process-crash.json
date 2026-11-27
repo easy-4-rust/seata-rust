@@ -1,0 +1,70 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "status": "OWNED_WRITER_PROCESS_CRASH_AND_NATIVE_CONTROL_ACK_LOSS_RECOVERY_VERIFIED",
+  "scope": "System failure verification of existing XA recovery",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "actual_managed_mysql_cases_per_version": 13,
+  "actual_writer_processes_per_version": 9,
+  "real_process_stages": [
+    "enlisted",
+    "active",
+    "prepared_commit",
+    "prepared_rollback",
+    "commit_ok",
+    "rollback_ok",
+    "terminal_commit_ok",
+    "terminal_rollback_ok",
+    "unresponsive"
+  ],
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 372,
+    "successful_harness_summaries": 171,
+    "strict_xa_mysql_clippy": true
+  },
+  "original_Java_global_transactions_per_version": 2,
+  "old_pending_journal_reopened_for_ack_loss": true,
+  "native_end_replay_after_ack_loss": false,
+  "database_terminal_before_file_completion_verified": true,
+  "live_unresponsive_guard_result": "Pending until actual owned process exit",
+  "worker_self_lifetime_seconds": 45,
+  "external_PID_or_SQL_KILL": false,
+  "proof_weakenings_rejected_per_version": 23,
+  "runtime_behavior_changed": false,
+  "new_public_API_or_migrations": 0,
+  "Java_Undo_or_legacy_records_changed": false,
+  "authority": {
+    "mysql": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql_20261127_230937_b01a77b4",
+      "catalog_sha256": "4689a742980b8976979081c697247a7a22ee28f63edc0d57c4d259d1340a8ab4"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/xa-managed/java_20261127_231101_0b62aa7d",
+      "catalog_sha256": "4fa26853525df5b9739b736381aebe1cad9498654c8ce710a0f11780acbe79f1"
+    },
+    "regression199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_231101_c53cbbca",
+      "catalog_sha256": "82b67783615687f522106dfda0c7a0d41039024107c4c75c41e5a61213bb8a64"
+    },
+    "regression185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_231225_92d50f57",
+      "catalog_sha256": "ffffc74466d372a6f5edddc8c142bc612d89569a0c9918e927bb33b1d6c84681"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/xa-managed/process_validation_20261127_final",
+      "catalog_sha256": "74119c3b72ba3c9e60a4671b0ca21e91f968c2e43219367d4956d02985507814"
+    }
+  },
+  "remaining": [
+    "Full original Java TC failure/reconnect/concurrency matrix",
+    "OS-level whole-process suspension and real network partition",
+    "Database restart/crash/control unknown outcomes and recovery topology",
+    "Production privileges, deployment, scalability, retention and observability",
+    "All remaining AT/TCC/Phase5-7 plan gates"
+  ],
+  "full_XA_gate_complete": false,
+  "whole_plan_complete": false
+}
