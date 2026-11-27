@@ -1272,3 +1272,10 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 只读日志 sampler 现可独立或与原 TM/RM/MySQL 来源组合，通过原回环 Bearer 端点输出六条固定序列；采集不消费/保留队列，不增加日志递归、身份标签或恢复权限。入队、取给消费者与四类丢弃各自保留语义。
 
 双 Rust 各三个真实 HTTP/TM TCP 目标通过，含错误令牌、全部计数分离、关闭后最终样本、指标源不延长队列寿命及原 32 条 TM 指标组合。三类正式源反例每版本均失败、精确恢复后通过，每版本九项证据削弱拒绝。最终全工作区各 760 passed / 347 ignored，观测组件全功能/默认/仅日志/仅 MySQL 严格检查及默认依赖检查通过。证据、计数分离补强及执行前脚本语法诊断见 [日志指标接入](phase-2/evidence/structured-log-metrics/README.md)。本轮不新增原 Java TC/MySQL 现场；生产抓取告警部署、应用日志组合、追踪、其他状态事件、外部审查和剩余 WP05–07/Phase4–7 继续。
+
+
+## 2026-11-27：与原应用日志栈组合的可选 Layer
+
+新增默认关闭的 structured_log_layer，复用原日志队列/预算/计数，通过官方 per-layer filter 与底层含 Registry 的原应用栈组合，不全局替换过滤或把应用 span 字段带进 Seata JSON。默认及原仅日志依赖边界保持。
+
+双版本各五个目标及一个实际 MySQL Layer 接入通过：动态过滤按原栈基线对照，原 span 父子/record/follows/克隆/关闭、应用全局过滤、七模板及显式 instrument 的实际 TM 请求均核对。三类正式源反例每版本失败、原字节恢复后通过，每版本十三项证据削弱拒绝。最终全工作区各 766 passed / 347 ignored、观测组件全功能与四种子特性严格检查通过。三个新发布依赖及实际解包输入封存，无关锁边恢复。原型中绝对 Span 状态假设和静态/动态过滤夹具问题见 [Layer 组合证据](phase-2/evidence/structured-log-layer/README.md)。原 Java TC 未重跑；自动线程/进程传播、生产 sink/采集告警、其他状态事件、外部审查与全部后续计划继续。

@@ -16,7 +16,18 @@ use seata_rm::{BranchIdentity, BranchPhase, BranchResolution, BranchResource};
 async fn original_mysql_undo_and_control_results_reach_json_file_without_credentials() {
     let (subscriber, receiver, sampler) =
         StructuredLogSubscriber::channel(StructuredLogConfig::new(16, 4096).unwrap());
-    let _capture = tracing::subscriber::set_default(subscriber);
+    #[cfg(feature = "structured_log_layer")]
+    let dispatch = if std::env::var("SEATA_STRUCTURED_LOG_LAYER").as_deref() == Ok("1") {
+        use tracing_subscriber::layer::SubscriberExt;
+        tracing::Dispatch::new(
+            tracing_subscriber::Registry::default().with(subscriber.into_layer()),
+        )
+    } else {
+        tracing::Dispatch::new(subscriber)
+    };
+    #[cfg(not(feature = "structured_log_layer"))]
+    let dispatch = tracing::Dispatch::new(subscriber);
+    let _capture = tracing::dispatcher::set_default(&dispatch);
     let options = MySqlOptions::new(
         "127.0.0.1".into(),
         std::env::var("SEATA_MYSQL_PORT").unwrap().parse().unwrap(),
@@ -57,7 +68,7 @@ async fn original_mysql_undo_and_control_results_reach_json_file_without_credent
             .unwrap(),
         BranchResolution::Unknown
     );
-    let values=sink::finish(receiver,&sampler,"mysql-native",serde_json::json!({"resource_id":resource,"xid":"logs:fixture","branch_id":4242,"fence_inserted":true,"rollback_read_existing_fence":true,"closed_pool_recovery":"Unknown"})).await;
+    let values=sink::finish(receiver,&sampler,"mysql-native",serde_json::json!({"resource_id":resource,"xid":"logs:fixture","branch_id":4242,"fence_inserted":true,"rollback_read_existing_fence":true,"closed_pool_recovery":"Unknown","layer_mode":cfg!(feature = "structured_log_layer") && std::env::var("SEATA_STRUCTURED_LOG_LAYER").as_deref()==Ok("1")})).await;
     assert_eq!(values.len(), 3);
     assert_eq!(values[0]["fields"]["observation"], "fenced_inserted");
     assert_eq!(values[0]["fields"]["commit_attempted"], "true");

@@ -1,0 +1,230 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-structured-log-layer-20261127-182822-ba9778f9",
+      "--label",
+      "seata.structured.logs.owner=f7fd1f950c3a4dd989fe279d19f97669",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_structured_logs_mysql_20261127_182822_ba9778f9/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:54880:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_f7fd1f950c3a",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_f7fd1f950c3a"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-observability",
+      "--features",
+      "mysql,structured_log_layer",
+      "--test",
+      "structured_log_mysql",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\structured_log_mysql-17be538043e08b5d.exe",
+      "original_mysql_undo_and_control_results_reach_json_file_without_credentials",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-durable-fence",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT branch_id,log_status FROM undo_f7fd1f950c3a.undo_log WHERE xid='logs:fixture'"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-reset-fence",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DELETE FROM undo_f7fd1f950c3a.undo_log"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-observability",
+      "--features",
+      "mysql,structured_log_layer",
+      "--test",
+      "structured_log_mysql",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\structured_log_mysql-afec7785bc318375.exe",
+      "original_mysql_undo_and_control_results_reach_json_file_without_credentials",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-durable-fence",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT branch_id,log_status FROM undo_f7fd1f950c3a.undo_log WHERE xid='logs:fixture'"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-reset-fence",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DELETE FROM undo_f7fd1f950c3a.undo_log"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "bd8cad87a65d6cf4e748bd222fb55d38d0d6bcbe04fe7fe677544a5c64d92b2e"
+    ],
+    "exit_code": 1
+  }
+]

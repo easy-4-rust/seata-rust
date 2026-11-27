@@ -1,0 +1,103 @@
+{
+  "accepted": 7,
+  "application_event_count": 1,
+  "records": [
+    {
+      "fields": {
+        "message": "tm_rpc_outcome",
+        "operation": "Status",
+        "outcome": "response",
+        "request_id": "-17",
+        "xid": "tc:layer"
+      },
+      "level": "INFO",
+      "target": "seata_tm::rpc",
+      "timestamp_unix_millis": 1795775311594
+    },
+    {
+      "fields": {
+        "branch_id": "Some(42)",
+        "message": "rm_rpc_outcome",
+        "operation": "BranchReport",
+        "outcome": "unknown",
+        "request_id": "Some(-18)",
+        "resource_sha256": "Some(\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\")",
+        "xid": "Some(\"tc:layer\")"
+      },
+      "level": "WARN",
+      "target": "seata_rm::rpc",
+      "timestamp_unix_millis": 1795775311594
+    },
+    {
+      "fields": {
+        "branch_id": "42",
+        "branch_status": "PhaseTwoRollbacked",
+        "connection_generation": "2",
+        "message": "rm_callback_decision",
+        "phase": "Rollback",
+        "request_id": "-18",
+        "resource_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "result_code": "Success",
+        "xid": "tc:layer"
+      },
+      "level": "INFO",
+      "target": "seata_rm::callback",
+      "timestamp_unix_millis": 1795775311594
+    },
+    {
+      "fields": {
+        "connection_generation": "2",
+        "message": "rm_callback_response_write",
+        "outcome": "local_written",
+        "request_id": "-18",
+        "response_count": "1"
+      },
+      "level": "INFO",
+      "target": "seata_rm::callback_write",
+      "timestamp_unix_millis": 1795775311594
+    },
+    {
+      "fields": {
+        "branch_id": "42",
+        "commit_attempted": "true",
+        "message": "mysql_control_outcome",
+        "operation": "rollback",
+        "outcome": "unknown_commit",
+        "requested_phase": "rollback",
+        "resolution": "not_observed",
+        "resource_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "xid": "tc:layer"
+      },
+      "level": "INFO",
+      "target": "seata_db_mysql::control",
+      "timestamp_unix_millis": 1795775311595
+    },
+    {
+      "fields": {
+        "branch_id": "42",
+        "commit_attempted": "true",
+        "message": "mysql_undo_outcome",
+        "observation": "consumed",
+        "operation": "rollback",
+        "outcome": "completed",
+        "resource_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "xid": "tc:layer"
+      },
+      "level": "INFO",
+      "target": "seata_db_mysql::undo",
+      "timestamp_unix_millis": 1795775311595
+    },
+    {
+      "fields": {
+        "branch_id": "42",
+        "message": "mysql_undo_checksum_rejected",
+        "outcome": "unknown",
+        "resource_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "xid": "tc:layer"
+      },
+      "level": "WARN",
+      "target": "seata_db_mysql::undo",
+      "timestamp_unix_millis": 1795775311595
+    }
+  ]
+}

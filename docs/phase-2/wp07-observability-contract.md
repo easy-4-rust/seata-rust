@@ -235,3 +235,15 @@ structured_logs 特性下 MetricsSources::with_structured_logs 接收现有只�
 
 
 本节选定接入已通过双 Rust 各三个真实认证 HTTP/TM TCP 目标，三个正式源反例每版本失败、精确恢复后通过，每版本九项证据削弱拒绝。最终全工作区各 760 passed / 347 ignored，观测组件全功能、默认、仅日志与仅 MySQL 严格检查通过；默认/仅日志依赖均无 SQLx。独立 oversize/invalid 采样、语法诊断、原 HTTP 和最终输入见 [日志指标接入证据](evidence/structured-log-metrics/README.md)。生产抓取、告警和完整 WP07 仍开放。
+
+
+## 与应用日志栈组合的可选 Layer（实施基线，2026-11-27）
+
+新增默认关闭的 structured_log_layer 特性，包含 structured_logs 和精确固定的 tracing-subscriber 0.3.23（关闭默认特性，仅 registry）。StructuredLogSubscriber::into_layer<S> 消费现有订阅器并返回可与应用 Registry/LookupSpan 订阅栈组合的 Layer，不自动安装/替换全局 subscriber。原独立订阅器和仅 structured_logs 的依赖边界保留。
+
+Seata 分支使用官方 per-layer filter，仅接纳已有正式事件命名空间，不把应用过滤的 span/无关事件送入应用输出，并以无 Seata 层的同条件基线核对 Registry 行为；不以自己的过滤器全局拒绝应用日志。应用 span 的身份、父子、record、follows_from、enter/exit、克隆和最终关闭由原 Registry/应用 Layer 保持；Seata JSON 不添加 span 字段，字段校验、预算、满队列丢弃和六计数沿用原实现。应用全局过滤仍可拒绝 Seata 事件，应用须在启动时明确配置各层策略。
+
+两个分支的输出策略独立；Seata JSON 的脱敏/内存预算不覆盖应用自己的日志或 span 导出，应用分支仍可执行原 I/O。组合不自动传播跨线程/进程上下文；显式 instrument/Dispatch 传播另行验证，不伪造追踪身份。验收覆盖动态过滤与 span 生命周期、七模板、应用字段与 JSON 分离、实际 TM/MySQL 接入、有效源反例、双 Rust 回归及默认/仅日志依赖树。生产采集、跨进程追踪与完整 WP07 继续开放。
+
+
+本节选定 Registry/LookupSpan 组合入口已通过双 Rust 各五个目标、各一个实际 MySQL Layer 场景、三类源码反例和每版本十三项证据削弱。最终全工作区各 766 passed / 347 ignored，观测组件全功能/默认/仅日志/仅 MySQL/仅 Layer 严格检查与依赖边界通过。原应用动态过滤、span 生命周期、全局过滤、真实 TM 和七模板，以及 Registry 基线/静态过滤夹具诊断与依赖归档见 [Layer 组合证据](evidence/structured-log-layer/README.md)。本轮不声明任意手写 subscriber、自动跨线程/进程传播、生产采集部署或完整 WP07 完成。

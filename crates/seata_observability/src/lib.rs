@@ -53,3 +53,6 @@ pub use structured_log_receiver::StructuredLogReceiver;
 
 #[cfg(feature = "structured_logs")]
 pub use structured_log_subscriber::StructuredLogSubscriber;
+
+#[cfg(feature = "structured_log_layer")]
+mod structured_log_layer;

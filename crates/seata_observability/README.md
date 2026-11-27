@@ -59,3 +59,12 @@ sampler.snapshot() 的 accepted/received 只表示入队与本机交付，full/c
 
 
 日志来源可独立使用，也可与原 TM/RM/MySQL 来源组合。seata_structured_logs_accepted_total、seata_structured_logs_received_total 和 seata_structured_logs_dropped_total{reason="full|closed|oversize|invalid"} 共六条序列；reason 实际只有四个独立固定值。accepted 与 received 是两个阶段，不能相加作为业务或持久化次数。读取指标不消费队列，不增加日志递归，源和 sampler 均不保留发送器。组件全停后仍可读取最终值；进程重启归零，快照逐字段采样。[认证 HTTP 与真实 TM 验证](../../docs/phase-2/evidence/structured-log-metrics/README.md)。
+
+
+## 与应用 Layer 栈组合
+
+可选 structured_log_layer 包含 structured_logs，并仅为此模式增加固定 tracing-subscriber 的 registry 特性。应用底层已有 Registry/LookupSpan 栈时，可用 application_stack.with(json_subscriber.into_layer()) 追加 Seata 分支；不自动设置或替换全局默认值。仅 structured_logs 和默认构建均不引入 tracing-subscriber。
+
+Seata 分支使用独立 per-layer filter，应用自己的事件、span 字段和生命周期仍由原层处理；原应用动态过滤和全局过滤保留，应用全局配置也可能拒绝 Seata 事件。JSON 仍只包含原固定事件字段，不自动附加 span 内容或扩散应用私有字段。两分支的输出/权限策略独立，Seata 队列的预算和 try_send 不约束应用原有 I/O。
+
+这支持底层含 Registry 的标准订阅栈，不接管任意手写 subscriber 的 span 实现，也不自动传播线程/进程上下文。动态 per-layer 过滤是否仍分配内部 span 由原 Registry 决定；验证按无 Seata 分支的原栈对照，并核对实际应用输出。[Layer 组合证据](../../docs/phase-2/evidence/structured-log-layer/README.md)。

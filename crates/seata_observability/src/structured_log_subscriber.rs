@@ -23,6 +23,33 @@ pub struct StructuredLogSubscriber {
     sampler: StructuredLogSampler,
 }
 impl StructuredLogSubscriber {
+    /// 无额外参数；消费原订阅器，返回可与底层包含 Registry 的应用 LookupSpan 栈组合的事件 Layer。
+    /// 复用原队列与计数，不自动安装全局值；应用全局过滤仍生效。
+    ///
+    /// ```
+    /// use seata_observability::{StructuredLogConfig, StructuredLogSubscriber};
+    /// use tracing_subscriber::{Registry, layer::SubscriberExt};
+    /// # fn main() -> Result<(), Box<dyn std::error::Error>> {
+    /// let (json, _receiver, _sampler) =
+    ///     StructuredLogSubscriber::channel(StructuredLogConfig::new(32, 8192)?);
+    /// let _application_stack = Registry::default().with(json.into_layer());
+    /// # Ok(())
+    /// # }
+    /// ```
+    #[cfg(feature = "structured_log_layer")]
+    pub fn into_layer<S>(self) -> impl tracing_subscriber::Layer<S> + Send + Sync
+    where
+        S: Subscriber + Send + Sync,
+        for<'lookup> S: tracing_subscriber::registry::LookupSpan<'lookup>,
+    {
+        use tracing_subscriber::Layer;
+        crate::structured_log_layer::StructuredLogLayer::new(self).with_filter(
+            tracing_subscriber::filter::filter_fn(|metadata| {
+                metadata.is_event() && crate::structured_log_schema::known_target(metadata.target())
+            }),
+        )
+    }
+
     /// 参数为已验证预算；返回订阅器、唯一消费者及只读采样器，不自动安装全局 Dispatch。
     pub fn channel(
         config: StructuredLogConfig,

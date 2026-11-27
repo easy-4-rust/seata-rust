@@ -1,0 +1,22 @@
+
+running 5 tests
+test dynamic_application_filter_keeps_disabled_spans_and_independent_seata_events ... FAILED
+test application_global_filter_still_controls_seata_events ... ok
+test all_seven_templates_and_application_output_keep_separate_admission ... ok
+test application_span_records_follows_clone_context_and_final_close_are_preserved ... ok
+test actual_tm_and_instrumented_application_span_share_stack_without_json_enrichment ... ok
+
+failures:
+
+---- dynamic_application_filter_keeps_disabled_spans_and_independent_seata_events stdout ----
+
+thread 'dynamic_application_filter_keeps_disabled_spans_and_independent_seata_events' (54960) panicked at crates\seata_observability\tests\structured_log_layer.rs:118:9:
+Seata layer enabled a filtered application span
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    dynamic_application_filter_keeps_disabled_spans_and_independent_seata_events
+
+test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
