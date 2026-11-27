@@ -1,0 +1,60 @@
+{
+  "actual_commit_packet": [
+    7,
+    0,
+    0,
+    0,
+    3,
+    67,
+    79,
+    77,
+    77,
+    73,
+    84
+  ],
+  "actual_ok_packet": [
+    7,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    2,
+    2,
+    0,
+    0
+  ],
+  "after_recovery": [
+    1,
+    1
+  ],
+  "before_recovery": [
+    1,
+    1
+  ],
+  "events": [
+    {
+      "branch_id": "42",
+      "commit_attempted": "true",
+      "message": "mysql_undo_outcome",
+      "observation": "not_observed",
+      "operation": "fence",
+      "outcome": "cancelled",
+      "resource_sha256": "ca95ee7b5751887dc9e4fd46720862a7567a52bbc86b0abae4268a04788b4a13",
+      "target": "seata_db_mysql::undo",
+      "xid": "rollback:xid"
+    },
+    {
+      "branch_id": "42",
+      "commit_attempted": "false",
+      "message": "mysql_undo_outcome",
+      "observation": "fenced_existing",
+      "operation": "fence",
+      "outcome": "completed",
+      "resource_sha256": "ca95ee7b5751887dc9e4fd46720862a7567a52bbc86b0abae4268a04788b4a13",
+      "target": "seata_db_mysql::undo",
+      "xid": "rollback:xid"
+    }
+  ]
+}

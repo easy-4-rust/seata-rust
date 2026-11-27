@@ -1,5 +1,6 @@
 #![allow(clippy::unwrap_used)]
 use super::MySqlControlEvent;
+use crate::test_event_capture as capture;
 use crate::{DbError, MySqlRecoveryError, MySqlRecoveryOperation};
 use seata_protocol::BranchType;
 use seata_rm::{BranchIdentity, BranchPhase};
@@ -8,8 +9,6 @@ use std::{
     collections::BTreeMap,
     sync::{Arc, Mutex},
 };
-#[path = "../tests/support/java_checksum_events.rs"]
-mod capture;
 #[test]
 fn cancellation_unwind_and_error_logs_keep_only_permitted_correlations() {
     let resource = "jdbc:mysql://user:private-password@127.0.0.1/db?token=private-token";

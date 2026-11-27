@@ -1,0 +1,76 @@
+{
+  "status": "SELECTED_INDEPENDENT_MYSQL_UNDO_RESULT_EVENTS_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "base_commit": "09f5736751c000c5c7c1c44812bea5b67ccc8390",
+  "target": "seata_db_mysql::undo",
+  "message": "mysql_undo_outcome",
+  "event_fields": [
+    "operation",
+    "xid",
+    "branch_id",
+    "resource_sha256",
+    "outcome",
+    "observation",
+    "commit_attempted"
+  ],
+  "native_live_tests_per_version": 3,
+  "actual_COMMIT_OK_faults_per_version": 4,
+  "source_mutations_per_version": 4,
+  "evidence_negative_controls_per_version": 11,
+  "workspace_tests_per_version": {
+    "passed": 746,
+    "ignored": 346
+  },
+  "strict_Clippy_packages": [
+    "seata-db-mysql",
+    "seata-observability"
+  ],
+  "default_checks_passed": true,
+  "default_observability_sqlx_dependency": false,
+  "final_native_inputs_match_current_bytes": true,
+  "mutated_production_files_exactly_restored": true,
+  "java_tc_rerun_in_this_increment": false,
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "remaining MySQL phase-one and durable branch events",
+    "production subscriber, collection, alerts and cross-process tracing",
+    "production authentication and complete security/load gates",
+    "independent external review",
+    "remaining WP05-07 and Phase4-7"
+  ],
+  "evidence": {
+    "red": {
+      "path": "docs/phase-2/evidence/mysql-undo-events/red_20261127_155247_4f32258c",
+      "catalog_sha256": "ad6ed2e941ad7545bcadda91272d74af7e6ed3f426641383c2b5d7a40c577d26"
+    },
+    "native": {
+      "path": "docs/phase-2/evidence/mysql-undo-events/run_20261127_161120_3038dc4a",
+      "catalog_sha256": "43db752710fd5555e3875c11943ac1adcd5bc2859fb0f645d35924d343a221e2"
+    },
+    "source_mutations": {
+      "path": "docs/phase-2/evidence/mysql-undo-events/mutations_20261127_155558_495ce59a",
+      "catalog_sha256": "304146d591d1085ce38c4a8e99ab18726ea3880c329206c1d3b6793ec497b569"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/mysql-undo-events/validation_20261127_162242_e01b9ea1",
+      "catalog_sha256": "44fb74aab99182f8e1e14b7ff6552e0798cfddbbb67eae7479ffb5caa78492a7"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/mysql-undo-events/default_20261127_162204_c41847ce",
+      "catalog_sha256": "fd5977a409fc114a06a7546670fb9ba6daa4e69e27f7160a6488d422105070f0"
+    },
+    "regression_199": {
+      "path": "docs/phase-2/evidence/mysql-undo-events/regression_1.99_20261127_161120_a1dc40f4",
+      "catalog_sha256": "1861374c0f3a000157f1a43039c5e1aa34fe3f0c205fad65b12c2ba75d776a6a"
+    },
+    "regression_185": {
+      "path": "docs/phase-2/evidence/mysql-undo-events/regression_1.85_20261127_161120_67c31a58",
+      "catalog_sha256": "b9f15560e1040a6cd8df702b5dfd98ed95948ad766edee4e80d1f214eaa158fb"
+    }
+  }
+}

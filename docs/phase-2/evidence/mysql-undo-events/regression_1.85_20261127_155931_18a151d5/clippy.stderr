@@ -1,0 +1,28 @@
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error: file is loaded as a module multiple times: `crates\seata_db_mysql\src\..\tests\support\java_checksum_events.rs`
+  --> crates\seata_db_mysql\src\my_sql_control_event_tests.rs:11:1
+   |
+1  | | #![allow(clippy::unwrap_used)]
+   | |_____________________________________________________________^ first loaded here
+...
+11 | / #[path = "../tests/support/java_checksum_events.rs"]
+   |
+  ::: crates\seata_db_mysql\src\..\tests\support\java_checksum_events.rs:1:1
+   |
+1  | / //! 捕获现场 MySQL 摘要校验事件，核对关联字段和敏感信息边界。
+2  | | use std::{
+3  | |     collections::BTreeMap,
+4  | |     fmt,
+...  |
+9  | |     span::{Attributes, Id, Record},
+10 | |     Event, Metadata, Subscriber,
+   | |____________^ loaded again here
+   |
+   = help: replace all but one `mod` item with `use` items
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#duplicate_mod
+   = note: `-D clippy::duplicate-mod` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::duplicate_mod)]`
+
+    Checking seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+error: could not compile `seata-db-mysql` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

@@ -147,6 +147,7 @@ pub use my_sql_recovery_operation::MySqlRecoveryOperation;
 #[cfg(test)]
 mod my_sql_undo_metrics_sampler_tests;
 
+mod my_sql_undo_event;
 mod my_sql_undo_guard;
 mod my_sql_undo_metrics;
 mod my_sql_undo_metrics_sampler;
@@ -164,3 +165,8 @@ pub use my_sql_phase_one_metrics::MySqlPhaseOneMetrics;
 pub use my_sql_phase_one_metrics_sampler::MySqlPhaseOneMetricsSampler;
 pub use my_sql_phase_one_operation::MySqlPhaseOneOperation;
 pub use my_sql_phase_one_outcome::MySqlPhaseOneOutcome;
+
+#[cfg(test)]
+#[allow(clippy::unwrap_used)]
+#[path = "../tests/support/java_checksum_events.rs"]
+mod test_event_capture;

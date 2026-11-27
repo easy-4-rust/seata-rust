@@ -197,3 +197,15 @@ requested_phase 为 none/commit/rollback，来自原请求动作；尤其 Observ
 
 
 本节选定控制结果事件已通过双 Rust 的真实写入/重复读取、锁等待取消、原 COMMIT OK 截留后的未知/取消与同分支恢复，以及各三个固定原 Java TC 回调场景。原帧、事件和停止后的控制计数对照、每 profile 的 12 项证据削弱、三类正式源反例及当前源码逐字节绑定见 [控制结果事件证据](evidence/mysql-control-events/README.md)。全工作区各 744 passed / 343 ignored，受影响两组件全功能及默认严格检查通过；本项不关闭完整 WP07、生产管线或其余阶段。
+
+
+## 独立 Undo 结果事件（实施基线，2026-11-27）
+
+rollback_undo_log 和 fence_undo_log 在有效原身份的已轮询调用上各输出一次 INFO mysql_undo_outcome，target=seata_db_mysql::undo。字段为 operation、xid、branch_id、resource_sha256、outcome、observation、commit_attempted；资源仅输出完整 SHA-256，无法取得规范资源标识时为空字符串。非法输入与未轮询 Future 不输出身份事件，既有指标仍按原契约结算。
+
+outcome 固定为 completed、unknown_commit、before_commit_error、cancelled；observation 仅在原 Ok 返回时为 consumed、fenced_inserted、fenced_existing、undo_present，其他结果为 not_observed。COMMIT 标记只在原实际尝试点设置，读既有围栏/Normal 不设置；不把取消或服务器已持久化但原响应未确认误记成功。完成标记先于日志输出，解栈不重复输出。禁止记录 SQL、Undo、原错误、URL、凭据，不增加数据库调用、重试或恢复权限。
+
+验收覆盖真实补偿及重复观察、原锁等待取消与关闭池错误、两个 API 的原 COMMIT OK 截留后未知/取消、同身份继续观察、敏感字段边界、有效源代码反例与双 Rust 回归。本项不替代完整 WP07、生产采集和独立审查。
+
+
+本节选定范围已通过双 Rust 的真实补偿/只读观察、两个 API 的行锁等待取消及四次原 COMMIT OK 截留/版本，同身份继续观察通过。四类正式源反例每版本均由目标断言拒绝，恢复原字节后最终现场通过；每版本十一项证据削弱拒绝。最终全工作区各 746 passed / 346 ignored，受影响两组件全功能与默认严格检查通过。最终输入、一次共享测试模块重复加载的诊断及剩余边界见 [独立 Undo 事件证据](evidence/mysql-undo-events/README.md)。本轮未重跑原 Java TC，不改变 Java Undo 格式、迁移或兼容路径，不关闭完整 WP07。

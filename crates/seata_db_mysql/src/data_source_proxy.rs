@@ -99,9 +99,18 @@ impl MySqlDataSource {
         format: crate::undo::UndoSerializer,
     ) -> Result<crate::UndoRollbackObservation, crate::UndoRollbackError> {
         let guard = self.undo_metrics.begin(crate::MySqlUndoOperation::Rollback);
+        let mut event = crate::my_sql_undo_event::MySqlUndoEvent::new(
+            xid,
+            branch_id,
+            self.resource_id().ok().as_deref(),
+            "rollback",
+        );
         let result = self
-            .rollback_undo_log_for_serializer_inner(xid, branch_id, profile, format)
+            .rollback_undo_log_for_serializer_inner(xid, branch_id, profile, format, &mut event)
             .await;
+        if let Some(event) = event {
+            event.finish_rollback(&result);
+        }
         guard.finish_rollback(&result);
         result
     }
@@ -112,6 +121,7 @@ impl MySqlDataSource {
         branch_id: i64,
         profile: seata_at::MySqlJdbcProfile,
         format: crate::undo::UndoSerializer,
+        event: &mut Option<crate::my_sql_undo_event::MySqlUndoEvent>,
     ) -> Result<crate::UndoRollbackObservation, crate::UndoRollbackError> {
         use crate::UndoRollbackError;
         if xid.is_empty() || xid.len() > 128 || branch_id <= 0 {
@@ -154,6 +164,9 @@ impl MySqlDataSource {
             }
             if commit {
                 attempt.start_commit();
+                if let Some(event) = event {
+                    event.mark_commit_attempted();
+                }
                 tx.commit()
                     .await
                     .map_err(|e| DbError::driver("Undo rollback commit", e))?;
@@ -174,7 +187,16 @@ impl MySqlDataSource {
         branch_id: i64,
     ) -> Result<crate::UndoFenceObservation, crate::UndoFenceError> {
         let guard = self.undo_metrics.begin(crate::MySqlUndoOperation::Fence);
-        let result = self.fence_undo_log_inner(xid, branch_id).await;
+        let mut event = crate::my_sql_undo_event::MySqlUndoEvent::new(
+            xid,
+            branch_id,
+            self.resource_id().ok().as_deref(),
+            "fence",
+        );
+        let result = self.fence_undo_log_inner(xid, branch_id, &mut event).await;
+        if let Some(event) = event {
+            event.finish_fence(&result);
+        }
         guard.finish_fence(&result);
         result
     }
@@ -183,6 +205,7 @@ impl MySqlDataSource {
         &self,
         xid: &str,
         branch_id: i64,
+        event: &mut Option<crate::my_sql_undo_event::MySqlUndoEvent>,
     ) -> Result<crate::UndoFenceObservation, crate::UndoFenceError> {
         use crate::mysql::{MySqlUndoLogManager, UndoFenceDecision};
         use crate::{UndoFenceError, UndoFenceObservation};
@@ -218,6 +241,9 @@ impl MySqlDataSource {
             let observation = match decision {
                 UndoFenceDecision::InsertedGuard => {
                     commit_attempted = true;
+                    if let Some(event) = event {
+                        event.mark_commit_attempted();
+                    }
                     tx.commit()
                         .await
                         .map_err(|e| DbError::driver("Undo fence commit", e))?;
