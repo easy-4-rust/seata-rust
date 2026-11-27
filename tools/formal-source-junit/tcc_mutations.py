@@ -26,6 +26,7 @@ def run():
     base = work/'crates/seata_tcc/src'
     context = base/'api/business_action_context.rs'
     fence = base/'fence/fence_handler.rs'
+    equality = base/'api/action_context_value_equality.rs'
     mutations = [
         ('byte_budget', context, 'MAX_CONTEXT_BYTES: usize = 1_048_576', 'MAX_CONTEXT_BYTES: usize = 2_097_152', 'context_and_fence', 'invalid_context_and_budgets_fail_before_context_can_be_used'),
         ('depth_budget', context, 'MAX_JSON_DEPTH: usize = 64', 'MAX_JSON_DEPTH: usize = 128', 'context_and_fence', 'invalid_context_and_budgets_fail_before_context_can_be_used'),
@@ -34,6 +35,18 @@ def run():
         ('late_try', fence, '(FenceOperation::Try, Some(_)) => FenceDecision::Refuse', '(FenceOperation::Try, Some(_)) => FenceDecision::InsertAndInvoke(Tried)', 'context_and_fence', 'complete_fence_matrix_never_replays_try_or_changes_terminal_direction'),
         ('terminal_direction', fence, '(FenceOperation::Confirm, Some(Rollbacked | Suspended)) => FenceDecision::Refuse', '(FenceOperation::Confirm, Some(Rollbacked | Suspended)) => FenceDecision::AlreadyApplied', 'context_and_fence', 'complete_fence_matrix_never_replays_try_or_changes_terminal_direction'),
         ('unicode_blank', context, "&& !matches!(value, '\\u{0085}' | '\\u{00a0}' | '\\u{2007}' | '\\u{202f}')", '&& true', 'java_context', 'every_bmp_scalar_has_original_java_blank_classification'),
+    ]
+    mutations += [
+        ('tracking_off',context,'self.tracking_enabled = true;','self.tracking_enabled = false;','context_mutation','pinned_java_tracking_null_removal_clear_replace_and_delay_lifecycle_match'),
+        ('null_put_not_dirty',context,'if self.tracking_enabled && changed {','if self.tracking_enabled && changed && value.get() != "null" {','context_mutation','pinned_java_tracking_null_removal_clear_replace_and_delay_lifecycle_match'),
+        ('add_null_overwrites',context,'value.filter(|v| v.get() != "null")','value','context_mutation','pinned_java_value_change_and_type_comparisons_match_without_reencoding_values'),
+        ('remove_null_not_dirty',context,'if self.tracking_enabled && previous.is_some() {','if self.tracking_enabled && previous.as_ref().is_some_and(|v|v.get() != "null") {','context_mutation','pinned_java_tracking_null_removal_clear_replace_and_delay_lifecycle_match'),
+        ('empty_clear_dirty',context,'if !self.action_context.is_empty() {','if true {','context_mutation','pinned_java_tracking_null_removal_clear_replace_and_delay_lifecycle_match'),
+        ('set_map_dirty',context,'self.action_context = values;','self.action_context = values; self.updated = Some(true);','context_mutation','pinned_java_tracking_null_removal_clear_replace_and_delay_lifecycle_match'),
+        ('mutation_budget_ignored',context,'Self::validate_mapping(&candidate)?;','let _ = Self::validate_mapping(&candidate);','context_mutation','failed_mutations_preserve_map_tracking_and_original_numeric_bytes'),
+        ('float_zero_collapsed',equality,'left.to_bits() == right.to_bits()','left == right','context_mutation','pinned_java_value_change_and_type_comparisons_match_without_reencoding_values'),
+        ('object_values_ignored',equality,'if left == right {',"if left == right || left.starts_with('{') {",'context_mutation','pinned_java_value_change_and_type_comparisons_match_without_reencoding_values'),
+        ('untracked_add_not_dirty',context,'if changed {','if changed && self.tracking_enabled {','context_mutation','explicit_add_marks_updated_before_tracking_but_direct_put_does_not'),
     ]
     records = []
     for version in ['1.99', '1.85']:
@@ -63,7 +76,7 @@ def run():
     for row in inputs:
         need(sha(ROOT/row['path']) == row['sha256'], 'Live TCC source changed during isolated mutation tests')
     save(out/'records.json', records)
-    save(out/'result.json', dict(status='TCC_FAULTY_PRODUCTION_VARIANTS_REJECTED', variants_per_version=7, actual_behavioral_failures=14, live_source_mutated=False, TCC_gate_complete=False, whole_plan_complete=False))
+    save(out/'result.json', dict(status='TCC_FAULTY_PRODUCTION_VARIANTS_REJECTED', variants_per_version=17, actual_behavioral_failures=34, live_source_mutated=False, TCC_gate_complete=False, whole_plan_complete=False))
     shutil.copyfile(Path(__file__), out/Path(__file__).name)
     save(out/'catalog.json', [dict(path=p.name, sha256=sha(p)) for p in sorted(out.iterdir()) if p.is_file()])
     print(str(out))

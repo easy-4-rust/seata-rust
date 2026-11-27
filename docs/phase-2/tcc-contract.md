@@ -8,6 +8,14 @@
 
 参数保存为已验证的原 JSON 值字节，避免把 Java long、任意精度整数/小数或指数先转 f64 后损坏。字符串键保持 JSON 解码语义；同键按原 Java parser 的最后值处理。输入总字节有界、嵌套解析有界；Debug/错误不能带业务值、原 XID 或资源文本。
 
+### 动态上下文的核心依赖
+
+按固定 Java `BusinessActionContext` 增加可选 updated/delayReport、初始化后的变更跟踪、受控 put/remove/clear/set 和 addActionContext；原 XID/BranchId/动作名继续只读。新增键（包括 JSON null）、删除已有 null、清空非空映射都应标记变更；同值替换、删除不存在键和清空空映射不标记。`addActionContext` 忽略 null；直接 put 可保存 null。setActionContext 替换映射但不自行标记，跟踪仍开启；失败/超预算的变更必须原子拒绝，不破坏原状态。
+
+相等性按固定 Java 实际 JSON Provider 的类型执行：Integer/Long/BigInteger 不相互强转，小数/指数的 Double 比较保留正负零区别；对象比较忽略键顺序，数组保留顺序。浮点转换仅用于该兼容比较，不用于保存、序列化或重建业务值。updated 仅是 Java 可变状态，不能作为 TC 已收到报告、原参数相同、数据库已提交或回调获授权的证明。
+
+该核心依赖不自动发送网络报告。后续持久报告仍须解决原登记身份与更新应用数据的区分、Registered 状态单次报告、未知响应、报告版本/原字节、旧 Pending 与新参数回调的一致性，以及 Try 的可变业务上下文交接；不能放宽既有身份冲突校验来伪装已支持完整动态报告。
+
 Fence 固定码为 TRIED=1、COMMITTED=2、ROLLBACKED=3、SUSPENDED=4；未知码拒绝。Try 只允许唯一插入 TRIED 后执行业务，任何已有记录都不能重复 Try。Confirm 仅 TRIED 可原子迁移 COMMITTED 并执行；COMMITTED 返回已完成；缺失保持失败，ROLLBACKED/SUSPENDED 不换向。Cancel 对缺失记录唯一插入 SUSPENDED 并跳过业务，对 TRIED 原子迁移 ROLLBACKED 并执行，对 ROLLBACKED/SUSPENDED 复用完成，对 COMMITTED 不换向。
 
 核心决策仅描述持锁事务内应执行的动作，不证明提交成功、TC 授权或缺行已被围栏。缺行 Cancel 的成功必须等 SUSPENDED 唯一插入与提交确认；并发 Try 胜出时重新读取，不能凭一次缺行查询宣布空回滚。
@@ -71,3 +79,5 @@ RM apply/recover 都先核对当前物理表、持久原身份和实例；在持
 写入者真实退出后，分别保持数据库运行、正常重启或 SIGKILL 后启动同一自有 MySQL 数据目录。核对原 UUID 与原 Fence/业务，不能重建数据库、补写状态或换身份。新 RM/新连接重开旧持久日志，仅处理同一原回调，旧 Pending 在终态提交确认前不能变 Completed。未提交 Try 必须回滚后由原 Cancel 建立 SUSPENDED；已提交 TRIED 继续原 Confirm/Cancel，已提交终态复用完成。独立 general_log 应分别记录未提交尝试和恢复实际执行，重复回调不能再次执行已经提交的业务。原实例变化/损坏及更广生产拓扑仍按独立门禁处理。
 
 上述选定边界已取得 [进程与同库恢复证据](../phase-4/evidence/tcc-managed/PROCESS_DATABASE_RECOVERY.md) 及 [本轮 ledger](../phase-4/mysql-tcc-process-database-recovery.json)：双版本 54 个实际强杀/数据库恢复场景，16 项 MySQL、4 项正常原 TC、8 项原 TC 回调故障回归通过，902 项证据削弱被拒绝；每版工作区 791 passed / 384 ignored，严格检查通过。原 TC 的一次自然旧连接重试重叠按原身份、关联号及关闭时序校验，不把未答复请求算成功。完整 TCC 与总计划继续开放。
+
+动态上下文的核心依赖已取得 [变更跟踪证据](../phase-4/evidence/tcc-core/CONTEXT_MUTATION.md) 和 [本轮 ledger](../phase-4/tcc-context-mutation.json)：固定 Java 46 项观察中 Rust 核心比较 45 项，1 项 util 自动报告后续基线保留；双版本各 17 次源码行为反例被拒绝，工作区各 795 passed / 384 ignored，严格检查通过。当前源码重跑 54 项进程/数据库恢复、16 项 MySQL、4 项正常原 TC 和 8 项原 TC 故障事务通过，924 项证据削弱被拒绝。可变 Try、持久报告版本与回调身份交接未接通，不能把本地 updated 状态宣称为完整动态报告。

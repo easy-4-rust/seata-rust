@@ -39,13 +39,13 @@ def verify(java, mutations, regressions):
         need(any(('org.apache.seata.rm.tcc.api.'+name+' source:').encode() in line and b'/classes/' in line for line in origins), 'Original compiled context not loaded')
     mutations = mutations[0]
     result = load(mutations/'result.json')
-    need(result['actual_behavioral_failures'] == 14 and result['variants_per_version'] == 7 and result['live_source_mutated'] is False and result['TCC_gate_complete'] is result['whole_plan_complete'] is False, 'Mutation scope changed')
+    need(result['actual_behavioral_failures'] == 34 and result['variants_per_version'] == 17 and result['live_source_mutated'] is False and result['TCC_gate_complete'] is result['whole_plan_complete'] is False, 'Mutation scope changed')
     for row in load(mutations/'source-inputs.json'):
         need(sha(ROOT/row['path']) == row['sha256'], 'TCC mutation input drift')
     records = load(mutations/'records.json')
-    need(len(records) == 14 and len({(r['Rust'],r['mutation']) for r in records}) == 14 and {r['Rust'] for r in records} == {'1.99','1.85'}, 'TCC mutation matrix incomplete')
+    need(len(records) == 34 and len({(r['Rust'],r['mutation']) for r in records}) == 34 and {r['Rust'] for r in records} == {'1.99','1.85'}, 'TCC mutation matrix incomplete')
     for version in ['1.99','1.85']:
-        need({r['mutation'] for r in records if r['Rust'] == version} == {'byte_budget','depth_budget','floating_point','string_flag','late_try','terminal_direction','unicode_blank'}, 'Required faulty production variant missing')
+        need({r['mutation'] for r in records if r['Rust'] == version} == {'byte_budget','depth_budget','floating_point','string_flag','late_try','terminal_direction','unicode_blank','tracking_off','null_put_not_dirty','add_null_overwrites','remove_null_not_dirty','empty_clear_dirty','set_map_dirty','mutation_budget_ignored','float_zero_collapsed','object_values_ignored','untracked_add_not_dirty'}, 'Required faulty production variant missing')
     for row in records:
         prefix = row['Rust']+'-'+row['mutation']
         need(sha(mutations/(prefix+'.rs')) == row['modified_source_sha256'] and row['exit_code'] == 101, 'Executed faulty source differs')
@@ -55,10 +55,10 @@ def verify(java, mutations, regressions):
     for version, (folder, _) in zip(['1.99','1.85'], regressions, strict=True):
         sources(folder)
         result = load(folder/'result.json')
-        need(result['Rust'] == version and result['passed'] == 791 and result['ignored'] == 372 and result['successful_test_harness_summaries'] == 175 and result['strict_tcc_all_targets_clippy'] and result['strict_xa_mysql_all_targets_clippy'], 'Full TCC workspace regression differs')
+        need(result['Rust'] == version and result['passed'] == 795 and result['ignored'] == 384 and result['successful_test_harness_summaries'] == 178 and result['strict_tcc_all_targets_clippy'] and result['strict_xa_mysql_all_targets_clippy'], 'Full TCC workspace regression differs')
         need(all(row['exit_code'] == 0 for row in load(folder/'commands.json')), 'Actual workspace/Clippy command failed')
         summaries = re.findall(rb'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;', (folder/'workspace.stdout').read_bytes())
-        need(len(summaries) == 175 and sum(int(r[0]) for r in summaries) == 791 and not any(int(r[1]) for r in summaries) and sum(int(r[2]) for r in summaries) == 372, 'Raw workspace summaries differ')
+        need(len(summaries) == 178 and sum(int(r[0]) for r in summaries) == 795 and not any(int(r[1]) for r in summaries) and sum(int(r[2]) for r in summaries) == 384, 'Raw workspace summaries differ')
         stderr = (folder/'workspace.stderr').read_bytes()
         need(b'tests\\context_and_fence.rs' in stderr and b'tests\\java_context.rs' in stderr, 'New TCC test targets not executed')
 
@@ -71,4 +71,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     pairs = [(getattr(args,name),getattr(args,name+'_sha')) for name in ['java','mutations','rust199','rust185']]
     verify(pairs[0],pairs[1],pairs[2:])
-    print('Verified original Java TCC context, 14 behavioral source counterexamples and dual workspace evidence; full TCC gate remains open')
+    print('Verified original Java TCC context, 34 behavioral source counterexamples and dual workspace evidence; full TCC gate remains open')

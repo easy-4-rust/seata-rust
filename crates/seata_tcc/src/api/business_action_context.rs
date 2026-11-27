@@ -1,3 +1,4 @@
+use super::action_context_value_equality::ActionContextValueEquality;
 use crate::TccError;
 use serde_json::value::RawValue;
 use std::{collections::BTreeMap, fmt};
@@ -9,6 +10,9 @@ pub struct BusinessActionContext {
     branch_id: i64,
     action_name: Option<String>,
     action_context: BTreeMap<String, Box<RawValue>>,
+    tracking_enabled: bool,
+    updated: Option<bool>,
+    delay_report: Option<bool>,
 }
 impl BusinessActionContext {
     /// 最大原应用 JSON 字节数；超过预算在解析和复制前拒绝。
@@ -45,6 +49,9 @@ impl BusinessActionContext {
             branch_id,
             action_name,
             action_context,
+            tracking_enabled: false,
+            updated: None,
+            delay_report: None,
         })
     }
     /// 无参数；返回原可选 XID，不作规范化。
@@ -63,9 +70,120 @@ impl BusinessActionContext {
     pub fn get_action_context(&self, key: &str) -> Option<&RawValue> {
         self.action_context.get(key).map(Box::as_ref)
     }
-    /// 无参数；返回只读业务参数映射。动态更新及报告须由正式资源层负责。
+    /// 无参数；返回只读业务参数映射；变更须通过受控方法，网络报告由正式资源层负责。
     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
         &self.action_context
+    }
+    /// 无参数；返回 Java 可选 updated 标志，不证明原参数字节相同或报告已送达。
+    pub const fn get_updated(&self) -> Option<bool> {
+        self.updated
+    }
+    /// 参数为原可选 updated；只设置本地 Java 状态，不确认网络或数据库结果。
+    pub fn set_updated(&mut self, updated: Option<bool>) {
+        self.updated = updated;
+    }
+    /// 无参数；返回原可选 delayReport；此核心对象不发送报告。
+    pub const fn get_delay_report(&self) -> Option<bool> {
+        self.delay_report
+    }
+    /// 参数为原可选延迟标志；不发送网络请求或清除已有变更。
+    pub fn set_delay_report(&mut self, delay_report: Option<bool>) {
+        self.delay_report = delay_report;
+    }
+    /// 无参数；初始化完成后开启业务映射的变更跟踪，不将既有条目标为更新。
+    pub fn enable_action_context_tracking(&mut self) {
+        self.tracking_enabled = true;
+    }
+    /// 参数为业务键及原 JSON 值；有界原子替换，返回旧值，直接 put 可存储 null。
+    /// 对应 Java: BusinessActionContext.TrackedActionContextMap#put。
+    pub fn put_action_context(
+        &mut self,
+        key: &str,
+        value: &RawValue,
+    ) -> Result<Option<Box<RawValue>>, TccError> {
+        if key.len() > Self::MAX_CONTEXT_BYTES {
+            return Err(TccError::ContextBudget);
+        }
+        validate_budget(value.get())?;
+        let previous = self.action_context.get(key);
+        let changed = match previous {
+            None => true,
+            Some(old) => !ActionContextValueEquality::equal(old, value)?,
+        };
+        let mut candidate = self.action_context.clone();
+        let previous = candidate.insert(key.into(), value.to_owned());
+        Self::validate_mapping(&candidate)?;
+        self.action_context = candidate;
+        if self.tracking_enabled && changed {
+            self.updated = Some(true);
+        }
+        Ok(previous)
+    }
+    /// 参数为业务键及可选原 JSON 值；忽略 null，返回 Java 对象相等性判断的变更结果。
+    /// 对应 Java: BusinessActionContext#addActionContext；不等同 util 的自动报告入口。
+    pub fn add_action_context(
+        &mut self,
+        key: &str,
+        value: Option<&RawValue>,
+    ) -> Result<bool, TccError> {
+        let Some(value) = value.filter(|v| v.get() != "null") else {
+            return Ok(false);
+        };
+        if key.len() > Self::MAX_CONTEXT_BYTES {
+            return Err(TccError::ContextBudget);
+        }
+        validate_budget(value.get())?;
+        let changed = match self.action_context.get(key) {
+            None => true,
+            Some(old) => !ActionContextValueEquality::equal(old, value)?,
+        };
+        self.put_action_context(key, value)?;
+        if changed {
+            self.updated = Some(true);
+        }
+        Ok(changed)
+    }
+    /// 参数为业务键；返回实际删除的旧值，删除已有 null 也在跟踪开启时标记变更。
+    pub fn remove_action_context(&mut self, key: &str) -> Option<Box<RawValue>> {
+        let previous = self.action_context.remove(key);
+        if self.tracking_enabled && previous.is_some() {
+            self.updated = Some(true);
+        }
+        previous
+    }
+    /// 无参数；清空映射，仅在原映射非空且跟踪开启时标记变更。
+    pub fn clear_action_context(&mut self) {
+        if !self.action_context.is_empty() {
+            self.action_context.clear();
+            if self.tracking_enabled {
+                self.updated = Some(true);
+            }
+        }
+    }
+    /// 参数为替代业务映射；原子预算校验后替换，保留跟踪开关和原 updated 标志。
+    /// 对应 Java: BusinessActionContext#setActionContext，不自动标记框架侧替换。
+    pub fn set_action_context(
+        &mut self,
+        values: BTreeMap<String, Box<RawValue>>,
+    ) -> Result<(), TccError> {
+        Self::validate_mapping(&values)?;
+        self.action_context = values;
+        Ok(())
+    }
+    fn validate_mapping(values: &BTreeMap<String, Box<RawValue>>) -> Result<(), TccError> {
+        let mut bytes = 0usize;
+        for (key, value) in values {
+            bytes = bytes
+                .checked_add(key.len())
+                .and_then(|n| n.checked_add(value.get().len()))
+                .ok_or(TccError::ContextBudget)?;
+            if bytes > Self::MAX_CONTEXT_BYTES {
+                return Err(TccError::ContextBudget);
+            }
+        }
+        let envelope = BTreeMap::from([("actionContext", values)]);
+        let encoded = serde_json::to_string(&envelope).map_err(|_| TccError::InvalidContext)?;
+        validate_budget(&encoded)
     }
     /// 无参数；仅原 JSON 布尔 true 启用 Fence，不接受字符串或数字。
     pub fn use_common_fence(&self) -> bool {
@@ -90,6 +208,8 @@ impl fmt::Debug for BusinessActionContext {
                 &self.action_name.as_ref().map(String::len),
             )
             .field("context_keys", &self.action_context.len())
+            .field("updated", &self.updated)
+            .field("delay_report", &self.delay_report)
             .finish_non_exhaustive()
     }
 }

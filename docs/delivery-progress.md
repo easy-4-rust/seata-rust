@@ -1303,3 +1303,9 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 按现有 Phase 4/TCC contract 补齐双 Rust 的九个真实写入者强杀边界，分别联测数据库持续运行、正常重启与 SIGKILL 后同目录恢复，共 54 场景。独立 OS 句柄、原 COMMIT/OK、实际行锁、原 UUID/Fence/业务、旧日志 CRC 与恢复前后 DML 联合验证通过；16 项 MySQL、4 项正常原 Java TC、8 项原 TC 回调故障回归通过，902 项证据削弱拒绝。工作区各 791 passed / 384 ignored，严格检查通过。[证据](phase-4/evidence/tcc-managed/PROCESS_DATABASE_RECOVERY.md)、[ledger](phase-4/mysql-tcc-process-database-recovery.json)。生产 API、迁移、Java Undo/旧 AT/XA 记录未改动。
 
 该进程矩阵使用正式 RM 与原 V1 协议测试对端，不计作原 Java TC 同时崩溃联合验收。原 TC 一次自然旧连接重试重叠已有严格关联/时序及无业务重放证据。动态上下文报告、完整故障/并发/拓扑、生产权限/保留清理/负载/运维以及 AT/XA 剩余门禁、Phase 5–7 仍未完成，范围不缩减。
+
+## TCC 动态上下文的核心依赖（2026-11-28）
+
+按既有 TCC contract 实现受控参数变更、可选 updated/delayReport 和初始化后跟踪。固定 Java 执行 46 项观察，Rust 核心比较其中 45 项；另 1 项 util 自动报告观察继续保留为后续基线。原始 RawValue 数值不重编码，Double 仅用于 Java 对象相等性的兼容比较；updated 不是报告/事务成功或原字节相同的证明。[证据](phase-4/evidence/tcc-core/CONTEXT_MUTATION.md)、[ledger](phase-4/tcc-context-mutation.json)。
+
+双版本各 795 passed / 384 ignored，严格检查通过；17 类错误源码每版实际行为失败，共 34 次。当前源码重新执行 54 项进程/数据库恢复、16 项 MySQL、4 项正常原 Java TC 和 8 项原 TC 故障事务，924 项证据削弱拒绝。原 Undo 格式、AT/XA 数据和默认 TCC 业务接口未改动。可变 Try 业务上下文、立即/延迟网络报告、持久版本、未知报告响应与旧 Pending/新参数回调协调仍未交付；完整 TCC 和全计划继续开放。

@@ -1,0 +1,351 @@
+   Compiling seata-tcc v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tcc)
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:21:17
+   |
+21 |         context.put_action_context("value",&raw(before)).unwrap();
+   |                 ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `enable_action_context_tracking` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:22:17
+   |
+22 |         context.enable_action_context_tracking();
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `get_action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:63:5
+   |
+63 |     pub fn get_action_context(&self, key: &str) -> Option<&RawValue> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `add_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:23:29
+   |
+23 |         let changed=context.add_action_context("value",Some(&raw(after))).unwrap();
+   |                             ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:25:28
+   |
+25 |         assert_eq!(context.get_updated(),row.get("updated").and_then(serde_json::Value::as_bool));
+   |                            ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:42:39
+   |
+42 |             "untracked_put"=>{context.put_action_context("a",&raw("1")).unwrap();},
+   |                                       ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `enable_action_context_tracking` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:43:31
+   |
+43 |             "enable"=>context.enable_action_context_tracking(),
+   |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `get_action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:63:5
+   |
+63 |     pub fn get_action_context(&self, key: &str) -> Option<&RawValue> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:44:34
+   |
+44 |             "same_put"=>{context.put_action_context("a",&raw("1")).unwrap();},
+   |                                  ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:45:34
+   |
+45 |             "new_null"=>{context.put_action_context("null",&raw("null")).unwrap();},
+   |                                  ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:46:35
+   |
+46 |             "same_null"=>{context.set_updated(None);context.put_action_context("null",&raw("null")).unwrap();},
+   |                                   ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:46:61
+   |
+46 |             "same_null"=>{context.set_updated(None);context.put_action_context("null",&raw("null")).unwrap();},
+   |                                                             ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `remove_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:47:48
+   |
+47 |             "missing_remove"=>{assert!(context.remove_action_context("missing").is_none());},
+   |                                                ^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `remove_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:48:48
+   |
+48 |             "remove_null"=>{assert_eq!(context.remove_action_context("null").unwrap().get(),"null");},
+   |                                                ^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:49:31
+   |
+49 |             "clear"=>{context.set_updated(Some(false));context.clear_action_context();},
+   |                               ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `clear_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:49:64
+   |
+49 |             "clear"=>{context.set_updated(Some(false));context.clear_action_context();},
+   |                                                                ^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name
+   |
+49 -             "clear"=>{context.set_updated(Some(false));context.clear_action_context();},
+49 +             "clear"=>{context.set_updated(Some(false));context.action_context();},
+   |
+
+error[E0599]: no method named `set_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:50:37
+   |
+50 |             "clear_empty"=>{context.set_updated(None);context.clear_action_context();},
+   |                                     ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `clear_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:50:63
+   |
+50 |             "clear_empty"=>{context.set_updated(None);context.clear_action_context();},
+   |                                                               ^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name
+   |
+50 -             "clear_empty"=>{context.set_updated(None);context.clear_action_context();},
+50 +             "clear_empty"=>{context.set_updated(None);context.action_context();},
+   |
+
+error[E0599]: no method named `set_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:51:36
+   |
+51 |             "replace_map"=>context.set_action_context(BTreeMap::new()).unwrap(),
+   |                                    ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `get_action_context` with a similar name
+   |
+51 -             "replace_map"=>context.set_action_context(BTreeMap::new()).unwrap(),
+51 +             "replace_map"=>context.get_action_context(BTreeMap::new()).unwrap(),
+   |
+
+error[E0599]: no method named `set_delay_report` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:52:36
+   |
+52 |             "delay_true"=>{context.set_delay_report(Some(true));context.add_action_context("delayed",Some(&raw("2"))).unwrap();},
+   |                                    ^^^^^^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `add_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:52:73
+   |
+52 |             "delay_true"=>{context.set_delay_report(Some(true));context.add_action_context("delayed",Some(&raw("2"))).unwrap();},
+   |                                                                         ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_delay_report` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:53:36
+   |
+53 |             "delay_false"=>context.set_delay_report(Some(false)),
+   |                                    ^^^^^^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `set_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:54:31
+   |
+54 |             "reset"=>{context.set_updated(None);context.set_delay_report(None);},
+   |                               ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `set_delay_report` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:54:57
+   |
+54 |             "reset"=>{context.set_updated(None);context.set_delay_report(None);},
+   |                                                         ^^^^^^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `add_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:55:43
+   |
+55 |             "add_null"=>{assert!(!context.add_action_context("ignored",None).unwrap());},
+   |                                           ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:58:28
+   |
+58 |         assert_eq!(context.get_updated(),row.get("updated").and_then(serde_json::Value::as_bool),"{name}");
+   |                            ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `get_delay_report` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:59:28
+   |
+59 |         assert_eq!(context.get_delay_report(),row.get("delay_report").and_then(serde_json::Value::as_bool),"{name}");
+   |                            ^^^^^^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `set_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:67:13
+   |
+67 |     context.set_updated(None);context.put_action_context("tracked_after_set",&raw("true")).unwrap();
+   |             ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:67:39
+   |
+67 |     context.set_updated(None);context.put_action_context("tracked_after_set",&raw("true")).unwrap();
+   |                                       ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:68:24
+   |
+68 |     assert_eq!(context.get_updated(),Some(true));
+   |                        ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `enable_action_context_tracking` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:73:39
+   |
+73 |     let mut context=context();context.enable_action_context_tracking();
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `get_action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:63:5
+   |
+63 |     pub fn get_action_context(&self, key: &str) -> Option<&RawValue> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:75:13
+   |
+75 |     context.put_action_context("precise",&original).unwrap();context.set_updated(None);
+   |             ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:75:70
+   |
+75 |     context.put_action_context("precise",&original).unwrap();context.set_updated(None);
+   |                                                                      ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:78:24
+   |
+78 |     assert_eq!(context.put_action_context("too_big",&huge).unwrap_err(),TccError::ContextBudget);
+   |                        ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:79:82
+   |
+79 |     assert_eq!(context.to_application_data().unwrap(),before);assert_eq!(context.get_updated(),None);
+   |                                                                                  ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `put_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:81:24
+   |
+81 |     assert_eq!(context.put_action_context("deep",&deep).unwrap_err(),TccError::ContextBudget);
+   |                        ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `action_context` with a similar name, but with different arguments
+  --> crates\seata_tcc\src\api\business_action_context.rs:67:5
+   |
+67 |     pub fn action_context(&self) -> &BTreeMap<String, Box<RawValue>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:82:82
+   |
+82 |     assert_eq!(context.to_application_data().unwrap(),before);assert_eq!(context.get_updated(),None);
+   |                                                                                  ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+error[E0599]: no method named `set_action_context` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:84:24
+   |
+84 |     assert_eq!(context.set_action_context(replacement).unwrap_err(),TccError::ContextBudget);
+   |                        ^^^^^^^^^^^^^^^^^^
+   |
+help: there is a method `get_action_context` with a similar name
+   |
+84 -     assert_eq!(context.set_action_context(replacement).unwrap_err(),TccError::ContextBudget);
+84 +     assert_eq!(context.get_action_context(replacement).unwrap_err(),TccError::ContextBudget);
+   |
+
+error[E0599]: no method named `get_updated` found for struct `BusinessActionContext` in the current scope
+  --> crates\seata_tcc\tests\context_mutation.rs:85:82
+   |
+85 |     assert_eq!(context.to_application_data().unwrap(),before);assert_eq!(context.get_updated(),None);
+   |                                                                                  ^^^^^^^^^^^ method not found in `BusinessActionContext`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-tcc` (test "context_mutation") due to 37 previous errors
