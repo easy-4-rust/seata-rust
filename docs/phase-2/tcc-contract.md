@@ -149,3 +149,11 @@ ActionContextUtil 的 JSON 边界区分标量与复合值：字符串、布尔�
 
 
 原 JAR/同端点/同 DB 会话的双版本三模式双方向三数据库矩阵共 36 笔、72 次原进程强杀、1584 项证据削弱及严格回归通过，见 [原 TC 联合恢复证据](../phase-4/evidence/tcc-managed/ORIGINAL_TC_JOINT_CRASH_RECOVERY.md) 和 [ledger](../phase-4/tcc-original-tc-joint-crash-recovery.json)。完整联合切点与生产门禁保持开放。
+
+
+### 二阶段事务内部的原 TC 联合强杀（选定矩阵已验证）
+
+在原 TC 决定与最新参数保持不变的前提下，将联合强杀推进到真实 Confirm/Cancel DML 未提交，以及原业务 COMMIT 成功响应已被截留而 RM 尚未确认两个切点。前者须以原 InnoDB NOWAIT 错误证明仍持锁，旧事务退出后由同分支恢复原动作；后者须以原 COMMIT/OK 和独立原终态证明已提交，重启只复用终态而不再执行业务。两者旧日志均保持原登记身份的 Pending，新 TC/新 RM 使用原端点、原 DB 会话和原日志；全局 End 仍只有一次。三种动态参数、双方向、双 Rust 与三种数据库模式共同验收，前后业务 DML 分开核对。更多 Try/报告内部联合切点及生产门禁继续开放。
+
+
+双版本两切点 × 三种参数 × 双方向 × 三种数据库模式共 72 笔、144 次原进程强杀、3816 项证据削弱通过，见 [二阶段内部联合恢复](../phase-4/evidence/tcc-managed/ORIGINAL_TC_INTERNAL_JOINT_RECOVERY.md) 和 [ledger](../phase-4/tcc-original-tc-internal-joint-recovery.json)。完整联合切点与生产门禁保持开放。

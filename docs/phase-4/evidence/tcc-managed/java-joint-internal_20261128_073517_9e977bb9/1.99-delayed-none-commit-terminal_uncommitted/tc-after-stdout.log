@@ -1,0 +1,209 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+07:36:19.980  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+07:36:20.066  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+07:36:20.110  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 3628 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in E:\codex-builds\seata-tcc-java-20261128_073517_9e977bb9\1.99-delayed-none-commit-terminal_uncommitted)
+07:36:20.112  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+07:36:21.601  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+07:36:21.633  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+07:36:22.017  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 3.068 seconds (process running for 4.386)
+07:36:22.164 ERROR --- [                     main] [trics.exporter.ExporterFactory] [     getInstanceList]  [] : not support metrics exporter type: prometheus
+==> 
+org.apache.seata.common.loader.EnhancedServiceNotFoundException: not found service provider for : org.apache.seata.metrics.exporter.Exporter caused by java.lang.IllegalStateException: Extension instance(definition: org.apache.seata.common.loader.ExtensionDefinition@e7f65cdd, class: interface org.apache.seata.metrics.exporter.Exporter)  could not be instantiated: null
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:505)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.getExtensionInstance(EnhancedServiceLoader.java:486)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.loadExtension(EnhancedServiceLoader.java:460)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.load(EnhancedServiceLoader.java:351)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.access$200(EnhancedServiceLoader.java:282)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:122)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:106)
+	at org.apache.seata.metrics.exporter.ExporterFactory.getInstanceList(ExporterFactory.java:51)
+	at org.apache.seata.server.metrics.MetricsManager.init(MetricsManager.java:57)
+	at org.apache.seata.server.Server.start(Server.java:78)
+	at org.apache.seata.server.ServerRunner.run(ServerRunner.java:62)
+	at org.springframework.boot.SpringApplication.lambda$callRunner$1(SpringApplication.java:792)
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82)
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60)
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:791)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.apache.seata.server.ServerApplication.main(ServerApplication.java:30)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:106)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:64)
+	at org.springframework.boot.loader.launch.PropertiesLauncher.main(PropertiesLauncher.java:580)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.initInstance(EnhancedServiceLoader.java:731)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:501)
+	... 37 more
+Caused by: java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:555)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:337)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:294)
+	at java.base/sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:89)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl.<init>(ServerImpl.java:142)
+	at jdk.httpserver/sun.net.httpserver.HttpServerImpl.<init>(HttpServerImpl.java:50)
+	at jdk.httpserver/sun.net.httpserver.DefaultHttpServerProvider.createHttpServer(DefaultHttpServerProvider.java:35)
+	at jdk.httpserver/com.sun.net.httpserver.HttpServer.create(HttpServer.java:150)
+	at io.prometheus.client.exporter.HTTPServer.<init>(HTTPServer.java:396)
+	at org.apache.seata.metrics.exporter.prometheus.PrometheusExporter.<init>(PrometheusExporter.java:55)
+	... 44 more
+
+Caused by: java.lang.IllegalStateException: Extension instance(definition: org.apache.seata.common.loader.ExtensionDefinition@e7f65cdd, class: interface org.apache.seata.metrics.exporter.Exporter)  could not be instantiated: null
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:505)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.getExtensionInstance(EnhancedServiceLoader.java:486)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.loadExtension(EnhancedServiceLoader.java:460)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.load(EnhancedServiceLoader.java:351)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.access$200(EnhancedServiceLoader.java:282)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:122)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:106)
+	at org.apache.seata.metrics.exporter.ExporterFactory.getInstanceList(ExporterFactory.java:51)
+	at org.apache.seata.server.metrics.MetricsManager.init(MetricsManager.java:57)
+	at org.apache.seata.server.Server.start(Server.java:78)
+	at org.apache.seata.server.ServerRunner.run(ServerRunner.java:62)
+	at org.springframework.boot.SpringApplication.lambda$callRunner$1(SpringApplication.java:792)
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82)
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60)
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:791)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.apache.seata.server.ServerApplication.main(ServerApplication.java:30)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:106)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:64)
+	at org.springframework.boot.loader.launch.PropertiesLauncher.main(PropertiesLauncher.java:580)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.initInstance(EnhancedServiceLoader.java:731)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:501)
+	... 37 common frames omitted
+Caused by: java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:555)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:337)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:294)
+	at java.base/sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:89)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl.<init>(ServerImpl.java:142)
+	at jdk.httpserver/sun.net.httpserver.HttpServerImpl.<init>(HttpServerImpl.java:50)
+	at jdk.httpserver/sun.net.httpserver.DefaultHttpServerProvider.createHttpServer(DefaultHttpServerProvider.java:35)
+	at jdk.httpserver/com.sun.net.httpserver.HttpServer.create(HttpServer.java:150)
+	at io.prometheus.client.exporter.HTTPServer.<init>(HTTPServer.java:396)
+	at org.apache.seata.metrics.exporter.prometheus.PrometheusExporter.<init>(PrometheusExporter.java:55)
+	... 44 common frames omitted
+ <==
+07:36:22.658  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+07:36:22.955  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+07:36:23.117  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:23.118 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:23.119  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:23.213  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 50541
+07:36:23.233  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: E:/codex-builds/seata-tcc-java-20261128_073517_9e977bb9/1.99-delayed-none-commit-terminal_uncommitted/logs.
+07:36:23.233  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 1202 millSeconds
+07:36:24.155  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:24.155 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:24.155  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:25.180  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:25.181 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:25.181  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:26.209  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:26.209 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:26.209  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:27.239  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:27.240 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:27.240  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:28.270  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:28.270 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:28.270  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:29.297  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:29.297 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:29.297  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:30.320  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:30.320 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:30.320  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:31.340  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:31.340 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:31.340  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:32.361  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:32.361 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:32.361  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:33.381  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:33.381 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:33.381  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:34.400  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:34.401 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:34.401  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:35.422  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:35.422 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:35.422  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:36.451  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:36.452 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:36.452  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:37.475  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:37.475 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:37.475  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:38.506  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:38.506 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:38.506  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:39.527  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:39.527 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:39.527  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:40.550  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : No channel is available for resource[tcc-original-action]
+07:36:40.550 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:50541:4045081923975933953] : Committing branch transaction exception:retrying=true, BR:4045081923975933955/4045081923975933953, Global commit continue
+07:36:40.550  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is NOT done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:40.569  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='tcc-original-action', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x51dbcd5d, L:/127.0.0.1:50541 - R:/127.0.0.1:52400],client version:1.1.0
+07:36:41.573  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:50541:4045081923975933953] : Choose [id: 0x51dbcd5d, L:/127.0.0.1:50541 - R:/127.0.0.1:52400] on the same IP[127.0.0.1] as alternative of phase0-auth:127.0.0.1:51247
+07:36:41.770  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchCommitResponse{xid='198.18.0.1:50541:4045081923975933953', branchId=4045081923975933955, branchStatus=PhaseTwo_Committed, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+07:36:41.779  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [bda$doGlobalCommit$1]  [198.18.0.1:50541:4045081923975933953] : Commit branch transaction successfully, xid = 198.18.0.1:50541:4045081923975933953 branchId = 4045081923975933955
+07:36:41.800  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:50541:4045081923975933953] : Committing global transaction is successfully done, xid = 198.18.0.1:50541:4045081923975933953.
+07:36:41.821  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:52400 to server channel inactive.
+07:36:41.821  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x51dbcd5d, L:/127.0.0.1:50541 ! R:/127.0.0.1:52400]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:52400', channel=[id: 0x51dbcd5d, L:/127.0.0.1:50541 ! R:/127.0.0.1:52400], resourceSets=[]}

@@ -141,13 +141,17 @@ impl XaCommandProxy {
     pub fn captured(&self) -> Option<(Vec<u8>, Vec<u8>)> {
         self.captured.lock().unwrap().clone()
     }
+    /// 无参数；返回当前实际匹配命令数，不释放已截留的原响应。
+    pub fn matched_commands(&self) -> usize {
+        self.attempts.load(Ordering::Acquire)
+    }
     /// 无参数；等待代理及所有连接结束，返回完整观察期间匹配的原命令次数。
     pub async fn shutdown(mut self) -> usize {
         if let Some(stop) = self.stop.take() {
             let _ = stop.send(());
         }
         (&mut self.owner).await.unwrap();
-        self.attempts.load(Ordering::Acquire)
+        self.matched_commands()
     }
 }
 impl Drop for XaCommandProxy {

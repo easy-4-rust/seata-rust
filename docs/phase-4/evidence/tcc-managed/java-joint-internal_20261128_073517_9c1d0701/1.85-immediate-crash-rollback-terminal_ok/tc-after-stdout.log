@@ -1,0 +1,104 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+07:52:00.309  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+07:52:00.377  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+07:52:00.408  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 47684 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in E:\codex-builds\seata-tcc-java-20261128_073517_9c1d0701\1.85-immediate-crash-rollback-terminal_ok)
+07:52:00.409  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+07:52:01.742  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+07:52:01.767  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+07:52:02.105  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 2.729 seconds (process running for 3.972)
+07:52:02.601  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+07:52:02.833  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+07:52:02.978  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:02.980 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : [stacktrace]Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+==> 
+org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+	at org.apache.seata.server.coordinator.AbstractCore.branchRollback(AbstractCore.java:239)
+	at org.apache.seata.server.coordinator.DefaultCore.branchRollback(DefaultCore.java:138)
+	at org.apache.seata.server.coordinator.DefaultCore.lambda$doGlobalRollback$3(DefaultCore.java:447)
+	at org.apache.seata.server.session.SessionHelper.forEach(SessionHelper.java:395)
+	at org.apache.seata.server.coordinator.DefaultCore.doGlobalRollback(DefaultCore.java:433)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.lambda$handleRollbackingByScheduled$6(DefaultCoordinator.java:614)
+	at org.apache.seata.server.session.SessionHelper.lambda$forEach$0(SessionHelper.java:316)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:290)
+	at java.base/java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:754)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:686)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateParallel(ForEachOps.java:159)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateParallel(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:765)
+	at org.apache.seata.server.session.SessionHelper.forEach(SessionHelper.java:312)
+	at org.apache.seata.server.session.SessionHelper.forEach(SessionHelper.java:333)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.handleRollbackingByScheduled(DefaultCoordinator.java:602)
+	at org.apache.seata.server.session.SessionHolder.distributedLockAndExecute(SessionHolder.java:433)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.lambda$rollbackingSchedule$7(DefaultCoordinator.java:630)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.io.IOException: rm client is not connected. dbkey:tcc-original-action,clientId:phase0-auth:127.0.0.1:58461
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemotingServer.sendSyncRequest(AbstractNettyRemotingServer.java:85)
+	at org.apache.seata.server.coordinator.AbstractCore.branchRollbackSend(AbstractCore.java:250)
+	at org.apache.seata.server.coordinator.AbstractCore.branchRollback(AbstractCore.java:235)
+	... 30 common frames omitted
+ <==
+07:52:02.982 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:03.033  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 57998
+07:52:03.045  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: E:/codex-builds/seata-tcc-java-20261128_073517_9c1d0701/1.85-immediate-crash-rollback-terminal_ok/logs.
+07:52:03.045  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 929 millSeconds
+07:52:04.028  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:04.029 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:04.029 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:05.073  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:05.073 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:05.073 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:06.101  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:06.102 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:06.102 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:07.152  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:07.152 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:07.152 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:08.208  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:08.209 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:08.209 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:09.260  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:09.260 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:09.261 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:10.293  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:10.293 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:10.293 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:11.334  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:11.334 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:11.334 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:12.358  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:12.358 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:12.358 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:13.396  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:13.396 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:13.396 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:14.422  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : No channel is available for resource[tcc-original-action]
+07:52:14.422 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction exception, xid = 198.18.0.1:57998:4045081927830310913 ,branchId = 4045081927830310915 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915, global rollback failed
+07:52:14.422 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:57998:4045081927830310913] : Failed to handle rollbacking [198.18.0.1:57998:4045081927830310913] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:14.604  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='tcc-original-action', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x7539e156, L:/127.0.0.1:57998 - R:/127.0.0.1:57586],client version:1.1.0
+07:52:15.446  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:57998:4045081927830310913] : Choose [id: 0x7539e156, L:/127.0.0.1:57998 - R:/127.0.0.1:57586] on the same IP[127.0.0.1] as alternative of phase0-auth:127.0.0.1:58461
+07:52:15.724  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='198.18.0.1:57998:4045081927830310913', branchId=4045081927830310915, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+07:52:15.744  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [198.18.0.1:57998:4045081927830310913] : Rollback branch transaction successfully, xid = 198.18.0.1:57998:4045081927830310913 branchId = 4045081927830310915
+07:52:15.774  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:57998:4045081927830310913] : Rollback global transaction successfully, xid = 198.18.0.1:57998:4045081927830310913.
+07:52:15.778  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:57586 to server channel inactive.
+07:52:15.778  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x7539e156, L:/127.0.0.1:57998 ! R:/127.0.0.1:57586]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:57586', channel=[id: 0x7539e156, L:/127.0.0.1:57998 ! R:/127.0.0.1:57586], resourceSets=[]}

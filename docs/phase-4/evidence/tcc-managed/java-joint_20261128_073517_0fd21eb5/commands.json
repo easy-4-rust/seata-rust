@@ -1,0 +1,1033 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-tcc-java-20261128-073517-0fd21eb5",
+      "--label",
+      "seata.tcc.owner=de7e56b923f54e19ba51e4745bf86507",
+      "--mount",
+      "type=bind,source=E:/codex-builds/seata-tcc-java-20261128_073517_0fd21eb5/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:62861:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=tcc_java_de7e56b923f5",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "install-server-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "tcc_java_de7e56b923f5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-terminal-source",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:server/src/main/java/org/apache/seata/server/coordinator/DefaultCore.java"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-state-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-context-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-state-before-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-business-dml-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-state-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-context-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-restore-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-state-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-context-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-business-dml-after",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-commit-tc-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM tcc_java_de7e56b923f5.global_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.branch_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-state-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-context-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-state-before-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-business-dml-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-state-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-context-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-restore-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-state-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-context-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-business-dml-after",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-delayed-none-rollback-tc-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM tcc_java_de7e56b923f5.global_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.branch_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-state-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-context-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-state-before-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-business-dml-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-state-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-context-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-restore-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-state-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-context-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-business-dml-after",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-commit-tc-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM tcc_java_de7e56b923f5.global_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.branch_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-state-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-context-cut",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-state-before-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-business-dml-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-state-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-context-after-database",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-restore-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-state-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT @@server_uuid; SELECT HEX(xid),status FROM tcc_java_de7e56b923f5.global_table ORDER BY xid; SELECT HEX(xid),branch_id,branch_type,status,HEX(application_data) FROM tcc_java_de7e56b923f5.branch_table ORDER BY branch_id; SELECT HEX(xid),branch_id,HEX(resource_id),HEX(application_data),HEX(server_uuid),schema_version,status FROM tcc_java_de7e56b923f5.seata_rs_tcc_fence_v1; SELECT id,v FROM tcc_java_de7e56b923f5.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-context-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM tcc_java_de7e56b923f5.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-business-dml-after",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-delayed-none-rollback-tc-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM tcc_java_de7e56b923f5.global_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.branch_table),(SELECT COUNT(*) FROM tcc_java_de7e56b923f5.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "16e5b90b4239b28ccbdb9d0aeaa97211bf58855174aff9717cf3b5908eb7cb9d"
+    ],
+    "exit_code": 1
+  }
+]

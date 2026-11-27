@@ -1,10 +1,14 @@
 //! 固定原 Java TC 的正式 TCC 全局事务与真实同库 Fence/业务。
 #![cfg(feature = "tcc")]
 #![allow(clippy::unwrap_used)]
+#[path = "support/xa_command_proxy.rs"]
+mod command_proxy;
 #[path = "support/tcc_dynamic_action.rs"]
 mod dynamic_action;
 #[path = "support/tcc_managed_fixture.rs"]
 mod fixture;
+#[path = "support/tcc_joint_action.rs"]
+mod joint_action;
 use seata_protocol::{transaction::BranchRegisterRequest, BranchType, GlobalStatus};
 use seata_rm::{
     BranchPhase, BranchRecordState, BranchResource, FileBranchStore, JournalOptions,
@@ -22,6 +26,21 @@ async fn run(rollback: bool) {
         ));
     }
     let dynamic = std::env::var("SEATA_TCC_DYNAMIC").ok();
+    let joint_cut = std::env::var("SEATA_TCC_JOINT_CUT").ok();
+    if let Some(cut) = &joint_cut {
+        assert!(["terminal_uncommitted", "terminal_ok"].contains(&cut.as_str()));
+    }
+    let mut mysql_proxy = if joint_cut.as_deref() == Some("terminal_ok") {
+        Some(
+            command_proxy::XaCommandProxy::start(
+                std::env::var("SEATA_MYSQL_PORT").unwrap().parse().unwrap(),
+                b"\x03COMMIT".to_vec(),
+            )
+            .await,
+        )
+    } else {
+        None
+    };
     let report_fault = matches!(fault.as_deref(), Some("report_lost" | "report_cancel"));
     if report_fault {
         assert!(dynamic.is_some() && rollback);
@@ -31,8 +50,12 @@ async fn run(rollback: bool) {
         assert!(["delayed", "immediate", "precision"].contains(&mode.as_str()));
         source.close().await.unwrap();
         source = seata_db_mysql::MySqlDataSource::connect(
-            fixture::owned_mysql::options(None)
-                .operation_timeout(Duration::from_secs(15))
+            fixture::owned_mysql::options(mysql_proxy.as_ref().map(|p| p.port))
+                .operation_timeout(Duration::from_secs(if joint_cut.is_some() {
+                    60
+                } else {
+                    15
+                }))
                 .unwrap(),
         )
         .await
@@ -47,16 +70,26 @@ async fn run(rollback: bool) {
         .execute(&mut admin)
         .await
         .unwrap();
+        let dynamic = dynamic_action::TccDynamicAction {
+            immediate: mode == "immediate",
+            precision_only: mode == "precision",
+            catch_report_error: false,
+            failure_mode: None,
+        };
+        let action: std::sync::Arc<dyn seata_tcc::TccBusinessAction> = if let Some(cut) = &joint_cut
+        {
+            std::sync::Arc::new(joint_action::TccJointAction {
+                dynamic,
+                cut: cut.clone(),
+            })
+        } else {
+            std::sync::Arc::new(dynamic)
+        };
         adapter = std::sync::Arc::new(
             seata_db_mysql::MySqlTccResourceManager::new(
                 source.clone(),
                 "tcc-original-action".into(),
-                std::sync::Arc::new(dynamic_action::TccDynamicAction {
-                    immediate: mode == "immediate",
-                    precision_only: mode == "precision",
-                    catch_report_error: false,
-                    failure_mode: None,
-                }),
+                action,
             )
             .unwrap()
             .with_context_reporting(),
@@ -77,7 +110,11 @@ async fn run(rollback: bool) {
         store.clone(),
     )
     .request_timeout(Duration::from_secs(if report_fault { 15 } else { 5 }))
-    .callback_timeout(Duration::from_secs(5))
+    .callback_timeout(Duration::from_secs(if joint_cut.is_some() {
+        60
+    } else {
+        5
+    }))
     .build()
     .unwrap();
     let tm = TransactionManager::builder(
@@ -202,6 +239,33 @@ async fn run(rollback: bool) {
             serde_json::json!({"mode":mode,"fault":fault,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"registered_application_data":app,"reported_application_data":current,"try_committed":!report_fault,"try_future_cancelled":try_future_cancelled,"report_error_unknown":report_error_unknown}),
         );
         reported_data = Some(current);
+        if let Some(proxy) = mysql_proxy.take() {
+            if rollback {
+                proxy.arm_after(1);
+            } else {
+                proxy.arm();
+            }
+            let cut_identity = identity.clone();
+            let _mysql_watcher = tokio::spawn(async move {
+                let deadline = tokio::time::Instant::now() + Duration::from_secs(30);
+                loop {
+                    if let Some((request, ok)) = proxy.captured() {
+                        fixture::record(
+                            "joint-terminal-cut",
+                            serde_json::json!({"cut":"terminal_ok","phase":if rollback{"cancel"}else{"confirm"},"xid":cut_identity.xid(),"branch_id":cut_identity.branch_id().to_string(),"held_request":request,"held_ok":ok,"matched_commands":proxy.matched_commands()}),
+                        );
+                        std::future::pending::<()>().await;
+                        drop(proxy);
+                        return;
+                    }
+                    if tokio::time::Instant::now() >= deadline {
+                        proxy.shutdown().await;
+                        panic!("actual terminal COMMIT OK capture deadline");
+                    }
+                    tokio::time::sleep(Duration::from_millis(5)).await;
+                }
+            });
+        }
         if std::env::var_os("SEATA_TCC_DYNAMIC_HOLD").is_some() {
             let limit = tokio::time::Instant::now() + Duration::from_secs(20);
             while !fixture::folder("control").join("allow-end").exists() {
@@ -379,13 +443,22 @@ async fn original_java_tc_recovers_joint_crash_tcc_branch() {
     )
     .unwrap();
     let journal = std::path::PathBuf::from(std::env::var("SEATA_TCC_OLD_JOURNAL").unwrap());
-    assert_eq!(std::fs::read(&journal).unwrap(), b"SRMJNL01");
+    let cut = std::env::var("SEATA_TCC_JOINT_CUT").ok();
+    if cut.is_none() {
+        assert_eq!(std::fs::read(&journal).unwrap(), b"SRMJNL01");
+    }
     let store = FileBranchStore::open(
         journal,
         JournalOptions::new(32, 1048576, 65536, 32).unwrap(),
     )
     .await
     .unwrap();
+    if cut.is_some() {
+        assert_eq!(
+            store.lease(identity.clone(), phase).await.unwrap().state(),
+            Some(BranchRecordState::Pending)
+        );
+    }
     let catalog = ResourceCatalog::new(4, 32767).unwrap();
     catalog.register(adapter.clone()).unwrap();
     let rm = ResourceManager::builder(
@@ -445,7 +518,7 @@ async fn original_java_tc_recovers_joint_crash_tcc_branch() {
     }
     fixture::record(
         "original-java-tcc-joint-recovery",
-        serde_json::json!({"mode":mode,"direction":direction,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"registered_application_data":identity.application_data(),"reported_application_data":before["reported_application_data"],"writer_pid":before["rust_process_id"],"journal":"Completed","status":status,"protocol":2,"business":business,"new_global_end_requests":0,"new_business_registrations":0,"new_reports":0,"finished_inferred_as_success":false}),
+        serde_json::json!({"mode":mode,"direction":direction,"cut":cut,"old_journal":if cut.is_some(){"Pending"}else{"None"},"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"registered_application_data":identity.application_data(),"reported_application_data":before["reported_application_data"],"writer_pid":before["rust_process_id"],"journal":"Completed","status":status,"protocol":2,"business":business,"new_global_end_requests":0,"new_business_registrations":0,"new_reports":0,"finished_inferred_as_success":false}),
     );
     rm.shutdown().await.unwrap();
     source.close().await.unwrap();

@@ -1,0 +1,188 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+07:45:59.749  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+07:45:59.806  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+07:45:59.833  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 61068 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in E:\codex-builds\seata-tcc-java-20261128_073517_3f7426ed\1.99-precision-restart-rollback-terminal_ok)
+07:45:59.833  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+07:46:00.815  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+07:46:00.839  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+07:46:01.091  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 2.083 seconds (process running for 3.353)
+07:46:01.223 ERROR --- [                     main] [trics.exporter.ExporterFactory] [     getInstanceList]  [] : not support metrics exporter type: prometheus
+==> 
+org.apache.seata.common.loader.EnhancedServiceNotFoundException: not found service provider for : org.apache.seata.metrics.exporter.Exporter caused by java.lang.IllegalStateException: Extension instance(definition: org.apache.seata.common.loader.ExtensionDefinition@e7f65cdd, class: interface org.apache.seata.metrics.exporter.Exporter)  could not be instantiated: null
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:505)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.getExtensionInstance(EnhancedServiceLoader.java:486)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.loadExtension(EnhancedServiceLoader.java:460)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.load(EnhancedServiceLoader.java:351)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.access$200(EnhancedServiceLoader.java:282)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:122)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:106)
+	at org.apache.seata.metrics.exporter.ExporterFactory.getInstanceList(ExporterFactory.java:51)
+	at org.apache.seata.server.metrics.MetricsManager.init(MetricsManager.java:57)
+	at org.apache.seata.server.Server.start(Server.java:78)
+	at org.apache.seata.server.ServerRunner.run(ServerRunner.java:62)
+	at org.springframework.boot.SpringApplication.lambda$callRunner$1(SpringApplication.java:792)
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82)
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60)
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:791)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.apache.seata.server.ServerApplication.main(ServerApplication.java:30)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:106)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:64)
+	at org.springframework.boot.loader.launch.PropertiesLauncher.main(PropertiesLauncher.java:580)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.initInstance(EnhancedServiceLoader.java:731)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:501)
+	... 37 more
+Caused by: java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:555)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:337)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:294)
+	at java.base/sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:89)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl.<init>(ServerImpl.java:142)
+	at jdk.httpserver/sun.net.httpserver.HttpServerImpl.<init>(HttpServerImpl.java:50)
+	at jdk.httpserver/sun.net.httpserver.DefaultHttpServerProvider.createHttpServer(DefaultHttpServerProvider.java:35)
+	at jdk.httpserver/com.sun.net.httpserver.HttpServer.create(HttpServer.java:150)
+	at io.prometheus.client.exporter.HTTPServer.<init>(HTTPServer.java:396)
+	at org.apache.seata.metrics.exporter.prometheus.PrometheusExporter.<init>(PrometheusExporter.java:55)
+	... 44 more
+
+Caused by: java.lang.IllegalStateException: Extension instance(definition: org.apache.seata.common.loader.ExtensionDefinition@e7f65cdd, class: interface org.apache.seata.metrics.exporter.Exporter)  could not be instantiated: null
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:505)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.getExtensionInstance(EnhancedServiceLoader.java:486)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.loadExtension(EnhancedServiceLoader.java:460)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.load(EnhancedServiceLoader.java:351)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.access$200(EnhancedServiceLoader.java:282)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:122)
+	at org.apache.seata.common.loader.EnhancedServiceLoader.load(EnhancedServiceLoader.java:106)
+	at org.apache.seata.metrics.exporter.ExporterFactory.getInstanceList(ExporterFactory.java:51)
+	at org.apache.seata.server.metrics.MetricsManager.init(MetricsManager.java:57)
+	at org.apache.seata.server.Server.start(Server.java:78)
+	at org.apache.seata.server.ServerRunner.run(ServerRunner.java:62)
+	at org.springframework.boot.SpringApplication.lambda$callRunner$1(SpringApplication.java:792)
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82)
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60)
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:791)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.apache.seata.server.ServerApplication.main(ServerApplication.java:30)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:106)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:64)
+	at org.springframework.boot.loader.launch.PropertiesLauncher.main(PropertiesLauncher.java:580)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.initInstance(EnhancedServiceLoader.java:731)
+	at org.apache.seata.common.loader.EnhancedServiceLoader$InnerEnhancedServiceLoader.createNewExtension(EnhancedServiceLoader.java:501)
+	... 37 common frames omitted
+Caused by: java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:555)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:337)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:294)
+	at java.base/sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:89)
+	at jdk.httpserver/sun.net.httpserver.ServerImpl.<init>(ServerImpl.java:142)
+	at jdk.httpserver/sun.net.httpserver.HttpServerImpl.<init>(HttpServerImpl.java:50)
+	at jdk.httpserver/sun.net.httpserver.DefaultHttpServerProvider.createHttpServer(DefaultHttpServerProvider.java:35)
+	at jdk.httpserver/com.sun.net.httpserver.HttpServer.create(HttpServer.java:150)
+	at io.prometheus.client.exporter.HTTPServer.<init>(HTTPServer.java:396)
+	at org.apache.seata.metrics.exporter.prometheus.PrometheusExporter.<init>(PrometheusExporter.java:55)
+	... 44 common frames omitted
+ <==
+07:46:01.599  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+07:46:01.777  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+07:46:01.956  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:01.957 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:01.957 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:01.981  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 60588
+07:46:01.993  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: E:/codex-builds/seata-tcc-java-20261128_073517_3f7426ed/1.99-precision-restart-rollback-terminal_ok/logs.
+07:46:01.994  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 894 millSeconds
+07:46:03.001  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:03.001 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:03.001 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:04.033  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:04.033 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:04.033 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:05.066  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:05.066 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:05.066 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:06.095  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:06.095 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:06.095 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:07.142  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:07.143 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:07.143 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:08.176  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:08.176 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:08.177 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:09.206  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:09.206 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:09.206 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:10.253  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:10.253 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:10.253 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:11.287  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:11.287 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:11.287 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:12.324  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : No channel is available for resource[tcc-original-action]
+07:46:12.324 ERROR --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction exception, xid = 198.18.0.1:60588:4045081926349807617 ,branchId = 4045081926349807619 ,retrying=true ,exception = Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619, global rollback failed
+07:46:12.324 ERROR --- [       SyncProcessing_1_1] [coordinator.DefaultCoordinator] [backingByScheduled$6]  [198.18.0.1:60588:4045081926349807617] : Failed to handle rollbacking [198.18.0.1:60588:4045081926349807617] Unknown org.apache.seata.core.exception.BranchTransactionException: Send branch rollback failed, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:13.232  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='tcc-original-action', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0xdf3bf746, L:/127.0.0.1:60588 - R:/127.0.0.1:54761],client version:1.1.0
+07:46:13.353  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:60588:4045081926349807617] : Choose [id: 0xdf3bf746, L:/127.0.0.1:60588 - R:/127.0.0.1:54761] on the same IP[127.0.0.1] as alternative of phase0-auth:127.0.0.1:59351
+07:46:13.617  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRollbackResponse{xid='198.18.0.1:60588:4045081926349807617', branchId=4045081926349807619, branchStatus=PhaseTwo_Rollbacked, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+07:46:13.629  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [a$doGlobalRollback$3]  [198.18.0.1:60588:4045081926349807617] : Rollback branch transaction successfully, xid = 198.18.0.1:60588:4045081926349807617 branchId = 4045081926349807619
+07:46:13.654  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [    doGlobalRollback]  [198.18.0.1:60588:4045081926349807617] : Rollback global transaction successfully, xid = 198.18.0.1:60588:4045081926349807617.
+07:46:13.667  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:54761 to server channel inactive.
+07:46:13.667  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xdf3bf746, L:/127.0.0.1:60588 ! R:/127.0.0.1:54761]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:54761', channel=[id: 0xdf3bf746, L:/127.0.0.1:60588 ! R:/127.0.0.1:54761], resourceSets=[]}

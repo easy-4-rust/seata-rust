@@ -1,0 +1,87 @@
+[
+  {
+    "label": "internal-none",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit\\validate_tcc_joint_internal.py",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-managed\\java-joint-internal_20261128_073517_9e977bb9",
+      "776f1244850475392299202358c81c95d0c9a262484dc8585c1259071e44696f",
+      "--weakenings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "internal-restart",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit\\validate_tcc_joint_internal.py",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-managed\\java-joint-internal_20261128_073517_3f7426ed",
+      "4c2c5e9f5a6ecd047911de7e8480a8424a012c9fb432130bc1df0384e17fd268",
+      "--weakenings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "internal-crash",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit\\validate_tcc_joint_internal.py",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-managed\\java-joint-internal_20261128_073517_9c1d0701",
+      "425f32c2550004885e15cd4131213f62e832a365a8ad09da2c68d8e0a9455805",
+      "--weakenings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "core",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit\\validate_tcc_core.py",
+      "--java",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\java_20261128_002854_2a650ebd",
+      "--java-sha",
+      "ce39bb3a202e796a10d1c4d6287f4f3dc3a4ecebfe4db39994fdacc5691dc0ad",
+      "--mutations",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\mutations_20261128_051031_07579471",
+      "--mutations-sha",
+      "19afd020290f46dfd6211b03a1a3ca68d0519087ab77befad83de55a366ea4c6",
+      "--rust199",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\regression_1.99_20261128_073517_37bb98d6",
+      "--rust199-sha",
+      "aeed160d2f5f36b6572a65c8f169b47061a19a66f0abc19f9426dd5965e0c5f7",
+      "--rust185",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\regression_1.85_20261128_073517_1c2c3c49",
+      "--rust185-sha",
+      "8e086123f0562ca487c6fc19ff10ceeace70002c115ba6555fe5159ac3d4dea9"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "baseline",
+    "argv": [
+      "-c",
+      "import sys,json;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from validate_structured_logs import catalog,sources;from validate_tcc_joint_crash import check_case;p=Path(sys.argv[2]);catalog(p,sys.argv[3]);sources(p);r=json.loads((p/'result.json').read_bytes());assert r['Rust_versions']==['1.99','1.85'] and r['modes']==['delayed'] and r['database_modes']==['none'] and r['directions']==['commit','rollback'] and r['actual_global_transactions']==4;assert json.loads((p/'cleanup.json').read_bytes())['owned_container_removed'];assert all(x['exit_code']==(1 if x['label']=='confirm-removed' else 0) for x in json.loads((p/'commands.json').read_bytes()));[check_case(p,v,'delayed','none',d) for v in ['1.99','1.85'] for d in ['commit','rollback']];print('Verified four original pre-callback joint-crash regressions')",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-managed\\java-joint_20261128_073517_0fd21eb5",
+      "ac9944fb9dc112cc7f0c9f87f1bd2f5c40076154585a68b0b2e2e06b3587ec2d"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "proxy-regression",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-rm-java\\test_tcc_dynamic_proxy.py"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "joint-proxy",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-rm-java\\test_tcc_joint_proxy.py"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "published-control",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit\\test_tcc_joint_control.py"
+    ],
+    "exit_code": 0
+  }
+]
