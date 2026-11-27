@@ -1,0 +1,219 @@
+{
+  "specification": "docs/phase-2/tcc-contract.md",
+  "status": "SELECTED_MYSQL_TCC_DURABLE_DYNAMIC_REPORTS_VERIFIED",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "workspace_per_version": {
+    "passed": 796,
+    "ignored": 388,
+    "successful_test_harness_summaries": 178,
+    "strict_rm_tcc_xa_mysql_clippy": true
+  },
+  "actual_dynamic_mysql_test_functions": 8,
+  "actual_dynamic_mysql_branch_scenarios": 32,
+  "actual_original_Java_dynamic_transactions": 12,
+  "actual_static_mysql_regression_cases": 16,
+  "actual_static_original_Java_normal_transactions": 4,
+  "actual_static_original_Java_fault_transactions": 8,
+  "actual_static_process_database_regression_cases": 54,
+  "behavioral_source_counterexamples": {
+    "core": 34,
+    "dynamic": 12,
+    "total": 46
+  },
+  "evidence_weakenings_rejected": {
+    "Java_mutation": 24,
+    "process": 642,
+    "managed": 154,
+    "Java_fault": 104,
+    "dynamic": 206
+  },
+  "evidence_weakenings_rejected_total": 1130,
+  "explicit_immediate_report": true,
+  "automatic_finally_report": true,
+  "original_registration_receipt_preserved": true,
+  "original_raw_JSON_values_preserved": true,
+  "report_manifest_schema_version": 1,
+  "static_Fence_protocol_version": 1,
+  "dynamic_Fence_protocol_version": 2,
+  "current_runtime_rechecks_terminal_Fence_before_Completed_reuse": true,
+  "arbitrary_old_binary_downgrade_supported": false,
+  "Java_Undo_or_existing_AT_XA_records_changed": false,
+  "Java_util_automatic_convenience_API_port_complete": false,
+  "TCC_full_gate_complete": false,
+  "whole_plan_complete": false,
+  "authority": {
+    "java_core": {
+      "path": "docs/phase-4/evidence/tcc-core/java_20261128_002854_2a650ebd",
+      "catalog_sha256": "ce39bb3a202e796a10d1c4d6287f4f3dc3a4ecebfe4db39994fdacc5691dc0ad"
+    },
+    "java_mutation": {
+      "path": "docs/phase-4/evidence/tcc-core/java-mutation_20261128_023439_58ee39f8",
+      "catalog_sha256": "fa02f2e18caa26b8fdc57390c9f61157a7a6b835c2a5a18a885105b646a15a40"
+    },
+    "mutations": {
+      "path": "docs/phase-4/evidence/tcc-core/mutations_20261128_035919_bb0db709",
+      "catalog_sha256": "78205f9e64aed773b6c917ee6d203bafdb762795d56b781c6545f1c319be8ced"
+    },
+    "rust199": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.99_20261128_035919_fd8d3328",
+      "catalog_sha256": "a7de6f9aa79e5d6e09a6a3b57ca6ce9f605b80efcff7b906ed1a8133c4686f51"
+    },
+    "rust185": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.85_20261128_035919_2efe9a14",
+      "catalog_sha256": "33c5ac4cc19ea0641a11f87d75420165a69bb75e1aa9ff53deaf29a70b27f8ec"
+    },
+    "mysql": {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_035919_b910dec8",
+      "catalog_sha256": "edce536733319838256a05f1997c89f2cc855f0b8231e7624c5aae48a7dd36eb"
+    },
+    "process": {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_035919_8086907b",
+      "catalog_sha256": "3d564c2272fcd589c7a167da740daed57ed5da4a3bf1989ca1a91c18e0d8fe78"
+    },
+    "dynamic": {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_035919_bf0765ba",
+      "catalog_sha256": "2a8af47cc940a1a068a0aa63347c5e3e5edfedd41f25f653944368ebf6c75e8a"
+    },
+    "dynamic_mutations": {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic-mutations_20261128_035919_30e1c84b",
+      "catalog_sha256": "d35d009059b158c41ec830840e7f6de90d2baf718c2dbfa5227c21f81ecd9538"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/tcc-managed/java_20261128_041410_c3bf8d1f",
+      "catalog_sha256": "4b60f3556734091d2eae3425373c79d50919afb489b632a653f443a829343cb2"
+    },
+    "java_fault": {
+      "path": "docs/phase-4/evidence/tcc-managed/java-fault_20261128_041420_872fbada",
+      "catalog_sha256": "f1091bfb2d6a96c973c595a62f86a28407146df8baff20cb6c837a6b4e1b1d80"
+    },
+    "dynamic_java": {
+      "path": "docs/phase-4/evidence/tcc-managed/java-dynamic_20261128_041439_f0c98f1a",
+      "catalog_sha256": "3a8127fa92599445b6bc16fcd715abcc35689c43e9bd3b5eb052cd7bbb83afee"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/tcc-managed/validation_dynamic_20261128_final",
+      "catalog_sha256": "252351937252965e88684067446af52fd05b173efc8403e233aacafe61aade7d"
+    }
+  },
+  "remaining": [
+    "Java util automatic convenience API",
+    "Dynamic-report-specific writer/database crashes, original TC faults, concurrency and topology",
+    "Production privileges, retention/cleanup, load and operations",
+    "Remaining AT/XA gates and Phase 5-7"
+  ],
+  "diagnostic_batches": [
+    {
+      "path": "docs/phase-4/evidence/tcc-core/mutations_20261128_032550_984ba55b",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "b67d92111df08a4c5aca96bcbcd3e0efafb8c3409a3045a8441696dc0afc460c"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.85_20261128_032550_89dd3170",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "6bf4b1a4825454e74921ca56d8bbd3fab44544da3205db8f3024660e6558f395"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.99_20261128_032550_de732507",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "e4990d8f3607761a0f78d5c455bf6b50ca0873f143ff7df2f404200efc968ffb"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic-mutations_20261128_034007_f5e97fd0",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "fa3b3cf986d2d1fcb49790a697174bddcb0b3f0304947366aa7728336f0cf224"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic-red_20261128_034754_bbbe2eb5",
+      "role": "Actual protocol-downgrade behavioral RED before fix; not final acceptance",
+      "catalog_sha256": "22be719eab2c2523b1d204c8f063c9661870c644bcea8131dfd39f8f6b6b1580"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_031618_2486f036",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "bdc5622fe55926bcea609d987b130b44481930d520f707bf3f23cc65417ac1e0"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_031902_a069e677",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": null
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_032023_e757565c",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "1df45122a0ea0f21c3a6fbd6831385fa7ef264a4a8173518d98927786c8f22cc"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_032307_811a010f",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "dfa2889170fe78db6da08207a00ed65359f2b129d9e56eff02d0231d5566bae4"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_032550_ae7d637e",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "0313e9f7aecce4f0e62c7aa2363172fbac59231a9b62aa03b882b670582d500a"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_034906_35811285",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "96cafbd02223e5bb08a47ba63600d13bffee2b1764fbbfda4f28c4677520e58c"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_035338_2d707b94",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "471cc6a23e7f754d47315c50b491f382c49f0a252de9a4148547f7e9107b5e92"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/java-dynamic_20261128_030853_50c26d2d",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "874b1a58600cf006aa488e25edfdf326438b0138d2743e7c6c471ec1a07f198a"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/java-dynamic_20261128_032550_b3291df7",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "32c319aa0a442bb21d72114d952122e2df81d3abae9f44a7182b7aee2f577459"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/java-dynamic_20261128_035919_94a7e701",
+      "role": "Incomplete: Windows proxy bind WinError 10013; owned resources cleaned; replaced by authority batch",
+      "catalog_sha256": null
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/java-fault_20261128_034043_2b4b555d",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "df083771723b492ee2be0f69bc5c6157672f3762a671e77862e0ea9f5773e6f4"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/java_20261128_034043_398a49fb",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "99d7cc385437a1958017d8dad51aa39fa97912317c3a79a787b635f9d9dcdef6"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_030340_9d5c8abd",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "5f9b01cffe2d00edf221b854702d0b8f7ddec41d5c4c377b242cda99e843e53b"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_030650_e87d9750",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "360f16deb68bb382f81e36e78d91a815e6e86b0181247a7361b7d6c6696c28d6"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_031212_224be851",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "f24ecf865b9d7a706d2b24a2072b1976133e1d56662df484be7acb7b28365f30"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_032550_cd3f9fd0",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "ff53e0c80d1559dea17c2d1695af66d4f7ee886a2c4cb8f5b140a260b94fc99d"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_032550_2c09287c",
+      "role": "Historical/intermediate source or incomplete run; not current-source authority",
+      "catalog_sha256": "3f8aa8706767dbde51d0890c3c28c22a25207d4a6161eda481941567b607eec4"
+    }
+  ]
+}

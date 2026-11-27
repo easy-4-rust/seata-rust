@@ -234,3 +234,13 @@ pub use mysql_tcc_try_error::MySqlTccTryError;
 mod mysql_tcc_fence_store;
 #[cfg(feature = "tcc")]
 mod mysql_tcc_transaction;
+#[cfg(feature = "tcc")]
+mod mysql_tcc_context_version;
+#[cfg(feature = "tcc")]
+mod mysql_tcc_context_store;
+#[cfg(feature = "tcc")]
+mod mysql_tcc_context_reporter;
+#[cfg(feature = "tcc")]
+mod mysql_tcc_context_report_error;
+#[cfg(feature = "tcc")]
+pub use mysql_tcc_context_report_error::MySqlTccContextReportError;

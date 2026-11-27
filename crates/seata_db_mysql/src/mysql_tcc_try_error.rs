@@ -4,6 +4,17 @@ use seata_rm::{RegisteredBranch, RmCallError};
 /// 对应 Java: TccActionInterceptorHandler 的登记/prepareFence 异常边界；Rust 原回执扩展。
 #[derive(Debug, thiserror::Error)]
 pub enum MySqlTccTryError {
+    /// 原成功登记后的动态报告失败；本次业务事务未获提交许可，报告可能已生效。
+    #[error("TCC context report failed before Try commit")]
+    ContextReport {
+        /// 未改写的原 TC 成功登记回执。
+        receipt: Box<RegisteredBranch>,
+        /// 保留本地持久化及 ADR-0008 的原报告错误类型。
+        #[source]
+        source: Box<crate::MySqlTccContextReportError>,
+        /// 当前 Try 是否已开始过单次报告请求（包括更早已确认的版本）。
+        context_report_started: bool,
+    },
     /// 原登记前的输入或配置拒绝。
     #[error("TCC Try rejected before registration")]
     Local {
@@ -14,7 +25,7 @@ pub enum MySqlTccTryError {
     /// 正式单次登记失败，保留请求可能生效语义。
     #[error(transparent)]
     Registration(#[from] RmCallError),
-    /// 本次 Try 没有发送 COMMIT，事务被拒绝或关闭；不否定其他尝试已有的 Fence，也不授权重放。
+    /// 本次业务/Fence Try 没有发送 COMMIT，事务被拒绝或关闭；不否定其他尝试已有的 Fence，也不授权重放。
     #[error("TCC registered Try refused before commit")]
     Refused {
         /// 原 TC 成功登记回执。
@@ -41,13 +52,17 @@ pub enum MySqlTccTryError {
         registration_may_have_effect: bool,
         /// 本次 Try 的 COMMIT 是否可能已经发送；false 不否定其他尝试或全局结果。
         try_commit_may_have_effect: bool,
+        /// 动态报告是否可能已经发送，独立于 Try COMMIT；不授权盲目重放。
+        context_report_may_have_effect: bool,
     },
 }
 impl MySqlTccTryError {
     /// 无参数；返回真实原登记借用，None 不表示登记必定未生效。
     pub fn registered_branch(&self) -> Option<&RegisteredBranch> {
         match self {
-            Self::Refused { receipt, .. } | Self::UnknownCommit { receipt, .. } => Some(receipt),
+            Self::Refused { receipt, .. }
+            | Self::UnknownCommit { receipt, .. }
+            | Self::ContextReport { receipt, .. } => Some(receipt),
             Self::Deadline { receipt, .. } => receipt.as_deref(),
             _ => None,
         }

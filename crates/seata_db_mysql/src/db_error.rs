@@ -4,6 +4,9 @@ use seata_datasource::{ImageError, MetadataError};
 /// 对应 Java: java.sql.SQLException与TableMetaException的Rust类型化边界。
 #[derive(Debug, thiserror::Error)]
 pub enum DbError {
+    /// 原报告版本摘要与当前字节不一致，保留分支等待修复，不复用完成日志。
+    #[error("MySQL TCC context checksum mismatch")]
+    TccContextChecksumMismatch,
     /// 原事务持久摘要与当前 Undo 字节不一致，保留原分支等待修复。
     #[error("MySQL Undo checksum mismatch")]
     UndoChecksumMismatch,

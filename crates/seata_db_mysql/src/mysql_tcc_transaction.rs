@@ -1,3 +1,4 @@
+use crate::mysql_tcc_context_reporter::MySqlTccContextReporter;
 use crate::{
     cache::MySqlTableMetaReader, current_table_constraints::CurrentTableConstraints,
     mysql_image_reader::MySqlImageReader, mysql_tcc_fence_store::MySqlTccFenceStore, DbError,
@@ -5,7 +6,7 @@ use crate::{
 };
 use seata_at::SqlRecognizerFactory;
 use seata_datasource::{FieldValue, TableMeta};
-use seata_tcc::{TccError, TccTransaction};
+use seata_tcc::{BusinessActionContext, TccError, TccTransaction};
 use sqlx::{MySql, Transaction};
 use std::{fmt, future::Future, pin::Pin};
 /// Fence 与业务共享的独占连接作用域；取消或任何 DML 错误后原作用域不能继续提交。
@@ -13,6 +14,7 @@ use std::{fmt, future::Future, pin::Pin};
 pub(crate) struct MySqlTccTransaction {
     source: MySqlDataSource,
     transaction: Option<Transaction<'static, MySql>>,
+    reporter: Option<MySqlTccContextReporter>,
 }
 impl fmt::Debug for MySqlTccTransaction {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -37,7 +39,21 @@ impl MySqlTccTransaction {
         Ok(Self {
             source: source.clone(),
             transaction: Some(transaction),
+            reporter: None,
         })
+    }
+    /// 参数为绑定原成功回执的发布者；只在当前 Try 事务内部交接，不公开原连接。
+    pub(crate) fn attach_reporter(&mut self, reporter: MySqlTccContextReporter) {
+        self.reporter = Some(reporter);
+    }
+    /// 无参数；只读校验作用域确认回滚后释放原锁，不发送额外 COMMIT 或声明业务完成。
+    pub(crate) async fn rollback_read_scope(mut self) -> Result<(), DbError> {
+        let tx = self.transaction.take().ok_or(DbError::Input {
+            reason: "TCC read scope is closed",
+        })?;
+        tx.rollback()
+            .await
+            .map_err(|e| DbError::driver("TCC read scope rollback", e))
     }
     /// 无参数；仅适配器内部借用原事务，业务接口不暴露此入口。
     pub(crate) fn control(&mut self) -> Result<&mut Transaction<'static, MySql>, DbError> {
@@ -118,6 +134,35 @@ impl MySqlTccTransaction {
     }
 }
 impl TccTransaction for MySqlTccTransaction {
+    fn report_context<'a>(
+        &'a mut self,
+        context: &'a mut BusinessActionContext,
+    ) -> Pin<Box<dyn Future<Output = Result<bool, TccError>> + Send + 'a>> {
+        Box::pin(async move {
+            // 首次 await 前封闭原事务；报告取消、拒绝或未知后，捕获错误也不能再提交。
+            let transaction = self
+                .transaction
+                .take()
+                .ok_or(TccError::ContextReportUnavailable)?;
+            let mut reporter = self
+                .reporter
+                .take()
+                .ok_or(TccError::ContextReportUnavailable)?;
+            match reporter.publish(context).await {
+                Ok(reported) => {
+                    self.transaction = Some(transaction);
+                    self.reporter = Some(reporter);
+                    Ok(reported)
+                }
+                Err(error) => {
+                    if let Ok(mut state) = reporter.state.lock() {
+                        state.1 = Some(error);
+                    }
+                    Err(TccError::ContextReportUnavailable)
+                }
+            }
+        })
+    }
     fn execute<'a>(
         &'a mut self,
         sql: &'a str,

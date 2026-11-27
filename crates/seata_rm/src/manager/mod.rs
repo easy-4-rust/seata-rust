@@ -13,3 +13,5 @@ mod rm_call_metrics_sampler;
 pub use rm_call_metrics_sampler::RmCallMetricsSampler;
 
 mod callback_write_event;
+#[cfg(test)]
+mod callback_identity_tests;

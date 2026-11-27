@@ -1309,3 +1309,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 按既有 TCC contract 实现受控参数变更、可选 updated/delayReport 和初始化后跟踪。固定 Java 执行 46 项观察，Rust 核心比较其中 45 项；另 1 项 util 自动报告观察继续保留为后续基线。原始 RawValue 数值不重编码，Double 仅用于 Java 对象相等性的兼容比较；updated 不是报告/事务成功或原字节相同的证明。[证据](phase-4/evidence/tcc-core/CONTEXT_MUTATION.md)、[ledger](phase-4/tcc-context-mutation.json)。
 
 双版本各 795 passed / 384 ignored，严格检查通过；17 类错误源码每版实际行为失败，共 34 次。当前源码重新执行 54 项进程/数据库恢复、16 项 MySQL、4 项正常原 Java TC 和 8 项原 TC 故障事务，924 项证据削弱拒绝。原 Undo 格式、AT/XA 数据和默认 TCC 业务接口未改动。可变 Try 业务上下文、立即/延迟网络报告、持久版本、未知报告响应与旧 Pending/新参数回调协调仍未交付；完整 TCC 和全计划继续开放。
+
+
+## TCC 持久动态报告验收（2026-11-28）
+
+本节更新前文核心依赖增量的未接通状态：显式启用 MySQL 可变 Try、立即/最终报告、020 原字节版本与 SHA-256、类型化未知响应及旧 Pending/新参数真实回调协调已接通。双版本 32 个动态分支场景、12 个原 Java TC 动态全局事务通过；静态 16 项 MySQL、4 项正常/8 项故障原 TC、54 项进程/数据库恢复回归通过。工作区每版 796 passed / 388 ignored，严格检查通过；46 次错误源码实际行为失败和 1130 项证据削弱拒绝。详见 [动态报告证据](phase-4/evidence/tcc-managed/DYNAMIC_CONTEXT_REPORTS.md) 与 [ledger](phase-4/tcc-dynamic-context-reports.json)。Java util 自动便捷 API、动态故障/并发/拓扑及生产门禁尚未完成，完整 TCC 和总计划继续开放。

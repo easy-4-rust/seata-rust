@@ -104,12 +104,16 @@ impl MySqlTccFenceStore {
         }
         Ok(())
     }
-    /// 参数为已验证事务及原身份；返回持锁 Fence 状态，应用 BLOB 仅在服务器比较，拒绝超限和身份冲突。
+    /// 参数为已验证事务、原身份和预期协议（静态 1/报告 2）；返回持锁 Fence 状态，应用 BLOB 仅在服务器比较，拒绝超限和身份冲突。
     pub(crate) async fn read(
         tx: &mut Transaction<'static, MySql>,
         source: &MySqlDataSource,
         id: &BranchIdentity,
+        protocol_version: u16,
     ) -> Result<Option<CommonFenceStatus>, DbError> {
+        if !matches!(protocol_version, 1 | 2) {
+            return Err(DbError::RecoveryConflict);
+        }
         let row=sqlx::query("SELECT resource_id,server_uuid,schema_version,status,CAST(application_data <=> ? AS SIGNED),CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) FROM seata_rs_tcc_fence_v1 WHERE xid=? AND branch_id=? FOR UPDATE").bind(id.application_data().map(str::as_bytes)).bind(id.xid().as_bytes()).bind(id.branch_id()).fetch_optional(&mut **tx).await.map_err(|e|DbError::driver("TCC Fence read",e))?;
         let Some(row) = row else { return Ok(None) };
         let decode = |e| DbError::driver("TCC Fence identity decode", e);
@@ -121,7 +125,7 @@ impl MySqlTccFenceStore {
         let bounded: i64 = row.try_get(5).map_err(decode)?;
         if resource != id.resource().resource_id().as_bytes()
             || server != source.server_uuid.as_bytes()
-            || version != 1
+            || version != protocol_version
             || app != 1
             || bounded != 1
         {
@@ -131,14 +135,18 @@ impl MySqlTccFenceStore {
             .map(Some)
             .map_err(|_| DbError::RecoveryConflict)
     }
-    /// 参数为原身份及初始状态；唯一插入仲裁 Try/空 Cancel，不忽略重复键或覆盖已有记录。
+    /// 参数为原身份、初始状态及预期协议；唯一插入仲裁 Try/空 Cancel，不忽略重复键或覆盖已有记录。
     pub(crate) async fn insert(
         tx: &mut Transaction<'static, MySql>,
         source: &MySqlDataSource,
         id: &BranchIdentity,
         status: CommonFenceStatus,
+        protocol_version: u16,
     ) -> Result<(), DbError> {
-        let result=sqlx::query("INSERT INTO seata_rs_tcc_fence_v1(xid,branch_id,resource_id,application_data,server_uuid,schema_version,status) VALUES(?,?,?,?,?,1,?)").bind(id.xid().as_bytes()).bind(id.branch_id()).bind(id.resource().resource_id().as_bytes()).bind(id.application_data().map(str::as_bytes)).bind(source.server_uuid.as_bytes()).bind(status.code()).execute(&mut **tx).await.map_err(|e|DbError::driver("TCC Fence unique insert",e))?;
+        if !matches!(protocol_version, 1 | 2) {
+            return Err(DbError::RecoveryConflict);
+        }
+        let result=sqlx::query("INSERT INTO seata_rs_tcc_fence_v1(xid,branch_id,resource_id,application_data,server_uuid,schema_version,status) VALUES(?,?,?,?,?,?,?)").bind(id.xid().as_bytes()).bind(id.branch_id()).bind(id.resource().resource_id().as_bytes()).bind(id.application_data().map(str::as_bytes)).bind(source.server_uuid.as_bytes()).bind(protocol_version).bind(status.code()).execute(&mut **tx).await.map_err(|e|DbError::driver("TCC Fence unique insert",e))?;
         if result.rows_affected() != 1 {
             return Err(DbError::RecoveryConflict);
         }

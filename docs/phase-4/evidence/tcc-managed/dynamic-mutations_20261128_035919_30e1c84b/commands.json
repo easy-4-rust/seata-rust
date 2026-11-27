@@ -1,0 +1,640 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-dynamic-mutations-20261128-035919-30e1c84b",
+      "--label",
+      "seata.dynamic.owner=b5a3bf6643dc44ddb2811bfcd30d990e",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata-tcc-dynamic-mutations-20261128_035919_30e1c84b/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:61417:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=dynamic_mut_b5a3bf6643dc",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "811dc001fb0b2f4a8cb76133a49cfebee69bf726118d5007693b9c96b31826eb"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "811dc001fb0b2f4a8cb76133a49cfebee69bf726118d5007693b9c96b31826eb",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "dynamic_mut_b5a3bf6643dc"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-rm-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-rm",
+      "--lib",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-0",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-1",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_cases::report_rejection_loss_caught_failure_and_cancellation_never_commit_try",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-2",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-3",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\seata_rm-8aad5582fc877a85.exe",
+      "manager::callback_identity_tests::callback_identity_cannot_change_branch_or_resource_and_is_checked_before_completed_reuse",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-checksum_ignored-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-checksum_ignored",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.99-report_error_ignored-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-report_error_ignored",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_cases::report_rejection_loss_caught_failure_and_cancellation_never_commit_try",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.99-AT_status_in_TCC_report-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-AT_status_in_TCC_report",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.99-protocol_downgrade_accepted-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-protocol_downgrade_accepted",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.99-cached_completion_unverified-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-cached_completion_unverified",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.99-stable_identity_key_bypass-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-rm",
+      "--lib",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-stable_identity_key_bypass",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.99\\debug\\deps\\seata_rm-8aad5582fc877a85.exe",
+      "manager::callback_identity_tests::callback_identity_cannot_change_branch_or_resource_and_is_checked_before_completed_reuse",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.85-baseline-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-baseline-rm-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-rm",
+      "--lib",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-baseline-0",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-baseline-1",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_cases::report_rejection_loss_caught_failure_and_cancellation_never_commit_try",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-baseline-2",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-baseline-3",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\seata_rm-b9bdc1a7a89f0c07.exe",
+      "manager::callback_identity_tests::callback_identity_cannot_change_branch_or_resource_and_is_checked_before_completed_reuse",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-checksum_ignored-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-checksum_ignored",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.85-report_error_ignored-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-report_error_ignored",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_cases::report_rejection_loss_caught_failure_and_cancellation_never_commit_try",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.85-AT_status_in_TCC_report-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-AT_status_in_TCC_report",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.85-protocol_downgrade_accepted-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-protocol_downgrade_accepted",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.85-cached_completion_unverified-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-cached_completion_unverified",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\live_tcc-8aa1f63e82e15f30.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.85-stable_identity_key_bypass-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-rm",
+      "--lib",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-stable_identity_key_bypass",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\target-1.85\\debug\\deps\\seata_rm-b9bdc1a7a89f0c07.exe",
+      "manager::callback_identity_tests::callback_identity_cannot_change_branch_or_resource_and_is_checked_before_completed_reuse",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_035919_30e1c84b\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "811dc001fb0b2f4a8cb76133a49cfebee69bf726118d5007693b9c96b31826eb"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "811dc001fb0b2f4a8cb76133a49cfebee69bf726118d5007693b9c96b31826eb"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "811dc001fb0b2f4a8cb76133a49cfebee69bf726118d5007693b9c96b31826eb"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "811dc001fb0b2f4a8cb76133a49cfebee69bf726118d5007693b9c96b31826eb"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 1
+  }
+]

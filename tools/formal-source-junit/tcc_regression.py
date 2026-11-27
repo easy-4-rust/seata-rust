@@ -31,7 +31,7 @@ def run(version):
     commands = []
     summaries = []
     for label, arguments in [('workspace', ['test', '--workspace', '--all-features', '--offline', '--locked']),
-                              ('clippy', ['clippy', '-p', 'seata-db-mysql', '-p', 'seata-xa', '-p', 'seata-tcc', '--all-targets', '--all-features', '--offline', '--locked', '--', '-D', 'warnings'])]:
+                              ('clippy', ['clippy', '-p', 'seata-db-mysql', '-p', 'seata-xa', '-p', 'seata-tcc', '-p', 'seata-rm', '--all-targets', '--all-features', '--offline', '--locked', '--', '-D', 'warnings'])]:
         argv = ['cargo', '+' + version + '.0', *arguments]
         value = subprocess.run(argv, cwd=ROOT, env=env, capture_output=True, timeout=600,
                                creationflags=subprocess.CREATE_NO_WINDOW)

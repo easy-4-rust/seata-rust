@@ -40,3 +40,17 @@ seata-observability 显式启用 mysql 特性后，with_mysql_recovery 可独立
 
 
 正式 XA 回调观察器现复用受控 BranchCallbackReceipt 处理早到 Rollback：先竞争原登记唯一键，排除孤立记录/Prepared 后，原子持久否定启动终态与 guard。迟到的真实登记回执和克隆不能 START；若原登记先获胜则交回正常恢复，不从重复键猜结果。手工 apply/recover/dispatch 缺记录仍 Unknown，不能签发该屏障；回调能力也不转换为 RegisteredBranch。已有孤立数据保持 Pending，修复后才重新证明。
+
+### 显式 TCC 动态上下文报告
+
+启用 `tcc` feature 后，部署 `020_seata_rs_tcc_context_v1.sql` 并调用 `MySqlTccResourceManager::with_context_reporting()`，才会使用独立报告清单；默认静态路径不要求此表。控制池至少需要两个连接，并保持现有操作期限。清单最多保存原登记版本 0 和 64 个不可覆盖报告版本，包含原身份、实例、schema_version 和完整原字节摘要，不代表业务已经提交。
+
+业务可覆盖 `TccBusinessAction::try_action_with_context` 修改上下文；立即报告显式等待 `TccTransaction::report_context`，其余变更在业务返回后的 finally 路径报告。原 updated/延迟标志不证明网络送达，完整原值字节变化仍需要报告。报告确认后才允许发送业务/Fence COMMIT；报告错误、取消或被捕获的报告错误会封闭原事务。业务返回 false/错误仍回滚本地业务，但此前成功的上下文报告可独立存在。旧只读 Try 实现保持兼容。
+
+`register_and_try` 返回未改写的原成功登记回执；预先取得回执的调用方使用 `try_registered_with_context(client, receipt)`，并在取消 Future 之前自行保留原回执。普通 `try_registered` 没有正式报告客户端，不能用于已开启报告的资源。`MySqlTccTryError::ContextReport` 保留原回执、原报告错误及已开始请求的边界；Deadline 分别保留登记、报告和本次业务 COMMIT 的可能发送状态。不自动重发登记、报告或业务。
+
+原连接回调先核验清单和当前 Fence，之后才能以原登记身份复用文件 Pending/Completed；实际业务参数仍来自验证后的原回调，不全局忽略 application_data 冲突。摘要损坏保持可重试；恢复原字节后同一原分支可继续。原 Undo、019 Fence 和 AT/XA 格式均不迁移。完整崩溃/并发/拓扑、util 自动报告便利入口和生产权限/保留/负载门禁继续开放。
+
+新动态 Fence 使用既有 schema_version 字段的协议值 2；当前静态路径只接受原协议 1，误用静态配置不能执行动态分支的旧参数。019 表结构、旧记录和默认值不改写，020 清单自身版本仍为 1。恢复时必须保留所选协议配置。
+
+当前运行时的 TCC 回调复用 Completed 前还会验证同方向终态 Fence，控制状态缺失、回退或摘要异常时不会仅凭日志返回成功，也不会重放业务。此校验不承诺旧二进制任意降级的行为；恢复须维持相应报告配置与版本。

@@ -2,6 +2,9 @@
 /// 对应 Java: org.apache.seata.integration.tx.api.fence.exception.CommonFenceException；Rust 输入错误扩展。
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
 pub enum TccError {
+    /// 动态报告未确认或当前事务不提供此能力，不包含报告载荷。
+    #[error("TCC context report unavailable")]
+    ContextReportUnavailable,
     /// 业务明确失败；持久适配器必须回滚本地 Fence 与业务，不能发布完成。
     #[error("TCC business action failed")]
     Business,

@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "branch_id": 9501,
+      "immediate": false,
+      "journal": "Completed",
+      "old_pending": true,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Commit",
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"id\":1,\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 2,
+      "xid": "tcc:dynamic-false-Commit"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": false,
+      "journal": "Completed",
+      "old_pending": false,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Rollback",
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"id\":1,\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 2,
+      "xid": "tcc:dynamic-false-Rollback"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": true,
+      "journal": "Completed",
+      "old_pending": true,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Commit",
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"id\":1,\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}",
+        "{\"actionContext\":{\"amount\":9,\"final\":9,\"id\":1,\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 3,
+      "xid": "tcc:dynamic-true-Commit"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": true,
+      "journal": "Completed",
+      "old_pending": false,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Rollback",
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"id\":1,\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}",
+        "{\"actionContext\":{\"amount\":9,\"final\":9,\"id\":1,\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 3,
+      "xid": "tcc:dynamic-true-Rollback"
+    }
+  ],
+  "rust_process_id": 35376,
+  "whole_plan_complete": false
+}

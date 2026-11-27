@@ -60,10 +60,22 @@ impl BranchDispatcher {
         guard: &mut super::rm_dispatch_guard::RmDispatchGuard,
     ) -> Result<BranchStatus, RmError> {
         let resource = self.catalog.lookup(identity.resource())?;
-        let mut lease = self.store.lease(identity.clone(), phase).await?;
+        let journal_identity = if let Some(receipt) = callback {
+            let stable = resource.callback_identity(receipt).await?;
+            if stable.key() != identity.key() || stable.resource() != identity.resource() {
+                return Err(RmError::IdentityConflict);
+            }
+            stable
+        } else {
+            identity.clone()
+        };
+        let mut lease = self.store.lease(journal_identity, phase).await?;
         let original_state = lease.state();
         match original_state {
             Some(BranchRecordState::Completed) => {
+                if let Some(receipt) = callback {
+                    resource.verify_callback_completion(receipt).await?;
+                }
                 guard.reused(BranchRecordState::Completed);
                 return Ok(status(phase, BranchResolution::Applied));
             }

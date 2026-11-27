@@ -71,6 +71,19 @@ pub async fn reply_registered(socket: &mut TcpStream, id: i32, branch: i64) {
     )
     .await;
 }
+/// 参数为原连接及原登记身份；返回 Registered 报告请求号和完整新应用数据。
+pub async fn read_context_report(socket: &mut TcpStream, identity: &BranchIdentity) -> (i32,String) {
+    let request=peer::read(socket).await;
+    let Some(Message::BranchReportRequest(fields))=request.body else {panic!("context report missing")};
+    assert_eq!(fields.xid.as_deref(),Some(identity.xid()));assert_eq!(fields.branch_id,identity.branch_id());
+    assert_eq!(fields.branch_type,BranchType::Tcc);assert_eq!(fields.status,seata_protocol::BranchStatus::Registered);assert_eq!(fields.resource_id,None);
+    (request.id,fields.application_data.unwrap())
+}
+/// 参数为原连接、原请求号及结果码；只回复对应的报告响应。
+pub async fn reply_context_report(socket: &mut TcpStream,id:i32,code:ResultCode) {
+    let mut response=peer::success();response.result_code=code;
+    peer::write(socket,peer::reply(id,Message::BranchReportResponse(seata_protocol::transaction::BranchReportResponse{response}))).await;
+}
 /// 参数为原连接和请求号；回复明确 Failed，不签发成功分支回执。
 pub async fn reject_registration(socket: &mut TcpStream, id: i32) {
     let mut response = peer::success();

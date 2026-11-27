@@ -3,6 +3,14 @@
 #![allow(clippy::unwrap_used)]
 #[path = "support/tcc_managed_ack_cases.rs"]
 mod ack_cases;
+#[path = "support/tcc_dynamic_cases.rs"]
+mod dynamic_cases;
+#[path = "support/tcc_dynamic_action.rs"]
+mod dynamic_action;
+#[path = "support/tcc_dynamic_integrity_cases.rs"]
+mod dynamic_integrity_cases;
+#[path = "support/tcc_dynamic_setup_cases.rs"]
+mod dynamic_setup_cases;
 #[path = "support/xa_command_proxy.rs"]
 mod command_proxy;
 #[path = "support/tcc_managed_fixture.rs"]
