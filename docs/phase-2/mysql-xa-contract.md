@@ -40,3 +40,17 @@ flowchart LR
 ## 当前实施证据
 
 标识和原生 MySQL 两阶段增量已通过上述选定场景：原 Java 实际 8 向量、双 Rust 各 5 身份目标/8 原生现场、三种原 OK 截留、真实行锁等待后取消、不同进程与同一 MySQL 重启后的原身份恢复。七类源码反例共十四次及每版本十二项证据削弱拒绝。全工作区各 785 passed / 356 ignored，生产字节与当前一致；最终 native 条件测试的观察补强后重跑目标/严格检查与源封存。见 [固定证据与诊断](../phase-4/evidence/mysql-xa/README.md) 和 [machine ledger](../phase-4/mysql-xa-native.json)。完整 XA Resource/RM/原 TC Gate、AT 和其余所有阶段继续开放。
+
+## 正式登记与 RM 接入的实施顺序
+
+当前继续实施第一阶段：正式 `ResourceClient` 单次 XA BranchRegister（原 lock_key 为 None），仅匹配成功响应签发的 `RegisteredBranch` 能启动受管理事务。原 XID 必须先满足 MySQL 64 字节限制，不允许登记后截断、hash 或重新申请分支。原资源模式、JDBC ID、可选应用数据和 TC 签发编号原样保留。普通 MySQL Prepare 成功沿用原 Java XA 流程，不自动发送 AT 的 PhaseOne_Done；未知注册/数据库结果均不合成成功回执或重发报告。
+
+014 显式新表保存不可变原登记身份、格式版本、单向二阶段决定和确认终态。运行时不建表或升级，不改变原七列 Undo/AT 恢复表。必须在任何 XA START 前，先提交一条仅能插入一次的原登记记录；任何校验、写入、重复身份或控制 COMMIT 未确认都不启动 XA。同一原回执的克隆也不能再次启动该分支，终态后不删除该防重放记录。
+
+受管理 DML 和 Prepare 持原登记行锁核对 phase=0；回调在独立事务中先将原方向从 0 持久绑定为 Commit/Rollback，再执行原三分量 XA 控制，不能换向。跨进程使用不同 RM 日志时，数据库决定仍必须一致。成功控制响应后另行持久确认终态，再允许 RM 发布 Applied。后续同方向的终态读取不再次调用原生控制；错误/取消/期限均保留 Pending 或未知。
+
+首次 apply 与 Pending recover 都先核对精确原身份和方向。仅真正 XA RECOVER 中精确可见的原 Prepared 才可执行已绑定的同方向结束动作；MySQL 对不可复用的同一 XA 三分量负责单次 Prepared→终态转换。不会把此条件返回成 NotApplied，旧未知结果也不授权重新 START、登记或重放业务。不存在登记行或 Prepared、驱动失败、XAER_NOTA、方向/身份冲突均不得猜成功。
+
+第一阶段验证正式 XA 登记、无原生动作的登记拒绝/回包丢失、单次持久登记后原始 Prepare、RM 正常两方向回调与重复、独立恢复行的方向拒绝、日志重建及全局 TC 正常路径。本阶段仍有明确缺口：原生结束已生效而终态行尚未确认时，缺 Prepared 继续 Unknown；登记/START/Prepare 的进程退出以及旧活动会话的否定证明需要下一阶段的持久生产者/结束意图、同 XA 提交见证和旧会话围栏。它们继续作为完整 XA RM Gate 的必要验收，不能因第一阶段通过删除。所有错误必须保留已经真实取得的原登记回执；消费式 Prepare 前调用方也须保留该原身份，取消 Future 不能从数据库缺行重造回执。
+
+第一阶段的最终选定证据见 [受管理 XA 记录](../phase-4/evidence/xa-managed/README.md) 和 [machine ledger](../phase-4/mysql-xa-managed.json)：Rust 1.99/1.85 每版八项受管理真实 MySQL 场景、八项原生回归以及原 Java TC 的 Commit/Rollback 全局事务。双版本工作区各 785 passed / 366 ignored，严格 XA/MySQL Clippy 通过；ignored 场景由独立现场工具明确执行，不能把忽略本身计作通过。独立校验核对封存源码、原始 V1 帧、数据库状态与实际清理结果。原生 COMMIT OK 丢失现场仍为 Pending，保留上述恢复缺口；此处只确认第一阶段，不关闭完整 XA Gate 或总计划。

@@ -1,0 +1,103 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "status": "MANAGED_XA_FIRST_STAGE_ORIGINAL_REGISTRATION_AND_NORMAL_TC_VERIFIED",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "original_Java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "actual_managed_mysql_cases_per_version": 8,
+  "original_java_global_transactions_per_version": 2,
+  "native_mysql_regression_cases_per_version": 8,
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 366,
+    "successful_test_harness_summaries": 171,
+    "strict_xa_mysql_clippy": true
+  },
+  "authority": {
+    "managed_mysql": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql_20261127_210055_ac9666f7",
+      "catalog_sha256": "4f799087183810c20e7b638fa2370088da26c75bf3e6b4d63e7df84175c48691"
+    },
+    "original_java_tc": {
+      "path": "docs/phase-4/evidence/xa-managed/java_20261127_210118_f21cefc1",
+      "catalog_sha256": "b237c750acd667f08ceb566de320aca3ad9e700cf019db6bc2456e0a9db6418a"
+    },
+    "native_mysql_regression": {
+      "path": "docs/phase-4/evidence/mysql-xa/mysql_20261127_210118_b4c416c2",
+      "catalog_sha256": "8c9adf06d1332630998c8191784e4db2c744f5cd1426eb548c8b9cbc5ccba6e6"
+    },
+    "workspace_199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_205917_3658ebde",
+      "catalog_sha256": "02007168f518136216150136280b458ce3d94e0a09c31c510acc56c5c9b93637"
+    },
+    "workspace_185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_210045_581de2b8",
+      "catalog_sha256": "8a6b96c68b3f154d8bd9d274cb032ad528f08e21d171de658e810ee963f4b0c9"
+    },
+    "independent_validation": {
+      "path": "docs/phase-4/evidence/xa-managed/verification_20261127_final",
+      "catalog_sha256": "d3d9cd0a7f5008bd7a39bae7f9e2667c9a33e00880140dd3e0c4366c32b2ee4f"
+    },
+    "default_and_xa_only": {
+      "path": "docs/phase-4/evidence/mysql-xa/default_20261127_210331_088f27c1",
+      "catalog_sha256": "2ee315a1fa102b5b95234e276d75c99ec3a1666beffbc875cade6024c3038bc7"
+    }
+  },
+  "source_files": [
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_branch_record.rs",
+      "sha256": "eed6a92c9272bd3d33efefa4e78d04e38a2f8582ebc739768565f7751ffa64b2"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_branch_store.rs",
+      "sha256": "d298a02c21c5e6538c6c382b381af7033523756f95a0c922476d127dac525ff5"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_data_source.rs",
+      "sha256": "0e1f05dfe0e1d99027a00f5b25a3b0a73055221e96b319b5a497f3233e9f337f"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_enlist_error.rs",
+      "sha256": "4f19db49e35f31a7b672af53ed6726c00e3172b394dfd43791a140dcd757676b"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_enlisted_transaction.rs",
+      "sha256": "b44ebd17b7ea051783e148889466e1ac0700986cdcb6ff1150cf0d049fd71f60"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_error.rs",
+      "sha256": "7193cf1d8bd50060b2afbbb85c807cf8c56d2ae3d7b6df673bb6383a33326df8"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_resource_manager.rs",
+      "sha256": "28cdcfd5eeddfb9246acdaed6ffb389de1676460459794778cec3ec3ef42a0aa"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_table.rs",
+      "sha256": "a45554bae2fd3abc1cd0b1ac399174eeee20313e4b90b6b31d9f94fa33672920"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_transaction.rs",
+      "sha256": "89ff120440684e671f0ec8d0dd014868007377ee8114a0fdcbf25a65e387596b"
+    }
+  ],
+  "compatibility": {
+    "Java_Undo_format_changed": false,
+    "legacy_Undo_records_changed": false,
+    "default_AT_commit_gate_changed": false,
+    "runtime_auto_migration": false,
+    "new_explicit_migration": "014_seata_rs_xa_branch.sql"
+  },
+  "full_XA_gate_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "Native end applied but original ACK/terminal row lost remains Unknown/Pending; durable same-XA witness required",
+    "Durable producer/end intent and old active session fence",
+    "Full original Java TC cancellation/crash/concurrency and deployment gate",
+    "AT WP05/WP06 production acceptance, WP07 production operations, TCC and Phase 5-7 remain open"
+  ],
+  "default_xa_dependency": false,
+  "third_party_version_changes": 0
+}

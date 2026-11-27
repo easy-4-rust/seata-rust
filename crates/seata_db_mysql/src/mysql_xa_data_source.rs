@@ -180,7 +180,7 @@ impl MySqlXaDataSource {
         }
         // XA 控制使用 COM_QUERY；固定 MySQL 对 prepared-statement 协议返回 1295。
         // sql 仅来自固定动词、原字节十六进制和固定格式号，禁止拼接原业务文本。
-        timeout_at(deadline, sqlx::raw_sql(sql).execute(&mut **connection))
+        timeout_at(deadline, sqlx::Executor::execute(&mut **connection, sql))
             .await
             .map_err(|_| MySqlXaError::Unknown {
                 operation,

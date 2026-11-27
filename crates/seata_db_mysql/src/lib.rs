@@ -185,3 +185,24 @@ mod mysql_xa_transaction;
 pub use mysql_xa_transaction::MySqlXaTransaction;
 #[cfg(feature = "xa")]
 mod mysql_xa_table;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_branch_record;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_branch_store;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_enlist_error;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_resource_manager;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_enlisted_transaction;
+#[cfg(feature = "xa")]
+pub use mysql_xa_enlist_error::MySqlXaEnlistError;
+#[cfg(feature = "xa")]
+pub use mysql_xa_enlisted_transaction::MySqlXaEnlistedTransaction;
+#[cfg(feature = "xa")]
+pub use mysql_xa_resource_manager::MySqlXaResourceManager;
