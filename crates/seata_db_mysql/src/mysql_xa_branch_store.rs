@@ -36,6 +36,7 @@ impl MySqlXaBranchStore {
     ) -> Result<(), DbError> {
         if table != Self::TABLE
             && table != crate::mysql_xa_commit_witness::MySqlXaCommitWitness::TABLE
+            && table != crate::mysql_xa_prepare_evidence::MySqlXaPrepareEvidence::TABLE
         {
             return Err(DbError::RecoveryConflict);
         }
@@ -159,10 +160,20 @@ impl MySqlXaBranchStore {
         table: &'static str,
     ) -> Result<(Transaction<'static, MySql>, Option<MySqlXaBranchRecord>), DbError> {
         let mut tx = Self::begin(source).await?;
-        Self::validate_table(&mut tx, source, table).await?;
-        let row=sqlx::query(&format!("SELECT resource_id,server_uuid,schema_version,phase,completed,CAST(application_data <=> ? AS SIGNED) AS app_matches,CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) AS app_bounded FROM {table} WHERE xid=? AND branch_id=? FOR UPDATE")).bind(id.application_data().map(str::as_bytes)).bind(id.xid().as_bytes()).bind(id.branch_id()).fetch_optional(&mut *tx).await.map_err(|e|DbError::driver("XA branch read",e))?;
+        let record = Self::read_table(&mut tx, source, id, table).await?;
+        Ok((tx, record))
+    }
+    /// 参数为已有控制事务、原数据源/身份和固定内部表；返回持锁并完整核验的快照。
+    pub(crate) async fn read_table(
+        tx: &mut Transaction<'static, MySql>,
+        source: &MySqlDataSource,
+        id: &BranchIdentity,
+        table: &'static str,
+    ) -> Result<Option<MySqlXaBranchRecord>, DbError> {
+        Self::validate_table(tx, source, table).await?;
+        let row=sqlx::query(&format!("SELECT resource_id,server_uuid,schema_version,phase,completed,CAST(application_data <=> ? AS SIGNED) AS app_matches,CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) AS app_bounded FROM {table} WHERE xid=? AND branch_id=? FOR UPDATE")).bind(id.application_data().map(str::as_bytes)).bind(id.xid().as_bytes()).bind(id.branch_id()).fetch_optional(&mut **tx).await.map_err(|e|DbError::driver("XA branch read",e))?;
         let Some(row) = row else {
-            return Ok((tx, None));
+            return Ok(None);
         };
         let resource: Vec<u8> = row
             .try_get("resource_id")
@@ -196,13 +207,10 @@ impl MySqlXaBranchStore {
         {
             return Err(DbError::RecoveryConflict);
         }
-        Ok((
-            tx,
-            Some(MySqlXaBranchRecord {
-                phase,
-                completed: completed == 1,
-            }),
-        ))
+        Ok(Some(MySqlXaBranchRecord {
+            phase,
+            completed: completed == 1,
+        }))
     }
     /// 参数为不可伪造的原登记回执；确认唯一插入 COMMIT 后才允许该原身份开始一次 XA。
     pub(crate) async fn claim(

@@ -62,3 +62,13 @@ flowchart LR
 回调先持久绑定原方向。原 Prepared 可见时沿用原生结束；Commit 响应未知后保留 Pending。后续同方向恢复仅在原 Prepared 不可见且实际读到精确原身份、同实例/schema/version 的已提交见证时，可持久确认原 Commit 终态；不重发原生 COMMIT、不重放业务。缺见证仍为 Unknown，不能证明回滚。原 014 登记和既有 Prepared 不合成见证；旧分支若原生响应已丢失且无见证，继续保持未知。
 
 验收先复现原 COMMIT OK 截留后的 Pending，再由同一原分支回调通过已提交见证完成；双版本真实 MySQL、原 TC 正常两方向、完整受影响回归、见证身份/结构篡改及缺行拒绝。该增量不关闭旧活动会话围栏、持久生产者/结束意图、Rollback ACK 丢失恢复、完整故障矩阵或总计划。
+
+## Prepared 回滚结束意图与响应丢失恢复
+
+016 显式保存与原登记逐字段一致的生产者见证写入证据及 Prepared 回滚结束意图。原 ACTIVE 连接实际插入 015 见证后、END/PREPARE 前，在控制事务持久插入 016 phase=0/completed=0；确认控制提交后重新获取原分支门闩并核对仍未绑定二阶段，才允许单次 END/PREPARE。取消或相反回调不授权重新 START 或重做业务。
+
+Rollback RM 只在实际观察原完整 Prepared 后，将匹配的原生产者证据升级为 phase=2/completed=0，并在任何原生 ROLLBACK 前确认控制提交。再次取得原分支门闩与实际状态后执行同方向结束。后续恢复仅当原登记仍绑定 Rollback、原 Prepared 已不可见、016 的原身份与已持久 Prepared 回滚意图匹配、且原 015 提交见证确实缺失时，才确认原回滚；发现提交见证应拒绝换向结果。没有 016 或只有 phase=0 不能从缺行认定回滚。
+
+依据为原 XA 已进入不可重启的 Prepared、生产者已写入同事务见证、持久决定单向且登记不可复用；回滚释放事务内见证锁后，缺提交见证才排除 Commit。外部绕过受管理身份/权限的写入器、管理员破坏或恢复拓扑仍属于完整生产门禁。旧分支没有生产者证据时，原生 ACK 正常仍可确认；ACK 丢失仍未知。未 Prepared 的活动会话恢复及完整旧会话围栏继续开放。验收必须实际截留原 ROLLBACK OK，首次 Pending，后续原分支恢复完成且只发一次 ROLLBACK；删改结束意图和仅缺 Prepared 均不得确认。
+
+该增量最终证据见 [Prepared 回滚恢复](../phase-4/evidence/xa-managed/PREPARED_ROLLBACK.md) 及 [machine ledger](../phase-4/mysql-xa-prepared-rollback.json)。双 Rust 各九项受管理真实 MySQL、原 Java TC 两方向、全工作区各 785 passed / 367 ignored 和严格 XA/MySQL Clippy 通过；连续两个原 OK 截留、原身份意图损坏和缺失、冲突提交见证及新管理器恢复均有实际现场证据。完整生产和总计划仍开放。

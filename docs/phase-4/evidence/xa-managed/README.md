@@ -1,5 +1,7 @@
 # 正式 XA 登记与 RM 接入：选定阶段
 
+最新推进：[Prepared 回滚结束意图与连续响应丢失恢复](PREPARED_ROLLBACK.md)。旧阶段的未知结果记录保留，不回填为当时已通过。
+
 后续已推进 [同事务 Commit 见证恢复](COMMIT_WITNESS.md)；以下描述及 machine ledger 保留第一阶段的历史结果。新写入分支通过 015 见证扩展恢复正向提交；没有见证的旧分支不会被补造终态。
 
 规格事实源：[XA 契约](../../../phase-2/mysql-xa-contract.md)。固定结果及校验目录见 [machine ledger](../../mysql-xa-managed.json)。

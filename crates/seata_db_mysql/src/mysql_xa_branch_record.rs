@@ -4,6 +4,6 @@
 pub(crate) struct MySqlXaBranchRecord {
     /// 0 未绑定，1 Commit，2 Rollback。
     pub(crate) phase: u8,
-    /// 原生结束响应及此终态控制 COMMIT 均已确认。
+    /// 原生结束响应或持久结果证明及此终态控制 COMMIT 均已确认。
     pub(crate) completed: bool,
 }

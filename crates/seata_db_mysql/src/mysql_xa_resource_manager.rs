@@ -183,53 +183,94 @@ impl MySqlXaResourceManager {
         if !MySqlXaBranchStore::bind(&self.native.source, id, phase).await? {
             return Ok(BranchResolution::Unknown);
         }
-        let (mut gate, row) = MySqlXaBranchStore::lock(&self.native.source, id).await?;
-        let row = row.ok_or(DbError::RecoveryConflict)?;
-        if row.phase != MySqlXaBranchStore::phase(phase) {
-            return Err(DbError::RecoveryConflict);
-        }
-        if row.completed {
-            gate.rollback()
-                .await
-                .map_err(|e| DbError::driver("XA completed gate release", e))?;
-            return Ok(BranchResolution::Applied);
-        }
-        let xid = Self::xa_id(id);
-        let prepared = self.native.prepared_observed(&xid).await;
-        if matches!(prepared, Ok(false))
-            && phase == BranchPhase::Commit
-            && crate::mysql_xa_commit_witness::MySqlXaCommitWitness::committed(
-                &self.native.source,
-                id,
-            )
-            .await?
-        {
-            // 正向见证与业务同 XA 原子提交；只结束原持久决定，不重发原生命令。
+        for _ in 0..2 {
+            let (mut gate, row) = MySqlXaBranchStore::lock(&self.native.source, id).await?;
+            let row = row.ok_or(DbError::RecoveryConflict)?;
+            if row.phase != MySqlXaBranchStore::phase(phase) {
+                return Err(DbError::RecoveryConflict);
+            }
+            if row.completed {
+                gate.rollback()
+                    .await
+                    .map_err(|e| DbError::driver("XA completed gate release", e))?;
+                return Ok(BranchResolution::Applied);
+            }
+            let xid = Self::xa_id(id);
+            let prepared = self.native.prepared_observed(&xid).await;
+            if matches!(prepared, Ok(false))
+                && phase == BranchPhase::Commit
+                && crate::mysql_xa_commit_witness::MySqlXaCommitWitness::committed(
+                    &self.native.source,
+                    id,
+                )
+                .await?
+            {
+                // 正向见证与业务同 XA 原子提交；只结束原持久决定，不重发原生命令。
+                MySqlXaBranchStore::complete(&mut gate, id, phase).await?;
+                gate.commit()
+                    .await
+                    .map_err(|e| DbError::driver("XA witnessed terminal commit", e))?;
+                return Ok(BranchResolution::Applied);
+            }
+            if matches!(prepared, Ok(false))
+                && phase == BranchPhase::Rollback
+                && crate::mysql_xa_prepare_evidence::MySqlXaPrepareEvidence::rollback_armed(
+                    &mut gate,
+                    &self.native.source,
+                    id,
+                )
+                .await?
+            {
+                if crate::mysql_xa_commit_witness::MySqlXaCommitWitness::committed(
+                    &self.native.source,
+                    id,
+                )
+                .await?
+                {
+                    return Err(DbError::RecoveryConflict);
+                }
+                MySqlXaBranchStore::complete(&mut gate, id, phase).await?;
+                gate.commit()
+                    .await
+                    .map_err(|e| DbError::driver("XA proved rollback terminal commit", e))?;
+                return Ok(BranchResolution::Applied);
+            }
+            if !matches!(prepared, Ok(true)) {
+                gate.rollback()
+                    .await
+                    .map_err(|e| DbError::driver("XA unknown gate release", e))?;
+                return Ok(BranchResolution::Unknown);
+            }
+            if phase == BranchPhase::Rollback
+                && crate::mysql_xa_prepare_evidence::MySqlXaPrepareEvidence::arm_rollback(
+                    &mut gate,
+                    &self.native.source,
+                    id,
+                )
+                .await?
+                    == Some(true)
+            {
+                // 此时已实际观察 Prepared；先确认结束意图，再重新获取原门闩及原生状态。
+                gate.commit()
+                    .await
+                    .map_err(|e| DbError::driver("XA Prepared rollback intent commit", e))?;
+                continue;
+            }
+            // 只有完整原 Prepared 和持久同方向都已确认才结束；不重新 START 或执行业务。
+            let result = match phase {
+                BranchPhase::Commit => self.native.commit_prepared(&xid).await,
+                BranchPhase::Rollback => self.native.rollback_prepared(&xid).await,
+            };
+            if result.is_err() {
+                return Ok(BranchResolution::Unknown);
+            }
             MySqlXaBranchStore::complete(&mut gate, id, phase).await?;
             gate.commit()
                 .await
-                .map_err(|e| DbError::driver("XA witnessed terminal commit", e))?;
+                .map_err(|e| DbError::driver("XA terminal commit", e))?;
             return Ok(BranchResolution::Applied);
         }
-        if !matches!(prepared, Ok(true)) {
-            gate.rollback()
-                .await
-                .map_err(|e| DbError::driver("XA unknown gate release", e))?;
-            return Ok(BranchResolution::Unknown);
-        }
-        // 只有完整原 Prepared 和持久同方向都已确认才结束；不重新 START 或执行业务。
-        let result = match phase {
-            BranchPhase::Commit => self.native.commit_prepared(&xid).await,
-            BranchPhase::Rollback => self.native.rollback_prepared(&xid).await,
-        };
-        if result.is_err() {
-            return Ok(BranchResolution::Unknown);
-        }
-        MySqlXaBranchStore::complete(&mut gate, id, phase).await?;
-        gate.commit()
-            .await
-            .map_err(|e| DbError::driver("XA terminal commit", e))?;
-        Ok(BranchResolution::Applied)
+        Ok(BranchResolution::Unknown)
     }
     async fn resolve(
         &self,

@@ -1,0 +1,115 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "status": "ORIGINAL_PREPARE_AND_ROLLBACK_OK_LOSS_RECOVERED_FROM_DURABLE_PRODUCER_AND_PREPARED_INTENT",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "managed_MySQL_cases_per_version": 9,
+  "original_Java_global_transactions_per_version": 2,
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 367,
+    "successful_harness_summaries": 171,
+    "strict_xa_mysql_clippy": true
+  },
+  "red_target_failed_for_required_behavior": true,
+  "native_PREPARE_per_double_loss_case": 1,
+  "native_ROLLBACK_per_double_loss_case": 1,
+  "callback_statuses_per_double_loss_case": [
+    9,
+    8
+  ],
+  "intent_corruptions_rejected_per_version": 6,
+  "evidence_weakenings_rejected_per_version": 15,
+  "negative_results": {
+    "staged_only": "Unknown",
+    "missing_intent": "Unknown",
+    "visible_commit_witness": "Rejected",
+    "extra_index": "Rejected"
+  },
+  "explicit_migration": "016_seata_rs_xa_prepare_evidence.sql",
+  "runtime_auto_migration": false,
+  "requires_managed_writer_exclusivity": true,
+  "Java_Undo_or_legacy_records_changed": false,
+  "authority": {
+    "red": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql-red_20261127_213818_a7093dcc",
+      "catalog_sha256": "87c6b16e27cc20d15c0c4f76674d290de103ee8b24f00072993113c14786880f"
+    },
+    "mysql": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql_20261127_214313_2a518e2c",
+      "catalog_sha256": "0552e4abb51eb38733076837671cd2efeca12f1538bc5a6b1fd904abd44173ea"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/xa-managed/java_20261127_214434_e2120305",
+      "catalog_sha256": "d9fec2e029cb86d8dac5db55a37865f806618ea5ab46f1b1ddc6daa36a0c04bc"
+    },
+    "regression199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_214433_76e3c931",
+      "catalog_sha256": "b568ff93173a279d5058f50ced3bed874ddbca6cc5bbc3df8e4bde94e61d944a"
+    },
+    "regression185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_214604_81e73736",
+      "catalog_sha256": "5d0f2fcf2384d0e7b2f17fde1c67082bdbcd755a7b65b95eb4f01533a48c028a"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/xa-managed/rollback_validation_20261127_final",
+      "catalog_sha256": "615d6415f09e0073a840ec8b2ac1ac38546ab9fee9da5ee7702f3352ff5a6049"
+    }
+  },
+  "source_files": [
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_branch_record.rs",
+      "sha256": "4bde25f3950438b61b2f54a55e60474d8c3e04ead8a0e13daec4b42c71e8d441"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_branch_store.rs",
+      "sha256": "990ee38c277533da365f1e6d338c22e7d2545f3db039daa98c6f8d8aa5b834ac"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_commit_witness.rs",
+      "sha256": "fe156a2df60a1693a0ea1b6d64ae073e7e2b17c9aaad8c51ff2f2dc10d053123"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_data_source.rs",
+      "sha256": "0e1f05dfe0e1d99027a00f5b25a3b0a73055221e96b319b5a497f3233e9f337f"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_enlist_error.rs",
+      "sha256": "4f19db49e35f31a7b672af53ed6726c00e3172b394dfd43791a140dcd757676b"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_enlisted_transaction.rs",
+      "sha256": "91f360647d9ba475d0fb54dc99a96bf98fe13033b7045d764babf35d8403a9fd"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_error.rs",
+      "sha256": "7193cf1d8bd50060b2afbbb85c807cf8c56d2ae3d7b6df673bb6383a33326df8"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_prepare_evidence.rs",
+      "sha256": "07341dc59843df2cac866633e9f34aed6bcd5758529da96dabe6e723b84d1c4f"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_resource_manager.rs",
+      "sha256": "d94bff8505d8858329d211e5c16e337f4ed2a1efa6ae68ba32cd726b5ad6a349"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_table.rs",
+      "sha256": "a45554bae2fd3abc1cd0b1ac399174eeee20313e4b90b6b31d9f94fa33672920"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_xa_transaction.rs",
+      "sha256": "542303f153c1ecf38edc24f5f45060a2c3e274de896a40bf28e6c73ff69e3992"
+    }
+  ],
+  "remaining": [
+    "ACTIVE/IDLE old session fence and early callback recovery",
+    "Real process crash / concurrent callbacks / terminal control COMMIT loss / original TC fault matrix",
+    "Production migration, writer privileges, retention, physical instance recovery topology",
+    "AT WP05/WP06/WP07, TCC and Phase5-7 full remaining plan"
+  ],
+  "full_XA_gate_complete": false,
+  "whole_plan_complete": false
+}

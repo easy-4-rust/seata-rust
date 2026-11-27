@@ -209,3 +209,6 @@ pub use mysql_xa_resource_manager::MySqlXaResourceManager;
 
 #[cfg(feature = "xa")]
 mod mysql_xa_commit_witness;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_prepare_evidence;

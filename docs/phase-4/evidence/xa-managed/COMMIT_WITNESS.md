@@ -1,5 +1,7 @@
 # XA COMMIT 响应丢失后的同事务见证恢复
 
+后续 [016 Prepared 回滚恢复](PREPARED_ROLLBACK.md) 已推进原 Prepared 回滚响应丢失路径；下文保留本阶段的历史边界。
+
 事实源为 [XA 契约的见证增量](../../../phase-2/mysql-xa-contract.md)。最终目录、源码摘要及结果见 [machine ledger](../../mysql-xa-commit-witness.json)。第一阶段证据保留为历史记录，不覆盖原 Pending 结果。
 
 015 显式创建独立 InnoDB 见证表。受管理 Prepare 在原 ACTIVE 连接上唯一写入原登记身份，再 END/PREPARE；见证与业务同属一个 XA，不另行提交。控制行锁保护写见证期间的原方向，元数据锁和独立约束检查保护表结构；原业务 DML 接口继续拒绝所有 seata_rs_ 内部表。

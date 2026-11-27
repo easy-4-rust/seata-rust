@@ -31,3 +31,6 @@ seata-observability 显式启用 mysql 特性后，with_mysql_recovery 可独立
 
 
 受管理 Prepare 还要求显式部署 015 提交见证表；原 ACTIVE XA 在 END/PREPARE 前写入精确原身份见证，与业务一起提交或回滚。原生 Commit OK 丢失后，精确匹配的已提交见证可恢复同一原方向终态，不重发 COMMIT。缺见证仍 Unknown；旧 014 Prepared 没有见证时不会被补造成功。回滚响应丢失、旧活动会话围栏与完整故障门禁继续开放。
+
+
+受管理 Prepare 还要求显式部署 016 生产者/Prepared 结束意图表：原见证写入成功后先持久生产者证据，重新获取方向门闩后才 END/PREPARE。Rollback 对精确 Prepared 的观察与回滚意图须先持久确认；之后恢复同时要求原意图、Prepared 缺失及提交见证缺失，才完成原回滚。只有生产者证据、缺失/损坏的结束意图或可见提交见证均不能确认回滚。未 Prepared 的活动会话和外部写入权限等完整生产门禁继续开放。

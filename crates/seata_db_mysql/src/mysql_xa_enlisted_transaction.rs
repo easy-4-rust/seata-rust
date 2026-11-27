@@ -131,6 +131,36 @@ impl MySqlXaEnlistedTransaction {
                     receipt: Box::new(receipt.clone()),
                     source,
                 })?;
+            crate::mysql_xa_prepare_evidence::MySqlXaPrepareEvidence::stage(
+                &mut gate,
+                &self.manager.native.source,
+                receipt.identity(),
+            )
+            .await
+            .map_err(|source| MySqlXaEnlistError::Control {
+                receipt: Box::new(receipt.clone()),
+                source,
+            })?;
+            // 先确认原 XA 已写见证的生产者证据，再重新仲裁方向；未持有新门闩时不发送 END。
+            gate.commit()
+                .await
+                .map_err(|e| MySqlXaEnlistError::Control {
+                    receipt: Box::new(receipt.clone()),
+                    source: DbError::driver("XA staged evidence commit", e),
+                })?;
+            let (gate, row) =
+                MySqlXaBranchStore::lock(&self.manager.native.source, receipt.identity())
+                    .await
+                    .map_err(|source| MySqlXaEnlistError::Control {
+                        receipt: Box::new(receipt.clone()),
+                        source,
+                    })?;
+            if !row.is_some_and(|r| r.phase == 0 && !r.completed) {
+                return Err(MySqlXaEnlistError::Control {
+                    receipt: Box::new(receipt.clone()),
+                    source: DbError::RecoveryConflict,
+                });
+            }
             native
                 .prepare()
                 .await
