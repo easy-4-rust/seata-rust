@@ -18,7 +18,7 @@ async fn run(rollback: bool) {
     if let Some(mode) = &fault {
         assert!(matches!(
             mode.as_str(),
-            "duplicate" | "reconnect" | "report_lost" | "report_cancel"
+            "duplicate" | "reconnect" | "report_lost" | "report_cancel" | "joint_crash"
         ));
     }
     let dynamic = std::env::var("SEATA_TCC_DYNAMIC").ok();
@@ -331,4 +331,122 @@ async fn original_java_tc_commits_original_tcc_branch() {
 #[ignore = "requires pinned original Java TC and owned MySQL"]
 async fn original_java_tc_rolls_back_original_tcc_branch() {
     run(true).await;
+}
+
+/// 新进程只重开原日志并接收原 TC 回调；不重新取得或重造登记回执。
+#[tokio::test]
+#[ignore = "requires original Java TC joint-crash controller and owned database"]
+async fn original_java_tc_recovers_joint_crash_tcc_branch() {
+    let before: serde_json::Value = serde_json::from_slice(
+        &std::fs::read(std::env::var("SEATA_TCC_JOINT_BEFORE").unwrap()).unwrap(),
+    )
+    .unwrap();
+    let mode = before["mode"].as_str().unwrap();
+    assert!(["delayed", "immediate", "precision"].contains(&mode));
+    let direction = std::env::var("SEATA_TCC_JOINT_DIRECTION").unwrap();
+    assert!(["commit", "rollback"].contains(&direction.as_str()));
+    let phase = if direction == "commit" {
+        BranchPhase::Commit
+    } else {
+        BranchPhase::Rollback
+    };
+    let source = seata_db_mysql::MySqlDataSource::connect(
+        fixture::owned_mysql::options(None)
+            .operation_timeout(Duration::from_secs(15))
+            .unwrap(),
+    )
+    .await
+    .unwrap();
+    let adapter = std::sync::Arc::new(
+        seata_db_mysql::MySqlTccResourceManager::new(
+            source.clone(),
+            "tcc-original-action".into(),
+            std::sync::Arc::new(fixture::Action::default()),
+        )
+        .unwrap()
+        .with_context_reporting(),
+    );
+    let identity = seata_rm::BranchIdentity::new(
+        before["xid"].as_str().unwrap().into(),
+        before["branch_id"].as_str().unwrap().parse().unwrap(),
+        adapter.key().clone(),
+        Some(
+            before["registered_application_data"]
+                .as_str()
+                .unwrap()
+                .into(),
+        ),
+    )
+    .unwrap();
+    let journal = std::path::PathBuf::from(std::env::var("SEATA_TCC_OLD_JOURNAL").unwrap());
+    assert_eq!(std::fs::read(&journal).unwrap(), b"SRMJNL01");
+    let store = FileBranchStore::open(
+        journal,
+        JournalOptions::new(32, 1048576, 65536, 32).unwrap(),
+    )
+    .await
+    .unwrap();
+    let catalog = ResourceCatalog::new(4, 32767).unwrap();
+    catalog.register(adapter.clone()).unwrap();
+    let rm = ResourceManager::builder(
+        fixture::pool(std::env::var("SEATA_RM_ENDPOINT").unwrap().parse().unwrap()),
+        fixture::registration(true),
+        catalog,
+        store.clone(),
+    )
+    .request_timeout(Duration::from_secs(5))
+    .callback_timeout(Duration::from_secs(15))
+    .build()
+    .unwrap();
+    let deadline = tokio::time::Instant::now() + Duration::from_secs(90);
+    loop {
+        let state = store
+            .lease(identity.clone(), phase)
+            .await
+            .ok()
+            .and_then(|lease| lease.state());
+        if state == Some(BranchRecordState::Completed) {
+            break;
+        }
+        assert!(
+            tokio::time::Instant::now() < deadline,
+            "original TC did not recover durable decision"
+        );
+        tokio::time::sleep(Duration::from_millis(30)).await;
+    }
+    let mut admin = fixture::owned_mysql::admin().await;
+    let row: (u8, u16, Vec<u8>) =
+        sqlx::query_as("SELECT status,schema_version,application_data FROM seata_rs_tcc_fence_v1")
+            .fetch_one(&mut admin)
+            .await
+            .unwrap();
+    let status = if direction == "commit" { 2 } else { 3 };
+    assert_eq!((row.0, row.1), (status, 2));
+    assert_eq!(row.2, identity.application_data().unwrap().as_bytes());
+    let business = fixture::business(&mut admin).await;
+    assert_eq!(
+        business,
+        if direction == "rollback" {
+            vec![]
+        } else {
+            vec![(1, if mode == "precision" { 14 } else { 18 })]
+        }
+    );
+    loop {
+        let remaining:i64=sqlx::query_scalar("SELECT (SELECT COUNT(*) FROM global_table)+(SELECT COUNT(*) FROM branch_table)+(SELECT COUNT(*) FROM lock_table)").fetch_one(&mut admin).await.unwrap();
+        if remaining == 0 {
+            break;
+        }
+        assert!(
+            tokio::time::Instant::now() < deadline,
+            "original TC terminal cleanup not observed"
+        );
+        tokio::time::sleep(Duration::from_millis(30)).await;
+    }
+    fixture::record(
+        "original-java-tcc-joint-recovery",
+        serde_json::json!({"mode":mode,"direction":direction,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"registered_application_data":identity.application_data(),"reported_application_data":before["reported_application_data"],"writer_pid":before["rust_process_id"],"journal":"Completed","status":status,"protocol":2,"business":business,"new_global_end_requests":0,"new_business_registrations":0,"new_reports":0,"finished_inferred_as_success":false}),
+    );
+    rm.shutdown().await.unwrap();
+    source.close().await.unwrap();
 }

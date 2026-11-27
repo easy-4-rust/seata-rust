@@ -141,3 +141,11 @@ ActionContextUtil 的 JSON 边界区分标量与复合值：字符串、布尔�
 
 
 双版本十阶段 × 三种数据库模式共 60 场景、1312 项证据削弱及静态 18 项回归通过，见 [动态进程恢复证据](../phase-4/evidence/tcc-managed/DYNAMIC_PROCESS_DATABASE_RECOVERY.md) 与 [ledger](../phase-4/tcc-dynamic-process-database-recovery.json)。原 TC 联合崩溃与完整生产门禁保持开放。
+
+
+### 原 Java TC 与 Rust 进程联合崩溃（选定切点已验证）
+
+在原 TC 已持久化唯一 Commit/Rollback 决定、首次原回调尚未交付 RM 时强杀原 TC 和 Rust 写入进程。分别保持数据库、正常重启或 SIGKILL 后恢复同一目录；新 TC 必须使用原 JAR、原端点和原 DB 会话，新 RM 重开旧日志。仅由原 TC 重试同一分支，恢复端不得 Begin、登记业务分支、重发报告或全局 End，不回写 TC 状态来推动恢复。三种动态参数模式与双方向、双 Rust、三种数据库模式共同核验。原登记/报告字节、持久决定、旧/新进程句柄、原帧、日志 CRC、实例 UUID 及前后 DML 必须一致；TC 行删除或 Finished 不能单独证明成功。此切点不替代 Try/二阶段内部更多联合切点及生产拓扑门禁。
+
+
+原 JAR/同端点/同 DB 会话的双版本三模式双方向三数据库矩阵共 36 笔、72 次原进程强杀、1584 项证据削弱及严格回归通过，见 [原 TC 联合恢复证据](../phase-4/evidence/tcc-managed/ORIGINAL_TC_JOINT_CRASH_RECOVERY.md) 和 [ledger](../phase-4/tcc-original-tc-joint-crash-recovery.json)。完整联合切点与生产门禁保持开放。

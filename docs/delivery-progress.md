@@ -1334,3 +1334,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## 动态 TCC 进程与同库恢复（2026-11-28）
 
 双版本十个真实事务边界，分别保持数据库运行、正常重启或 SIGKILL 后恢复同目录，共 60 场景通过。包括报告持久化但响应尚未确认的强杀，以及 Try/二阶段未提交或原 COMMIT OK 被截留。独立进程句柄、锁/原包、实例/数据目录、原版本摘要、登记身份 Fence、日志 CRC 和前后 DML 联合核验，1312 项证据削弱拒绝。静态 18 项写入者强杀回归通过；每版工作区 801 passed / 394 ignored，179 摘要，严格检查通过。[证据](phase-4/evidence/tcc-managed/DYNAMIC_PROCESS_DATABASE_RECOVERY.md)、[ledger](phase-4/tcc-dynamic-process-database-recovery.json)。生产源码/迁移未改，测试 V1 对端不计作 Java TC 同时崩溃，完整 TCC、AT/XA 与 Phase 5–7 仍未完成。
+
+
+## 原 Java TC 与 Rust 联合崩溃恢复（2026-11-28）
+
+在原 TC 已持久化决定、首次原回调尚未交付时，实际强杀原 Rust 与原 TC，恢复同目录数据库和同端点原 JAR；新 RM 只重开旧日志并接收同分支重试。双 Rust、三种参数、双方向及三种数据库模式共 36 笔事务、72 次退出通过。完整原帧、独立进程句柄、持久决定/版本摘要、原登记 Fence、日志 CRC 和前后 DML 联合核验，1584 项证据削弱拒绝，11 项夹具控制检查通过。每版工作区 801 passed / 395 ignored，179 摘要，严格 Clippy 通过。[证据](phase-4/evidence/tcc-managed/ORIGINAL_TC_JOINT_CRASH_RECOVERY.md)、[ledger](phase-4/tcc-original-tc-joint-crash-recovery.json)。生产源码与协调器未改，认证覆盖限本地夹具；更多联合切点、配置并发/拓扑、生产门禁及全计划继续开放。

@@ -1,5 +1,6 @@
 """Loopback-only RM observer; duplicate one original callback or lose one final reply and close its session."""
 import argparse
+import hashlib
 import datetime
 import json
 import os
@@ -50,6 +51,9 @@ class CallbackRule:
         if role not in ['RM','TM'] or role=='TM' and mode!='basic':raise ValueError('TM observation must be passthrough')
         self.mode=mode;self.role=role;self.roles={};self.callbacks={};self.held={};self.duplicate_key=None
         self.faults=0;self.released=0;self.closed=0;self.lock=threading.Lock()
+
+    def complete(self,connections):
+        return self.faults==0 if self.mode=='basic' else self.faults==1 and (self.released==1 if self.mode=='duplicate' else self.closed==1 and connections>=2)
 
     def inspect(self,direction,connection,frame):
         if len(frame)<16:raise ValueError('Missing native header')
@@ -112,8 +116,26 @@ class Sink:
     def close(self):self.stream.close()
 
 
+def expected_peer_reset(error,authorization):
+    if not isinstance(error,(ConnectionResetError,ConnectionAbortedError)) or authorization is None:return None
+    deadline=time.monotonic()+1
+    while True:
+        try:raw=Path(authorization).read_bytes();value=json.loads(raw);break
+        except PermissionError:
+            if time.monotonic()>=deadline:return None
+            time.sleep(.005)
+        except (OSError,ValueError):return None
+    if set(value)!={'phase','writer_pid','tc_pid','monotonic_ns'} or value['phase']!='joint-kill':return None
+    if any(type(value[k]) is not int or value[k]<=0 for k in ['writer_pid','tc_pid','monotonic_ns']) or value['writer_pid']==value['tc_pid']:return None
+    elapsed=time.perf_counter_ns()-value['monotonic_ns']
+    if not 0<=elapsed<=10_000_000_000:return None
+    return hashlib.sha256(raw).hexdigest()
+
+
 class ProxyServer:
-    def __init__(self,listen,upstream,mode,events,stop_file,role='RM'):
+    def __init__(self,listen,upstream,mode,events,stop_file,role='RM',expected_peer_exit_file=None):
+        self.expected_peer_exit_file=expected_peer_exit_file
+        if expected_peer_exit_file is not None and Path(expected_peer_exit_file).resolve().drive.upper() not in ['D:','E:']:raise ValueError('Peer exit control escaped development drives')
         self.upstream=upstream;self.rule=CallbackRule(mode,role);self.sink=Sink(events);self.stop_file=Path(stop_file)
         self.errors=[];self.sessions=[];self.sockets=[];self.lock=threading.Lock()
         self.listener=socket.socket();self.listener.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);self.listener.bind(('127.0.0.1',listen));self.listener.listen(8);self.listener.settimeout(.2)
@@ -145,7 +167,9 @@ class ProxyServer:
                                 self.sink.emit(dict(event='fault_close',connection=connection));close_sockets();break
                     except Exception as error:
                         if not closing.is_set():
-                            self.errors.append(str(error));self.sink.emit(dict(event='error',direction=direction,connection=connection,message=str(error),frame_hex=raw.hex() if raw else ''))
+                            authorization=expected_peer_reset(error,self.expected_peer_exit_file)
+                            if authorization is not None:self.sink.emit(dict(event='expected_peer_reset',direction=direction,connection=connection,error_type=type(error).__name__,authorization_sha256=authorization))
+                            else:self.errors.append(str(error));self.sink.emit(dict(event='error',direction=direction,connection=connection,message=str(error),frame_hex=raw.hex() if raw else ''))
                     finally:close_sockets()
                 threads=[threading.Thread(target=pump,args=(client,upstream,'c2s')),threading.Thread(target=pump,args=(upstream,client,'s2c'))]
                 for thread in threads:thread.start()
@@ -173,7 +197,7 @@ class ProxyServer:
                     except OSError:pass
             for thread in self.sessions:thread.join(timeout=4)
             if any(thread.is_alive() for thread in self.sessions):self.errors.append('Owned RM proxy session not joined')
-            expected=(self.rule.faults==0 if self.rule.mode=='basic' else self.rule.faults==1 and (self.rule.released==1 if self.rule.mode=='duplicate' else self.rule.closed==1 and connections>=2))
+            expected=self.rule.complete(connections)
             succeeded=not self.errors and expected and not self.rule.held and bool(self.rule.roles)
             self.sink.emit(dict(event='summary',role=self.rule.role,succeeded=succeeded,mode=self.rule.mode,connections=connections,faults=self.rule.faults,released=self.rule.released,closed=self.rule.closed,errors=self.errors))
             self.sink.close()
@@ -183,5 +207,5 @@ class ProxyServer:
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--listen-port',type=int,required=True);parser.add_argument('--upstream-port',type=int,required=True)
     parser.add_argument('--mode',choices=['basic','duplicate','reconnect'],required=True);parser.add_argument('--events',type=Path,required=True);parser.add_argument('--stop-file',type=Path,required=True)
-    parser.add_argument('--role',choices=['RM','TM'],default='RM')
-    args=parser.parse_args();ProxyServer(args.listen_port,args.upstream_port,args.mode,args.events,args.stop_file,args.role).serve()
+    parser.add_argument('--role',choices=['RM','TM'],default='RM');parser.add_argument('--expected-peer-exit-file',type=Path)
+    args=parser.parse_args();ProxyServer(args.listen_port,args.upstream_port,args.mode,args.events,args.stop_file,args.role,args.expected_peer_exit_file).serve()
