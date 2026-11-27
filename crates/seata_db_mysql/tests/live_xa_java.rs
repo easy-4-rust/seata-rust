@@ -14,6 +14,8 @@ use seata_tm::{TransactionCompletion, TransactionConfig, TransactionManager};
 use std::time::Duration;
 
 async fn run(rollback: bool) {
+    let fault = std::env::var("SEATA_XA_JAVA_FAULT").ok();
+    let database_restart = matches!(fault.as_deref(), Some("restart" | "crash"));
     let (mut admin, source, adapter) = fixture::seed().await;
     let store = FileBranchStore::open(
         fixture::folder("java-journal").join("branches.log"),
@@ -41,7 +43,7 @@ async fn run(rollback: bool) {
     .build()
     .unwrap();
     let config = TransactionConfig::builder("native-managed-xa".into())
-        .transaction_timeout(Duration::from_secs(60))
+        .transaction_timeout(Duration::from_secs(if database_restart { 180 } else { 60 }))
         .build()
         .unwrap();
     let mut global = tm.begin(&config).await.unwrap();
@@ -67,6 +69,30 @@ async fn run(rollback: bool) {
     let prepared = local.prepare().await.unwrap();
     assert_eq!(prepared.identity(), &identity);
     assert!(fixture::business(&mut admin).await.is_empty());
+    if database_restart {
+        // 只暂停已真实 Prepare 的原事务；外部运行器核对自有容器后重启同一实例。
+        fixture::record(
+            "before-database-restart",
+            serde_json::json!({"mode":fault,"xid":xid.as_str(),"branch_id":identity.branch_id().to_string(),"resource_id":adapter.key().resource_id()}),
+        );
+        std::fs::write(
+            fixture::folder("proof").join("database-checkpoint-ready"),
+            b"prepared\n",
+        )
+        .unwrap();
+        let resumed = fixture::folder("proof").join("database-resumed");
+        let deadline = tokio::time::Instant::now() + Duration::from_secs(120);
+        while !resumed.exists() {
+            assert!(
+                tokio::time::Instant::now() < deadline,
+                "owned database restart not resumed"
+            );
+            tokio::time::sleep(Duration::from_millis(25)).await;
+        }
+        assert_eq!(std::fs::read(resumed).unwrap(), b"resume-original-branch\n");
+        // 原观察连接已随数据库退出而关闭，恢复后使用新的独立观察会话。
+        admin = fixture::owned_mysql::admin().await;
+    }
     let phase = if rollback {
         BranchPhase::Rollback
     } else {
@@ -77,9 +103,11 @@ async fn run(rollback: bool) {
     } else {
         GlobalStatus::Committed
     };
-    let fault = std::env::var("SEATA_XA_JAVA_FAULT").ok();
     if let Some(mode) = &fault {
-        assert!(matches!(mode.as_str(), "duplicate" | "reconnect"));
+        assert!(matches!(
+            mode.as_str(),
+            "duplicate" | "reconnect" | "restart" | "crash"
+        ));
     }
     let end = if rollback {
         global.rollback().await

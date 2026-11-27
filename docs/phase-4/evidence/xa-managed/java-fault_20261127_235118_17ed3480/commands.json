@@ -1,0 +1,168 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-xa-java-20261127-235118-17ed3480",
+      "--label",
+      "seata.xa.owner=426cfd564f5d4dcea77dd362ba2720b8",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata-xa-java-fault-20261127_235118_17ed3480/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:58990:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=xa_java_426cfd564f5d",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "install-server-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "xa_java_426cfd564f5d"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-terminal-source",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:server/src/main/java/org/apache/seata/server/coordinator/DefaultCore.java"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "xa",
+      "--test",
+      "live_xa_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-restart-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "9afe2e38015e225b06b6c5e34f268196be940f80e217f55d4252a55e6ee5d937"
+    ],
+    "exit_code": 1
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "status": "ORIGINAL_JAVA_TC_XA_SURVIVES_OWNED_MYSQL_RESTART_AND_CRASH",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "modes": [
+    "restart",
+    "crash"
+  ],
+  "directions": [
+    "commit",
+    "rollback"
+  ],
+  "fault_cases": 8,
+  "normal_Java_transactions": 4,
+  "semantic_weakenings_rejected": 112,
+  "callbacks": {
+    "1.99-restart-commit": 1,
+    "1.99-restart-rollback": 1,
+    "1.99-crash-commit": 1,
+    "1.99-crash-rollback": 2,
+    "1.85-restart-commit": 1,
+    "1.85-restart-rollback": 1,
+    "1.85-crash-commit": 1,
+    "1.85-crash-rollback": 1
+  },
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 372,
+    "strict_xa_mysql_clippy": true
+  },
+  "same_container_data_directory_and_server_uuid": true,
+  "original_TC_and_RM_processes_survived_database_exit": true,
+  "original_registration_and_Prepared_bytes_preserved": true,
+  "initial_TM_unknown_not_inferred_from_Finished": true,
+  "client_End_retries": 0,
+  "native_end_replay": false,
+  "runtime_behavior_changed": false,
+  "new_public_API_or_migrations": 0,
+  "Java_Undo_or_legacy_records_changed": false,
+  "authority": {
+    "database": {
+      "path": "docs/phase-4/evidence/xa-managed/java-fault_20261127_235541_b4ab4582",
+      "catalog_sha256": "37a8c066b2c6e7d4b54b58cb6a462b1837672672863ba1c76ac95a6b0f3d0806"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/xa-managed/java_20261127_235434_cbf84d6d",
+      "catalog_sha256": "a5265b7cf95f9373ad9f0d860516842bc93756493ad0714d6abc8b3416b3cbb8"
+    },
+    "regression199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_235434_86a44c86",
+      "catalog_sha256": "fd7845df75f027b980e578a6a5cccd60b56a2d5c1d615eca82792ce2f974e733"
+    },
+    "regression185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_235434_f6c43db9",
+      "catalog_sha256": "2218e7e7d4c935e5fc7f67985bede09d737487c6c807fcb11105680cc58508d6"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/xa-managed/database_validation_20261128_final",
+      "catalog_sha256": "3e423d1f6448aa45d15a3a48b479e211e9e1599194dc0a85537fd928a5098e1b"
+    }
+  },
+  "XA_full_fault_gate_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "Full original Java TC failure/concurrency matrix",
+    "Database faults during native/control unknown boundaries",
+    "Failover and changed-instance recovery topology",
+    "Production privileges/deployment/scalability/retention/observability",
+    "AT and TCC acceptance; Phase 5-7"
+  ]
+}

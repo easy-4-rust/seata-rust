@@ -8,6 +8,7 @@ from pathlib import Path
 from inventory_rebuilt import ROOT, need, sha
 from validate_structured_logs import catalog, sources
 from validate_xa_managed import load, string, only
+from mysql_undo_executor_live import IMAGE
 
 
 def frames(path):
@@ -32,6 +33,7 @@ def check_case(folder, prefix, mode, direction):
     case = folder/prefix
     proof = load(case/'observations/proof/original-java-xa-fault.json')
     commit = direction == 'commit'
+    database = mode in ['restart', 'crash']
     expected = 'Committed' if commit else 'Rollbacked'
     need(proof['mode'] == mode and proof['expected_tc_terminal'] == expected and proof['initial_global_status'] in [None, expected], 'Original decision differs')
     need(proof['journal'] == 'Completed' and proof['prepared_remaining'] == proof['phase_one_reports'] == 0 and proof['client_end_requests'] == 1 and proof['finished_inferred_as_success'] is False, 'Uncertain reply incorrectly treated as success')
@@ -54,7 +56,7 @@ def check_case(folder, prefix, mode, direction):
     callback_kind, reply_kind = (3, 4) if commit else (5, 6)
     callbacks = [r for r in rm if r['kind'] == callback_kind]
     replies = [r for r in rm if r['kind'] == reply_kind]
-    need(callbacks and len(replies) == 2 and all(r['direction'] == 's2c' for r in callbacks), 'Fault callback/reply count differs')
+    need(callbacks and (len(replies) == len(callbacks) and 1 <= len(callbacks) <= 16 if database else len(replies) == 2) and all(r['direction'] == 's2c' for r in callbacks), 'Fault callback/reply count differs')
     for row in callbacks:
         body = row['body']
         value, pos = string(body, 2)
@@ -67,8 +69,31 @@ def check_case(folder, prefix, mode, direction):
         value, pos = string(body, 4)
         need(row['direction'] == 'c2s' and body[2:4] == b'\x01\x00' and value == xid and int.from_bytes(body[pos:pos+8], 'big', signed=True) == branch and body[pos+8:] == bytes([5 if commit else 8]), 'Original terminal reply changed')
         need(any((r['connection'], r['request_id']) == (row['connection'], row['request_id']) for r in callbacks), 'Reply not correlated with callback')
-    need(summary['mode'] == mode and summary['faults'] == 1, 'Fault not injected exactly once')
-    if mode == 'duplicate':
+    need(summary['mode'] == ('basic' if database else mode) and summary['faults'] == (0 if database else 1), 'Fault not injected exactly once')
+    if database:
+        callback_keys = {(r['connection'], r['request_id']) for r in callbacks}
+        reply_keys = {(r['connection'], r['request_id']) for r in replies}
+        need(len(callback_keys) == len(callbacks) and callback_keys == reply_keys and len(reply_keys) == len(replies) and all(r['action'] == 'forward' and r['delivery_count'] == 1 for r in rm), 'Database recovery changed callback delivery/correlation')
+        checkpoint = load(case/'observations/proof/before-database-restart.json')
+        need(checkpoint == dict(mode=mode, xid=xid, branch_id=str(branch), resource_id=resource, rust_process_id=proof['rust_process_id']), 'Database checkpoint changed original identity')
+        process_ids = load(case/'process-cleanup.json')['pids']
+        need(len(process_ids) == len(set(process_ids)) == 4 and process_ids[-1] == checkpoint['rust_process_id'], 'Checkpoint not from actual owned client')
+        need((case/'observations/proof/database-resumed').read_bytes() == b'resume-original-branch\n', 'Original client not resumed')
+        def snapshot(name):
+            return (folder/(prefix+'-'+name+'.stdout')).read_bytes().strip()
+        before = snapshot('prepared-before-restart')
+        suffix = (xid+'-'+str(branch)).encode()
+        need(before == snapshot('prepared-after-restart') and before.split(b'\t') == [b'9752', str(len(xid.encode())).encode(), str(len(('-'+str(branch)).encode())).encode(), b'0x'+suffix.hex().upper().encode()], 'Prepared identity did not survive database recovery')
+        need(snapshot('uuid-before-restart') == snapshot('uuid-after-restart') and snapshot('uuid-before-restart'), 'Original database instance changed')
+        need(snapshot('tc-before-restart') == snapshot('tc-after-restart') == (xid+'\t'+str(branch)+'\n'+xid).encode(), 'Original TC registration changed over restart')
+        before_owner = json.loads(snapshot('owned-before-restart'))[0]
+        stopped_owner = json.loads(snapshot('owned-stopped'))[0]
+        need(before_owner['Id'] == stopped_owner['Id'] and before_owner['Image'] == stopped_owner['Image'] == IMAGE and before_owner['State']['Running'] and not stopped_owner['State']['Running'] and before_owner['Config']['Labels']['seata.xa.owner'] == stopped_owner['Config']['Labels']['seata.xa.owner'] and before_owner['Config']['Labels']['seata.xa.owner'], 'Owned database did not exit')
+        if mode == 'crash': need(stopped_owner['State']['ExitCode'] == 137, 'Database crash not forced termination')
+        commands = load(folder/'commands.json')
+        stop = [r for r in commands if r['label'] == prefix+'-stop-for-restart']
+        need(len(stop) == 1 and stop[0]['exit_code'] == 0 and stop[0]['argv'] == (['docker','kill','--signal','KILL',before_owner['Id']] if mode == 'crash' else ['docker','stop','--time','20',before_owner['Id']]), 'Database lifecycle command changed')
+    elif mode == 'duplicate':
         need(len(callbacks) == 1 and callbacks[0]['action'] == 'duplicate_original' and callbacks[0]['delivery_count'] == 2, 'Original callback not duplicated exactly')
         need([r['action'] for r in replies] == ['hold', 'release_original'] and [r['delivery_count'] for r in replies] == [0, 1], 'Duplicate responses not held/released exactly')
         need(replies[0]['frame_hex'] == replies[1]['frame_hex'] == replies[1]['released_frame_hex'] and summary['released'] == 1 and summary['closed'] == 0, 'Released reply not original bytes')
@@ -95,11 +120,13 @@ def check_case(folder, prefix, mode, direction):
     need(independent('independent-state') == (xid.encode().hex().upper()+'\t'+str(branch)+'\t'+('1' if commit else '2')+'\t1').encode(), 'Physical original terminal differs')
     need(independent('independent-business') == (b'1\t42' if commit else b'') and not independent('independent-prepared') and independent('independent-tc') == b'0\t0\t0', 'Physical business/prepared/TC cleanup differs')
     writes = [r for r in independent('native-commands').splitlines() if b'XA RECOVER' not in r]
+    if database:
+        writes = [r for r in independent('native-before-restart').splitlines() if b'XA RECOVER' not in r]+writes
     suffix = ("X'"+xid.encode().hex().upper()+"',X'"+('-'+str(branch)).encode().hex().upper()+"',9752").encode()
     need(writes == [b'Query\tXA '+verb+b' '+suffix for verb in [b'START', b'END', b'PREPARE', b'COMMIT' if commit else b'ROLLBACK']], 'Native XA body/end replayed or changed')
 
 
-def verify(folder, digest):
+def verify(folder, digest, database=False):
     catalog(folder, digest)
     sources(folder)
     result = load(folder/'result.json')
@@ -107,7 +134,7 @@ def verify(folder, digest):
     need(result['Java_jar_sha256'] == guard.reg.JAR_SHA, 'Original TC artifact changed')
     original = subprocess.check_output(['git', '-C', str(guard.reg.ORACLE), 'show', guard.reg.PIN+':server/src/main/java/org/apache/seata/server/coordinator/DefaultCore.java'])
     need((folder/'original-DefaultCore.java').read_bytes() == original, 'Terminal log source not original pinned TC')
-    need(result['Rust_versions'] == ['1.99', '1.85'] and result['modes'] == ['duplicate', 'reconnect'] and result['Java_pin'] == 'cba73e180fd8896a99df6415b859d275122feaa7' and result['whole_plan_complete'] is result['XA_full_fault_gate_complete'] is False, 'Fault scope or Java pin changed')
+    need(result['Rust_versions'] == ['1.99', '1.85'] and result['modes'] == (['restart', 'crash'] if database else ['duplicate', 'reconnect']) and result['Java_pin'] == 'cba73e180fd8896a99df6415b859d275122feaa7' and result['whole_plan_complete'] is result['XA_full_fault_gate_complete'] is False, 'Fault scope or Java pin changed')
     for version in result['Rust_versions']:
         for mode in result['modes']:
             for direction in ['commit', 'rollback']:
@@ -115,11 +142,11 @@ def verify(folder, digest):
     need(load(folder/'cleanup.json')['owned_container_removed'], 'Owned fixture container remains')
 
 
-def negative_controls(folder):
+def negative_controls(folder, database=False):
     """Mutate semantic inputs without catalog checks, so hashes cannot mask weak assertions."""
     rejected = 0
     for version in ['1.99', '1.85']:
-        for mode in ['duplicate', 'reconnect']:
+        for mode in (['restart', 'crash'] if database else ['duplicate', 'reconnect']):
             for direction in ['commit', 'rollback']:
                 prefix = version+'-'+mode+'-'+direction
                 with tempfile.TemporaryDirectory(prefix='seata-xa-proof-', dir='D:/Temp') as directory:
@@ -128,6 +155,7 @@ def negative_controls(folder):
                     shutil.copytree(folder/prefix, case)
                     for path in folder.glob(prefix+'-*.stdout'):
                         shutil.copyfile(path, root/path.name)
+                    shutil.copyfile(folder/'commands.json', root/'commands.json')
                     proof_path = case/'observations/proof/original-java-xa-fault.json'
                     rm_path = case/'RM-frames.jsonl'
                     log_path = case/'tc-stdout.log'
@@ -145,14 +173,21 @@ def negative_controls(folder):
                             altered = [r for r in altered if r.get('kind') != 11]
                         else:
                             row = next(r for r in altered if r['event'] == 'summary') if change == 'no_fault' else next(r for r in altered if r.get('kind') == (4 if direction == 'commit' else 6))
-                            if change == 'no_fault': row['faults'] = 0
+                            if change == 'no_fault': row['faults'] = 1 if database else 0
                             elif change == 'wrong_reply': row['frame_hex'] = row['frame_hex'][:-2]+'0a'
-                            else: row['delivery_count'] = 1
+                            else: row['delivery_count'] = 0 if database else 1
                         mutations.append((rm_path, b''.join(json.dumps(r).encode()+b'\n' for r in altered)))
                     terminal = load(case/'original-tc-terminal.json')
                     mutations.extend([(log_path, log_path.read_bytes().replace(terminal['original_global_success_log'].encode(), b'Finished')),
-                                      (sql_path, sql_path.read_bytes()+sql_path.read_bytes().splitlines(keepends=True)[0]),
+                                      (sql_path, sql_path.read_bytes()+next(line for line in sql_path.read_bytes().splitlines(keepends=True) if b'XA RECOVER' not in line)),
                                       (tc_path, b'1\t0\t0\n')])
+                    if database:
+                        for name in ['prepared-after-restart', 'uuid-after-restart', 'tc-after-restart']:
+                            mutations.append((root/(prefix+'-'+name+'.stdout'), b'changed-original\n'))
+                        owner_path = root/(prefix+'-owned-stopped.stdout')
+                        owner = load(owner_path)
+                        owner[0]['State']['Running'] = True
+                        mutations.append((owner_path, json.dumps(owner).encode()))
                     check_case(root, prefix, mode, direction)
                     for path, altered in mutations:
                         before = path.read_bytes()
@@ -162,7 +197,7 @@ def negative_controls(folder):
                             except ValueError: rejected += 1
                             else: raise RuntimeError('Semantic weakening accepted: '+str(path))
                         finally: path.write_bytes(before)
-    need(rejected == 80, 'Semantic weakening matrix incomplete')
+    need(rejected == (112 if database else 80), 'Semantic weakening matrix incomplete')
     return rejected
 
 
@@ -171,8 +206,9 @@ if __name__ == '__main__':
     parser.add_argument('folder', type=Path)
     parser.add_argument('catalog_sha256')
     parser.add_argument('--negative-controls', action='store_true')
+    parser.add_argument('--database', action='store_true')
     args = parser.parse_args()
-    verify(args.folder, args.catalog_sha256)
+    verify(args.folder, args.catalog_sha256, args.database)
     if args.negative_controls:
-        print('Rejected semantic weakenings:', negative_controls(args.folder))
+        print('Rejected semantic weakenings:', negative_controls(args.folder, args.database))
     print('Verified eight original Java TC XA callback fault cases, wire identities and physical outcomes')

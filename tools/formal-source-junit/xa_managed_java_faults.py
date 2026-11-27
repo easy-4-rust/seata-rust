@@ -71,10 +71,39 @@ seata:
                     args=[guard.reg.JAVA,'-Xlog:class+load=info:file=class-load.log','-Djava.io.tmpdir=D:/Temp','-Duser.home='+str(case_work),'-Dspring.config.location=file:'+(case_work/'application.yml').as_posix(),'-Dseata.callback.fixture.resource='+resource,'-Dloader.path='+overlay.as_posix()+','+guard.DRIVER.as_posix(),'-cp',jar,'org.springframework.boot.loader.launch.PropertiesLauncher','-h','127.0.0.1']
                     processes.append(guard.support.spawn(args,case_work,env,case_out,'tc'));guard.support.wait_owned(processes[-1],tc,env)
                     for role,listen in [('RM',rm),('TM',tm)]:
-                        args=[sys.executable,'-B',ROOT/'tools/formal-rm-java/rm_proxy.py','--listen-port',listen,'--upstream-port',tc,'--events',case_out/(role+'-frames.jsonl'),'--stop-file',stop,'--role',role,'--mode',mode if role=='RM' else 'basic'];processes.append(guard.support.spawn(args,case_work,env,case_out,role));guard.support.wait_owned(processes[-1],listen,env)
+                        args=[sys.executable,'-B',ROOT/'tools/formal-rm-java/rm_proxy.py','--listen-port',listen,'--upstream-port',tc,'--events',case_out/(role+'-frames.jsonl'),'--stop-file',stop,'--role',role,'--mode',mode if role=='RM' and mode in ['duplicate','reconnect'] else 'basic'];processes.append(guard.support.spawn(args,case_work,env,case_out,role));guard.support.wait_owned(processes[-1],listen,env)
                     command(prefix+'-enable-log',mysql+["SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"])
                     observations=case_out/'observations';observations.mkdir();extra=dict(SEATA_XA_JAVA_FAULT=mode,SEATA_XA_OUT=str(observations),SEATA_MYSQL_PORT=str(db_port),SEATA_MYSQL_PASSWORD=guard.PASSWORD,SEATA_MYSQL_DATABASE=database,SEATA_RM_ENDPOINT=f'127.0.0.1:{rm}',SEATA_TM_ENDPOINT=f'127.0.0.1:{tm}')
-                    value=subprocess.run([str(artifacts[0]),'original_java_tc_'+('commits' if direction=='commit' else 'rolls_back')+'_managed_xa_original_branch','--ignored','--exact','--nocapture'],cwd=ROOT,env=env|extra,capture_output=True,timeout=90,creationflags=subprocess.CREATE_NO_WINDOW);(case_out/'client.stdout').write_bytes(value.stdout);(case_out/'client.stderr').write_bytes(value.stderr);save(case_out/'client-command.json',dict(path=str(artifacts[0]),sha256=sha(artifacts[0]),exit_code=value.returncode));need(value.returncode==0,'Original Java XA case failed: '+(value.stdout+value.stderr)[-2200:].decode(errors='replace'));need(b'test result: ok. 1 passed;' in value.stdout,'Original Java XA case did not execute')
+                    client_args=[str(artifacts[0]),'original_java_tc_'+('commits' if direction=='commit' else 'rolls_back')+'_managed_xa_original_branch','--ignored','--exact','--nocapture']
+                    if mode in ['restart','crash']:
+                        client=guard.support.spawn(client_args,ROOT,env|extra,case_out,'database-client');processes.append(client)
+                        checkpoint=observations/'proof/before-database-restart.json';limit=time.monotonic()+30
+                        while not (observations/'proof/database-checkpoint-ready').exists():
+                            need(client.poll() is None and time.monotonic()<limit,'Client did not pause at original Prepared checkpoint');time.sleep(.05)
+                        identity=json.loads(checkpoint.read_bytes());need(identity['rust_process_id']==client.pid and identity['mode']==mode,'Prepared checkpoint not owned client')
+                        state=json.loads(command(prefix+'-owned-before-restart',['docker','inspect',container]).stdout)[0]
+                        need(state['Id']==container and state['Image']==guard.IMAGE and state['Config']['Labels'].get('seata.xa.owner')==owner and state['State']['Running'],'Restart target not owned fixture')
+                        before=command(prefix+'-prepared-before-restart',mysql+['XA RECOVER CONVERT XID']).stdout
+                        need(len(before.strip().splitlines())==1,'Original Prepared missing before database failure')
+                        uuid_before=command(prefix+'-uuid-before-restart',mysql+['SELECT @@server_uuid']).stdout
+                        command(prefix+'-native-before-restart',mysql+["SELECT command_type,argument FROM mysql.general_log WHERE command_type='Query' AND argument LIKE 'XA %' ORDER BY event_time,thread_id"])
+                        command(prefix+'-tc-before-restart',mysql+['SELECT xid,branch_id FROM '+database+'.branch_table; SELECT xid FROM '+database+'.global_table'])
+                        command(prefix+'-stop-for-restart',['docker','kill','--signal','KILL',container] if mode=='crash' else ['docker','stop','--time','20',container])
+                        stopped=json.loads(command(prefix+'-owned-stopped',['docker','inspect',container]).stdout)[0]
+                        need(not stopped['State']['Running'] and (mode!='crash' or stopped['State']['ExitCode']==137),'Owned database did not stop in requested mode')
+                        command(prefix+'-start-for-restart',['docker','start',container]);limit=time.monotonic()+120
+                        while subprocess.run(mysql+['SELECT VERSION()'],env=env,capture_output=True,timeout=10,creationflags=subprocess.CREATE_NO_WINDOW).returncode:
+                            need(time.monotonic()<limit,'Owned XA database restart timeout');time.sleep(.3)
+                        after=command(prefix+'-prepared-after-restart',mysql+['XA RECOVER CONVERT XID']).stdout
+                        need(before==after and uuid_before==command(prefix+'-uuid-after-restart',mysql+['SELECT @@server_uuid']).stdout,'Original Prepared/instance changed after restart')
+                        command(prefix+'-tc-after-restart',mysql+['SELECT xid,branch_id FROM '+database+'.branch_table; SELECT xid FROM '+database+'.global_table'])
+                        command(prefix+'-reenable-log',mysql+["SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"])
+                        (observations/'proof/database-resumed').write_bytes(b'resume-original-branch\n')
+                        try:client.wait(timeout=90)
+                        except subprocess.TimeoutExpired:guard.support.stop(client);raise
+                        value=subprocess.CompletedProcess(client_args,client.returncode,(case_out/'database-client-stdout.log').read_bytes(),(case_out/'database-client-stderr.log').read_bytes())
+                    else:value=subprocess.run(client_args,cwd=ROOT,env=env|extra,capture_output=True,timeout=90,creationflags=subprocess.CREATE_NO_WINDOW)
+                    (case_out/'client.stdout').write_bytes(value.stdout);(case_out/'client.stderr').write_bytes(value.stderr);save(case_out/'client-command.json',dict(path=str(artifacts[0]),sha256=sha(artifacts[0]),exit_code=value.returncode));need(value.returncode==0,'Original Java XA case failed: '+(value.stdout+value.stderr)[-2200:].decode(errors='replace'));need(b'test result: ok. 1 passed;' in value.stdout,'Original Java XA case did not execute')
                     proof=json.loads((observations/'proof/original-java-xa-fault.json').read_bytes());xid=proof['xid'];branch=proof['branch_id']
                     success=(('Committing global transaction is successfully done, xid = '+xid+'.') if direction=='commit' else ('Rollback global transaction successfully, xid = '+xid+'.')).encode()
                     branch_success=(('Commit branch transaction successfully, xid = ' if direction=='commit' else 'Rollback branch transaction successfully, xid = ')+xid+' branchId = '+branch).encode()
@@ -101,4 +130,4 @@ seata:
     save(out/'result.json',dict(status='ORIGINAL_JAVA_TC_MANAGED_XA_CALLBACK_FAULTS_VERIFIED',Rust_versions=versions,modes=modes,Java_pin=guard.reg.PIN,Java_jar_sha256=guard.reg.JAR_SHA,XA_full_fault_gate_complete=False,whole_plan_complete=False));shutil.copyfile(Path(__file__),out/Path(__file__).name);save(out/'catalog.json',[dict(path=p.relative_to(out).as_posix(),sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()]);print(json.dumps(dict(evidence=str(out),catalog_sha256=sha(out/'catalog.json'))))
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--rust',choices=['1.99','1.85']);parser.add_argument('--mode',choices=['duplicate','reconnect']);args=parser.parse_args();run([args.rust] if args.rust else ['1.99','1.85'],[args.mode] if args.mode else ['duplicate','reconnect'])
+    parser=argparse.ArgumentParser();parser.add_argument('--rust',choices=['1.99','1.85']);parser.add_argument('--mode',choices=['duplicate','reconnect','restart','crash']);parser.add_argument('--database',action='store_true');args=parser.parse_args();run([args.rust] if args.rust else ['1.99','1.85'],[args.mode] if args.mode else ['restart','crash'] if args.database else ['duplicate','reconnect'])

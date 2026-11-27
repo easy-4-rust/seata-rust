@@ -108,3 +108,11 @@ Rollback 在无 Prepared、也没有既有 Prepared 回滚证明时，只能对�
 使用原 TC 构建产物、原数据库存储和实际 XA 分支；透传代理重复同一原回调，或扣留第一次真实终态回包并关闭 RM 会话。由 TC 自身重试，客户端不重发全局 End，不把 Finished 或 TC 记录缺失单独解释成方向成功。必须同时核对原分支终态回包、原 TC 固定源码对应的分支/全局成功日志、控制/业务状态和 TC 清理，并确认没有再次原生结束或业务重放。正常未注入场景继续要求原全局结束响应明确 Committed/Rollbacked。此项是完整原 TC 故障门禁的增量，不关闭进程/数据库/网络/生产或总计划剩余验收。
 
 最终证据见 [原 TC 回调故障验收](../phase-4/evidence/xa-managed/JAVA_CALLBACK_FAULTS.md) 和 [machine ledger](../phase-4/mysql-xa-java-callback-faults.json)：两版合计八项真实故障、四项原 TC 正常事务，八十项语义证据削弱被拒绝；工作区各 785 passed / 372 ignored，严格检查通过。重连下首次 TM 超时仍保留未决，原 TC 最终结果由分支回包、固定源日志和物理结果联合确认；没有全局 End、原生结束或业务重放。
+
+## 原 TC 全局事务中的数据库恢复
+
+原 Java TC 使用同一自有 MySQL 存储全局与分支；正式原登记的业务事务实际 Prepare 后暂停一次客户端 End。运行器独立核对原 Prepared、原 TC 登记、实例 UUID 和容器所有权，再对该自有数据库执行正常停机或强制终止并重启。必须观察数据库确已退出，且重启后原字节 Prepared、实例 UUID 和 TC 原登记均保持一致，然后仅恢复该客户端的一次原 End。原 TC 进程和原 RM/持久日志跨越此次数据库退出，不补造身份、不重新登记分支、不重新 START/Prepare 或执行业务。
+
+双 Rust 与 Commit/Rollback 覆盖两种数据库退出方式；原 TC 原终态回包、分支/全局源日志、业务/控制终态、Prepared 与 TC 清理联合核对，退出前后三段独立 SQL 和 general_log 保留真实命令序列。客户端未收到明确初次全局响应时仍保持未知语义。该验收仅针对同实例同数据目录恢复，不代替数据丢失、主从切换、实例 UUID 改变、权限或生产拓扑验收。
+
+最终证据见 [数据库恢复验收](../phase-4/evidence/xa-managed/DATABASE_RECOVERY.md) 和 [machine ledger](../phase-4/mysql-xa-java-database-recovery.json)：双版本八次实际数据库退出/重启，合计九个原 TC 回调（其中一个原分支出现自然并发重试），没有原生结束重放；112 项语义证据削弱被拒绝。四项正常原 TC 事务、双版本工作区各 785 passed / 372 ignored 及严格检查通过。完整 XA、AT/TCC 和总计划继续开放。
