@@ -1,0 +1,74 @@
+{
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "status": "SELECTED_SINGLE_FILE_SINK_VERIFIED",
+  "production_feature": "structured_log_file",
+  "default_enabled": false,
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "native_windows_file_targets_per_version": 10,
+  "controlled_worker_targets_per_version": 4,
+  "real_MySQL_targets_per_version": 1,
+  "source_mutations_rejected": 10,
+  "independent_weakened_proofs_rejected_per_version": 10,
+  "workspace_per_version": {
+    "passed": 780,
+    "ignored": 348,
+    "successful_harness_summaries": 164,
+    "includes_rustdoc": true,
+    "strict_observability_clippy": true
+  },
+  "authority": {
+    "rust199": {
+      "path": "docs/phase-2/evidence/structured-log-file/rust_/20261127_190221_a624389e",
+      "catalog_sha256": "aedc6fe0b4f3fd243809e0d9c8da36923e3bc09578a1025d03d03292cb7aa302"
+    },
+    "rust185": {
+      "path": "docs/phase-2/evidence/structured-log-file/rust_/20261127_190221_8b8bb66d",
+      "catalog_sha256": "0f5ddde5b9ad4df84307923b5d203d332fca33234dc2166482d96e78b487a19d"
+    },
+    "mysql": {
+      "path": "docs/phase-2/evidence/structured-log-file/mysql_20261127_190221_b6916061",
+      "catalog_sha256": "6bd4660905438f61ffa39a96409f46dfaee5bbe1685ee8efc2b3b685613d25eb"
+    },
+    "mutations": {
+      "path": "docs/phase-2/evidence/structured-log-file/mutations_20261127_190135_b457982a",
+      "catalog_sha256": "0f8dcea7e3337b379199eae1f3cf9da1732a69ea04a950371fad41becf885af0"
+    },
+    "regression199": {
+      "path": "docs/phase-2/evidence/structured-log-file/regression_1.99_20261127_190226_3ecf4dd9",
+      "catalog_sha256": "028bf13df028f12d0a748b4915746e8f320b1c74ab05f63e7b6ba9a0bb36510c"
+    },
+    "regression185": {
+      "path": "docs/phase-2/evidence/structured-log-file/regression_1.85_20261127_190226_077d2e8e",
+      "catalog_sha256": "9e41d68d4ecf90f81478d16ffb441492919e4f486663a1dff35b5d7c01657279"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/structured-log-file/default_20261127_190221_dd04db43",
+      "catalog_sha256": "5645416311402af8a0f6a69963349c40413e62e116606adb33439453cad72c19"
+    },
+    "validation": {
+      "path": "docs/phase-2/evidence/structured-log-file/validation_20261127_190350_76f59f1d",
+      "catalog_sha256": "fc0f871b6ca7eb36047f518b1850d0a28bd2906ac47c3b6fe6deb70cf0263bb9"
+    }
+  },
+  "original_behavioral_red": {
+    "path": "docs/phase-2/evidence/structured-log-file/red_/20261127_185426_4e976764",
+    "catalog_sha256": "e8c9f671bd38ce6c4851e727c95d55f5b72322874466dc4efcc4a8cf7185b14b",
+    "interpretation": "Real Windows read-only empty file falsely completed without native sync_all; fixed syscall returns native permission failure."
+  },
+  "lockfile_changed": false,
+  "original_Java_Undo_DDL_git": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "original_Java_TC_rerun": false,
+  "WP07_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "file rotation and retention",
+    "deployment permissions and operations",
+    "power-loss and directory persistence validation",
+    "cross-process collection and tracing",
+    "external production review",
+    "remaining Phase 0–7 acceptance items"
+  ]
+}

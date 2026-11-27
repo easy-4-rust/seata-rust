@@ -1279,3 +1279,12 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 新增默认关闭的 structured_log_layer，复用原日志队列/预算/计数，通过官方 per-layer filter 与底层含 Registry 的原应用栈组合，不全局替换过滤或把应用 span 字段带进 Seata JSON。默认及原仅日志依赖边界保持。
 
 双版本各五个目标及一个实际 MySQL Layer 接入通过：动态过滤按原栈基线对照，原 span 父子/record/follows/克隆/关闭、应用全局过滤、七模板及显式 instrument 的实际 TM 请求均核对。三类正式源反例每版本失败、原字节恢复后通过，每版本十三项证据削弱拒绝。最终全工作区各 766 passed / 347 ignored、观测组件全功能与四种子特性严格检查通过。三个新发布依赖及实际解包输入封存，无关锁边恢复。原型中绝对 Span 状态假设和静态/动态过滤夹具问题见 [Layer 组合证据](phase-2/evidence/structured-log-layer/README.md)。原 Java TC 未重跑；自动线程/进程传播、生产 sink/采集告警、其他状态事件、外部审查与全部后续计划继续。
+
+
+## 2026-11-27：WP07 正式单文件日志输出器
+
+沿用批准的观测契约，新增默认关闭的 structured_log_file。调用方显式提供独占空文件能力，原字节 write_all/flush 后累计完整写入，真实 sync_all 后累计同步；具备总字节上限、条数/周期/最终同步、脱敏阶段错误及未知尾部标记。关闭停止接纳并排空，Pending/取消等待保留原 JoinHandle 与 I/O，不自动重启/截断/重放；Drop 只请求停止，进度快照不作为完成证明。
+
+双 Rust 各 10 项原生文件、4 项受控任务、1 项真实 MySQL 场景通过；全工作区各 780 passed / 348 ignored（164 个成功摘要含 rustdoc），严格 Clippy 与默认/文件依赖边界通过。真实 Windows 只读空文件系统同步错误、原 MySQL DDL/fence/关闭池 Unknown 和生产文件回读已核对；五类源码反例 × 双版本共十次拒绝，每版本十项证据削弱拒绝，最终归档源码字节与当前一致。Cargo.lock 未改变。[组件 ledger](phase-2/wp07-structured-log-file.json)、[运行与诊断证据](phase-2/evidence/structured-log-file/README.md)。
+
+本增量只关闭选定单文件输出器的实施项，未完成轮转/保留、部署权限、跨进程采集/追踪、断电/目录持久化及外部审查；完整 WP07 和 Phase 0–7 保持未完成。本轮不重复请求已授权的提交和 GitHub 推送。

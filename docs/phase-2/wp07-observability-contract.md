@@ -247,3 +247,19 @@ Seata 分支使用官方 per-layer filter，仅接纳已有正式事件命名空
 
 
 本节选定 Registry/LookupSpan 组合入口已通过双 Rust 各五个目标、各一个实际 MySQL Layer 场景、三类源码反例和每版本十三项证据削弱。最终全工作区各 766 passed / 347 ignored，观测组件全功能/默认/仅日志/仅 MySQL/仅 Layer 严格检查与依赖边界通过。原应用动态过滤、span 生命周期、全局过滤、真实 TM 和七模板，以及 Registry 基线/静态过滤夹具诊断与依赖归档见 [Layer 组合证据](evidence/structured-log-layer/README.md)。本轮不声明任意手写 subscriber、自动跨线程/进程传播、生产采集部署或完整 WP07 完成。
+
+
+## 调用方文件能力上的有界单文件 sink（实施基线，2026-11-27）
+
+新增默认关闭 structured_log_file（structured_logs + tokio/fs），不增加第三方包。StructuredLogFileSink::start 消费唯一 Receiver 与调用方已打开的 File，启动异步文件任务；无运行时时返回错误。任务要求普通空文件及原位置 0，不创建路径、不截断/重放/自动重试记录。文件独占写入及权限由调用方保证；本增量不实现轮转/保留和远端采集。
+
+配置最大输出字节 1–1 GiB、每次同步记录数 1–65536、同步周期 10ms–60s。每条原 JSON 字节执行 write_all 与 flush，只有 flush 确认后累计完整写入；按条数、脏数据周期及最终关闭执行真正 sync_all，成功后才累计同步确认。报告只覆盖本 worker 已消费、完整写入、写入字节、同步记录和同步操作次数；队列 accepted/received 不等于这些文件事实。进度快照逐字段读取，不证明无在途 I/O 或已停止。
+
+停止请求关闭接纳并排空已接纳的有界队列；停止在 I/O 期间到达时，关闭 Receiver 但继续等待同一个 I/O Future，不取消后重建。shutdown 的等待预算最长 60s，可为 0；超时返回 Pending 并保留原 JoinHandle，后续 shutdown/wait 继续等待同任务。成功完成和错误结果缓存，重复观察不重复写入/同步。Drop 仅请求收尾，不作为停止或同步证明；任务取消/异常返回 WorkerOutcomeUnknown，不授权重启。
+
+写入/flush 错误保留已确认前缀，并标记当前记录可能不完整；同步错误不把已写但未同步记录称为已同步。文件预算在写下一条前检查，先同步已有脏前缀再返回容量错误，当前记录不写；任务失败关闭接收端，不自动恢复或截断未知尾部。错误只含固定阶段、ErrorKind、原 OS 码及计数，不含路径、原错误文本或记录内容，不递归输出自身错误日志。
+
+验收包括真实文件原字节与 sync_all、条数/周期/最终同步、零预算 Pending 后同任务完成及幂等观察、非空目标拒绝、文件容量边界、只读文件写入与同步系统错误、停止不取消原 I/O 的控制 Future、任务取消未知分类、真实 MySQL 日志接入、源码反例、双 Rust 和默认依赖边界。文件同步确认不表示断电/目录持久性、远端接收或 TC 完成；完整生产部署、轮转保留和 WP07 继续开放。
+
+
+本节选定单文件 sink 已通过双 Rust 各 10 项原生文件目标、4 项受控 worker 目标、1 项实际 MySQL 场景。全工作区各 780 passed / 348 ignored，五类生产源码反例共十次、每版本十项证据削弱及依赖边界验证通过。Windows 只读空文件的真实系统错误核对 sync_all 调用；零预算不保证必定 Pending，受控 worker 单独验证 Pending 与取消等待保留原任务。规格状态、固定字节证据和早期夹具诊断见 [单文件输出证据](evidence/structured-log-file/README.md)。轮转保留、生产部署、断电/目录持久化及外部审查仍开放。

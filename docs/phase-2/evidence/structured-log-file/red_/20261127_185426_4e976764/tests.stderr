@@ -1,0 +1,30 @@
+   Compiling tokio v1.54.1
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+   Compiling tokio-rustls v0.26.4
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+   Compiling seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+warning: unused import: `StructuredLogFileShutdown`
+ --> crates\seata_observability\tests\structured_log_file.rs:5:5
+  |
+5 |     StructuredLogFileShutdown, StructuredLogFileSink, StructuredLogFileStage, StructuredLogSubscriber};
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `emit` is never used
+  --> crates\seata_observability\tests\structured_log_file.rs:21:4
+   |
+21 | fn emit(subscriber:&StructuredLogSubscriber,id:i64){
+   |    ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `seata-observability` (test "structured_log_file") generated 2 warnings (run `cargo fix --test "structured_log_file" -p seata-observability` to apply 1 suggestion)
+    Finished `test` profile [unoptimized] target(s) in 5.58s
+     Running tests\structured_log_file.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\structured_log_file-027cddbc3ffbef03.exe)
+
+thread 'readonly_empty_target_exercises_native_sync_all' (43456) panicked at crates\seata_observability\tests\structured_log_file.rs:34:33:
+read-only target must exercise native sync_all: StructuredLogFileReport { received_records: 0, written_records: 0, written_bytes: 0, synchronized_records: 0, sync_operations: 1 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-observability --test structured_log_file`

@@ -1,0 +1,46 @@
+    Checking seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+error: used `expect()` on a `Result` value
+  --> crates\seata_observability\src\log_file_worker_tests.rs:43:5
+   |
+43 | /     tokio::time::timeout(Duration::from_secs(3), sender.closed())
+44 | |         .await
+45 | |         .expect("stop did not close admission while original I/O remained pending");
+   | |___________________________________________________________________________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#expect_used
+   = note: `-D clippy::expect-used` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::expect_used)]`
+
+error: could not compile `seata-observability` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: used `expect_err()` on a `Result` value
+  --> crates\seata_observability\tests\structured_log_file.rs:67:17
+   |
+67 |       let error = sink
+   |  _________________^
+68 | |         .wait()
+69 | |         .await
+70 | |         .expect_err("read-only target must exercise native sync_all");
+   | |_____________________________________________________________________^
+   |
+   = note: if this value is an `Ok`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#expect_used
+   = note: `-D clippy::expect-used` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::expect_used)]`
+
+error: used `expect()` on a `Result` value
+   --> crates\seata_observability\tests\structured_log_file.rs:143:5
+    |
+143 | /     tokio::time::timeout(Duration::from_secs(3), async {
+144 | |         while sink.progress().synchronized_records < count {
+145 | |             tokio::time::sleep(Duration::from_millis(2)).await;
+...   |
+148 | |     .await
+149 | |     .expect("live synchronization missing");
+    | |___________________________________________^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#expect_used
+
+error: could not compile `seata-observability` (test "structured_log_file") due to 2 previous errors

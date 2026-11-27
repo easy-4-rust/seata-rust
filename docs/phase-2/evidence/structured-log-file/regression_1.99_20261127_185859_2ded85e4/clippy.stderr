@@ -1,0 +1,16 @@
+    Checking seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+error: used `expect()` on a `Result` value
+  --> crates\seata_observability\src\log_file_worker_tests.rs:43:5
+   |
+43 | /     tokio::time::timeout(Duration::from_secs(3), sender.closed())
+44 | |         .await
+45 | |         .expect("stop did not close admission while original I/O remained pending");
+   | |___________________________________________________________________________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#expect_used
+   = note: `-D clippy::expect-used` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::expect_used)]`
+
+error: could not compile `seata-observability` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

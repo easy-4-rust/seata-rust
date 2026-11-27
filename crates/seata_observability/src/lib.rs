@@ -56,3 +56,39 @@ pub use structured_log_subscriber::StructuredLogSubscriber;
 
 #[cfg(feature = "structured_log_layer")]
 mod structured_log_layer;
+
+#[cfg(feature = "structured_log_file")]
+mod structured_log_file_config;
+#[cfg(feature = "structured_log_file")]
+pub use structured_log_file_config::StructuredLogFileConfig;
+
+#[cfg(feature = "structured_log_file")]
+mod structured_log_file_error;
+#[cfg(feature = "structured_log_file")]
+pub use structured_log_file_error::StructuredLogFileError;
+
+#[cfg(feature = "structured_log_file")]
+mod structured_log_file_report;
+#[cfg(feature = "structured_log_file")]
+pub use structured_log_file_report::StructuredLogFileReport;
+
+#[cfg(feature = "structured_log_file")]
+mod structured_log_file_stage;
+#[cfg(feature = "structured_log_file")]
+pub use structured_log_file_stage::StructuredLogFileStage;
+
+#[cfg(feature = "structured_log_file")]
+mod structured_log_file_shutdown;
+#[cfg(feature = "structured_log_file")]
+pub use structured_log_file_shutdown::StructuredLogFileShutdown;
+
+#[cfg(feature = "structured_log_file")]
+mod structured_log_file_sink;
+#[cfg(feature = "structured_log_file")]
+pub use structured_log_file_sink::StructuredLogFileSink;
+
+#[cfg(feature = "structured_log_file")]
+mod log_file_progress;
+
+#[cfg(feature = "structured_log_file")]
+mod log_file_worker;

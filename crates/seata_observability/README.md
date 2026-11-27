@@ -68,3 +68,14 @@ sampler.snapshot() 的 accepted/received 只表示入队与本机交付，full/c
 Seata 分支使用独立 per-layer filter，应用自己的事件、span 字段和生命周期仍由原层处理；原应用动态过滤和全局过滤保留，应用全局配置也可能拒绝 Seata 事件。JSON 仍只包含原固定事件字段，不自动附加 span 内容或扩散应用私有字段。两分支的输出/权限策略独立，Seata 队列的预算和 try_send 不约束应用原有 I/O。
 
 这支持底层含 Registry 的标准订阅栈，不接管任意手写 subscriber 的 span 实现，也不自动传播线程/进程上下文。动态 per-layer 过滤是否仍分配内部 span 由原 Registry 决定；验证按无 Seata 分支的原栈对照，并核对实际应用输出。[Layer 组合证据](../../docs/phase-2/evidence/structured-log-layer/README.md)。
+
+
+## 显式单文件输出
+
+可选 `structured_log_file` 包含 `structured_logs` 和 Tokio fs，不引入 Layer 或 MySQL 依赖。调用方先独占创建空普通文件，再用 `StructuredLogFileSink::start(receiver, file, config)` 启动唯一任务。组件不创建路径、不截断、不轮转，也不自动重放；文件不得与外部写入者共享。配置限制总字节、同步批量和定期同步周期，超出字节预算时同步已有完整前缀并停止接纳。
+
+每条原 JSON 行使用 `write_all`、`flush`，成功后才增加 written；只有真实 `sync_all` 成功才增加 synchronized。报告只覆盖当前输出任务；操作系统同步确认不等于断电、父目录持久化或远端接收。写入/flush 错误可能留下未知尾部；sync 错误不能确认本批同步，不允许用这些计数自动重放。
+
+`shutdown(budget)` 请求关闭接纳、排空队列并最终同步；返回 `Pending` 后继续调用同一对象的 `wait` 或 `shutdown`。超时保留原 JoinHandle 和正在执行的 I/O，不中断、不重启。重复完成观察返回缓存结果。Drop 只请求停止，不等待完成；runtime 取消/任务异常返回 Unknown，不是关闭确认。周期与批量同步期间也响应停止请求，然后等待原 I/O 结束。调用方负责应用入口、TM/RM 的停止顺序及显式等待；进度快照不证明无在途写入。
+
+只读采样不保留文件、队列或控制权限；错误只包含固定阶段、标准错误类别、OS 数字码和确认前缀，不含路径、原错误文本或日志正文。生产轮转、保留策略、文件/目录权限部署及跨进程运维仍未验收。
