@@ -1,0 +1,9 @@
+
+thread 'dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback' (36076) panicked at crates\seata_db_mysql\tests\support\tcc_managed_peer.rs:79:52:
+assertion `left == right` failed
+  left: PhaseOneDone
+ right: Registered
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback' (36076) panicked at crates\seata_db_mysql\tests\support\tcc_dynamic_cases.rs:104:18:
+called `Result::unwrap()` on an `Err` value: ContextReport { receipt: RegisteredBranch { identity: BranchIdentity { xid_bytes: 30, branch_id: 9501, resource: ResourceKey { branch_type: Tcc, resource_id_bytes: 19 }, application_data_bytes: Some(56) }, lock_key_bytes: None, result_code: Success, .. }, source: Rpc(UnknownOutcome { operation: BranchReport, request: BranchReportRequest(BranchReportRequest { xid_present: true, branch_id: 9501, status: PhaseOneDone, resource_id_present: false, application_data_present: true, branch_type: Tcc, .. }), source: UnknownOutcome { generation: ConnectionGeneration(1), request_id: 3, reason: ConnectionClosed } }), context_report_started: true }

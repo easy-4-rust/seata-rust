@@ -1,0 +1,95 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+05:26:46.954  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+05:26:47.016  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+05:26:47.043  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 56420 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\seata-tcc-java-20261128_051031_a1d36256\1.85-precision-reconnect-commit)
+05:26:47.043  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+05:26:48.365  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+05:26:48.404  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+05:26:48.759  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 2.619 seconds (process running for 3.947)
+05:26:49.411  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+05:26:49.706  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+05:26:49.979  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 59957
+05:26:49.998  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/seata-tcc-java-20261128_051031_a1d36256/1.85-precision-reconnect-commit/logs.
+05:26:49.998  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 1228 millSeconds
+05:27:02.383  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='tcc-original-action', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x3ea20e5a, L:/127.0.0.1:59957 - R:/127.0.0.1:62646],client version:1.1.0
+05:27:02.389  INFO --- [ttyServerNIOWorker_1_2_48] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0xdbb69e22, L:/127.0.0.1:59957 - R:/127.0.0.1:62647],client version:1.1.0,client protocol-version:null
+05:27:02.395  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='native-managed-tcc', timeout=60000}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:02.429  INFO --- [rverHandlerThread_1_2_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:59957:4045081892258398209] : Begin new global transaction applicationId: phase0-auth,transactionServiceGroup: default_tx_group, transactionName: native-managed-tcc,timeout:60000,xid:198.18.0.1:59957:4045081892258398209
+05:27:02.429  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:59957:4045081892258398209', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:02.435  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:59957:4045081892258398209', branchType=TCC, resourceId='tcc-original-action', lockKey='null', applicationData='{"actionContext":{"useTCCFence":true,"id":1,"amount":7,"precise":1.23000000000000000000000000001}}'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:02.460  INFO --- [rverHandlerThread_1_3_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:59957:4045081892258398209] : Register branch successfully, xid = 198.18.0.1:59957:4045081892258398209, branchId = 4045081892258398211, resourceId = tcc-original-action ,lockKeys = null
+05:27:02.461  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045081892258398211, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:02.655  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchReportRequest{xid='198.18.0.1:59957:4045081892258398209', branchId=4045081892258398211, resourceId='null', status=Registered, applicationData='{"actionContext":{"amount":7,"id":1,"precise":1.23000000000000000000000000002,"useTCCFence":true}}', branchType=TCC}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:02.667  INFO --- [rverHandlerThread_1_4_500] [erver.coordinator.AbstractCore] [        branchReport]  [198.18.0.1:59957:4045081892258398209] : Report branch status successfully, xid = 198.18.0.1:59957:4045081892258398209, branchId = 4045081892258398211
+05:27:02.668  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchReportResponse{resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:03.219  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalCommitRequest{xid='198.18.0.1:59957:4045081892258398209', extraData='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:03.400  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:62646 to server channel inactive.
+05:27:03.400  INFO --- [ttyServerNIOWorker_1_1_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x3ea20e5a, L:/127.0.0.1:59957 ! R:/127.0.0.1:62646]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:62646', channel=[id: 0x3ea20e5a, L:/127.0.0.1:59957 ! R:/127.0.0.1:62646], resourceSets=[]}
+05:27:03.482  INFO --- [rverHandlerThread_1_6_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='tcc-original-action', version='1.1.0', applicationId='phase0-auth', transactionServiceGroup='default_tx_group', extraData='phase0-local-only'},channel:[id: 0x162ae080, L:/127.0.0.1:59957 - R:/127.0.0.1:62666],client version:1.1.0
+05:27:04.246  INFO --- [       SyncProcessing_1_1] [.core.rpc.netty.ChannelManager] [          getChannel]  [198.18.0.1:59957:4045081892258398209] : Choose [id: 0x162ae080, L:/127.0.0.1:59957 - R:/127.0.0.1:62666] on the same IP[127.0.0.1] as alternative of phase0-auth:127.0.0.1:62646
+05:27:04.363  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchCommitResponse{xid='198.18.0.1:59957:4045081892258398209', branchId=4045081892258398211, branchStatus=PhaseTwo_Committed, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: default_tx_group
+05:27:04.381  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [bda$doGlobalCommit$1]  [198.18.0.1:59957:4045081892258398209] : Commit branch transaction successfully, xid = 198.18.0.1:59957:4045081892258398209 branchId = 4045081892258398211
+05:27:04.432  INFO --- [       SyncProcessing_1_1] [server.coordinator.DefaultCore] [      doGlobalCommit]  [198.18.0.1:59957:4045081892258398209] : Committing global transaction is successfully done, xid = 198.18.0.1:59957:4045081892258398209.
+05:27:18.229  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [  userEventTriggered]  [] : channel:[id: 0xdbb69e22, L:/127.0.0.1:59957 - R:/127.0.0.1:62647] read idle.
+05:27:18.229  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:62647 to server channel inactive.
+05:27:18.229  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xdbb69e22, L:/127.0.0.1:59957 - R:/127.0.0.1:62647]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:62647', channel=[id: 0xdbb69e22, L:/127.0.0.1:59957 - R:/127.0.0.1:62647], resourceSets=null}
+05:27:18.229  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [hannelHandlerContext]  [] : closeChannelHandlerContext channel:[id: 0xdbb69e22, L:/127.0.0.1:59957 - R:/127.0.0.1:62647]
+05:27:18.230  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:62647 to server channel inactive.
+05:27:18.230  INFO --- [ttyServerNIOWorker_1_2_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xdbb69e22, L:/127.0.0.1:59957 ! R:/127.0.0.1:62647]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:62647', channel=[id: 0xdbb69e22, L:/127.0.0.1:59957 ! R:/127.0.0.1:62647], resourceSets=null}
+05:27:18.234  INFO --- [ttyServerNIOWorker_1_3_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:62666 to server channel inactive.
+05:27:18.234  INFO --- [ttyServerNIOWorker_1_3_48] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0x162ae080, L:/127.0.0.1:59957 ! R:/127.0.0.1:62666]context:RpcContext{applicationId='phase0-auth', transactionServiceGroup='default_tx_group', clientId='phase0-auth:127.0.0.1:62666', channel=[id: 0x162ae080, L:/127.0.0.1:59957 ! R:/127.0.0.1:62666], resourceSets=[]}
+05:27:18.259 ERROR --- [rverHandlerThread_1_5_500] [pc.netty.AbstractNettyRemoting] [            sendSync]  [198.18.0.1:59957:4045081892258398209] : wait response error:null ,cost: 15015 ms,ip:/127.0.0.1:62646,request:BranchCommitRequest{xid='198.18.0.1:59957:4045081892258398209', branchId=4045081892258398211, branchType=TCC, resourceId='tcc-original-action', applicationData='{"actionContext":{"amount":7,"id":1,"precise":1.23000000000000000000000000002,"useTCCFence":true}}'}
+05:27:18.260 ERROR --- [rverHandlerThread_1_5_500] [server.coordinator.DefaultCore] [               error]  [198.18.0.1:59957:4045081892258398209] : Committing branch transaction exception:retrying=false, BR:4045081892258398211/4045081892258398209, Global commit failed
+05:27:18.263 ERROR --- [rverHandlerThread_1_5_500] [ption.AbstractExceptionHandler] [eptionHandleTemplate]  [198.18.0.1:59957:4045081892258398209] : Catch TransactionException while do RPC, request: GlobalCommitRequest{xid='198.18.0.1:59957:4045081892258398209', extraData='null'}
+==> 
+org.apache.seata.core.exception.TransactionException: global commit request failed. xid=198.18.0.1:59957:4045081892258398209, msg=updateGlobalSessionStatus failed.
+	at org.apache.seata.server.AbstractTCInboundHandler$2.execute(AbstractTCInboundHandler.java:108)
+	at org.apache.seata.server.AbstractTCInboundHandler$2.execute(AbstractTCInboundHandler.java:99)
+	at org.apache.seata.core.exception.AbstractExceptionHandler.exceptionHandleTemplate(AbstractExceptionHandler.java:128)
+	at org.apache.seata.server.AbstractTCInboundHandler.handle(AbstractTCInboundHandler.java:98)
+	at org.apache.seata.core.protocol.transaction.GlobalCommitRequest.handle(GlobalCommitRequest.java:34)
+	at org.apache.seata.server.limit.AbstractTransactionRequestHandler.next(AbstractTransactionRequestHandler.java:44)
+	at org.apache.seata.server.limit.ratelimit.RateLimiterHandler.handle(RateLimiterHandler.java:75)
+	at org.apache.seata.server.limit.LimitRequestDecorator.handle(LimitRequestDecorator.java:44)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.onRequest(DefaultCoordinator.java:806)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.onRequestMessage(ServerOnRequestProcessor.java:216)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.process(ServerOnRequestProcessor.java:126)
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemoting.lambda$processMessage$2(AbstractNettyRemoting.java:315)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.apache.seata.common.exception.StoreException: updateGlobalSessionStatus failed.
+	at org.apache.seata.server.storage.db.session.DataBaseSessionManager.updateGlobalSessionStatus(DataBaseSessionManager.java:78)
+	at org.apache.seata.server.session.AbstractSessionManager.onStatusChange(AbstractSessionManager.java:133)
+	at org.apache.seata.server.session.GlobalSession.changeGlobalStatus(GlobalSession.java:252)
+	at org.apache.seata.server.session.GlobalSession.queueToRetryCommit(GlobalSession.java:879)
+	at org.apache.seata.server.coordinator.DefaultCore.lambda$doGlobalCommit$1(DefaultCore.java:373)
+	at org.apache.seata.server.session.SessionHelper.forEach(SessionHelper.java:395)
+	at org.apache.seata.server.coordinator.DefaultCore.doGlobalCommit(DefaultCore.java:293)
+	at org.apache.seata.server.coordinator.DefaultCore.commit(DefaultCore.java:268)
+	at org.apache.seata.server.coordinator.DefaultCoordinator.doGlobalCommit(DefaultCoordinator.java:343)
+	at org.apache.seata.server.AbstractTCInboundHandler$2.execute(AbstractTCInboundHandler.java:104)
+	... 15 common frames omitted
+ <==
+05:27:18.266 ERROR --- [rverHandlerThread_1_5_500] [pc.netty.AbstractNettyRemoting] [bda$processMessage$2]  [198.18.0.1:59957:4045081892258398209] : 0104
+==> 
+java.lang.RuntimeException: channel is error.
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemotingServer.sendAsyncResponse(AbstractNettyRemotingServer.java:124)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.onRequestMessage(ServerOnRequestProcessor.java:217)
+	at org.apache.seata.core.rpc.processor.server.ServerOnRequestProcessor.process(ServerOnRequestProcessor.java:126)
+	at org.apache.seata.core.rpc.netty.AbstractNettyRemoting.lambda$processMessage$2(AbstractNettyRemoting.java:315)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+ <==

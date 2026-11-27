@@ -1319,3 +1319,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## TCC util 自动报告验收（2026-11-28）
 
 已接通 JSON 边界的 BusinessActionContextUtil 批量/单值共享与立即/延迟自动报告，显式借用当前上下文和受控事务，预算拒绝保持原状态。固定原 Java util 19 项观察与 7 次原 dispatcher 出口调用核验，先前保留的 util 对象观察也完成比较；出口不计作网络证明。实际 8 个 util 原 TC 事务加 4 个原字节精度事务通过，双版本 32 个动态分支场景及 16 项静态 MySQL、4/8 项正常/故障原 TC、54 项进程/同库恢复回归通过。工作区每版 801 passed / 388 ignored，179 个成功摘要，严格检查通过；60 次错误生产源码实际行为失败，1260 项证据削弱拒绝。[自动报告证据](phase-4/evidence/tcc-managed/AUTOMATIC_CONTEXT_UTIL.md)、[ledger](phase-4/tcc-context-util.json)。Java 任意对象/反射注解、动态专用故障/并发/拓扑与生产门禁仍开放，完整计划未完成。
+
+
+## 动态报告与原 TC 故障验收结果（2026-11-28）
+
+双 Rust 的三种动态路径联合原 TC 回调重复/终态丢失，共 24 笔 Commit/Rollback；原报告成功响应丢失和报告等待中实际取消各 6 笔，由唯一原 Rollback 建立 SUSPENDED，合计 36 笔原全局事务。原完整参数、关联、重新登记、原 TC 终态日志、持久版本/SHA-256、原身份 Fence 和 DML 联合核验通过，报告未确认不提交 Try，空 Cancel 不执行业务。当前源码同时通过 32 个动态分支场景、12 个原 TC 正常动态事务、16 项静态 MySQL、4/8 项正常/故障静态原 TC、54 项进程/同库恢复回归；工作区每版 801 passed / 388 ignored，179 个成功摘要，严格检查通过。60 次错误生产源码实际行为失败，2326 项证据削弱拒绝。[联合故障证据](phase-4/evidence/tcc-managed/DYNAMIC_ORIGINAL_TC_FAULTS.md)、[ledger](phase-4/tcc-dynamic-original-tc-faults.json)。本次只扩展夹具与核验，生产代码/协议/迁移未改变；动态进程/数据库崩溃、并发/跨实例配置与生产门禁，以及 AT/XA 和 Phase 5–7 仍未完成。

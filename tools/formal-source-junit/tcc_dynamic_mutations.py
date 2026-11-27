@@ -21,7 +21,7 @@ def run():
     shutil.copytree(ROOT/'crates',source/'crates')
     for name in ['Cargo.toml','Cargo.lock']:shutil.copyfile(ROOT/name,source/name)
     (work/'data').mkdir()
-    env=os.environ|dict(TEMP='D:/Temp',TMP='D:/Temp',CARGO_HOME=str(ROOT.parent/'.seata-cargo-cache'),CARGO_PROFILE_TEST_DEBUG='0',CARGO_INCREMENTAL='0',DOCKER_CONFIG='D:/Temp/seata-docker-config',SEATA_MYSQL_PASSWORD=PASSWORD)
+    env=os.environ|dict(TEMP='D:/Temp',TMP='D:/Temp',CARGO_HOME=str(ROOT.parent/'.seata-cargo-cache'),CARGO_PROFILE_TEST_DEBUG='0',CARGO_INCREMENTAL='0',CARGO_BUILD_JOBS='2',DOCKER_CONFIG='D:/Temp/seata-docker-config',SEATA_MYSQL_PASSWORD=PASSWORD)
     with zipfile.ZipFile(BASELINE/'portable_inputs_20261127/runtime-inputs.zip') as archive:undo=archive.read('stage/source/script/client/at/db/mysql.sql')
     (work/'undo.sql').write_bytes(undo);env['SEATA_UNDO_SCHEMA_PATH']=str(work/'undo.sql')
     with socket.socket() as probe:probe.bind(('127.0.0.1',0));port=probe.getsockname()[1]
@@ -81,7 +81,7 @@ def run():
                 prefix=version+'-'+name
                 # 每个错误版本只有一次原生链接；复用依赖缓存，但不复制/覆盖可执行文件。
                 variant_target=work/('variant-target-'+prefix)
-                shutil.copytree(baseline_target,variant_target,ignore=shutil.ignore_patterns('*.exe','executed'))
+                shutil.copytree(baseline_target,variant_target,ignore=shutil.ignore_patterns('*.exe','*.dll','*.dll.lib','*.pdb','executed'))
                 owned_targets.append(str(variant_target));env['CARGO_TARGET_DIR']=str(variant_target)
                 try:
                     path.write_bytes(original.decode().replace(needle,replacement).encode());(out/(prefix+'.rs')).write_bytes(path.read_bytes())

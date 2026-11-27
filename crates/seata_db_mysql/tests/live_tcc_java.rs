@@ -5,7 +5,7 @@
 mod dynamic_action;
 #[path = "support/tcc_managed_fixture.rs"]
 mod fixture;
-use seata_protocol::GlobalStatus;
+use seata_protocol::{transaction::BranchRegisterRequest, BranchType, GlobalStatus};
 use seata_rm::{
     BranchPhase, BranchRecordState, BranchResource, FileBranchStore, JournalOptions,
     ResourceCatalog, ResourceManager,
@@ -16,10 +16,16 @@ use std::time::Duration;
 async fn run(rollback: bool) {
     let fault = std::env::var("SEATA_TCC_JAVA_FAULT").ok();
     if let Some(mode) = &fault {
-        assert!(matches!(mode.as_str(), "duplicate" | "reconnect"));
+        assert!(matches!(
+            mode.as_str(),
+            "duplicate" | "reconnect" | "report_lost" | "report_cancel"
+        ));
     }
     let dynamic = std::env::var("SEATA_TCC_DYNAMIC").ok();
-    assert!(!(dynamic.is_some() && fault.is_some()));
+    let report_fault = matches!(fault.as_deref(), Some("report_lost" | "report_cancel"));
+    if report_fault {
+        assert!(dynamic.is_some() && rollback);
+    }
     let (mut admin, mut source, mut adapter) = fixture::seed().await;
     if let Some(mode) = &dynamic {
         assert!(["delayed", "immediate", "precision"].contains(&mode.as_str()));
@@ -70,7 +76,7 @@ async fn run(rollback: bool) {
         catalog,
         store.clone(),
     )
-    .request_timeout(Duration::from_secs(5))
+    .request_timeout(Duration::from_secs(if report_fault { 15 } else { 5 }))
     .callback_timeout(Duration::from_secs(5))
     .build()
     .unwrap();
@@ -91,13 +97,89 @@ async fn run(rollback: bool) {
     } else {
         fixture::app(1)
     };
-    let receipt = adapter
-        .register_and_try(&rm.client(), global.xid().as_str(), Some(app.clone()))
-        .await
-        .unwrap();
+    let mut report_error_unknown = false;
+    let mut try_future_cancelled = false;
+    let receipt = if report_fault {
+        // 先保留正式原回执，取消 Future 没有返回值，不能事后用裸字段重造回执。
+        let receipt = rm
+            .client()
+            .branch_register_with_receipt(BranchRegisterRequest {
+                xid: Some(global.xid().as_str().into()),
+                branch_type: BranchType::Tcc,
+                resource_id: Some(adapter.key().resource_id().into()),
+                lock_key: None,
+                application_data: Some(app.clone()),
+            })
+            .await
+            .unwrap();
+        if fault.as_deref() == Some("report_cancel") {
+            let resource = adapter.clone();
+            let client = rm.client();
+            let retained = receipt.clone();
+            let task = tokio::spawn(async move {
+                resource
+                    .try_registered_with_context(&client, retained)
+                    .await
+            });
+            let limit = tokio::time::Instant::now() + Duration::from_secs(20);
+            while !fixture::folder("control").join("cancel-try").exists() {
+                assert!(
+                    !task.is_finished(),
+                    "Try completed before actual report cancellation boundary"
+                );
+                assert!(
+                    tokio::time::Instant::now() < limit,
+                    "owned report cancellation marker missing"
+                );
+                tokio::time::sleep(Duration::from_millis(10)).await;
+            }
+            assert!(!task.is_finished());
+            task.abort();
+            assert!(task.await.unwrap_err().is_cancelled());
+            try_future_cancelled = true;
+        } else {
+            let error = adapter
+                .try_registered_with_context(&rm.client(), receipt.clone())
+                .await
+                .unwrap_err();
+            assert_eq!(
+                error.registered_branch().unwrap().identity(),
+                receipt.identity()
+            );
+            let seata_db_mysql::MySqlTccTryError::ContextReport {
+                source: reason,
+                context_report_started,
+                ..
+            } = error
+            else {
+                panic!("original report error type lost")
+            };
+            assert!(context_report_started);
+            let seata_db_mysql::MySqlTccContextReportError::Rpc(reason) = *reason else {
+                panic!("report loss became a local error")
+            };
+            assert!(reason.is_unknown_outcome());
+            report_error_unknown = true;
+        }
+        assert!(fixture::business(&mut admin).await.is_empty());
+        let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM seata_rs_tcc_fence_v1")
+            .fetch_one(&mut admin)
+            .await
+            .unwrap();
+        assert_eq!(count, 0, "unconfirmed report allowed Try commit");
+        receipt
+    } else {
+        adapter
+            .register_and_try(&rm.client(), global.xid().as_str(), Some(app.clone()))
+            .await
+            .unwrap()
+    };
     let identity = receipt.identity().clone();
     assert_eq!(receipt.lock_key(), None);
-    assert_eq!(fixture::business(&mut admin).await, vec![(1, 7)]);
+    assert_eq!(
+        fixture::business(&mut admin).await,
+        if report_fault { vec![] } else { vec![(1, 7)] }
+    );
     let mut reported_data = None;
     if let Some(mode) = &dynamic {
         assert_eq!(identity.application_data(), Some(app.as_str()));
@@ -117,7 +199,7 @@ async fn run(rollback: bool) {
         assert_eq!(tc_data, current);
         fixture::record(
             "dynamic-before-end",
-            serde_json::json!({"mode":mode,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"registered_application_data":app,"reported_application_data":current}),
+            serde_json::json!({"mode":mode,"fault":fault,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"registered_application_data":app,"reported_application_data":current,"try_committed":!report_fault,"try_future_cancelled":try_future_cancelled,"report_error_unknown":report_error_unknown}),
         );
         reported_data = Some(current);
         if std::env::var_os("SEATA_TCC_DYNAMIC_HOLD").is_some() {
@@ -194,7 +276,16 @@ async fn run(rollback: bool) {
         .fetch_one(&mut admin)
         .await
         .unwrap();
-    assert_eq!(status, if rollback { 3 } else { 2 });
+    assert_eq!(
+        status,
+        if report_fault {
+            4
+        } else if rollback {
+            3
+        } else {
+            2
+        }
+    );
     let deadline = tokio::time::Instant::now() + Duration::from_secs(5);
     loop {
         let remaining:i64=sqlx::query_scalar("SELECT (SELECT COUNT(*) FROM global_table)+(SELECT COUNT(*) FROM branch_table)+(SELECT COUNT(*) FROM lock_table)").fetch_one(&mut admin).await.unwrap();
@@ -205,10 +296,17 @@ async fn run(rollback: bool) {
         tokio::time::sleep(Duration::from_millis(25)).await;
     }
     if let Some(mode) = dynamic {
-        fixture::record(
-            "original-java-tcc-dynamic",
-            serde_json::json!({"mode":mode,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"resource_id":adapter.key().resource_id(),"branch_type":identity.resource().branch_type().to_java_v1(),"registered_application_data":app,"reported_application_data":reported_data,"global_status":format!("{:?}",observed.unwrap()),"status":status,"journal":"Completed","business":business,"finished_inferred_as_success":false}),
-        );
+        if let Some(fault_mode) = fault {
+            fixture::record(
+                "original-java-tcc-dynamic-fault",
+                serde_json::json!({"mode":mode,"fault":fault_mode,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"resource_id":adapter.key().resource_id(),"branch_type":identity.resource().branch_type().to_java_v1(),"registered_application_data":app,"reported_application_data":reported_data,"lock_key":null,"initial_global_status":observed.map(|v|format!("{v:?}")),"expected_tc_terminal":format!("{expected:?}"),"status":status,"journal":"Completed","business":business,"try_committed":!report_fault,"try_future_cancelled":try_future_cancelled,"report_error_unknown":report_error_unknown,"original_receipt_retained":true,"client_end_requests":1,"finished_inferred_as_success":false}),
+            );
+        } else {
+            fixture::record(
+                "original-java-tcc-dynamic",
+                serde_json::json!({"mode":mode,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"resource_id":adapter.key().resource_id(),"branch_type":identity.resource().branch_type().to_java_v1(),"registered_application_data":app,"reported_application_data":reported_data,"global_status":format!("{:?}",observed.unwrap()),"status":status,"journal":"Completed","business":business,"finished_inferred_as_success":false}),
+            );
+        }
     } else if let Some(mode) = fault {
         fixture::record(
             "original-java-tcc-fault",

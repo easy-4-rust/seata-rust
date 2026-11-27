@@ -27,7 +27,9 @@ def expected_app(app,mode,final):
     expected = dict(useTCCFence=True,id=1,amount=7 if mode=='precision' else 9,precise=Decimal('1.2300000000000000000000000000'+('2' if mode=='precision' else '1')))
     if mode!='precision':expected.update(object='{"a":1,"precise":1.23000000000000000000000000001}',array='[1,2]')
     if mode=='immediate' and final:expected['final']=9
-    need(decoded(app)==dict(actionContext=expected),'Actual report dropped/rounded/replaced dynamic values')
+    actual=decoded(app);need(actual==dict(actionContext=expected),'Actual report dropped/rounded/replaced dynamic values')
+    values=actual['actionContext']
+    need(type(values['useTCCFence']) is bool and type(values['id']) is int and type(values['amount']) is int and (not (mode=='immediate' and final) or type(values['final']) is int),'JSON bool/integer types were coerced by evidence comparison')
     need(('"precise":1.2300000000000000000000000000'+('2' if mode=='precision' else '1')) in app,'Original decimal bytes lost')
 
 

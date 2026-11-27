@@ -1,0 +1,4 @@
+
+thread 'original_java_tc_commits_original_tcc_branch' (7800) panicked at crates\seata_db_mysql\tests\live_tcc_java.rs:175:14:
+called `Result::unwrap()` on an `Err` value: ContextReport { receipt: RegisteredBranch { identity: BranchIdentity { xid_bytes: 36, branch_id: 4045081887305125891, resource: ResourceKey { branch_type: Tcc, resource_id_bytes: 19 }, application_data_bytes: Some(56) }, lock_key_bytes: None, result_code: Success, .. }, source: Rpc(UnknownOutcome { operation: BranchReport, request: BranchReportRequest(BranchReportRequest { xid_present: true, branch_id: 4045081887305125891, status: Registered, resource_id_present: false, application_data_present: true, branch_type: Tcc, .. }), source: UnknownOutcome { generation: ConnectionGeneration(1), request_id: 3, reason: ConnectionClosed } }), context_report_started: true }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
