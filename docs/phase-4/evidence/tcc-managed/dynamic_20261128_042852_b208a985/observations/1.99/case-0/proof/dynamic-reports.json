@@ -1,0 +1,92 @@
+{
+  "cases": [
+    {
+      "branch_id": 9501,
+      "immediate": false,
+      "journal": "Completed",
+      "old_pending": true,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Commit",
+      "precision_only": false,
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"array\":\"[1,2]\",\"id\":1,\"object\":\"{\\\"a\\\":1,\\\"precise\\\":1.23000000000000000000000000001}\",\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 2,
+      "xid": "tcc:dynamic-false-false-Commit"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": false,
+      "journal": "Completed",
+      "old_pending": false,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Rollback",
+      "precision_only": false,
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"array\":\"[1,2]\",\"id\":1,\"object\":\"{\\\"a\\\":1,\\\"precise\\\":1.23000000000000000000000000001}\",\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 2,
+      "xid": "tcc:dynamic-false-false-Rollback"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": true,
+      "journal": "Completed",
+      "old_pending": true,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Commit",
+      "precision_only": false,
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"array\":\"[1,2]\",\"id\":1,\"object\":\"{\\\"a\\\":1,\\\"precise\\\":1.23000000000000000000000000001}\",\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}",
+        "{\"actionContext\":{\"amount\":9,\"array\":\"[1,2]\",\"final\":9,\"id\":1,\"object\":\"{\\\"a\\\":1,\\\"precise\\\":1.23000000000000000000000000001}\",\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 3,
+      "xid": "tcc:dynamic-true-false-Commit"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": true,
+      "journal": "Completed",
+      "old_pending": false,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7}}",
+      "phase": "Rollback",
+      "precision_only": false,
+      "reports": [
+        "{\"actionContext\":{\"amount\":9,\"array\":\"[1,2]\",\"id\":1,\"object\":\"{\\\"a\\\":1,\\\"precise\\\":1.23000000000000000000000000001}\",\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}",
+        "{\"actionContext\":{\"amount\":9,\"array\":\"[1,2]\",\"final\":9,\"id\":1,\"object\":\"{\\\"a\\\":1,\\\"precise\\\":1.23000000000000000000000000001}\",\"precise\":1.23000000000000000000000000001,\"useTCCFence\":true}}"
+      ],
+      "versions": 3,
+      "xid": "tcc:dynamic-true-false-Rollback"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": false,
+      "journal": "Completed",
+      "old_pending": true,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7,\"precise\":1.23000000000000000000000000001}}",
+      "phase": "Commit",
+      "precision_only": true,
+      "reports": [
+        "{\"actionContext\":{\"amount\":7,\"id\":1,\"precise\":1.23000000000000000000000000002,\"useTCCFence\":true}}"
+      ],
+      "versions": 2,
+      "xid": "tcc:dynamic-false-true-Commit"
+    },
+    {
+      "branch_id": 9501,
+      "immediate": false,
+      "journal": "Completed",
+      "old_pending": false,
+      "original_app": "{\"actionContext\":{\"useTCCFence\":true,\"id\":1,\"amount\":7,\"precise\":1.23000000000000000000000000001}}",
+      "phase": "Rollback",
+      "precision_only": true,
+      "reports": [
+        "{\"actionContext\":{\"amount\":7,\"id\":1,\"precise\":1.23000000000000000000000000002,\"useTCCFence\":true}}"
+      ],
+      "versions": 2,
+      "xid": "tcc:dynamic-false-true-Rollback"
+    }
+  ],
+  "rust_process_id": 38560,
+  "whole_plan_complete": false
+}

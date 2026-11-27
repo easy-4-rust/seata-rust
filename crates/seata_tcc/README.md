@@ -9,3 +9,8 @@ Phase 4 的独立 TCC 核心，事实源为 [TCC 契约](../../docs/phase-2/tcc-
 正式 ResourceClient/RM 与 MySQL 持久业务/Fence 的显式实现位于 seata-db-mysql，选定原 Java TC 和故障恢复证据由项目 TCC 契约与 ledger 管理。本核心提供数据和异步能力契约，不将这些接口本身当作完整 TCC、生产支持或总计划完成证明。
 
 动态业务可按需覆盖 `try_action_with_context`，默认实现继续委托既有只读 Try。`TccTransaction::report_context` 是可选的显式异步能力，默认明确返回不可用；具体资源必须负责报告版本、原回执及事务封闭。仅设置 delayReport 或 updated 不会发送网络请求，已确认报告也不证明本地 Try 已提交。
+# util 参数共享
+
+`BusinessActionContextUtil::add_context` / `add_context_map` 显式借用当前可变上下文与受控事务。忽略 null，同值不报告；只在 `delayReport == Some(true)` 时延迟，其他情况下参数变化会自动等待报告。成功才清除 updated；错误/取消由事务封闭原作用域，不盲重试。单独 `report_context` 保留 Java 的 updated 门槛。显式借用代替 ThreadLocal，避免异步任务迁移时串用上下文。
+
+`ActionContextUtil::handle_action_context` 将对象/数组保存为 JSON 字符串，标量保留原值。RawValue 边界不携带 Java 集合类元数据，复合字符串内保存提供的原 JSON 字节（含精确数值与空白）；不是 Java 任意对象/反射注解或类型自动反序列化支持。批量预算拒绝保持原上下文不变。实际网络报告只由显式启用的适配器提供，核心 utility 不签发 TC/事务成功证明。

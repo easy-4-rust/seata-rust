@@ -54,3 +54,6 @@ seata-observability 显式启用 mysql 特性后，with_mysql_recovery 可独立
 新动态 Fence 使用既有 schema_version 字段的协议值 2；当前静态路径只接受原协议 1，误用静态配置不能执行动态分支的旧参数。019 表结构、旧记录和默认值不改写，020 清单自身版本仍为 1。恢复时必须保留所选协议配置。
 
 当前运行时的 TCC 回调复用 Completed 前还会验证同方向终态 Fence，控制状态缺失、回退或摘要异常时不会仅凭日志返回成功，也不会重放业务。此校验不承诺旧二进制任意降级的行为；恢复须维持相应报告配置与版本。
+# TCC util 自动报告
+
+可变 Try 可调用 `seata_tcc::BusinessActionContextUtil::add_context_map(context, transaction, Some(&values)).await`；默认延迟设置在 Try 返回后发送，业务显式设置 `delayReport=Some(false)` 后，参数变化自动通过同一受控事务报告一次。它复用既有原回执、持久完整版本和类型化错误边界；成功报告不表示 Try 已提交。预算拒绝不留下半批参数，捕获网络错误也不能让已封闭的 Try 继续提交。原参数本地修改方法仍只修改本地值；需要自动报告时使用 util 入口。

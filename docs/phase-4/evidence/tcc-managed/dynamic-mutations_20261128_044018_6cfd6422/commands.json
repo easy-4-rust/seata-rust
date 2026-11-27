@@ -1,0 +1,232 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-dynamic-mutations-20261128-044018-6cfd6422",
+      "--label",
+      "seata.dynamic.owner=4c73a2439ce0413b95921300055b46cf",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata-tcc-dynamic-mutations-20261128_044018_6cfd6422/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:55116:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=dynamic_mut_4c73a2439ce0",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "8593e40ee19c246836bf5a146802f49d7db87cbeedf08bf2234939fa4f8d23a4"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "8593e40ee19c246836bf5a146802f49d7db87cbeedf08bf2234939fa4f8d23a4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "dynamic_mut_4c73a2439ce0"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-rm-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-rm",
+      "--lib",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-0",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-1",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_cases::report_rejection_loss_caught_failure_and_cancellation_never_commit_try",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-2",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-baseline-3",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\target-1.99\\debug\\deps\\seata_rm-8aad5582fc877a85.exe",
+      "manager::callback_identity_tests::callback_identity_cannot_change_branch_or_resource_and_is_checked_before_completed_reuse",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-checksum_ignored-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-checksum_ignored",
+    "argv": [
+      "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\target-1.99\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "1.99-report_error_ignored-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "cwd": "D:\\codex-builds\\seata-tcc-dynamic-mutations-20261128_044018_6cfd6422\\source",
+    "exit_code": 101
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "8593e40ee19c246836bf5a146802f49d7db87cbeedf08bf2234939fa4f8d23a4"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "8593e40ee19c246836bf5a146802f49d7db87cbeedf08bf2234939fa4f8d23a4"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "8593e40ee19c246836bf5a146802f49d7db87cbeedf08bf2234939fa4f8d23a4"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "8593e40ee19c246836bf5a146802f49d7db87cbeedf08bf2234939fa4f8d23a4"
+    ],
+    "cwd": "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation",
+    "exit_code": 1
+  }
+]

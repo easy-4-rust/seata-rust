@@ -1314,3 +1314,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## TCC 持久动态报告验收（2026-11-28）
 
 本节更新前文核心依赖增量的未接通状态：显式启用 MySQL 可变 Try、立即/最终报告、020 原字节版本与 SHA-256、类型化未知响应及旧 Pending/新参数真实回调协调已接通。双版本 32 个动态分支场景、12 个原 Java TC 动态全局事务通过；静态 16 项 MySQL、4 项正常/8 项故障原 TC、54 项进程/数据库恢复回归通过。工作区每版 796 passed / 388 ignored，严格检查通过；46 次错误源码实际行为失败和 1130 项证据削弱拒绝。详见 [动态报告证据](phase-4/evidence/tcc-managed/DYNAMIC_CONTEXT_REPORTS.md) 与 [ledger](phase-4/tcc-dynamic-context-reports.json)。Java util 自动便捷 API、动态故障/并发/拓扑及生产门禁尚未完成，完整 TCC 和总计划继续开放。
+
+
+## TCC util 自动报告验收（2026-11-28）
+
+已接通 JSON 边界的 BusinessActionContextUtil 批量/单值共享与立即/延迟自动报告，显式借用当前上下文和受控事务，预算拒绝保持原状态。固定原 Java util 19 项观察与 7 次原 dispatcher 出口调用核验，先前保留的 util 对象观察也完成比较；出口不计作网络证明。实际 8 个 util 原 TC 事务加 4 个原字节精度事务通过，双版本 32 个动态分支场景及 16 项静态 MySQL、4/8 项正常/故障原 TC、54 项进程/同库恢复回归通过。工作区每版 801 passed / 388 ignored，179 个成功摘要，严格检查通过；60 次错误生产源码实际行为失败，1260 项证据削弱拒绝。[自动报告证据](phase-4/evidence/tcc-managed/AUTOMATIC_CONTEXT_UTIL.md)、[ledger](phase-4/tcc-context-util.json)。Java 任意对象/反射注解、动态专用故障/并发/拓扑与生产门禁仍开放，完整计划未完成。

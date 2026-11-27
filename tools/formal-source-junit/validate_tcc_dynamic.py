@@ -25,6 +25,7 @@ def decoded(app):return json.loads(app,parse_float=Decimal)
 
 def expected_app(app,mode,final):
     expected = dict(useTCCFence=True,id=1,amount=7 if mode=='precision' else 9,precise=Decimal('1.2300000000000000000000000000'+('2' if mode=='precision' else '1')))
+    if mode!='precision':expected.update(object='{"a":1,"precise":1.23000000000000000000000000001}',array='[1,2]')
     if mode=='immediate' and final:expected['final']=9
     need(decoded(app)==dict(actionContext=expected),'Actual report dropped/rounded/replaced dynamic values')
     need(('"precise":1.2300000000000000000000000000'+('2' if mode=='precision' else '1')) in app,'Original decimal bytes lost')
@@ -148,14 +149,26 @@ def verify_mutations(folder,digest):
     records=load(folder/'records.json');need(len(records)==12 and {(r['Rust'],r['mutation']) for r in records}=={(version,name) for version in ['1.99','1.85'] for name in expected},'Dynamic source counterexamples missing')
     cleanup=load(folder/'cleanup.json');need(cleanup['owned_container_removed'] and Path(cleanup['isolated_source']).drive.upper()=='D:','Counterexamples touched live workspace or left database')
     targets=[Path(p).resolve() for p in cleanup['isolated_targets']]
+    need(len(targets)==14 and len(set(targets))==14,'Counterexamples did not use independent build directories')
     commands=load(folder/'commands.json')
+    artifacts=load(folder/'artifacts.json')
     for version in ['1.99','1.85']:
         for index in range(4):need(b'test result: ok. 1 passed;' in (folder/(version+'-baseline-'+str(index)+'.stdout')).read_bytes(),'Unmodified isolated baseline failed')
     for row in records:
         prefix=row['Rust']+'-'+row['mutation'];need(row['exit_code']==101 and sha_local(folder/(prefix+'.rs'))==row['modified_source_sha256'],'Counterexample source differs')
         raw=(folder/(prefix+'.stdout')).read_bytes();need(b'test result: FAILED. 0 passed; 1 failed;' in raw and row['test'].encode() in raw,'Compiler/setup failure counted as behavior')
+        signatures={
+            'checksum_ignored':[b'assertion failed: !matches!(adapter.recover',b'Ok(BranchResolution::Applied)'],
+            'report_error_ignored':[b'called `Result::unwrap_err()` on an `Ok` value: RegisteredBranch'],
+            'AT_status_in_TCC_report':[b'left: PhaseOneDone',b'right: Registered'],
+            'protocol_downgrade_accepted':[b'static mode must reject report-enabled records before using old parameters'],
+            'cached_completion_unverified':[b'left: (Success, 5)',b'right: (Failed, 6)'],
+            'stable_identity_key_bypass':[b'assertion failed: matches!(result, Err(RmError::IdentityConflict))'],
+        }
+        stderr=(folder/(prefix+'.stderr')).read_bytes();need(all(signature in stderr for signature in signatures[row['mutation']]),'Selected behavior assertion missing; arbitrary setup panic is not a counterexample')
         command=[c for c in commands if c['label']==prefix];need(len(command)==1 and command[0]['exit_code']==101 and row['test'] in command[0]['argv'],'Counterexample did not execute selected behavior')
         artifact=Path(command[0]['argv'][0]).resolve();need(any(artifact.is_relative_to(target) for target in targets),'Mutated artifact escaped isolated D target')
+        copies=[a for a in artifacts if a['label']==prefix+'-build'];need(len(copies)==1 and Path(copies[0]['executed_path']).resolve()==artifact and copies[0]['sha256']==row['artifact_sha256'] and any(target.name=='variant-target-'+prefix and Path(copies[0]['built_path']).resolve().is_relative_to(target) and artifact.is_relative_to(target) for target in targets),'Executed isolated copy not bound to actual unique build artifact')
 
 
 def sha_local(path):return hashlib.sha256(path.read_bytes()).hexdigest()

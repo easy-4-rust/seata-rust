@@ -31,7 +31,7 @@ def run():
         for p in sorted([p for p in (ROOT/'crates').rglob('*') if p.is_file()]+[ROOT/'Cargo.toml',ROOT/'Cargo.lock',Path(__file__)]):
             name=p.relative_to(ROOT).as_posix();archive.writestr(name,p.read_bytes());inputs.append(dict(path=name,sha256=sha(p)))
     save(out/'source-inputs.json',inputs)
-    commands=[]
+    commands=[];artifacts=[]
     def command(label,argv,cwd=ROOT,expected=0,input=None):
         value=subprocess.run(list(map(str,argv)),cwd=cwd,env=env,input=input,capture_output=True,timeout=300,creationflags=subprocess.CREATE_NO_WINDOW)
         (out/(label+'.stdout')).write_bytes(value.stdout);(out/(label+'.stderr')).write_bytes(value.stderr)
@@ -43,7 +43,12 @@ def run():
         argv+=['--lib'] if role=='rm' else ['--features','tcc','--test','live_tcc']
         value=command(label,argv+['--offline','--locked','--no-run','--message-format=json'],source)
         rows=[Path(row['executable']) for line in value.stdout.splitlines() if line.startswith(b'{') and (row:=json.loads(line)).get('executable')]
-        need(len(rows)==1,'Unique isolated counterexample artifact missing');return rows[0]
+        need(len(rows)==1,'Unique isolated counterexample artifact missing')
+        # Windows 下不直接执行后续还要原地链接覆盖的 Cargo 产物；每次构建使用独立校验副本。
+        built=rows[0];executed=Path(env['CARGO_TARGET_DIR'])/'executed'/(label+'.exe');executed.parent.mkdir(exist_ok=True)
+        shutil.copyfile(built,executed);need(sha(built)==sha(executed),'Isolated executable copy differs')
+        artifacts.append(dict(label=label,built_path=str(built),executed_path=str(executed),sha256=sha(executed)))
+        save(out/'artifacts.json',artifacts);return executed
     normal='dynamic_cases::full_context_reports_keep_original_receipt_and_recover_old_pending_with_new_callback'
     errors='dynamic_cases::report_rejection_loss_caught_failure_and_cancellation_never_commit_try'
     integrity='dynamic_integrity_cases::modified_report_versions_never_reuse_completed_and_original_bytes_restore_same_branch'
@@ -56,7 +61,7 @@ def run():
         ('cached_completion_unverified','crates/seata_rm/src/manager/branch_dispatcher.rs','resource.verify_callback_completion(receipt).await?;','let _ = receipt;','mysql',integrity),
         ('stable_identity_key_bypass','crates/seata_rm/src/manager/branch_dispatcher.rs','if stable.key() != identity.key() || stable.resource() != identity.resource() {','if false {','rm',rm_test),
     ]
-    records=[];container=None
+    records=[];container=None;owned_targets=[]
     print('TCC_DYNAMIC_MUTATIONS '+str(out),flush=True)
     try:
         container=command('create',['docker','create','--pull=never','--name','seata-dynamic-mutations-'+stamp.replace('_','-'),'--label','seata.dynamic.owner='+owner,'--mount','type=bind,source='+(work/'data').as_posix()+',target=/var/lib/mysql','-p','127.0.0.1:'+str(port)+':3306','-e','MYSQL_ROOT_PASSWORD='+PASSWORD,'-e','MYSQL_ROOT_HOST=%','-e','MYSQL_DATABASE='+database,IMAGE]).stdout.decode().strip()
@@ -65,6 +70,7 @@ def run():
         command('undo-schema',['docker','exec','-i','-e','MYSQL_PWD='+PASSWORD,container,'mysql','-h127.0.0.1','-uroot',database],input=undo)
         for version in ['1.99','1.85']:
             env['CARGO_TARGET_DIR']=str(work/('target-'+version))
+            baseline_target=Path(env['CARGO_TARGET_DIR']);owned_targets.append(str(baseline_target))
             native=build(version,'mysql',version+'-baseline-build');rm=build(version,'rm',version+'-baseline-rm-build')
             for index,test in enumerate([normal,errors,integrity,rm_test]):
                 observations=work/('baseline-'+version+'-'+str(index));observations.mkdir();env['SEATA_XA_OUT']=str(observations)
@@ -73,18 +79,22 @@ def run():
             for name,relative,needle,replacement,role,test in mutations:
                 path=source/relative;original=path.read_bytes();need(original.decode().count(needle)==1,'Dynamic mutation target drift: '+name)
                 prefix=version+'-'+name
+                # 每个错误版本只有一次原生链接；复用依赖缓存，但不复制/覆盖可执行文件。
+                variant_target=work/('variant-target-'+prefix)
+                shutil.copytree(baseline_target,variant_target,ignore=shutil.ignore_patterns('*.exe','executed'))
+                owned_targets.append(str(variant_target));env['CARGO_TARGET_DIR']=str(variant_target)
                 try:
                     path.write_bytes(original.decode().replace(needle,replacement).encode());(out/(prefix+'.rs')).write_bytes(path.read_bytes())
                     executable=build(version,role,prefix+'-build');observations=work/prefix;observations.mkdir();env['SEATA_XA_OUT']=str(observations)
                     argv=[executable,test,*([] if role=='rm' else ['--ignored']),'--exact','--nocapture']
                     value=command(prefix,argv,source,101);need(b'test result: FAILED. 0 passed; 1 failed;' in value.stdout and test.encode() in value.stdout,'Compiler/setup failure counted as behavioral counterexample')
                     records.append(dict(Rust=version,mutation=name,path=relative,modified_source_sha256=sha(path),artifact_sha256=sha(executable),test=test,exit_code=value.returncode));save(out/'records.json',records)
-                finally:path.write_bytes(original)
+                finally:path.write_bytes(original);env['CARGO_TARGET_DIR']=str(baseline_target)
     finally:
         if container:
             state=json.loads(command('inspect',['docker','inspect',container]).stdout)[0];need(state['Id']==container and state['Image']==IMAGE and state['Config']['Labels'].get('seata.dynamic.owner')==owner,'Owned counterexample database changed')
             command('stop',['docker','stop','--time','10',container]);command('remove',['docker','rm',container]);need(command('confirm-removed',['docker','inspect',container],expected=None).returncode!=0,'Counterexample database remains')
-        save(out/'cleanup.json',dict(owned_container_removed=bool(container),isolated_source=str(source),isolated_targets=[str(work/('target-'+v)) for v in ['1.99','1.85']]))
+        save(out/'cleanup.json',dict(owned_container_removed=bool(container),isolated_source=str(source),isolated_targets=owned_targets))
     for row in inputs:need(sha(ROOT/row['path'])==row['sha256'],'Live source changed during isolated report counterexamples')
     save(out/'result.json',dict(status='DYNAMIC_REPORT_FAULTY_PRODUCTION_SOURCES_REJECTED',variants_per_version=6,actual_behavioral_failures=12,live_source_mutated=False,TCC_full_gate_complete=False,whole_plan_complete=False))
     shutil.copyfile(Path(__file__),out/Path(__file__).name);save(out/'catalog.json',[dict(path=p.relative_to(out).as_posix(),sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()]);print(json.dumps(dict(evidence=str(out),catalog_sha256=sha(out/'catalog.json'))))

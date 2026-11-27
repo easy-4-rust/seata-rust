@@ -98,3 +98,16 @@ TCC 的原连接回调复用 Completed 前还须重新验证当前 Fence 的同�
 ## TCC 持久动态报告验收（2026-11-28）
 
 本节更新前文核心依赖增量的未接通状态：显式启用 MySQL 可变 Try、立即/最终报告、020 原字节版本与 SHA-256、类型化未知响应及旧 Pending/新参数真实回调协调已接通。双版本 32 个动态分支场景、12 个原 Java TC 动态全局事务通过；静态 16 项 MySQL、4 项正常/8 项故障原 TC、54 项进程/数据库恢复回归通过。工作区每版 796 passed / 388 ignored，严格检查通过；46 次错误源码实际行为失败和 1130 项证据削弱拒绝。详见 [动态报告证据](../phase-4/evidence/tcc-managed/DYNAMIC_CONTEXT_REPORTS.md) 与 [ledger](../phase-4/tcc-dynamic-context-reports.json)。Java util 自动便捷 API、动态故障/并发/拓扑及生产门禁尚未完成，完整 TCC 和总计划继续开放。
+
+### util 参数合并与自动报告入口（JSON 边界已验收）
+
+BusinessActionContextUtil 以显式借用当前上下文和事务能力代替 Java ThreadLocal，避免异步任务迁移或交叉调用串用上下文；不提供全局可伪造的报告客户端。单值 null、缺失值、空/缺失批量映射不修改也不报告；批量忽略 null，Java 相等性判定没有变化时返回 false，不能顺便发送此前积累的 updated。真正变化后 updated=true；delayReport 仅 Some(true) 延迟并返回 false，None/Some(false) 自动等待一次正式报告。报告成功才清除 updated；错误保持原错误/可能发送事实，不捕获后伪装成功、不重试。显式 util reportContext 也遵守 updated==true 的 Java 门槛；资源管理器最终原字节变化检查继续独立存在。
+
+ActionContextUtil 的 JSON 边界区分标量与复合值：字符串、布尔、数字保持原值；对象/数组成为 JSON 字符串，便于二阶段类型转换。Rust 输入本来就是经过验证的 RawValue，字符串内保留调用方提供的复合 JSON 原字节，不将任意精度数值转换成 Double 或添加 Java 类型元数据。预算或输入拒绝必须在任何参数合并/报告前原子完成，不能留下半批更新。参数键/身份边界、原回执及持久报告格式沿用上节。
+
+验收使用固定 Java 原 util 与 ActionContextUtil 实际执行的无变化、延迟、立即、批量、复合值和异常观察；用受控原 Java ResourceManager 出口观察报告调用，不冒充网络验收。另须让真实 MySQL 与原 Java TC 的动态业务通过新 util 入口执行，核对实际 Registered/TCC 包、持久完整版本、原身份和 Commit/Cancel 业务结果。Rust 双版本验证取消/失败封闭和预算原子性；尚未实际执行前不标记完成。
+
+
+## TCC util 自动报告验收（2026-11-28）
+
+已接通 JSON 边界的 BusinessActionContextUtil 批量/单值共享与立即/延迟自动报告，显式借用当前上下文和受控事务，预算拒绝保持原状态。固定原 Java util 19 项观察与 7 次原 dispatcher 出口调用核验，先前保留的 util 对象观察也完成比较；出口不计作网络证明。实际 8 个 util 原 TC 事务加 4 个原字节精度事务通过，双版本 32 个动态分支场景及 16 项静态 MySQL、4/8 项正常/故障原 TC、54 项进程/同库恢复回归通过。工作区每版 801 passed / 388 ignored，179 个成功摘要，严格检查通过；60 次错误生产源码实际行为失败，1260 项证据削弱拒绝。[自动报告证据](../phase-4/evidence/tcc-managed/AUTOMATIC_CONTEXT_UTIL.md)、[ledger](../phase-4/tcc-context-util.json)。Java 任意对象/反射注解、动态专用故障/并发/拓扑与生产门禁仍开放，完整计划未完成。

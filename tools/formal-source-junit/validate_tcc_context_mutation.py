@@ -67,4 +67,4 @@ if __name__ == '__main__':
     parser=argparse.ArgumentParser();parser.add_argument('folder',type=Path);parser.add_argument('catalog_sha256');parser.add_argument('--weakenings',action='store_true');args=parser.parse_args()
     rows = verify(args.folder,args.catalog_sha256)
     if args.weakenings:print('Rejected Java context evidence weakenings:',weakenings(rows))
-    print('Verified 46 unchanged Java observations; Rust core compares 45, util auto-report remains separate')
+    print('Verified 46 unchanged Java observations; Rust integration is verified by current workspace evidence')

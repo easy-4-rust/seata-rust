@@ -221,7 +221,7 @@ fn java_whitespace(value: char) -> bool {
             && !matches!(value, '\u{0085}' | '\u{00a0}' | '\u{2007}' | '\u{202f}'))
 }
 // RawValue 不把参数解析为 f64；另在整个原信封上执行字节/结构预算，包含未知字段。
-fn validate_budget(data: &str) -> Result<(), TccError> {
+pub(crate) fn validate_budget(data: &str) -> Result<(), TccError> {
     if data.len() > BusinessActionContext::MAX_CONTEXT_BYTES {
         return Err(TccError::ContextBudget);
     }
