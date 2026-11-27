@@ -340,6 +340,9 @@ impl MySqlXaResourceManager {
     }
 }
 impl BranchResource for MySqlXaResourceManager {
+    fn callback_observer(&self) -> Option<&dyn seata_rm::BranchCallbackObserver> {
+        Some(self)
+    }
     fn key(&self) -> &ResourceKey {
         &self.key
     }
@@ -356,5 +359,44 @@ impl BranchResource for MySqlXaResourceManager {
         phase: BranchPhase,
     ) -> Pin<Box<dyn Future<Output = Result<BranchResolution, RmError>> + Send + 'a>> {
         Box::pin(self.resolve(identity, phase))
+    }
+}
+
+impl seata_rm::BranchCallbackObserver for MySqlXaResourceManager {
+    fn observe<'a>(
+        &'a self,
+        receipt: &'a seata_rm::BranchCallbackReceipt,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RmError>> + Send + 'a>> {
+        Box::pin(async move {
+            if receipt.phase() != BranchPhase::Rollback {
+                return Ok(());
+            }
+            self.validate(receipt.identity())
+                .map_err(|_| RmError::IdentityConflict)?;
+            let deadline = Instant::now() + self.native.source.operation_timeout();
+            let result = timeout_at(
+                deadline,
+                crate::mysql_xa_early_rollback::MySqlXaEarlyRollback::observe(
+                    &self.native,
+                    receipt,
+                ),
+            )
+            .await;
+            if Instant::now() >= deadline {
+                return Err(RmError::Unavailable {
+                    reason: "XA early callback deadline; original outcome unresolved",
+                });
+            }
+            result
+                .map_err(|_| RmError::Unavailable {
+                    reason: "XA early callback deadline; original outcome unresolved",
+                })?
+                .map_err(|error| match error {
+                    DbError::RecoveryConflict => RmError::IdentityConflict,
+                    _ => RmError::Unavailable {
+                        reason: "XA early callback control outcome unresolved",
+                    },
+                })
+        })
     }
 }

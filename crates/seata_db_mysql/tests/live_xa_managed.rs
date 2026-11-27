@@ -42,7 +42,11 @@ async fn rm(
         catalog,
         store.clone(),
     )
-    .request_timeout(Duration::from_millis(1200))
+    .request_timeout(if matches!(name, "early" | "register-race") {
+        Duration::from_secs(5)
+    } else {
+        Duration::from_millis(1200)
+    })
     .callback_timeout(Duration::from_secs(5))
     .build()
     .unwrap();

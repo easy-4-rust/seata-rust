@@ -217,3 +217,6 @@ mod mysql_xa_prepare_evidence;
 mod mysql_xa_session;
 #[cfg(feature = "xa")]
 mod mysql_xa_session_fence;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_early_rollback;

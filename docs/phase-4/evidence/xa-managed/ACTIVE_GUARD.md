@@ -1,5 +1,7 @@
 # 旧 ACTIVE 作用域的资源围栏
 
+后续 [正式早回滚交接](EARLY_ROLLBACK.md) 已推进早于原登记响应的回调；下文保留本阶段的历史边界。
+
 事实源：[XA 契约](../../../phase-2/mysql-xa-contract.md)。固定最终目录及结果见 [machine ledger](../../mysql-xa-active-guard.json)。
 
 017 在原唯一登记控制事务中明确登记新 guard 协议；旧分支不被自动回填。018 是同一原身份的事务内 guard。新生产者在原 XA START 后、任何业务或向调用方返回作用域之前，必须唯一插入 phase=0/completed=0 guard。开始门闩下再次验证当前物理结构，防止登记控制事务结束后的结构变化进入原生开始路径。原 guard 随业务一起持有、提交或回滚。

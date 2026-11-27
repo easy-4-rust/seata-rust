@@ -37,3 +37,6 @@ seata-observability 显式启用 mysql 特性后，with_mysql_recovery 可独立
 
 
 017/018 显式登记新作用域的 guard 协议。任何业务之前，原 XA 必须在原物理连接取得事务内 guard；可取消的独占会话槽通过持久决定监视器退休本库持有的旧连接，不使用远程 KILL。Rollback 恢复在原 guard 唯一键取得持久屏障后，重查 Prepared/提交见证并与原终态一起提交。旧协议记录、未释放的 guard、身份/结构冲突均不能补成成功；被暂停/分区的会话保持未知直到实际可取得屏障。完整强制会话清理、性能/运行手册和生产权限仍开放。
+
+
+正式 XA 回调观察器现复用受控 BranchCallbackReceipt 处理早到 Rollback：先竞争原登记唯一键，排除孤立记录/Prepared 后，原子持久否定启动终态与 guard。迟到的真实登记回执和克隆不能 START；若原登记先获胜则交回正常恢复，不从重复键猜结果。手工 apply/recover/dispatch 缺记录仍 Unknown，不能签发该屏障；回调能力也不转换为 RegisteredBranch。已有孤立数据保持 Pending，修复后才重新证明。

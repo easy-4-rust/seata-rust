@@ -84,3 +84,13 @@ Rollback 在无 Prepared、也没有既有 Prepared 回滚证明时，只能对�
 验收：保留旧 ACTIVE 对象并已执行真实未提交业务，由独立数据源/正式回调完成原回滚；旧作用域后续 DML/Prepare 拒绝，原事务实际释放，屏障持久，无原生 END/PREPARE/ROLLBACK 或远程 KILL。缺协议、结构/身份冲突、等待失败不能确认；既有 Prepared 两方向及连续响应丢失回归继续通过。完整进程崩溃、网络分区强制清理、生产部署/权限和其余总计划继续开放。
 
 该增量最终选定证据见 [ACTIVE guard 围栏](../phase-4/evidence/xa-managed/ACTIVE_GUARD.md) 和 [machine ledger](../phase-4/mysql-xa-active-guard.json)。双版本十项真实 MySQL、原 Java TC 两方向通过，工作区每版各 785 passed / 368 ignored；最终存储负例改用独立常规期限管理器并核对 IdentityConflict 后，重跑双版本现场、源封存和严格 Clippy。健康作用域经过至少两次真实监视查询仍可更新，正式回调后实际回滚，后续业务/Prepare 拒绝。完整生产和总计划继续开放。
+
+## 正式早回滚回调的启动否定屏障
+
+只复用 RM 正式连接整批校验后签发的 BranchCallbackReceipt，通过既有 BranchCallbackObserver 在文件 Pending 之后处理；不修改公共 apply/recover 的缺行 Unknown 行为，不构造 RegisteredBranch。原 Rollback 回调早于 BranchRegister 响应时，持原分支键检查缺控制行、缺所有已有原生产者/见证/guard 记录，并实际确认无原 Prepared；只有成功唯一插入原控制否定终态与 guard 屏障并确认同一控制 COMMIT 后，才允许回调完成。已有孤立数据或观察未知不能推断空回滚。
+
+该否定记录阻止迟到的原唯一登记提交，guard 进一步阻止迟到的原业务路径；客户端真实收到原成功回执后仍保留原 XID/BranchId/可选字段，但启动返回明确控制拒绝且不发送 START。唯一键竞争若由原登记先获胜，则回到已有原登记/ACTIVE/Prepared 恢复路径，不能因重复键直接宣称成功。重复原回调可重读终态，反向决定拒绝。
+
+验收覆盖真实早回调先完成、原登记响应后到仍禁止原启动、回执克隆不重启、手工入口不能签发否定屏障、独立管理器和重复回调终态，以及原登记/回调并发竞争；原 Java TC 与全部受影响回归保持通过。完整进程崩溃、分区、并发故障及生产/其余总计划继续开放。
+
+该增量证据见 [正式早回滚交接](../phase-4/evidence/xa-managed/EARLY_ROLLBACK.md) 和 [machine ledger](../phase-4/mysql-xa-early-rollback.json)。双版本每版十二项真实 MySQL（含三个登记竞争与五类孤立证据子场景）、原 Java TC 两方向、完整工作区各 785 passed / 370 ignored 及严格 XA/MySQL Clippy 通过。独立源码/原始包/SQL 校验和每版十八项证据削弱拒绝均已执行。手工缺行仍 Unknown，只有正式回调能力可以签发早否定屏障；完整生产和总计划继续开放。

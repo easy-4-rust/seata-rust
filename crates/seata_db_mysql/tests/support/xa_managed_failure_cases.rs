@@ -11,6 +11,252 @@ use std::{sync::Arc, time::Duration};
 use tokio::net::TcpListener;
 
 #[tokio::test]
+#[ignore = "requires owned MySQL and formal orphan callback checks"]
+async fn early_callback_never_treats_orphan_evidence_as_empty_rollback() {
+    let mut cases = Vec::new();
+    for (index, table) in [
+        "seata_rs_xa_commit_witness_v1",
+        "seata_rs_xa_prepare_evidence_v1",
+        "seata_rs_xa_guard_enrollment_v1",
+        "seata_rs_xa_session_guard_v1",
+        "native_prepared",
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let (mut admin, source, adapter) = fixture::seed().await;
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let (manager, store) = rm(adapter.clone(), &listener, "early-orphan").await;
+        let key = adapter.key().clone();
+        let xid = format!("xa:early-orphan:{index}");
+        let identity = BranchIdentity::new(
+            xid.clone(),
+            9007199254741020 + index as i64,
+            key.clone(),
+            None,
+        )
+        .unwrap();
+        let native = seata_db_mysql::MySqlXaDataSource::new(source.clone());
+        let native_id = seata_xa::XaBranchXid::new(Some(xid.clone()), identity.branch_id());
+        if table == "native_prepared" {
+            let mut scope = native.start(native_id.clone()).await.unwrap();
+            scope
+                .execute(
+                    &SqlRecognizerFactory::recognize("INSERT INTO xa_managed(id,v) VALUES(1,42)")
+                        .unwrap(),
+                    &[],
+                )
+                .await
+                .unwrap();
+            scope.prepare().await.unwrap();
+        } else {
+            let uuid: String = sqlx::query_scalar("SELECT @@server_uuid")
+                .fetch_one(&mut admin)
+                .await
+                .unwrap();
+            let (phase, completed) = if table == "seata_rs_xa_commit_witness_v1" {
+                (1, 1)
+            } else {
+                (0, 0)
+            };
+            sqlx::query(&format!("INSERT INTO {table}(xid,branch_id,resource_id,application_data,server_uuid,schema_version,phase,completed) VALUES(?,?,?,NULL,?,1,?,?)"))
+                .bind(xid.as_bytes()).bind(identity.branch_id()).bind(key.resource_id().as_bytes()).bind(uuid.as_bytes()).bind(phase).bind(completed).execute(&mut admin).await.unwrap();
+        }
+        let original = identity.clone();
+        let (start, ready) = tokio::sync::oneshot::channel();
+        let (first, observed) = tokio::sync::oneshot::channel();
+        let (resume, repaired) = tokio::sync::oneshot::channel();
+        let (done, finished) = tokio::sync::oneshot::channel();
+        let server = tokio::spawn(async move {
+            let mut socket = bootstrap(&listener, key.resource_id()).await;
+            registered(
+                &mut socket,
+                key.resource_id(),
+                &xid,
+                None,
+                original.branch_id(),
+            )
+            .await;
+            ready.await.unwrap();
+            let response = callback(&mut socket, -71, &original, BranchPhase::Rollback).await;
+            assert_eq!(
+                response,
+                if table == "native_prepared" {
+                    (ResultCode::Success, 9)
+                } else {
+                    (ResultCode::Failed, 10)
+                },
+                "orphan evidence was declared empty rollback"
+            );
+            first.send(()).unwrap();
+            repaired.await.unwrap();
+            assert_eq!(
+                callback(&mut socket, -72, &original, BranchPhase::Rollback).await,
+                (ResultCode::Success, 8)
+            );
+            done.send(()).unwrap();
+            idle(&mut socket).await;
+        });
+        let receipt = manager
+            .client()
+            .branch_register_with_receipt(seata_protocol::transaction::BranchRegisterRequest {
+                xid: Some(identity.xid().into()),
+                branch_type: BranchType::Xa,
+                resource_id: Some(identity.resource().resource_id().into()),
+                application_data: None,
+                lock_key: None,
+            })
+            .await
+            .unwrap();
+        start.send(()).unwrap();
+        observed.await.unwrap();
+        let rows: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM seata_rs_xa_branch_v1")
+            .fetch_one(&mut admin)
+            .await
+            .unwrap();
+        assert_eq!(
+            rows, 0,
+            "failed early proof committed a provisional denial record"
+        );
+        assert_eq!(
+            store
+                .lease(identity.clone(), BranchPhase::Rollback)
+                .await
+                .unwrap()
+                .state(),
+            Some(BranchRecordState::Pending)
+        );
+        if table == "native_prepared" {
+            native.rollback_prepared(&native_id).await.unwrap();
+        } else {
+            sqlx::raw_sql(&format!("DELETE FROM {table}"))
+                .execute(&mut admin)
+                .await
+                .unwrap();
+        }
+        resume.send(()).unwrap();
+        finished.await.unwrap();
+        let error = adapter.start_registered(receipt).await.unwrap_err();
+        assert_eq!(error.registered_branch().unwrap().identity(), &identity);
+        assert!(fixture::business(&mut admin).await.is_empty());
+        assert_eq!(
+            store
+                .lease(identity.clone(), BranchPhase::Rollback)
+                .await
+                .unwrap()
+                .state(),
+            Some(BranchRecordState::Completed)
+        );
+        cases.push(serde_json::json!({"kind":table,"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"first_status":if table=="native_prepared" {9} else {10},"provisional_denial_rows_after_failure":rows,"first_journal":"Pending","repaired_status":8,"late_start_rejected":true,"journal":"Completed","business":[]}));
+        manager.shutdown().await.unwrap();
+        server.await.unwrap();
+        source.close().await.unwrap();
+    }
+    fixture::record("early-orphan-evidence", serde_json::json!({"cases":cases}));
+}
+
+#[tokio::test]
+#[ignore = "requires owned MySQL and real registration/callback race"]
+async fn rollback_callback_races_original_start_without_late_business() {
+    let mut cases = Vec::new();
+    for index in 0..3 {
+        let (mut admin, source, adapter) = fixture::seed().await;
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let (manager, store) = rm(adapter.clone(), &listener, "register-race").await;
+        let key = adapter.key().clone();
+        let xid = format!("xa:register-race:{index}");
+        let identity = BranchIdentity::new(
+            xid.clone(),
+            9007199254741010 + index,
+            key.clone(),
+            Some("original-race-application".into()),
+        )
+        .unwrap();
+        let original = identity.clone();
+        let (done, finished) = tokio::sync::oneshot::channel();
+        let server = tokio::spawn(async move {
+            let mut socket = bootstrap(&listener, key.resource_id()).await;
+            registered(
+                &mut socket,
+                key.resource_id(),
+                &xid,
+                Some("original-race-application"),
+                original.branch_id(),
+            )
+            .await;
+            let mut statuses = Vec::new();
+            for retry in 0..4 {
+                let response =
+                    callback(&mut socket, -61 - retry, &original, BranchPhase::Rollback).await;
+                statuses.push(response.1);
+                if response == (ResultCode::Success, 8) {
+                    break;
+                }
+                assert_eq!(
+                    response.1, 9,
+                    "registration race became an unretryable result"
+                );
+                tokio::time::sleep(Duration::from_millis(50)).await;
+            }
+            assert_eq!(
+                statuses.last(),
+                Some(&8),
+                "registration/callback race did not finish original rollback"
+            );
+            done.send(statuses).unwrap();
+            idle(&mut socket).await;
+        });
+        // 原登记响应与原回调相邻发送；生产者和控制事务实际竞争相同原键。
+        let outcome = adapter
+            .register_and_start(
+                &manager.client(),
+                identity.xid(),
+                Some("original-race-application".into()),
+            )
+            .await;
+        let statuses = finished.await.unwrap();
+        let started = match outcome {
+            Ok(mut tx) => {
+                let error = tx
+                    .execute(
+                        &SqlRecognizerFactory::recognize(
+                            "INSERT INTO xa_managed(id,v) VALUES(1,42)",
+                        )
+                        .unwrap(),
+                        &[],
+                    )
+                    .await
+                    .unwrap_err();
+                assert_eq!(error.registered_branch().unwrap().identity(), &identity);
+                assert!(tx.prepare().await.is_err());
+                true
+            }
+            Err(error) => {
+                assert_eq!(error.registered_branch().unwrap().identity(), &identity);
+                false
+            }
+        };
+        assert_eq!(
+            store
+                .lease(identity.clone(), BranchPhase::Rollback)
+                .await
+                .unwrap()
+                .state(),
+            Some(BranchRecordState::Completed)
+        );
+        assert!(fixture::business(&mut admin).await.is_empty());
+        cases.push(serde_json::json!({"xid":identity.xid(),"branch_id":identity.branch_id().to_string(),"application_data":identity.application_data(),"callback_statuses":statuses,"scope_started":started,"late_business_rejected":true,"journal":"Completed","business":[]}));
+        manager.shutdown().await.unwrap();
+        server.await.unwrap();
+        source.close().await.unwrap();
+    }
+    fixture::record(
+        "registration-callback-race",
+        serde_json::json!({"cases":cases,"original_registration_each_case":1,"whole_plan_complete":false}),
+    );
+}
+
+#[tokio::test]
 #[ignore = "requires owned MySQL and live original ACTIVE scope"]
 async fn original_active_scope_is_fenced_by_independent_rm_without_caller_drop() {
     fn send<F: Send>(future: F) -> F {
@@ -567,13 +813,42 @@ async fn lost_native_commit_ok_preserves_rm_pending_and_does_not_replay() {
 
 #[tokio::test]
 #[ignore = "requires owned real MySQL and early original registration callback"]
-async fn callback_before_registration_reply_stays_pending_until_original_prepare() {
+async fn callback_before_registration_reply_fences_late_original_start() {
     let (mut admin, source, adapter) = fixture::seed().await;
     let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
     let (manager, store) = rm(adapter.clone(), &listener, "early").await;
     let key = adapter.key().clone();
     let identity =
         BranchIdentity::new("xa:early".into(), 9007199254741002, key.clone(), None).unwrap();
+    assert_eq!(
+        adapter
+            .apply(&identity, BranchPhase::Rollback)
+            .await
+            .unwrap(),
+        BranchResolution::Unknown
+    );
+    assert_eq!(
+        adapter
+            .recover(&identity, BranchPhase::Rollback)
+            .await
+            .unwrap(),
+        BranchResolution::Unknown
+    );
+    let manual_catalog = seata_rm::ResourceCatalog::new(4, 32767).unwrap();
+    manual_catalog.register(adapter.clone()).unwrap();
+    let manual = seata_rm::BranchDispatcher::new(manual_catalog, store.clone());
+    assert_eq!(
+        manual
+            .dispatch(identity.clone(), BranchPhase::Rollback)
+            .await
+            .unwrap(),
+        seata_protocol::BranchStatus::PhaseTwoRollbackFailedRetryable
+    );
+    let before: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM seata_rs_xa_branch_v1")
+        .fetch_one(&mut admin)
+        .await
+        .unwrap();
+    assert_eq!(before, 0, "manual identity minted early rollback authority");
     let peer_identity = identity.clone();
     let (start, ready) = tokio::sync::oneshot::channel();
     let (done, finished) = tokio::sync::oneshot::channel();
@@ -585,8 +860,8 @@ async fn callback_before_registration_reply_stays_pending_until_original_prepare
         );
         assert_eq!(
             callback(&mut socket, -31, &peer_identity, BranchPhase::Rollback).await,
-            (ResultCode::Success, 9),
-            "early rollback falsely confirmed missing registered branch"
+            (ResultCode::Success, 8),
+            "early rollback did not persist fence before registration reply"
         );
         peer::write(
             &mut socket,
@@ -607,17 +882,29 @@ async fn callback_before_registration_reply_stays_pending_until_original_prepare
         done.send(()).unwrap();
         idle(&mut socket).await;
     });
-    let mut tx = adapter
+    let error = adapter
         .register_and_start(&manager.client(), identity.xid(), None)
         .await
-        .unwrap();
-    tx.execute(
-        &SqlRecognizerFactory::recognize("INSERT INTO xa_managed(id,v) VALUES(1,42)").unwrap(),
-        &[],
-    )
-    .await
-    .unwrap();
-    assert_eq!(tx.prepare().await.unwrap().identity(), &identity);
+        .unwrap_err();
+    let receipt = error.registered_branch().unwrap().clone();
+    assert_eq!(receipt.identity(), &identity);
+    assert!(
+        matches!(
+            error,
+            seata_db_mysql::MySqlXaEnlistError::Control {
+                source: seata_db_mysql::DbError::Driver {
+                    code: Some(1062),
+                    ..
+                },
+                ..
+            }
+        ),
+        "late original registration was not durably denied"
+    );
+    assert!(
+        adapter.start_registered(receipt).await.is_err(),
+        "late receipt clone restarted fenced branch"
+    );
     start.send(()).unwrap();
     finished.await.unwrap();
     assert!(fixture::business(&mut admin).await.is_empty());
@@ -629,9 +916,34 @@ async fn callback_before_registration_reply_stays_pending_until_original_prepare
             .state(),
         Some(BranchRecordState::Completed)
     );
+    let enrollment: i64 =
+        sqlx::query_scalar("SELECT COUNT(*) FROM seata_rs_xa_guard_enrollment_v1")
+            .fetch_one(&mut admin)
+            .await
+            .unwrap();
+    assert_eq!(
+        enrollment, 0,
+        "early callback fabricated producer enrollment"
+    );
+    let fresh_source = MySqlDataSource::connect(fixture::owned_mysql::options(None))
+        .await
+        .unwrap();
+    let fresh = MySqlXaResourceManager::new(fresh_source.clone()).unwrap();
+    assert_eq!(
+        fresh
+            .recover(&identity, BranchPhase::Rollback)
+            .await
+            .unwrap(),
+        BranchResolution::Applied
+    );
+    assert!(matches!(
+        fresh.apply(&identity, BranchPhase::Commit).await,
+        Err(seata_rm::RmError::IdentityConflict)
+    ));
+    fresh_source.close().await.unwrap();
     fixture::record(
         "early-callback",
-        serde_json::json!({"branch_id":identity.branch_id().to_string(),"xid":identity.xid(),"callback_statuses":[9,8],"early_result":"Unknown","original_prepared_rollback":"Applied","journal":"Completed","business_rows":0}),
+        serde_json::json!({"branch_id":identity.branch_id().to_string(),"xid":identity.xid(),"callback_statuses":[8,8],"manual_entry_result":"Unknown","manual_dispatch_no_control_rows":true,"producer_enrollment_rows":0,"fresh_manager_terminal":"Applied","opposite_phase_rejected":true,"early_result":"Applied","late_start_rejected":true,"late_receipt_preserved":true,"duplicate_receipt_rejected":true,"journal":"Completed","business_rows":0}),
     );
     manager.shutdown().await.unwrap();
     server.await.unwrap();

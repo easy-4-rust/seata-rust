@@ -103,7 +103,7 @@ def mysql(folder):
     result = load(folder/'result.json')
     need(result['Rust_versions'] == ['1.99', '1.85'] and result['XA_RM_gate_complete'] is False and result['whole_plan_complete'] is False, 'Managed scope changed')
     for rust in result['Rust_versions']:
-        for index in range(10):
+        for index in range(12):
             prefix = rust+'-case-'+str(index)
             need(b'test result: ok. 1 passed;' in (folder/(prefix+'.stdout')).read_bytes(), 'Managed case did not execute')
             need(not (folder/(prefix+'-independent-prepared.stdout')).read_bytes().strip(), 'Managed Prepared remains')
@@ -140,6 +140,27 @@ def mysql(folder):
                 need((folder/(prefix+'-independent-guard.stdout')).read_bytes().strip() == key+b'\t2\t1', 'Active guard tombstone differs')
                 need((folder/(prefix+'-independent-guard-enrollment.stdout')).read_bytes().strip() == key+b'\t0\t0', 'Original guard enrollment differs')
                 need(not (folder/(prefix+'-independent-business.stdout')).read_bytes().strip(), 'Old active business escaped fence')
+            if index == 7:
+                proof = load(folder/'observations'/rust/'case-7/proof/early-callback.json')
+                early_proof(proof)
+                need(not writes, 'Early rollback sent native XA control')
+                key = (proof['xid'].encode().hex().upper()+'\t'+proof['branch_id']).encode()
+                need((folder/(prefix+'-independent-state.stdout')).read_bytes().strip() == key+b'\t2\t1', 'Early denial terminal differs')
+                need((folder/(prefix+'-independent-guard.stdout')).read_bytes().strip() == key+b'\t2\t1', 'Early denial guard differs')
+                need(not (folder/(prefix+'-independent-guard-enrollment.stdout')).read_bytes().strip(), 'Early callback minted producer enrollment')
+            if index == 10:
+                proof = load(folder/'observations'/rust/'case-10/proof/registration-callback-race.json')
+                race_proof(proof)
+                allowed = {("Query\tXA START X'"+row['xid'].encode().hex().upper()+"',X'"+('-'+row['branch_id']).encode().hex().upper()+"',9752").encode() for row in proof['cases']}
+                need(len(writes) == len(set(writes)) and set(writes) <= allowed, 'Registration race repeated or changed native START')
+                need(not (folder/(prefix+'-independent-business.stdout')).read_bytes().strip(), 'Registration race leaked business')
+            if index == 11:
+                proof = load(folder/'observations'/rust/'case-11/proof/early-orphan-evidence.json')
+                orphan_proof(proof)
+                row = proof['cases'][-1]
+                suffix = ("X'"+row['xid'].encode().hex().upper()+"',X'"+('-'+row['branch_id']).encode().hex().upper()+"',9752").encode()
+                need(writes == [b'Query\tXA '+verb+b' '+suffix for verb in [b'START',b'END',b'PREPARE',b'ROLLBACK']], 'Orphan Prepared cleanup command sequence changed')
+                need(not (folder/(prefix+'-independent-business.stdout')).read_bytes().strip(), 'Orphan cleanup leaked business')
     need(load(folder/'cleanup.json')['owned_container_removed'], 'Owned managed MySQL remains')
 
 
@@ -164,6 +185,27 @@ def active_proof(proof):
     need(proof['journal'] == 'Completed' and proof['callback_status'] == 8 and proof['business'] == [] and proof['guard'] == [2, 1], 'Active scope not actually rolled back')
     need(proof['caller_did_not_drop_before_callback'] is True and proof['independent_manager'] is True and proof['late_business_rejected'] is True and proof['late_prepare_rejected'] is True, 'Original active scope lifecycle not verified')
     need(type(proof['phase_zero_monitor_observations']) is int and proof['phase_zero_monitor_observations'] >= 2, 'Healthy original phase-zero scope not retained across actual monitor observations')
+
+
+def early_proof(proof):
+    need(proof['callback_statuses'] == [8,8] and proof['early_result'] == 'Applied' and proof['journal'] == 'Completed' and proof['business_rows'] == 0, 'Early callback did not durably finish rollback')
+    need(proof['manual_entry_result'] == 'Unknown' and proof['manual_dispatch_no_control_rows'] is True and proof['producer_enrollment_rows'] == 0, 'Manual identity minted callback authority')
+    need(proof['late_start_rejected'] is True and proof['late_receipt_preserved'] is True and proof['duplicate_receipt_rejected'] is True and proof['fresh_manager_terminal'] == 'Applied' and proof['opposite_phase_rejected'] is True, 'Late original registration escaped denial')
+
+
+def race_proof(proof):
+    need(len(proof['cases']) == 3 and proof['original_registration_each_case'] == 1 and proof['whole_plan_complete'] is False, 'Registration race scope changed')
+    need(len({row['branch_id'] for row in proof['cases']}) == 3, 'Registration race reused identity')
+    for row in proof['cases']:
+        need(row['callback_statuses'] and row['callback_statuses'][-1] == 8 and set(row['callback_statuses']) <= {8,9}, 'Registration race not completed or incorrectly rejected')
+        need(row['application_data'] == 'original-race-application' and row['late_business_rejected'] is True and row['journal'] == 'Completed' and row['business'] == [], 'Registration race changed original data or leaked business')
+
+
+def orphan_proof(proof):
+    need([row['kind'] for row in proof['cases']] == ['seata_rs_xa_commit_witness_v1','seata_rs_xa_prepare_evidence_v1','seata_rs_xa_guard_enrollment_v1','seata_rs_xa_session_guard_v1','native_prepared'], 'Orphan matrix incomplete')
+    for row in proof['cases']:
+        need(row['first_status'] == (9 if row['kind'] == 'native_prepared' else 10) and row['provisional_denial_rows_after_failure'] == 0 and row['first_journal'] == 'Pending', 'Orphan evidence falsely committed denial')
+        need(row['repaired_status'] == 8 and row['late_start_rejected'] is True and row['journal'] == 'Completed' and row['business'] == [], 'Orphan repair failed original rollback')
 
 
 if __name__ == '__main__':
