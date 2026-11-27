@@ -1,0 +1,48 @@
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error: file is loaded as a module multiple times: `crates\seata_db_mysql\tests\support\tcc_crash_action.rs`
+ --> crates\seata_db_mysql\tests\support\tcc_managed_process_cases.rs:6:1
+  |
+1 |  | //! 真实 TCC 写入子进程强制终止、同库重启及新 RM 的原日志恢复。
+  |  |_________________________________________________^ first loaded here
+...
+6 |  / #[path = "tcc_crash_action.rs"]
+  |
+ ::: crates\seata_db_mysql\tests\support\tcc_crash_action.rs:1:1
+  |
+1 | /  //! 在真实业务 DML 之后保持原事务的进程故障动作。
+2 | |  use super::fixture;
+3 | |  use seata_tcc::{BusinessActionContext, TccBusinessAction, TccError, TccTransaction};
+4 | |  use std::{future::Future, pin::Pin};
+... |
+8 | |  #[derive(Debug)]
+9 | |  pub struct TccCrashAction {
+  | |______________________^ loaded again here
+  |
+  = help: replace all but one `mod` item with `use` items
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#duplicate_mod
+  = note: `-D clippy::duplicate-mod` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(clippy::duplicate_mod)]`
+
+error: file is loaded as a module multiple times: `crates\seata_db_mysql\tests\support\xa_owned_process.rs`
+ --> crates\seata_db_mysql\tests\support\tcc_managed_process_cases.rs:4:1
+  |
+1 |  | //! 真实 TCC 写入子进程强制终止、同库重启及新 RM 的原日志恢复。
+  |  |______________________________^ first loaded here
+...
+4 |  / #[path = "xa_owned_process.rs"]
+  |
+ ::: crates\seata_db_mysql\tests\support\xa_owned_process.rs:1:1
+  |
+1 | /  #![allow(clippy::unwrap_used)]
+2 | |  use std::process::{Child, Command, ExitStatus};
+3 | |  /// 仅管理当前夹具实际创建的进程句柄；失败退出时清理，禁止按外部 PID 终止进程。
+4 | |  /// 对应 Java: 无直接对象；Rust 自有故障进程夹具。
+5 | |  pub struct XaOwnedProcess {
+6 | |      child: Child,
+7 | |  }
+  | |___________________^ loaded again here
+  |
+  = help: replace all but one `mod` item with `use` items
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#duplicate_mod
+
+error: could not compile `seata-db-mysql` (test "live_tcc") due to 2 previous errors

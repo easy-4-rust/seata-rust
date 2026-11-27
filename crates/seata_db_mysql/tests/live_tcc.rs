@@ -21,6 +21,8 @@ mod fixture;
 mod peer;
 #[path = "support/tcc_managed_process_cases.rs"]
 mod process_cases;
+#[path = "support/tcc_dynamic_process_cases.rs"]
+mod dynamic_process_cases;
 #[path = "support/tcc_managed_registration_cases.rs"]
 mod registration_cases;
 use seata_db_mysql::MySqlTccResourceManager;

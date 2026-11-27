@@ -120,6 +120,10 @@ pub async fn callback(
     identity: &BranchIdentity,
     phase: BranchPhase,
 ) -> (ResultCode, u8) {
+    callback_with_read_timeout(socket,id,identity,phase,std::time::Duration::from_secs(3)).await
+}
+/// 参数为原分支、方向及对端读取预算；返回真实响应，TC 重试由调用者显式控制。
+pub async fn callback_with_read_timeout(socket: &mut TcpStream,id:i32,identity:&BranchIdentity,phase:BranchPhase,read_timeout:std::time::Duration) -> (ResultCode,u8) {
     let body = match phase {
         BranchPhase::Commit => Message::BranchCommitRequest(BranchCommitRequest {
             xid: identity.xid().into(),
@@ -139,7 +143,7 @@ pub async fn callback(
     let mut frame = peer::reply(id, body);
     frame.message_type = RequestType::RequestSync;
     peer::write(socket, frame).await;
-    let response = peer::read(socket).await;
+    let response = peer::read_with_timeout(socket,read_timeout).await;
     assert_eq!(response.id, id);
     match response.body.unwrap() {
         Message::BranchCommitResponse(value) => {

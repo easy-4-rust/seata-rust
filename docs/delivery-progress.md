@@ -1329,3 +1329,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## TCC 仅报告清单状态的配置切换（2026-11-28）
 
 修复错误静态配置重放未提交 Try、最新报告参数污染原日志身份的问题。改回报告配置后同一原分支/日志继续空 Cancel；保留可选 020 缺表、原协议 1 Fence 和单连接池。真实 1142 不当作缺表。双版本 8 项函数覆盖 12 个配置场景，6 次隔离错误生产实现失败，68 项证据削弱拒绝。当前源码静态 MySQL 16 项、动态 32 个分支场景、54 项进程/同库恢复和原 Java TC 4/8/12/36 笔矩阵重跑；工作区每版 801 passed / 392 ignored，179 摘要，严格检查通过。[证据](phase-4/evidence/tcc-managed/CONFIGURATION_TRANSITION.md)、[ledger](phase-4/tcc-configuration-transition.json)。完整 TCC、配置竞争/拓扑、生产门禁以及 AT/XA 和 Phase 5–7 仍未完成。
+
+
+## 动态 TCC 进程与同库恢复（2026-11-28）
+
+双版本十个真实事务边界，分别保持数据库运行、正常重启或 SIGKILL 后恢复同目录，共 60 场景通过。包括报告持久化但响应尚未确认的强杀，以及 Try/二阶段未提交或原 COMMIT OK 被截留。独立进程句柄、锁/原包、实例/数据目录、原版本摘要、登记身份 Fence、日志 CRC 和前后 DML 联合核验，1312 项证据削弱拒绝。静态 18 项写入者强杀回归通过；每版工作区 801 passed / 394 ignored，179 摘要，严格检查通过。[证据](phase-4/evidence/tcc-managed/DYNAMIC_PROCESS_DATABASE_RECOVERY.md)、[ledger](phase-4/tcc-dynamic-process-database-recovery.json)。生产源码/迁移未改，测试 V1 对端不计作 Java TC 同时崩溃，完整 TCC、AT/XA 与 Phase 5–7 仍未完成。

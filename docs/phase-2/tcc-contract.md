@@ -133,3 +133,11 @@ ActionContextUtil 的 JSON 边界区分标量与复合值：字符串、布尔�
 
 
 选定配置场景的实际双版本验证、来源反例和兼容性见 [配置切换证据](../phase-4/evidence/tcc-managed/CONFIGURATION_TRANSITION.md) 与 [ledger](../phase-4/tcc-configuration-transition.json)。完整配置竞争/拓扑与 TCC 生产门禁保持开放。
+
+
+### 动态报告的进程与同库恢复（选定矩阵已验证）
+
+将已确认的新参数报告与旧登记身份一起跨写入进程强杀、数据库持续运行/正常重启/崩溃恢复核验。Try 未提交时报告版本可存活，但不得推断业务成功；已提交 Try 及二阶段未知提交须按最新已知回调参数恢复，原日志和 Fence 继续绑定原登记字节。报告版本/SHA、协议 2、实际锁或原 COMMIT OK、原进程句柄、同目录同 UUID 及前后业务 DML 共同证明边界。该矩阵延续既有九阶段，并增加报告已持久化、响应尚未确认时的实际强杀；不替代原 TC 同时崩溃及更广拓扑门禁。
+
+
+双版本十阶段 × 三种数据库模式共 60 场景、1312 项证据削弱及静态 18 项回归通过，见 [动态进程恢复证据](../phase-4/evidence/tcc-managed/DYNAMIC_PROCESS_DATABASE_RECOVERY.md) 与 [ledger](../phase-4/tcc-dynamic-process-database-recovery.json)。原 TC 联合崩溃与完整生产门禁保持开放。

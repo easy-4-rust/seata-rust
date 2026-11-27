@@ -55,10 +55,10 @@ def verify(java, mutations, regressions):
     for version, (folder, _) in zip(['1.99','1.85'], regressions, strict=True):
         sources(folder)
         result = load(folder/'result.json')
-        need(result['Rust'] == version and result['passed'] == 801 and result['ignored'] == 392 and result['successful_test_harness_summaries'] == 179 and result['strict_tcc_all_targets_clippy'] and result['strict_xa_mysql_all_targets_clippy'], 'Full TCC workspace regression differs')
+        need(result['Rust'] == version and result['passed'] == 801 and result['ignored'] == 394 and result['successful_test_harness_summaries'] == 179 and result['strict_tcc_all_targets_clippy'] and result['strict_xa_mysql_all_targets_clippy'], 'Full TCC workspace regression differs')
         need(all(row['exit_code'] == 0 for row in load(folder/'commands.json')), 'Actual workspace/Clippy command failed')
         summaries = re.findall(rb'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;', (folder/'workspace.stdout').read_bytes())
-        need(len(summaries) == 179 and sum(int(r[0]) for r in summaries) == 801 and not any(int(r[1]) for r in summaries) and sum(int(r[2]) for r in summaries) == 392, 'Raw workspace summaries differ')
+        need(len(summaries) == 179 and sum(int(r[0]) for r in summaries) == 801 and not any(int(r[1]) for r in summaries) and sum(int(r[2]) for r in summaries) == 394, 'Raw workspace summaries differ')
         stderr = (folder/'workspace.stderr').read_bytes()
         need(b'tests\\context_and_fence.rs' in stderr and b'tests\\java_context.rs' in stderr and b'tests\\context_util.rs' in stderr, 'New TCC test targets not executed')
 

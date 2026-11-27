@@ -1,0 +1,77 @@
+{
+  "status": "SELECTED_TCC_DYNAMIC_PROCESS_DATABASE_RECOVERY_VERIFIED",
+  "specification": "docs/phase-2/tcc-contract.md",
+  "stages": [
+    "try_uncommitted",
+    "report_waiting",
+    "tried_commit",
+    "tried_cancel",
+    "try_ok",
+    "confirm_uncommitted",
+    "cancel_uncommitted",
+    "confirm_ok",
+    "cancel_ok",
+    "suspended_ok"
+  ],
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "database_modes": [
+    "none",
+    "restart",
+    "crash"
+  ],
+  "actual_dynamic_cases": 60,
+  "evidence_weakenings_rejected": 1312,
+  "static_writer_death_regressions": 18,
+  "workspace_per_version": {
+    "passed": 801,
+    "ignored": 394,
+    "successful_harnesses": 179,
+    "strict_clippy": true
+  },
+  "authority": {
+    "dynamic": {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic-process_20261128_064454_747d5fe1",
+      "catalog_sha256": "b076923f8e91716da7dea20234ac58b4def0dbc208b650262e1e3a7f2a9ec272"
+    },
+    "static": {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_064454_ab967a2f",
+      "catalog_sha256": "0ae75a9c84043b69dce17cc6b3c3334ca4746040393e62fc1c4901edf83f854d"
+    },
+    "rust199": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.99_20261128_064454_5fa6fa77",
+      "catalog_sha256": "06dd8520020b5c28f04385b0be60102bba37bd1a4f0d1f6d15946430634ea6e1"
+    },
+    "rust185": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.85_20261128_064454_2a0bc501",
+      "catalog_sha256": "2550b5137dea91805d7b96da89b6463ac03aa21501f18e4a6f28525a0f0176cb"
+    },
+    "mutations": {
+      "path": "docs/phase-4/evidence/tcc-core/mutations_20261128_051031_07579471",
+      "catalog_sha256": "19afd020290f46dfd6211b03a1a3ca68d0519087ab77befad83de55a366ea4c6"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/tcc-core/java_20261128_002854_2a650ebd",
+      "catalog_sha256": "ce39bb3a202e796a10d1c4d6287f4f3dc3a4ecebfe4db39994fdacc5691dc0ad"
+    }
+  },
+  "validation": {
+    "path": "docs/phase-4/evidence/tcc-managed/validation_dynamic_process_20261128_final",
+    "catalog_sha256": "775f53d2ec86638f04593d5edae435b7d27daab8428a47917a83ec434525b0b5"
+  },
+  "production_unchanged_from": "e243a2cf7d9630a5d11b2fd68fefc89754803d84",
+  "protocol_peer": "owned original V1 peer; not Java TC co-crash",
+  "TCC_full_gate_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "original TC and RM/database joint crash",
+    "wider configuration concurrency/topology",
+    "production permissions/retention/load/operations/review",
+    "Java reflection/object API and AT/XA remaining gates",
+    "Phase 5-7"
+  ],
+  "observed_retryable_recovery_replies": 0,
+  "actual_successful_recovery_callback_replies": 120
+}

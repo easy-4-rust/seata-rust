@@ -1,0 +1,46 @@
+[
+  {
+    "label": "dynamic",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit\\validate_tcc_dynamic_process.py",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-managed\\dynamic-process_20261128_064454_747d5fe1",
+      "b076923f8e91716da7dea20234ac58b4def0dbc208b650262e1e3a7f2a9ec272",
+      "--weakenings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "core",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit\\validate_tcc_core.py",
+      "--java",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\java_20261128_002854_2a650ebd",
+      "--java-sha",
+      "ce39bb3a202e796a10d1c4d6287f4f3dc3a4ecebfe4db39994fdacc5691dc0ad",
+      "--mutations",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\mutations_20261128_051031_07579471",
+      "--mutations-sha",
+      "19afd020290f46dfd6211b03a1a3ca68d0519087ab77befad83de55a366ea4c6",
+      "--rust199",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\regression_1.99_20261128_064454_5fa6fa77",
+      "--rust199-sha",
+      "06dd8520020b5c28f04385b0be60102bba37bd1a4f0d1f6d15946430634ea6e1",
+      "--rust185",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-core\\regression_1.85_20261128_064454_2a0bc501",
+      "--rust185-sha",
+      "2550b5137dea91805d7b96da89b6463ac03aa21501f18e4a6f28525a0f0176cb"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "static",
+    "argv": [
+      "-c",
+      "import sys,json;from pathlib import Path;sys.path.insert(0,sys.argv[1]);from validate_tcc_process import check_case;from validate_structured_logs import catalog,sources;p=Path(sys.argv[2]);catalog(p,sys.argv[3]);sources(p);r=json.loads((p/'result.json').read_bytes());assert r['Rust_versions']==['1.99','1.85'] and r['database_fault_modes']==['none'] and r['selected_case']=='none';assert json.loads((p/'cleanup.json').read_bytes())['owned_container_removed'];assert all(x['exit_code']==(1 if x['label']=='confirm-removed' else 0) for x in json.loads((p/'commands.json').read_bytes()));[check_case(p,v,0,i) for v in ['1.99','1.85'] for i in range(9)];print('Verified eighteen unchanged static TCC writer-death regressions')",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\tools\\formal-source-junit",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-4\\evidence\\tcc-managed\\process_20261128_064454_ab967a2f",
+      "0ae75a9c84043b69dce17cc6b3c3334ca4746040393e62fc1c4901edf83f854d"
+    ],
+    "exit_code": 0
+  }
+]

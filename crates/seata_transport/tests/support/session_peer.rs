@@ -84,9 +84,13 @@ pub fn xid(value: RpcMessage) -> String {
     }
 }
 pub async fn read(stream: &mut TcpStream) -> RpcMessage {
+    read_with_timeout(stream, Duration::from_secs(3)).await
+}
+/// 参数为原 socket 与显式等待上界；返回完整原生帧，不改变客户端的请求或回调期限。
+pub async fn read_with_timeout(stream: &mut TcpStream, timeout: Duration) -> RpcMessage {
     // 固定头+declared body的朴素读取与客户端增量解码器独立，不共享其分片逻辑。
     let mut fixed = [0u8; 16];
-    tokio::time::timeout(Duration::from_secs(3), stream.read_exact(&mut fixed))
+    tokio::time::timeout(timeout, stream.read_exact(&mut fixed))
         .await
         .unwrap()
         .unwrap();
@@ -94,7 +98,7 @@ pub async fn read(stream: &mut TcpStream) -> RpcMessage {
     assert!((16..=65536).contains(&length));
     let mut bytes = fixed.to_vec();
     bytes.resize(length, 0);
-    tokio::time::timeout(Duration::from_secs(3), stream.read_exact(&mut bytes[16..]))
+    tokio::time::timeout(timeout, stream.read_exact(&mut bytes[16..]))
         .await
         .unwrap()
         .unwrap();

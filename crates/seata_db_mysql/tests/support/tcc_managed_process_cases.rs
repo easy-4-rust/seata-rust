@@ -2,9 +2,9 @@
 #![allow(clippy::unwrap_used)]
 use super::{command_proxy::XaCommandProxy, fixture, manager, peer};
 #[path = "xa_owned_process.rs"]
-mod owned_process;
+pub(super) mod owned_process;
 #[path = "tcc_crash_action.rs"]
-mod tcc_crash_action;
+pub(super) mod tcc_crash_action;
 use seata_db_mysql::{MySqlDataSource, MySqlTccResourceManager};
 use seata_protocol::{transaction::BranchRegisterRequest, BranchType, ResultCode};
 use seata_rm::{BranchIdentity, BranchPhase, BranchRecordState, BranchResource};
