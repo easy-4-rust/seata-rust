@@ -1,0 +1,10 @@
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at org.apache.seata.common.json.JsonUtil.<clinit>(JsonUtil.java:40)
+	at org.apache.seata.rm.tcc.api.BusinessActionContextUtil.getBusinessActionContext(BusinessActionContextUtil.java:151)
+	at ContextOracle.observe(ContextOracle.java:15)
+	at ContextOracle.main(ContextOracle.java:40)
+Caused by: org.apache.seata.common.exception.NotSupportYetException: config type can not be null
+	at org.apache.seata.config.ConfigurationFactory.getConfigType(ConfigurationFactory.java:152)
+	at org.apache.seata.config.ConfigurationFactory.maybeNeedOriginFileInstance(ConfigurationFactory.java:133)
+	at org.apache.seata.config.ConfigurationFactory.<clinit>(ConfigurationFactory.java:64)
+	... 4 more

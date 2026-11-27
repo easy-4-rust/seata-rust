@@ -1,0 +1,13 @@
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at org.apache.seata.common.json.JsonUtil.<clinit>(JsonUtil.java:40)
+	at org.apache.seata.rm.tcc.api.BusinessActionContextUtil.getBusinessActionContext(BusinessActionContextUtil.java:151)
+	at ContextOracle.observe(ContextOracle.java:15)
+	at ContextOracle.main(ContextOracle.java:40)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.springframework.core.env.ConfigurableEnvironment.getProperty(String, java.lang.Class)" because "environment" is null
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.getConfigFromEnvironment(SpringBootConfigurationProvider.java:230)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:74)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.getConfig(<generated>)
+	at org.apache.seata.config.ConfigurationFactory.getConfigType(ConfigurationFactory.java:148)
+	at org.apache.seata.config.ConfigurationFactory.maybeNeedOriginFileInstance(ConfigurationFactory.java:133)
+	at org.apache.seata.config.ConfigurationFactory.<clinit>(ConfigurationFactory.java:64)
+	... 4 more

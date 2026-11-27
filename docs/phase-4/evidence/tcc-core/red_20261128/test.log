@@ -1,0 +1,76 @@
+   Compiling serde_json v1.0.140
+   Compiling seata-tcc v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tcc)
+warning: missing documentation for a struct field
+ --> crates\seata_tcc\src\fence\fence_decision.rs:9:23
+  |
+9 |     UpdateAndInvoke { expected: CommonFenceStatus, next: CommonFenceStatus },
+  |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a struct field
+ --> crates\seata_tcc\src\fence\fence_decision.rs:9:52
+  |
+9 |     UpdateAndInvoke { expected: CommonFenceStatus, next: CommonFenceStatus },
+  |                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `seata-tcc` (lib) generated 2 warnings
+warning: missing documentation for the crate
+  --> crates\seata_tcc\tests\context_and_fence.rs:1:1
+   |
+ 1 | / #![allow(clippy::unwrap_used)]
+ 2 | | use seata_tcc::{BusinessActionContext, CommonFenceStatus, FenceDecision, FenceHandler, FenceOperation, TccError};
+ 3 | |
+ 4 | | #[test]
+...  |
+74 | |     for code in [i32::MIN,-1,0,5,255,i32::MAX]{assert_eq!(CommonFenceStatus::try_from(code),Err(TccError::UnknownFenceStatus));}
+75 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: `seata-tcc` (test "context_and_fence") generated 1 warning
+    Finished `test` profile [unoptimized] target(s) in 2.99s
+     Running tests\context_and_fence.rs (E:/workspaces/workspace-github-easy-4-rust/.seata-target-nodebug\debug\deps\context_and_fence-7a938ffcd0cc39ac.exe)
+
+running 4 tests
+test java_blank_null_missing_and_boolean_flag_semantics_are_explicit ... FAILED
+test original_context_values_and_identity_are_preserved_without_floating_point ... FAILED
+test complete_fence_matrix_never_replays_try_or_changes_terminal_direction ... FAILED
+test invalid_context_and_budgets_fail_before_context_can_be_used ... FAILED
+
+failures:
+
+---- java_blank_null_missing_and_boolean_flag_semantics_are_explicit stdout ----
+
+thread 'java_blank_null_missing_and_boolean_flag_semantics_are_explicit' (36768) panicked at crates\seata_tcc\tests\context_and_fence.rs:40:51:
+called `Option::unwrap()` on a `None` value
+
+---- original_context_values_and_identity_are_preserved_without_floating_point stdout ----
+
+thread 'original_context_values_and_identity_are_preserved_without_floating_point' (11764) panicked at crates\seata_tcc\tests\context_and_fence.rs:11:5:
+assertion failed: context.use_common_fence()
+
+---- complete_fence_matrix_never_replays_try_or_changes_terminal_direction stdout ----
+
+thread 'complete_fence_matrix_never_replays_try_or_changes_terminal_direction' (53056) panicked at crates\seata_tcc\tests\context_and_fence.rs:71:67:
+assertion `left == right` failed
+  left: Refuse
+ right: InsertAndInvoke(Tried)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- invalid_context_and_budgets_fail_before_context_can_be_used stdout ----
+
+thread 'invalid_context_and_budgets_fail_before_context_can_be_used' (5644) panicked at crates\seata_tcc\tests\context_and_fence.rs:46:70:
+called `Result::unwrap_err()` on an `Ok` value: BusinessActionContext { has_xid: false, branch_id: 0, action_name_bytes: None, context_keys: 0, .. }
+
+
+failures:
+    complete_fence_matrix_never_replays_try_or_changes_terminal_direction
+    invalid_context_and_budgets_fail_before_context_can_be_used
+    java_blank_null_missing_and_boolean_flag_semantics_are_explicit
+    original_context_values_and_identity_are_preserved_without_floating_point
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-tcc --test context_and_fence`

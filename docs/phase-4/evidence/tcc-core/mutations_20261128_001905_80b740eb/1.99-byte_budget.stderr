@@ -1,0 +1,10 @@
+   Compiling seata-tcc v0.1.0 (D:\codex-builds\seata-tcc-mutations-20261128_001905_80b740eb\crates\seata_tcc)
+error: this arithmetic operation will overflow
+   --> crates\seata_tcc\tests\context_and_fence.rs:105:32
+    |
+105 |     let oversized = " ".repeat(BusinessActionContext::MAX_CONTEXT_BYTES + 1);
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ attempt to compute `usize::MAX + 1_usize`, which would overflow
+    |
+    = note: `#[deny(arithmetic_overflow)]` on by default
+
+error: could not compile `seata-tcc` (test "context_and_fence") due to 1 previous error
