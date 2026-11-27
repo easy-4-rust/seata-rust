@@ -223,3 +223,15 @@ outcome 固定为 completed、unknown_commit、before_commit_error、cancelled�
 
 
 本节选定适配器已通过双 Rust 的十个目标测试与各一项真实 MySQL 接入，真实 TM/RM/回调/数据库 JSON 经过自有文件 sync_all 与回读。四类源码反例每版本目标失败、精确恢复后通过；每版本十五项证据削弱拒绝。最终全工作区各 757 passed / 347 ignored、观测组件全功能/默认/仅日志特性严格检查通过，默认及仅日志依赖均无 SQLx。最终输入、脚本标签和早期原型边界见 [有界日志适配器证据](evidence/structured-logs/README.md)。生产 sink/保留/认证采集告警、应用既有日志组合、丢弃计数的端点导出、跨进程追踪和完整 WP07 继续开放。
+
+
+## 日志交付计数的认证指标导出（实施基线，2026-11-27）
+
+structured_logs 特性下 MetricsSources::with_structured_logs 接收现有只读 StructuredLogSampler，可作为唯一来源或与原 TM/RM/MySQL 来源组合。固定六条序列：seata_structured_logs_accepted_total、seata_structured_logs_received_total，以及 seata_structured_logs_dropped_total 的 reason=full|closed|oversize|invalid。标签不含身份、资源、请求编号、输出路径或凭据。没有该来源时不输出这六条序列。
+
+沿用现有回环 Bearer 端点，采集不读取/消费 JSON 队列，不安装 subscriber，不持有发送、关闭或输出器能力，也不创建递归日志。采样逐字段、进程内饱和累计，accepted/received 不表示持久化或 TC 接收；不能把六计数相加当作业务效果。订阅器/消费者销毁后仍可读取最终累计，采样器不会延长队列寿命。默认特性和仅日志特性仍不增加 SQLx 运行依赖。
+
+验收包括真实授权 HTTP 的六个计数与敏感字段缺席、错误令牌拒绝、关闭排空后最终样本、只保留指标源不延长队列寿命、与真实 TM 请求及原 32 条 TM 指标组合、有效源码反例和双 Rust 回归。生产抓取/告警部署和完整 WP07 继续独立验收。
+
+
+本节选定接入已通过双 Rust 各三个真实认证 HTTP/TM TCP 目标，三个正式源反例每版本失败、精确恢复后通过，每版本九项证据削弱拒绝。最终全工作区各 760 passed / 347 ignored，观测组件全功能、默认、仅日志与仅 MySQL 严格检查通过；默认/仅日志依赖均无 SQLx。独立 oversize/invalid 采样、语法诊断、原 HTTP 和最终输入见 [日志指标接入证据](evidence/structured-log-metrics/README.md)。生产抓取、告警和完整 WP07 仍开放。

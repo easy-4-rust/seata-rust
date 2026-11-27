@@ -7,7 +7,7 @@ use seata_rm::{BranchPhase, RmCallMetricsSampler, RmMetricsSampler, RmOperation}
 use seata_tm::{TmMetricsSampler, TmOperation};
 use seata_transport::{PoolSampler, PoolSlotState};
 
-/// 固定 TM/RM 连接、调用、分支与可选 MySQL 控制事务的只读指标来源；没有用户提供的标签键或标签值。
+/// 固定 TM/RM 连接、调用、分支及可选日志交付/MySQL 控制事务的只读指标来源；没有用户提供的标签键或标签值。
 /// 对应 Java: TM/RM 客户端连接监控视图的组合职责。
 #[derive(Default)]
 pub struct MetricsSources {
@@ -16,6 +16,8 @@ pub struct MetricsSources {
     tm_calls: Option<TmMetricsSampler>,
     rm_branches: Option<RmMetricsSampler>,
     rm_calls: Option<RmCallMetricsSampler>,
+    #[cfg(feature = "structured_logs")]
+    structured_logs: Option<crate::StructuredLogSampler>,
     #[cfg(feature = "mysql")]
     mysql_recovery: Option<MySqlRecoveryMetricsSampler>,
     #[cfg(feature = "mysql")]
@@ -33,6 +35,8 @@ impl MetricsSources {
             tm_calls: None,
             rm_branches: None,
             rm_calls: None,
+            #[cfg(feature = "structured_logs")]
+            structured_logs: None,
             #[cfg(feature = "mysql")]
             mysql_recovery: None,
             #[cfg(feature = "mysql")]
@@ -110,7 +114,19 @@ impl MetricsSources {
         self
     }
 
+    /// 参数为日志适配器的只读计数；返回增加六条固定序列的来源，可独立使用。
+    /// 不保留队列或发送/关闭权限；重复配置替换原日志来源，不输出业务身份。
+    #[cfg(feature = "structured_logs")]
+    pub fn with_structured_logs(mut self, source: crate::StructuredLogSampler) -> Self {
+        self.structured_logs = Some(source);
+        self
+    }
+
     pub(crate) fn is_empty(&self) -> bool {
+        #[cfg(feature = "structured_logs")]
+        if self.structured_logs.is_some() {
+            return false;
+        }
         #[cfg(feature = "mysql")]
         if self.mysql_recovery.is_some()
             || self.mysql_undo.is_some()
@@ -360,6 +376,29 @@ impl MetricsSources {
                         counts.count(*outcome)
                     ));
                 }
+            }
+        }
+        #[cfg(feature = "structured_logs")]
+        if let Some(source) = &self.structured_logs {
+            // 只读原子计数，不触碰 JSON 队列，也不生成本端点自己的日志事件。
+            let counts = source.snapshot();
+            output.push_str(&format!(
+                "seata_structured_logs_accepted_total {}\n",
+                counts.accepted
+            ));
+            output.push_str(&format!(
+                "seata_structured_logs_received_total {}\n",
+                counts.received
+            ));
+            for (reason, count) in [
+                ("full", counts.dropped_full),
+                ("closed", counts.dropped_closed),
+                ("oversize", counts.dropped_oversize),
+                ("invalid", counts.dropped_invalid),
+            ] {
+                output.push_str(&format!(
+                    "seata_structured_logs_dropped_total{{reason=\"{reason}\"}} {count}\n"
+                ));
             }
         }
         output

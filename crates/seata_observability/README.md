@@ -53,6 +53,9 @@ tracing::subscriber::set_global_default(subscriber)?;
 
 应用消费者从 receiver.recv().await 取得完整 UTF-8 JSON 行，负责输出器的权限、刷新和持久化。关闭业务入口并停止 TM/RM 后，通过消费者自己的停止信号调用 receiver.close()，继续 recv 排空已有队列，随后确认输出器完成；直接 Drop 会丢弃未消费记录。
 
-sampler.snapshot() 的 accepted/received 只表示入队与本机交付，full/closed/oversize/invalid 是四类丢弃，不表示文件或 TC 接收。六累计饱和不回绕，采样逐字段读取；采样器不会保留队列。当前不自动导出这六计数到 /metrics。
+sampler.snapshot() 的 accepted/received 只表示入队与本机交付，full/closed/oversize/invalid 是四类丢弃，不表示文件或 TC 接收。六累计饱和不回绕，采样逐字段读取；采样器不会保留队列。可在 structured_logs 特性下显式使用 MetricsSources::default().with_structured_logs(sampler.clone())，通过原回环 Bearer 端点导出六条固定序列；不提供该来源时不导出。
 
 这是专用 Subscriber，只导出七种固定正式事件，不收集任意应用事件或 span。应用已有日志链的组合和跨线程上下文须自行明确集成；组件不自动安装全局值、创建文件/线程或联网。详见 [正式契约与双版本证据](../../docs/phase-2/evidence/structured-logs/README.md)。生产采集、保留、远程认证和告警仍待部署验收。
+
+
+日志来源可独立使用，也可与原 TM/RM/MySQL 来源组合。seata_structured_logs_accepted_total、seata_structured_logs_received_total 和 seata_structured_logs_dropped_total{reason="full|closed|oversize|invalid"} 共六条序列；reason 实际只有四个独立固定值。accepted 与 received 是两个阶段，不能相加作为业务或持久化次数。读取指标不消费队列，不增加日志递归，源和 sampler 均不保留发送器。组件全停后仍可读取最终值；进程重启归零，快照逐字段采样。[认证 HTTP 与真实 TM 验证](../../docs/phase-2/evidence/structured-log-metrics/README.md)。

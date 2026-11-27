@@ -1,0 +1,85 @@
+{
+  "status": "SELECTED_AUTHENTICATED_STRUCTURED_LOG_METRICS_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "base_commit": "d17b75c3e0faf21ca76c7e72c715f8c537bbb0d4",
+  "feature": "structured_logs",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "series_count": 6,
+  "metric_families": [
+    "seata_structured_logs_accepted_total",
+    "seata_structured_logs_received_total",
+    "seata_structured_logs_dropped_total"
+  ],
+  "fixed_drop_reasons": [
+    "full",
+    "closed",
+    "oversize",
+    "invalid"
+  ],
+  "http_live_targets_per_version": 3,
+  "combined_original_TM_series": 32,
+  "source_mutations_per_version": 3,
+  "evidence_negative_controls_per_version": 9,
+  "workspace_tests_per_version": {
+    "passed": 760,
+    "ignored": 347
+  },
+  "strict_Clippy_package": "seata-observability",
+  "strict_feature_profiles": [
+    "default",
+    "structured_logs",
+    "mysql",
+    "all"
+  ],
+  "default_and_log_only_sqlx_runtime_dependency": false,
+  "final_native_inputs_match_current_bytes": true,
+  "production_source_exactly_restored": true,
+  "original_java_tc_rerun": false,
+  "actual_mysql_runtime_in_this_increment": false,
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "production scrape, alerts, authentication gateway, sink and retention deployment",
+    "application log composition and cross-process tracing",
+    "remaining state events and full security/load gates",
+    "independent external review",
+    "remaining WP05-07 and Phase4-7"
+  ],
+  "evidence": {
+    "red": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/red_/20261127_175103_54d80db8",
+      "catalog_sha256": "9be25f1a413a07acb6b3ee1543ce5618ebb13a915c1ecf5eb624bf02dda3bd28"
+    },
+    "rust199": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/rust_/20261127_175853_a52ff787",
+      "catalog_sha256": "a8b7a1752dbde0808b2dca2d5bdc74cb175e3503966cd6e242199a4f999b2017"
+    },
+    "rust185": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/rust_/20261127_175858_2b9e7d0b",
+      "catalog_sha256": "7737e1c9b8d83ddd9db5c1707143129ae747357750a3f1e02c0410580b3f892f"
+    },
+    "source_mutations": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/mutations_20261127_175737_422ec753",
+      "catalog_sha256": "a7c8b637633b888c27a9b2ebbfe527e83b3f366ce23cce3748e334fecadcfde6"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/validation_20261127_175927_7a43e1d4",
+      "catalog_sha256": "627e02bbbd774a9cc91fbf0fbe9cab4bb9a2746ba311f7da1426806ad78cb1e8"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/default_20261127_175853_6c19e0e9",
+      "catalog_sha256": "5764c0a9dcf59f6c177f2d687a8e320d35cce1d2f78075cb8b3b165726a504a9"
+    },
+    "regression_199": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/regression_1.99_20261127_175853_a1aea0ba",
+      "catalog_sha256": "6fdaa3decf4accbd5cf445408bb0892100341aea757f6cc386fbb60754af4e7a"
+    },
+    "regression_185": {
+      "path": "docs/phase-2/evidence/structured-log-metrics/regression_1.85_20261127_175853_7b44bae9",
+      "catalog_sha256": "d87bdf53ce76b826eb1e2808947eda8fff05664e1f874c496e54d00237593ef0"
+    }
+  }
+}

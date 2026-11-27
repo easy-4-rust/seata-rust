@@ -1,0 +1,10 @@
+   Compiling seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+    Finished `test` profile [unoptimized] target(s) in 1.46s
+     Running tests\structured_log_metrics.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\structured_log_metrics-ee693c3d8aa4dcbc.exe)
+
+thread 'authenticated_log_only_endpoint_exports_all_six_quiescent_counts_without_identity' (13776) panicked at crates\seata_observability\tests\structured_log_metrics.rs:25:55:
+assertion `left == right` failed: six structured log metrics missing
+  left: {}
+ right: {"seata_structured_logs_accepted_total": 0, "seata_structured_logs_dropped_total{reason=\"closed\"}": 0, "seata_structured_logs_dropped_total{reason=\"full\"}": 0, "seata_structured_logs_dropped_total{reason=\"invalid\"}": 0, "seata_structured_logs_dropped_total{reason=\"oversize\"}": 0, "seata_structured_logs_received_total": 0}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-observability --test structured_log_metrics`
