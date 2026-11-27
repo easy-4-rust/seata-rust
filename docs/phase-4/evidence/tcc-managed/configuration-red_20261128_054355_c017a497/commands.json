@@ -1,0 +1,254 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-xa-20261128-054355-c017a497",
+      "--label",
+      "seata.structured.logs.owner=0d9e7414dbe743cda80b31079bab8e13",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_structured_logs_mysql_20261128_054355_c017a497/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:63799:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_0d9e7414dbe7",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_0d9e7414dbe7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-0-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "configuration_cases::static_callback_cannot_poison_manifest_only_origin_before_correct_configuration_recovers",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 101
+  },
+  {
+    "label": "1.99-case-0-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM undo_0d9e7414dbe7.tcc_managed ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0-fence",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,status FROM undo_0d9e7414dbe7.seata_rs_tcc_fence_v1 ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COUNT(*) FROM undo_0d9e7414dbe7.undo_log"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0-business-dml",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT command_type,argument FROM mysql.general_log WHERE command_type IN ('Query','Execute') AND (argument LIKE 'INSERT INTO tcc_managed%' OR argument LIKE 'UPDATE tcc_managed%' OR argument LIKE 'DELETE FROM tcc_managed%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0-fence-protocol",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT schema_version FROM undo_0d9e7414dbe7.seata_rs_tcc_fence_v1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0-context",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,revision,HEX(resource_id),HEX(registration_data),HEX(application_data),HEX(server_uuid),schema_version,HEX(checksum) FROM undo_0d9e7414dbe7.seata_rs_tcc_context_v1 ORDER BY revision"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "d70f7f2431b9095036bcd3efd81e4f9dc90a80e6f63003b541232bb06cd55a57"
+    ],
+    "exit_code": 1
+  }
+]

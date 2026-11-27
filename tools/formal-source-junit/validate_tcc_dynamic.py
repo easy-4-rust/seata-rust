@@ -152,6 +152,7 @@ def verify_mutations(folder,digest):
     cleanup=load(folder/'cleanup.json');need(cleanup['owned_container_removed'] and Path(cleanup['isolated_source']).drive.upper()=='D:','Counterexamples touched live workspace or left database')
     targets=[Path(p).resolve() for p in cleanup['isolated_targets']]
     need(len(targets)==14 and len(set(targets))==14,'Counterexamples did not use independent build directories')
+    need(all(target.parent.parent in [Path('D:/codex-builds').resolve(),Path('E:/codex-builds').resolve()] and target.parent.name==Path(cleanup['isolated_source']).parent.name for target in targets),'Counterexample target escaped owned development build roots')
     commands=load(folder/'commands.json')
     artifacts=load(folder/'artifacts.json')
     for version in ['1.99','1.85']:
@@ -169,7 +170,7 @@ def verify_mutations(folder,digest):
         }
         stderr=(folder/(prefix+'.stderr')).read_bytes();need(all(signature in stderr for signature in signatures[row['mutation']]),'Selected behavior assertion missing; arbitrary setup panic is not a counterexample')
         command=[c for c in commands if c['label']==prefix];need(len(command)==1 and command[0]['exit_code']==101 and row['test'] in command[0]['argv'],'Counterexample did not execute selected behavior')
-        artifact=Path(command[0]['argv'][0]).resolve();need(any(artifact.is_relative_to(target) for target in targets),'Mutated artifact escaped isolated D target')
+        artifact=Path(command[0]['argv'][0]).resolve();need(any(artifact.is_relative_to(target) for target in targets),'Mutated artifact escaped isolated build target')
         copies=[a for a in artifacts if a['label']==prefix+'-build'];need(len(copies)==1 and Path(copies[0]['executed_path']).resolve()==artifact and copies[0]['sha256']==row['artifact_sha256'] and any(target.name=='variant-target-'+prefix and Path(copies[0]['built_path']).resolve().is_relative_to(target) and artifact.is_relative_to(target) for target in targets),'Executed isolated copy not bound to actual unique build artifact')
 
 

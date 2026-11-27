@@ -298,6 +298,10 @@ impl MySqlTccResourceManager {
         {
             return Err(DbError::RecoveryConflict);
         }
+        if !self.context_reporting {
+            MySqlTccContextStore::assert_no_dynamic_origin(tx.control()?, &self.source, id, true)
+                .await?;
+        }
         MySqlTccFenceStore::insert(
             tx.control()?,
             &self.source,
@@ -335,6 +339,18 @@ impl MySqlTccResourceManager {
         id: &BranchIdentity,
     ) -> Result<BranchIdentity, DbError> {
         if !self.context_reporting {
+            if MySqlTccFenceStore::read(tx.control()?, &self.source, id, 1)
+                .await?
+                .is_none()
+            {
+                MySqlTccContextStore::assert_no_dynamic_origin(
+                    tx.control()?,
+                    &self.source,
+                    id,
+                    true,
+                )
+                .await?;
+            }
             return Ok(id.clone());
         }
         let status: Option<u8> = sqlx::query_scalar(
@@ -515,14 +531,33 @@ impl BranchResource for MySqlTccResourceManager {
         receipt: &'a BranchCallbackReceipt,
     ) -> Pin<Box<dyn Future<Output = Result<BranchIdentity, RmError>> + Send + 'a>> {
         Box::pin(async move {
-            if !self.context_reporting {
-                return Ok(receipt.identity().clone());
-            }
             self.identity_context(receipt.identity())
                 .map_err(|_| RmError::IdentityConflict)?;
             let result = async {
                 let mut tx = MySqlTccTransaction::begin(&self.source).await?;
-                let original = self.persisted_identity(&mut tx, receipt.identity()).await?;
+                let original = if self.context_reporting {
+                    self.persisted_identity(&mut tx, receipt.identity()).await?
+                } else {
+                    // 静态预检不等待旧 Try 的行锁；先拒绝动态来源，避免把新参数写成原日志身份。
+                    if MySqlTccFenceStore::read_snapshot(
+                        tx.control()?,
+                        &self.source,
+                        receipt.identity(),
+                        1,
+                    )
+                    .await?
+                    .is_none()
+                    {
+                        MySqlTccContextStore::assert_no_dynamic_origin(
+                            tx.control()?,
+                            &self.source,
+                            receipt.identity(),
+                            false,
+                        )
+                        .await?;
+                    }
+                    receipt.identity().clone()
+                };
                 tx.rollback_read_scope().await?;
                 Ok::<_, DbError>(original)
             }

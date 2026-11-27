@@ -1,0 +1,142 @@
+{
+  "status": "SELECTED_TCC_CONFIGURATION_TRANSITIONS_VERIFIED",
+  "specification": "docs/phase-2/tcc-contract.md",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "native_configuration_test_functions": 8,
+  "selected_configuration_scenarios": 12,
+  "actual_configuration_faulty_source_failures": 6,
+  "configuration_evidence_weakenings_rejected": 68,
+  "workspace_per_version": {
+    "passed": 801,
+    "ignored": 392,
+    "successful_test_harness_summaries": 179,
+    "strict_clippy": true
+  },
+  "current_source_regressions": {
+    "static_mysql": 16,
+    "dynamic_branch_scenarios": 32,
+    "process_database_recovery": 54,
+    "normal_static_original_TC": 4,
+    "fault_static_original_TC": 8,
+    "normal_dynamic_original_TC": 12,
+    "fault_dynamic_original_TC": 36
+  },
+  "authority": {
+    "java_core": {
+      "path": "docs/phase-4/evidence/tcc-core/java_20261128_002854_2a650ebd",
+      "catalog_sha256": "ce39bb3a202e796a10d1c4d6287f4f3dc3a4ecebfe4db39994fdacc5691dc0ad"
+    },
+    "java_mutation": {
+      "path": "docs/phase-4/evidence/tcc-core/java-mutation_20261128_023439_58ee39f8",
+      "catalog_sha256": "fa02f2e18caa26b8fdc57390c9f61157a7a6b835c2a5a18a885105b646a15a40"
+    },
+    "mutations": {
+      "path": "docs/phase-4/evidence/tcc-core/mutations_20261128_051031_07579471",
+      "catalog_sha256": "19afd020290f46dfd6211b03a1a3ca68d0519087ab77befad83de55a366ea4c6"
+    },
+    "rust199": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.99_20261128_060128_7432dcd2",
+      "catalog_sha256": "5db4bfb4290552433e5b71df597e198ec5cae36f58d2c33deea4fc1b170b1cd7"
+    },
+    "rust185": {
+      "path": "docs/phase-4/evidence/tcc-core/regression_1.85_20261128_060128_4aa5ed86",
+      "catalog_sha256": "8fb60a4af9896e94a3bb6ddf36c41683f27ce98a73c6cbe646dc7edebcf4de39"
+    },
+    "mysql": {
+      "path": "docs/phase-4/evidence/tcc-managed/mysql_20261128_060128_c41ee82d",
+      "catalog_sha256": "1ea5e8397665043b6a6dc7a0a91bcc29689a47211b951e38df9b4aa20f07a01c"
+    },
+    "process": {
+      "path": "docs/phase-4/evidence/tcc-managed/process_20261128_061252_ec601757",
+      "catalog_sha256": "d885e09153e1140b9cf21cfad6aa94ede7165a526a77c611831deed9b4f30834"
+    },
+    "dynamic": {
+      "path": "docs/phase-4/evidence/tcc-managed/dynamic_20261128_060128_3275a06c",
+      "catalog_sha256": "05745acac07dccdc3f170fee48db2643cfa577cde6f49b5299111fdf009626a5"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/tcc-managed/java_20261128_061252_881d3cf7",
+      "catalog_sha256": "fbdc2f634638dc053dd60f75dbea5ebf77c06c1b2a915609aff14efedfb105e2"
+    },
+    "java_fault": {
+      "path": "docs/phase-4/evidence/tcc-managed/java-fault_20261128_061252_bbdf17ad",
+      "catalog_sha256": "fd4011571b5ba9a7fb5ffa84ad124bfb853dba08688a4a0d04188ac3dd972e93"
+    },
+    "dynamic_java": {
+      "path": "docs/phase-4/evidence/tcc-managed/java-dynamic_20261128_061252_38da0e84",
+      "catalog_sha256": "208a85226cdd2f019d58432613a4568c03013ace8b40393fc36a40f772bd8faa"
+    },
+    "java_util": {
+      "path": "docs/phase-4/evidence/tcc-core/java-util_20261128_042633_6737e2e6",
+      "catalog_sha256": "4faace7353811d43a9efcc45247db7f20add9ec4c9ccc5e1378429fd83ecca68"
+    },
+    "joint": {
+      "path": "docs/phase-4/evidence/tcc-managed/java-dynamic-fault_20261128_061252_99ff9d14",
+      "catalog_sha256": "f424b07432942ac0c12441cd9c8be5b8fdf47210cf5b6907a433ec4fc87c4b42"
+    },
+    "configuration": {
+      "path": "docs/phase-4/evidence/tcc-managed/configuration_20261128_060128_98028e41",
+      "catalog_sha256": "2b2edc6f5ba5ba72bf59950fac60489f4cc4ada46f8cf35c3646b586a03e6e77"
+    },
+    "configuration_mutations": {
+      "path": "docs/phase-4/evidence/tcc-managed/configuration-mutations_20261128_061341_f39c5943",
+      "catalog_sha256": "3cd3ee97c36e65c58ead9f86670b421fa611651f5e3932d23b0009f0d2eaf449"
+    }
+  },
+  "validation": {
+    "path": "docs/phase-4/evidence/tcc-managed/validation_configuration_20261128_final",
+    "catalog_sha256": "f9b2952390babbe01899bfe3e4edc3fe0040bfb754b752acd5f510b310507ebd"
+  },
+  "production": [
+    {
+      "path": "crates/seata_db_mysql/src/mysql_tcc_context_store.rs",
+      "sha256": "55d625c23c28a458f3626f2258fe84f8559b3afa0bbbded1c261084692c3cd9a"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_tcc_fence_store.rs",
+      "sha256": "fdc610c48dcef27608b906d472d9c3bcdf84f1b596d06e3135740915052e1610"
+    },
+    {
+      "path": "crates/seata_db_mysql/src/mysql_tcc_resource_manager.rs",
+      "sha256": "b25933572f73913140311145d4cb909166c7a51468fd634055d0bf180419ef75"
+    }
+  ],
+  "compatibility": {
+    "Java_Undo_format_unchanged": true,
+    "existing_protocol_1_Fence": true,
+    "optional_020_absence": true,
+    "static_max_connections_1": true,
+    "strict_original_registration_and_journal_identity": true
+  },
+  "TCC_full_gate_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "dynamic process/database crash and wider configuration races/topology",
+    "Java reflection/object API coverage",
+    "TCC production performance/operations/review gates",
+    "AT/XA remaining gates and Phase 5-7"
+  ],
+  "behavioral_red": [
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/configuration-red_20261128_054355_c017a497",
+      "catalog_sha256": "22ce7c96fb02cd5307928825363cad74f742f645a7470156bea9d2286d6a5bd2"
+    },
+    {
+      "path": "docs/phase-4/evidence/tcc-managed/configuration-red_20261128_054413_90d7309d",
+      "catalog_sha256": "98356e245476289f7c59802f0ce4326169fd0fd8ccc35bdefc08a6239c66a26a"
+    }
+  ],
+  "diagnostics_only": [
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_054742_3cd874e5",
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_055426_5e673dc8",
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_055526_5c87a5dc",
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_055822_377a8348",
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_055848_03b21909",
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_055926_c2e6b961",
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_060009_aefeac87",
+    "docs/phase-4/evidence/tcc-managed/configuration_20261128_060055_f4c60123"
+  ]
+}

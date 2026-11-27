@@ -61,10 +61,24 @@ def check_case(folder,version,mode,fault,direction,alterations=None):
     for row in callbacks:
         body=row['body'];value,pos=string(body,2);need(row['direction']=='s2c' and value==xid and int.from_bytes(body[pos:pos+8],'big',signed=True)==branch and body[pos+8]==1,'Callback changed original TCC branch')
         value,pos=string(body,pos+9);app,pos=string(body,pos,4);need(value==resource and app==apps[-1] and pos==len(body),'Retry dropped or altered latest context')
+    retryable=[];terminal=[]
     for row in replies:
-        body=row['body'];value,pos=string(body,4)
-        need(row['direction']=='c2s' and body[2:4]==b'\x01\x00' and value==xid and int.from_bytes(body[pos:pos+8],'big',signed=True)==branch and body[pos+8:]==bytes([5 if commit else 8]),'Actual callback terminal reply differs')
+        body=row['body'];pos=3
+        if body[2]==0:
+            msg,pos=string(body,pos)
+            need(report_fault and msg=='resource action not confirmed' and body[pos]==0,'Unrelated/nonretryable failed callback accepted')
+            pos+=1;retryable.append(row)
+        else:
+            need(body[2:4]==b'\x01\x00','Callback response prefix changed')
+            pos=4;terminal.append(row)
+        value,pos=string(body,pos)
+        need(row['direction']=='c2s' and value==xid and int.from_bytes(body[pos:pos+8],'big',signed=True)==branch and body[pos+8:]==bytes([9 if body[2]==0 else 5 if commit else 8]),'Actual callback result/branch/status differs')
         need((row['connection'],row['request_id']) in correlations,'Reply lacks same-session original callback')
+    need(terminal,'No actual terminal success response')
+    for failed in retryable:
+        request=next(r for r in callbacks if (r['connection'],r['request_id'])==(failed['connection'],failed['request_id']))
+        need(failed['action']=='forward' and failed['delivery_count']==1 and request['monotonic_ns']<failed['monotonic_ns'],'Retryable failure not original forwarded response')
+        need(any(success['connection']==failed['connection'] and success['request_id']!=failed['request_id'] and failed['monotonic_ns']<success['monotonic_ns'] and any(earlier['connection']==request['connection'] and earlier['request_id']==success['request_id'] and earlier['body']==request['body'] and earlier['monotonic_ns']<request['monotonic_ns'] for earlier in callbacks) for success in terminal),'Retryable failure lacks concurrent earlier callback and later same-session terminal authority')
     closes=[r for r in events if r['event']=='fault_close']
     if fault=='duplicate':
         injected=[r for r in callbacks if r['action']=='duplicate_original']
@@ -114,6 +128,7 @@ def check_case(folder,version,mode,fault,direction,alterations=None):
     global_log=('Committing global transaction is successfully done, xid = ' if commit else 'Rollback global transaction successfully, xid = ')+xid+'.'
     need(load(case/'original-tc-terminal.json')==dict(xid=xid,branch_id=str(branch),direction=direction,original_branch_success_log=branch_log,original_global_success_log=global_log,Finished_used_as_success=False),'Original TC terminal observation changed')
     logs=alterations.get('tc_logs',(case/'tc-stdout.log').read_bytes());need(branch_log.encode() in logs and global_log.encode() in logs,'Original TC terminal logs missing')
+    if retryable:need(('Rollback branch transaction fail and will retry, xid = '+xid+' branchId = '+str(branch)).encode() in logs,'Original TC did not observe retryable failure for same branch')
     def fact(name):return alterations.get('facts',{}).get(name,(folder/(prefix+'-'+name+'.stdout')).read_bytes().strip().replace(b'\r',b''))
     context_versions(fact('independent-report-context'),xid,branch,original,apps)
     need(fact('final-context')==fact('independent-report-context'),'Context versions changed/deleted during phase two')
@@ -144,7 +159,7 @@ def verify(folder,digest):
     for args in cases(result['Rust_versions'],result['modes'],result['faults']):check_case(folder,*args)
 
 def weakenings(folder):
-    rejected=0;overlaps=0
+    rejected=0;overlaps=0;retry_windows=0
     for version,mode,fault,direction in cases(['1.99','1.85'],MODES,FAULTS):
         args=(folder,version,mode,fault,direction);prefix='-'.join([version,mode,fault,direction]);case=folder/prefix
         proof=load(case/'observations/proof/original-java-tcc-dynamic-fault.json');variants=[]
@@ -163,6 +178,14 @@ def weakenings(folder):
             for key,value in [('frame_hex','00'),('request_frame_sha256','0'*64)]:
                 changed=load(case/'report-held.json');changed[key]=value;variants.append(dict(held=changed))
             for fact in ['held-context','held-tc','held-fence','held-business']:variants.append(dict(facts={fact:b'changed'}))
+        retryable=[r for r in rm if r['kind']==(4 if direction=='commit' else 6) and r['body'][2]==0]
+        if retryable:
+            retry_windows+=1
+            failed=retryable[0]
+            for field,value in [('body',failed['body'][:-1]+b'\x08'),('monotonic_ns',2**63)]:
+                changed=copy.deepcopy(rm);next(r for r in changed if r['index']==failed['index'])[field]=value;variants.append(dict(rm=changed))
+            changed=copy.deepcopy(rm);variants.append(dict(rm=[r for r in changed if r['kind']!=(4 if direction=='commit' else 6) or r['body'][2]!=1]))
+            variants.append(dict(tc_logs=(case/'tc-stdout.log').read_bytes().replace(b'Rollback branch transaction fail and will retry, xid = ',b'no observed retry for ')))
         if fault=='duplicate':
             target=next(r for r in rm if r['kind']==(3 if direction=='commit' else 5) and r['action']=='duplicate_original')
             natural=[r for r in rm if r['kind']==target['kind'] and r['action']=='forward']
@@ -180,7 +203,7 @@ def weakenings(folder):
             try:check_case(*args,change)
             except ValueError:rejected+=1
             else:raise RuntimeError('Dynamic fault evidence weakening accepted')
-    need(rejected==1056+2*overlaps,'Dynamic fault weakening matrix incomplete');return rejected
+    need(rejected==1056+2*overlaps+4*retry_windows,'Dynamic fault weakening matrix incomplete');return rejected
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('folder',type=Path);parser.add_argument('catalog_sha256');parser.add_argument('--weakenings',action='store_true');args=parser.parse_args()

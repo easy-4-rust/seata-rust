@@ -12,6 +12,49 @@ pub(crate) struct MySqlTccContextStore;
 impl MySqlTccContextStore {
     pub(crate) const MAX_REVISION: u16 = 64;
     const TABLE: &'static str = "seata_rs_tcc_context_v1";
+    /// 参数为原事务、数据源、身份及是否锁定当前结果；无 Fence 的静态路径拒绝持久动态来源。
+    /// 预检只读且不锁业务行；执行时以当前读锁定来源/缺口，不能把权限或结构未知当作缺表。
+    pub(crate) async fn assert_no_dynamic_origin(
+        tx: &mut Transaction<'static, MySql>,
+        source: &MySqlDataSource,
+        id: &BranchIdentity,
+        lock_origin: bool,
+    ) -> Result<(), DbError> {
+        match sqlx::query("SELECT 1 FROM seata_rs_tcc_context_v1 LIMIT 0")
+            .execute(&mut **tx)
+            .await
+        {
+            Ok(_) => {}
+            Err(error) => {
+                let missing = error
+                    .as_database_error()
+                    .and_then(|e| e.try_downcast_ref::<sqlx::mysql::MySqlDatabaseError>())
+                    .is_some_and(|e| e.number() == 1146);
+                if missing {
+                    return Ok(());
+                }
+                return Err(DbError::driver("TCC optional context origin", error));
+            }
+        }
+        Self::validate(tx, source).await?;
+        let query = if lock_origin {
+            "SELECT 1 FROM seata_rs_tcc_context_v1 WHERE xid=? AND branch_id=? LIMIT 1 FOR UPDATE"
+        } else {
+            "SELECT 1 FROM seata_rs_tcc_context_v1 WHERE xid=? AND branch_id=? LIMIT 1"
+        };
+        let origin = sqlx::query(query)
+            .bind(id.xid().as_bytes())
+            .bind(id.branch_id())
+            .fetch_optional(&mut **tx)
+            .await
+            .map_err(|e| DbError::driver("TCC static origin guard", e))?;
+        if origin.is_some() {
+            return Err(DbError::Invalid {
+                reason: "TCC durable context requires reporting configuration",
+            });
+        }
+        Ok(())
+    }
     /// 参数为当前事务与原数据源；取得 MDL 后核对精确结构、实例和约束。
     pub(crate) async fn validate(
         tx: &mut Transaction<'static, MySql>,

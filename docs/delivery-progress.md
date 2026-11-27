@@ -1324,3 +1324,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## 动态报告与原 TC 故障验收结果（2026-11-28）
 
 双 Rust 的三种动态路径联合原 TC 回调重复/终态丢失，共 24 笔 Commit/Rollback；原报告成功响应丢失和报告等待中实际取消各 6 笔，由唯一原 Rollback 建立 SUSPENDED，合计 36 笔原全局事务。原完整参数、关联、重新登记、原 TC 终态日志、持久版本/SHA-256、原身份 Fence 和 DML 联合核验通过，报告未确认不提交 Try，空 Cancel 不执行业务。当前源码同时通过 32 个动态分支场景、12 个原 TC 正常动态事务、16 项静态 MySQL、4/8 项正常/故障静态原 TC、54 项进程/同库恢复回归；工作区每版 801 passed / 388 ignored，179 个成功摘要，严格检查通过。60 次错误生产源码实际行为失败，2326 项证据削弱拒绝。[联合故障证据](phase-4/evidence/tcc-managed/DYNAMIC_ORIGINAL_TC_FAULTS.md)、[ledger](phase-4/tcc-dynamic-original-tc-faults.json)。本次只扩展夹具与核验，生产代码/协议/迁移未改变；动态进程/数据库崩溃、并发/跨实例配置与生产门禁，以及 AT/XA 和 Phase 5–7 仍未完成。
+
+
+## TCC 仅报告清单状态的配置切换（2026-11-28）
+
+修复错误静态配置重放未提交 Try、最新报告参数污染原日志身份的问题。改回报告配置后同一原分支/日志继续空 Cancel；保留可选 020 缺表、原协议 1 Fence 和单连接池。真实 1142 不当作缺表。双版本 8 项函数覆盖 12 个配置场景，6 次隔离错误生产实现失败，68 项证据削弱拒绝。当前源码静态 MySQL 16 项、动态 32 个分支场景、54 项进程/同库恢复和原 Java TC 4/8/12/36 笔矩阵重跑；工作区每版 801 passed / 392 ignored，179 摘要，严格检查通过。[证据](phase-4/evidence/tcc-managed/CONFIGURATION_TRANSITION.md)、[ledger](phase-4/tcc-configuration-transition.json)。完整 TCC、配置竞争/拓扑、生产门禁以及 AT/XA 和 Phase 5–7 仍未完成。

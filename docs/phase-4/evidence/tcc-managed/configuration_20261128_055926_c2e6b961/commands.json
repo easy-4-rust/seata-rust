@@ -1,0 +1,146 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-xa-20261128-055926-c2e6b961",
+      "--label",
+      "seata.structured.logs.owner=f4862da894804984861b4b07f77623ef",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_structured_logs_mysql_20261128_055926_c2e6b961/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:63869:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_f4862da89480",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_f4862da89480"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "tcc",
+      "--test",
+      "live_tcc",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-0-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_tcc-80130ca453a94ba3.exe",
+      "configuration_cases::static_origin_access_denial_is_not_missing_table_and_correct_mode_recovers",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 101
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "edb70c9c26404796243ace7163d509c3aae096b9b4da68109e61bbb7c5be90a3"
+    ],
+    "exit_code": 1
+  }
+]

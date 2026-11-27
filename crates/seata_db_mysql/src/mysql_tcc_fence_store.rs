@@ -111,10 +111,39 @@ impl MySqlTccFenceStore {
         id: &BranchIdentity,
         protocol_version: u16,
     ) -> Result<Option<CommonFenceStatus>, DbError> {
+        Self::read_state(tx, source, id, protocol_version, true).await
+    }
+    /// 参数为当前事务、原身份与预期协议；仅核对已提交身份快照，不获取业务行锁或证明终态完成。
+    pub(crate) async fn read_snapshot(
+        tx: &mut Transaction<'static, MySql>,
+        source: &MySqlDataSource,
+        id: &BranchIdentity,
+        protocol_version: u16,
+    ) -> Result<Option<CommonFenceStatus>, DbError> {
+        Self::read_state(tx, source, id, protocol_version, false).await
+    }
+    async fn read_state(
+        tx: &mut Transaction<'static, MySql>,
+        source: &MySqlDataSource,
+        id: &BranchIdentity,
+        protocol_version: u16,
+        lock_row: bool,
+    ) -> Result<Option<CommonFenceStatus>, DbError> {
         if !matches!(protocol_version, 1 | 2) {
             return Err(DbError::RecoveryConflict);
         }
-        let row=sqlx::query("SELECT resource_id,server_uuid,schema_version,status,CAST(application_data <=> ? AS SIGNED),CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) FROM seata_rs_tcc_fence_v1 WHERE xid=? AND branch_id=? FOR UPDATE").bind(id.application_data().map(str::as_bytes)).bind(id.xid().as_bytes()).bind(id.branch_id()).fetch_optional(&mut **tx).await.map_err(|e|DbError::driver("TCC Fence read",e))?;
+        let query = if lock_row {
+            "SELECT resource_id,server_uuid,schema_version,status,CAST(application_data <=> ? AS SIGNED),CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) FROM seata_rs_tcc_fence_v1 WHERE xid=? AND branch_id=? FOR UPDATE"
+        } else {
+            "SELECT resource_id,server_uuid,schema_version,status,CAST(application_data <=> ? AS SIGNED),CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) FROM seata_rs_tcc_fence_v1 WHERE xid=? AND branch_id=?"
+        };
+        let row = sqlx::query(query)
+            .bind(id.application_data().map(str::as_bytes))
+            .bind(id.xid().as_bytes())
+            .bind(id.branch_id())
+            .fetch_optional(&mut **tx)
+            .await
+            .map_err(|e| DbError::driver("TCC Fence read", e))?;
         let Some(row) = row else { return Ok(None) };
         let decode = |e| DbError::driver("TCC Fence identity decode", e);
         let resource: Vec<u8> = row.try_get(0).map_err(decode)?;

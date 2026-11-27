@@ -1,4 +1,5 @@
-"""Execute faulty dynamic-report/RM production sources only in an isolated D workspace and target."""
+"""Execute faulty production sources in isolated D sources/MySQL data and E build targets."""
+import argparse
 import datetime
 import json
 import os
@@ -14,10 +15,11 @@ from inventory_rebuilt import ROOT, BASELINE, need, save, sha
 from mysql_undo_executor_live import IMAGE, PASSWORD
 
 
-def run():
+def run(configuration=False):
     stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8]
-    out=ROOT/'docs/phase-4/evidence/tcc-managed'/('dynamic-mutations_'+stamp);out.mkdir(parents=True)
+    out=ROOT/'docs/phase-4/evidence/tcc-managed'/(('configuration-mutations_' if configuration else 'dynamic-mutations_')+stamp);out.mkdir(parents=True)
     work=Path('D:/codex-builds')/('seata-tcc-dynamic-mutations-'+stamp);work.mkdir();source=work/'source';source.mkdir()
+    target_work=Path('E:/codex-builds')/work.name;target_work.mkdir(parents=True)
     shutil.copytree(ROOT/'crates',source/'crates')
     for name in ['Cargo.toml','Cargo.lock']:shutil.copyfile(ROOT/name,source/name)
     (work/'data').mkdir()
@@ -61,6 +63,22 @@ def run():
         ('cached_completion_unverified','crates/seata_rm/src/manager/branch_dispatcher.rs','resource.verify_callback_completion(receipt).await?;','let _ = receipt;','mysql',integrity),
         ('stable_identity_key_bypass','crates/seata_rm/src/manager/branch_dispatcher.rs','if stable.key() != identity.key() || stable.resource() != identity.resource() {','if false {','rm',rm_test),
     ]
+    configuration_tests=[
+        'configuration_cases::static_try_cannot_replay_original_receipt_after_unconfirmed_dynamic_report',
+        'configuration_cases::static_callback_cannot_poison_manifest_only_origin_before_correct_configuration_recovers',
+        'configuration_cases::static_origin_access_denial_is_not_missing_table_and_correct_mode_recovers',
+    ]
+    if configuration:
+        mutations=[
+            ('static_try_origin_bypassed','crates/seata_db_mysql/src/mysql_tcc_resource_manager.rs',
+             '            MySqlTccContextStore::assert_no_dynamic_origin(tx.control()?, &self.source, id, true)\n                .await?;',
+             '            let _ = id;','mysql',configuration_tests[0]),
+            ('static_prejournal_origin_bypassed','crates/seata_db_mysql/src/mysql_tcc_resource_manager.rs',
+             '                            false,\n                        )\n                        .await?;',
+             '                            false,\n                        )\n                        .await.ok();','mysql',configuration_tests[1]),
+            ('permission_denied_treated_missing','crates/seata_db_mysql/src/mysql_tcc_context_store.rs',
+             'e.number() == 1146','e.number() == 1146 || e.number() == 1142','mysql',configuration_tests[2]),
+        ]
     records=[];container=None;owned_targets=[]
     print('TCC_DYNAMIC_MUTATIONS '+str(out),flush=True)
     try:
@@ -69,10 +87,10 @@ def run():
         while subprocess.run(mysql+['SELECT VERSION()'],env=env,capture_output=True,timeout=10,creationflags=subprocess.CREATE_NO_WINDOW).returncode:need(time.monotonic()<limit,'Owned counterexample database startup timeout');time.sleep(.2)
         command('undo-schema',['docker','exec','-i','-e','MYSQL_PWD='+PASSWORD,container,'mysql','-h127.0.0.1','-uroot',database],input=undo)
         for version in ['1.99','1.85']:
-            env['CARGO_TARGET_DIR']=str(work/('target-'+version))
+            env['CARGO_TARGET_DIR']=str(target_work/('target-'+version))
             baseline_target=Path(env['CARGO_TARGET_DIR']);owned_targets.append(str(baseline_target))
             native=build(version,'mysql',version+'-baseline-build');rm=build(version,'rm',version+'-baseline-rm-build')
-            for index,test in enumerate([normal,errors,integrity,rm_test]):
+            for index,test in enumerate(configuration_tests if configuration else [normal,errors,integrity,rm_test]):
                 observations=work/('baseline-'+version+'-'+str(index));observations.mkdir();env['SEATA_XA_OUT']=str(observations)
                 argv=[rm if test==rm_test else native,test,*([] if test==rm_test else ['--ignored']),'--exact','--nocapture']
                 value=command(version+'-baseline-'+str(index),argv,source);need(b'test result: ok. 1 passed;' in value.stdout,'Isolated behavioral baseline did not execute')
@@ -80,7 +98,7 @@ def run():
                 path=source/relative;original=path.read_bytes();need(original.decode().count(needle)==1,'Dynamic mutation target drift: '+name)
                 prefix=version+'-'+name
                 # 每个错误版本只有一次原生链接；复用依赖缓存，但不复制/覆盖可执行文件。
-                variant_target=work/('variant-target-'+prefix)
+                variant_target=target_work/('variant-target-'+prefix)
                 shutil.copytree(baseline_target,variant_target,ignore=shutil.ignore_patterns('*.exe','*.dll','*.dll.lib','*.pdb','executed'))
                 owned_targets.append(str(variant_target));env['CARGO_TARGET_DIR']=str(variant_target)
                 try:
@@ -96,8 +114,9 @@ def run():
             command('stop',['docker','stop','--time','10',container]);command('remove',['docker','rm',container]);need(command('confirm-removed',['docker','inspect',container],expected=None).returncode!=0,'Counterexample database remains')
         save(out/'cleanup.json',dict(owned_container_removed=bool(container),isolated_source=str(source),isolated_targets=owned_targets))
     for row in inputs:need(sha(ROOT/row['path'])==row['sha256'],'Live source changed during isolated report counterexamples')
-    save(out/'result.json',dict(status='DYNAMIC_REPORT_FAULTY_PRODUCTION_SOURCES_REJECTED',variants_per_version=6,actual_behavioral_failures=12,live_source_mutated=False,TCC_full_gate_complete=False,whole_plan_complete=False))
+    save(out/'result.json',dict(status='CONFIGURATION_FAULTY_PRODUCTION_SOURCES_REJECTED' if configuration else 'DYNAMIC_REPORT_FAULTY_PRODUCTION_SOURCES_REJECTED',variants_per_version=len(mutations),actual_behavioral_failures=len(records),live_source_mutated=False,TCC_full_gate_complete=False,whole_plan_complete=False))
     shutil.copyfile(Path(__file__),out/Path(__file__).name);save(out/'catalog.json',[dict(path=p.relative_to(out).as_posix(),sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()]);print(json.dumps(dict(evidence=str(out),catalog_sha256=sha(out/'catalog.json'))))
 
 
-if __name__=='__main__':run()
+if __name__=='__main__':
+    parser=argparse.ArgumentParser();parser.add_argument('--configuration',action='store_true');run(parser.parse_args().configuration)
