@@ -1,0 +1,29 @@
+   Compiling seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+   Compiling seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+   Compiling seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+   Compiling seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+   Compiling seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+warning: use of deprecated method `std::sync::atomic::Atomic::<u64>::fetch_update`: renamed to `try_update` for consistency
+  --> crates\seata_observability\src\structured_log_sampler.rs:21:63
+   |
+21 | ...   if let Some(counter)=self.0.get(index) {let _=counter.fetch_update(Ordering::Relaxed,Ordering::Relaxed,|v|Some(v.saturating_ad...
+   |                                                             ^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+help: replace the use of the deprecated method
+   |
+21 -         if let Some(counter)=self.0.get(index) {let _=counter.fetch_update(Ordering::Relaxed,Ordering::Relaxed,|v|Some(v.saturating_add(1)));}
+21 +         if let Some(counter)=self.0.get(index) {let _=counter.try_update(Ordering::Relaxed,Ordering::Relaxed,|v|Some(v.saturating_add(1)));}
+   |
+
+warning: `seata-observability` (lib) generated 1 warning (run `cargo fix --lib -p seata-observability` to apply 1 suggestion)
+    Finished `test` profile [unoptimized] target(s) in 2.65s
+     Running tests\structured_logs.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug\debug\deps\structured_logs-47558d2125ba2311.exe)
+
+thread 'unexpected_fields_are_rejected_before_debug_formatting' (41252) panicked at crates\seata_observability\tests\structured_logs.rs:26:5:
+assertion `left == right` failed: unexpected field was formatted before schema rejection
+  left: 1
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-observability --test structured_logs`

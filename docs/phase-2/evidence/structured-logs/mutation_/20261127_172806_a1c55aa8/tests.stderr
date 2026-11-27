@@ -1,0 +1,20 @@
+   Compiling seata-observability v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_observability)
+warning: field `maximum` is never read
+ --> crates\seata_observability\src\log_record_buffer.rs:6:5
+  |
+4 | pub(crate) struct LogRecordBuffer {
+  |                   --------------- field in this struct
+5 |     bytes: Vec<u8>,
+6 |     maximum: usize,
+  |     ^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+
+warning: `seata-observability` (lib) generated 1 warning
+    Finished `test` profile [unoptimized] target(s) in 1.20s
+     Running tests\structured_logs.rs (E:\workspaces\workspace-github-easy-4-rust\.seata-target-nodebug-185\debug\deps\structured_logs-d1466036f77dc27d.exe)
+
+thread 'oversized_fields_and_json_escaping_drop_whole_records' panicked at crates\seata_observability\tests\structured_logs.rs:145:5:
+oversize record escaped JSON budget
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p seata-observability --test structured_logs`

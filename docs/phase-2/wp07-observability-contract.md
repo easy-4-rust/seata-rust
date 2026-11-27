@@ -209,3 +209,17 @@ outcome 固定为 completed、unknown_commit、before_commit_error、cancelled�
 
 
 本节选定范围已通过双 Rust 的真实补偿/只读观察、两个 API 的行锁等待取消及四次原 COMMIT OK 截留/版本，同身份继续观察通过。四类正式源反例每版本均由目标断言拒绝，恢复原字节后最终现场通过；每版本十一项证据削弱拒绝。最终全工作区各 746 passed / 346 ignored，受影响两组件全功能与默认严格检查通过。最终输入、一次共享测试模块重复加载的诊断及剩余边界见 [独立 Undo 事件证据](evidence/mysql-undo-events/README.md)。本轮未重跑原 Java TC，不改变 Java Undo 格式、迁移或兼容路径，不关闭完整 WP07。
+
+
+## 有界结构化日志订阅适配器（实施基线，2026-11-27）
+
+新增默认关闭的 structured_logs 特性。应用显式创建 StructuredLogSubscriber、唯一 StructuredLogReceiver 与只读 StructuredLogSampler，自行选择作用域或全局 Dispatch；组件不替换既有 subscriber、不创建线程或文件、不主动联网。只接受既有七种正式事件模板（TM/RM 出站、RM 决策/回包、MySQL 控制、Undo 结果/摘要拒绝）。按静态 target/字段集合先拒绝额外字段，再格式化；固定消息和枚举/数值/资源摘要校验失败时整条拒绝，不输出部分身份。任意应用 span 字段和未知事件不进入导出。
+
+队列容量 1–4096，单条含换行的 JSON 上限 512–262144 字节，二者乘积不得超过 64 MiB。字段格式化和最终 JSON 编码均有字节预算。所有源字段保留 tracing 原文本语义，包括 Option 的 Debug 表示和 signed request_id；JSON 转义换行与引号，不从 Debug 文本伪造新身份。顶层补充 target、level、timestamp_unix_millis，fields 保存原字段。元数据模板来自可信库调用点；XID 是允许的关联身份，不承诺对用户主动塞入身份本身的任意秘密做语义识别。
+
+事件路径只用 try_send，不等待消费者；满队列丢弃新事件，关闭消费者后丢弃后续事件。accepted/received/full/closed/oversize/invalid 六计数饱和累计、逐字段采样，不宣称落盘或远端接收。Receiver.close 停止接纳并允许取走已有有界队列，之后 recv 返回 None；仅保留 sampler 不延长队列寿命。组件不输出自己的错误日志以避免递归。应用负责消费写入、权限、落盘刷新、远程认证、保留与告警。
+
+验收要求配置/溢出/JSON 转义/超预算/额外敏感字段在格式化前拒绝、并发满队列不阻塞、关闭后排空、所有现有模板、真实 TM/RM TCP 路径和 MySQL 事件接入、双 Rust 回归、有效源代码反例及默认依赖边界。该适配器不等于完整生产日志采集、span 链路追踪或 WP07 完成。
+
+
+本节选定适配器已通过双 Rust 的十个目标测试与各一项真实 MySQL 接入，真实 TM/RM/回调/数据库 JSON 经过自有文件 sync_all 与回读。四类源码反例每版本目标失败、精确恢复后通过；每版本十五项证据削弱拒绝。最终全工作区各 757 passed / 347 ignored、观测组件全功能/默认/仅日志特性严格检查通过，默认及仅日志依赖均无 SQLx。最终输入、脚本标签和早期原型边界见 [有界日志适配器证据](evidence/structured-logs/README.md)。生产 sink/保留/认证采集告警、应用既有日志组合、丢弃计数的端点导出、跨进程追踪和完整 WP07 继续开放。

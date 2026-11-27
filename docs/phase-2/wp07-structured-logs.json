@@ -1,0 +1,79 @@
+{
+  "status": "SELECTED_BOUNDED_STRUCTURED_LOG_ADAPTER_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "base_commit": "2c8588de8bbaeaf5af766da30e76afcb9cc5220c",
+  "feature": "structured_logs",
+  "default_enabled": false,
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "supported_event_templates": 7,
+  "maximum_queue_capacity": 4096,
+  "maximum_record_bytes": 262144,
+  "maximum_queued_content_bytes": 67108864,
+  "source_mutations_per_version": 4,
+  "evidence_negative_controls_per_version": 15,
+  "targeted_non_db_tests_per_version": 10,
+  "actual_mysql_targets_per_version": 1,
+  "workspace_tests_per_version": {
+    "passed": 757,
+    "ignored": 347
+  },
+  "strict_Clippy_packages": [
+    "seata-observability"
+  ],
+  "default_and_structured_log_only_runtime_sqlx_dependency": false,
+  "final_native_inputs_match_current_bytes": true,
+  "mutated_production_files_exactly_restored": true,
+  "lockfile_only_adds_optional_observability_edges": true,
+  "java_tc_rerun_in_this_increment": false,
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "remaining MySQL phase-one and durable branch events",
+    "application logging composition and cross-process span propagation",
+    "production sink, durable retention, remote authenticated collection, alerts and drop-counter metrics export",
+    "production authentication and complete security/load gates",
+    "independent external review",
+    "remaining WP05-07 and Phase4-7"
+  ],
+  "evidence": {
+    "red": {
+      "path": "docs/phase-2/evidence/structured-logs/red_/20261127_170728_c2d1e653",
+      "catalog_sha256": "055458e3bd5113fa406d0aad3e4355833767b0c4b1ed22615193d9b9d96d41af"
+    },
+    "rust199": {
+      "path": "docs/phase-2/evidence/structured-logs/rust_/20261127_174500_7fe04404",
+      "catalog_sha256": "561f414a406db491b05fa39f531d039e209efe3784fc1bc2d79691d02f74455d"
+    },
+    "rust185": {
+      "path": "docs/phase-2/evidence/structured-logs/rust_/20261127_174501_76e3b176",
+      "catalog_sha256": "9d150badbdb22415a6251e2c8169334f390f5d83dc710d3a4cc2070b2e01c07d"
+    },
+    "mysql": {
+      "path": "docs/phase-2/evidence/structured-logs/mysql_20261127_174500_126bb8ef",
+      "catalog_sha256": "71b8f7451e28a7d19bb3648dfec6a675743a9d2badbeabfcaf351f9d7583df36"
+    },
+    "source_mutations": {
+      "path": "docs/phase-2/evidence/structured-logs/mutations_20261127_172738_12ad9565",
+      "catalog_sha256": "ed193a545fbf14f4968ceb7323773edb26587459f8858405f3f13ce9c1791006"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/structured-logs/validation_20261127_174618_34d2e716",
+      "catalog_sha256": "3403a5060539849654c857b4c92398fa623455b54d1211e77c6577380ff4067b"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/structured-logs/default_20261127_173146_b12ac1f7",
+      "catalog_sha256": "dac1670caa9c4eee2654729cddd9179f2de5452aac203d34f4d6acc47bce8441"
+    },
+    "regression_199": {
+      "path": "docs/phase-2/evidence/structured-logs/regression_1.99_20261127_173231_338c46e7",
+      "catalog_sha256": "d118f0ee1bf250c58cdaa59b5f4935e25b55604cfc39ef49aeee0c00f59420ca"
+    },
+    "regression_185": {
+      "path": "docs/phase-2/evidence/structured-logs/regression_1.85_20261127_173231_d827727a",
+      "catalog_sha256": "9c9c031f3eb4e5676248c7fc404aa6f0c5253972120e325ce8cedc7a1e6f2b2e"
+    }
+  }
+}

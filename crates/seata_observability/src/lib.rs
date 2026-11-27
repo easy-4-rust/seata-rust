@@ -8,3 +8,48 @@ pub use metrics_error::MetricsError;
 pub use metrics_exporter::MetricsExporter;
 pub use metrics_server_config::MetricsServerConfig;
 pub use metrics_sources::MetricsSources;
+
+#[cfg(feature = "structured_logs")]
+mod structured_log_config;
+
+#[cfg(feature = "structured_logs")]
+mod structured_log_error;
+
+#[cfg(feature = "structured_logs")]
+mod structured_log_stats;
+
+#[cfg(feature = "structured_logs")]
+mod structured_log_sampler;
+
+#[cfg(feature = "structured_logs")]
+mod structured_log_receiver;
+
+#[cfg(feature = "structured_logs")]
+mod log_record_buffer;
+
+#[cfg(feature = "structured_logs")]
+mod log_record_visitor;
+
+#[cfg(feature = "structured_logs")]
+mod structured_log_schema;
+
+#[cfg(feature = "structured_logs")]
+mod structured_log_subscriber;
+
+#[cfg(feature = "structured_logs")]
+pub use structured_log_config::StructuredLogConfig;
+
+#[cfg(feature = "structured_logs")]
+pub use structured_log_error::StructuredLogError;
+
+#[cfg(feature = "structured_logs")]
+pub use structured_log_stats::StructuredLogStats;
+
+#[cfg(feature = "structured_logs")]
+pub use structured_log_sampler::StructuredLogSampler;
+
+#[cfg(feature = "structured_logs")]
+pub use structured_log_receiver::StructuredLogReceiver;
+
+#[cfg(feature = "structured_logs")]
+pub use structured_log_subscriber::StructuredLogSubscriber;

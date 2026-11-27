@@ -37,3 +37,22 @@ RM 出站来源通过 with_rm_calls(resource_manager.call_metrics_sampler()) 或
 
 
 显式 mysql Cargo 特性增加 with_mysql_recovery(source.recovery_metrics_sampler())，也接受管理器同名只读能力；默认关闭，默认运行依赖中没有 MySQL/SQLx。六种固定控制动作各导出 active、四种互斥 outcome 及两种成功 resolution，共 42 条序列。completed 仅表示控制事务返回 Ok；Applied 包含读取已有终态，不能推断实际业务效果次数。取消与 COMMIT 确认未知分开，不输出业务身份。见 [MySQL 控制指标证据](../../docs/phase-2/evidence/mysql-control-metrics/README.md)。
+
+
+## 可选的结构化日志
+
+启用 structured_logs 后可显式创建固定 Seata 事件的 JSON 订阅器：
+
+```rust,ignore
+use seata_observability::{StructuredLogConfig, StructuredLogSubscriber};
+let (subscriber, mut receiver, sampler) =
+    StructuredLogSubscriber::channel(StructuredLogConfig::new(32, 8192)?);
+// 应用启动时自行选择安装方式；此调用不会替换已存在的全局 subscriber。
+tracing::subscriber::set_global_default(subscriber)?;
+```
+
+应用消费者从 receiver.recv().await 取得完整 UTF-8 JSON 行，负责输出器的权限、刷新和持久化。关闭业务入口并停止 TM/RM 后，通过消费者自己的停止信号调用 receiver.close()，继续 recv 排空已有队列，随后确认输出器完成；直接 Drop 会丢弃未消费记录。
+
+sampler.snapshot() 的 accepted/received 只表示入队与本机交付，full/closed/oversize/invalid 是四类丢弃，不表示文件或 TC 接收。六累计饱和不回绕，采样逐字段读取；采样器不会保留队列。当前不自动导出这六计数到 /metrics。
+
+这是专用 Subscriber，只导出七种固定正式事件，不收集任意应用事件或 span。应用已有日志链的组合和跨线程上下文须自行明确集成；组件不自动安装全局值、创建文件/线程或联网。详见 [正式契约与双版本证据](../../docs/phase-2/evidence/structured-logs/README.md)。生产采集、保留、远程认证和告警仍待部署验收。
