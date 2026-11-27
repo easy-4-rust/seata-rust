@@ -2,6 +2,12 @@
 /// 对应 Java: org.apache.seata.integration.tx.api.fence.exception.CommonFenceException；Rust 输入错误扩展。
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
 pub enum TccError {
+    /// 业务明确失败；持久适配器必须回滚本地 Fence 与业务，不能发布完成。
+    #[error("TCC business action failed")]
+    Business,
+    /// 事务不可继续或执行结果未确认，不向业务公开 SQL/驱动输入。
+    #[error("TCC transaction unavailable")]
+    TransactionUnavailable,
     /// 原应用数据不是可接受的 JSON。
     #[error("invalid TCC context JSON")]
     InvalidContext,

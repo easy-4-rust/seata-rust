@@ -2,6 +2,10 @@
 mod api;
 mod exception;
 mod fence;
+mod tcc_business_action;
+mod tcc_transaction;
 pub use api::BusinessActionContext;
 pub use exception::TccError;
 pub use fence::{CommonFenceStatus, FenceDecision, FenceHandler, FenceOperation};
+pub use tcc_business_action::TccBusinessAction;
+pub use tcc_transaction::TccTransaction;

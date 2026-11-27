@@ -220,3 +220,17 @@ mod mysql_xa_session_fence;
 
 #[cfg(feature = "xa")]
 mod mysql_xa_early_rollback;
+
+#[cfg(feature = "tcc")]
+mod mysql_tcc_resource_manager;
+#[cfg(feature = "tcc")]
+mod mysql_tcc_try_error;
+#[cfg(feature = "tcc")]
+pub use mysql_tcc_resource_manager::MySqlTccResourceManager;
+#[cfg(feature = "tcc")]
+pub use mysql_tcc_try_error::MySqlTccTryError;
+
+#[cfg(feature = "tcc")]
+mod mysql_tcc_fence_store;
+#[cfg(feature = "tcc")]
+mod mysql_tcc_transaction;

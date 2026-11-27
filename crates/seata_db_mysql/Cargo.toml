@@ -8,11 +8,13 @@ repository.workspace = true
 description = "SQLx MySQL AT and optional native XA transaction integration"
 
 [features]
+tcc = ["dep:seata-tcc"]
 xa = ["dep:seata-xa", "dep:futures-util"]
 transport_tls = ["seata-tm/tls", "seata-rm/tls", "seata-transport/tls"]
 experimental_changed_commit = []
 
 [dependencies]
+seata-tcc = { path = "../seata_tcc", optional = true }
 seata-xa = { path = "../seata_xa", optional = true }
 futures-util = { version = "=0.3.34", default-features = false, features = ["std"], optional = true }
 seata-datasource = { path = "../seata_datasource" }

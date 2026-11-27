@@ -33,3 +33,19 @@ stateDiagram-v2
 6. 动态参数报告、生产权限、清理保留策略、负载与运维另行完成，不能删除 Fence 后允许原身份再次 Try。
 
 第 1 项核心增量已取得 [固定执行与源码反例证据](../phase-4/evidence/tcc-core/README.md) 和 [machine ledger](../phase-4/tcc-core.json)：原 Java 实际 21 项上下文、4 个 Fence 码，双 Rust 每版 6 项组件测试/63,488 个 BMP 标量/15 格 Fence 矩阵，七类源码反例每版实际七次行为失败。完整工作区各 791 passed / 372 ignored，TCC/XA/MySQL 严格 Clippy 通过。该结果不证明数据库 Fence；第 2–6 项及全部计划继续开放。不创建第二套 Spec Kit/OpenSpec 事实源。
+
+## 正式登记与 MySQL Fence 执行
+
+显式 `tcc` feature 使用独立 `seata_rs_tcc_fence_v1`，不改变 Java Undo、原 Fence 表或 AT/XA 表。列为原 XID/BranchId、精确动作资源名、原可选应用数据、原实例 UUID、schema_version 和 Fence status，主键为原 XID/BranchId。运行时不建表、不迁移、不删除终态。XID 当前限定非空 UTF-8 至多 128 字节，资源名至多 512 字节，应用数据沿用核心预算；超限在正式登记前拒绝，不截断或 hash。
+
+业务以 `TccBusinessAction` 显式提供 Try/Confirm/Cancel，接收原上下文及仅允许当前有界参数化 DML 的事务能力。该能力不暴露原连接、COMMIT、DDL 或内部表写入；每次 DML 持 MDL 检查当前 InnoDB、触发器与双向外键。失败或取消后作用域封闭，即使业务捕获错误也不能继续或提交。业务返回 false/错误时 Fence 和同库业务一起回滚；外部网络、其他数据库或应用自行产生的副作用不由本地事务能力协调。
+
+Try 必须持正式 ResourceClient 单次成功登记签发的原回执，原模式为 TCC、lock_key=None，原 actionContext 带布尔 useTCCFence=true。唯一插入 TRIED 与 Try 业务同事务提交，已有 Fence 不得重复执行。登记、数据库失败或期限必须保留已取得的原回执；未知登记不合成编号、不重发登记，未知提交不盲重试业务。
+
+Try 错误按 ADR-0008 区分：Refused 表示本次未发送 COMMIT，不否定其他尝试已有的 Fence，也不授权重放；UnknownCommit 表示本次提交命令可能已发送而响应未确认；Deadline 单独保留登记和 Try COMMIT 的发送边界。提交边界只在最终实例/持久性检查之后、即将发送原 COMMIT 前置位，取消不能回退该事实。
+
+RM apply/recover 都先核对当前物理表、持久原身份和实例；在持原行锁的同一事务中比较 TRIED、写原终态并调用对应业务。未知旧尝试只能在同一原行锁排除旧事务、核对真实状态后恢复；已持久同方向终态只返回 Applied，不重复调用业务。相反终态、Confirm 缺行、身份/结构冲突或驱动失败保持 Pending/失败，不能猜成功或换向。
+
+空 Cancel 仅由正式连接产生的不可伪造 BranchCallbackReceipt 经 Pending 之后的 observer 入口仲裁。缺行时唯一插入 SUSPENDED 并确认提交，随后 apply/recover 才能复用该终态。手工裸身份 apply/recover 不能创建空回滚屏障；并发 Try/Cancel 靠原唯一键和行锁仲裁，任何死锁/重复键/未知提交均保留未决，由原 TC 重试同一身份。迟到原登记回执不能穿过已提交 SUSPENDED。
+
+本增量选定实现已取得 [正式 MySQL TCC 验收证据](../phase-4/evidence/tcc-managed/README.md) 和 [machine ledger](../phase-4/mysql-tcc-managed.json)：双版本每版六项真实 MySQL、两项原 TC 全局事务，覆盖实际行锁等待、空 Cancel/迟到 Try、五类身份与四类结构拒绝、三阶段 COMMIT 原 OK 丢失和旧 Pending 恢复，无业务 DML 重放；134 项证据削弱拒绝。工作区各 791 passed / 380 ignored，严格检查通过。完整登记/TC 故障矩阵、进程/数据库恢复、动态报告和生产保留/权限/负载仍未完成，不能据本增量关闭第 2–6 项全部门禁或总计划。

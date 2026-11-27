@@ -15,6 +15,7 @@ def run():
     work = Path('D:/codex-builds')/('seata-tcc-mutations-'+stamp)
     work.mkdir()
     shutil.copytree(ROOT/'crates/seata_tcc', work/'crates/seata_tcc')
+    shutil.copytree(ROOT/'crates/seata_datasource', work/'crates/seata_datasource')
     manifest = (ROOT/'Cargo.toml').read_bytes().decode()
     manifest = manifest[:manifest.index('members = ')]+'members = ["crates/seata_tcc"]\n'+manifest[manifest.index('exclude = '):]
     (work/'Cargo.toml').write_bytes(manifest.encode())
