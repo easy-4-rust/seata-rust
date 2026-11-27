@@ -1,0 +1,333 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-xa-20261127-192905-8e9fc4c8",
+      "--label",
+      "seata.structured.logs.owner=d253798e73d645e9a2a69c8a32d31114",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_structured_logs_mysql_20261127_192905_8e9fc4c8/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:61290:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_d253798e73d6",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_d253798e73d6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "xa",
+      "--test",
+      "live_xa",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "prepared_is_invisible_locked_and_resolved_only_by_original_identity",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-1",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "original_hex_identity_and_active_rollback_preserve_values",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-2",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "failed_or_cancelled_dml_poison_scope_and_close_original_session",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-3",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "unsafe_tables_are_rejected_before_dml",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-4",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "detached_preparation_configuration_is_required",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-5",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "original_xa_ok_loss_preserves_unknown_without_automatic_replay",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-6",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "prepare_original_branches_before_external_restart",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-prepared-before-restart",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "XA RECOVER CONVERT XID"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-invisible-before-restart",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM undo_d253798e73d6.xa_core ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-stop-for-restart",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "20",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-start-for-restart",
+    "argv": [
+      "docker",
+      "start",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-prepared-after-restart",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "XA RECOVER CONVERT XID"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-invisible-after-restart",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM undo_d253798e73d6.xa_core ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-7",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_xa-a5cfbdab88da6148.exe",
+      "recover_original_branches_after_external_restart",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-final-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,v FROM undo_d253798e73d6.xa_core ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-final-prepared",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "XA RECOVER CONVERT XID"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "7e685e3a6889656a0815733b1fbe7a7797011289a7d44953e1ebbb25023e7dad"
+    ],
+    "exit_code": 1
+  }
+]

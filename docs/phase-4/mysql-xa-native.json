@@ -1,0 +1,105 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "architecture": "docs/architecture/SEATA_RUST_ARCHITECTURE_PLAN.md#phase-4xa--tcc",
+  "status": "XA_NATIVE_MYSQL_FOUNDATION_VERIFIED",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "original_Java_pin": "cba73e180fd8896a99df6415b859d275122feaa7",
+  "Java_runtime": "JDK 17.0.12",
+  "original_Java_vectors": 8,
+  "Rust_identity_tests_per_version": 5,
+  "actual_MySQL_cases_per_version": 8,
+  "original_OK_loss_operations_per_version": [
+    "PREPARE",
+    "COMMIT",
+    "ROLLBACK"
+  ],
+  "actual_control_requests_each_OK_loss_operation": 1,
+  "effective_source_controls_rejected": 14,
+  "independent_evidence_controls_rejected_per_version": 12,
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 356,
+    "successful_harness_summaries": 169,
+    "includes_rustdoc": true,
+    "strict_xa_mysql_clippy": true
+  },
+  "production_sources_unchanged_after_full_workspace_runs": true,
+  "final_ignored_native_test_hardened_after_full_runs": "PFS observed row wait before cancellation; both full native matrices, final source archives, default and XA-only strict Clippy rerun",
+  "default_xa_dependency": false,
+  "third_party_versions_changed": 0,
+  "authority": {
+    "java": {
+      "path": "docs/phase-4/evidence/mysql-xa/java_20261127_195047_fdfecd8b",
+      "catalog_sha256": "1a5ad6ebb0026c2ec18638c45708991dda49ce5ff4e39ecfe28efe1f045f77aa"
+    },
+    "rust199": {
+      "path": "docs/phase-4/evidence/mysql-xa/rust_/20261127_200051_778d6eee",
+      "catalog_sha256": "2774341fc63aa249712b71ebedfbcb9032e4f55b2adbaf5752b363fae6a2ff12"
+    },
+    "rust185": {
+      "path": "docs/phase-4/evidence/mysql-xa/rust_/20261127_200052_b78c1a98",
+      "catalog_sha256": "fef031bce6926bbbdc83f331ccb066780fa54c9f539a1c25f49bd05d86786a66"
+    },
+    "mysql": {
+      "path": "docs/phase-4/evidence/mysql-xa/mysql_20261127_200051_2a4729a5",
+      "catalog_sha256": "b183be3516f8192f1a324559abefdc7637731f21850db550a46022fefc93296d"
+    },
+    "mutations": {
+      "path": "docs/phase-4/evidence/mysql-xa/mutations_20261127_194103_d97bda89",
+      "catalog_sha256": "e5507331a342544552307143eab5b2b89fa47f9e21319d052afc423858090dbf"
+    },
+    "regression199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_194653_306db348",
+      "catalog_sha256": "3e74a1e9a80e7547c74d6a4de6f9e7740d839a0aedb0f8303852b239c15bb81d"
+    },
+    "regression185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_194643_0c30a643",
+      "catalog_sha256": "b16a83e6cfda766ec14868751cc459e7a9d2a5dba0deeb7db9dcf1e5bb7f7798"
+    },
+    "default": {
+      "path": "docs/phase-4/evidence/mysql-xa/default_20261127_195244_2204d2f1",
+      "catalog_sha256": "8d3062fe2e8efe196319e5459bb307b9a85c24a20f8d7b82f640440a8ccd44ad"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/mysql-xa/validation_20261127_200233_f805e422",
+      "catalog_sha256": "0046d8aadc37479a62b9b80f7da693f6863a45f3f3f639175c2fcc12b72e398b"
+    }
+  },
+  "Java_objects": [
+    {
+      "name": "XAXid",
+      "Rust": "crates/seata_xa/src/xa_xid.rs",
+      "status": "SELECTED_INTERFACE_CONTRACT"
+    },
+    {
+      "name": "XABranchXid",
+      "Rust": "crates/seata_xa/src/xa_branch_xid.rs",
+      "status": "SELECTED_UTF8_BYTE_IDENTITY",
+      "strict_recovery_decode_differs_from_lossy_Java": true
+    },
+    {
+      "name": "XAXidBuilder",
+      "Rust_method_references": [
+        "XaBranchXid::new",
+        "XaBranchXid::from_components"
+      ],
+      "status": "METHOD_REFERENCE_NOT_COMPLETE_ONE_TO_ONE_PORT"
+    }
+  ],
+  "original_Java_TC_XA_rerun": false,
+  "XA_RM_gate_complete": false,
+  "AT_WP05_gate_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "TC XA BranchRegister/Report integration",
+    "durable original branch ownership and phase-two intent",
+    "XA BranchResource apply/recover and authoritative terminal classification",
+    "cancellation/reply-loss/concurrent callback matrix with original Java TC",
+    "full XA supported SQL/deployment/performance/security acceptance",
+    "TCC/Fence/empty rollback/hanging and all remaining Phase 0–7 requirements"
+  ],
+  "last_input_refresh": "Only test-proxy Chinese API documentation changed; both final identity input seals and both complete native matrices rerun."
+}

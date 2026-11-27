@@ -1,0 +1,41 @@
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.140
+   Compiling seata-xa v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_xa)
+    Finished `test` profile [unoptimized] target(s) in 1.82s
+     Running unittests src\lib.rs (E:/workspaces/workspace-github-easy-4-rust/.seata-target-nodebug\debug\deps\seata_xa-a13fffdba634b10f.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\xa_identity.rs (E:/workspaces/workspace-github-easy-4-rust/.seata-target-nodebug\debug\deps\xa_identity-234f06688a3282c7.exe)
+
+running 4 tests
+test malformed_or_noncanonical_recovery_bytes_are_rejected ... ok
+test java_null_empty_and_zero_remain_distinct_logical_values ... ok
+test java_branch_prefix_and_signed_long_are_preserved ... FAILED
+test mysql_identity_is_bounded_and_uses_only_original_hex ... FAILED
+
+failures:
+
+---- java_branch_prefix_and_signed_long_are_preserved stdout ----
+
+thread 'java_branch_prefix_and_signed_long_are_preserved' (37436) panicked at crates\seata_xa\tests\xa_identity.rs:9:9:
+assertion `left == right` failed: original Java XA branch prefix differs
+  left: [49]
+ right: [45, 49]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- mysql_identity_is_bounded_and_uses_only_original_hex stdout ----
+
+thread 'mysql_identity_is_bounded_and_uses_only_original_hex' (49208) panicked at crates\seata_xa\tests\xa_identity.rs:21:134:
+assertion failed: sql.ends_with(",X'2D3137',9752")
+
+
+failures:
+    java_branch_prefix_and_signed_long_are_preserved
+    mysql_identity_is_bounded_and_uses_only_original_hex
+
+test result: FAILED. 2 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p seata-xa --test xa_identity`

@@ -19,3 +19,12 @@ MySqlDataSource::recovery_metrics_sampler 与 MySqlDataSourceManager::recovery_m
 MySqlControlMetrics 的 active 是在途调用；completed、unknown_commit、before_commit_error、cancelled 互斥结算一次内部 control 调用。completed 不证明业务提交，可能只是持久登记、方向绑定或只读事务。成功结果的 applied/unresolved 单独计数，Applied 包含读取已有终态，不能作为效果执行次数。取消不推断提交边界，提交前错误不证明旧业务没有效果。快照逐字段读取，累计饱和不回绕。
 
 seata-observability 显式启用 mysql 特性后，with_mysql_recovery 可独立导出固定 42 条序列。默认导出器不引入 MySQL/SQLx 运行依赖。此增量覆盖恢复管理器控制事务；一阶段业务提交、独立 Undo API 和完整生产观测门禁仍需分别验收。见 [真实数据库与原 TC 证据](../../docs/phase-2/evidence/mysql-control-metrics/README.md)。
+
+
+## 可选原生 XA
+
+`xa` 特性显式启用独立 `seata-xa` 身份模型和 `MySqlXaDataSource`。先按既有 TLS/实例/schema 验证建立原 MySqlDataSource，再构造 XA 入口。start 消费原 XaBranchXid，execute 沿用参数化 DML/预算及当前 InnoDB/约束检查；prepare 消费活动作用域，发送同连接 END/PREPARE。准备后行锁由 MySQL 持有，原连接退休，新连接可显式 commit_prepared 或 rollback_prepared。XA 不写 AT Undo；禁止 ONE PHASE 和活动作用域的普通本地 COMMIT。
+
+原生操作错误分为本次操作 NotSent、命令可能发送后的 Unknown、只读观察失败与中毒。prepared_observed 只判断当前真正 XA RECOVER 中是否存在完整三分量原身份；缺行或 XAER_NOTA 不能确认原提交/回滚，也不授权自动重试。Drop/取消关闭活动连接，不把 Prepared 当作已回滚。调用方保留原身份并遵循 TC 的事务决定。
+
+此入口尚未接入正式 XA BranchResource/TC 登记、持久结束门闩和权威终态恢复；不能用任意构造的字节身份冒充真实登记。完整 XA RM/Java TC 故障门禁与生产部署仍开放。见 [实施契约](../../docs/phase-2/mysql-xa-contract.md)。AT 默认生产 COMMIT 门槛不因此改变。

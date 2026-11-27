@@ -10,7 +10,7 @@
 | Phase 1 / WP-01–03 | 正式协议模型/编解码、连接/关联、TM、XID/异步上下文及传播、互操作 | 正式Cargo workspace、协议/传输/TM已通过获批首期各组件Gate；全部V1与后续兼容性门槛继续开放 | 首期组件已验证 |
 | Phase 2 / WP-04–06 | 正式 RM、SQL 拦截、镜像、锁、Undo Log、MySQL AT 原子提交/补偿与幂等 | 正式RM拥有登记池/单次出站/原连接批回调/持久日志及强杀恢复；45RM纳入234项双版本回归。WP04首期十项及真实Java六例Gate现已通过；SQL/Undo继续WP05/06，模拟TC和文件资源夹具不证明数据库原子性 | 进行中 |
 | Phase 3 / WP-07 | 生产配置、可观测性、认证/TLS、优雅停机、兼容矩阵、故障/并发/压力/安全审查及操作指南 | 单次探针不是生产就绪验收 | 未完成 |
-| Phase 4 | XA MySQL、两阶段提交、TCC Resource/Fence、空回滚与悬挂 | 需正式规格细化、实现与恢复测试；V1 的暂缓不等于从本目标删除 | 未完成 |
+| Phase 4 | XA MySQL、两阶段提交、TCC Resource/Fence、空回滚与悬挂 | Java XA 身份与 MySQL 原生两阶段已有双版本/真实重启证据；完整 XA Resource/TC 门禁、TCC/Fence/空回滚/悬挂继续 | 进行中 |
 | Phase 5 | Rust TC：Global/Branch Session、状态机、锁、存储、恢复、超时/重试；Java/Go/Rust 兼容 | Java TC 验证不能替代 Rust TC，尚无正式实现 | 未完成 |
 | Phase 6 | 集群/故障切换、注册发现、配置中心、多存储、管理 API、监控审计 | 需按 Phase 5 稳定边界实施与验证 | 未完成 |
 | Phase 7 | Saga、PostgreSQL、SeaORM/SQLx/Diesel、更多 RPC、CLI、扩展插件及 Java 完整能力对照 | 原架构各能力矩阵均纳入目标；不得以目录/feature 声明作为完成证据 | 未完成 |
@@ -1288,3 +1288,12 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 双 Rust 各 10 项原生文件、4 项受控任务、1 项真实 MySQL 场景通过；全工作区各 780 passed / 348 ignored（164 个成功摘要含 rustdoc），严格 Clippy 与默认/文件依赖边界通过。真实 Windows 只读空文件系统同步错误、原 MySQL DDL/fence/关闭池 Unknown 和生产文件回读已核对；五类源码反例 × 双版本共十次拒绝，每版本十项证据削弱拒绝，最终归档源码字节与当前一致。Cargo.lock 未改变。[组件 ledger](phase-2/wp07-structured-log-file.json)、[运行与诊断证据](phase-2/evidence/structured-log-file/README.md)。
 
 本增量只关闭选定单文件输出器的实施项，未完成轮转/保留、部署权限、跨进程采集/追踪、断电/目录持久化及外部审查；完整 WP07 和 Phase 0–7 保持未完成。本轮不重复请求已授权的提交和 GitHub 推送。
+
+
+## 2026-11-27：Phase 4 XA 标识与原生 MySQL 两阶段
+
+新增独立 seata-xa 身份模型和 seata-db-mysql 可选 xa。格式 9752/UTF-8/原分支前缀与固定 Java 源对象实际输出逐字节对照；原生独占作用域支持单次参数化 DML、END/PREPARE、显式原身份 Commit/Rollback 和有界 XA RECOVER。失败/取消封闭作用域，连接退出即退休；NotSent、命令未知与只读观察错误分开，不用缺 Prepared 或 XAER_NOTA 猜终态，不自动重放控制命令。
+
+双 Rust 各 5 项身份、8 项真实 MySQL 场景通过，包含三种真实 OK 截留（各控制命令一次）、先观察实际行锁等待再取消、原进程退出、同一 MySQL 重启和新进程同身份恢复。全工作区各 785 passed / 356 ignored（169 摘要含 rustdoc），最终受影响目标及默认/仅 XA 严格检查通过；原生产字节未变，最后 native 观察补强后已重新执行全部现场/封存。七类生产源反例共十四次拒绝，每版本十二项弱化证据拒绝，独立 SQL/原帧/重启三分量均核验。[XA 契约](phase-2/mysql-xa-contract.md)、[native ledger](phase-4/mysql-xa-native.json)、[证据与诊断](phase-4/evidence/mysql-xa/README.md)。
+
+此为总计划中独立 XA 路径的基础增量，未关闭 XA Resource/RM/Java TC 全局门禁；AT 的外部写入器/TC 锁安全及默认有变化 COMMIT 门槛保持。持久 XA 所有权/方向、正式回调权威恢复、完整故障/SQL/部署门禁，TCC/Fence/空回滚/悬挂和全部 Phase 5–7 继续。

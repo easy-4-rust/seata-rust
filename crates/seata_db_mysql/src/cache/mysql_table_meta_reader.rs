@@ -29,7 +29,8 @@ impl MySqlTableMetaReader {
         Self::verify_engine_definition(definition)
     }
 
-    fn verify_engine_definition(definition: &str) -> Result<(), DbError> {
+    /// 参数为当前 SHOW CREATE TABLE 原定义；仅确认 InnoDB 物理基表，返回固定校验错误。
+    pub(crate) fn verify_engine_definition(definition: &str) -> Result<(), DbError> {
         let engine = definition.lines().find_map(|line| {
             line.strip_prefix(") ENGINE=")
                 .and_then(|options| options.split_ascii_whitespace().next())

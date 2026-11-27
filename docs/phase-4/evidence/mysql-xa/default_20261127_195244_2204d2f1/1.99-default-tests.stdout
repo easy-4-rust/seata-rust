@@ -1,0 +1,616 @@
+
+running 62 tests
+test connection_proxy::tests::ready_undo_publication_after_deadline_keeps_poison_and_rolls_back_original_transaction ... ignored, requires owned real MySQL fixture
+test data_source_proxy::fastjson_tests::fastjson2_split_undo_validates_all_logs_before_writes_and_then_cleans_up ... ignored, requires owned real MySQL with original undo_log schema
+test data_source_proxy::fastjson_tests::fastjson_split_undo_validates_all_logs_before_writes_and_then_cleans_up ... ignored, requires owned real MySQL with original undo_log schema
+test my_sql_undo_metrics_sampler_tests::independent_undo_observations_and_restored_rows_saturate_without_inventing_effects ... ok
+test my_sql_phase_one_metrics_sampler::tests::phase_one_stage_counters_saturate_without_losing_other_stages ... ok
+test my_sql_undo_metrics_sampler_tests::independent_undo_unknown_results_never_become_success_observations ... ok
+test my_sql_phase_one_metrics_sampler::tests::phase_one_stage_errors_preserve_registration_and_commit_boundaries ... ok
+test my_sql_recovery_metrics_sampler::tests::unknown_commit_is_not_completed_or_before_commit_error ... ok
+test mysql::mysql_undo_log_manager::tests::older_control_snapshot_reads_the_later_committed_guard ... ignored, requires owned real MySQL fixture
+test java_tc_mysql_lock_limits::tests::each_group_and_row_gets_its_own_budget_including_pk_colons ... ok
+test my_sql_undo_event::tests::invalid_identity_is_not_logged_and_missing_resource_is_explicit ... ok
+test my_sql_recovery_metrics_sampler::tests::saturation_and_cancelled_guard_are_bounded_and_separate ... ok
+test connection_proxy::tests::affected_business_rows_without_any_undo_image_cannot_be_no_change ... ok
+test mysql::mysql_undo_delete_executor_test::original_mysql_undo_delete_get_undo_rows ... ok
+test mysql::mysql_undo_update_executor_test::original_mysql_undo_update_get_undo_rows ... ok
+test mysql::mysql_undo_insert_executor_test::original_mysql_undo_insert_get_undo_rows ... ok
+test mysql::undo_fragment_layout_tests::layout_preserves_exact_packet_boundary_and_rejects_empty_or_unrepresentable_payloads ... ok
+test data_compare_utils::tests::records_equal_rejects_a_repeated_key_in_either_image ... ok
+test data_compare_utils::tests::records_equal_consumes_distinct_composite_keys_in_any_order ... ok
+test mysql::undo_fragment_layout_tests::layout_withholds_rows_until_every_child_identity_is_known_and_valid ... ok
+test my_sql_undo_metrics_sampler_tests::independent_undo_clones_share_concurrent_counts_and_cancelled_guards ... ok
+test my_sql_phase_one_metrics_sampler::tests::phase_one_stage_clones_share_counts_and_cancelled_scope ... ok
+test mysql::mysql_undo_update_executor_test::original_mysql_undo_update_build_undo_sql ... ok
+test mysql::mysql_undo_insert_executor_test::original_mysql_undo_insert_build_undo_sql ... ok
+test my_sql_undo_event::tests::unwind_and_original_errors_keep_only_identity_and_digest ... ok
+test my_sql_control_event::tests::cancellation_unwind_and_error_logs_keep_only_permitted_correlations ... ok
+test mysql::undo_fragment_layout_tests::original_oversized_log_has_java_fragments_and_exact_root_references ... ok
+test mysql::mysql_undo_delete_executor_test::original_mysql_undo_delete_build_undo_sql ... ok
+test mysql::undo_fragment_sqlx_tests::driver_error_preserves_os_code_and_excludes_custom_message ... ok
+test mysql_failure_report_guard::tests::concurrent_report_attempts_grant_exactly_one_owner ... ok
+test mysql::undo_fragment_sqlx_tests::insert_prepare_disconnect_retains_io_cause ... ok
+test mysql_options_java_tc_profile_tests::fixed_java_tc_mysql_db_profile_enables_all_three_registration_guards ... ok
+test mysql::undo_fragment_sqlx_tests::insert_prepare_rejection_preserves_server_diagnostics ... ok
+test mysql_options_java_tc_profile_tests::fixed_profile_preserves_explicit_tls_and_existing_guard_settings ... ok
+test mysql_options_java_tc_profile_tests::tinyint_profile_binding_also_requires_the_original_resource_binding ... ok
+test mysql::undo_fragment_sqlx_tests::second_fragment_error_stops_root_insert_and_releases_statement ... ok
+test mysql::undo_fragment_cleanup_sqlx_tests::deletes_children_then_root_with_exact_xid_and_parent ... ok
+test undo_rollback_attempt_tests::acquire_failure_and_late_commit_remain_distinguishable ... ok
+test data_source_manager::rollback_sqlx_tests::managed_sqlx_preserves_metadata_failure_after_rollback_error ... ok
+test mysql::undo_fragment_read_sqlx_tests::non_java_whitespace_subid_stops_before_membership_or_body ... ok
+test data_source_proxy::rollback_sqlx_tests::sqlx_closes_failed_rollback_connection_after_error_reply ... ok
+test mysql::undo_fragment_sqlx_tests::original_fragment_insert_binds_and_releases_each_statement ... ok
+test undo_rollback_attempt_tests::dirty_failure_survives_explicit_rollback_error ... ok
+test undo_rollback_attempt_tests::acquired_read_failure_survives_timeout_while_rolling_back ... ok
+test mysql::undo_fragment_cleanup_sqlx_tests::zero_row_or_driver_error_on_child_stops_before_root_delete ... ok
+test mysql::undo_fragment_read_sqlx_tests::duplicate_child_rows_cannot_hide_a_missing_child_before_body_reads ... ok
+test undo::rollback_undo_document_tests::fastjson2_requires_exact_locked_context_and_preflights_jsonb_before_table_lookup ... ok
+test undo::rollback_undo_document_tests::locked_serializer_selects_exact_decoder_before_table_lookup ... ok
+test mysql::undo_fragment_read_sqlx_tests::child_batch_prepare_rejection_preserves_server_diagnostics ... ok
+test mysql_image_reader::tests::oversized_parameters_are_rejected_before_native_argument_encoding ... ok
+test mysql::undo_fragment_read_sqlx_tests::invalid_subid_preserves_numeric_cause_before_sql_for_children ... ok
+test mysql::undo_fragment_read_sqlx_tests::orphan_or_missing_children_are_rejected_before_body_reads ... ok
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_authentication_rejection_keeps_original_identity_and_diagnostics ... ok
+test data_source_manager::rollback_sqlx_tests::managed_acquisition_failure_replies_retryable_and_keeps_durable_pending ... ok
+test mysql::undo_fragment_read_sqlx_tests::fragment_membership_row_order_does_not_change_root_declared_body_order ... ok
+test mysql::undo_fragment_read_sqlx_tests::reads_original_child_ids_payloads_and_closes_the_batch_statement ... ok
+test data_source_manager::rollback_sqlx_tests::managed_acquisition_timeout_preserves_phase_before_begin ... ok
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_pool_deadline_is_reported_before_begin ... ok
+test mysql::undo_fragment_read_sqlx_tests::blank_subid_accepts_root_only_and_still_rejects_orphan ... ok
+test data_source_manager::rollback_sqlx_tests::managed_sqlx_preserves_metadata_failure_after_rollback_timeout ... ok
+test data_source_proxy::rollback_sqlx_tests::sqlx_closes_failed_rollback_connection_without_reply ... ok
+test data_source_proxy::rollback_sqlx_tests::undo_acquisition_obeys_shorter_operation_deadline ... ok
+
+test result: ok. 58 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; finished in 1.53s
+
+
+running 22 tests
+test is_field_equals ... ok
+test fastjson_date_only_spaces_throws_before_parsing ... ok
+test fastjson_source::fastjson_local_date_time_and_null_values ... ok
+test fastjson_source::fastjson_timestamp ... ok
+test fastjson_source::fastjson_decimal ... ok
+test fastjson_source::fastjson_bigint ... ok
+test fastjson_source::fastjson_time ... ok
+test records_source::records_compare_null_empty_and_missing_metadata_in_order ... ok
+test fastjson_source::fastjson_date ... ok
+test local_datetime_source::local_datetime_values_and_errors_match_fixed_jdk ... ok
+test jdbc_utc_source::jdbc_utc_values_and_exception_classes_match_the_fixed_jdk ... ok
+test rows_source::compare_rows_matches_primary_keys_before_temporal_conversion ... ok
+test test_row_list_to_map_with_single_pk ... ok
+test rows_source::compare_rows_selects_the_exact_serializer_name ... ok
+test rows_match_by_composite_key_and_report_missing_columns_or_rows ... ok
+test records_source::records_use_left_keys_then_update_the_original_fields ... ok
+test rows_source::compare_rows_preserves_jdk_bucket_order_and_partial_conversion ... ok
+test is_records_equals ... ok
+test decimal_row_keys_follow_big_decimal_to_string ... ok
+test java_map_preserves_original_duplicate_and_collision_behavior ... ok
+test test_row_list_to_map_with_multip_pk ... ok
+test is_rows_equals ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 1 test
+test linked_escape_handlers_match_all_production_java_providers ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+
+running 2 tests
+test provider_cache_uses_raw_name_and_retries_lookup_after_locale_change ... ok
+test original_mysql_provider_and_table_primary_key_escape_match ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 4 tests
+test tied_highest_priority_reports_configuration_error_without_selecting_a_provider ... ok
+test prototype_is_cached_once_per_raw_request_name ... ok
+test singleton_constructor_can_resolve_its_alias_and_preserves_both_raw_bindings ... ok
+test discovers_linked_mysql_and_constructs_only_winning_singleton_on_concurrent_lookup ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test outer_probe_overwrites_inner_cached_driver_like_original_jvm ... ok
+test driver_profiles_and_resource_identity_match_original_jdbc ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 4 tests
+test test_load_driver_with_empty_class_name ... ignored, requires pinned Java and original H2 JDBC driver
+test test_load_driver_with_invalid_driver_class ... ignored, requires pinned Java and original H2 JDBC driver
+test test_load_driver_with_null_class_name ... ignored, requires pinned Java and original H2 JDBC driver
+test test_load_driver_with_valid_h2_driver ... ignored, requires pinned Java and original H2 JDBC driver
+
+test result: ok. 0 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test unrelated_errors_stop_the_current_stage_without_wrapping ... ok
+test wraps_only_designated_failures_and_keeps_cause_identity ... ok
+test context_prefers_its_class_and_misses_try_the_default_once ... ok
+test loader_dispatch_matches_original_java_profiles ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test equal_top_priority_without_a_link_order_is_rejected ... ok
+test rm_uses_the_highest_order_provider_with_the_druid_name ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 4 tests
+test rust_host_failure_keeps_both_operation_and_close_errors ... ok
+test suppressed_retains_identity_and_does_not_form_an_arc_cycle ... ok
+test db_type_null_reference_preserves_the_close_exception ... ok
+test jdbc_and_xa_initialization_match_original_close_and_registration_order ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test test_init_data_source_resource_success ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_data_source_resource_with_null_meta_data ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_data_source_resource_with_sql_exception ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_ensures_connection_closed ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_success ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_with_null_xa_connection ... ignored, requires pinned JVM and original JDBC drivers
+test test_init_xa_data_source_resource_with_sql_exception ... ignored, requires pinned JVM and original JDBC drivers
+
+test result: ok. 0 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test rm_jdbc_url_type_keeps_locale_fold_and_original_null_error ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 11 tests
+test test_build_resource_id_without_query_string ... ok
+test test_build_resource_id_with_query_string ... ok
+test test_build_resource_id_with_multiple_question_marks ... ok
+test test_build_resource_id_with_empty_query_string ... ok
+test test_db_type_parser_singleton_pattern ... ok
+test test_get_db_type_with_h2_url ... ok
+test test_get_db_type_with_mysql_url ... ok
+test test_db_type_parser_loading ... ok
+test test_get_db_type_with_oracle_url ... ok
+test test_get_db_type_with_postgresql_url ... ok
+test default_parser_is_shared_with_the_registry_and_missing_name_keeps_java_error ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 5 tests
+test blocked_dml_cancellation_and_deadline_are_not_successful_execution ... ignored, requires owned real MySQL fixture
+test completed_dml_is_not_committed_and_delegated_rollback_counts_once ... ignored, requires owned real MySQL fixture
+test input_and_driver_errors_keep_the_original_transaction_uncommitted ... ignored, requires owned real MySQL fixture
+test prepared_and_checked_delegates_each_count_one_explicit_rollback ... ignored, requires owned real MySQL fixture
+test rollback_response_withheld_keeps_cancellation_separate_from_unconfirmed ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test original_java_tc_callback_recovers_lost_registration_with_real_branch_id_and_no_business_commit ... ignored, requires pinned original Java TC, raw registration-loss proxy and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 18 tests
+test callback_before_positive_response_prevents_late_none_lock_key_enrollment ... ignored, requires owned real MySQL fixture
+test expanded_schema_preserves_known_receipt_and_enrollment_remains_idempotent ... ignored, requires owned real MySQL fixture
+test legacy_recovery::absent_enrollment_is_unknown_but_enrolled_missing_undo_fences_and_finishes_atomically ... ignored, requires owned real MySQL fixture
+test legacy_recovery::cancelled_dispatch_retains_pending_and_new_process_recovers_original_identity ... ignored, requires owned real MySQL fixture and exact recovery child artifact
+test legacy_recovery::collation_alias_guard_cannot_publish_another_xid_terminal ... ignored, requires owned real MySQL fixture
+test legacy_recovery::compensation_and_terminal_are_atomic_and_duplicate_callbacks_preserve_later_business ... ignored, requires owned real MySQL fixture
+test legacy_recovery::concurrent_and_delayed_attempts_observe_one_durable_terminal ... ignored, requires owned real MySQL fixture
+test legacy_recovery::dirty_failure_keeps_undo_and_persistent_direction_for_next_recovery ... ignored, requires owned real MySQL fixture
+test legacy_recovery::enrollment_is_idempotent_but_does_not_overwrite_application_or_profile ... ignored, requires owned real MySQL fixture
+test legacy_recovery::recovery_schema_drift_and_triggers_are_rejected_without_enrollment ... ignored, requires owned real MySQL fixture
+test legacy_recovery::recovery_table_is_reserved_before_any_business_dml ... ignored, requires owned real MySQL fixture
+test legacy_recovery::terminal_write_denial_rolls_back_already_executed_compensation_and_undo_delete ... ignored, requires owned real MySQL fixture
+test legacy_recovery::unsupported_commit_binds_direction_without_reporting_success_or_deleting_undo ... ignored, requires owned real MySQL fixture
+test lost_registration_response_is_handed_to_validated_callback_without_forged_success_receipt ... ignored, requires owned real MySQL fixture
+test manual_dispatch_cannot_mint_callback_ownership ... ignored, requires owned real MySQL fixture
+test migration::archived_old_reader_rejects_expansion_and_current_child_recovers_original_pending ... ignored, requires owned real MySQL fixture
+test migration::legacy_known_callback_works_but_missing_ownership_requires_explicit_migration ... ignored, requires owned real MySQL fixture
+test migration::malformed_origin_version_phase_lock_knowledge_and_default_are_rejected_without_undo ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 18 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test callback_origin_commit_unknown_stays_pending_and_original_retry_finishes ... ignored, requires owned MySQL and original packet callback-origin COMMIT observer
+test compensation_acquisition_rejection_preserves_normal_until_tc_retries ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 6 tests
+test java_affected_image_guard::original_java_tc_rejects_native_affected_count_without_images ... ignored, requires original Java TC and owned MySQL affected-row packet fault
+test java_no_change_commit::original_java_tc_no_change_commit_leaves_no_branch ... ignored, requires pinned Java TC and an owned real MySQL passthrough observer
+test java_no_change_commit::original_java_tc_no_change_lost_ack_remains_unknown_without_branch ... ignored, requires pinned Java TC and an owned MySQL COMMIT acknowledgment loss observer
+test java_no_change_commit::original_java_tc_rejects_finished_branch_with_exact_rm_call_metrics ... ignored, requires pinned original Java TC and owned MySQL
+test java_no_change_commit::original_java_tc_single_slot_pool_recovers_after_commit_timeout ... ignored, requires pinned Java TC and owned MySQL with its original COMMIT OK held
+test original_java_tc_preparation_keeps_normal_undo_local_then_rolls_back_before_the_real_callback ... ignored, requires pinned original Java TC, raw passthrough observer and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 6 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 12 tests
+test cases::actual_v2_reader_refuses_fourteen_columns_and_current_reader_recovers_pending_rollback ... ignored, requires owned real MySQL fixture and archived actual v2 executable
+test cases::normal_guard_absent_and_many_orphan_children_cleanup_preserves_other_branches ... ignored, requires owned real MySQL fixture
+test cases::public_commit_cannot_authorize_or_cleanup_new_physical_records ... ignored, requires owned real MySQL fixture
+test cases::upgrading_real_legacy_phase_one_rows_preserves_bytes_and_requires_fresh_callback ... ignored, requires owned real MySQL fixture
+test guard_cases::authorized_cleanup_deadline_and_mid_wait_cancellation_preserve_logs_then_original_callback_recovers ... ignored, requires owned real MySQL fixture
+test guard_cases::collation_aliases_and_distinct_suffixes_never_delete_other_original_identities ... ignored, requires owned real MySQL fixture
+test guard_cases::illegal_direction_authority_and_dual_terminal_combinations_are_never_applied ... ignored, requires owned real MySQL fixture
+test real_commit_callback_atomically_cleans_root_children_and_terminal_without_business_changes ... ignored, requires owned real MySQL fixture
+test recovery_cases::early_real_commit_decision_blocks_late_precommit_and_original_local_normal_is_rolled_back ... ignored, requires owned real MySQL fixture
+test recovery_cases::malformed_commit_capability_shape_defaults_and_trigger_never_authorize_or_clean ... ignored, requires owned real MySQL fixture
+test recovery_cases::parallel_independent_recovery_instances_serialize_one_cleanup_effect ... ignored, requires owned real MySQL fixture
+test recovery_cases::terminal_update_permission_denial_rolls_back_actual_deletion_and_recovers_after_grant ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 3 tests
+test lock_guard_cases::native_registration_guard_preserves_exclusive_tc_lock_and_releases_on_original_rollback ... ignored, requires pinned original Java TC and owned MySQL lock store
+test original_java_tc_commit_authorizes_and_cleans_manually_committed_fixture_without_business_replay ... ignored, requires pinned original Java TC and owned MySQL
+test original_java_tc_retries_compensation_after_mysql_acquisition_rejection ... ignored, requires pinned Java TC, two loopback observers and owned real MySQL
+
+test result: ok. 0 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test original_cleanup_failure_retains_pending_and_actual_process_recovers_without_business_replay ... ignored, requires owned real MySQL with targeted commit cleanup fault observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 17 tests
+test actual_recovery_lock_wait_deadline_and_cancellation_consume_original_scope ... ignored, requires owned real MySQL fixture
+test callback_bound_before_check_never_allows_check_even_during_undo_lock_cycle ... ignored, requires owned real MySQL fixture
+test changed_identity_direction_origin_or_schema_never_obtains_commit_arbitration ... ignored, requires owned real MySQL fixture
+test changed_registered_scope_cannot_use_no_change_commit ... ignored, requires owned real MySQL fixture
+test checked_drop_and_unpolled_check_drop_roll_back_and_release_all_original_locks ... ignored, requires owned real MySQL fixture
+test first_phase_commit_requires_staged_004_witness ... ignored, requires owned real MySQL fixture
+test late_recovery_definition_changes_cannot_publish_first_phase_witness ... ignored, requires owned real MySQL fixture
+test late_valid_witness_migration_cannot_change_prepared_scope_capability ... ignored, requires owned real MySQL fixture
+test managed_rollback_fence_cases::managed_rollback_fences_a_stale_writer_after_compensating_normal_undo ... ignored, requires owned real MySQL fixture
+test no_change_checked_scope_sends_one_real_commit_without_branch_or_undo ... ignored, requires owned real MySQL fixture
+test no_change_checks_do_not_require_recovery_or_undo_tables_or_register_a_branch ... ignored, requires owned real MySQL fixture
+test no_change_commit_driver_loss_is_unknown_even_without_a_tc_branch ... ignored, requires owned real MySQL fixture
+test original_callback_after_local_check_waits_then_finishes_after_local_rollback ... ignored, requires owned real MySQL fixture
+test original_eleven_column_and_migrated_version_one_records_keep_commit_checks_compatible ... ignored, requires owned real MySQL fixture
+test original_transaction_holds_commit_arbitration_until_whole_rollback ... ignored, requires owned real MySQL fixture
+test witness_cases::first_phase_witness_is_written_in_the_original_transaction_and_rolls_back_with_it ... ignored, requires owned real MySQL fixture
+test witness_cases::first_phase_witness_observation_preserves_legacy_and_survives_real_callback_cleanup ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 17 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 3 tests
+test actual_row_wait_cancellation_and_closed_pool_keep_commit_unattempted ... ignored, requires owned real MySQL fixture
+test original_commit_ok_held_is_unknown_or_cancelled_then_same_branch_recovers ... ignored, requires owned real MySQL fixture
+test real_control_writes_and_duplicate_reads_emit_distinct_commit_boundaries ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 17 tests
+test after_image_over_budget_is_not_published_and_the_business_effects_roll_back ... ignored, requires owned real MySQL fixture
+test decimal_text_primary_assignment_cannot_capture_an_adjacent_old_row ... ignored, requires owned real MySQL fixture
+test duplicate_key_failure_poisons_and_rollback_removes_all_prior_local_effects ... ignored, requires owned real MySQL fixture
+test execution_failures::business_table_matching_next_internal_name_is_not_shadowed_or_dropped ... ignored, requires owned real MySQL fixture
+test execution_failures::cancellation_after_business_before_after_image_releases_the_actual_write ... ignored, requires owned real MySQL fixture
+test execution_failures::cancellation_after_key_assignment_cleans_temp_and_rolls_back_prior_business ... ignored, requires owned real MySQL fixture
+test execution_failures::cumulative_undo_payload_limit_poisons_and_rolls_back_all_statements ... ignored, requires owned real MySQL fixture
+test execution_failures::deadline_after_key_assignment_cleans_temp_and_rolls_back_prior_business ... ignored, requires owned real MySQL fixture
+test execution_failures::invalid_key_assignment_leaves_no_committed_effect_and_session_exit_cleans_temp ... ignored, requires owned real MySQL fixture
+test execution_failures::missing_temp_permission_poisons_without_committing_prior_business ... ignored, requires owned real MySQL fixture
+test insert_uses_explicit_composite_keys_and_native_exact_values_without_committing ... ignored, requires owned real MySQL fixture
+test key_assignment_staging_preserves_char_binary_decimal_and_does_not_commit_prior_work ... ignored, requires owned real MySQL fixture
+test local_parameter_rejection_preserves_the_scope_without_appending_undo ... ignored, requires owned real MySQL fixture
+test missing_explicit_insert_key_and_primary_key_update_fail_before_business_execution ... ignored, requires owned real MySQL fixture
+test no_match_and_noop_do_not_invent_rows_or_require_a_changed_row_count ... ignored, requires owned real MySQL fixture
+test pending_undo_record_limit_poisons_and_forces_full_rollback ... ignored, requires owned real MySQL fixture
+test update_after_image_uses_original_keys_when_the_where_column_changes_then_delete_is_empty ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 17 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test enrollment_commit_loss_retains_known_receipt_and_original_callback_can_finish ... ignored, requires owned MySQL with original enrollment COMMIT fault observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test original_java_tc_preparation_keeps_normal_undo_local_then_rolls_back_before_the_real_callback ... ignored, requires pinned original Java TC, raw passthrough observer and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 14 tests
+test cases::canceled_real_prepare_keeps_registration_unknown_in_caller_slot ... ignored, requires owned real MySQL fixture
+test cases::disconnected_original_transaction_keeps_registered_undo_failure_unconfirmed ... ignored, requires owned real MySQL fixture
+test cases::early_callback_prevents_preparation_and_retains_the_genuine_late_receipt ... ignored, requires owned real MySQL fixture
+test cases::existing_guard_rejects_normal_undo_after_registration_and_preserves_real_identity ... ignored, requires owned real MySQL fixture
+test cases::local_validation_poison_and_sealed_undo_are_rejected_before_any_registration ... ignored, requires owned real MySQL fixture
+test cases::outer_registration_deadline_and_explicit_cancellation_close_original_transaction ... ignored, requires owned real MySQL fixture
+test cases::rejected_and_lost_registration_consume_business_without_fabricating_a_receipt ... ignored, requires owned real MySQL fixture
+test empty_and_zero_row_changes_do_not_register_or_create_recovery_ownership ... ignored, requires owned real MySQL fixture
+test late_nontransactional_resource_binding_is_rejected_before_registration ... ignored, requires owned real MySQL fixture
+test preparation_uses_real_images_and_positive_receipt_but_keeps_business_and_undo_uncommitted ... ignored, requires owned real MySQL fixture
+test registration_guard_cases::lossy_row_tokens_abort_before_registration_and_safe_tokens_keep_the_original_wire ... ignored, requires owned real MySQL fixture
+test wait_cases::actual_enrollment_and_undo_waits_preserve_known_receipt_and_cancelled_scope ... ignored, requires owned real MySQL fixture
+test wait_cases::an_unpolled_preparation_future_drops_the_original_transaction_without_registering ... ignored, requires owned real MySQL fixture
+test wait_cases::preparation_resource_mismatch_is_local_before_registration ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 14 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test preflight_locks_prevent_row_growth_and_phantoms_before_full_query_is_forwarded ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 20 tests
+test actual_metadata_preserves_physical_integer_text_binary_and_unsigned_decimal_domains ... ignored, requires owned real MySQL fixture
+test charset_only_ddl_rejects_stale_text_domain_in_an_existing_transaction ... ignored, requires owned real MySQL fixture
+test checked_metadata_blocks_later_trigger_and_foreign_key_ddl_until_rollback ... ignored, requires owned real MySQL fixture
+test definer_channel_checks_hidden_triggers_and_cross_schema_foreign_keys ... ignored, requires owned real MySQL fixture
+test definer_channel_rejects_partial_revokes_and_missing_scope ... ignored, requires owned real MySQL fixture
+test drop_releases_real_metadata_lock_without_a_business_commit ... ignored, requires owned real MySQL fixture
+test engine_only_ddl_is_rejected_before_nontransactional_business_execution ... ignored, requires owned real MySQL fixture
+test exact_metadata_has_physical_order_composite_primary_order_and_unsigned_precision ... ignored, requires owned real MySQL fixture
+test independent_column_shape_ddl_rejects_stale_count_order_and_nullability ... ignored, requires owned real MySQL fixture
+test independent_extra_ddl_rejects_invisible_generated_and_auto_increment_columns ... ignored, requires owned real MySQL fixture
+test later_table_ddl_uses_current_primary_key_and_column_types_in_an_existing_transaction ... ignored, requires owned real MySQL fixture
+test later_trigger_and_foreign_keys_are_rejected_before_business_or_cascade_effects ... ignored, requires owned real MySQL fixture
+test metadata_lock_blocks_actual_ddl_until_the_same_transaction_rolls_back ... ignored, requires owned real MySQL fixture
+test metadata_visibility_is_required_before_interpreting_missing_triggers_as_absence ... ignored, requires owned real MySQL fixture
+test schema_partial_revocation_cannot_be_overridden_by_a_global_trigger_grant ... ignored, requires owned real MySQL fixture
+test scoped_table_grants_do_not_prove_global_inbound_foreign_key_visibility ... ignored, requires owned real MySQL fixture
+test table_trigger_grants_only_cover_their_exact_table ... ignored, requires owned real MySQL fixture
+test type_only_ddl_is_rejected_after_another_table_establishes_the_dictionary_snapshot ... ignored, requires owned real MySQL fixture
+test unsafe_tables_and_unknown_types_fail_closed_and_poison_the_local_scope ... ignored, requires owned real MySQL fixture
+test withheld_database_response_obeys_the_client_deadline_and_discards_the_transaction ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 20 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test different_mysql_servers_cannot_share_a_preparation_or_pool ... ignored, requires two owned real MySQL instances with the same schema
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test physical_types_keep_all_native_subtypes_and_tinyint_display_width ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test server_ok_withheld_from_original_commit_is_bounded_unknown ... ignored, requires owned real MySQL and armed response-loss proxy
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test blocked_control_cancel_is_separate_from_before_commit_error_and_keeps_no_effect ... ignored, requires owned real MySQL fixture
+test shared_control_counts_follow_durable_results_and_duplicate_terminal_reads ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 11 tests
+test absent_enrollment_is_unknown_but_enrolled_missing_undo_fences_and_finishes_atomically ... ignored, requires owned real MySQL fixture
+test cancelled_dispatch_retains_pending_and_new_process_recovers_original_identity ... ignored, requires owned real MySQL fixture and exact recovery child artifact
+test collation_alias_guard_cannot_publish_another_xid_terminal ... ignored, requires owned real MySQL fixture
+test compensation_and_terminal_are_atomic_and_duplicate_callbacks_preserve_later_business ... ignored, requires owned real MySQL fixture
+test concurrent_and_delayed_attempts_observe_one_durable_terminal ... ignored, requires owned real MySQL fixture
+test dirty_failure_keeps_undo_and_persistent_direction_for_next_recovery ... ignored, requires owned real MySQL fixture
+test enrollment_is_idempotent_but_does_not_overwrite_application_or_profile ... ignored, requires owned real MySQL fixture
+test recovery_schema_drift_and_triggers_are_rejected_without_enrollment ... ignored, requires owned real MySQL fixture
+test recovery_table_is_reserved_before_any_business_dml ... ignored, requires owned real MySQL fixture
+test terminal_write_denial_rolls_back_already_executed_compensation_and_undo_delete ... ignored, requires owned real MySQL fixture
+test unsupported_commit_binds_direction_without_reporting_success_or_deleting_undo ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test lost_terminal_commit_recovers_without_replaying_compensation_or_business ... ignored, requires owned MySQL and original packet recovery commit observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 10 tests
+test caller_cancellation_releases_the_owned_transaction_before_proxy_shutdown ... ignored, requires owned real MySQL fixture
+test captured_rows_stay_locked_until_original_transaction_rolls_back ... ignored, requires owned real MySQL fixture
+test composite_primary_order_is_database_index_order_not_physical_column_order ... ignored, requires owned real MySQL fixture
+test decimal_and_unsigned_predicate_parameters_keep_native_numeric_semantics ... ignored, requires owned real MySQL fixture
+test empty_images_keep_schema_and_bad_parameter_counts_do_not_poison ... ignored, requires owned real MySQL fixture
+test insert_and_primary_key_update_are_rejected_without_business_execution ... ignored, requires owned real MySQL fixture
+test physical_types_decode_char_padding_binary_null_and_exact_unsigned_values ... ignored, requires owned real MySQL fixture
+test response_loss_uses_one_client_deadline_for_the_whole_before_image_chain ... ignored, requires owned real MySQL fixture
+test row_field_and_total_budgets_reject_before_full_payload_select ... ignored, requires owned real MySQL fixture
+test update_before_image_uses_where_parameters_and_preserves_full_exact_rows ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 10 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test trusted_ca_keeps_hostname_verification_and_all_business_connections_encrypted ... ignored, requires owned TLS-only real MySQL fixture and CA files
+test x509_account_requires_client_identity_for_pool_and_auxiliary_sessions ... ignored, requires owned MySQL X509 account and client identity files
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test expired_and_future_client_certificates_are_rejected_by_x509_account ... ignored, requires owned X509 MySQL account and lifecycle client certificates
+test expired_and_future_server_certificates_reject_new_and_auxiliary_sessions ... ignored, requires owned reloadable TLS MySQL fixture and lifecycle certificates
+test leaf_and_ca_rotation_keep_new_connection_trust_and_original_transaction_atomicity ... ignored, requires owned reloadable TLS MySQL fixture and lifecycle certificates
+test mysql_refuses_invalid_lifetime_reload_and_keeps_previous_tls_context ... ignored, requires owned reloadable TLS MySQL fixture and lifecycle certificates
+
+test result: ok. 0 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 6 tests
+test java_tm_attested::signer_node ... ignored, owned Docker signing node for fixed original TC AT recovery
+test original_java_tc_durable_tm_lost_commit_reply_never_replays ... ignored, requires pinned original Java TC, TM reply-loss proxy and owned MySQL
+test original_java_tc_durable_tm_lost_rollback_reply_never_replays ... ignored, requires pinned original Java TC, TM reply-loss proxy and owned MySQL
+test original_java_tc_launcher_intent_child ... ignored, child of the pinned Java TC recovery scenarios
+test original_java_tc_supervised_tm_recovers_commit ... ignored, requires pinned original Java TC, raw TM observer and owned MySQL
+test original_java_tc_supervised_tm_recovers_rollback_with_reply_loss ... ignored, requires pinned original Java TC, TM reply-loss observer and owned MySQL
+
+test result: ok. 0 passed; 0 failed; 6 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test launcher_source_schema_preserves_full_xid_and_rejects_invalid_claim_states ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test legacy_008_row_remains_unowned_after_009_migration ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 10 tests
+test begin_source_and_end_markers_precede_real_commit_frame ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test changed_owner_instance_blocks_original_end_cas ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test commit_response_loss_keeps_send_claim_and_denies_memory_recovery ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test existing_launcher_accounts_gain_only_stop_scope_grants ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test marker_ack_loss_after_persisted_cas_never_emits_end_frame ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test marker_exit_retains_one_way_send_claim ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test snapshot_rejects_same_digest_with_different_full_xid ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test supervised_exit_allows_only_one_owner_transfer ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+test tm_launcher_exit_after_marker_child ... ignored, child process controlled by marker_exit_retains_one_way_send_claim
+test transferred_rollback_lost_reply_stays_unknown ... ignored, requires owned real MySQL 8.4.13 and a fresh undo_* database
+
+test result: ok. 0 passed; 0 failed; 10 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test real_prepared_insert_update_delete_and_exact_composite_rows_encode_without_commit ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 3 tests
+test actual_undo_commit_ok_held_remains_unknown_or_cancelled_then_original_identity_recovers ... ignored, requires owned real MySQL fixture
+test actual_undo_row_wait_cancel_and_closed_pool_do_not_attempt_commit ... ignored, requires owned real MySQL fixture
+test original_undo_observations_and_read_only_repeats_keep_actual_commit_boundary ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 9 tests
+test cancellation_during_actual_identity_wait_publishes_no_guard ... ignored, requires owned real MySQL fixture
+test committed_normal_is_preserved_as_opaque_pending_work ... ignored, requires owned real MySQL fixture
+test deadline_during_actual_identity_wait_stays_before_commit ... ignored, requires owned real MySQL fixture
+test durable_guard_blocks_two_original_late_normal_writers_without_replaying_business ... ignored, requires owned real MySQL fixture
+test invalid_identity_has_no_sql_effect_and_debug_hides_xid ... ignored, requires owned real MySQL fixture
+test malformed_or_unknown_guard_never_becomes_a_fence ... ignored, requires owned real MySQL fixture
+test original_normal_winner_is_observed_after_actual_lock_arbitration ... ignored, requires owned real MySQL fixture
+test relaxed_flush_configuration_is_rejected_without_guard ... ignored, requires owned real MySQL fixture
+test two_control_attempts_have_one_durable_identity_without_automatic_retry ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test unknown_control_commit_requires_original_identity_observation ... ignored, requires owned MySQL and raw packet observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test independent_undo_metrics_count_observations_without_recounting_database_effects ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 17 tests
+test already_restored_and_equal_images_skip_dml_then_follow_original_missing_log_fence ... ignored, requires owned real MySQL fixture
+test binary_collation_text_keeps_utf8_keys_and_restores_the_original_row ... ignored, requires owned real MySQL fixture
+test cancellation_during_original_undo_lock_wait_publishes_no_partial_restoration ... ignored, requires owned real MySQL fixture
+test changed_or_unsafe_schema_and_unknown_compression_do_not_consume_undo ... ignored, requires owned real MySQL fixture
+test concurrent_duplicate_rollback_has_one_normal_consumer_and_preserves_original_missing_log_semantics ... ignored, requires owned real MySQL fixture
+test corrupted_or_missing_subrows_keep_business_and_every_remaining_original_byte ... ignored, requires owned real MySQL fixture
+test deadline_during_original_undo_lock_wait_publishes_no_partial_restoration ... ignored, requires owned real MySQL fixture
+test foreign_keys_committed_after_undo_dictionary_snapshot_cannot_affect_compensation ... ignored, requires owned real MySQL fixture
+test jdbc_profile_or_original_document_identity_mismatch_never_changes_business ... ignored, requires owned real MySQL fixture
+test later_dirty_failure_rolls_back_earlier_compensation_and_keeps_all_undo_bytes ... ignored, requires owned real MySQL fixture
+test mixed_logs_run_in_reverse_and_consume_only_original_branch ... ignored, requires owned real MySQL fixture
+test numeric_tinyint_profile_restores_physical_integer_two_without_boolean_loss ... ignored, requires owned real MySQL fixture
+test orphan_undo_children_prevent_empty_rollback_with_or_without_guard ... ignored, requires owned real MySQL fixture
+test real_packet_chunks_are_validated_reassembled_and_deleted_with_their_original_root ... ignored, requires owned real MySQL fixture
+test stored_insert_undo_restores_business_and_consumes_original_row_atomically ... ignored, requires owned real MySQL fixture
+test trigger_committed_after_undo_dictionary_snapshot_cannot_execute_during_compensation ... ignored, requires owned real MySQL fixture
+test update_and_delete_restore_original_values_without_pk_cartesian_products ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 17 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test uncertain_rollback_commit_keeps_original_identity_and_recovers_without_business_replay ... ignored, requires owned MySQL and original packet COMMIT observer
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 12 tests
+test absolute_deadline_during_actual_unique_key_wait_discards_owned_transaction ... ignored, requires owned real MySQL fixture
+test cancelling_actual_unique_key_wait_discards_owned_transaction ... ignored, requires owned real MySQL fixture
+test empty_flush_writes_nothing_and_successful_flush_seals_all_mutations ... ignored, requires owned real MySQL fixture
+test existing_normal_and_global_finished_rows_are_not_overwritten ... ignored, requires owned real MySQL fixture
+test inbound_foreign_key_on_undo_table_rejects_flush_and_rolls_back_business ... ignored, requires owned real MySQL fixture
+test invalid_original_identity_poisoned_before_any_undo_insert ... ignored, requires owned real MySQL fixture
+test missing_unsafe_or_incomplete_undo_table_never_commits_business ... ignored, requires owned real MySQL fixture
+test original_undo_row_and_business_share_one_uncommitted_transaction_then_rollback ... ignored, requires owned real MySQL fixture
+test oversized_sub_id_context_never_publishes_partial_undo ... ignored, requires owned real MySQL fixture
+test packet_splits_original_bytes_and_root_context_reassembles_exactly ... ignored, requires owned real MySQL fixture
+test undo_current_schema_rejects_late_constraints_columns_and_identity_index_changes ... ignored, requires owned real MySQL fixture
+test undo_engine_change_after_business_metadata_snapshot_is_rejected_before_flush ... ignored, requires owned real MySQL fixture
+
+test result: ok. 0 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 5 tests
+test debug_never_prints_password_or_username ... ok
+test disabling_tls_requires_an_explicit_literal_loopback_address ... ok
+test options_reject_invalid_identifiers_addresses_and_pool_limits ... ok
+test custom_ca_is_bounded_redacted_and_cannot_be_combined_with_disabled_tls ... ok
+test client_identity_requires_bounded_pem_pair_and_never_allows_disabled_tls ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test crates\seata_db_mysql\src\mysql_commit_checked_transaction.rs - mysql_commit_checked_transaction::MySqlCommitCheckedTransaction (line 14) - compile fail ... ok
+test crates\seata_db_mysql\src\mysql_prepared_transaction.rs - mysql_prepared_transaction::MySqlPreparedTransaction (line 12) - compile fail ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+

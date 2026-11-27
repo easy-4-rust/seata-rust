@@ -170,3 +170,18 @@ pub use my_sql_phase_one_outcome::MySqlPhaseOneOutcome;
 #[allow(clippy::unwrap_used)]
 #[path = "../tests/support/java_checksum_events.rs"]
 mod test_event_capture;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_error;
+#[cfg(feature = "xa")]
+pub use mysql_xa_error::MySqlXaError;
+#[cfg(feature = "xa")]
+mod mysql_xa_data_source;
+#[cfg(feature = "xa")]
+pub use mysql_xa_data_source::MySqlXaDataSource;
+#[cfg(feature = "xa")]
+mod mysql_xa_transaction;
+#[cfg(feature = "xa")]
+pub use mysql_xa_transaction::MySqlXaTransaction;
+#[cfg(feature = "xa")]
+mod mysql_xa_table;

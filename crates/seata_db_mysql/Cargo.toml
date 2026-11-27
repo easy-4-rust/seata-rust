@@ -5,13 +5,16 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "SQLx MySQL AT data source, metadata and local transaction integration"
+description = "SQLx MySQL AT and optional native XA transaction integration"
 
 [features]
+xa = ["dep:seata-xa", "dep:futures-util"]
 transport_tls = ["seata-tm/tls", "seata-rm/tls", "seata-transport/tls"]
 experimental_changed_commit = []
 
 [dependencies]
+seata-xa = { path = "../seata_xa", optional = true }
+futures-util = { version = "=0.3.34", default-features = false, features = ["std"], optional = true }
 seata-datasource = { path = "../seata_datasource" }
 seata-at = { path = "../seata_at" }
 seata-rm = { path = "../seata_rm" }

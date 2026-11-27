@@ -1,0 +1,114 @@
+[
+  {
+    "Rust": "1.99",
+    "operation": "java_prefix",
+    "case": "original_java_vectors_match_every_component",
+    "marker": "fixed Java XA byte identity changed",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mutation_/20261127_194103_1db455f1",
+    "catalog_sha256": "c4ba4b4f9733efa0a5170ee05b9c8fd70bb4fc280f5df3a3a2db19ab757e99fa"
+  },
+  {
+    "Rust": "1.99",
+    "operation": "omit_prepare",
+    "case": "prepared_is_invisible_locked_and_resolved_only_by_original_identity",
+    "marker": "original Prepared branch missing",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194104_bdd4cf33",
+    "catalog_sha256": "56a1e724c510030536357b116653d97bd88559462ec7664e0eabd45ecce412dd"
+  },
+  {
+    "Rust": "1.99",
+    "operation": "wrong_commit_direction",
+    "case": "prepared_is_invisible_locked_and_resolved_only_by_original_identity",
+    "marker": "original XA COMMIT must publish original business row",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194132_259163f5",
+    "catalog_sha256": "0c92693b6e529c8bff4baf236fc84c7688b289c4a4cdcd4fd56d5587655a4c4b"
+  },
+  {
+    "Rust": "1.99",
+    "operation": "ignore_format",
+    "case": "original_hex_identity_and_active_rollback_preserve_values",
+    "marker": "foreign XA format was mistaken for Seata Prepared",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194154_21358b4f",
+    "catalog_sha256": "04e09c8f0bee21709eb05bb4e41b503d998f1cd8bfacdc22394a34ff1f89bc22"
+  },
+  {
+    "Rust": "1.99",
+    "operation": "ignore_qualifier",
+    "case": "prepared_is_invisible_locked_and_resolved_only_by_original_identity",
+    "marker": "other branch qualifier was mistaken for Prepared",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194214_af2b015b",
+    "catalog_sha256": "3af461bc9022c431ed9ff341176f3e39630c552688b4d934a258b2287b7fee52"
+  },
+  {
+    "Rust": "1.99",
+    "operation": "unknown_as_not_sent",
+    "case": "original_xa_ok_loss_preserves_unknown_without_automatic_replay",
+    "marker": "original XA OK loss must preserve unknown",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194234_bda292ac",
+    "catalog_sha256": "67f351305844a83a64a7322f606f41d26963e02462fbbd9eef51b7baf9414f2a"
+  },
+  {
+    "Rust": "1.99",
+    "operation": "omit_constraints",
+    "case": "unsafe_tables_are_rejected_before_dml",
+    "marker": "XA trigger was not rejected before DML",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194254_b0a092ea",
+    "catalog_sha256": "38fe9c668687c02ffa56451aae24fee8855e5e0c479994644499a534f1f1ec78"
+  },
+  {
+    "Rust": "1.85",
+    "operation": "java_prefix",
+    "case": "original_java_vectors_match_every_component",
+    "marker": "fixed Java XA byte identity changed",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mutation_/20261127_194315_344be127",
+    "catalog_sha256": "53e7be5f529af58e9f3dcfeb4ff95d4182c7edc4e37710be5f6ab852a1770bbe"
+  },
+  {
+    "Rust": "1.85",
+    "operation": "omit_prepare",
+    "case": "prepared_is_invisible_locked_and_resolved_only_by_original_identity",
+    "marker": "original Prepared branch missing",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194317_702f1666",
+    "catalog_sha256": "8b28058cafe5bf2a3c68d47a16919f0212d6ae30933b2461166b4b06a009df8e"
+  },
+  {
+    "Rust": "1.85",
+    "operation": "wrong_commit_direction",
+    "case": "prepared_is_invisible_locked_and_resolved_only_by_original_identity",
+    "marker": "original XA COMMIT must publish original business row",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194341_3a44b5b0",
+    "catalog_sha256": "5fc3ac3174105db461ac7e6b49306a9d1bca064a81eee00121ca938f641c83f6"
+  },
+  {
+    "Rust": "1.85",
+    "operation": "ignore_format",
+    "case": "original_hex_identity_and_active_rollback_preserve_values",
+    "marker": "foreign XA format was mistaken for Seata Prepared",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194402_23c4c52c",
+    "catalog_sha256": "2035717694f1905ea44d26df44a5a1407b9f52df391584d2f9c27e4dd48e8ea0"
+  },
+  {
+    "Rust": "1.85",
+    "operation": "ignore_qualifier",
+    "case": "prepared_is_invisible_locked_and_resolved_only_by_original_identity",
+    "marker": "other branch qualifier was mistaken for Prepared",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194422_0dcb20e2",
+    "catalog_sha256": "dd29186e3009796bda881a44c8fbfd78144591095ee502310b331f486e59f945"
+  },
+  {
+    "Rust": "1.85",
+    "operation": "unknown_as_not_sent",
+    "case": "original_xa_ok_loss_preserves_unknown_without_automatic_replay",
+    "marker": "original XA OK loss must preserve unknown",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194443_5c3315b1",
+    "catalog_sha256": "6bedb981414b9dd3d3547eceb7c13300c305a91e0ab3390c7405e790db8b1f5d"
+  },
+  {
+    "Rust": "1.85",
+    "operation": "omit_constraints",
+    "case": "unsafe_tables_are_rejected_before_dml",
+    "marker": "XA trigger was not rejected before DML",
+    "evidence": "docs/phase-4/evidence/mysql-xa/mysql-red_20261127_194507_eadf8717",
+    "catalog_sha256": "c802cfc8aae97a2e5355549b328207f8b9c8ac23eade36b569f8abb69e01d5a9"
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-xa-20261127-194443-5c3315b1",
+      "--label",
+      "seata.structured.logs.owner=bb1a177412734fcbb506e1f15c639d90",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_structured_logs_mysql_20261127_194443_5c3315b1/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:63466:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_bb1a17741273",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "f1151d1f6a35b4b995d39e592c0dfd74be6eec27bae40efcddc0a7182acaea98"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f1151d1f6a35b4b995d39e592c0dfd74be6eec27bae40efcddc0a7182acaea98",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_bb1a17741273"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "xa",
+      "--test",
+      "live_xa",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-live",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_xa-e5eb88614f1aa589.exe",
+      "original_xa_ok_loss_preserves_unknown_without_automatic_replay",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 101
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "f1151d1f6a35b4b995d39e592c0dfd74be6eec27bae40efcddc0a7182acaea98"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "f1151d1f6a35b4b995d39e592c0dfd74be6eec27bae40efcddc0a7182acaea98"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "f1151d1f6a35b4b995d39e592c0dfd74be6eec27bae40efcddc0a7182acaea98"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "f1151d1f6a35b4b995d39e592c0dfd74be6eec27bae40efcddc0a7182acaea98"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "f1151d1f6a35b4b995d39e592c0dfd74be6eec27bae40efcddc0a7182acaea98"
+    ],
+    "exit_code": 1
+  }
+]
