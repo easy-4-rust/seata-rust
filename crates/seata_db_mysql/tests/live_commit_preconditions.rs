@@ -3,6 +3,9 @@
 #[path = "support/callback_peer.rs"]
 #[allow(dead_code)]
 mod callback_peer;
+#[cfg(feature = "experimental_changed_commit")]
+#[path = "support/failure_report_metrics_cases.rs"]
+mod failure_report_metrics_cases;
 #[path = "support/first_phase_fixture.rs"]
 mod first_fixture;
 #[path = "support/undo_store_fixture.rs"]
@@ -1174,6 +1177,11 @@ async fn prepared_rollback_reports_failure_only_after_local_rollback() {
         .unwrap()
         .unwrap();
     assert_eq!(receipt.identity().branch_id(), 42);
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::RollbackAndReportFailure,
+        seata_db_mysql::MySqlPhaseOneOutcome::FailureReportObserved,
+        1,
+    );
     let mut socket = peer.await.unwrap();
     assert_eq!(h.closed_counts(&mut socket).await, (0, 0, (1, 0, 0)));
 }
@@ -1205,6 +1213,12 @@ async fn prepared_rollback_report_loss_keeps_rollback_fact_and_receipt() {
         .await
         .unwrap_err();
     peer.await.unwrap();
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::RollbackAndReportFailure,
+        seata_db_mysql::MySqlPhaseOneOutcome::FailureReportUnknown,
+        1,
+    );
+    h.save_phase_metrics("rollback-report-loss.json");
     assert!(error.local_rollback_confirmed());
     assert!(error.is_unknown_outcome());
     assert_eq!(
@@ -1242,6 +1256,12 @@ async fn prepared_rollback_driver_loss_does_not_report_failure() {
         .rollback_and_report_failure(&h.rm.client())
         .await
         .unwrap_err();
+    h.assert_phase(
+        seata_db_mysql::MySqlPhaseOneOperation::RollbackAndReportFailure,
+        seata_db_mysql::MySqlPhaseOneOutcome::FailureRollbackUnconfirmed,
+        1,
+    );
+    h.save_phase_metrics("rollback-driver-loss.json");
     assert!(!error.local_rollback_confirmed());
     assert!(error.is_unknown_outcome());
     assert_eq!(

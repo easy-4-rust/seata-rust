@@ -18,10 +18,16 @@ pub enum MySqlPhaseOneOperation {
     Execute,
     /// 显式原本地事务回滚，不含自动 Drop。
     Rollback,
+    /// 已准备作用域回滚并报告失败的组合入口。
+    RollbackAndReportFailure,
+    /// 真实准备错误持有者的单次失败报告调用。
+    PrepareFailureReport,
+    /// 准备及自动失败报告组合入口。
+    PrepareAndReportFailure,
 }
 impl MySqlPhaseOneOperation {
     /// 固定全部阶段；实验阶段为零不表示相应能力已经启用。
-    pub const ALL: [Self; 7] = [
+    pub const ALL: [Self; 10] = [
         Self::Prepare,
         Self::CheckCommit,
         Self::CommitNoChange,
@@ -29,6 +35,9 @@ impl MySqlPhaseOneOperation {
         Self::CommitAndReport,
         Self::Execute,
         Self::Rollback,
+        Self::RollbackAndReportFailure,
+        Self::PrepareFailureReport,
+        Self::PrepareAndReportFailure,
     ];
     /// 无参数；返回固定阶段标签，不含业务身份。
     pub const fn label(self) -> &'static str {
@@ -40,12 +49,42 @@ impl MySqlPhaseOneOperation {
             Self::CommitAndReport => "commit_and_report",
             Self::Execute => "execute",
             Self::Rollback => "rollback",
+            Self::RollbackAndReportFailure => "rollback_and_report_failure",
+            Self::PrepareFailureReport => "prepare_failure_report",
+            Self::PrepareAndReportFailure => "prepare_and_report_failure",
         }
     }
     /// 无参数；返回本阶段适用的固定结果，用于有界导出。
     pub fn outcomes(self) -> &'static [MySqlPhaseOneOutcome] {
         use MySqlPhaseOneOutcome as O;
         match self {
+            Self::RollbackAndReportFailure => &[
+                O::FailureReportSkipped,
+                O::FailureRollbackUnconfirmed,
+                O::FailureReportObserved,
+                O::FailureReportUnknown,
+                O::FailureReportFailed,
+                O::Cancelled,
+            ],
+            Self::PrepareFailureReport => &[
+                O::FailureReportNotEligible,
+                O::FailureReportAlreadyAttempted,
+                O::FailureReportObserved,
+                O::FailureReportUnknown,
+                O::FailureReportFailed,
+                O::Cancelled,
+            ],
+            Self::PrepareAndReportFailure => &[
+                O::PreparedUnregistered,
+                O::PreparedRegistered,
+                O::PrepareFailureUnreported,
+                O::FailureReportObserved,
+                O::FailureReportUnknown,
+                O::FailureReportFailed,
+                O::FailureReportNotEligible,
+                O::FailureReportAlreadyAttempted,
+                O::Cancelled,
+            ],
             Self::Execute => &[O::ExecutionCompleted, O::ExecutionFailed, O::Cancelled],
             Self::Rollback => &[O::RollbackConfirmed, O::RollbackUnconfirmed, O::Cancelled],
             Self::Prepare => &[

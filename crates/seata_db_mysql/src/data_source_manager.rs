@@ -99,6 +99,9 @@ impl MySqlDataSourceManager {
         application_data: Option<String>,
         failure_slot: &mut Option<crate::MySqlPrepareError>,
     ) -> Result<crate::MySqlPreparedTransaction, crate::MySqlPrepareReportedError> {
+        let guard = self
+            .phase_one_metrics_sampler()
+            .begin(crate::MySqlPhaseOneOperation::PrepareAndReportFailure);
         let prepared = self
             .prepare_transaction_with_progress(
                 transaction,
@@ -108,7 +111,10 @@ impl MySqlDataSourceManager {
                 failure_slot,
             )
             .await;
-        crate::MySqlPrepareReportedError::complete(prepared, failure_slot, client).await
+        let result =
+            crate::MySqlPrepareReportedError::complete(prepared, failure_slot, client).await;
+        guard.finish_prepare_and_report(&result);
+        result
     }
     /// 参数为已连接单主机数据源与固定 JDBC 配置；返回精确资源适配器，不执行迁移或注册。
     pub fn new(source: MySqlDataSource, profile: MySqlJdbcProfile) -> Result<Self, DbError> {

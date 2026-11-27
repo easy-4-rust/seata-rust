@@ -1,0 +1,76 @@
+{
+  "status": "SELECTED_FAILURE_REPORT_METRICS_VERIFIED",
+  "specification": "docs/phase-2/wp07-observability-contract.md",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "new_operations": [
+    "rollback_and_report_failure",
+    "prepare_failure_report",
+    "prepare_and_report_failure"
+  ],
+  "fixed_exported_series": 63,
+  "existing_39_series_meanings_preserved": true,
+  "existing_cancelled_enum_discriminant_preserved": true,
+  "native_tests_per_version": 8,
+  "native_counter_profiles_per_version": 11,
+  "authenticated_HTTP_tests_per_version": 1,
+  "original_java_scenarios_per_version": 8,
+  "source_mutations_per_version": 3,
+  "java_evidence_negative_controls_per_profile": 12,
+  "workspace_tests_per_version": {
+    "passed": 743,
+    "ignored": 340
+  },
+  "strict_Clippy_packages": [
+    "seata-db-mysql",
+    "seata-observability"
+  ],
+  "default_checks_passed": true,
+  "default_observability_sqlx_dependency": false,
+  "experimental_report_API_default_enabled": false,
+  "Java_source_drift": "one exact allow(dead_code) attribute on a shared native test helper; runtime bodies and production sources unchanged; recorded by verifier",
+  "independent_external_review": "OPEN",
+  "WP07_complete": false,
+  "remaining": [
+    "durable MySQL structured events",
+    "production collection, alerts and complete deployment validation",
+    "independent external review and complete security/load gates",
+    "remaining WP05-07 and Phase4-7"
+  ],
+  "evidence": {
+    "red": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/red_20261127_071602_7ff6dddb",
+      "catalog_sha256": "f1807031d4cda766f7e377456815e5fe038afa3dea5c0ff4fb32cc1a547411fb"
+    },
+    "restored_native": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/run_20261127_143120_6e594ba9",
+      "catalog_sha256": "5bf6ebcae90fb1fbc795a56db371157fc24ec6d5e9bc2bd253075ad22a13f2fb"
+    },
+    "original_java_tc": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/java_20261127_142210_f159c2dd",
+      "catalog_sha256": "bffdaafcdeeda1121f84be04904541dca7ac4399f664e095a121f9084ab365fb"
+    },
+    "source_mutations": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/mutations_20261127_141929_138573af",
+      "catalog_sha256": "d53f3440acacccc0bb42ac0e61e41a198281ea1d4a2a30420b2a529c03f41cc1"
+    },
+    "raw_validation": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/validation_20261127_143748_04a090ae",
+      "catalog_sha256": "d30a1a0769d091d1bd970d48bb3f2b27aeea60ea1ca7a2a1cf3eb12f2085d8fd"
+    },
+    "default": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/default_20261127_143308_36b6791d",
+      "catalog_sha256": "298774ca60abc87ee3e896476e94cf34f9bdd9fdc6464f85c5b4ea9d3f45efbf"
+    },
+    "regression_199": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/regression_1.99_20261127_143308_ca310a84",
+      "catalog_sha256": "aeb2834a024c62218e15a7a3c67b723292d6867c0589fba5155cc4c6aba01f36"
+    },
+    "regression_185": {
+      "path": "docs/phase-2/evidence/failure-report-metrics/regression_1.85_20261127_143308_39d3a099",
+      "catalog_sha256": "38ae580dda51ad48541e074a3edb09d66599352a617afd594f0f70bffb2aeb61"
+    }
+  }
+}

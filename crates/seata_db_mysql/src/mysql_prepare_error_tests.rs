@@ -144,7 +144,7 @@ async fn orchestration_reports_confirmed_prepare_failure_and_returns_original_er
         receipt: Box::new(receipt),
         source: DbError::UndoSealed,
         rollback: Ok(()),
-        report_guard: MySqlFailureReportGuard::new(),
+        report_guard: MySqlFailureReportGuard::new(None),
     };
     let mut slot = None;
     let result = MySqlPrepareReportedError::complete(
@@ -165,7 +165,7 @@ async fn orchestration_reports_confirmed_prepare_failure_and_returns_original_er
         receipt: Box::new(error.prepare_error().registered_branch().unwrap().clone()),
         source: DbError::UndoSealed,
         rollback: Err(Box::new(DbError::Closed)),
-        report_guard: MySqlFailureReportGuard::new(),
+        report_guard: MySqlFailureReportGuard::new(None),
     };
     let result = MySqlPrepareReportedError::complete(
         Err::<MySqlPreparedTransaction, _>(unconfirmed),
@@ -242,7 +242,7 @@ async fn confirmed_rollback_reports_original_identity_only_once() {
         receipt: Box::new(receipt),
         source: DbError::UndoSealed,
         rollback: Ok(()),
-        report_guard: MySqlFailureReportGuard::new(),
+        report_guard: MySqlFailureReportGuard::new(None),
     };
     assert!(error.local_rollback_confirmed());
     assert!(!error.failure_report_started());
@@ -263,7 +263,7 @@ async fn confirmed_rollback_reports_original_identity_only_once() {
         receipt: Box::new(error.registered_branch().unwrap().clone()),
         source: DbError::UndoSealed,
         rollback: Err(Box::new(DbError::Closed)),
-        report_guard: MySqlFailureReportGuard::new(),
+        report_guard: MySqlFailureReportGuard::new(None),
     };
     assert!(matches!(
         unconfirmed
@@ -315,7 +315,7 @@ async fn canceled_report_wait_retains_receipt_and_refuses_replay() {
         receipt: Box::new(receipt),
         source: DbError::UndoSealed,
         rollback: Ok(()),
-        report_guard: MySqlFailureReportGuard::new(),
+        report_guard: MySqlFailureReportGuard::new(None),
     };
     let client = rm.client();
     let mut slot = None;
@@ -400,7 +400,7 @@ async fn tc_rejected_failure_report_keeps_original_response_and_no_replay() {
         receipt: Box::new(receipt),
         source: DbError::UndoSealed,
         rollback: Ok(()),
-        report_guard: MySqlFailureReportGuard::new(),
+        report_guard: MySqlFailureReportGuard::new(None),
     };
     let failure = error
         .report_failure_after_rollback(&rm.client())

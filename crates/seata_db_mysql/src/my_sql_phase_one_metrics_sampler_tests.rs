@@ -118,7 +118,7 @@ fn phase_one_stage_errors_preserve_registration_and_commit_boundaries() {
             .iter()
             .map(|op| 1 + op.outcomes().len())
             .sum::<usize>(),
-        39
+        63
     );
 }
 

@@ -116,7 +116,9 @@ impl MySqlTransactionPreparer {
                     receipt: Box::new(receipt),
                     source,
                     rollback,
-                    report_guard: crate::MySqlFailureReportGuard::new(),
+                    report_guard: crate::MySqlFailureReportGuard::new(Some(
+                        manager.phase_one_metrics_sampler(),
+                    )),
                 });
             }
             if let Err(source) = transaction
@@ -132,7 +134,9 @@ impl MySqlTransactionPreparer {
                     receipt: Box::new(receipt),
                     source,
                     rollback,
-                    report_guard: crate::MySqlFailureReportGuard::new(),
+                    report_guard: crate::MySqlFailureReportGuard::new(Some(
+                        manager.phase_one_metrics_sampler(),
+                    )),
                 });
             }
             Ok(MySqlPreparedTransaction::new(

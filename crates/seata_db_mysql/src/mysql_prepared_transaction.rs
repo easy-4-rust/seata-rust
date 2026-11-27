@@ -106,6 +106,19 @@ impl MySqlPreparedTransaction {
         self,
         client: &ResourceClient,
     ) -> Result<Option<RegisteredBranch>, crate::MySqlPhaseOneFailureReportError> {
+        let guard = self
+            .source
+            .phase_one_metrics_sampler()
+            .begin(crate::MySqlPhaseOneOperation::RollbackAndReportFailure);
+        let result = self.rollback_and_report_failure_inner(client).await;
+        guard.finish_rollback_report(&result);
+        result
+    }
+    #[cfg(feature = "experimental_changed_commit")]
+    async fn rollback_and_report_failure_inner(
+        self,
+        client: &ResourceClient,
+    ) -> Result<Option<RegisteredBranch>, crate::MySqlPhaseOneFailureReportError> {
         let receipt = self.receipt.clone();
         self.transaction.rollback().await.map_err(|source| {
             crate::MySqlPhaseOneFailureReportError::Local {

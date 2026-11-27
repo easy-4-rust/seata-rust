@@ -110,6 +110,77 @@ impl MySqlPhaseOneGuard {
             Outcome::RollbackUnconfirmed
         });
     }
+    /// 参数为原回滚/失败报告结果；保留本地回滚与报告的不同事实。
+    #[cfg(feature = "experimental_changed_commit")]
+    pub(crate) fn finish_rollback_report(
+        self,
+        result: &Result<Option<RegisteredBranch>, crate::MySqlPhaseOneFailureReportError>,
+    ) {
+        self.finish(match result {
+            Ok(Some(_)) => Outcome::FailureReportObserved,
+            Ok(None) => Outcome::FailureReportSkipped,
+            Err(crate::MySqlPhaseOneFailureReportError::Local { .. }) => {
+                Outcome::FailureRollbackUnconfirmed
+            }
+            Err(crate::MySqlPhaseOneFailureReportError::Report { source, .. })
+                if source.is_unknown_outcome() =>
+            {
+                Outcome::FailureReportUnknown
+            }
+            Err(crate::MySqlPhaseOneFailureReportError::Report { .. }) => {
+                Outcome::FailureReportFailed
+            }
+        });
+    }
+    /// 参数为原显式准备失败报告结果；重复门闩拒绝不算本次网络未知尝试。
+    #[cfg(feature = "experimental_changed_commit")]
+    pub(crate) fn finish_prepare_report(
+        self,
+        result: &Result<
+            seata_protocol::transaction::BranchReportResponse,
+            crate::MySqlPrepareFailureReportError,
+        >,
+    ) {
+        self.finish(Self::prepare_report_outcome(result));
+    }
+    #[cfg(feature = "experimental_changed_commit")]
+    fn prepare_report_outcome(
+        result: &Result<
+            seata_protocol::transaction::BranchReportResponse,
+            crate::MySqlPrepareFailureReportError,
+        >,
+    ) -> Outcome {
+        match result {
+            Ok(_) => Outcome::FailureReportObserved,
+            Err(crate::MySqlPrepareFailureReportError::NotEligible) => {
+                Outcome::FailureReportNotEligible
+            }
+            Err(crate::MySqlPrepareFailureReportError::AlreadyAttempted) => {
+                Outcome::FailureReportAlreadyAttempted
+            }
+            Err(crate::MySqlPrepareFailureReportError::Call(source))
+                if source.is_unknown_outcome() =>
+            {
+                Outcome::FailureReportUnknown
+            }
+            Err(crate::MySqlPrepareFailureReportError::Call(_)) => Outcome::FailureReportFailed,
+        }
+    }
+    /// 参数为组合准备/失败报告的原结果；未报告不表示本地业务已安全结束。
+    #[cfg(feature = "experimental_changed_commit")]
+    pub(crate) fn finish_prepare_and_report(
+        self,
+        result: &Result<MySqlPreparedTransaction, crate::MySqlPrepareReportedError>,
+    ) {
+        self.finish(match result {
+            Ok(prepared) if prepared.registered_branch().is_some() => Outcome::PreparedRegistered,
+            Ok(_) => Outcome::PreparedUnregistered,
+            Err(error) => error
+                .report_result()
+                .map(Self::prepare_report_outcome)
+                .unwrap_or(Outcome::PrepareFailureUnreported),
+        });
+    }
     fn finish(mut self, outcome: Outcome) {
         self.sampler.increment(self.operation, outcome);
         self.finished = true;

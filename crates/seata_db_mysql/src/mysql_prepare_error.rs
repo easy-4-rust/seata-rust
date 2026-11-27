@@ -124,6 +124,23 @@ impl MySqlPrepareError {
         &self,
         client: &ResourceClient,
     ) -> Result<BranchReportResponse, crate::MySqlPrepareFailureReportError> {
+        let counter = match self {
+            Self::Enrollment { report_guard, .. } | Self::Undo { report_guard, .. } => report_guard
+                .metrics()
+                .map(|metrics| metrics.begin(crate::MySqlPhaseOneOperation::PrepareFailureReport)),
+            _ => None,
+        };
+        let result = self.report_failure_after_rollback_inner(client).await;
+        if let Some(counter) = counter {
+            counter.finish_prepare_report(&result);
+        }
+        result
+    }
+    #[cfg(feature = "experimental_changed_commit")]
+    async fn report_failure_after_rollback_inner(
+        &self,
+        client: &ResourceClient,
+    ) -> Result<BranchReportResponse, crate::MySqlPrepareFailureReportError> {
         let (receipt, guard) = match self {
             Self::Enrollment {
                 receipt,

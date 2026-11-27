@@ -8,7 +8,7 @@ use seata_rm::{BranchResource, ResourceCatalog, ResourceManager};
 use std::{sync::Arc, time::Duration};
 use tokio::net::{TcpListener, TcpStream};
 #[path = "phase_one_metrics_snapshot.rs"]
-mod phase_one_metrics_snapshot;
+pub(crate) mod phase_one_metrics_snapshot;
 
 /// 单个测试的自有作用域；只在运行器创建的随机库使用。
 pub struct Harness {
@@ -109,6 +109,14 @@ impl Harness {
             rm,
             listener,
         }
+    }
+    /// 封存原数据源的实际计数快照，不把业务身份放入产品指标。
+    #[allow(dead_code)]
+    pub fn save_phase_metrics(&self, name: &str) {
+        fixture::save(
+            name,
+            &phase_one_metrics_snapshot::value(&self.source.phase_one_metrics_sampler()),
+        );
     }
     pub async fn accept(&self) -> TcpStream {
         callback_peer::registered(&self.listener, self.adapter.key()).await

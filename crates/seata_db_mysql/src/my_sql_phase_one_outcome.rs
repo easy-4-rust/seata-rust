@@ -55,8 +55,24 @@ pub enum MySqlPhaseOneOutcome {
     RollbackUnconfirmed,
     /// 已轮询阶段取消或 panic 解栈，不推断提交边界。
     Cancelled,
+    /// 原失败报告收到有效成功响应，不是业务或全局提交成功。
+    FailureReportObserved,
+    /// 无登记分支，原本地回滚确认后未发送报告。
+    FailureReportSkipped,
+    /// 原本地回滚未获确认，未进入失败报告。
+    FailureRollbackUnconfirmed,
+    /// 本次原失败报告可能已发送而未获权威确认。
+    FailureReportUnknown,
+    /// 原失败报告返回明确拒绝、写前或本地错误；保留原错误细分。
+    FailureReportFailed,
+    /// 原准备错误不满足报告前提，本次没有发送。
+    FailureReportNotEligible,
+    /// 原报告门闩已经占用，本次没有再次发送。
+    FailureReportAlreadyAttempted,
+    /// 组合准备失败，没有进入失败报告；保留原错误而不推断事务效果。
+    PrepareFailureUnreported,
 }
-pub(crate) const OUTCOME_COUNT: usize = MySqlPhaseOneOutcome::Cancelled as usize + 1;
+pub(crate) const OUTCOME_COUNT: usize = MySqlPhaseOneOutcome::PrepareFailureUnreported as usize + 1;
 impl MySqlPhaseOneOutcome {
     /// 无参数；返回固定指标标签，不含用户输入。
     pub const fn label(self) -> &'static str {
@@ -87,6 +103,14 @@ impl MySqlPhaseOneOutcome {
             Self::RollbackConfirmed => "rollback_confirmed",
             Self::RollbackUnconfirmed => "rollback_unconfirmed",
             Self::Cancelled => "cancelled",
+            Self::FailureReportObserved => "failure_report_observed",
+            Self::FailureReportSkipped => "failure_report_skipped",
+            Self::FailureRollbackUnconfirmed => "failure_rollback_unconfirmed",
+            Self::FailureReportUnknown => "failure_report_unknown",
+            Self::FailureReportFailed => "failure_report_failed",
+            Self::FailureReportNotEligible => "failure_report_not_eligible",
+            Self::FailureReportAlreadyAttempted => "failure_report_already_attempted",
+            Self::PrepareFailureUnreported => "prepare_failure_unreported",
         }
     }
 }

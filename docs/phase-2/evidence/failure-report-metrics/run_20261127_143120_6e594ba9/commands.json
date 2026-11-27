@@ -1,0 +1,356 @@
+[
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-failure-report-metrics-20261127-143120-6e594ba9",
+      "--label",
+      "seata.failure.report.metrics.owner=3e32416e028741f0baf0eecfb9e60f37",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata_failure_report_metrics_20261127_143120_6e594ba9/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:50104:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_3e32416e0287",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "aec27eff668b4b14a6103fd5f0fc11b8b0d53446f77f5bd138f6b73af831c82b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_commit_preconditions",
+      "--features",
+      "experimental_changed_commit",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "prepared_rollback_reports_failure_only_after_local_rollback",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-1",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "prepared_rollback_report_loss_keeps_rollback_fact_and_receipt",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-2",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "prepared_rollback_driver_loss_does_not_report_failure",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-3",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "failure_report_metrics_cases::explicit_original_prepare_error_preserves_report_outcomes_and_blocks_replay",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-4",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "failure_report_metrics_cases::automatic_prepare_failure_cancel_keeps_original_error_and_nested_counters",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-5",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "failure_report_metrics_cases::automatic_prepare_failure_observed_has_separate_outer_and_report_results",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-6",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "failure_report_metrics_cases::empty_and_invalid_preparations_do_not_invent_failure_reports",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-case-7",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\live_commit_preconditions-fe17b373749be595.exe",
+      "failure_report_metrics_cases::registered_combination_and_checked_delegate_have_one_report_scope",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-http-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-observability",
+      "--test",
+      "mysql_recovery",
+      "--features",
+      "mysql",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-http",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug\\debug\\deps\\mysql_recovery-7e032aa9b4414751.exe",
+      "first_phase_source_exports_31_stage_series_without_promoting_preparation_to_commit",
+      "--exact",
+      "--ignored",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_commit_preconditions",
+      "--features",
+      "experimental_changed_commit",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-0",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "prepared_rollback_reports_failure_only_after_local_rollback",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-1",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "prepared_rollback_report_loss_keeps_rollback_fact_and_receipt",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-2",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "prepared_rollback_driver_loss_does_not_report_failure",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-3",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "failure_report_metrics_cases::explicit_original_prepare_error_preserves_report_outcomes_and_blocks_replay",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-4",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "failure_report_metrics_cases::automatic_prepare_failure_cancel_keeps_original_error_and_nested_counters",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-5",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "failure_report_metrics_cases::automatic_prepare_failure_observed_has_separate_outer_and_report_results",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-6",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "failure_report_metrics_cases::empty_and_invalid_preparations_do_not_invent_failure_reports",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-case-7",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\live_commit_preconditions-e3ad5b411a8cc67e.exe",
+      "failure_report_metrics_cases::registered_combination_and_checked_delegate_have_one_report_scope",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-http-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-observability",
+      "--test",
+      "mysql_recovery",
+      "--features",
+      "mysql",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-http",
+    "argv": [
+      "E:\\workspaces\\workspace-github-easy-4-rust\\.seata-target-nodebug-185\\debug\\deps\\mysql_recovery-94f70d0711040763.exe",
+      "first_phase_source_exports_31_stage_series_without_promoting_preparation_to_commit",
+      "--exact",
+      "--ignored",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "aec27eff668b4b14a6103fd5f0fc11b8b0d53446f77f5bd138f6b73af831c82b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "aec27eff668b4b14a6103fd5f0fc11b8b0d53446f77f5bd138f6b73af831c82b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "aec27eff668b4b14a6103fd5f0fc11b8b0d53446f77f5bd138f6b73af831c82b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "aec27eff668b4b14a6103fd5f0fc11b8b0d53446f77f5bd138f6b73af831c82b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "aec27eff668b4b14a6103fd5f0fc11b8b0d53446f77f5bd138f6b73af831c82b"
+    ],
+    "exit_code": 1
+  }
+]
