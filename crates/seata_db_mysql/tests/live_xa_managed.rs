@@ -48,6 +48,18 @@ async fn rm(
     .unwrap();
     (manager, store)
 }
+// 现场元数据篡改矩阵可超过通用短夹具的 EOF 等待；仍拒绝任何额外请求。
+async fn idle(socket: &mut TcpStream) {
+    use tokio::io::AsyncReadExt;
+    let mut byte = [0];
+    assert_eq!(
+        tokio::time::timeout(Duration::from_secs(30), socket.read(&mut byte))
+            .await
+            .unwrap()
+            .unwrap(),
+        0
+    );
+}
 async fn bootstrap(listener: &TcpListener, resource: &str) -> TcpStream {
     let (mut socket, _) = listener.accept().await.unwrap();
     let request = peer::read(&mut socket).await;
@@ -187,7 +199,7 @@ async fn registered_original_xa_prepares_and_completes_through_real_rm_callbacks
                 )
             );
             done.send(()).unwrap();
-            peer::eof(&mut socket).await;
+            idle(&mut socket).await;
         });
         let mut enlisted = adapter
             .register_and_start(&manager.client(), identity.xid(), app.map(str::to_owned))
@@ -231,6 +243,19 @@ async fn registered_original_xa_prepares_and_completes_through_real_rm_callbacks
         tokio::time::timeout(Duration::from_secs(5),async{loop{let rows:i64=sqlx::query_scalar("SELECT COUNT(*) FROM seata_rs_xa_branch_v1 WHERE xid=? AND branch_id=? AND completed=1").bind(identity.xid().as_bytes()).bind(branch).fetch_one(&mut admin).await.unwrap();if rows==1{break;}tokio::time::sleep(Duration::from_millis(5)).await;}}).await.unwrap();
         // 等待两次同向和一次相反回调完成，随后读取原持久日志。
         finished.await.unwrap();
+        let witness_count: i64 = sqlx::query_scalar(
+            "SELECT COUNT(*) FROM seata_rs_xa_commit_witness_v1 WHERE xid=? AND branch_id=?",
+        )
+        .bind(identity.xid().as_bytes())
+        .bind(branch)
+        .fetch_one(&mut admin)
+        .await
+        .unwrap();
+        assert_eq!(
+            witness_count,
+            if phase == BranchPhase::Commit { 1 } else { 0 },
+            "witness was not atomic with original XA direction"
+        );
         let state = store.lease(identity.clone(), phase).await.unwrap().state();
         assert_eq!(state, Some(seata_rm::BranchRecordState::Completed));
         let fresh_source =
@@ -303,7 +328,7 @@ async fn failed_or_lost_registration_cannot_start_mysql_xa() {
                     ),
                 )
                 .await;
-                peer::eof(&mut socket).await;
+                idle(&mut socket).await;
             }
         });
         let oversized = adapter
@@ -366,7 +391,7 @@ async fn unsafe_claim_table_rejects_before_xa_start_and_keeps_original_receipt()
             9007199254740997,
         )
         .await;
-        peer::eof(&mut socket).await;
+        idle(&mut socket).await;
     });
     let error = adapter
         .register_and_start(&manager.client(), "xa:unsafe", None)
@@ -411,7 +436,7 @@ async fn bound_direction_closes_active_scope_and_absence_stays_unknown() {
             9007199254740998,
         )
         .await;
-        peer::eof(&mut socket).await;
+        idle(&mut socket).await;
     });
     let mut tx = adapter
         .register_and_start(&manager.client(), "xa:bound", None)
@@ -470,7 +495,7 @@ async fn persisted_original_identity_and_current_schema_guard_native_finish() {
             9007199254740999,
         )
         .await;
-        peer::eof(&mut socket).await;
+        idle(&mut socket).await;
     });
     let mut tx = adapter
         .register_and_start(&manager.client(), "xa:identity", None)
@@ -557,7 +582,7 @@ async fn changed_commit_durability_after_connect_blocks_xa_start() {
             9007199254741000,
         )
         .await;
-        peer::eof(&mut socket).await;
+        idle(&mut socket).await;
     });
     sqlx::raw_sql("SET GLOBAL innodb_flush_log_at_trx_commit=0")
         .execute(&mut admin)

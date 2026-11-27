@@ -206,3 +206,6 @@ pub use mysql_xa_enlist_error::MySqlXaEnlistError;
 pub use mysql_xa_enlisted_transaction::MySqlXaEnlistedTransaction;
 #[cfg(feature = "xa")]
 pub use mysql_xa_resource_manager::MySqlXaResourceManager;
+
+#[cfg(feature = "xa")]
+mod mysql_xa_commit_witness;

@@ -91,7 +91,7 @@ impl MySqlXaEnlistedTransaction {
     /// 消耗原作用域，持原行锁单次 END/PREPARE；成功返回原真实回执，不自动发送 PhaseOne_Done。
     /// 原生响应未知/取消不重做；错误保留真实回执，Prepared 缺失不能代替已确认回滚。
     pub async fn prepare(mut self) -> Result<RegisteredBranch, MySqlXaEnlistError> {
-        let native = self
+        let mut native = self
             .transaction
             .take()
             .ok_or_else(|| MySqlXaEnlistError::Control {
@@ -101,7 +101,7 @@ impl MySqlXaEnlistedTransaction {
         let deadline = Instant::now() + self.manager.native.source.operation_timeout();
         let receipt = &self.receipt;
         let result = timeout_at(deadline, async {
-            let (gate, row) =
+            let (mut gate, row) =
                 MySqlXaBranchStore::lock(&self.manager.native.source, receipt.identity())
                     .await
                     .map_err(|source| MySqlXaEnlistError::Control {
@@ -114,6 +114,23 @@ impl MySqlXaEnlistedTransaction {
                     source: DbError::RecoveryConflict,
                 });
             }
+            crate::mysql_xa_branch_store::MySqlXaBranchStore::validate_table(
+                &mut gate,
+                &self.manager.native.source,
+                crate::mysql_xa_commit_witness::MySqlXaCommitWitness::TABLE,
+            )
+            .await
+            .map_err(|source| MySqlXaEnlistError::Control {
+                receipt: Box::new(receipt.clone()),
+                source,
+            })?;
+            native
+                .insert_commit_witness(receipt.identity())
+                .await
+                .map_err(|source| MySqlXaEnlistError::Native {
+                    receipt: Box::new(receipt.clone()),
+                    source,
+                })?;
             native
                 .prepare()
                 .await

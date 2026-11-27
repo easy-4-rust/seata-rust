@@ -75,6 +75,7 @@ def run(versions, red, case=None, expected_failure=None):
                 command(version+'-case-'+str(index)+'-independent-business',mysql+['SELECT id,v FROM '+database+'.xa_managed ORDER BY id'])
                 command(version+'-case-'+str(index)+'-independent-state',mysql+['SELECT HEX(xid),branch_id,phase,completed FROM '+database+'.seata_rs_xa_branch_v1 ORDER BY xid,branch_id'])
                 command(version+'-case-'+str(index)+'-independent-prepared',mysql+['XA RECOVER CONVERT XID'])
+                command(version+'-case-'+str(index)+'-independent-witness',mysql+['SELECT HEX(xid),branch_id,phase,completed FROM '+database+'.seata_rs_xa_commit_witness_v1 ORDER BY xid,branch_id'])
             save(out/(version+'-artifact.json'),dict(path=str(artifacts[0]),sha256=sha(artifacts[0])))
     finally:
         for file in (work/'observations').rglob('*'):

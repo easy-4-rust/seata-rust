@@ -196,6 +196,21 @@ impl MySqlXaResourceManager {
         }
         let xid = Self::xa_id(id);
         let prepared = self.native.prepared_observed(&xid).await;
+        if matches!(prepared, Ok(false))
+            && phase == BranchPhase::Commit
+            && crate::mysql_xa_commit_witness::MySqlXaCommitWitness::committed(
+                &self.native.source,
+                id,
+            )
+            .await?
+        {
+            // 正向见证与业务同 XA 原子提交；只结束原持久决定，不重发原生命令。
+            MySqlXaBranchStore::complete(&mut gate, id, phase).await?;
+            gate.commit()
+                .await
+                .map_err(|e| DbError::driver("XA witnessed terminal commit", e))?;
+            return Ok(BranchResolution::Applied);
+        }
         if !matches!(prepared, Ok(true)) {
             gate.rollback()
                 .await

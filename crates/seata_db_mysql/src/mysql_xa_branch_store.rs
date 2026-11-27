@@ -26,16 +26,29 @@ impl MySqlXaBranchStore {
         tx: &mut Transaction<'static, MySql>,
         source: &MySqlDataSource,
     ) -> Result<(), DbError> {
-        sqlx::query("SELECT 1 FROM seata_rs_xa_branch_v1 LIMIT 0 FOR UPDATE")
+        Self::validate_table(tx, source, Self::TABLE).await
+    }
+    /// 参数为原控制事务、数据源和内部固定表名；校验相同的不可变身份物理存储契约。
+    pub(crate) async fn validate_table(
+        tx: &mut Transaction<'static, MySql>,
+        source: &MySqlDataSource,
+        table: &'static str,
+    ) -> Result<(), DbError> {
+        if table != Self::TABLE
+            && table != crate::mysql_xa_commit_witness::MySqlXaCommitWitness::TABLE
+        {
+            return Err(DbError::RecoveryConflict);
+        }
+        sqlx::query(&format!("SELECT 1 FROM {table} LIMIT 0 FOR UPDATE"))
             .execute(&mut **tx)
             .await
             .map_err(|e| DbError::driver("XA branch metadata lock", e))?;
-        MySqlTableMetaReader::verify_current_engine(tx, Self::TABLE).await?;
+        MySqlTableMetaReader::verify_current_engine(tx, table).await?;
         CurrentTableConstraints::verify(
             tx,
             &source.control_pool().connect_options(),
             source.database(),
-            Self::TABLE,
+            table,
         )
         .await?;
         let durable: i64 =
@@ -48,7 +61,7 @@ impl MySqlXaBranchStore {
                 feature: "XA branch requires durable InnoDB commit",
             });
         }
-        let columns=sqlx::query("SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4),CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4),CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4),CAST(COLUMN_DEFAULT AS CHAR CHARACTER SET utf8mb4),CAST(EXTRA AS CHAR CHARACTER SET utf8mb4),CAST(COLLATION_NAME AS CHAR CHARACTER SET utf8mb4) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? ORDER BY ORDINAL_POSITION LIMIT 9").bind(source.database()).bind(Self::TABLE).fetch_all(&mut **tx).await.map_err(|e|DbError::driver("XA branch columns",e))?;
+        let columns=sqlx::query("SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4),CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4),CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4),CAST(COLUMN_DEFAULT AS CHAR CHARACTER SET utf8mb4),CAST(EXTRA AS CHAR CHARACTER SET utf8mb4),CAST(COLLATION_NAME AS CHAR CHARACTER SET utf8mb4) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? ORDER BY ORDINAL_POSITION LIMIT 9").bind(source.database()).bind(table).fetch_all(&mut **tx).await.map_err(|e|DbError::driver("XA branch columns",e))?;
         let expected = [
             ("xid", "varbinary(64)", false, None),
             ("branch_id", "bigint", false, None),
@@ -89,7 +102,7 @@ impl MySqlXaBranchStore {
                 return Err(DbError::RecoveryConflict);
             }
         }
-        let indexes=sqlx::query("SELECT CAST(INDEX_NAME AS CHAR CHARACTER SET utf8mb4) AS INDEX_NAME,CAST(NON_UNIQUE AS SIGNED) AS n,CAST(SEQ_IN_INDEX AS SIGNED) AS s,CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS COLUMN_NAME,CAST(SUB_PART IS NULL AS SIGNED) AS full_column,CAST(INDEX_TYPE AS CHAR CHARACTER SET utf8mb4) AS INDEX_TYPE,CAST(IS_VISIBLE AS CHAR CHARACTER SET utf8mb4) AS IS_VISIBLE,CAST(EXPRESSION IS NULL AS SIGNED) AS plain FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? ORDER BY INDEX_NAME,SEQ_IN_INDEX LIMIT 3").bind(source.database()).bind(Self::TABLE).fetch_all(&mut **tx).await.map_err(|e|DbError::driver("XA branch index",e))?;
+        let indexes=sqlx::query("SELECT CAST(INDEX_NAME AS CHAR CHARACTER SET utf8mb4) AS INDEX_NAME,CAST(NON_UNIQUE AS SIGNED) AS n,CAST(SEQ_IN_INDEX AS SIGNED) AS s,CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS COLUMN_NAME,CAST(SUB_PART IS NULL AS SIGNED) AS full_column,CAST(INDEX_TYPE AS CHAR CHARACTER SET utf8mb4) AS INDEX_TYPE,CAST(IS_VISIBLE AS CHAR CHARACTER SET utf8mb4) AS IS_VISIBLE,CAST(EXPRESSION IS NULL AS SIGNED) AS plain FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? ORDER BY INDEX_NAME,SEQ_IN_INDEX LIMIT 3").bind(source.database()).bind(table).fetch_all(&mut **tx).await.map_err(|e|DbError::driver("XA branch index",e))?;
         if indexes.len() != 2 {
             return Err(DbError::RecoveryConflict);
         }
@@ -137,9 +150,17 @@ impl MySqlXaBranchStore {
         source: &MySqlDataSource,
         id: &BranchIdentity,
     ) -> Result<(Transaction<'static, MySql>, Option<MySqlXaBranchRecord>), DbError> {
+        Self::lock_table(source, id, Self::TABLE).await
+    }
+    /// 参数为原身份及固定内部表；返回持锁且逐字段验证的原登记或原提交见证。
+    pub(crate) async fn lock_table(
+        source: &MySqlDataSource,
+        id: &BranchIdentity,
+        table: &'static str,
+    ) -> Result<(Transaction<'static, MySql>, Option<MySqlXaBranchRecord>), DbError> {
         let mut tx = Self::begin(source).await?;
-        Self::validate(&mut tx, source).await?;
-        let row=sqlx::query("SELECT resource_id,server_uuid,schema_version,phase,completed,CAST(application_data <=> ? AS SIGNED) AS app_matches,CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) AS app_bounded FROM seata_rs_xa_branch_v1 WHERE xid=? AND branch_id=? FOR UPDATE").bind(id.application_data().map(str::as_bytes)).bind(id.xid().as_bytes()).bind(id.branch_id()).fetch_optional(&mut *tx).await.map_err(|e|DbError::driver("XA branch read",e))?;
+        Self::validate_table(&mut tx, source, table).await?;
+        let row=sqlx::query(&format!("SELECT resource_id,server_uuid,schema_version,phase,completed,CAST(application_data <=> ? AS SIGNED) AS app_matches,CAST(application_data IS NULL OR OCTET_LENGTH(application_data)<=1048576 AS SIGNED) AS app_bounded FROM {table} WHERE xid=? AND branch_id=? FOR UPDATE")).bind(id.application_data().map(str::as_bytes)).bind(id.xid().as_bytes()).bind(id.branch_id()).fetch_optional(&mut *tx).await.map_err(|e|DbError::driver("XA branch read",e))?;
         let Some(row) = row else {
             return Ok((tx, None));
         };

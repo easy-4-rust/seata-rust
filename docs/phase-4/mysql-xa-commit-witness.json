@@ -1,0 +1,63 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "status": "ORIGINAL_COMMIT_OK_LOSS_RECOVERED_FROM_SAME_XA_COMMITTED_WITNESS",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "managed_mysql_cases_per_version": 8,
+  "original_java_global_transactions_per_version": 2,
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 366,
+    "successful_harness_summaries": 171,
+    "strict_xa_mysql_clippy": true
+  },
+  "final_target_sources_sealed": true,
+  "final_test_harness_adjustments_after_199_workspace": "EOF wait and cumulative owned proxy budget; complete dual-version live matrix rebuilt and rerun",
+  "red_test_failed_for_required_behavior": true,
+  "native_COMMIT_commands_per_loss_case": 1,
+  "callback_statuses_per_loss_case": [
+    6,
+    5
+  ],
+  "witness_corruptions_rejected_per_version": 6,
+  "proof_weakenings_rejected": 12,
+  "explicit_migration": "015_seata_rs_xa_commit_witness.sql",
+  "runtime_auto_migration": false,
+  "Java_Undo_or_legacy_records_changed": false,
+  "authority": {
+    "red": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql-red_20261127_211726_c4dfa0fc",
+      "catalog_sha256": "dc5f0e5f18752d5457304ca5322749a03a234f47b9999eb9f9261317a1835011"
+    },
+    "mysql": {
+      "path": "docs/phase-4/evidence/xa-managed/mysql_20261127_213103_87a1383c",
+      "catalog_sha256": "9c3437f15bc37a2d705b56ebab79f580bbf88ec061e24c4eeef002471927500f"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/xa-managed/java_20261127_213103_b516bf30",
+      "catalog_sha256": "81e5d4dddc66609e00fb741a58ac8984838b2b986c35531ae4d1819b3dc23c18"
+    },
+    "regression199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_212712_65c62bac",
+      "catalog_sha256": "e18be08e5b384def9610ae0b52bb454184b638180e948504670b44f691bfed05"
+    },
+    "regression185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_213103_f7db3432",
+      "catalog_sha256": "3c7445dcce8e60aad3c77cf6d2de29ae5c418fe7fce891c5b2bd02630b42e5fc"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/xa-managed/witness_validation_20261127_final",
+      "catalog_sha256": "1f5da41178f7eeb0609939b91f5602de5fb6445724ca6b636ece34ea05a3ada2"
+    }
+  },
+  "remaining": [
+    "Rollback native OK loss recovery",
+    "Durable producer/end intent and old session fence",
+    "Full original TC fault/concurrency/process crash gate",
+    "Deployment/permissions/witness retention and remaining AT/TCC/Phase5-7 gates"
+  ],
+  "full_XA_gate_complete": false,
+  "whole_plan_complete": false
+}

@@ -28,3 +28,6 @@ seata-observability 显式启用 mysql 特性后，with_mysql_recovery 可独立
 原生操作错误分为本次操作 NotSent、命令可能发送后的 Unknown、只读观察失败与中毒。prepared_observed 只判断当前真正 XA RECOVER 中是否存在完整三分量原身份；缺行或 XAER_NOTA 不能确认原提交/回滚，也不授权自动重试。Drop/取消关闭活动连接，不把 Prepared 当作已回滚。调用方保留原身份并遵循 TC 的事务决定。
 
 受管理入口 MySqlXaResourceManager 已接入正式 XA BranchResource 和单次 TC 登记，014 显式新表保存原回执身份、防重启行、原方向与已确认终态；仅实际 Prepared 可以执行同方向结束，终态重读不再次发送原生控制。MySqlXaEnlistedTransaction 只允许登记后 DML 与消费式 Prepare，不自动发送 AT 的 PhaseOne_Done；错误保留原真实回执。缺登记/Prepared 和原生响应丢失仍保持未知，不能用任意字节身份冒充登记。结束已生效但终态记录未确认的恢复、旧活动会话围栏、完整 XA RM/Java TC 故障门禁与生产部署仍开放。见 [实施契约](../../docs/phase-2/mysql-xa-contract.md)。AT 默认生产 COMMIT 门槛不因此改变。
+
+
+受管理 Prepare 还要求显式部署 015 提交见证表；原 ACTIVE XA 在 END/PREPARE 前写入精确原身份见证，与业务一起提交或回滚。原生 Commit OK 丢失后，精确匹配的已提交见证可恢复同一原方向终态，不重发 COMMIT。缺见证仍 Unknown；旧 014 Prepared 没有见证时不会被补造成功。回滚响应丢失、旧活动会话围栏与完整故障门禁继续开放。

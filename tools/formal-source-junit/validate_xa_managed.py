@@ -87,6 +87,16 @@ def java(folder):
     need(load(folder/'cleanup.json')['owned_container_removed'], 'Owned Java MySQL remains')
 
 
+def witness_proof(proof):
+    need(proof['intermediate_journal'] == 'Pending' and proof['journal'] == 'Completed' and proof['control_state'] == [1, 1] and proof['actual_commands'] == 1 and proof['callback_statuses'] == [6, 5], 'Lost original commit OK lifecycle changed')
+    need(proof['witness_corruptions_rejected'] == 6 and proof['missing_witness'] == 'Unknown' and proof['fresh_manager_recovered'] is True and proof['witness_invisible_before_commit'] is True and proof['witness_extra_index_rejected'] is True, 'Witness safety checks missing')
+    request = bytes(proof['request'])
+    response = bytes(proof['held_original_ok'])
+    expected = ("XA COMMIT X'"+proof['xid'].encode().hex().upper()+"',X'"+('-'+proof['branch_id']).encode().hex().upper()+"',9752").encode()
+    need(int.from_bytes(request[:3], 'little') == len(request)-4 and request[3:] == b'\x00\x03'+expected, 'Captured command not original COM_QUERY XA identity')
+    need(int.from_bytes(response[:3], 'little') == len(response)-4 and response[3:5] == b'\x01\x00', 'Captured original native COMMIT OK missing')
+
+
 def mysql(folder):
     catalog(folder, sha(folder/'catalog.json'))
     sources(folder)
@@ -104,7 +114,10 @@ def mysql(folder):
             if index == 6:
                 need(sum(b'XA COMMIT ' in line for line in writes) == 1, 'Unknown native commit replayed')
                 proof = load(folder/'observations'/rust/'case-6/proof/native-commit-loss.json')
-                need(proof['journal'] == 'Pending' and proof['control_state'] == [1, 0] and proof['actual_commands'] == 1 and proof['callback_statuses'] == [6, 6], 'Lost original commit OK falsely completed')
+                witness_proof(proof)
+                state = (proof['xid'].encode().hex().upper()+'\t'+proof['branch_id']+'\t1\t1').encode()
+                need((folder/(prefix+'-independent-state.stdout')).read_bytes().strip() == state, 'Independent original terminal differs')
+                need((folder/(prefix+'-independent-witness.stdout')).read_bytes().strip() == state, 'Independent original committed witness differs')
     need(load(folder/'cleanup.json')['owned_container_removed'], 'Owned managed MySQL remains')
 
 

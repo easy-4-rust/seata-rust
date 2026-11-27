@@ -4,7 +4,7 @@ use crate::{
 };
 use seata_at::SqlRecognizer;
 use seata_datasource::FieldValue;
-use seata_xa::{XaBranchXid, XaOperation};
+use seata_xa::{XaBranchXid, XaOperation, XaXid};
 use sqlx::{pool::PoolConnection, MySql};
 use tokio::time::{timeout_at, Instant};
 /// 独占连接的 ACTIVE XA 作用域；失败/取消后中毒，Prepare 消费原作用域。
@@ -103,6 +103,51 @@ impl MySqlXaTransaction {
         self.connection = Some(connection);
         self.poisoned = false;
         Ok(result)
+    }
+    /// 参数为原登记身份；仅受管理 Prepare 可在原 ACTIVE 连接写入提交见证，失败/取消即中毒。
+    pub(crate) async fn insert_commit_witness(
+        &mut self,
+        identity: &seata_rm::BranchIdentity,
+    ) -> Result<(), MySqlXaError> {
+        if self.poisoned
+            || identity.xid().as_bytes() != self.xid.get_global_transaction_id()
+            || identity.branch_id() != self.xid.get_branch_id()
+        {
+            return Err(MySqlXaError::Poisoned);
+        }
+        self.poisoned = true;
+        let mut connection = self.connection.take().ok_or(MySqlXaError::Poisoned)?;
+        let deadline = Instant::now() + self.source.source.operation_timeout();
+        timeout_at(
+            deadline,
+            crate::mysql_xa_commit_witness::MySqlXaCommitWitness::insert(
+                &mut connection,
+                &self.source.source,
+                identity,
+            ),
+        )
+        .await
+        .map_err(|_| MySqlXaError::Unknown {
+            operation: XaOperation::Execute,
+            source: DbError::Deadline {
+                operation: "XA commit witness",
+            },
+        })?
+        .map_err(|source| MySqlXaError::Unknown {
+            operation: XaOperation::Execute,
+            source,
+        })?;
+        if Instant::now() >= deadline {
+            return Err(MySqlXaError::Unknown {
+                operation: XaOperation::Execute,
+                source: DbError::Deadline {
+                    operation: "XA commit witness",
+                },
+            });
+        }
+        self.connection = Some(connection);
+        self.poisoned = false;
+        Ok(())
     }
     /// 消耗原 ACTIVE 作用域；返回原 END/PREPARE 明确确认的身份，Prepared 在原连接关闭后继续由 MySQL 持有。
     /// 失败/取消不能据此认定回滚；返回值不是 TC 登记回执，必须显式观察/解决同一身份。

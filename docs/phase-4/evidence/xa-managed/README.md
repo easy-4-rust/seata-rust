@@ -1,5 +1,7 @@
 # 正式 XA 登记与 RM 接入：选定阶段
 
+后续已推进 [同事务 Commit 见证恢复](COMMIT_WITNESS.md)；以下描述及 machine ledger 保留第一阶段的历史结果。新写入分支通过 015 见证扩展恢复正向提交；没有见证的旧分支不会被补造终态。
+
 规格事实源：[XA 契约](../../../phase-2/mysql-xa-contract.md)。固定结果及校验目录见 [machine ledger](../../mysql-xa-managed.json)。
 
 受管理入口使用真实 ResourceClient 签发的原 RegisteredBranch，登记成功后持久防重放行，再启动原 XA。正常 Prepare 不发送 AT 的 PhaseOne_Done。两方向回调及重建后的终态读取由生产 BranchResource 完成，不能从恢复缺行推断终态。

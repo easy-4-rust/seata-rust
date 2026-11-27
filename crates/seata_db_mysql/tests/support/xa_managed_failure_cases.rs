@@ -2,11 +2,11 @@
 #![allow(clippy::unwrap_used)]
 #[path = "xa_command_proxy.rs"]
 mod xa_command_proxy;
-use super::{bootstrap, callback, fixture, peer, registered, rm};
+use super::{bootstrap, callback, fixture, idle, peer, registered, rm};
 use seata_at::SqlRecognizerFactory;
 use seata_db_mysql::{MySqlDataSource, MySqlXaResourceManager};
 use seata_protocol::{transaction::BranchRegisterResponse, BranchType, Message, ResultCode};
-use seata_rm::{BranchIdentity, BranchPhase, BranchRecordState, BranchResource};
+use seata_rm::{BranchIdentity, BranchPhase, BranchRecordState, BranchResolution, BranchResource};
 use std::{sync::Arc, time::Duration};
 use tokio::net::TcpListener;
 
@@ -43,6 +43,8 @@ async fn lost_native_commit_ok_preserves_rm_pending_and_does_not_replay() {
     .unwrap();
     let peer_identity = identity.clone();
     let (start, ready) = tokio::sync::oneshot::channel();
+    let (first_done, first_finished) = tokio::sync::oneshot::channel();
+    let (resume, proceed) = tokio::sync::oneshot::channel();
     let (done, finished) = tokio::sync::oneshot::channel();
     let server = tokio::spawn(async move {
         let mut socket = bootstrap(&listener, key.resource_id()).await;
@@ -61,14 +63,15 @@ async fn lost_native_commit_ok_preserves_rm_pending_and_does_not_replay() {
                 .1,
             6
         );
+        first_done.send(()).unwrap();
+        proceed.await.unwrap();
         assert_eq!(
-            callback(&mut socket, -28, &peer_identity, BranchPhase::Commit)
-                .await
-                .1,
-            6
+            callback(&mut socket, -28, &peer_identity, BranchPhase::Commit).await,
+            (ResultCode::Success, 5),
+            "committed same-XA witness did not resolve original Pending"
         );
         done.send(()).unwrap();
-        peer::eof(&mut socket).await;
+        idle(&mut socket).await;
     });
     let mut tx = adapter
         .register_and_start(&manager.client(), identity.xid(), None)
@@ -81,8 +84,101 @@ async fn lost_native_commit_ok_preserves_rm_pending_and_does_not_replay() {
     .await
     .unwrap();
     tx.prepare().await.unwrap();
+    let invisible: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM seata_rs_xa_commit_witness_v1")
+        .fetch_one(&mut admin)
+        .await
+        .unwrap();
+    assert_eq!(
+        invisible, 0,
+        "Prepared witness leaked before original COMMIT"
+    );
     proxy.arm();
     start.send(()).unwrap();
+    first_finished.await.unwrap();
+    assert_eq!(
+        store
+            .lease(identity.clone(), BranchPhase::Commit)
+            .await
+            .unwrap()
+            .state(),
+        Some(BranchRecordState::Pending)
+    );
+    let uuid: String = sqlx::query_scalar("SELECT @@server_uuid")
+        .fetch_one(&mut admin)
+        .await
+        .unwrap();
+    for assignment in [
+        "resource_id='wrong'",
+        "application_data='wrong'",
+        "server_uuid='wrong'",
+        "schema_version=9",
+        "phase=0",
+        "completed=0",
+    ] {
+        sqlx::raw_sql(&format!(
+            "UPDATE seata_rs_xa_commit_witness_v1 SET {assignment}"
+        ))
+        .execute(&mut admin)
+        .await
+        .unwrap();
+        assert!(
+            adapter
+                .recover(&identity, BranchPhase::Commit)
+                .await
+                .is_err(),
+            "corrupt XA witness accepted as original commit proof"
+        );
+        sqlx::query("UPDATE seata_rs_xa_commit_witness_v1 SET resource_id=?,application_data=NULL,server_uuid=?,schema_version=1,phase=1,completed=1")
+            .bind(identity.resource().resource_id().as_bytes()).bind(uuid.as_bytes()).execute(&mut admin).await.unwrap();
+    }
+    sqlx::raw_sql("ALTER TABLE seata_rs_xa_commit_witness_v1 ADD KEY unexpected(resource_id)")
+        .execute(&mut admin)
+        .await
+        .unwrap();
+    assert!(
+        adapter
+            .recover(&identity, BranchPhase::Commit)
+            .await
+            .is_err(),
+        "unexpected witness index accepted"
+    );
+    sqlx::raw_sql("ALTER TABLE seata_rs_xa_commit_witness_v1 DROP KEY unexpected")
+        .execute(&mut admin)
+        .await
+        .unwrap();
+    sqlx::raw_sql("DELETE FROM seata_rs_xa_commit_witness_v1")
+        .execute(&mut admin)
+        .await
+        .unwrap();
+    assert_eq!(
+        adapter
+            .recover(&identity, BranchPhase::Commit)
+            .await
+            .unwrap(),
+        BranchResolution::Unknown,
+        "missing witness falsely proved original COMMIT"
+    );
+    let incomplete: u8 = sqlx::query_scalar("SELECT completed FROM seata_rs_xa_branch_v1")
+        .fetch_one(&mut admin)
+        .await
+        .unwrap();
+    assert_eq!(
+        incomplete, 0,
+        "rejected/missing witness changed original terminal"
+    );
+    // 独立管理员只恢复测试先前移走的原见证字段，不为生产恢复合成身份。
+    sqlx::raw_sql("INSERT INTO seata_rs_xa_commit_witness_v1 SELECT xid,branch_id,resource_id,application_data,server_uuid,schema_version,1,1 FROM seata_rs_xa_branch_v1").execute(&mut admin).await.unwrap();
+    let fresh_source = MySqlDataSource::connect(fixture::owned_mysql::options(Some(proxy.port)))
+        .await
+        .unwrap();
+    let fresh = MySqlXaResourceManager::new(fresh_source.clone()).unwrap();
+    assert_eq!(
+        fresh.recover(&identity, BranchPhase::Commit).await.unwrap(),
+        BranchResolution::Applied,
+        "fresh resource failed original committed witness recovery"
+    );
+    fresh_source.close().await.unwrap();
+    resume.send(()).unwrap();
     finished.await.unwrap();
     let (request, response) = proxy.captured().unwrap();
     assert_eq!(request[4..], command);
@@ -94,14 +190,14 @@ async fn lost_native_commit_ok_preserves_rm_pending_and_does_not_replay() {
             .await
             .unwrap()
             .state(),
-        Some(BranchRecordState::Pending),
-        "lost native success was falsely completed in RM journal"
+        Some(BranchRecordState::Completed),
+        "committed same-XA witness did not finish original RM journal"
     );
     let row: (u8, u8) = sqlx::query_as("SELECT phase,completed FROM seata_rs_xa_branch_v1")
         .fetch_one(&mut admin)
         .await
         .unwrap();
-    assert_eq!(row, (1, 0));
+    assert_eq!(row, (1, 1));
     assert!(sqlx::raw_sql("XA RECOVER")
         .fetch_all(&mut admin)
         .await
@@ -116,7 +212,7 @@ async fn lost_native_commit_ok_preserves_rm_pending_and_does_not_replay() {
     );
     fixture::record(
         "native-commit-loss",
-        serde_json::json!({"branch_id":identity.branch_id().to_string(),"xid":identity.xid(),"request":request,"held_original_ok":response,"actual_commands":count,"callback_statuses":[6,6],"journal":"Pending","control_state":[1,0],"business":[[1,42]],"missing_prepared_not_success":true}),
+        serde_json::json!({"branch_id":identity.branch_id().to_string(),"xid":identity.xid(),"request":request,"held_original_ok":response,"actual_commands":count,"callback_statuses":[6,5],"witness_invisible_before_commit":true,"witness_corruptions_rejected":6,"witness_extra_index_rejected":true,"missing_witness":"Unknown","fresh_manager_recovered":true,"intermediate_journal":"Pending","journal":"Completed","control_state":[1,1],"business":[[1,42]],"missing_prepared_not_success":true}),
     );
     source.close().await.unwrap();
     plain.close().await.unwrap();
@@ -162,7 +258,7 @@ async fn callback_before_registration_reply_stays_pending_until_original_prepare
             (ResultCode::Success, 8)
         );
         done.send(()).unwrap();
-        peer::eof(&mut socket).await;
+        idle(&mut socket).await;
     });
     let mut tx = adapter
         .register_and_start(&manager.client(), identity.xid(), None)

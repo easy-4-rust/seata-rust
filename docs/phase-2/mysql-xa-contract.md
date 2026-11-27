@@ -54,3 +54,11 @@ flowchart LR
 第一阶段验证正式 XA 登记、无原生动作的登记拒绝/回包丢失、单次持久登记后原始 Prepare、RM 正常两方向回调与重复、独立恢复行的方向拒绝、日志重建及全局 TC 正常路径。本阶段仍有明确缺口：原生结束已生效而终态行尚未确认时，缺 Prepared 继续 Unknown；登记/START/Prepare 的进程退出以及旧活动会话的否定证明需要下一阶段的持久生产者/结束意图、同 XA 提交见证和旧会话围栏。它们继续作为完整 XA RM Gate 的必要验收，不能因第一阶段通过删除。所有错误必须保留已经真实取得的原登记回执；消费式 Prepare 前调用方也须保留该原身份，取消 Future 不能从数据库缺行重造回执。
 
 第一阶段的最终选定证据见 [受管理 XA 记录](../phase-4/evidence/xa-managed/README.md) 和 [machine ledger](../phase-4/mysql-xa-managed.json)：Rust 1.99/1.85 每版八项受管理真实 MySQL 场景、八项原生回归以及原 Java TC 的 Commit/Rollback 全局事务。双版本工作区各 785 passed / 366 ignored，严格 XA/MySQL Clippy 通过；ignored 场景由独立现场工具明确执行，不能把忽略本身计作通过。独立校验核对封存源码、原始 V1 帧、数据库状态与实际清理结果。原生 COMMIT OK 丢失现场仍为 Pending，保留上述恢复缺口；此处只确认第一阶段，不关闭完整 XA Gate 或总计划。
+
+## XA 同事务提交见证：恢复增量
+
+015 显式部署独立 InnoDB 提交见证表。受管理 Prepare 在原 ACTIVE XA、原物理连接写入精确原身份见证，再 END/PREPARE；正常业务入口继续禁止写内部表。见证与业务只在同一 XA COMMIT 后共同可见，Rollback 不留下见证。写见证之前持控制行锁核对原方向尚未绑定，校验精确表结构、实例、约束和持久性，失败/取消封闭原作用域。
+
+回调先持久绑定原方向。原 Prepared 可见时沿用原生结束；Commit 响应未知后保留 Pending。后续同方向恢复仅在原 Prepared 不可见且实际读到精确原身份、同实例/schema/version 的已提交见证时，可持久确认原 Commit 终态；不重发原生 COMMIT、不重放业务。缺见证仍为 Unknown，不能证明回滚。原 014 登记和既有 Prepared 不合成见证；旧分支若原生响应已丢失且无见证，继续保持未知。
+
+验收先复现原 COMMIT OK 截留后的 Pending，再由同一原分支回调通过已提交见证完成；双版本真实 MySQL、原 TC 正常两方向、完整受影响回归、见证身份/结构篡改及缺行拒绝。该增量不关闭旧活动会话围栏、持久生产者/结束意图、Rollback ACK 丢失恢复、完整故障矩阵或总计划。

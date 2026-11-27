@@ -61,7 +61,7 @@ impl XaCommandProxy {
                     _=&mut stopping=>break,
                     Some(_)=workers.join_next(),if !workers.is_empty()=>{},
                     incoming=listener.accept()=>{
-                        let (client,_)=incoming.unwrap();accepted+=1;if accepted>32 {drop(client);continue;}
+                        let (client,_)=incoming.unwrap();accepted+=1;if accepted>256 {drop(client);continue;}
                         let flag=flag.clone();let record=record.clone();let command=command.clone();let counted=counted.clone();
                         workers.spawn(async move {
                             let server=TcpStream::connect(("127.0.0.1",upstream)).await?;
