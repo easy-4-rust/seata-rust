@@ -102,3 +102,9 @@ Rollback 在无 Prepared、也没有既有 Prepared 回滚证明时，只能对�
 覆盖 enlist 后、活动业务后、Prepare 后两方向、原生 Commit/Rollback OK 截留后、两方向终态控制 COMMIT OK 截留后；另将自有写入进程事件循环停住，证实进程仍存活、guard 尚未释放时回调保持 Pending，实际终止后才能完成。所有终止均使用自有 Child 句柄，不按外部 PID 杀进程或发 SQL KILL。子进程 PID、原始请求/OK、旧日志状态、数据库前后状态、新 RM 回调和独立 general_log 一起封存。该故障矩阵验证现有恢复机制，不据单个进程测试关闭完整 XA/生产或总计划。
 
 最终证据见 [真实进程故障验证](../phase-4/evidence/xa-managed/PROCESS_CRASH.md) 和 [machine ledger](../phase-4/mysql-xa-process-crash.json)：双版本每版十三项受管理 MySQL、九个实际 writer 进程检查点，合计十八次实际进程退出/恢复；原生和终态控制 OK 截留后旧 Pending 日志恢复，无原生结束重放；无响应旧 guard 在实际释放前保持 Pending。工作区各 785 passed / 372 ignored，严格检查和原 Java TC 正常两方向回归通过，每版二十三项证据削弱被拒绝。该批验收没有新增运行时行为，完整 XA/生产及总计划继续开放。
+
+## 固定原 Java TC 的回调投递故障
+
+使用原 TC 构建产物、原数据库存储和实际 XA 分支；透传代理重复同一原回调，或扣留第一次真实终态回包并关闭 RM 会话。由 TC 自身重试，客户端不重发全局 End，不把 Finished 或 TC 记录缺失单独解释成方向成功。必须同时核对原分支终态回包、原 TC 固定源码对应的分支/全局成功日志、控制/业务状态和 TC 清理，并确认没有再次原生结束或业务重放。正常未注入场景继续要求原全局结束响应明确 Committed/Rollbacked。此项是完整原 TC 故障门禁的增量，不关闭进程/数据库/网络/生产或总计划剩余验收。
+
+最终证据见 [原 TC 回调故障验收](../phase-4/evidence/xa-managed/JAVA_CALLBACK_FAULTS.md) 和 [machine ledger](../phase-4/mysql-xa-java-callback-faults.json)：两版合计八项真实故障、四项原 TC 正常事务，八十项语义证据削弱被拒绝；工作区各 785 passed / 372 ignored，严格检查通过。重连下首次 TM 超时仍保留未决，原 TC 最终结果由分支回包、固定源日志和物理结果联合确认；没有全局 End、原生结束或业务重放。

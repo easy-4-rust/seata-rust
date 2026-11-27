@@ -1,0 +1,61 @@
+{
+  "specification": "docs/phase-2/mysql-xa-contract.md",
+  "status": "ORIGINAL_JAVA_TC_CALLBACK_DUPLICATION_AND_RECONNECT_VERIFIED",
+  "Rust_versions": [
+    "1.99",
+    "1.85"
+  ],
+  "modes": [
+    "duplicate",
+    "reconnect"
+  ],
+  "directions": [
+    "commit",
+    "rollback"
+  ],
+  "fault_cases": 8,
+  "normal_Java_transactions": 4,
+  "semantic_weakenings_rejected": 80,
+  "workspace_per_version": {
+    "passed": 785,
+    "ignored": 372,
+    "strict_xa_mysql_clippy": true
+  },
+  "initial_TM_timeout_remains_unknown": true,
+  "Finished_inferred_as_success": false,
+  "client_End_retries": 0,
+  "native_end_replay": false,
+  "runtime_behavior_changed": false,
+  "new_public_API_or_migrations": 0,
+  "Java_Undo_or_legacy_records_changed": false,
+  "authority": {
+    "fault": {
+      "path": "docs/phase-4/evidence/xa-managed/java-fault_20261127_233736_50122a1f",
+      "catalog_sha256": "cdb532406cb7ee52ed6b25bd6b2c647dcfe7afc13c21ceaa98f22276a2bb5266"
+    },
+    "java": {
+      "path": "docs/phase-4/evidence/xa-managed/java_20261127_233925_1b3b5cad",
+      "catalog_sha256": "0953d2024e76801a52c461fbcbbeea4759e3369a5e8f4ee9f6737fa776982bcb"
+    },
+    "regression199": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.99_20261127_233925_a6c71ffe",
+      "catalog_sha256": "e47089e5ce29d558cedc94d6d3e73c831157ee632a3dd24dc413697bccc62de9"
+    },
+    "regression185": {
+      "path": "docs/phase-4/evidence/mysql-xa/regression_1.85_20261127_233925_39cf0cde",
+      "catalog_sha256": "62ea93a0af30ac45cb278771ef7180f94e0430f4e868508a9ca13e8de90ceea7"
+    },
+    "validation": {
+      "path": "docs/phase-4/evidence/xa-managed/java_fault_validation_20261127_final",
+      "catalog_sha256": "f33a569898460de695f936d07d1c92db4324c8208d0fe053936795af986ef85a"
+    }
+  },
+  "XA_full_fault_gate_complete": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "Full original Java TC failure/concurrency matrix",
+    "Database crash/restart and recovery topology",
+    "Production privileges/deployment/scalability/retention/observability",
+    "AT and TCC acceptance; Phase 5-7"
+  ]
+}

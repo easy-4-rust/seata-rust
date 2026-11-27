@@ -77,19 +77,43 @@ async fn run(rollback: bool) {
     } else {
         GlobalStatus::Committed
     };
+    let fault = std::env::var("SEATA_XA_JAVA_FAULT").ok();
+    if let Some(mode) = &fault {
+        assert!(matches!(mode.as_str(), "duplicate" | "reconnect"));
+    }
     let end = if rollback {
-        global.rollback().await.unwrap()
+        global.rollback().await
     } else {
-        global.commit().await.unwrap()
+        global.commit().await
     };
     let observed = match end {
-        TransactionCompletion::Observed { outcome, .. } => outcome.status(),
+        Ok(TransactionCompletion::Observed { outcome, .. }) => Some(outcome.status()),
+        other if fault.is_some() => {
+            let _ = other;
+            None
+        }
         other => panic!("original XA global end unresolved: {other:?}"),
     };
-    assert_eq!(
-        observed, expected,
-        "original Java TC did not confirm requested XA global direction"
-    );
+    if fault.is_none() {
+        assert_eq!(
+            observed,
+            Some(expected),
+            "original Java TC did not confirm requested XA global direction"
+        );
+    }
+    // 故障下只等待原 TC 自身的重试；客户端不重发 End，也不从 Finished 猜终态。
+    let deadline = tokio::time::Instant::now() + Duration::from_secs(25);
+    loop {
+        let remaining:i64=sqlx::query_scalar("SELECT (SELECT COUNT(*) FROM global_table WHERE xid=?)+(SELECT COUNT(*) FROM branch_table WHERE xid=?)").bind(xid.as_str()).bind(xid.as_str()).fetch_one(&mut admin).await.unwrap();
+        if remaining == 0 {
+            break;
+        }
+        assert!(
+            tokio::time::Instant::now() < deadline,
+            "original TC did not remove original global/branch after retry"
+        );
+        tokio::time::sleep(Duration::from_millis(25)).await;
+    }
     let state = store.lease(identity.clone(), phase).await.unwrap().state();
     assert_eq!(state, Some(BranchRecordState::Completed));
     let rows = fixture::business(&mut admin).await;
@@ -108,10 +132,17 @@ async fn run(rollback: bool) {
         assert!(tokio::time::Instant::now() < deadline);
         tokio::time::sleep(Duration::from_millis(10)).await;
     }
-    fixture::record(
-        "original-java-xa",
-        serde_json::json!({"xid":xid.as_str(),"branch_id":identity.branch_id().to_string(),"resource_id":adapter.key().resource_id(),"branch_type":3,"lock_key":null,"application_data":null,"phase":if rollback{"Rollback"}else{"Commit"},"global_status":format!("{observed:?}"),"journal":"Completed","business":rows,"prepared_remaining":0,"phase_one_reports":0}),
-    );
+    if let Some(mode) = fault {
+        fixture::record(
+            "original-java-xa-fault",
+            serde_json::json!({"mode":mode,"xid":xid.as_str(),"branch_id":identity.branch_id().to_string(),"resource_id":adapter.key().resource_id(),"branch_type":3,"lock_key":null,"application_data":null,"phase":if rollback{"Rollback"}else{"Commit"},"initial_global_status":observed.map(|v|format!("{v:?}")),"expected_tc_terminal":format!("{expected:?}"),"journal":"Completed","business":rows,"prepared_remaining":0,"phase_one_reports":0,"client_end_requests":1,"finished_inferred_as_success":false}),
+        );
+    } else {
+        fixture::record(
+            "original-java-xa",
+            serde_json::json!({"xid":xid.as_str(),"branch_id":identity.branch_id().to_string(),"resource_id":adapter.key().resource_id(),"branch_type":3,"lock_key":null,"application_data":null,"phase":if rollback{"Rollback"}else{"Commit"},"global_status":format!("{:?}",observed.unwrap()),"journal":"Completed","business":rows,"prepared_remaining":0,"phase_one_reports":0}),
+        );
+    }
     rm.shutdown().await.unwrap();
     tm.shutdown().await.unwrap();
     source.close().await.unwrap();
