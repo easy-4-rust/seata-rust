@@ -1435,3 +1435,14 @@ catalog 为 `87c385aff3d1d4fddfc393bced4c07691764f6d5f53140dd27c76ecf2f2baea6`�
 [首期已批准语法的端到端矩阵](phase-2/evidence/initial-sql-matrix/README.md)通过双 Rust：22 接受 / 22 语法拒绝 / 1 元数据拒绝用例，接受项各自提交和补偿，共 88 笔原 TC 全局事务。独立核验前后镜像、原锁、一次成功报告、同事务 Undo/checksum、恢复终态与最终业务；原 Java parser 重读并语义重编码 88 份 Undo。双版本分类测试和新增目标严格 Clippy 通过。
 
 对应 WP05 的“分类器/明确支持矩阵”和“明确不支持 SQL 的拒绝行为”两项已记录为完成；首期范围、默认实验 COMMIT 门槛、完整 Java SQL 与总 Gate 不变。catalog 为 `e980032696b95661939b4104cdb5be6d467eb9bae84ca3daf771c19b09e1d437`。现场新增定位到原 TC 单向 111 清理指令尚未接入 RM 执行，列为下一项具体生产差距；不以协议已解码代替清理已执行。
+
+
+### 2026-11-28：原 TC 定期清理、SQL 别名与 SeaORM 实体 DML
+
+原 TC 111 清理缺口已由[正式 RM/MySQL 保留期清理](phase-2/evidence/undo-retention/README.md)补齐。两版等待原 180 秒定时任务，各删除 6107 条过期 Undo；绑定/触发器拒绝、恢复清理及同一连接后续回调通过，保留原 Java 全状态过期删除语义。
+
+[单表 SQL 别名](phase-2/evidence/initial-sql-matrix/README.md#单表别名与完整原矩阵回归)已补齐显式/省略 AS、限定列及前镜像别名。双版本 28 接受用例各执行提交/补偿，112 笔原全局事务与原 Java parser、六个原 Druid 识别器用例全部核验。
+
+新增正式 `seata-orm-seaorm`，[真实实体 DML](phase-2/evidence/seaorm-mysql/README.md)通过双版本十二笔原 TC 事务。原子 Undo/checksum、锁、报告、回调、恢复历史及 DECIMAL/二进制/中文 JSON/NULL 全字段一致；原 Java parser 重读全部日志。每版组件 7 passed / 1 ignored，完整工作区 840 passed / 414 ignored，严格 Clippy 通过。原生 ConnectionTrait、完整 ORM 读写/模型返回/生成 ID/关联/迁移/2.x、完整 SQL 和生产门禁继续开放；不标记完整 V1 或 Phase 5–7 完成。
+
+最新 RustSec DB 审计保留三项报告（rsa、time、libsqlite3-sys），无 ignore；当前正常构建未启用后两者，rsa 仍在实际依赖链中，完整安全 Gate 未通过。后续需处理可适配双 Rust 基线的真实上游修复，并继续完整计划。

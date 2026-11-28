@@ -1,0 +1,37 @@
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨€¨€¨€¨[ ¨€¨€¨€¨€¨€¨[
+¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[¨^¨T¨T¨€¨€¨X¨T¨T¨a¨€¨€¨X¨T¨T¨€¨€¨[
+¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨€¨€¨€¨[  ¨€¨€¨€¨€¨€¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨€¨€¨€¨€¨€¨U
+¨^¨T¨T¨T¨T¨€¨€¨U¨€¨€¨X¨T¨T¨a  ¨€¨€¨X¨T¨T¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨X¨T¨T¨€¨€¨U
+¨€¨€¨€¨€¨€¨€¨€¨U¨€¨€¨€¨€¨€¨€¨€¨[¨€¨€¨U  ¨€¨€¨U   ¨€¨€¨U   ¨€¨€¨U  ¨€¨€¨U
+¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨T¨T¨T¨T¨T¨a¨^¨T¨a  ¨^¨T¨a   ¨^¨T¨a   ¨^¨T¨a  ¨^¨T¨a
+
+
+07:11:57.077  INFO --- [                     main] [der$InnerEnhancedServiceLoader] [lExtensionDefinition]  [] : Ignore load compatible class io.seata.config.ExtConfigurationProvider, because is not assignable from origin type org.apache.seata.config.ExtConfigurationProvider
+07:11:57.124  INFO --- [                     main] [ta.config.ConfigurationFactory] [                load]  [] : load Configuration from :FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd
+07:11:57.145  INFO --- [                     main] [seata.server.ServerApplication] [         logStarting]  [] : Starting ServerApplication v2.8.0-SNAPSHOT using Java 17.0.12 with PID 61908 (E:\workspaces\workspace-github-easy-4-rust\seata-java-phase09-oracle\server\target\seata-server.jar started by hnxyh in D:\codex-builds\seaorm-mysql-20261128_151044_911c7a3d)
+07:11:57.146  INFO --- [                     main] [seata.server.ServerApplication] [ogStartupProfileInfo]  [] : No active profile set, falling back to 1 default profile: "default"
+07:11:57.605  WARN --- [                     main] [read.ThreadPoolExecutorFactory] [        loadOptional]  [] : Virtual thread pool SPI provider 'virtual' is not available on the classpath. Virtual threads cannot be used.
+07:11:57.622  INFO --- [                     main] [rver.lock.LockerManagerFactory] [                init]  [] : use lock store mode: db
+07:11:57.732  INFO --- [                     main] [seata.server.ServerApplication] [          logStarted]  [] : Started ServerApplication in 1.208 seconds (process running for 1.821)
+07:11:57.988  INFO --- [                     main] [a.server.session.SessionHolder] [                init]  [] : use session store mode: db
+07:11:58.143  INFO --- [                     main] [aba.druid.pool.DruidDataSource] [                init]  [] : {dataSource-1} inited
+07:11:58.265  INFO --- [                     main] [rpc.netty.NettyServerBootstrap] [               start]  [] : Server started, service listen port: 57354
+07:11:58.274  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : 
+ you can visit seata console UI on namingserver. 
+ log path: D:/codex-builds/seaorm-mysql-20261128_151044_911c7a3d/logs.
+07:11:58.274  INFO --- [                     main] [ache.seata.server.ServerRunner] [                 run]  [] : seata server started in 540 millSeconds
+07:12:08.446  INFO --- [rverHandlerThread_1_1_500] [rocessor.server.RegRmProcessor] [      onRegRmMessage]  [] : RM register success,message:RegisterRMRequest{resourceIds='jdbc:mysql://127.0.0.1:57352/admission', version='1.1.0', applicationId='seaorm-entity-rust', transactionServiceGroup='cross_lock', extraData='null'},channel:[id: 0xaf18c644, L:/127.0.0.1:57354 - R:/127.0.0.1:62893],client version:1.1.0
+07:12:08.446  INFO --- [ettyServerNIOWorker_1_2_4] [rocessor.server.RegTmProcessor] [      onRegTmMessage]  [] : TM register success,message:RegisterTMRequest{version='1.1.0', applicationId='seaorm-entity-rust', transactionServiceGroup='cross_lock', extraData=''},channel:[id: 0xafbfa24d, L:/127.0.0.1:57354 - R:/127.0.0.1:62894],client version:1.1.0,client protocol-version:null
+07:12:08.454  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: GlobalBeginRequest{transactionName='seaorm-entity-mysql', timeout=90000}, clientIp: 127.0.0.1, vgroup: cross_lock
+07:12:08.475  INFO --- [rverHandlerThread_1_2_500] [coordinator.DefaultCoordinator] [       doGlobalBegin]  [198.18.0.1:57354:4045082036063338497] : Begin new global transaction applicationId: seaorm-entity-rust,transactionServiceGroup: cross_lock, transactionName: seaorm-entity-mysql,timeout:90000,xid:198.18.0.1:57354:4045082036063338497
+07:12:08.475  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: GlobalBeginResponse{xid='198.18.0.1:57354:4045082036063338497', extraData='null', resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: cross_lock
+07:12:08.529  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchRegisterRequest{xid='198.18.0.1:57354:4045082036063338497', branchType=AT, resourceId='jdbc:mysql://127.0.0.1:57352/admission', lockKey='orm_items:11', applicationData='null'}, clientIp: 127.0.0.1, vgroup: cross_lock
+07:12:08.561  INFO --- [rverHandlerThread_1_3_500] [erver.coordinator.AbstractCore] [bda$branchRegister$0]  [198.18.0.1:57354:4045082036063338497] : Register branch successfully, xid = 198.18.0.1:57354:4045082036063338497, branchId = 4045082036063338499, resourceId = jdbc:mysql://127.0.0.1:57352/admission ,lockKeys = orm_items:11
+07:12:08.561  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchRegisterResponse{branchId=4045082036063338499, resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: cross_lock
+07:12:08.821  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : receive msg[single]: BranchReportRequest{xid='198.18.0.1:57354:4045082036063338497', branchId=4045082036063338499, resourceId='jdbc:mysql://127.0.0.1:57352/admission', status=PhaseOne_Done, applicationData='null', branchType=AT}, clientIp: 127.0.0.1, vgroup: cross_lock
+07:12:08.833  INFO --- [rverHandlerThread_1_4_500] [erver.coordinator.AbstractCore] [        branchReport]  [198.18.0.1:57354:4045082036063338497] : Report branch status successfully, xid = 198.18.0.1:57354:4045082036063338497, branchId = 4045082036063338499
+07:12:08.838  INFO --- [     batchLoggerPrint_1_1] [ocessor.server.BatchLogHandler] [                 run]  [] : result msg[single]: BranchReportResponse{resultCode=Success, msg='null'}, clientIp: 127.0.0.1, vgroup: cross_lock
+07:12:09.051  INFO --- [ettyServerNIOWorker_1_2_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:62894 to server channel inactive.
+07:12:09.051  INFO --- [ettyServerNIOWorker_1_1_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : 127.0.0.1:62893 to server channel inactive.
+07:12:09.052  INFO --- [ettyServerNIOWorker_1_2_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xafbfa24d, L:/127.0.0.1:57354 ! R:/127.0.0.1:62894]context:RpcContext{applicationId='seaorm-entity-rust', transactionServiceGroup='cross_lock', clientId='seaorm-entity-rust:127.0.0.1:62894', channel=[id: 0xafbfa24d, L:/127.0.0.1:57354 ! R:/127.0.0.1:62894], resourceSets=null}
+07:12:09.052  INFO --- [ettyServerNIOWorker_1_1_4] [ty.AbstractNettyRemotingServer] [    handleDisconnect]  [] : remove channel:[id: 0xaf18c644, L:/127.0.0.1:57354 ! R:/127.0.0.1:62893]context:RpcContext{applicationId='seaorm-entity-rust', transactionServiceGroup='cross_lock', clientId='seaorm-entity-rust:127.0.0.1:62893', channel=[id: 0xaf18c644, L:/127.0.0.1:57354 ! R:/127.0.0.1:62893], resourceSets=[]}

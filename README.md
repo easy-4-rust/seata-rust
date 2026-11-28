@@ -14,13 +14,15 @@ Seata-Rust follows a staged strategy:
 
 ## Architecture & Roadmap
 
-正式 Rust workspace 现包含 Protocol、Transport、TM、RM、AT、MySQL、XA、TCC 和可观测性等十二个 crate。WP01–WP04 已通过批准的初期组件与固定 Java TC 验收；完整 V1 和生产发布门禁仍开放。
+正式 Rust workspace 现包含 Protocol、Transport、TM、RM、AT、MySQL、XA、TCC 和可观测性等十三个 crate。WP01–WP04 已通过批准的初期组件与固定 Java TC 验收；完整 V1 和生产发布门禁仍开放。
 
 MySQL AT 已实现真实 SQL 执行、元数据与前后镜像、Java Undo 格式、原子持久化、SHA-256 校验、正式回调及跨进程恢复。[显式 UTC 的 DATETIME 精确读写及主键](docs/phase-2/evidence/mysql-datetime/README.md)已取得原 Java/双 Rust 验证；[TIMESTAMP 原生时间点及正式回调](docs/phase-2/evidence/mysql-timestamp/README.md)也已通过选定 UTC 现场，[强杀后独立进程恢复](docs/phase-2/evidence/mysql-timestamp-restart/README.md)已补验；非主键 JSON 列已通过[原 Java 格式与正式补偿对照](docs/phase-2/evidence/mysql-json/README.md)。有变化 COMMIT 仍需明确启用 `experimental_changed_commit`，完整 WP05 与生产准入尚未完成。详见[能力与恢复指南](docs/phase-2/v1-feature-matrix-and-recovery-guide.md)。
 
 可选 `xa` / `tcc` 已提供正式 MySQL 资源：XA 登记、PREPARE/二阶段及恢复；TCC Fence、空回滚、悬挂防护与动态上下文报告。固定原 Java TC、Rust 1.99 / 1.85 和真实 MySQL 已有选定故障矩阵证据，完整模式验收仍开放，见 [XA 契约](docs/phase-2/mysql-xa-contract.md)和 [TCC 契约](docs/phase-2/tcc-contract.md)。
 
 当前范围与原 Phase 0–7 差距见[全计划状态核对](docs/architecture/delivery-requirement-audit_20261128.md)。Rust TC、集群和完整生态尚未交付。
+
+正式 `seata-orm-seaorm` 已接入 SeaORM 1.1 实体 DML 构建器，在原 MySQL AT 事务中保持有序精确绑定。双 Rust 的十二笔真实提交/补偿、原 Java Undo parser 读取及完整字段核验通过；原生 ORM ConnectionTrait、完整读写/模型返回和其余生态仍待交付。[接入说明](crates/seata_orm_seaorm/README.md)、[验收证据](docs/phase-2/evidence/seaorm-mysql/README.md)。
 
 - [全计划交付进度](docs/delivery-progress.md) — Phase 0–7 完整范围、当前证据和未完成门槛。
 - [V1 能力矩阵与恢复指南](docs/phase-2/v1-feature-matrix-and-recovery-guide.md) — 当前可核验配置、实验性 MySQL 恢复边界及操作约束。

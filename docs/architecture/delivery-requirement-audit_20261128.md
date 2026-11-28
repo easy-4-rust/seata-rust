@@ -2,7 +2,7 @@
 
 范围保持为[原架构计划 Phase 0–7](SEATA_RUST_ARCHITECTURE_PLAN.md)和[V1 WP00–07](../phase-0/v1-implementation-acceptance-checklist.md)。本文件是当前工作树的导航与差距记录，不替换正式需求、不豁免门禁。历史 README 中“尚未接入”的描述必须按对应日期理解，不能据此重复开发已经存在的能力。
 
-当前 Cargo 工作区包含 protocol、transport、tm、rm、at、datasource、db_mysql、sqlparser、test、observability、xa、tcc 十二个正式 crate。未发现 Rust TC 服务端、PostgreSQL、Saga、集群/发现服务或 CLI 的正式工作区成员。不能把参考 Java 服务端、Python 运行器或测试夹具计为这些正式交付。
+当前 Cargo 工作区包含 protocol、transport、tm、rm、at、datasource、db_mysql、sqlparser、test、observability、xa、tcc 以及 orm_seaorm 十三个正式 crate。未发现 Rust TC 服务端、PostgreSQL、Saga、集群/发现服务或 CLI 的正式工作区成员。不能把参考 Java 服务端、Python 运行器或测试夹具计为这些正式交付。
 
 | 原要求 | 当前源码与权威证据入口 | 未完成或证据不足 |
 |---|---|---|
@@ -28,3 +28,5 @@
 后续[Undo 定期清理增量](../phase-2/evidence/undo-retention/README.md)已接入正式 RM/MySQL，并通过未修改原 TC 的 180 秒定时任务。双 Rust 各删除 6107 条过期原行，UTC 边界与原 Java 三批删除一致；错误绑定和触发器拒绝、恢复清理及同一连接后续分支回调均有实际证据。双版本全工作区各 831 测试通过、413 忽略。真实权限撤销、批次提交未知结果和生产运维仍开放；不因此关闭 WP05/WP07，更不把本增量算作 Phase 5–7 的实现。
 
 [单表 SQL 别名](../phase-2/mysql-sql-alias-contract.md)现已补齐原 Java 支持的显式/省略 AS、合法限定列及带别名前镜像。扩展 SQL 矩阵在双版本提交/补偿下通过 112 笔真实全局事务，全部 Undo 由原 Java parser 读取，六个新增输入还直接对照原 Druid 识别器。未知前缀、跨 schema、重复赋值和连接仍拒绝。该项不再列为未实现，但 JOIN/子查询等完整 SQL、全部写入器、生产准入及后续阶段仍需继续交付。
+
+原计划要求的独立 SeaORM 层已新增[正式实体 DML 适配](../phase-2/evidence/seaorm-mysql/README.md)，保持原 MySQL 本地事务、Undo、摘要、锁和提交/恢复门槛。双版本十二笔真实 Entity INSERT/UPDATE/DELETE 通过，DECIMAL/二进制/中文 JSON/NULL 全字段及原 Java parser 核验通过；全工作区各 840 通过、414 忽略。当前仍未提供原生 ConnectionTrait、完整读写/模型返回、生成 ID、关联和 2.x，不能标记完整 ORM/生态完成。最新全 lock 审计报告 rsa、time、libsqlite3-sys 三项；当前正常构建未启用后两者，但没有移除或忽略告警，生产安全门禁仍开放。下一步应依据最新上游修复和实际依赖链处理真实安全缺口，继续完整 ORM、SQL 和后续阶段交付。
