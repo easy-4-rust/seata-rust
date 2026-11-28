@@ -19,6 +19,8 @@
 
 [真实数据库探针](../../../docs/phase-2/evidence/java-writer-jdbc-profile/README.md)证明六码绑定、时间与装饰器拒绝及持锁，并验证旧入口。该探针只替换 Seata 数据源身份，未覆盖完整 Java TC/RM 回调；完整写入器门禁仍开放。
 
+后续[原 Java TC/RM 联试](../../../docs/phase-2/evidence/java-writer-jdbc-profile-tc/README.md)补齐新入口的实际代理接入：六码各完成原提交/回滚，精确模式实际补偿 DATE/TIME 普通列与主键。该联试不使用身份替身，保留原 Undo/Jackson 与原 RM；限定在记录的驱动、SQL、值域样本和自有 TC 环境。混合写入器竞争和完整生产准入仍需按 WP05 验收。
+
 ## 账号权限验证
 
 固定 MySQL 8.4.13 联试对 Java 写入、Rust 写入以及只读业务查询使用三个独立账号。两个写入账号对 005/011 表仅授予 `SELECT`。部署账号负责 DDL、初始化绑定和后续变更。

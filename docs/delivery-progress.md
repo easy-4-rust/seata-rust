@@ -1411,3 +1411,9 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 原 `JavaAtWriterAdmission` 新增四参数入口，在首条业务 SQL 前核对固定驱动、实际映射、UTC/精确装饰器和完整绑定码；原三参数及旧 schema 行为保留。[真实 MySQL 探针](phase-2/evidence/java-writer-jdbc-profile/README.md)取得 6 接受、69 拒绝、6 组实际 1205 持锁及回滚释放，另核验缺列拒绝与 8.0.33 旧入口。独立校验器通过源码、依赖、编译类和实际类加载来源核验。
 
 本次仅数据源身份使用替身，原 ConnectionProxy/JDBC/数据库均实际执行。完整原 Java TC/RM 与新入口的集成、DATE/TIME Java RM 补偿以及所有写入器强制接入仍待完成；本次没有修改 Rust 源码，也未重复宣称新的双 Rust 全工作区测试结果。WP05/WP07 和 Phase 5–7 保持开放。
+
+### 2026-11-28：原 Java TC/RM 完整入口联试
+
+后续[联试已完成新入口的真实 Java TM/RM 接入](phase-2/evidence/java-writer-jdbc-profile-tc/README.md)，不替换原 DataSourceProxy 身份。12 笔全局事务覆盖六码提交/回滚、60 次 Begin/登记前错误绑定拒绝。精确模式四笔事务实际执行七条 DML、生成原 DATE/TIME String Undo，并由原 RM 提交或恢复原字节；DATE/TIME 主键锁、原协议回调、分支身份与空终态已独立核验。catalog 为 `148d183d72bc36cbe698eeaee866e773beb8b4e0ab3627f35a8ec9d7456a2d01`。
+
+本轮未修改 Rust 源码和原 Java TC/RM。该现场不替代 Java/Rust 混合竞争、生产权限与认证、全部 SQL/值组合、WP07 以及 Phase 5–7。

@@ -18,3 +18,5 @@
 后续执行先推进阻挡 V1 稳定性的真实缺口：对照 WP05 完整 SQL 与所有写入器准入要求补证/修复，再完成 WP07 的部署、安全、长期负载与运维验收。XA/TCC 只为已命名的未闭合要求补工作，不通过无限细分相同故障切点替代上述交付。达到既有 V1 稳定性条件后，按原路线实现 Phase 5–7。每次完成声明须绑定实际源码、运行输入和原始结果；本文件不构成任何总阶段已经完成的声明。
 
 时间类型后续核对：[DATE/TIME/TIMESTAMP 原实现保真契约](../phase-2/mysql-temporal-compatibility-contract.md)记录原读取缺口。TIMESTAMP 已有独立原生身份、显式 UTC 回调与跨进程恢复；DATE/TIME 已新增显式无损装饰器、正式值模型及原 TC 下双 Rust 回调和生产者死亡后恢复。不能继续按早期观察重复开发这些能力。[完整配置准入](../phase-2/mysql-jdbc-profile-admission-contract.md)现有 Rust 原 TC 现场及 Java 原连接数据库探针；后者数据源身份使用替身，完整 Java TC/RM 与严格入口集成、Java RM 时间补偿、所有写入器准入仍待验证，不关闭完整 WP05。
+
+后续已取得[原 Java TC/RM 的严格入口与 DATE/TIME 补偿证据](../phase-2/evidence/java-writer-jdbc-profile-tc/README.md)：六码共十二笔全局事务和六十次错误绑定拒绝，选定精确 DATE/TIME 普通列及主键的原 RM 回调通过。新入口的原 Java 集成不再是未实施项；下一步核对两种语言在同一精确锁键上的混合竞争与准入，继续保留完整 SQL、生产权限/认证、WP07 和 Phase 5–7 的缺口。
