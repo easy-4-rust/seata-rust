@@ -1,0 +1,31 @@
+[workspace]
+members = ["crates/seata_client"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/easy-4-rust/seata-rust"
+
+[workspace.dependencies]
+thiserror = "=2.0.21"
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "net", "io-util", "sync", "time", "macros"] }
+tracing = "=0.1.44"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
+
+[patch.crates-io]
+sqlx-mysql = { path = "E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/third_party/sqlx_mysql" }
+time = { path = "E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/third_party/time" }
+rbatis = { path = "E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/third_party/rbatis" }
+rbdc = { path = "E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/third_party/rbdc" }
+scraper = { path = "E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/third_party/scraper" }
+rbatis-macro-driver = { path = "E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/third_party/rbatis_macro_driver" }

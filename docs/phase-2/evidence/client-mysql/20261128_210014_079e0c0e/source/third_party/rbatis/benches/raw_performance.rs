@@ -1,0 +1,286 @@
+#![allow(unused_mut)]
+#![allow(unused_imports)]
+#![allow(unreachable_patterns)]
+#![allow(unused_variables)]
+#![allow(unused_assignments)]
+#![allow(unused_must_use)]
+#![allow(dead_code)]
+#![feature(test)]
+extern crate test;
+
+use futures_core::future::BoxFuture;
+use futures_core::Stream;
+use rbatis::crud;
+use rbatis::rbatis::RBatis;
+use rbdc::db::{ConnectOptions, Connection, Driver, ExecResult, Row};
+use rbdc::rt::block_on;
+use rbdc::Error;
+use rbs::Value;
+use std::any::Any;
+use std::pin::Pin;
+use test::Bencher;
+
+pub trait QPS {
+    fn print(&self, total: u64);
+    fn cost(&self);
+}
+
+impl QPS for std::time::Instant {
+    fn print(&self, total: u64) {
+        let time = self.elapsed();
+        println!(
+            "time: {:?} ,each:{} ns/op ,qps: {} QPS/s",
+            &time,
+            time.as_nanos() / (total as u128),
+            (total as u128 * 1000000000 as u128 / time.as_nanos() as u128)
+        );
+    }
+
+    fn cost(&self) {
+        let time = self.elapsed();
+        println!("cost:{:?}", time);
+    }
+}
+
+#[macro_export]
+macro_rules! rbench {
+    ($total:expr,$body:block) => {{
+        let now = std::time::Instant::now();
+        for _ in 0..$total {
+            $body;
+        }
+        now.print($total);
+    }};
+}
+
+//cargo test --release --package rbatis --bench raw_performance bench_raw  --no-fail-fast -- --exact -Z unstable-options --show-output
+// ---- bench_raw stdout ----(windows)
+//time: 46.1023ms ,each:461 ns/op ,qps: 2169089 QPS/s
+//---- bench_raw stdout ----(Apple M1 macos)
+//time: 35.406375ms ,each:354 ns/op ,qps: 2824350 QPS/s
+#[test]
+fn bench_raw() {
+    let f = async {
+        let mut rbatis = RBatis::default();
+        rbatis.init(MockDriver {}, "mock://");
+        rbatis.acquire().await.unwrap();
+        rbench!(100000, {
+            let v = rbatis.exec_decode::<Vec<i32>>("", vec![]).await;
+        });
+    };
+    block_on(f);
+}
+
+// Test without interceptors to see theoretical limit
+#[test]
+fn bench_raw_no_intercepts() {
+    let f = async {
+        // Use default() instead of new() to avoid adding interceptors
+        let mut rbatis = RBatis::default();
+        rbatis.init(MockDriver {}, "mock://");
+        rbatis.acquire().await.unwrap();
+        rbench!(100000, {
+            let v = rbatis.exec_decode::<Vec<i32>>("", vec![]).await;
+        });
+    };
+    block_on(f);
+}
+
+// Test serialization overhead
+#[test]
+fn bench_serialize_mock_table() {
+    let t = MockTable {
+        id: Some("2".into()),
+        name: Some("2".into()),
+        pc_link: Some("2".into()),
+        h5_link: Some("2".into()),
+        pc_banner_img: None,
+        h5_banner_img: None,
+        sort: None,
+        status: Some(2),
+        remark: Some("2".into()),
+        create_time: Some(rbdc::datetime::DateTime::now()),
+        version: Some(1),
+        delete_flag: Some(1),
+    };
+    rbench!(100000, {
+        let _ = rbs::value!(&t);
+    });
+}
+
+// Test serialization + column_sets
+#[test]
+fn bench_serialize_and_column_sets() {
+    let t = MockTable {
+        id: Some("2".into()),
+        name: Some("2".into()),
+        pc_link: Some("2".into()),
+        h5_link: Some("2".into()),
+        pc_banner_img: None,
+        h5_banner_img: None,
+        sort: None,
+        status: Some(2),
+        remark: Some("2".into()),
+        create_time: Some(rbdc::datetime::DateTime::now()),
+        version: Some(1),
+        delete_flag: Some(1),
+    };
+    rbench!(100000, {
+        let v = rbs::value!(&t);
+        let _ = rbatis::crud_traits::ColumnSet::column_sets(&v);
+    });
+}
+
+// Test bare minimum overhead - just the connection and decode
+#[test]
+fn bench_raw_bare_min() {
+    let f = async {
+        let mut rbatis = RBatis::default();
+        rbatis.init(MockDriver {}, "mock://");
+        let executor = rbatis.acquire().await.unwrap();
+        rbench!(100000, {
+            let v = executor.exec_decode::<Vec<i32>>("", vec![]).await;
+        });
+    };
+    block_on(f);
+}
+
+//cargo test --release --package rbatis --bench raw_performance bench_insert  --no-fail-fast -- --exact -Z unstable-options --show-output
+//---- bench_insert stdout ----(macos,cpu-M1Max)
+//time: 881.112916ms ,each:8811 ns/op ,qps: 113492 QPS/s
+#[test]
+fn bench_insert() {
+    let f = async {
+        let rbatis = RBatis::new();
+        rbatis.init(MockDriver {}, "mock://").unwrap();
+        rbatis.acquire().await.unwrap();
+        let mut t = MockTable {
+            id: Some("2".into()),
+            name: Some("2".into()),
+            pc_link: Some("2".into()),
+            h5_link: Some("2".into()),
+            pc_banner_img: None,
+            h5_banner_img: None,
+            sort: None,
+            status: Some(2),
+            remark: Some("2".into()),
+            create_time: Some(rbdc::datetime::DateTime::now()),
+            version: Some(1),
+            delete_flag: Some(1),
+        };
+        rbench!(100000, {
+            MockTable::insert(&rbatis, &t).await.unwrap();
+        });
+    };
+    block_on(f);
+}
+
+//cargo test --release --color=always --package rbatis --bench raw_performance bench_select --no-fail-fast --  --exact -Z unstable-options --show-output
+// ---- bench_select stdout ----
+// Time: 111.495375ms ,each:1114 ns/op
+// QPS: 896873 QPS/s
+#[test]
+fn bench_select() {
+    let f = async {
+        let rbatis = RBatis::new();
+        rbatis.init(MockDriver {}, "mock://").unwrap();
+        rbatis.acquire().await.unwrap();
+        rbench!(100000, {
+            MockTable::select_by_map(&rbatis, rbs::value! {})
+                .await
+                .unwrap();
+        });
+    };
+    block_on(f);
+}
+
+#[derive(Debug, Clone)]
+struct MockDriver {}
+
+impl Driver for MockDriver {
+    fn name(&self) -> &str {
+        "test"
+    }
+
+    fn connect(&self, url: &str) -> BoxFuture<'_, Result<Box<dyn Connection>, Error>> {
+        Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+    }
+
+    fn connect_opt<'a>(
+        &'a self,
+        opt: &'a dyn ConnectOptions,
+    ) -> BoxFuture<'a, Result<Box<dyn Connection>, Error>> {
+        Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+    }
+
+    fn default_option(&self) -> Box<dyn ConnectOptions> {
+        Box::new(MockConnectOptions {})
+    }
+}
+
+#[derive(Clone, Debug)]
+struct MockConnection {}
+
+impl Connection for MockConnection {
+    fn exec_rows(
+        &mut self,
+        sql: &str,
+        params: Vec<Value>,
+    ) -> BoxFuture<
+        '_,
+        Result<Pin<Box<dyn Stream<Item = Result<Box<dyn Row>, Error>> + Send + '_>>, Error>,
+    > {
+        Box::pin(async {
+            let stream: Pin<Box<dyn Stream<Item = Result<Box<dyn Row>, Error>> + Send + '_>> =
+                Box::pin(futures::stream::iter(vec![]));
+            Ok(stream)
+        })
+    }
+
+    fn exec(&mut self, sql: &str, params: Vec<Value>) -> BoxFuture<'_, Result<ExecResult, Error>> {
+        Box::pin(async {
+            Ok(ExecResult {
+                rows_affected: 0,
+                last_insert_id: Value::Null,
+            })
+        })
+    }
+
+    fn close(&mut self) -> BoxFuture<'_, Result<(), Error>> {
+        Box::pin(async { Ok(()) })
+    }
+
+    fn ping(&mut self) -> BoxFuture<'_, Result<(), Error>> {
+        Box::pin(async { Ok(()) })
+    }
+}
+
+#[derive(Clone, Debug)]
+struct MockConnectOptions {}
+
+impl ConnectOptions for MockConnectOptions {
+    fn connect(&self) -> BoxFuture<'_, Result<Box<dyn Connection>, Error>> {
+        Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+    }
+
+    fn set_uri(&mut self, uri: &str) -> Result<(), Error> {
+        Ok(())
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+struct MockTable {
+    pub id: Option<String>,
+    pub name: Option<String>,
+    pub pc_link: Option<String>,
+    pub h5_link: Option<String>,
+    pub pc_banner_img: Option<String>,
+    pub h5_banner_img: Option<String>,
+    pub sort: Option<String>,
+    pub status: Option<i32>,
+    pub remark: Option<String>,
+    pub create_time: Option<rbdc::datetime::DateTime>,
+    pub version: Option<i64>,
+    pub delete_flag: Option<i32>,
+}
+crud!(MockTable {});

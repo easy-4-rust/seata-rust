@@ -1,0 +1,37 @@
+[package]
+name = "seata-client"
+description = "Unified explicit Seata TM/RM client lifecycle"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[features]
+tls = ["seata-tm/tls", "seata-rm/tls", "seata-transport/tls"]
+experimental_changed_commit = ["seata-db-mysql/experimental_changed_commit"]
+
+[dependencies]
+seata-tm = { path = "../seata_tm" }
+seata-rm = { path = "../seata_rm" }
+seata-transport = { path = "../seata_transport" }
+
+[dev-dependencies]
+seata-protocol = { path = "../seata_protocol" }
+tokio = { workspace = true, features = ["test-util"] }
+rcgen = { version = "=0.14.0", default-features = false, features = ["ring"] }
+tokio-rustls = { version = "=0.26.4", default-features = false, features = ["ring"] }
+seata-at = { path = "../seata_at" }
+seata-db-mysql = { path = "../seata_db_mysql" }
+seata-orm-rbatis = { path = "../seata_orm_rbatis" }
+serde_json = "=1.0.140"
+serde = { version = "=1.0.229", features = ["derive"] }
+sqlx = { version = "=0.8.6", default-features = false, features = ["mysql", "runtime-tokio", "bigdecimal", "chrono"] }
+sha2 = "=0.10.9"
+rbatis = "=4.9.11"
+rbs = "=4.8.4"
+futures-core = "=0.3.34"
+
+[lints]
+workspace = true

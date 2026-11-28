@@ -1,0 +1,95 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "compile-oracle",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\javac.exe",
+      "@D:\\codex-builds\\client-mysql-20261128_205800_43f41873\\compile.args"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.99",
+    "argv": [
+      "rustc",
+      "+1.99.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "classify-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-client",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_client_mysql_java",
+      "rbatis_generated_writes_are_classified_without_interpolating_bindings",
+      "--",
+      "--exact"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-client",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_client_mysql_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-client",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_client_mysql_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 101
+  }
+]

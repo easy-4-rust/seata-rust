@@ -1,0 +1,28 @@
+[package]
+name = "seata-rm"
+description = "Seata resource dispatch and durable branch reconciliation"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[features]
+tls = ["seata-transport/tls"]
+
+[dependencies]
+seata-protocol = { path = "../seata_protocol" }
+seata-transport = { path = "../seata_transport" }
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+sha2 = "=0.10.9"
+fs2 = "=0.4.3"
+crc32fast = "=1.5.0"
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints]
+workspace = true

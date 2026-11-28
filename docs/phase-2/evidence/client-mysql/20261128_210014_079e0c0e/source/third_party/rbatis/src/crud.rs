@@ -1,0 +1,674 @@
+//! The [`crud!`](crate::crud!) macro and the pagination helpers built on top of `py_sql`/`html_sql`.
+//!
+//! # `crud!`
+//!
+//! `crud!(Table{})` (or `crud!(Table{}, "table_name")` to override the table name)
+//! adds these methods to your struct:
+//!
+//! | Method | Generated SQL |
+//! |--------|---------------|
+//! | `insert(executor, &table)` | `INSERT INTO table (...) VALUES (...)` |
+//! | `insert_batch(executor, &[table], batch_size)` | `INSERT` statements with at most `batch_size` rows each; `0` inserts all rows in one statement |
+//! | `select_by_map(executor, condition)` | `SELECT ... FROM table WHERE ...` |
+//! | `update_by_map(executor, &table, condition)` | `UPDATE table SET ... WHERE ...` |
+//! | `delete_by_map(executor, condition)` | `DELETE FROM table WHERE ...` |
+//!
+//! The condition is an [`rbs::Value`] map built with the `value!` macro:
+//!
+//! * `value!{"id": "1"}` -> `WHERE id = '1'` (a key that ends with an operator, like
+//!   `value!{"name like ": "%a%"}`, is used as is)
+//! * `value!{"id": ["1", "2"]}` -> `WHERE id in ('1', '2')`
+//! * several keys are joined with `and`, `null` values are skipped, and an empty array
+//!   makes the method return an empty result instead of running the query
+//! * `select_by_map` accepts a `"column"` key to select specific columns, and
+//!   `update_by_map` accepts one to update only these columns
+//!
+//! The struct name is converted to a table name with [`snake_name!`](crate::snake_name),
+//! so `BizActivity` maps to `biz_activity`. Every field of the struct becomes a
+//! column, `None` fields are skipped by `insert` and `update_by_map`, and the `id`
+//! column is never updated.
+//!
+//! ```rust,no_run
+//! use rbatis::{crud, RBatis};
+//! use rbs::value;
+//!
+//! #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+//! pub struct BizActivity {
+//!     pub id: Option<String>,
+//!     pub name: Option<String>,
+//! }
+//!
+//! // generates insert / insert_batch / select_by_map / update_by_map / delete_by_map
+//! crud!(BizActivity {});
+//! // or, with an explicit table name:
+//! // crud!(BizActivity {}, "biz_activity");
+//!
+//! async fn run(rb: &RBatis) -> rbatis::Result<()> {
+//!     let activity = BizActivity { id: Some("1".into()), name: Some("a".into()) };
+//!
+//!     BizActivity::insert(rb, &activity).await?;
+//!     BizActivity::insert_batch(rb, std::slice::from_ref(&activity), 10).await?;
+//!     let rows: Vec<BizActivity> = BizActivity::select_by_map(rb, value!{"name": "a"}).await?;
+//!     BizActivity::update_by_map(rb, &activity, value!{"id": "1"}).await?;
+//!     BizActivity::delete_by_map(rb, value!{"id": "1"}).await?;
+//!
+//!     println!("{}", rows.len());
+//!     Ok(())
+//! }
+//! ```
+//!
+//! # Pagination
+//!
+//! [`htmlsql_select_page!`](crate::htmlsql_select_page!) and
+//! [`pysql_select_page!`](crate::pysql_select_page!) wrap a SQL template into a
+//! function that returns [`Page<T>`](crate::plugin::Page) and runs both the count
+//! and the data query. See [`plugin::page`](crate::plugin::page) for the details.
+//!
+//! [`raw_sql!`](crate::raw_sql!), [`pysql!`](crate::pysql!) and
+//! [`htmlsql!`](crate::htmlsql!) are small wrappers that declare a function and let
+//! the matching attribute macro fill in its body.
+
+///PySql: gen insert/insert_batch, select_by_map, update_by_map, delete_by_map methods
+///```rust
+/// use rbs::value;
+/// use rbatis::{Error, RBatis, rbdc::db::ExecResult};
+///
+/// #[derive(serde::Serialize, serde::Deserialize)]
+/// pub struct MockTable{
+///    pub id: Option<String>
+/// }
+/// rbatis::crud!(MockTable{}); //or crud!(MockTable{},"mock_table");
+///
+/// //use
+/// async fn test_use(rb:&RBatis) -> Result<(),Error>{
+///  let table = MockTable{id: Some("1".to_string())};
+///  let result:ExecResult = MockTable::insert(rb, &table).await?;
+///  let result:ExecResult = MockTable::insert_batch(rb, std::slice::from_ref(&table),10).await?;
+///
+///  let tables:Vec<MockTable> = MockTable::select_by_map(rb,value!{"id":"1"}).await?;
+///  let tables:Vec<MockTable> = MockTable::select_by_map(rb,value!{"id":["1","2","3"]}).await?;
+///  let tables:Vec<MockTable> = MockTable::select_by_map(rb,value!{"id":"1", "column": ["id", "name"]}).await?;
+///
+///  let result:ExecResult = MockTable::update_by_map(rb, &table, value!{"id":"1"}).await?;
+///  let result:ExecResult = MockTable::delete_by_map(rb, value!{"id":"1"}).await?;
+///  Ok(())
+/// }
+///
+///
+/// ```
+#[macro_export]
+macro_rules! crud {
+    ($table:ty{}) => {
+        $crate::crud!($table {}, "");
+    };
+    ($table:ty{},$table_name:expr) => {
+        // insert
+        impl $table {
+            /// batch insert records
+            ///
+            /// sql: `INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...), (value1, value2, ...), ...`
+            ///
+            /// `batch_size` is the number of records per statement, `0` sends all
+            /// records with one single statement
+            pub async fn insert_batch(
+                executor: &dyn $crate::executor::Executor,
+                tables: &[$table],
+                batch_size: u64,
+            ) -> std::result::Result<$crate::rbdc::db::ExecResult, $crate::rbdc::Error> {
+                use $crate::crud_traits::ColumnSet;
+                // batch_size == 0 would make make_ranges() return no ranges at all and
+                // the loop below would insert nothing. Use one single batch instead
+                let batch_size = if batch_size == 0 {
+                    tables.len() as u64
+                } else {
+                    batch_size
+                };
+                #[$crate::py_sql(
+                    "`insert into ${table_name} `
+                    trim ',':
+                     bind columns = tables.column_sets():
+                     for idx,table in tables:
+                      if idx == 0:
+                         `(`
+                         trim ',':
+                           for _,v in columns:
+                              ${v},
+                         `) VALUES `
+                      (
+                      trim ',':
+                       for _,v in columns:
+                         #{table[v]},
+                      ),
+                    "
+                )]
+                async fn insert_batch(
+                    executor: &dyn $crate::executor::Executor,
+                    tables: &[$table],
+                    table_name: &str,
+                ) -> std::result::Result<$crate::rbdc::db::ExecResult, $crate::rbdc::Error>
+                {
+                    impled!()
+                }
+                if tables.is_empty() {
+                    return Err($crate::rbdc::Error::from(
+                        "insert can not insert empty array tables!",
+                    ));
+                }
+                let mut table_name = $table_name.to_string();
+                if table_name.is_empty() {
+                    #[$crate::snake_name($table)]
+                    fn snake_name() {}
+                    table_name = snake_name();
+                }
+                let mut result = $crate::rbdc::db::ExecResult {
+                    rows_affected: 0,
+                    last_insert_id: rbs::Value::Null,
+                };
+                let ranges =
+                    $crate::plugin::Page::<()>::make_ranges(tables.len() as u64, batch_size);
+                for (offset, limit) in ranges {
+                    let exec_result = insert_batch(
+                        executor,
+                        &tables[offset as usize..limit as usize],
+                        table_name.as_str(),
+                    )
+                    .await?;
+                    result.rows_affected += exec_result.rows_affected;
+                    result.last_insert_id = exec_result.last_insert_id;
+                }
+                Ok(result)
+            }
+
+            /// insert a single record
+            ///
+            /// sql: `INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...)`
+            pub async fn insert(
+                executor: &dyn $crate::executor::Executor,
+                table: &$table,
+            ) -> std::result::Result<$crate::rbdc::db::ExecResult, $crate::rbdc::Error> {
+                <$table>::insert_batch(executor, std::slice::from_ref(table), 1).await
+            }
+        }
+        // select
+        impl $table {
+            /// select records by condition map.
+            /// supports "column" key in condition to select specific columns, e.g. `value!{"col1":"val1", "column": ["col1", "col2"]}`
+            ///
+            /// sql: `SELECT col1, col2, ... FROM table_name WHERE col1 = ? and col2 in (?, ?, ...)`
+            ///
+            /// condition map -> where sql:
+            /// - `value!{"col1": "val1"}`                       -> `WHERE col1 = 'val1'`
+            /// - `value!{"col1": 1, "col2": "val2"}`           -> `WHERE col1 = 1 and col2 = 'val2'`
+            /// - `value!{"col1": ["v1", "v2", "v3"]}`          -> `WHERE col1 in ('v1', 'v2', 'v3')`
+            /// - `value!{"col1": "val1", "col2": ["a", "b"]}`  -> `WHERE col1 = 'val1' and col2 in ('a', 'b')`
+            /// - null values are skipped
+            pub async fn select_by_map(
+                executor: &dyn $crate::executor::Executor,
+                mut condition: rbs::Value,
+            ) -> std::result::Result<Vec<$table>, $crate::rbdc::Error> {
+                use $crate::crud_traits::ValueOperatorSql;
+                // Extract column specification and remove it from condition
+                let table_column = {
+                    let mut columns = String::new();
+                    let mut clean_map = rbs::value::map::ValueMap::with_capacity(condition.len());
+                    for (k, v) in condition {
+                        match k.as_str() {
+                            Some("column") => {
+                                columns = match v {
+                                    rbs::Value::String(s) => s.clone(),
+                                    rbs::Value::Array(arr) => {
+                                        let cols: Vec<&str> =
+                                            arr.iter().filter_map(|v| v.as_str()).collect();
+                                        if cols.is_empty() {
+                                            "*".to_string()
+                                        } else {
+                                            cols.join(", ")
+                                        }
+                                    }
+                                    _ => "*".to_string(),
+                                };
+                            }
+                            _ => {
+                                clean_map.insert(k.clone(), v.clone());
+                            }
+                        }
+                    }
+                    if columns.is_empty() {
+                        columns = "*".to_string();
+                    }
+                    condition = rbs::Value::Map(clean_map);
+                    columns
+                };
+
+                #[$crate::py_sql(
+                    "`select ${table_column} from ${table_name}`
+           trim end=' where ':
+             ` where `
+             trim ' and ': for key,item in condition:
+                          if item == null:
+                             continue:
+                          if !item.is_array():
+                            ` and ${key.operator_sql()}#{item}`
+                          if item.is_array():
+                            ` and ${key} in (`
+                               trim ',': for _,item_array in item:
+                                    #{item_array},
+                            `)`
+        "
+                )]
+                async fn select_by_map(
+                    executor: &dyn $crate::executor::Executor,
+                    table_name: String,
+                    table_column: &str,
+                    condition: &rbs::Value,
+                ) -> std::result::Result<Vec<$table>, $crate::rbdc::Error> {
+                    for (_, v) in condition {
+                        if v.is_array() && v.is_empty() {
+                            return Ok(vec![]);
+                        }
+                    }
+                    impled!()
+                }
+                let mut table_name = $table_name.to_string();
+                if table_name.is_empty() {
+                    #[$crate::snake_name($table)]
+                    fn snake_name() {}
+                    table_name = snake_name();
+                }
+                select_by_map(executor, table_name, &table_column, &condition).await
+            }
+        }
+        // update
+        impl $table {
+            /// update records by condition map.
+            /// supports "column" key in condition to update specific columns, e.g. `value!{"col1":"val1", "column": ["col2", "col3"]}`
+            ///
+            /// sql: `UPDATE table_name SET col1 = ?, col2 = ?, ... WHERE col1 = ? and col2 in (?, ?, ...)`
+            /// note: skips null fields by default, skips 'id' field always
+            ///
+            /// condition map -> where sql:
+            /// - `value!{"col1": "val1"}`                       -> `WHERE col1 = 'val1'`
+            /// - `value!{"col1": 1, "col2": "val2"}`           -> `WHERE col1 = 1 and col2 = 'val2'`
+            /// - `value!{"col1": ["v1", "v2", "v3"]}`          -> `WHERE col1 in ('v1', 'v2', 'v3')`
+            /// - `value!{"col1": "val1", "col2": ["a", "b"]}`  -> `WHERE col1 = 'val1' and col2 in ('a', 'b')`
+            /// - null values are skipped
+            pub async fn update_by_map(
+                executor: &dyn $crate::executor::Executor,
+                table: &$table,
+                mut condition: rbs::Value,
+            ) -> std::result::Result<$crate::rbdc::db::ExecResult, $crate::rbdc::Error> {
+                use $crate::crud_traits::{FilterByColumns, ValueOperatorSql};
+
+                // Extract column list for selective updates - implements GitHub issue #591
+                let set_columns = {
+                    let mut columns = rbs::Value::Null;
+                    let mut clean_map = rbs::value::map::ValueMap::with_capacity(condition.len());
+                    for (k, v) in condition {
+                        match k.as_str() {
+                            Some("column") => {
+                                columns = match v {
+                                    rbs::Value::String(s) => {
+                                        rbs::Value::Array(vec![rbs::Value::String(s.clone())])
+                                    }
+                                    rbs::Value::Array(arr) => {
+                                        let filtered_array: Vec<rbs::Value> = arr
+                                            .iter()
+                                            .filter(|v| v.as_str().is_some())
+                                            .cloned()
+                                            .collect();
+                                        if filtered_array.is_empty() {
+                                            rbs::Value::Null
+                                        } else {
+                                            rbs::Value::Array(filtered_array)
+                                        }
+                                    }
+                                    _ => rbs::Value::Null,
+                                };
+                            }
+                            _ => {
+                                clean_map.insert(k.clone(), v.clone());
+                            }
+                        }
+                    }
+                    condition = rbs::Value::Map(clean_map);
+                    columns
+                };
+                #[$crate::py_sql(
+                    "`update ${table_name}
+                      if skip_null == false:
+                        set collection='table',skips='id',skip_null=false:
+                      if skip_null == true:
+                        set collection='table',skips='id':
+                      trim end=' where ':
+                       ` where `
+                       trim ' and ': for key,item in condition:
+                            if item == null:
+                               continue:
+                            if !item.is_array():
+                              ` and ${key.operator_sql()}#{item}`
+                            if item.is_array():
+                              ` and ${key} in (`
+                                 trim ',': for _,item_array in item:
+                                      #{item_array},
+                              `)`
+                    "
+                )]
+                async fn update_by_map_internal(
+                    executor: &dyn $crate::executor::Executor,
+                    table_name: String,
+                    table: &rbs::Value,
+                    condition: &rbs::Value,
+                    skip_null: bool,
+                ) -> std::result::Result<$crate::rbdc::db::ExecResult, $crate::rbdc::Error>
+                {
+                    for (_, v) in condition {
+                        if v.is_array() && v.is_empty() {
+                            return Ok($crate::rbdc::db::ExecResult::default());
+                        }
+                    }
+                    impled!()
+                }
+                let mut table_name = $table_name.to_string();
+                if table_name.is_empty() {
+                    #[$crate::snake_name($table)]
+                    fn snake_name() {}
+                    table_name = snake_name();
+                }
+                let table_value = rbs::value!(table);
+                let mut skip_null = true;
+                let table = if set_columns != rbs::Value::Null {
+                    skip_null = false;
+                    table_value.filter_by_columns(&set_columns)
+                } else {
+                    table_value
+                };
+                update_by_map_internal(executor, table_name, &table, &condition, skip_null).await
+            }
+        }
+        // delete
+        impl $table {
+            /// delete records by condition map
+            ///
+            /// sql: `DELETE FROM table_name WHERE col1 = ? and col2 in (?, ?, ...)`
+            ///
+            /// condition map -> where sql:
+            /// - `value!{"col1": "val1"}`                       -> `WHERE col1 = 'val1'`
+            /// - `value!{"col1": 1, "col2": "val2"}`           -> `WHERE col1 = 1 and col2 = 'val2'`
+            /// - `value!{"col1": ["v1", "v2", "v3"]}`          -> `WHERE col1 in ('v1', 'v2', 'v3')`
+            /// - `value!{"col1": "val1", "col2": ["a", "b"]}`  -> `WHERE col1 = 'val1' and col2 in ('a', 'b')`
+            /// - null values are skipped
+            pub async fn delete_by_map(
+                executor: &dyn $crate::executor::Executor,
+                condition: rbs::Value,
+            ) -> std::result::Result<$crate::rbdc::db::ExecResult, $crate::rbdc::Error> {
+                use $crate::crud_traits::ValueOperatorSql;
+                #[$crate::py_sql(
+                    "`delete from ${table_name}`
+           trim end=' where ':
+             ` where `
+             trim ' and ': for key,item in condition:
+                          if item == null:
+                             continue:
+                          if !item.is_array():
+                            ` and ${key.operator_sql()}#{item}`
+                          if item.is_array():
+                            ` and ${key} in (`
+                               trim ',': for _,item_array in item:
+                                    #{item_array},
+                            `)`
+        "
+                )]
+                async fn delete_by_map(
+                    executor: &dyn $crate::executor::Executor,
+                    table_name: String,
+                    condition: &rbs::Value,
+                ) -> std::result::Result<$crate::rbdc::db::ExecResult, $crate::rbdc::Error>
+                {
+                    for (_, v) in condition {
+                        if v.is_array() && v.is_empty() {
+                            return Ok($crate::rbdc::db::ExecResult::default());
+                        }
+                    }
+                    impled!()
+                }
+                let mut table_name = $table_name.to_string();
+                if table_name.is_empty() {
+                    #[$crate::snake_name($table)]
+                    fn snake_name() {}
+                    table_name = snake_name();
+                }
+                delete_by_map(executor, table_name, &condition).await
+            }
+        }
+    };
+}
+
+/// Generate a paginated function from an [`html_sql`](crate::html_sql) template.
+///
+/// The generated function returns [`Page<T>`](crate::plugin::Page) and takes a
+/// [`PageRequest`](crate::plugin::PageRequest) as its second argument.
+///
+/// The template is executed twice and receives three extra leading parameters:
+///
+/// * `do_count: bool` - `true` when counting, `false` when selecting the page
+/// * `page_no: u64` - the offset of the page, `(page_no - 1) * page_size`
+/// * `page_size: u64` - the number of rows per page
+///
+/// so the SQL must return a single `u64` when `do_count` is `true`, and the rows of
+/// the page when `do_count` is `false`:
+/// ```html
+/// <select id="select_page_data">
+///         `select `
+///         <if test="do_count == true">
+///             `count(1) from table`
+///         </if>
+///         <if test="do_count == false">
+///             `* from table limit ${page_no},${page_size}`
+///         </if>
+///   </select>
+/// ```
+/// ```
+/// #[derive(serde::Serialize, serde::Deserialize)]
+/// pub struct MockTable{}
+/// //rbatis::htmlsql_select_page!(select_page_data(name: &str) -> MockTable => "example.html");
+/// rbatis::htmlsql_select_page!(select_page_data(name: &str) -> MockTable => r#"
+/// <select id="select_page_data">
+///  `select * from table  where id > 1  limit ${page_no},${page_size} `
+/// </select>"#);
+///
+/// rbatis::pysql_select_page!(pysql_select_page(name:&str) -> MockTable =>
+///     r#"`select * from activity where delete_flag = 0`
+///         if name != '':
+///            ` and name=#{name}`
+///       ` limit ${page_no},${page_size}`
+/// "#);
+/// ```
+#[macro_export]
+macro_rules! htmlsql_select_page {
+    ($fn_name:ident($($param_key:ident:$param_type:ty$(,)?)*) -> $table:ty => $($html_file:expr$(,)?)*) => {
+            pub async fn $fn_name(executor: &dyn $crate::executor::Executor, page_request: &dyn $crate::plugin::IPageRequest, $($param_key:$param_type,)*) -> std::result::Result<$crate::plugin::Page<$table>, $crate::rbdc::Error> {
+             #[$crate::html_sql($($html_file,)*)]
+             pub async fn $fn_name(executor: &dyn $crate::executor::Executor,do_count:bool,page_no:u64,page_size:u64,$($param_key: &$param_type,)*) -> std::result::Result<rbs::Value, $crate::rbdc::Error>{
+                 $crate::impled!()
+             }
+              let mut executor = executor;
+              let mut conn = None;
+              if executor.name().eq($crate::executor::Executor::name(executor.rb_ref())){
+                  conn = Some(executor.rb_ref().acquire().await?);
+                  match &conn {
+                      Some(c) => {
+                          executor = c;
+                      }
+                      None => {}
+                  }
+             }
+             let mut page = $crate::plugin::Page::<$table>::new(page_request.page_no(), page_request.page_size(), 0, vec![]);
+             let mut intercept = executor.rb_ref().get_intercept::<$crate::plugin::intercept_page::PageIntercept>().ok_or_else(|| $crate::rbdc::Error::from("PageIntercept not found"))?;
+             if page_request.do_count() {
+                intercept.count_ids.insert(executor.id(),$crate::plugin::PageRequest::new(page_request.page_no(), page_request.page_size()));
+                let total_value = $fn_name(executor, true, page_request.offset(), page_request.page_size(), $(&$param_key,)*).await?;
+                page.total = $crate::decode::<i64>(total_value).unwrap_or(0i64) as u64;
+             }
+             intercept.select_ids.insert(executor.id(),$crate::plugin::PageRequest::new(page_request.page_no(), page_request.page_size()));
+             let records_value = $fn_name(executor, false, page_request.offset(), page_request.page_size(), $(&$param_key,)*).await?;
+             page.records = rbs::from_value(records_value)?;
+             Ok(page)
+         }
+    }
+}
+
+/// Generate a paginated function from a [`py_sql`](crate::py_sql) template.
+///
+/// The generated function returns [`Page<T>`](crate::plugin::Page) and takes a
+/// [`PageRequest`](crate::plugin::PageRequest) as its second argument.
+///
+/// The template is executed twice and receives three extra leading parameters:
+///
+/// * `do_count: bool` - `true` when counting, `false` when selecting the page
+/// * `page_no: u64` - the offset of the page, `(page_no - 1) * page_size`
+/// * `page_size: u64` - the number of rows per page
+///
+/// so the SQL must return a single `u64` when `do_count` is `true`, and the rows of
+/// the page when `do_count` is `false`:
+/// ```py
+/// `select * from activity where delete_flag = 0`
+///                   if name != '':
+///                     ` and name=#{name}`
+///                   if !ids.is_empty():
+///                     ` and id in `
+///                     ${ids.sql()}
+/// ```
+/// ```
+/// #[derive(serde::Serialize, serde::Deserialize)]
+/// pub struct MockTable{}
+/// rbatis::pysql_select_page!(pysql_select_page(name:&str) -> MockTable =>
+///     r#"`select * from activity where delete_flag = 0`
+///         if name != '':
+///            ` and name=#{name}`
+///       ` limit ${page_no},${page_size}`
+/// "#);
+/// ```
+#[macro_export]
+macro_rules! pysql_select_page {
+    ($fn_name:ident($($param_key:ident:$param_type:ty$(,)?)*) -> $table:ty => $($py_file:expr$(,)?)*) => {
+            pub async fn $fn_name(executor: &dyn $crate::executor::Executor, page_request: &dyn $crate::plugin::IPageRequest, $($param_key:$param_type,)*) -> std::result::Result<$crate::plugin::Page<$table>, $crate::rbdc::Error> {
+              #[$crate::py_sql($($py_file,)*)]
+              pub async fn $fn_name(executor: &dyn $crate::executor::Executor,do_count:bool,page_no:u64,page_size:u64,$($param_key: &$param_type,)*) -> std::result::Result<rbs::Value, $crate::rbdc::Error>{
+                 $crate::impled!()
+              }
+              let mut executor = executor;
+              let mut conn = None;
+              if executor.name().eq($crate::executor::Executor::name(executor.rb_ref())){
+                  conn = Some(executor.rb_ref().acquire().await?);
+                  match &conn {
+                      Some(c) => {
+                          executor = c;
+                      }
+                      None => {}
+                  }
+              }
+              let mut page = $crate::plugin::Page::<$table>::new(page_request.page_no(), page_request.page_size(), 0, vec![]);
+              let mut intercept = executor.rb_ref().get_intercept::<$crate::plugin::intercept_page::PageIntercept>().ok_or_else(|| $crate::rbdc::Error::from("PageIntercept not found"))?;
+              if page_request.do_count() {
+                 intercept.count_ids.insert(executor.id(),$crate::plugin::PageRequest::new(page_request.page_no(), page_request.page_size()));
+                 let total_value = $fn_name(executor, true, page_request.offset(), page_request.page_size(), $(&$param_key,)*).await?;
+                 page.total = $crate::decode(total_value).unwrap_or(0);
+              }
+              intercept.select_ids.insert(executor.id(),$crate::plugin::PageRequest::new(page_request.page_no(), page_request.page_size()));
+              let records_value = $fn_name(executor, false, page_request.offset(), page_request.page_size(), $(&$param_key,)*).await?;
+              page.records = rbs::from_value(records_value)?;
+              Ok(page)
+         }
+    }
+}
+
+/// Declare a function whose body is filled in by the `#[sql]` attribute macro.
+///
+/// for example:
+/// ```rust
+/// use rbatis::executor::Executor;
+/// rbatis::raw_sql!(test_same_id(rb: &dyn Executor, id: &u64)  -> Result<rbs::Value, rbatis::Error> =>
+/// "select * from table where id = ?"
+/// );
+/// ```
+#[macro_export]
+macro_rules! raw_sql {
+    ($fn_name:ident($($param_key:ident:$param_type:ty$(,)?)*) -> $return_type:ty => $sql_file:expr) => {
+       #[$crate::sql($sql_file)]
+       pub async fn $fn_name($($param_key: $param_type,)*) -> $return_type{
+           impled!()
+       }
+    }
+}
+
+/// Declare a function whose body is filled in by the `#[py_sql]` attribute macro.
+///
+/// for query example:
+/// ```rust
+/// use rbatis::executor::Executor;
+/// rbatis::pysql!(test_same_id(rb: &dyn Executor, id: &u64)  -> Result<rbs::Value, rbatis::Error> =>
+/// "select * from table where ${id} = 1
+///  if id != 0:
+///    `id = #{id}`"
+/// );
+/// ```
+/// for exec example:
+/// ```rust
+/// use rbatis::executor::Executor;
+/// use rbdc::db::ExecResult;
+/// rbatis::pysql!(test_same_id(rb: &dyn Executor, id: &u64)  -> Result<ExecResult, rbatis::Error> =>
+/// "`update activity set name = '1' where id = #{id}`"
+/// );
+/// ```
+#[macro_export]
+macro_rules! pysql {
+    ($fn_name:ident($($param_key:ident:$param_type:ty$(,)?)*) -> $return_type:ty => $py_file:expr) => {
+       #[$crate::py_sql($py_file)]
+       pub async fn $fn_name($($param_key: $param_type,)*) -> $return_type{
+          impled!()
+       }
+    }
+}
+
+/// Declare a function whose body is filled in by the `#[html_sql]` attribute macro.
+///
+/// for example query rbs::Value:
+/// ```rust
+/// use rbatis::executor::Executor;
+/// rbatis::htmlsql!(test_select(rb: &dyn Executor, id: &u64)  -> Result<rbs::Value, rbatis::Error> => r#"
+///             <mapper>
+///             <select id="test_same_id">
+///               `select ${id} from my_table`
+///             </select>
+///             </mapper>"#);
+/// ```
+/// exec (from file)
+/// ```rust
+/// use rbatis::executor::Executor;
+/// use rbdc::db::ExecResult;
+/// rbatis::htmlsql!(update_by_id(rb: &dyn Executor, id: &u64)  -> Result<ExecResult, rbatis::Error> => "example/example.html");
+/// ```
+/// query
+/// ```rust
+/// use rbatis::executor::Executor;
+/// #[derive(serde::Serialize, serde::Deserialize)]
+/// pub struct MyTable{
+///      pub id:Option<u64>,
+///      pub name:Option<String>,
+/// }
+/// rbatis::htmlsql!(test_select_table(rb: &dyn Executor, id: &u64)  -> Result<Vec<MyTable>, rbatis::Error> => r#"
+///             <mapper>
+///               <select id="test_same_id">
+///                 `select * from my_table`
+///               </select>
+///             </mapper>"#);
+/// ```
+#[macro_export]
+macro_rules! htmlsql {
+    ($fn_name:ident($($param_key:ident:$param_type:ty$(,)?)*) -> $return_type:ty => $html_file:expr) => {
+        #[$crate::html_sql($html_file)]
+        pub async fn $fn_name($($param_key: $param_type,)*) -> $return_type{
+              impled!()
+        }
+    }
+}

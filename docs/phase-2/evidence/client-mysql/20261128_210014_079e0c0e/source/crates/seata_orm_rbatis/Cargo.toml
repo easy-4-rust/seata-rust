@@ -1,0 +1,36 @@
+[package]
+name = "seata-orm-rbatis"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "rbatis adapter for the owned Seata MySQL AT transaction"
+[features]
+experimental_changed_commit = ["seata-db-mysql/experimental_changed_commit"]
+[dependencies]
+rbatis = "=4.9.11"
+rbs = "=4.8.4"
+futures-core = "=0.3.34"
+tokio.workspace = true
+thiserror.workspace = true
+seata-at = { path = "../seata_at" }
+seata-datasource = { path = "../seata_datasource" }
+seata-db-mysql = { path = "../seata_db_mysql" }
+bigdecimal = "=0.4.10"
+chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
+serde = "=1.0.229"
+serde_json = "=1.0.140"
+sqlx = { version = "=0.8.6", default-features = false, features = ["mysql", "runtime-tokio", "bigdecimal", "chrono"] }
+# rbdc 的宽版本依赖不声明 MSRV；精确约束已验证的 Rust 1.85 版本。
+uuid = "=1.26.1"
+[dev-dependencies]
+serde = { version = "=1.0.229", features = ["derive"] }
+seata-protocol = { path = "../seata_protocol" }
+seata-transport = { path = "../seata_transport" }
+seata-rm = { path = "../seata_rm" }
+seata-tm = { path = "../seata_tm" }
+sha2 = "=0.10.9"
+[lints]
+workspace = true
+

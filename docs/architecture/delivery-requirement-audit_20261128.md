@@ -2,12 +2,12 @@
 
 范围保持为[原架构计划 Phase 0–7](SEATA_RUST_ARCHITECTURE_PLAN.md)和[V1 WP00–07](../phase-0/v1-implementation-acceptance-checklist.md)。本文件是当前工作树的导航与差距记录，不替换正式需求、不豁免门禁。历史 README 中“尚未接入”的描述必须按对应日期理解，不能据此重复开发已经存在的能力。
 
-当前 Cargo 工作区包含 protocol、transport、tm、rm、at、datasource、db_mysql、sqlparser、test、observability、xa、tcc 以及 orm_seaorm、orm_rbatis 十四个正式 crate。未发现 Rust TC 服务端、PostgreSQL、Saga、集群/发现服务或 CLI 的正式工作区成员。不能把参考 Java 服务端、Python 运行器或测试夹具计为这些正式交付。
+当前 Cargo 工作区包含 protocol、transport、tm、rm、at、datasource、db_mysql、sqlparser、test、observability、xa、tcc 以及 orm_seaorm、orm_rbatis 以及 client 十五个正式 crate。未发现 Rust TC 服务端、PostgreSQL、Saga、集群/发现服务或 CLI 的正式工作区成员。不能把参考 Java 服务端、Python 运行器或测试夹具计为这些正式交付。
 
 | 原要求 | 当前源码与权威证据入口 | 未完成或证据不足 |
 |---|---|---|
 | Phase 0：参考审计与兼容基线 | Phase 0 ledger、状态矩阵、ADR；WP00-P 与 WP01 初期 profile Gate | 完整 WP00-R、原 Go 默认路径差异、外部 Java FILE/RAFT 等问题的完整闭环；候选补丁不等于上游发布已修复。 |
-| Phase 1：协议、传输、TM、上下文 | `seata_protocol`、`seata_transport`、`seata_tm`；WP01–03 组件 Gate | 完整部署及跨版本/语言运行验收继续依赖后续门禁。 |
+| Phase 1：协议、传输、TM、上下文 | `seata_protocol`、`seata_transport`、`seata_tm`、`seata_client`；WP01–03 组件 Gate | 完整部署及跨版本/语言运行验收继续依赖后续门禁。 |
 | Phase 2：RM、MySQL AT、Undo、锁 | `seata_rm`、`seata_at`、`seata_db_mysql`；WP04、WP05 各现场 ledger、WP06 十项及 Undo SHA-256 原事务恢复证据 | 默认有变化 COMMIT 仍关闭；完整 SQL/外部写入器/物理资源域准入及 WP05 总 Gate 尚未关闭。早期“只有识别或内存 Undo”已经不反映当前实现。 |
 | Phase 3：恢复、重试、幂等、并发、负载、跨语言 | 已有 AT 恢复/丢响应、TLS、日志/指标、停机、原 Java TC 证据；本轮新增[并发负载契约](../phase-2/at-concurrent-load-contract.md) | 本轮是有限并发现场，不能替代长时负载、生产容量、生产权限/证书/告警/值守及完整跨语言测试。 |
 | Phase 4：XA、两阶段、TCC、Fence、空回滚、悬挂 | `mysql_xa_resource_manager.rs`、`mysql_xa_enlisted_transaction.rs`、`mysql_tcc_resource_manager.rs`；[XA 契约](../phase-2/mysql-xa-contract.md)、[TCC 契约](../phase-2/tcc-contract.md)及 `docs/phase-4` 最新 ledger | 正式 XA/TCC 已实现，不应按照早期 native-only ledger 重新创建；完整模式门禁仍需覆盖对应剩余兼容、拓扑、权限、并发和故障要求。 |
@@ -46,3 +46,5 @@
 [time RFC 2822 源码安全回移](../phase-2/evidence/time-rfc2822/README.md)已保留 Rust 1.85，并用六个原版独立进程栈溢出、双版本十二个同输入/同栈大小正常错误及官方递归函数对照验证修复。正式根与 rbatis 探针锁定 `0.3.45+seata.1`；双版本工作区各 853 passed / 419 ignored，功能与 rbatis 各八项及严格 Clippy 通过。未修改上游锁文件仍报告原 time 漏洞；维护 path 包在工具中未再报告该项，故不以退出码 0 冒充源码证明。SQLite 原发现和 rbatis 的 lru unsound 警告、下游补丁发布集成及生产安全门禁继续开放。下一步推进实际 rbatis 原事务执行器，同时处理其真实依赖安全缺口；完整 Phase 0–7 仍未完成。
 
 [正式 rbatis 原事务适配](../phase-2/evidence/rbatis-mysql/README.md)现已新增独立工作区 crate，真实 Executor 持有并交还原事务，原生 CRUD、COUNT、精确原值与回执通过双 Rust 十二笔原 TC 提交/补偿及原 Java parser/锁/SHA/回调核验。负 TIME/UTC、快照、配置/预算拒绝、取消毒化和 Drop 回滚/MDL 释放实际通过；各 861 passed / 420 ignored，四包严格 Clippy 及九项独立兼容/缓存检查通过。lru 0.18.2 已移除两项旧 unsound 警告，SQLite 原发现和维护补丁发布仍开放。rbatis 不再是完全未接入项；完整插件/分页/类型生态及全部 SQL、写入器、生产范围与后续阶段继续交付，不据此关闭完整 Phase 0–7。
+
+[统一客户端入口](../phase-2/evidence/client-mysql/README.md)已落实原架构 §5.3：相同配置/身份/传输策略驱动显式 TM/RM 角色，部分启动失败清理和两方独立关闭错误；实际 TCP/mTLS、持有日志租约、取消/Drop 后 Pending 保留通过。双版本原 Java TC/MySQL 十二笔 rbatis 提交/补偿、原 Java parser/SHA/锁/回调以及各 870 passed / 421 ignored、严格 Clippy 和独立源码反例验证通过。统一入口不再完全缺失，但恢复控制权限仍须按原持久来源契约显式配置，WP05 全部 SQL/写入器、WP07 生产部署/运维/长时负载和后续 Phase 5–7 未关闭。

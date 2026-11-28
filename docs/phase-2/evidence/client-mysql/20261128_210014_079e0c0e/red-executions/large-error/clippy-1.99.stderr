@@ -1,0 +1,41 @@
+    Checking tokio v1.54.1
+    Checking seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+    Checking seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+    Checking seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+    Checking seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Checking tokio-stream v0.1.19
+    Checking seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+    Checking sqlx-core v0.8.6
+    Checking tokio-rustls v0.26.4
+    Checking seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+    Checking seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+    Checking rbdc v4.9.11 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\third_party\rbdc)
+    Checking sqlx-mysql v0.8.6 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\third_party\sqlx_mysql)
+    Checking fast_pool v1.0.4
+    Checking rbdc-pool-fast v4.9.5
+    Checking rbatis v4.9.11 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\third_party\rbatis)
+    Checking sqlx v0.8.6
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Checking seata-client v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_client)
+error: the `Err`-variant returned from this function is very large
+   --> crates\seata_client\src\seata_client.rs:138:33
+    |
+138 |     pub async fn build(self) -> Result<SeataClient, ClientBuildError> {
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 136 bytes
+    |
+    = help: try reducing the size of `client_build_error::ClientBuildError`, for example by boxing large elements or replacing it with `Box<client_build_error::ClientBuildError>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#result_large_err
+    = note: `-D clippy::result-large-err` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::result_large_err)]`
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\seata_client\src\seata_client.rs:144:10
+    |
+144 |     ) -> Result<SeataClient, ClientBuildError> {
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 136 bytes
+    |
+    = help: try reducing the size of `client_build_error::ClientBuildError`, for example by boxing large elements or replacing it with `Box<client_build_error::ClientBuildError>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#result_large_err
+
+error: could not compile `seata-client` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
