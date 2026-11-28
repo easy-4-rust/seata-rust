@@ -327,6 +327,8 @@ Gate verification 2026-11-13: [formal peer-profile evidence](../phase-1/evidence
 
 **2026-11-27 native affected-row fault supplement.** Default-build Rust 1.99/1.85 each reject real SQLx responses whose zero-row UPDATE/DELETE OK affected count is changed to one, both with and without a prior uncommitted INSERT. Later DML and preparation stay poisoned, native RM frames have no branch operation, and no local COMMIT is sent. After all original physical MySQL sessions disappear, independent SQL verifies complete rollback and empty Undo/control records. Removing the production guard fails the same real-driver test; restoring exact bytes passes. Three complete retained profiles each reject sixteen final evidence weakenings; original default-proxy no-change COMMIT remains valid. See [native driver evidence](../phase-2/evidence/mysql-affected-image-native/README.md). This closes the previously missing native affected-count fault example only; full WP05 and downstream gates stay open.
 
+**2026-11-28 native JSON increment:** non-primary JSON columns now preserve original MySQL text and JSON identity, use original Connector/J 8.0.27 JDBC -1/String Undo, distinguish SQL NULL and JSON null, and enforce native wire type/field budgets. Four original TC JSON transactions, 64 ordinary AT concurrent regressions, 102 evidence weakenings and six source counterexamples verify on Rust 1.99/1.85; each workspace passes 804 tests with 397 ignored. SQL grammar, default experimental commit and full WP05 gate remain unchanged. [Evidence](../phase-2/evidence/mysql-json/README.md).
+
 ### WP-06 — MySQL AT phase 2
 
 **Depends on:** WP-05.

@@ -192,6 +192,9 @@ impl MySqlInsertExecutor {
         match column.domain().ok_or(DbError::Unsupported {
             feature: "physical primary column domain",
         })? {
+            ColumnDomain::Json => Err(DbError::Unsupported {
+                feature: "JSON primary key",
+            }),
             ColumnDomain::Integer { bits, unsigned } => {
                 let kind = match bits {
                     8 => "TINYINT",

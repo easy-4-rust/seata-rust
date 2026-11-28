@@ -84,3 +84,8 @@ MySQL 8.4.13 的外键字典按引用方表执行访问过滤，因此过程需�
 固定原 Java TC 和自有 MySQL 的联试使用直接过程授权。Rust 写入账号无全局 PROCESS 及任何表级 TRIGGER，直接访问 InnoDB 外键字典和修改存储过程均被 MySQL 拒绝。原 006 在缺少过程授权时仍拒绝读入，通过授权后，原 Rust 分支完成实际业务提交、成功报告和二阶段回调。Java 竞争收到原锁冲突，释放后用新 XID 成功登记。[Rust 1.99](evidence/at-definer-metadata/seata_original_guard_iexffs5v/result.json) · [Rust 1.85](evidence/at-definer-metadata/seata_original_guard_66ndc1v0/result.json)
 
 Rust 1.99 的直接授权提交路径另行通过回归。[原直接授权回归](evidence/at-writer-permissions/seata_original_guard_5f5igpzi/result.json)
+
+
+## 原生 JSON 元数据（2026-11-28）
+
+在已有类型之外新增独立 JSON 物理域与原生身份，无字符维度，禁止主键。原 JDBC 8.0.27 现场为 -1 / String；仅对实际 JSON 原生行读取 UTF-8 字节，保留其他类型检查。见 [JSON 契约与证据](mysql-json-contract.md)。前文有日期的类型清单保留其历史范围。

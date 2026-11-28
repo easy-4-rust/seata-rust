@@ -1,0 +1,29 @@
+from pathlib import Path
+import sys,json,subprocess,re,hashlib,zipfile,shutil
+ROOT=Path('E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation');OUT=ROOT/'docs/phase-2/evidence/mysql-json/validation_20261128_final';OUT.mkdir(exist_ok=True);sys.path.insert(0,str(ROOT/'tools/formal-source-junit'))
+from inventory_rebuilt import save,sha
+from validate_structured_logs import catalog,sources
+runs=[('json','docs/phase-2/evidence/mysql-json/java_20261128_083558_2f346127','305f22835e2dd3db93e396a13d8fa2e6831a5ae7497756a2d50a0d038d98aa23'),('json','docs/phase-2/evidence/mysql-json/java_20261128_083558_b3405d39','1a25e13dcb2f4509791c039dfaa18c43536c7903c2d532415de2644038eced17'),('at','docs/phase-2/evidence/at-concurrent-load/java_20261128_083839_c2f89e47','c3b42221502c54b76c0fb6ced489182573d1691cccfe598fd1cbfdffa8d157a9'),('at','docs/phase-2/evidence/at-concurrent-load/java_20261128_083839_879d92b5','a19570540cd750c4fe58f70bf43c50dc5a3116a970df78f64d00614ec1e341d2')]
+commands=[];authorities=[]
+for i,(kind,path,digest) in enumerate(runs):
+ script='validate_json_column.py' if kind=='json' else 'validate_at_concurrent.py';argv=[sys.executable,'-B',str(ROOT/'tools/formal-source-junit'/script),str(ROOT/path),digest,'--weakenings'];r=subprocess.run(argv,cwd=ROOT,capture_output=True,creationflags=subprocess.CREATE_NO_WINDOW);(OUT/(str(i)+'.stdout')).write_bytes(r.stdout);(OUT/(str(i)+'.stderr')).write_bytes(r.stderr);commands.append(dict(argv=argv,exit_code=r.returncode));save(OUT/'commands.json',commands);assert r.returncode==0,r.stderr.decode(errors='replace');authorities.append(dict(kind=kind,path=path,catalog_sha256=digest));print(kind,i,'VERIFIED',flush=True)
+mutation=ROOT/'docs/phase-2/evidence/mysql-json/mutations_20261128_083431_d7d4520f';digest='c1e280ceae4910ec9f9aeb53adf210bb77e21cac791428718eec360e216cf248';catalog(mutation,digest);sources(mutation);rows=json.loads((mutation/'commands.json').read_bytes());assert len(rows)==6 and all(r['exit_code']==101 for r in rows)
+for row in rows:
+ label=row['label'];assert b'test result: FAILED. 0 passed; 1 failed;' in (mutation/(label+'.stdout')).read_bytes();assert sha(ROOT/row['source'])==row['original_sha256'] and sha(mutation/(label+'.rs'))==row['mutated_sha256'];assert row['original_sha256']!=row['mutated_sha256']
+authorities.append(dict(kind='source-counterexamples',path=mutation.relative_to(ROOT).as_posix(),catalog_sha256=digest))
+for v,name in [('1.99','regression_1.99_20261128_083616_1049b1fb'),('1.85','regression_1.85_20261128_083616_6ca1de4f')]:
+ p=ROOT/'docs/phase-2/evidence/mysql-json'/name;digest=sha(p/'catalog.json');catalog(p,digest);r=json.loads((p/'result.json').read_bytes());assert r['Rust']==v and r['passed']==804 and r['ignored']==397 and r['successful_test_harness_summaries']==182 and r['all_features'] and r['strict_mysql_all_targets_clippy'];cmds=json.loads((p/'commands.json').read_bytes());assert all(x['exit_code']==0 for x in cmds)
+ args=next(x['argv'] for x in cmds if x['label']=='clippy');assert all(x in args for x in ['seata-db-mysql','seata-at','seata-datasource','--all-targets','--all-features'])
+ summaries=re.findall(rb'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;', (p/'workspace.stdout').read_bytes());assert len(summaries)==182 and sum(int(x[0]) for x in summaries)==804 and sum(int(x[2]) for x in summaries)==397 and not any(int(x[1]) for x in summaries)
+ for source in r['production_sources']:assert sha(ROOT/source['path'])==source['sha256']
+ authorities.append(dict(kind='workspace',path=p.relative_to(ROOT).as_posix(),catalog_sha256=digest))
+baseline=ROOT/'docs/phase-2/evidence/mysql-json/java_20261128_082459_f0a9b881';stderr=(baseline/'1.99-commit/client.stderr').read_bytes();assert b'native JSON metadata and image must be supported: Unsupported { feature: "column type" }' in stderr
+old=subprocess.check_output(['git','show','2367d70ce4727824b9d4f80cb02d6e9934a1513e:crates/seata_db_mysql/src/cache/mysql_table_meta_reader.rs'],cwd=ROOT,creationflags=subprocess.CREATE_NO_WINDOW)
+with zipfile.ZipFile(baseline/'source-inputs.zip') as z:assert z.read('crates/seata_db_mysql/src/cache/mysql_table_meta_reader.rs')==old
+save(OUT/'baseline.json',dict(path=baseline.relative_to(ROOT).as_posix(),exit_code=json.loads((baseline/'1.99-commit/client-command.json').read_bytes())['exit_code'],source_archive_sha256=sha(baseline/'source-inputs.zip'),stderr_sha256=sha(baseline/'1.99-commit/client.stderr'),target_error='Unsupported column type',outer_checkpoint_wait_also_timed_out=True))
+save(OUT/'authority.json',authorities);inputs=[]
+with zipfile.ZipFile(OUT/'validator-inputs.zip','w',zipfile.ZIP_DEFLATED) as z:
+ for p in sorted((ROOT/'tools').rglob('*.py')):name=p.relative_to(ROOT).as_posix();z.writestr(name,p.read_bytes());inputs.append(dict(path=name,sha256=sha(p)))
+save(OUT/'validator-inputs.json',inputs);shutil.copyfile(Path(__file__),OUT/Path(__file__).name)
+save(OUT/'result.json',dict(status='MYSQL_JSON_COLUMN_DUAL_RUST_VERIFIED',Rust_versions=['1.99','1.85'],original_java_pin='cba73e180fd8896a99df6415b859d275122feaa7',original_connector_j='8.0.27',original_jackson='2.18.3',json_global_transactions=4,non_json_concurrent_regression_transactions=64,json_sample_rows_per_case=9,evidence_weakenings_rejected=dict(json=62,non_json_regression=40),source_assertion_counterexamples_rejected=6,workspace_per_rust=dict(passed=804,ignored=397,harness_summaries=182,strict_clippy=True),SQL_grammar_unchanged=True,production_default_changed_commit_enabled=False,WP05_full_gate_complete=False,whole_plan_complete=False))
+save(OUT/'catalog.json',[dict(path=p.relative_to(OUT).as_posix(),sha256=sha(p)) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='catalog.json']);print('FINAL_CATALOG',sha(OUT/'catalog.json'),flush=True)

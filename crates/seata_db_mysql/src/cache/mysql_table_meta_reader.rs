@@ -294,7 +294,7 @@ impl MySqlTableMetaReader {
                     ColumnType::SignedInteger
                 }
             }
-            "varchar" | "char" | "tinytext" | "text" | "mediumtext" | "longtext" => {
+            "json" | "varchar" | "char" | "tinytext" | "text" | "mediumtext" | "longtext" => {
                 ColumnType::Text
             }
             "varbinary" | "binary" | "tinyblob" | "blob" | "mediumblob" | "longblob" => {
@@ -307,7 +307,7 @@ impl MySqlTableMetaReader {
                 })
             }
         };
-        if kind == ColumnType::Text {
+        if kind == ColumnType::Text && data_type != "json" {
             let charset: Option<String> = row
                 .try_get("CHARACTER_SET_NAME")
                 .map_err(|e| DbError::driver("column charset", e))?;
@@ -353,6 +353,7 @@ impl MySqlTableMetaReader {
     fn native_type(data_type: &str, full_type: &str) -> Result<MySqlType, MetadataError> {
         // 同值域的TEXT/BLOB子类仍需保留身份；TINYINT(1)只保留事实，不在这里丢失整数值。
         Ok(match data_type {
+            "json" => MySqlType::Json,
             "tinyint" => MySqlType::TinyInt {
                 display_width_one: full_type
                     .split_whitespace()
@@ -400,6 +401,7 @@ impl MySqlTableMetaReader {
             return Ok(ColumnDomain::Integer { bits, unsigned });
         }
         match data_type {
+            "json" => Ok(ColumnDomain::Json),
             "char" | "varchar" | "tinytext" | "text" | "mediumtext" | "longtext" => {
                 let charset = match row
                     .try_get::<Option<String>, _>("CHARACTER_SET_NAME")

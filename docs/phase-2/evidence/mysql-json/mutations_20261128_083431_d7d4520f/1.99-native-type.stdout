@@ -1,0 +1,19 @@
+
+running 1 test
+test mysql_image_reader::tests::json_wire_type_is_checked_before_unchecked_bytes_or_null ... FAILED
+
+failures:
+
+---- mysql_image_reader::tests::json_wire_type_is_checked_before_unchecked_bytes_or_null stdout ----
+
+thread 'mysql_image_reader::tests::json_wire_type_is_checked_before_unchecked_bytes_or_null' (61424) panicked at crates\seata_db_mysql\src\mysql_image_reader.rs:461:21:
+assertion failed: matches!(result,
+    Err(DbError::Unsupported { feature: "JSON image native type differs" }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    mysql_image_reader::tests::json_wire_type_is_checked_before_unchecked_bytes_or_null
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 62 filtered out; finished in 0.01s
+

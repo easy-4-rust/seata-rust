@@ -1,0 +1,213 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-json-20261128-082459-f0a9b881",
+      "--label",
+      "seata.xa.owner=b8bca753bf85458095b3dadb9c177788",
+      "--mount",
+      "type=bind,source=E:/codex-builds/seata-json-20261128_082459_f0a9b881/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:52000:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_json_b8bca753bf85",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "install-server-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_json_b8bca753bf85"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_json_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_json_b8bca753bf85.undo_json; CREATE TABLE undo_json_b8bca753bf85.undo_json(id INT PRIMARY KEY,v JSON NULL) ENGINE=InnoDB; INSERT INTO undo_json_b8bca753bf85.undo_json VALUES(1,'{\"n\":9007199254740993,\"u\":18446744073709551615}'),(2,'null'),(3,NULL),(4,'[]'),(5,'{}'),(6,'\"unicode 雪 😀\"'),(7,'true'),(8,'18446744073709551615'),(20001,'[1,null,true]')"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_json_b8bca753bf85' AND TABLE_NAME='undo_json' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect-stopped",
+    "argv": [
+      "docker",
+      "inspect",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "7b96f78ca5e2f3c9963ad09956b67a144bf3e7ff071e6305a48db432e8f774b4"
+    ],
+    "exit_code": 1
+  }
+]

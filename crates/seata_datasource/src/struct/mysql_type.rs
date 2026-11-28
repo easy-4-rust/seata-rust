@@ -4,6 +4,8 @@ use crate::{ColumnDomain, ColumnMeta, MetadataError};
 /// 对应 Java: com.mysql.cj.MysqlType及ColumnMeta#dataTypeName（当前已认证物理类型子集）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MySqlType {
+    /// 原生 JSON；JDBC 使用 LONGVARCHAR/String，仍独立于 TEXT 保存物理身份。
+    Json,
     /// TINYINT，保留驱动boolean配置会使用的显示宽度1信息；unsigned由列域独立保存。
     TinyInt {
         /// 声明是否保留TINYINT(1)显示宽度；不自动把物理整数转换为bool。
@@ -49,10 +51,12 @@ impl MySqlType {
     pub(crate) fn validate(self, column: &ColumnMeta) -> Result<(), MetadataError> {
         let valid = matches!(
             (self, column.domain()),
-            (
-                Self::TinyInt { .. },
-                Some(ColumnDomain::Integer { bits: 8, .. })
-            ) | (Self::SmallInt, Some(ColumnDomain::Integer { bits: 16, .. }))
+            (Self::Json, Some(ColumnDomain::Json))
+                | (
+                    Self::TinyInt { .. },
+                    Some(ColumnDomain::Integer { bits: 8, .. })
+                )
+                | (Self::SmallInt, Some(ColumnDomain::Integer { bits: 16, .. }))
                 | (
                     Self::MediumInt,
                     Some(ColumnDomain::Integer { bits: 24, .. })

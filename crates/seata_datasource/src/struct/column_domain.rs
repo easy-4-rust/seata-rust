@@ -4,6 +4,8 @@ use crate::{CharacterSet, ColumnMeta, ColumnType, FieldValue, MetadataError};
 /// 对应 Java: org.apache.seata.sqlparser.struct.ColumnMeta的类型、长度、精度与unsigned；Rust结构化扩展。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ColumnDomain {
+    /// MySQL 原生 JSON：保存服务器 UTF-8 文本，不解析或重新编码内部数字；禁止作为主键。
+    Json,
     /// MySQL五种整型宽度，位数仅8/16/24/32/64。
     Integer {
         /// 实际存储位数，不是显示宽度。
@@ -35,6 +37,11 @@ impl ColumnDomain {
     /// 参数为完整列元数据；返回物理域与通用值域/维度的一致性结果。
     pub(crate) fn validate(&self, column: &ColumnMeta) -> Result<(), MetadataError> {
         let valid = match self {
+            Self::Json => {
+                column.kind() == ColumnType::Text
+                    && column.char_octet_length().is_none()
+                    && column.primary_key_ordinal().is_none()
+            }
             Self::Integer { bits, unsigned } => {
                 matches!(bits, 8 | 16 | 24 | 32 | 64)
                     && column.kind()
@@ -79,6 +86,7 @@ impl ColumnDomain {
             return true;
         }
         match (self, value) {
+            (Self::Json, FieldValue::Text(_)) => true,
             (
                 Self::Integer {
                     bits,

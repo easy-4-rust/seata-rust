@@ -2,12 +2,12 @@ use crate::{cache::MySqlTableMetaReader, DbError};
 use bigdecimal::BigDecimal;
 use seata_at::{SqlRecognizer, SqlType};
 use seata_datasource::{
-    ColumnMeta, ColumnType, DecimalValue, Field, FieldValue, ImageError, Row as ImageRow,
-    TableMeta, TableRecords,
+    ColumnMeta, ColumnType, DecimalValue, Field, FieldValue, ImageError, MySqlType,
+    Row as ImageRow, TableMeta, TableRecords,
 };
 use sqlx::{
     mysql::{MySqlArguments, MySqlRow},
-    Arguments, MySql, Row, Transaction, ValueRef,
+    Arguments, MySql, Row, Transaction, TypeInfo, ValueRef,
 };
 use std::str::FromStr;
 
@@ -240,11 +240,16 @@ impl MySqlImageReader {
         index: usize,
         column: &ColumnMeta,
     ) -> Result<FieldValue, DbError> {
-        if row
+        let raw = row
             .try_get_raw(index)
-            .map_err(|e| DbError::driver("image NULL marker", e))?
-            .is_null()
-        {
+            .map_err(|e| DbError::driver("image NULL marker", e))?;
+        let json = column.mysql_type() == Some(MySqlType::Json);
+        if json && raw.type_info().name() != "JSON" {
+            return Err(DbError::Unsupported {
+                feature: "JSON image native type differs",
+            });
+        }
+        if raw.is_null() {
             return Ok(FieldValue::Null);
         }
         match column.kind() {
@@ -258,9 +263,14 @@ impl MySqlImageReader {
                 .map_err(|e| DbError::driver("unsigned image", e)),
             ColumnType::Text => {
                 // 物理元数据已经确认文本及字符集；MySQL 的二进制排序标记不能代替列类型。
-                let bytes: &[u8] = row
-                    .try_get(index)
-                    .map_err(|e| DbError::driver("text image", e))?;
+                // SQLx 0.8.6 的 bytes 兼容表不含 JSON；仅在上方核对原生 JSON 后取其文本字节。
+                // 不使用 SQLx Json<Value>，避免对服务器 JSON 中的数值进行二次解析。
+                let bytes: &[u8] = if json {
+                    row.try_get_unchecked(index)
+                } else {
+                    row.try_get(index)
+                }
+                .map_err(|e| DbError::driver("text image", e))?;
                 let text = std::str::from_utf8(bytes).map_err(|error| {
                     DbError::driver("text image", sqlx::Error::Decode(Box::new(error)))
                 })?;
@@ -377,6 +387,106 @@ mod tests {
     use crate::DbError;
     use seata_at::SqlRecognizerFactory;
     use seata_datasource::{FieldValue, ImageError};
+
+    #[tokio::test]
+    async fn json_wire_type_is_checked_before_unchecked_bytes_or_null() {
+        use crate::mysql_loopback_fixture::{authenticate, read_command, write_packet};
+        use seata_datasource::{ColumnDomain, ColumnMeta, ColumnType, MySqlType};
+        use sqlx::{Connection, MySqlConnection};
+        use tokio::net::TcpListener;
+        tokio::time::timeout(std::time::Duration::from_secs(5), async {
+            let column = ColumnMeta::new(
+                "v".into(),
+                ColumnType::Text,
+                true,
+                1,
+                None,
+                None,
+                None,
+                None,
+            )
+            .unwrap()
+            .with_domain(ColumnDomain::Json)
+            .unwrap()
+            .with_mysql_type(MySqlType::Json)
+            .unwrap();
+            for (kind, value) in [
+                (245, Some(b"null".to_vec())),
+                (245, None),
+                (253, Some(b"null".to_vec())),
+                (253, None),
+                (245, Some(vec![255])),
+            ] {
+                let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+                let address = listener.local_addr().unwrap();
+                let server_value = value.clone();
+                let server = tokio::spawn(async move {
+                    let (mut socket, _) = listener.accept().await.unwrap();
+                    authenticate(&mut socket, 42).await.unwrap();
+                    assert_eq!(
+                        read_command(&mut socket).await.unwrap().unwrap(),
+                        b"\x03SELECT v"
+                    );
+                    write_packet(&mut socket, 1, &[1]).await.unwrap();
+                    let mut meta = Vec::new();
+                    for name in ["def", "", "json_work", "json_work", "v", "v"] {
+                        meta.push(name.len() as u8);
+                        meta.extend_from_slice(name.as_bytes());
+                    }
+                    meta.extend_from_slice(&[12, 45, 0, 0, 4, 0, 0, kind, 0, 0, 0, 0, 0]);
+                    write_packet(&mut socket, 2, &meta).await.unwrap();
+                    write_packet(&mut socket, 3, &[254, 0, 0, 2, 0])
+                        .await
+                        .unwrap();
+                    let row = if let Some(bytes) = server_value {
+                        let mut row = vec![bytes.len() as u8];
+                        row.extend(bytes);
+                        row
+                    } else {
+                        vec![251]
+                    };
+                    write_packet(&mut socket, 4, &row).await.unwrap();
+                    write_packet(&mut socket, 5, &[254, 0, 0, 2, 0])
+                        .await
+                        .unwrap();
+                });
+                let options = sqlx::mysql::MySqlConnectOptions::new()
+                    .host("127.0.0.1")
+                    .port(address.port())
+                    .username("fixture")
+                    .ssl_mode(sqlx::mysql::MySqlSslMode::Disabled);
+                let mut connection = MySqlConnection::connect_with(&options).await.unwrap();
+                let row = sqlx::raw_sql("SELECT v")
+                    .fetch_one(&mut connection)
+                    .await
+                    .unwrap();
+                let result = MySqlImageReader::decode(&row, 0, &column);
+                if kind != 245 {
+                    assert!(matches!(
+                        result,
+                        Err(DbError::Unsupported {
+                            feature: "JSON image native type differs"
+                        })
+                    ));
+                } else if value.as_deref() == Some(&[255]) {
+                    assert!(matches!(result, Err(DbError::Driver { .. })));
+                } else {
+                    assert_eq!(
+                        result.unwrap(),
+                        if value.is_none() {
+                            FieldValue::Null
+                        } else {
+                            FieldValue::Text("null".into())
+                        }
+                    );
+                }
+                drop(connection);
+                server.await.unwrap();
+            }
+        })
+        .await
+        .unwrap();
+    }
 
     #[test]
     fn oversized_parameters_are_rejected_before_native_argument_encoding() {

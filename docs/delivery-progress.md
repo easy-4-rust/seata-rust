@@ -1349,3 +1349,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## Phase 3 正式 AT 有限并发负载（2026-11-28）
 
 双 Rust 1.99/1.85、1/4/8 并发各八轮，共 208 笔原事务与 624 条业务语句，48 轮同时存续的 Undo/SHA/见证/门闩/全局锁现场通过。28 笔初始 RollbackRetrying 保留为原结果，全部由原 TC 后续回调完成，无全局请求重放；120 项证据削弱拒绝。每版工作区 801 passed / 396 ignored、180 摘要及严格 Clippy 通过。[证据与受控测量](phase-2/evidence/at-concurrent-load/README.md)、[ledger](phase-2/at-concurrent-load.json)。更新了早期能力摘要与[全计划差距核对](architecture/delivery-requirement-audit_20261128.md)，未缩减原范围。WP05、WP07、完整 XA/TCC 及 Phase 5–7 继续实施。
+
+
+## WP05 原生 MySQL JSON 列（2026-11-28）
+
+已实现非主键 JSON 元数据、精确服务器文本镜像、Java JDBC -1 / String Undo 及正式 AT 补偿；原实现的目标运行失败已保留。双 Rust 各执行原 TC 提交/回滚，四笔 JSON 原事务与原 Java 九行格式对照、非法输入/预算/脏镜像检查通过。另有普通 AT 64 笔并发回归、102 项证据削弱及六项源码反例；每版工作区 804 passed / 397 ignored、182 摘要与严格 Clippy 通过。[证据](phase-2/evidence/mysql-json/README.md)、[ledger](phase-2/wp05-mysql-json.json)。保留旧格式和默认提交开关；完整 WP05、生产及 Phase 5–7 继续开放。

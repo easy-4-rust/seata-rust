@@ -211,7 +211,7 @@ impl PreparedFormat {
             MySqlType::Decimal => (3, ValueEncoding::Typed("java.math.BigDecimal")),
             MySqlType::Char => (1, ValueEncoding::Natural),
             MySqlType::VarChar | MySqlType::TinyText => (12, ValueEncoding::Natural),
-            MySqlType::Text | MySqlType::MediumText | MySqlType::LongText => {
+            MySqlType::Json | MySqlType::Text | MySqlType::MediumText | MySqlType::LongText => {
                 (-1, ValueEncoding::Natural)
             }
             MySqlType::Binary => (-2, ValueEncoding::Typed("[B")),

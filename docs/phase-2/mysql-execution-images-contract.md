@@ -23,3 +23,8 @@
 内部临时键表只有受控ordinal列及原PK的对应类型列，不复制非PK默认值/触发器/外键，也不在临时键值上模拟业务唯一约束。仅使用CREATE/DROP TEMPORARY，不使用会隐式提交的ALTER/普通DDL；需要CREATE TEMPORARY TABLES权限。临时对象本身不随ROLLBACK撤销，成功路径显式删除，错误/取消使事务poison并依赖已有close_on_drop物理会话退出清理，不复用该连接。必须以先有本地业务效果再暂存/失败的现场验证无隐式提交；不因采用临时表就声称原子性已完成。依据MySQL8.4[临时表](https://dev.mysql.com/doc/refman/8.4/en/create-temporary-table.html)及[隐式提交](https://dev.mysql.com/doc/refman/8.4/en/implicit-commit.html)文档。
 
 验证需要：显式复合PK多行INSERT及参数/常量混排、精确整数/DECIMAL/二进制/NULL；更新原WHERE后仍按PK捕获；DELETE缺失后镜像；零匹配/无变化；重复键、后镜像超限与真实驱动失败的整体回滚；独立连接证明无隐式提交、原业务执行恰一次；取消/超时、双Rust与实际削弱断言。Java案例/序列化差分、Undo原子提交与故障恢复继续原验收，不以rollback-only组件替代。
+
+
+## 原生 JSON 列增量（2026-11-28）
+
+非主键 JSON 已接入正式元数据、镜像、Java Undo 和实际补偿。保留服务器文本，区分 SQL NULL 与 JSON null；原生值类型与 1 MiB 预算分别验证。未扩大 SQL 语法。见 [契约](mysql-json-contract.md)、[双 Rust 原 Java / 原 TC 证据](evidence/mysql-json/README.md)。

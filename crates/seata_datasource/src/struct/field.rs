@@ -20,9 +20,13 @@ impl Field {
             (FieldValue::Signed(_), ColumnType::SignedInteger)
             | (FieldValue::Unsigned(_), ColumnType::UnsignedInteger) => true,
             (FieldValue::Text(_), ColumnType::Text)
-            | (FieldValue::Binary(_), ColumnType::Binary) => column
-                .char_octet_length()
-                .is_some_and(|limit| value.value_bytes() as u64 <= limit),
+            | (FieldValue::Binary(_), ColumnType::Binary) => {
+                // JSON 没有字符维度；全局字段预算仍在上方执行，其他文本保持原长度校验。
+                matches!(column.domain(), Some(crate::ColumnDomain::Json))
+                    || column
+                        .char_octet_length()
+                        .is_some_and(|limit| value.value_bytes() as u64 <= limit)
+            }
             (FieldValue::Decimal(v), ColumnType::Decimal) => {
                 matches!((column.numeric_precision(),column.numeric_scale()),(Some(p),Some(s))
                     if v.scale()==s && v.integer_digits()<=p-s)
