@@ -8,9 +8,9 @@
 |---|---|---|---|
 | Phase 0 / WP-00 | Java/Go 源码映射、RSeata 审计、协议/状态对照、ADR、兼容性规范及运行时基线冻结 | 见 [ledger](phase-0/validation-ledger.md)；冻结29样例及Java处理器78输出已比较；响应丢失、FILE/DB/Redis恢复、认证/双资源重连及真实RAFT六次切换有证据；新增控制帧、24文本边界及250异常码响应；Java475/Rust117/Go235/新Python9通过；新增合并载荷及有符号/可选语义候选，原版默认/传输仍未修复；三个心跳三方一致，原版六个合并帧Go缺codec，显式载荷候选已通过，显式SDK会话/重连/分发已有选定路径证据，Java首字节分片仍失败；Go差异、FILE/RAFT恢复异常及其余门禁仍开放 | 进行中 |
 | Phase 1 / WP-01–03 | 正式协议模型/编解码、连接/关联、TM、XID/异步上下文及传播、互操作 | 正式Cargo workspace、协议/传输/TM已通过获批首期各组件Gate；全部V1与后续兼容性门槛继续开放 | 首期组件已验证 |
-| Phase 2 / WP-04–06 | 正式 RM、SQL 拦截、镜像、锁、Undo Log、MySQL AT 原子提交/补偿与幂等 | 正式RM拥有登记池/单次出站/原连接批回调/持久日志及强杀恢复；45RM纳入234项双版本回归。WP04首期十项及真实Java六例Gate现已通过；SQL/Undo继续WP05/06，模拟TC和文件资源夹具不证明数据库原子性 | 进行中 |
-| Phase 3 / WP-07 | 生产配置、可观测性、认证/TLS、优雅停机、兼容矩阵、故障/并发/压力/安全审查及操作指南 | 单次探针不是生产就绪验收 | 未完成 |
-| Phase 4 | XA MySQL、两阶段提交、TCC Resource/Fence、空回滚与悬挂 | Java XA 身份与 MySQL 原生两阶段已有双版本/真实重启证据；完整 XA Resource/TC 门禁、TCC/Fence/空回滚/悬挂继续 | 进行中 |
+| Phase 2 / WP-04–06 | 正式 RM、SQL 拦截、镜像、锁、Undo Log、MySQL AT 原子提交/补偿与幂等 | WP04 首期 Gate 通过；正式 MySQL 执行、Java Undo、原子提交、SHA-256、回调和跨进程恢复已有对应现场；有变化 COMMIT 仍默认关闭，WP05 完整 SQL/外部写入器准入与总 Gate 开放 | 进行中 |
+| Phase 3 / WP-07 | 生产配置、可观测性、认证/TLS、优雅停机、兼容矩阵、故障/并发/压力/安全审查及操作指南 | 本地指标/结构化日志、TLS、停机和故障已有选定证据；[双 Rust 正式 AT 208 笔有限负载](phase-2/evidence/at-concurrent-load/README.md)通过；长期负载、容量和生产部署/运维验收开放 | 进行中 |
+| Phase 4 | XA MySQL、两阶段提交、TCC Resource/Fence、空回滚与悬挂 | 正式 XA/TCC MySQL 资源、XA 两阶段/恢复与 TCC Fence/上下文已有原 TC 双 Rust 现场；原 TC 与 Rust 二阶段联合强杀已有选定矩阵；完整模式和生产门禁仍开放 | 进行中 |
 | Phase 5 | Rust TC：Global/Branch Session、状态机、锁、存储、恢复、超时/重试；Java/Go/Rust 兼容 | Java TC 验证不能替代 Rust TC，尚无正式实现 | 未完成 |
 | Phase 6 | 集群/故障切换、注册发现、配置中心、多存储、管理 API、监控审计 | 需按 Phase 5 稳定边界实施与验证 | 未完成 |
 | Phase 7 | Saga、PostgreSQL、SeaORM/SQLx/Diesel、更多 RPC、CLI、扩展插件及 Java 完整能力对照 | 原架构各能力矩阵均纳入目标；不得以目录/feature 声明作为完成证据 | 未完成 |
@@ -1344,3 +1344,8 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## 原 TC 二阶段内部联合强杀（2026-11-28）
 
 在实际 Confirm/Cancel DML 未提交及原 MySQL COMMIT OK 未交付 RM 的两个切点强杀原 TC 与 Rust。双版本、三参数模式、双方向及三数据库模式共 72 笔、144 次退出通过。独立原锁/原包、原决定和版本摘要、旧 Pending/新 Completed CRC、原 Fence 与前后 DML 联合核验，3816 项证据削弱拒绝；原未交付回调联合切点 4 笔及 11 项夹具控制回归通过。每版工作区 801 passed / 395 ignored，179 摘要，严格 Clippy 通过。[证据](phase-4/evidence/tcc-managed/ORIGINAL_TC_INTERNAL_JOINT_RECOVERY.md)、[ledger](phase-4/tcc-original-tc-internal-joint-recovery.json)。未改生产代码与原协调器，更多 Try/报告内部切点、配置并发/拓扑、生产及全计划仍开放。
+
+
+## Phase 3 正式 AT 有限并发负载（2026-11-28）
+
+双 Rust 1.99/1.85、1/4/8 并发各八轮，共 208 笔原事务与 624 条业务语句，48 轮同时存续的 Undo/SHA/见证/门闩/全局锁现场通过。28 笔初始 RollbackRetrying 保留为原结果，全部由原 TC 后续回调完成，无全局请求重放；120 项证据削弱拒绝。每版工作区 801 passed / 396 ignored、180 摘要及严格 Clippy 通过。[证据与受控测量](phase-2/evidence/at-concurrent-load/README.md)、[ledger](phase-2/at-concurrent-load.json)。更新了早期能力摘要与[全计划差距核对](architecture/delivery-requirement-audit_20261128.md)，未缩减原范围。WP05、WP07、完整 XA/TCC 及 Phase 5–7 继续实施。

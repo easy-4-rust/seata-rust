@@ -1,0 +1,113 @@
+{
+  "status": "SELECTED_AT_CONCURRENT_LOAD_MATRIX_VERIFIED",
+  "specification": "docs/phase-2/at-concurrent-load-contract.md",
+  "original_requirements": [
+    "Phase 3 concurrency and pressure",
+    "WP07 load and fault injection"
+  ],
+  "evidence": {
+    "path": "docs/phase-2/evidence/at-concurrent-load/validation_20261128_final",
+    "catalog_sha256": "230f1b5b6ebc02895bd6ce8082f5f9268df2bc5ec198d1749bde55810e094ec7"
+  },
+  "actual_global_transactions": 208,
+  "business_statements": 624,
+  "overlap_rounds": 48,
+  "evidence_weakenings_rejected": 120,
+  "initial_rollback_retrying": 28,
+  "measurements": [
+    {
+      "Rust": "1.99",
+      "concurrency": 1,
+      "transactions": 8,
+      "wall_us": 8479415,
+      "transactions_per_second": 0.9434613118947475,
+      "latency_us": {
+        "0.5": 993927,
+        "0.95": 1529162,
+        "0.99": 1529162
+      },
+      "rollback_retrying": 0
+    },
+    {
+      "Rust": "1.99",
+      "concurrency": 4,
+      "transactions": 32,
+      "wall_us": 14256043,
+      "transactions_per_second": 2.2446621408198615,
+      "latency_us": {
+        "0.5": 1735967,
+        "0.95": 2264093,
+        "0.99": 2265785
+      },
+      "rollback_retrying": 0
+    },
+    {
+      "Rust": "1.99",
+      "concurrency": 8,
+      "transactions": 64,
+      "wall_us": 23561598,
+      "transactions_per_second": 2.7162843538880512,
+      "latency_us": {
+        "0.5": 2806829,
+        "0.95": 3167508,
+        "0.99": 3351005
+      },
+      "rollback_retrying": 13
+    },
+    {
+      "Rust": "1.85",
+      "concurrency": 1,
+      "transactions": 8,
+      "wall_us": 9247761,
+      "transactions_per_second": 0.865074259596458,
+      "latency_us": {
+        "0.5": 1102456,
+        "0.95": 1905539,
+        "0.99": 1905539
+      },
+      "rollback_retrying": 0
+    },
+    {
+      "Rust": "1.85",
+      "concurrency": 4,
+      "transactions": 32,
+      "wall_us": 14919437,
+      "transactions_per_second": 2.1448530531011323,
+      "latency_us": {
+        "0.5": 1893015,
+        "0.95": 2125408,
+        "0.99": 2127920
+      },
+      "rollback_retrying": 2
+    },
+    {
+      "Rust": "1.85",
+      "concurrency": 8,
+      "transactions": 64,
+      "wall_us": 21292144,
+      "transactions_per_second": 3.0058034550207813,
+      "latency_us": {
+        "0.5": 2534176,
+        "0.95": 3173156,
+        "0.99": 3181127
+      },
+      "rollback_retrying": 13
+    }
+  ],
+  "workspace_per_rust": {
+    "passed": 801,
+    "ignored": 396,
+    "harness_summaries": 180,
+    "strict_clippy": true
+  },
+  "production_unchanged_from": "a11cac1a74f83fe8e02fa31ff7449ef7892c6852",
+  "production_capacity_certified": false,
+  "whole_plan_complete": false,
+  "remaining": [
+    "WP05 complete SQL and all writer admission gates",
+    "WP07 long-running load, production deployment and capacity acceptance",
+    "complete Java/Go/Rust interoperability and WP00-R",
+    "full XA/TCC gates",
+    "native Rust TC and Phase 6-7"
+  ]
+}
