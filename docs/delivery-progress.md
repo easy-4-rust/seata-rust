@@ -1446,3 +1446,12 @@ catalog 为 `87c385aff3d1d4fddfc393bced4c07691764f6d5f53140dd27c76ecf2f2baea6`�
 新增正式 `seata-orm-seaorm`，[真实实体 DML](phase-2/evidence/seaorm-mysql/README.md)通过双版本十二笔原 TC 事务。原子 Undo/checksum、锁、报告、回调、恢复历史及 DECIMAL/二进制/中文 JSON/NULL 全字段一致；原 Java parser 重读全部日志。每版组件 7 passed / 1 ignored，完整工作区 840 passed / 414 ignored，严格 Clippy 通过。原生 ConnectionTrait、完整 ORM 读写/模型返回/生成 ID/关联/迁移/2.x、完整 SQL 和生产门禁继续开放；不标记完整 V1 或 Phase 5–7 完成。
 
 最新 RustSec DB 审计保留三项报告（rsa、time、libsqlite3-sys），无 ignore；当前正常构建未启用后两者，rsa 仍在实际依赖链中，完整安全 Gate 未通过。后续需处理可适配双 Rust 基线的真实上游修复，并继续完整计划。
+
+
+### 2026-11-28：MySQL 认证移除旧 RSA 依赖
+
+[认证维护补丁与原生证据](phase-2/evidence/mysql-rsa-auth/README.md)已在当前根构建中使用 AWS-LC 替换 SQLx 0.8.6 的旧 rsa/rand 认证依赖，保持 Rust 1.85、原 OAEP/SHA-1 协议、TLS 验证及原 4096 位上限，弱键低于 2048 位明确拒绝。保留原包和逐文件来源，只修改活动 Cargo 与认证函数；未改 registry 或声称上游已发布。
+
+双 Rust × 2048/3072/4096 位密钥 × 两种认证插件/TLS，十八笔原 TC 全局事务及八项坏密码/公钥/弱键/CA 拒绝通过；真实原始包、密文尺寸、持有原业务连接时的 TLS cipher、未提交可见性、原子 Undo/SHA、一次登记/报告/回调、恢复历史与原 Java parser 读取均独立核验。两版完整工作区各 840 passed / 415 ignored，最终严格 Clippy 通过；首轮采样点和辅助模块检查失败保留为 incomplete_evidence，不计通过。
+
+相同公告库前后对照不再报告 RUSTSEC-2023-0071，实际正常图及 lock 均不含 rsa。time/SQLite 锁项告警仍保留，没有 ignore；当前正常构建未启用二者。修复依赖应用根 Cargo patch，发布消费者集成和完整安全/生产 Gate 尚未完成，完整 ORM/SQL 与 Phase 5–7 继续开放。

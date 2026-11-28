@@ -1,5 +1,7 @@
 # WP07 Rust 依赖公告审计增量（2026-11-25）
 
+后续状态（2026-11-28）：当前根构建的 [MySQL 认证维护补丁与原生验收](../mysql-rsa-auth/README.md)已从实际图及 lock 移除旧 `rsa`，保持 Rust 1.85。新旧相同公告库对照不再报告 RUSTSEC-2023-0071，但仍保留 time/SQLite 锁项告警；发布消费者的 root patch 集成及完整安全 Gate 尚未关闭。下文是原日期的历史检查结果，不反映该后续处置已发生的状态。
+
 范围：当前根目录 `Cargo.lock`，包含实验性 MySQL crate 的锁定依赖。此记录是 WP07 安全检查的增量，仍有未解决公告，不能作为完整安全 Gate 的通过证据。
 
 使用 `cargo-audit 0.22.2` 和 RustSec advisory DB 快照 `10db6998b5d74ec438bcf0763125bd425a068a8f`（1567 条公告）审计。原始机读结果分别保存为 [更新前](cargo-audit-before.json) 和 [更新后](cargo-audit-after-url.json)。后一次使用同一已下载数据库的 `--no-fetch` 复扫；其 JSON 未重复填写数据库提交字段，故以第一次扫描的提交号标识这次审计的数据库快照。当前 `Cargo.lock` SHA-256 为 `4CE88A528635D7C136D8B3CD0A3D7D745C1E668207F4F750ED577BCAFD10FA6F`。

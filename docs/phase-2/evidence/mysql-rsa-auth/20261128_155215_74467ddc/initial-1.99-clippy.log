@@ -1,0 +1,73 @@
+   Compiling getrandom v0.4.3
+   Compiling cfg-if v1.0.5
+   Compiling find-msvc-tools v0.1.16
+   Compiling jobserver v0.1.35
+   Compiling shlex v2.0.1
+   Compiling num-traits v0.2.19
+   Compiling cc v1.2.67
+    Checking digest v0.10.7
+   Compiling ring v0.17.14
+    Checking getrandom v0.2.17
+    Checking num-integer v0.1.47
+    Checking num-bigint v0.4.8
+    Checking sha2 v0.10.9
+   Compiling cmake v0.1.58
+   Compiling dunce v1.0.5
+   Compiling fs_extra v1.3.0
+   Compiling aws-lc-sys v0.47.0
+    Checking bigdecimal v0.4.10
+    Checking rustls-webpki v0.103.16
+   Compiling rustls v0.23.46
+   Compiling aws-lc-rs v1.19.0
+    Checking tokio-rustls v0.26.4
+    Checking seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+    Checking hmac v0.12.1
+    Checking signature v2.2.0
+    Checking ed25519 v2.2.3
+    Checking curve25519-dalek v4.1.3
+    Checking hkdf v0.12.4
+    Checking seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+    Checking sqlx-core v0.8.6
+    Checking sha1 v0.10.7
+    Checking atoi v2.0.0
+    Checking seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+    Checking md-5 v0.10.6
+    Checking seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+    Checking ed25519-dalek v2.2.0
+    Checking seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Checking seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+    Checking seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+    Checking seata-tcc v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tcc)
+    Checking seata-xa v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_xa)
+    Checking rcgen v0.14.0
+    Checking chrono v0.4.45
+    Checking ordered-float v4.6.0
+    Checking sea-query v0.32.7
+    Checking sea-orm v1.1.19
+    Checking sqlx-mysql v0.8.6 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\third_party\sqlx_mysql)
+    Checking sqlx v0.8.6
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Checking seata-orm-seaorm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_orm_seaorm)
+error: function `options` is never used
+ --> crates\seata_db_mysql\tests\support\owned_mysql.rs:4:8
+  |
+4 | pub fn options(port: Option<u16>) -> MySqlOptions {
+  |        ^^^^^^^
+  |
+  = note: `-D dead-code` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[expect(dead_code)]` or `#[allow(dead_code)]`
+
+error: function `options_for_user` is never used
+  --> crates\seata_db_mysql\tests\support\owned_mysql.rs:13:8
+   |
+13 | pub fn options_for_user(port: Option<u16>, user: String, password: String) -> MySqlOptions {
+   |        ^^^^^^^^^^^^^^^^
+
+error: function `admin` is never used
+  --> crates\seata_db_mysql\tests\support\owned_mysql.rs:25:14
+   |
+25 | pub async fn admin() -> sqlx::MySqlConnection {
+   |              ^^^^^
+
+error: could not compile `seata-db-mysql` (test "live_rsa_auth_java") due to 3 previous errors
+warning: build failed, waiting for other jobs to finish...

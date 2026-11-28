@@ -1,0 +1,386 @@
+//! 原 Java AT 实际提交后，正式 Rust RM 竞争同一 TC 排他锁。
+use super::{fixture, lock_guard_cases::checkpoint};
+use seata_at::SqlRecognizerFactory;
+use seata_datasource::FieldValue;
+use seata_db_mysql::{MySqlDataSource, MySqlDataSourceManager, MySqlPrepareError};
+use seata_protocol::transaction::GlobalLockQueryRequest;
+use seata_protocol::{BranchType, GlobalStatus, Message, TransactionExceptionCode};
+use seata_rm::{BranchResource, ResourceManager, RmCallError};
+use seata_tm::{TransactionConfig, TransactionManager};
+use sqlx::MySqlConnection;
+use std::{path::Path, time::Duration};
+use tokio::time::{sleep, Instant};
+
+fn account_case() -> (&'static str, &'static str, Vec<FieldValue>) {
+    match std::env::var("SEATA_TC_ACCOUNT_KEY")
+        .as_deref()
+        .unwrap_or("integer")
+    {
+        "composite" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=9007199254740993 AND segment='north'",
+            "accounts:north_9007199254740993",
+            Vec::new(),
+        ),
+        "decimal-plain" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=9007199254740993.12500000",
+            "accounts:9007199254740993.12500000",
+            Vec::new(),
+        ),
+        "decimal-scientific" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=0.00000010000000000000",
+            "accounts:1.0000000000000E-7",
+            Vec::new(),
+        ),
+        "binary" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=?",
+            "accounts:[-1]",
+            vec![FieldValue::Binary(vec![255])],
+        ),
+        "tinyint-boolean" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=1",
+            "accounts:true",
+            Vec::new(),
+        ),
+        "tinyint-numeric" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=2",
+            "accounts:2",
+            Vec::new(),
+        ),
+        "tinyint-mismatch" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=1",
+            "accounts:1",
+            Vec::new(),
+        ),
+        "integer" => (
+            "UPDATE accounts SET balance=balance-10 WHERE id=1",
+            "accounts:1",
+            Vec::new(),
+        ),
+        shape => panic!("unexpected account key shape {shape}"),
+    }
+}
+
+fn assert_profile_rejection(error: &MySqlPrepareError) {
+    assert!(
+        matches!(
+            error,
+            MySqlPrepareError::Local {
+                source: seata_db_mysql::DbError::Input {
+                    reason: "MySQL AT TINYINT(1) profile binding is missing or differs"
+                }
+            }
+        ),
+        "{error:?}"
+    );
+    assert!(error.registered_branch().is_none() && !error.is_registration_unknown());
+}
+
+pub(super) async fn exercise(
+    admin: &mut MySqlConnection,
+    source: &MySqlDataSource,
+    manager: &MySqlDataSourceManager,
+    rm: &ResourceManager,
+    tm: &TransactionManager,
+    folder: &Path,
+) {
+    let cfg = TransactionConfig::builder("java-rust-exclusive-lock".into())
+        .transaction_timeout(Duration::from_secs(60))
+        .build()
+        .unwrap();
+    let client = rm.client();
+    let resource = manager.key().resource_id();
+    let mut contender = tm.begin(&cfg).await.unwrap();
+    let xid = contender.xid().clone();
+    let (update, lock_key, parameters) = account_case();
+    let query = GlobalLockQueryRequest {
+        xid: Some(xid.as_str().into()),
+        branch_type: BranchType::At,
+        resource_id: Some(resource.into()),
+        lock_key: Some(lock_key.into()),
+        application_data: None,
+    };
+    let bound = std::env::var_os("SEATA_TC_BIND_TINYINT_PROFILE").is_some();
+    if !bound && std::env::var("SEATA_TC_ACCOUNT_KEY").as_deref() == Ok("tinyint-mismatch") {
+        assert!(client.lock_query(query).await.unwrap().lockable);
+        let mut local = source.begin().await.unwrap();
+        let update = SqlRecognizerFactory::recognize(update).unwrap();
+        assert_eq!(local.execute(&update, &parameters).await.unwrap(), 1);
+        let prepared = manager
+            .prepare_transaction(local, &client, xid.as_str(), None)
+            .await
+            .unwrap();
+        let receipt = prepared.registered_branch().unwrap();
+        let branch = receipt.identity().branch_id();
+        assert_eq!(receipt.lock_key(), Some(lock_key));
+        prepared.rollback().await.unwrap();
+        let state = serde_json::json!({
+            "xid":xid.as_str(),"branch_id":branch,"resource":resource,"lock_key":lock_key
+        });
+        checkpoint(folder, "tinyint-mismatched-profiles", &state).await;
+        contender.rollback().await.unwrap();
+        let deadline = Instant::now() + Duration::from_secs(8);
+        while tm.get_status(&xid).await.unwrap().status() != GlobalStatus::Finished {
+            assert!(
+                Instant::now() < deadline,
+                "numeric-profile Rust XID remains active"
+            );
+            sleep(Duration::from_millis(40)).await;
+        }
+        fixture::save("tc-lock-guard-result.json", &state);
+        return;
+    }
+    assert_eq!(client.lock_query(query).await.unwrap().lockable, bound);
+    let update = SqlRecognizerFactory::recognize(update).unwrap();
+    let mut local = source.begin().await.unwrap();
+    assert_eq!(local.execute(&update, &parameters).await.unwrap(), 1);
+    let error = manager
+        .prepare_transaction(local, &client, xid.as_str(), None)
+        .await
+        .unwrap_err();
+    let conflict_code = if bound {
+        assert_profile_rejection(&error);
+        None
+    } else {
+        let MySqlPrepareError::Registration(RmCallError::DefiniteRejected { response, .. }) = error
+        else {
+            panic!("expected original TC lock rejection: {error:?}");
+        };
+        let Some(Message::BranchRegisterResponse(rejected)) = response.body else {
+            panic!("expected original branch registration reply");
+        };
+        let exception = rejected.response.transaction_exception_code;
+        assert!(matches!(
+            exception,
+            TransactionExceptionCode::LockKeyConflict
+                | TransactionExceptionCode::LockKeyConflictFailFast
+        ));
+        Some(exception.to_java_v1())
+    };
+    contender.rollback().await.unwrap();
+    let deadline = Instant::now() + Duration::from_secs(8);
+    while tm.get_status(&xid).await.unwrap().status() != GlobalStatus::Finished {
+        assert!(
+            Instant::now() < deadline,
+            "rejected Rust XID remains active"
+        );
+        sleep(Duration::from_millis(40)).await;
+    }
+    checkpoint(
+        folder,
+        "java-held-rust-conflict",
+        &serde_json::json!({
+            "xid":xid.as_str(),"status":conflict_code,"resource":resource
+        }),
+    )
+    .await;
+
+    if bound {
+        let mut unset = tm.begin(&cfg).await.unwrap();
+        let unset_xid = unset.xid().clone();
+        let mut local = source.begin().await.unwrap();
+        assert_eq!(local.execute(&update, &parameters).await.unwrap(), 1);
+        let error = manager
+            .prepare_transaction(local, &client, unset_xid.as_str(), None)
+            .await
+            .unwrap_err();
+        assert_profile_rejection(&error);
+        unset.rollback().await.unwrap();
+        let deadline = Instant::now() + Duration::from_secs(8);
+        while tm.get_status(&unset_xid).await.unwrap().status() != GlobalStatus::Finished {
+            assert!(
+                Instant::now() < deadline,
+                "unset-profile Rust XID remains active"
+            );
+            sleep(Duration::from_millis(40)).await;
+        }
+        checkpoint(
+            folder,
+            "tinyint-binding-unset",
+            &serde_json::json!({"xid":unset_xid.as_str()}),
+        )
+        .await;
+    }
+
+    let mut admitted = tm.begin(&cfg).await.unwrap();
+    let admitted_xid = admitted.xid().clone();
+    let mut local = source.begin().await.unwrap();
+    assert_eq!(local.execute(&update, &parameters).await.unwrap(), 1);
+    let prepared = manager
+        .prepare_transaction(local, &client, admitted_xid.as_str(), None)
+        .await
+        .unwrap();
+    let receipt = prepared.registered_branch().unwrap();
+    let branch = receipt.identity().branch_id();
+    assert_eq!(receipt.lock_key(), Some(lock_key));
+    let evidence = serde_json::json!({
+        "xid":admitted_xid.as_str(),"branch_id":branch,"resource":resource
+    });
+    if bound {
+        // 保持准备事务打开，让独立连接验证映射行仍受共享锁保护。
+        checkpoint(folder, "java-released-rust-admitted", &evidence).await;
+        prepared.rollback().await.unwrap();
+    } else {
+        prepared.rollback().await.unwrap();
+        checkpoint(folder, "java-released-rust-admitted", &evidence).await;
+    }
+    admitted.rollback().await.unwrap();
+    let deadline = Instant::now() + Duration::from_secs(8);
+    while tm.get_status(&admitted_xid).await.unwrap().status() != GlobalStatus::Finished {
+        assert!(
+            Instant::now() < deadline,
+            "original Rust XID remains active"
+        );
+        sleep(Duration::from_millis(40)).await;
+    }
+    let state: (u8, u8, u8) = sqlx::query_as("SELECT phase,terminal,first_phase_committed FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=?")
+        .bind(admitted_xid.as_str().as_bytes()).bind(branch).fetch_one(&mut *admin).await.unwrap();
+    assert_eq!(state, (2, 1, 0));
+    fixture::save(
+        "tc-lock-guard-result.json",
+        &serde_json::json!({
+            "conflict_xid":xid.as_str(),"admitted_xid":admitted_xid.as_str(),"admitted_branch_id":branch,
+            "lock_conflict_code":conflict_code,"recovery_state":state
+        }),
+    );
+}
+
+/// 用实验性一阶段提交保留真实 TC 分支锁，并观察释放后的原 Java 登记。
+#[cfg(feature = "experimental_changed_commit")]
+pub(super) async fn rust_holds_lock(
+    admin: &mut MySqlConnection,
+    source: &MySqlDataSource,
+    manager: &MySqlDataSourceManager,
+    rm: &ResourceManager,
+    tm: &TransactionManager,
+    folder: &Path,
+) {
+    let separated_writers = std::env::var_os("SEATA_TC_AT_WRITER_USER").is_some();
+    if separated_writers {
+        // 006 表可读写，但部署尚未授予该表的触发器可见权限。
+        let probe = manager
+            .recover_commit_attempt("fixture:metadata-visibility", 1)
+            .await;
+        assert!(
+            matches!(
+                probe,
+                Err(seata_db_mysql::MySqlCommitRecoveryError::Observation {
+                    source: seata_db_mysql::DbError::Unsupported {
+                        feature: "metadata trigger visibility"
+                    }
+                })
+            ),
+            "006 metadata without TRIGGER is not authoritative: {probe:?}"
+        );
+        checkpoint(
+            folder,
+            "commit-metadata-denied",
+            &serde_json::json!({
+                "attempt_trigger_visibility": "rejected"
+            }),
+        )
+        .await;
+    } else {
+        for migration in [
+            include_str!("../../migrations/006_seata_rs_at_commit_attempt.sql"),
+            include_str!("../../migrations/007_seata_rs_at_commit_report_started.sql"),
+        ] {
+            sqlx::raw_sql(migration).execute(&mut *admin).await.unwrap();
+        }
+    }
+    let cfg = TransactionConfig::builder("rust-java-exclusive-lock".into())
+        .transaction_timeout(Duration::from_secs(90))
+        .build()
+        .unwrap();
+    let client = rm.client();
+    let mut owner = tm.begin(&cfg).await.unwrap();
+    let xid = owner.xid().clone();
+    let (update, lock_key, parameters) = account_case();
+    let update = SqlRecognizerFactory::recognize(update).unwrap();
+    let mut local = source.begin().await.unwrap();
+    assert_eq!(local.execute(&update, &parameters).await.unwrap(), 1);
+    let checked = manager
+        .prepare_transaction(local, &client, xid.as_str(), None)
+        .await
+        .unwrap()
+        .lock_commit_preconditions()
+        .await
+        .unwrap();
+    if separated_writers {
+        let branch = checked.registered_branch().unwrap().identity().branch_id();
+        checkpoint(
+            folder,
+            "before-business-commit",
+            &serde_json::json!({
+                "xid":xid.as_str(),"branch_id":branch,"resource":manager.key().resource_id()
+            }),
+        )
+        .await;
+    }
+    let receipt = checked
+        .commit_changed_and_report(manager, &client)
+        .await
+        .unwrap();
+    let branch = receipt.identity().branch_id();
+    assert_eq!(receipt.lock_key(), Some(lock_key));
+    let rejected_multi_byte = lock_key == "accounts:[-1]";
+    let rejected_lossy_tinyint = lock_key == "accounts:true";
+    let rejected_case = if rejected_multi_byte {
+        Some((
+            "UPDATE accounts SET balance=balance-10 WHERE id=?",
+            vec![FieldValue::Binary(vec![0, 255])],
+            "Java TC drops or splits the original row lock token",
+        ))
+    } else if rejected_lossy_tinyint {
+        Some((
+            "UPDATE accounts SET balance=balance-10 WHERE id=2",
+            Vec::new(),
+            "lossy tinyint Boolean conversion",
+        ))
+    } else {
+        None
+    };
+    if let Some((sql, parameters, reason)) = rejected_case {
+        let update = SqlRecognizerFactory::recognize(sql).unwrap();
+        let mut local = source.begin().await.unwrap();
+        assert_eq!(local.execute(&update, &parameters).await.unwrap(), 1);
+        let error = manager
+            .prepare_transaction(local, &client, xid.as_str(), None)
+            .await
+            .unwrap_err();
+        assert!(
+            matches!(
+                error,
+                MySqlPrepareError::LockKey(seata_at::LockKeyError::Unsupported {
+                    feature
+                }) if feature == reason
+            ),
+            "{error:?}"
+        );
+        assert!(error.registered_branch().is_none() && !error.is_registration_unknown());
+    }
+    let identity = serde_json::json!({
+        "xid":xid.as_str(),"branch_id":branch,"resource":manager.key().resource_id()
+    });
+    checkpoint(folder, "rust-held-java-conflict", &identity).await;
+
+    owner.commit().await.unwrap();
+    let deadline = Instant::now() + Duration::from_secs(8);
+    while tm.get_status(&xid).await.unwrap().status() != GlobalStatus::Finished {
+        assert!(
+            Instant::now() < deadline,
+            "original Rust owner did not finish"
+        );
+        sleep(Duration::from_millis(40)).await;
+    }
+    let state: (u8, u8, u8) = sqlx::query_as("SELECT phase,commit_terminal,first_phase_committed FROM seata_rs_at_branch_v1 WHERE xid=? AND branch_id=?")
+        .bind(xid.as_str().as_bytes()).bind(branch).fetch_one(&mut *admin).await.unwrap();
+    assert_eq!(state, (1, 1, 1));
+    checkpoint(folder, "rust-released-java-admitted", &identity).await;
+    fixture::save(
+        "tc-lock-guard-result.json",
+        &serde_json::json!({
+            "identity":identity,"commit_recovery_state":state,"rejected_multi_byte":rejected_multi_byte,
+            "rejected_lossy_tinyint":rejected_lossy_tinyint
+        }),
+    );
+}

@@ -24,6 +24,8 @@ MySQL AT 已实现真实 SQL 执行、元数据与前后镜像、Java Undo 格�
 
 正式 `seata-orm-seaorm` 已接入 SeaORM 1.1 实体 DML 构建器，在原 MySQL AT 事务中保持有序精确绑定。双 Rust 的十二笔真实提交/补偿、原 Java Undo parser 读取及完整字段核验通过；原生 ORM ConnectionTrait、完整读写/模型返回和其余生态仍待交付。[接入说明](crates/seata_orm_seaorm/README.md)、[验收证据](docs/phase-2/evidence/seaorm-mysql/README.md)。
 
+当前根构建通过明确的本地 SQLx 认证补丁移除旧 `rsa`，保留 Rust 1.85；十八笔真实认证/AT 事务与八项拒绝通过。该 root patch 尚需发布消费者集成，time/SQLite 锁项告警及完整生产门禁仍开放。[处置范围和证据](docs/phase-2/evidence/mysql-rsa-auth/README.md)。
+
 - [全计划交付进度](docs/delivery-progress.md) — Phase 0–7 完整范围、当前证据和未完成门槛。
 - [V1 能力矩阵与恢复指南](docs/phase-2/v1-feature-matrix-and-recovery-guide.md) — 当前可核验配置、实验性 MySQL 恢复边界及操作约束。
 

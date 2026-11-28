@@ -30,3 +30,5 @@
 [单表 SQL 别名](../phase-2/mysql-sql-alias-contract.md)现已补齐原 Java 支持的显式/省略 AS、合法限定列及带别名前镜像。扩展 SQL 矩阵在双版本提交/补偿下通过 112 笔真实全局事务，全部 Undo 由原 Java parser 读取，六个新增输入还直接对照原 Druid 识别器。未知前缀、跨 schema、重复赋值和连接仍拒绝。该项不再列为未实现，但 JOIN/子查询等完整 SQL、全部写入器、生产准入及后续阶段仍需继续交付。
 
 原计划要求的独立 SeaORM 层已新增[正式实体 DML 适配](../phase-2/evidence/seaorm-mysql/README.md)，保持原 MySQL 本地事务、Undo、摘要、锁和提交/恢复门槛。双版本十二笔真实 Entity INSERT/UPDATE/DELETE 通过，DECIMAL/二进制/中文 JSON/NULL 全字段及原 Java parser 核验通过；全工作区各 840 通过、414 忽略。当前仍未提供原生 ConnectionTrait、完整读写/模型返回、生成 ID、关联和 2.x，不能标记完整 ORM/生态完成。最新全 lock 审计报告 rsa、time、libsqlite3-sys 三项；当前正常构建未启用后两者，但没有移除或忽略告警，生产安全门禁仍开放。下一步应依据最新上游修复和实际依赖链处理真实安全缺口，继续完整 ORM、SQL 和后续阶段交付。
+
+后续 [RSA 认证处置](../phase-2/evidence/mysql-rsa-auth/README.md)以明确的本地 SQLx 0.8.6 维护补丁替换旧 RSA 依赖，实际图与 lock 不再包含 rsa，Rust 1.85 保留。两版、三种公钥、两种认证插件/TLS 的十八笔正式 AT 事务及八项拒绝通过；真实认证帧、持有连接时 TLS 会话、原子 Undo/SHA 和原 TC 回调均独立核验，工作区各 840 passed / 415 ignored、严格 Clippy 通过。time/SQLite 告警仍保留，未发布消费者不会自动继承根 Cargo patch；发布集成、完整 ORM/SQL、生产运维及后续阶段继续开放。

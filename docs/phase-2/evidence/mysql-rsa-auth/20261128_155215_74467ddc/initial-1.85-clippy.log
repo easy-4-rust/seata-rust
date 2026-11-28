@@ -1,0 +1,44 @@
+    Checking bigdecimal v0.4.10
+    Checking tokio-rustls v0.26.4
+    Checking seata-protocol v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_protocol)
+    Checking sqlx-core v0.8.6
+    Checking seata-transport v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_transport)
+    Checking seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+    Checking seata-sqlparser v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_sqlparser)
+    Checking sqlx-mysql v0.8.6 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\third_party\sqlx_mysql)
+    Checking seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+    Checking sqlx v0.8.6
+    Checking seata-rm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_rm)
+    Checking seata-tm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tm)
+    Checking seata-tcc v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tcc)
+    Checking seata-xa v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_xa)
+    Checking rcgen v0.14.0
+    Checking chrono v0.4.45
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+    Checking ordered-float v4.6.0
+    Checking sea-query v0.32.7
+    Checking sea-orm v1.1.19
+    Checking seata-orm-seaorm v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_orm_seaorm)
+error: function `options` is never used
+ --> crates\seata_db_mysql\tests\support\owned_mysql.rs:4:8
+  |
+4 | pub fn options(port: Option<u16>) -> MySqlOptions {
+  |        ^^^^^^^
+  |
+  = note: `-D dead-code` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(dead_code)]`
+
+error: function `options_for_user` is never used
+  --> crates\seata_db_mysql\tests\support\owned_mysql.rs:13:8
+   |
+13 | pub fn options_for_user(port: Option<u16>, user: String, password: String) -> MySqlOptions {
+   |        ^^^^^^^^^^^^^^^^
+
+error: function `admin` is never used
+  --> crates\seata_db_mysql\tests\support\owned_mysql.rs:25:14
+   |
+25 | pub async fn admin() -> sqlx::MySqlConnection {
+   |              ^^^^^
+
+error: could not compile `seata-db-mysql` (test "live_rsa_auth_java") due to 3 previous errors
+warning: build failed, waiting for other jobs to finish...

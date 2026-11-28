@@ -1,0 +1,87 @@
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -131,16 +131,14 @@
+ [dependencies.percent-encoding]
+ version = "2.1.0"
+ 
+-[dependencies.rand]
+-version = "0.8.4"
+-features = [
+-    "std",
+-    "std_rng",
+-]
+-default-features = false
+-
+-[dependencies.rsa]
+-version = "0.9"
++[dependencies.aws-lc-rs]
++version = "=1.19.0"
++default-features = false
++features = ["alloc", "non-fips", "prebuilt-nasm"]
++
++[dependencies.pem-rfc7468]
++version = "=0.7.0"
++features = ["alloc"]
+ 
+ [dependencies.rust_decimal]
+ version = "1.26.1"
+--- a/src/connection/auth.rs
++++ b/src/connection/auth.rs
+@@ -1,9 +1,8 @@
++use aws_lc_rs::rsa::{OaepPublicEncryptingKey, PublicEncryptingKey, OAEP_SHA1_MGF1SHA1};
+ use bytes::buf::Chain;
+ use bytes::Bytes;
+ use digest::{Digest, OutputSizeUser};
+ use generic_array::GenericArray;
+-use rand::thread_rng;
+-use rsa::{pkcs8::DecodePublicKey, Oaep, RsaPublicKey};
+ use sha1::Sha1;
+ use sha2::Sha256;
+ 
+@@ -162,9 +161,14 @@
+ 
+     // client sends an RSA encrypted password
+     let pkey = parse_rsa_pub_key(rsa_pub_key)?;
+-    let padding = Oaep::new::<sha1::Sha1>();
+-    pkey.encrypt(&mut thread_rng(), padding, &pass[..])
+-        .map_err(Error::protocol)
++    let pkey = OaepPublicEncryptingKey::new(pkey).map_err(Error::protocol)?;
++    let mut output = vec![0_u8; pkey.ciphertext_size()];
++    let written = pkey
++        .encrypt(&OAEP_SHA1_MGF1SHA1, &pass, &mut output, None)
++        .map_err(Error::protocol)?
++        .len();
++    output.truncate(written);
++    Ok(output)
+ }
+ 
+ // XOR(x, y)
+@@ -185,13 +189,24 @@
+     z.into_bytes()
+ }
+ 
+-// https://docs.rs/rsa/0.3.0/rsa/struct.RSAPublicKey.html?search=#example-1
+-fn parse_rsa_pub_key(key: &[u8]) -> Result<RsaPublicKey, Error> {
++// MySQL 原 SPKI 公钥格式；通过受维护的 AWS-LC 公钥接口解析。
++fn parse_rsa_pub_key(key: &[u8]) -> Result<PublicEncryptingKey, Error> {
+     let pem = std::str::from_utf8(key).map_err(Error::protocol)?;
+ 
+     // This takes advantage of the knowledge that we know
+     // we are receiving a PKCS#8 RSA Public Key at all
+     // times from MySQL
+ 
+-    RsaPublicKey::from_public_key_pem(pem).map_err(Error::protocol)
+-}
++    let (label, der) = pem_rfc7468::decode_vec(pem.as_bytes()).map_err(Error::protocol)?;
++    if label != "PUBLIC KEY" {
++        return Err(Error::protocol("MySQL SPKI PUBLIC KEY required"));
++    }
++    let key = PublicEncryptingKey::from_der(&der).map_err(Error::protocol)?;
++    // 保持原 rsa::RsaPublicKey::MAX_SIZE 上限；弱键由新后端显式拒绝。
++    if key.key_size_bits() > 4096 {
++        return Err(Error::protocol(
++            "MySQL RSA key exceeds original 4096-bit budget",
++        ));
++    }
++    Ok(key)
++}
