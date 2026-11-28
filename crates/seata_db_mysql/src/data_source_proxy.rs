@@ -373,6 +373,7 @@ impl MySqlDataSource {
                 registration_checks: MySqlAtRegistrationChecks {
                     require_resource_binding: options.require_resource_binding,
                     require_tinyint_profile_binding: options.require_tinyint_profile_binding,
+                    require_jdbc_profile_binding: options.require_jdbc_profile_binding,
                     java_tc_mysql_lock_limits: options.java_tc_mysql_lock_limits,
                     java_tc_mysql_lock_collation: options.java_tc_mysql_lock_collation,
                 },

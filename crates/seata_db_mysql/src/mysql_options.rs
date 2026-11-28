@@ -19,6 +19,7 @@ pub struct MySqlOptions {
     tls_client_identity_pem: Option<(Vec<u8>, Vec<u8>)>,
     pub(crate) require_resource_binding: bool,
     pub(crate) require_tinyint_profile_binding: bool,
+    pub(crate) require_jdbc_profile_binding: bool,
     pub(crate) java_tc_mysql_lock_limits: bool,
     pub(crate) java_tc_mysql_lock_collation: bool,
     pub(crate) maximum_connections: u32,
@@ -60,6 +61,7 @@ impl MySqlOptions {
             tls_client_identity_pem: None,
             require_resource_binding: false,
             require_tinyint_profile_binding: false,
+            require_jdbc_profile_binding: false,
             java_tc_mysql_lock_limits: false,
             java_tc_mysql_lock_collation: false,
             maximum_connections: 4,
@@ -171,6 +173,15 @@ impl MySqlOptions {
         self.require_tinyint_profile_binding = true;
         self
     }
+    /// 无参数；要求原事务核验 slot=1 的完整 JDBC 配置码及 TINYINT 位，返回严格准入配置。
+    /// 部署方排空旧分支后应用 011/021 并显式填写绑定；事务池或管理器任一端启用均不能降级。
+    /// 对应 Java: 无直接对象；同一 JDBC 资源内写入器表示约定的 Rust 部署扩展。
+    pub fn require_at_jdbc_profile_binding(mut self) -> Self {
+        self.require_resource_binding = true;
+        self.require_tinyint_profile_binding = true;
+        self.require_jdbc_profile_binding = true;
+        self
+    }
     /// 无参数；启用固定 Java TC 原版 MySQL 锁表的登记前字符长度校验，返回更新后的配置。
     /// 业务事务数据源或准备管理器任一端启用即可要求校验。
     /// 对应 Java: 无直接对象；目标为 Apache Seata 原版 MySQL lock_table 的存储约束。
@@ -256,6 +267,10 @@ impl fmt::Debug for MySqlOptions {
             .field("database_bytes", &self.database.len())
             .field("insecure_loopback", &self.insecure_loopback)
             .field("require_resource_binding", &self.require_resource_binding)
+            .field(
+                "require_jdbc_profile_binding",
+                &self.require_jdbc_profile_binding,
+            )
             .field(
                 "require_tinyint_profile_binding",
                 &self.require_tinyint_profile_binding,

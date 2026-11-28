@@ -218,3 +218,7 @@ Java 仍持锁时，新的 Rust XID 对 `accounts:0;reserves:1` 查询得到可�
 固定复合主键表可在一个本地工作事务中容纳 `('a_b','c')`、`('a','b_c')` 和 `('a','b_d')`。正式准备路径把前两组编码为相同的 `identity_pair:a_b_c`，后者查询返回 false，原 TC 明确拒绝登记。第三组生成 `identity_pair:a_b_d` 并成功登记。两套工具链各核对六次登记、四次锁查询、六次全局回滚及四个分支的独立终态和 Undo 围栏，保留了 TC 重试回调的原始帧。
 
 这两项分别留下物理排他锁缺口和额外锁冲突。WP05 完整锁安全门槛继续开放，兼容键格式及资源 ID 的处置继续沿用原验收约束。 [身份边界记录](wp05-tc-lock-identity-boundaries.json)
+
+## 完整 JDBC 配置的可选严格准入
+
+TINYINT 布尔位相同不足以代表 UTC/精确 DATE/TIME 表示相同。新增[完整配置绑定契约](mysql-jdbc-profile-admission-contract.md)，以可选 021 列和 `require_at_jdbc_profile_binding()` 核对完整码，事务池或管理器任一端启用均执行。原默认、资源绑定和 TINYINT 入口不变；旧全局分支排空后才允许维护方变更绑定。原 TC 八笔事务和双 Rust 真实配置/共享锁矩阵已验证这一守卫；完整写入器协作、权限、排他覆盖与生产门禁继续按 WP05 推进。

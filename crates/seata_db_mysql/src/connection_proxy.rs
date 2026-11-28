@@ -175,13 +175,20 @@ impl MySqlLocalTransaction {
             .await
             .map_err(|source| crate::MySqlPrepareError::Local { source })?;
         }
-        if transaction_checks.require_resource_binding || manager_checks.require_resource_binding {
+        let full_profile = transaction_checks.require_jdbc_profile_binding
+            || manager_checks.require_jdbc_profile_binding;
+        if transaction_checks.require_resource_binding
+            || manager_checks.require_resource_binding
+            || full_profile
+        {
             let check_profile = transaction_checks.require_tinyint_profile_binding
-                || manager_checks.require_tinyint_profile_binding;
+                || manager_checks.require_tinyint_profile_binding
+                || full_profile;
             MySqlResourceBinding::lock_verified(
                 transaction,
                 resource_id,
                 check_profile.then_some(profile),
+                full_profile,
             )
             .await
             .map_err(|source| crate::MySqlPrepareError::Local { source })?;

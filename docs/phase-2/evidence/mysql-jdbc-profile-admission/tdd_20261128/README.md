@@ -1,0 +1,1 @@
+The initial public-option tests failed with four missing field/method errors before implementation. Five selected option tests then passed. Real six-code/schema/row-lock behavior and actual TC rejection are independently covered by the final native packet. These compiler/test logs document development order and do not replace the final workspace or real DB evidence.

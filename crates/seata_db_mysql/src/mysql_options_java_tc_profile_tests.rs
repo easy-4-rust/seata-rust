@@ -48,3 +48,34 @@ fn fixed_profile_preserves_explicit_tls_and_existing_guard_settings() {
     assert!(options.java_tc_mysql_lock_collation);
     assert!(format!("{options:?}").contains("insecure_loopback: true"));
 }
+
+#[test]
+fn full_jdbc_profile_binding_requires_resource_and_tinyint_bindings() {
+    let default = options();
+    assert!(!default.require_jdbc_profile_binding);
+    let strict = options().require_at_jdbc_profile_binding();
+    assert!(
+        strict.require_resource_binding
+            && strict.require_tinyint_profile_binding
+            && strict.require_jdbc_profile_binding
+    );
+    assert_eq!(strict.database, default.database);
+    assert!(format!("{strict:?}").contains("require_jdbc_profile_binding: true"));
+}
+#[test]
+fn fixed_tc_profile_preserves_an_explicit_full_jdbc_guard() {
+    let strict = options()
+        .require_at_jdbc_profile_binding()
+        .with_java_tc_mysql_db_lock_profile();
+    assert!(
+        strict.require_resource_binding
+            && strict.require_tinyint_profile_binding
+            && strict.require_jdbc_profile_binding
+    );
+    assert!(strict.java_tc_mysql_lock_limits && strict.java_tc_mysql_lock_collation);
+    assert!(
+        !options()
+            .with_java_tc_mysql_db_lock_profile()
+            .require_jdbc_profile_binding
+    );
+}

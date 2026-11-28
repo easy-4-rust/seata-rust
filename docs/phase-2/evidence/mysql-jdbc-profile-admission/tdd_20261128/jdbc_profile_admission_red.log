@@ -1,0 +1,62 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0609]: no field `require_jdbc_profile_binding` on type `MySqlOptions`
+  --> crates\seata_db_mysql\src\mysql_options_java_tc_profile_tests.rs:54:41
+   |
+54 |  let default=options();assert!(!default.require_jdbc_profile_binding);
+   |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unknown field
+   |
+help: a field with a similar name exists
+   |
+54 -  let default=options();assert!(!default.require_jdbc_profile_binding);
+54 +  let default=options();assert!(!default.require_tinyint_profile_binding);
+   |
+
+error[E0599]: no method named `require_at_jdbc_profile_binding` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\src\mysql_options_java_tc_profile_tests.rs:55:23
+   |
+55 |  let strict=options().require_at_jdbc_profile_binding();
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+  ::: crates\seata_db_mysql\src\mysql_options.rs:11:1
+   |
+11 | pub struct MySqlOptions {
+   | ----------------------- method `require_at_jdbc_profile_binding` not found for this struct
+   |
+help: there is a method `require_at_tinyint_profile_binding` with a similar name
+   |
+55 -  let strict=options().require_at_jdbc_profile_binding();
+55 +  let strict=options().require_at_tinyint_profile_binding();
+   |
+
+error[E0599]: no method named `require_at_jdbc_profile_binding` found for struct `MySqlOptions` in the current scope
+  --> crates\seata_db_mysql\src\mysql_options_java_tc_profile_tests.rs:62:23
+   |
+62 |  let strict=options().require_at_jdbc_profile_binding().with_java_tc_mysql_db_lock_profile();
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+  ::: crates\seata_db_mysql\src\mysql_options.rs:11:1
+   |
+11 | pub struct MySqlOptions {
+   | ----------------------- method `require_at_jdbc_profile_binding` not found for this struct
+   |
+help: there is a method `require_at_tinyint_profile_binding` with a similar name
+   |
+62 -  let strict=options().require_at_jdbc_profile_binding().with_java_tc_mysql_db_lock_profile();
+62 +  let strict=options().require_at_tinyint_profile_binding().with_java_tc_mysql_db_lock_profile();
+   |
+
+error[E0609]: no field `require_jdbc_profile_binding` on type `MySqlOptions`
+  --> crates\seata_db_mysql\src\mysql_options_java_tc_profile_tests.rs:65:58
+   |
+65 |  assert!(!options().with_java_tc_mysql_db_lock_profile().require_jdbc_profile_binding);
+   |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unknown field
+   |
+help: a field with a similar name exists
+   |
+65 -  assert!(!options().with_java_tc_mysql_db_lock_profile().require_jdbc_profile_binding);
+65 +  assert!(!options().with_java_tc_mysql_db_lock_profile().require_tinyint_profile_binding);
+   |
+
+Some errors have detailed explanations: E0599, E0609.
+For more information about an error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (lib test) due to 4 previous errors

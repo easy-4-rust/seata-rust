@@ -3,6 +3,7 @@
 pub(crate) struct MySqlAtRegistrationChecks {
     pub(crate) require_resource_binding: bool,
     pub(crate) require_tinyint_profile_binding: bool,
+    pub(crate) require_jdbc_profile_binding: bool,
     pub(crate) java_tc_mysql_lock_limits: bool,
     pub(crate) java_tc_mysql_lock_collation: bool,
 }
