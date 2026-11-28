@@ -1,0 +1,15 @@
+[package]
+name = "seata-time-security-probe"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+[dependencies]
+time = { version = "=0.3.45", features = ["formatting", "parsing", "serde", "serde-well-known", "macros", "large-dates"] }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.140"
+[profile.test]
+debug = 0
+[workspace]
+
+[patch.crates-io]
+time = { path = "../../third_party/time" }

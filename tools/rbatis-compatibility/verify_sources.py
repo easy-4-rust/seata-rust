@@ -4,7 +4,7 @@ import hashlib
 import json
 
 ROOT = Path(__file__).resolve().parents[2]
-DIRECTORIES = ("rbatis", "rbdc", "scraper", "rbatis_macro_driver")
+DIRECTORIES = ("rbatis", "rbdc", "scraper", "rbatis_macro_driver", "time")
 
 
 def sha(path):
@@ -26,7 +26,7 @@ def verify():
         changed = [p for p, entry in expected.items()
                    if entry["sha256"] != entry["upstream_sha256"]]
         assert len(changed) == {"rbatis": 5, "rbdc": 3, "scraper": 2,
-                                "rbatis_macro_driver": 4}[directory], changed
+                                "rbatis_macro_driver": 4, "time": 2}[directory], changed
         result[directory] = {"crate": manifest["crate"], "version": manifest["version"],
                              "files": len(actual), "changed": changed,
                              "archive_sha256": manifest["archive_sha256"]}

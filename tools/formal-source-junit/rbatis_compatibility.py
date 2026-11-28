@@ -11,7 +11,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
 PROBE = ROOT / "tools/rbatis-compatibility"
-DIRECTORIES = ("rbatis", "rbdc", "scraper", "rbatis_macro_driver")
+DIRECTORIES = ("rbatis", "rbdc", "scraper", "rbatis_macro_driver", "time")
 
 
 def sha(path):

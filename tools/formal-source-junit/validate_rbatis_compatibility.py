@@ -47,7 +47,7 @@ def validate(out):
     expected_negative = (ROOT / "tools/rbatis-compatibility/src/lib.rs").read_bytes()
     assert (out / "negative-inputs/src/lib.rs").read_bytes() == expected_negative
     assert "rbatis-macro-driver=" not in (out / "negative-inputs/Cargo.toml").read_text(encoding="utf-8")
-    for directory in ("rbatis", "rbdc", "scraper", "rbatis_macro_driver"):
+    for directory in ("rbatis", "rbdc", "scraper", "rbatis_macro_driver", "time"):
         info = json.loads((ROOT / "third_party" / directory / "SEATA_PROVENANCE.json").read_bytes())
         publication = json.loads((out / (directory + ".publication.json")).read_bytes())["version"]
         assert publication["checksum"] == info["archive_sha256"] and not publication["yanked"]
