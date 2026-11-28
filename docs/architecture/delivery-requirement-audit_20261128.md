@@ -36,3 +36,5 @@
 [原业务语句回执](../phase-2/evidence/mysql-statement-result/README.md)已从 StatementCallback 贯通正式事务和 SeaORM `execute_with_result`，u64 原始影响行数/ID 不经后续会话查询或镜像推算，旧行数接口兼容。底层大整数回执、会话值变更、批量首 ID、错误/回滚，以及双 Rust 十二笔实体原 TC 提交/补偿均实际验证；各 840 passed / 416 ignored、严格 Clippy 通过。本项只是生成主键能力的前置交付，正式自增表/缺省键镜像定位仍拒绝并待实施，原生 ConnectionTrait、完整读写和 Phase 5–7 不变为已完成。
 
 [正式单行自增主键](../phase-2/evidence/mysql-auto-increment/README.md)现已从元数据准入推进到同一原 INSERT 回执定位镜像，保留原 Java Undo 和旧构造兼容。双 Rust、步长 7/偏移 3、十三类输入的 52 笔原 TC 提交/补偿、三个执行前拒绝、属性新增/移除快照拒绝与原 Java parser 均通过；零键补偿恢复及大于 i64 上限的键有实际证据。全工作区各 845 passed / 417 ignored、三个受影响包严格 Clippy 通过。正式单行自增镜像不再列为未实施；生成键批量、全部整数/JDBC 配置认证、原生 ORM 连接/模型/查询等完整范围继续交付，不关闭 WP05/WP07 或后续阶段。
+
+[原生借用式 SeaORM 连接](../phase-2/evidence/seaorm-borrowed/README.md)已实现可选 ConnectionTrait、同原事务有界 RR 查询及真实 Entity 模型插入/更新/删除；释放借用后继续原提交/补偿，不提供独立事务控制。双 Rust 十二笔原 TC 事务、原 Java Undo parser、原生列索引/时间读取、RR、预算拒绝及 MDL 取消均通过；各 850 passed / 418 ignored，严格 Clippy 通过。默认适配仍无 ORM 驱动，核心无 ORM 依赖。原生 ConnectionTrait/基本模型返回不再是完全缺失项，关系/聚合/更多表达式/流式/嵌套事务/迁移/2.x、完整 SQL 和生产范围仍开放。

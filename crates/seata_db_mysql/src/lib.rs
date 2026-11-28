@@ -248,3 +248,5 @@ pub use mysql_tcc_context_report_error::MySqlTccContextReportError;
 
 mod my_sql_statement_result;
 pub use my_sql_statement_result::MySqlStatementResult;
+
+mod my_sql_select_reader;

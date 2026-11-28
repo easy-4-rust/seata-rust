@@ -99,27 +99,7 @@ impl MySqlImageReader {
             .columns()
             .iter()
             .zip(&quoted)
-            .map(|(column, name)| {
-                let expression = match column.kind() {
-                    ColumnType::LocalDate => {
-                        format!("CASE WHEN {name} IS NULL THEN NULL ELSE 10 END")
-                    }
-                    ColumnType::InternalTime => {
-                        format!("CASE WHEN {name} IS NULL THEN NULL ELSE 17 END")
-                    }
-                    ColumnType::Timestamp | ColumnType::LocalDateTime => {
-                        format!("CASE WHEN {name} IS NULL THEN NULL ELSE 26 END")
-                    }
-                    ColumnType::SignedInteger | ColumnType::UnsignedInteger => {
-                        format!("CASE WHEN {name} IS NULL THEN NULL ELSE 8 END")
-                    }
-                    ColumnType::Decimal => {
-                        format!("OCTET_LENGTH(CAST({name} AS CHAR CHARACTER SET utf8mb4))")
-                    }
-                    ColumnType::Text | ColumnType::Binary => format!("OCTET_LENGTH({name})"),
-                };
-                format!("CAST({expression} AS UNSIGNED)")
-            })
+            .map(|(column, name)| Self::length_projection(column, name))
             .collect::<Vec<_>>()
             .join(", ");
         // 只取长度与NULL标记，避免先把超限BLOB交给驱动分配；RR锁覆盖下一次同条件读取。
@@ -243,7 +223,29 @@ impl MySqlImageReader {
         }
         Ok(arguments)
     }
-    fn preflight_sizes(
+    /// 参数为已认证物理列和安全引用名；返回无原值分配的长度/NULL 预检投影。
+    pub(crate) fn length_projection(column: &ColumnMeta, name: &str) -> String {
+        let expression = match column.kind() {
+            ColumnType::LocalDate => {
+                format!("CASE WHEN {name} IS NULL THEN NULL ELSE 10 END")
+            }
+            ColumnType::InternalTime => {
+                format!("CASE WHEN {name} IS NULL THEN NULL ELSE 17 END")
+            }
+            ColumnType::Timestamp | ColumnType::LocalDateTime => {
+                format!("CASE WHEN {name} IS NULL THEN NULL ELSE 26 END")
+            }
+            ColumnType::SignedInteger | ColumnType::UnsignedInteger => {
+                format!("CASE WHEN {name} IS NULL THEN NULL ELSE 8 END")
+            }
+            ColumnType::Decimal => {
+                format!("OCTET_LENGTH(CAST({name} AS CHAR CHARACTER SET utf8mb4))")
+            }
+            ColumnType::Text | ColumnType::Binary => format!("OCTET_LENGTH({name})"),
+        };
+        format!("CAST({expression} AS UNSIGNED)")
+    }
+    pub(crate) fn preflight_sizes(
         rows: &[MySqlRow],
         columns: usize,
     ) -> Result<Vec<Vec<Option<u64>>>, DbError> {

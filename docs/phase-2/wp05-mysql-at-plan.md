@@ -208,3 +208,7 @@ MySQL TLS 和提交回调权限故障已在固定原 Java TC、MySQL 8.4.13 与 
 ### 单行自增主键增量
 
 已实现当前物理/快照属性核对、缺省/NULL/零语义的单行生成键原回执定位、显式完整键批量及零键补偿恢复。双版本 52 笔原 TC 事务、原 Java Undo parser、执行前拒绝及双向属性 DDL 变化拒绝通过；各 845 passed / 417 ignored、严格 Clippy 通过。[范围与原始证据](evidence/mysql-auto-increment/README.md)。生成键批量、完整 ORM/API、完整 SQL/写入器准入和生产门禁仍开放。
+
+### 原生 ORM 连接与有界读取
+
+新增可选 borrowed_connection，以真实 ConnectionTrait 借用原事务，保留 SQLx 原生结果类型与列序；有界单表 SELECT 用原 RR 快照并保留取消/poison 边界。双版本 Entity 模型插入/更新/删除的十二笔正式原 TC 事务、原 Java parser、读取/预算/取消及全回归验证通过：[证据与未完成范围](evidence/seaorm-borrowed/README.md)。完整 ORM 生态、SQL/写入器和生产门禁继续实施。

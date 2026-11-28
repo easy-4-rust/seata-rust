@@ -27,3 +27,6 @@ pub use undo::{
     TableRecordsError, UndoCodecError, UndoCodecLimits, UndoLogDocument, UndoLogParser,
     UndoLogParserFactory, UndoLogParserSelectionError,
 };
+
+mod mysql_select_recognizer;
+pub use mysql_select_recognizer::MySqlSelectRecognizer;

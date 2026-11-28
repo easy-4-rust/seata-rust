@@ -1,0 +1,44 @@
+[package]
+name = "seata-db-mysql"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "SQLx MySQL AT and optional native XA transaction integration"
+
+[features]
+tcc = ["dep:seata-tcc"]
+xa = ["dep:seata-xa", "dep:futures-util"]
+transport_tls = ["seata-tm/tls", "seata-rm/tls", "seata-transport/tls"]
+experimental_changed_commit = []
+
+[dependencies]
+seata-tcc = { path = "../seata_tcc", optional = true }
+seata-xa = { path = "../seata_xa", optional = true }
+futures-util = { version = "=0.3.34", default-features = false, features = ["std"], optional = true }
+seata-datasource = { path = "../seata_datasource" }
+seata-at = { path = "../seata_at" }
+seata-rm = { path = "../seata_rm" }
+seata-sqlparser = { path = "../seata_sqlparser" }
+seata-protocol = { path = "../seata_protocol" }
+seata-transport = { path = "../seata_transport" }
+seata-tm = { path = "../seata_tm" }
+sha2 = "=0.10.9"
+sqlx = { version = "=0.8.6", default-features = false, features = ["mysql", "runtime-tokio", "tls-rustls-ring-webpki", "bigdecimal"] }
+bigdecimal = "=0.4.10"
+tracing.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+log = "=0.4.27"
+rustls-pki-types = { version = "=1.16.0", default-features = false, features = ["std"] }
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+rcgen = { version = "=0.14.0", default-features = false, features = ["ring"] }
+tokio-rustls = { version = "=0.26.4", default-features = false, features = ["ring"] }
+serde_json = "=1.0.140"
+ring = "=0.17.14"
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std"] }

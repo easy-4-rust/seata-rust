@@ -1,4 +1,4 @@
-use crate::{sea_orm_mysql_value::SeaOrmMySqlValue, SeaOrmMySqlError};
+use crate::SeaOrmMySqlError;
 use sea_orm::{DbBackend, QueryTrait, Statement};
 use seata_at::{SqlRecognizer, SqlRecognizerFactory};
 use seata_datasource::FieldValue;
@@ -24,28 +24,10 @@ impl SeaOrmMySqlStatement {
             });
         }
         let recognizer = SqlRecognizerFactory::recognize(&statement.sql)?;
-        let original = statement.values.map(|values| values.0).unwrap_or_default();
-        if original.len() != recognizer.parameter_count() || original.len() > 1024 {
-            return Err(SeaOrmMySqlError::Input {
-                reason: "exact bounded parameter count required",
-            });
-        }
-        let mut total = 0_usize;
-        let mut parameters = Vec::with_capacity(original.len());
-        for value in original {
-            let value = SeaOrmMySqlValue::convert(value)?;
-            total = total
-                .checked_add(value.value_bytes())
-                .ok_or(SeaOrmMySqlError::Input {
-                    reason: "parameter bytes overflow",
-                })?;
-            if total > 8_388_608 {
-                return Err(SeaOrmMySqlError::Input {
-                    reason: "parameter total budget",
-                });
-            }
-            parameters.push(value);
-        }
+        let parameters = crate::sea_orm_mysql_bindings::SeaOrmMySqlBindings::convert(
+            statement.values.map(|values| values.0).unwrap_or_default(),
+            recognizer.parameter_count(),
+        )?;
         Ok(Self {
             recognizer,
             parameters,

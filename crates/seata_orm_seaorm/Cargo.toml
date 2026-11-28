@@ -8,9 +8,12 @@ repository.workspace = true
 description = "SeaORM MySQL DML adapter for the owned Seata AT transaction"
 
 [features]
+borrowed_connection = ["dep:async-trait", "dep:tokio", "sea-orm/sqlx-mysql", "sea-orm/proxy"]
 experimental_changed_commit = ["seata-db-mysql/experimental_changed_commit"]
 
 [dependencies]
+async-trait = { version = "=0.1.92", optional = true }
+tokio = { workspace = true, optional = true }
 sea-orm = { version = "=1.1.19", default-features = false, features = ["macros", "with-json", "with-bigdecimal", "with-chrono"] }
 seata-at = { path = "../seata_at" }
 seata-datasource = { path = "../seata_datasource" }

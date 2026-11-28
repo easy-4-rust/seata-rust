@@ -398,6 +398,78 @@ impl MySqlLocalTransaction {
     pub fn undo_logs(&self) -> &[SqlUndoLog] {
         &self.undo_logs
     }
+    /// 参数为密封只读计划及原参数；在同一 RR 事务返回有界 SQLx 原生行，不暴露连接或提交能力。
+    /// 失败/取消/超时保留原毒化与拥有式关闭边界；普通 SELECT 不替换为当前锁定读。
+    pub async fn query(
+        &mut self,
+        sql: &seata_at::MySqlSelectRecognizer,
+        parameters: &[FieldValue],
+    ) -> Result<Vec<sqlx::mysql::MySqlRow>, DbError> {
+        if self.poisoned {
+            return Err(DbError::Poisoned);
+        }
+        if self.undo_flushed {
+            return Err(DbError::UndoSealed);
+        }
+        sql.validate_binding_bounds(parameters)
+            .map_err(|error| match error {
+                seata_at::SqlError::Budget { limit } => {
+                    DbError::Image(ImageError::Budget { limit })
+                }
+                _ => DbError::Input {
+                    reason: "read parameter shape or bounds",
+                },
+            })?;
+        let mut bytes = 0usize;
+        for value in parameters {
+            bytes = bytes
+                .checked_add(value.value_bytes())
+                .ok_or(ImageError::Budget {
+                    limit: "read parameter overflow",
+                })?;
+            if value.value_bytes() > 1_048_576 || bytes > 8_388_608 {
+                return Err(ImageError::Budget {
+                    limit: "read parameter payload",
+                }
+                .into());
+            }
+        }
+        self.poisoned = true;
+        let mut transaction = self.transaction.take().ok_or(DbError::Closed)?;
+        let deadline = Instant::now() + self.operation_timeout;
+        let result = timeout_at(deadline, async {
+            crate::current_table_constraints::CurrentTableConstraints::verify(
+                &mut transaction,
+                &self.metadata_options,
+                &self.database,
+                sql.table_name(),
+            )
+            .await?;
+            crate::my_sql_select_reader::MySqlSelectReader::read(
+                &mut transaction,
+                &self.database,
+                sql,
+                parameters,
+            )
+            .await
+        })
+        .await;
+        match result {
+            Ok(result) => {
+                self.transaction = Some(transaction);
+                if result.is_ok() {
+                    self.poisoned = false;
+                }
+                result
+            }
+            Err(_) => {
+                drop(transaction);
+                Err(DbError::Deadline {
+                    operation: "snapshot read",
+                })
+            }
+        }
+    }
     /// 参数为正式UPDATE/DELETE识别结果与完整原绑定；返回同事务持锁完整前镜像，不执行业务SQL。
     /// 对应Java: org.apache.seata.rm.datasource.exec.UpdateExecutor#beforeImage及DeleteExecutor；部分实现。
     pub async fn before_image(

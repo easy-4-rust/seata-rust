@@ -38,6 +38,20 @@ impl SqlRecognizerFactory {
         Ok(result)
     }
     fn checked_tokens(sql: &str, dialect: &MySqlDialect) -> Result<Vec<Token>, SqlError> {
+        Self::checked_tokens_for(sql, dialect, false)
+    }
+    /// 参数为原 SELECT 和固定方言；返回沿用原预算/注释禁令的词法序列。
+    pub(crate) fn checked_select_tokens(
+        sql: &str,
+        dialect: &MySqlDialect,
+    ) -> Result<Vec<Token>, SqlError> {
+        Self::checked_tokens_for(sql, dialect, true)
+    }
+    fn checked_tokens_for(
+        sql: &str,
+        dialect: &MySqlDialect,
+        allow_select: bool,
+    ) -> Result<Vec<Token>, SqlError> {
         if sql.len() > 65_536 {
             return Err(SqlError::Budget { limit: "SQL bytes" });
         }
@@ -61,13 +75,13 @@ impl SqlRecognizerFactory {
                 feature: "SQL comments/conditional comments/hints",
             });
         }
-        Self::check_tokens(&tokens)?;
+        Self::check_tokens(&tokens, allow_select)?;
         Ok(tokens
             .into_iter()
             .filter(|token| !matches!(token, Token::Whitespace(_)))
             .collect())
     }
-    fn verify_ast_tokens(
+    pub(crate) fn verify_ast_tokens(
         original: &[Token],
         statement: &Statement,
         dialect: &MySqlDialect,
@@ -138,12 +152,12 @@ impl SqlRecognizerFactory {
         }
         Ok(())
     }
-    fn check_tokens(tokens: &[Token]) -> Result<(), SqlError> {
+    fn check_tokens(tokens: &[Token], allow_select: bool) -> Result<(), SqlError> {
         let significant: Vec<_> = tokens
             .iter()
             .filter(|token| !matches!(token, Token::Whitespace(_)))
             .collect();
-        if !matches!(significant.first(), Some(Token::Word(word)) if matches!(word.keyword, Keyword::INSERT | Keyword::UPDATE | Keyword::DELETE))
+        if !matches!(significant.first(), Some(Token::Word(word)) if (matches!(word.keyword, Keyword::INSERT | Keyword::UPDATE | Keyword::DELETE) || (allow_select && word.keyword==Keyword::SELECT)))
         {
             return Err(SqlError::Unsupported {
                 feature: "non-DML first verb",
