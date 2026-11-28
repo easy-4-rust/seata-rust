@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+    <select id="test_if">
+        `select * from table `
+        <if test="id == 1">
+            `where id = 1`
+        </if>
+    </select>
+
+    <select id="test_null">
+        `select * from table `
+        <if test="id == null">
+            `where id = 1`
+        </if>
+    </select>
+
+    <select id="test_method_call">
+        `select * from table where id = ${id.method()}`
+    </select>
+
+    <select id="test_binary">
+        `${id + 1},
+        ${id - 1},
+        ${id * 1},
+        ${id / 1},
+        ${id % 1},
+        ${id & 1},
+        ${id | 1},
+        ${id == 1},
+        ${id < 1},
+        ${id <= 1},
+        ${id != 1},
+        ${id >= 1},
+        ${id > 1},
+        ${id ^ 1},
+        ${b && true},
+        ${b || true},
+        ${id + id},
+        ${id - id},
+        ${id * id},
+        ${id / id},
+        ${id % id},
+        ${id & id},
+        ${id | id},
+        ${id == id},
+        ${id < id},
+        ${id <= id},
+        ${id != id},
+        ${id >= id},
+        ${id > id},
+        ${id ^ id},
+        ${b && b},
+        ${b || b},
+        ${1 + 1},
+        ${1 - 1},
+        ${1 * 1},
+        ${1 / 1},
+        ${1 % 1},
+        ${1 & 1},
+        ${1 | 1},
+        ${1 == 1},
+        ${1 < 1},
+        ${1 <= 1},
+        ${1 != 1},
+        ${1 >= 1},
+        ${1 > 1},
+        ${1 ^ 1},
+        ${true && true},
+        ${true || true},
+        ${1 + id},
+        ${1 - id},
+        ${1 * id},
+        ${1 / id},
+        ${1 % id},
+        ${1 & id},
+        ${1 | id},
+        ${1 == id},
+        ${1 < id},
+        ${1 <= id},
+        ${1 != id},
+        ${1 >= id},
+        ${1 > id},
+        ${1 ^ id},
+        ${true && b},
+        ${true || b}`
+    </select>
+
+    <select id="test_unary">
+        `${-id}`
+    </select>
+
+    <select id="test_paren">
+        `${(-id)}`
+    </select>
+
+    <select id="test_field">
+        `${t.name}`
+    </select>
+
+    <select id="test_reference">
+        `${&t.name}`
+    </select>
+
+    <select id="test_index">
+        `${arr[0]}${map['0']}`
+    </select>
+
+    <select id="test_lit">
+        `${'aaaa'}`
+    </select>
+
+    <select id="test_where_empty">
+        <where></where>
+    </select>
+
+    <select id="test_where_sql">
+        <where></where>
+    </select>
+
+    <select id="test_bind">
+        <bind name="a" value="1"></bind>
+        ${a}
+    </select>
+
+    <select id="test_choose">
+        <choose>
+            <when test="a == 1">true</when>
+            <otherwise>false</otherwise>
+        </choose>
+    </select>
+
+    <select id="test_for">
+        <foreach collection="ids" separator="," index="k" item="v">
+            <if test="k == 0">
+                <continue></continue>
+            </if>
+            <if test="k == 3">
+                <break></break>
+            </if>
+            (${k},${v})
+        </foreach>
+    </select>
+
+    <select id="test_for_item">
+        <foreach collection="ids" separator="," index="k" item="v">
+            (${v.a},${v.b})
+        </foreach>
+    </select>
+
+    <select id="test_trim">
+        <trim prefix="(" prefixOverrides="1" suffixOverrides="2" suffix=")">
+            12
+        </trim>
+    </select>
+
+    <select id="test_trim2">
+        <trim prefix="(" start="1" end="2" suffix=")">
+            12
+        </trim>
+    </select>
+
+    <select id="test_trim3">
+        <trim start=" and ">
+            ` and `
+        </trim>
+    </select>
+
+    <select id="test_trim4">
+        <trim start=" and | or ">
+            ` and  or `
+        </trim>
+    </select>
+
+    <sql id="1">1</sql>
+    <select id="test_include">
+        <include refid="1"></include>
+    </select>
+
+    <select id="test_set">
+        <set>1,</set>
+    </select>
+
+    <!-- `<=` must be false when the left value is the greater one, `>=` the other way around -->
+    <select id="test_cmp_le_ge">`${1 <= 2},${2 <= 1},${2 >= 1},${1 >= 2},${1 <= 1},${1 <= id}`</select>
+
+    <!-- `!` on a template value -->
+    <select id="test_not_unary">`${!b}`</select>
+
+    <select id="test_not_if"><if test="!a">`skip`</if><if test="a">`keep`</if></select>
+
+    <!-- <bind> creates the key of the argument map, the following tags read it -->
+    <select id="test_bind_expr"><bind name="bound" value="id + 1"></bind>${bound},${bound == 2}</select>
+
+    <!-- the separator of a <foreach> only trims inside the text of the loop -->
+    <select id="test_for_keeps_outer_separator">`outer,`<foreach collection="ids" separator="," index="k" item="v">(${v})</foreach>`end`</select>
+
+    <!-- Paginated query - automatically detected by Page<T> return type -->
+    <select id="test_page">
+        `select * from table`
+        <where>
+            <if test="name != ''">
+                ` and name like #{name}`
+            </if>
+        </where>
+    </select>
+
+</mapper>

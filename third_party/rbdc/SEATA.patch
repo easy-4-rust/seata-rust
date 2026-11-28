@@ -1,0 +1,53 @@
+--- a/src/connect_options_any.rs
++++ b/src/connect_options_any.rs
+@@ -0,0 +1,17 @@
++use std::any::Any;
++/// 为 Rust 1.85 保留对象安全的原连接选项类型查询，不改变驱动实现。
++/// 对应 Java: 无直接对象；rbdc ConnectOptions 的 Rust 兼容扩展。
++pub trait ConnectOptionsAny: Any {
++    /// 无参数；返回原具体连接选项的共享 Any 引用，不复制对象。
++    fn options_as_any(&self) -> &dyn Any;
++    /// 无参数；返回原具体连接选项的可变 Any 引用，不替换对象。
++    fn options_as_any_mut(&mut self) -> &mut dyn Any;
++}
++impl<T: Any> ConnectOptionsAny for T {
++    fn options_as_any(&self) -> &dyn Any {
++        self
++    }
++    fn options_as_any_mut(&mut self) -> &mut dyn Any {
++        self
++    }
++}
+--- a/src/db.rs
++++ b/src/db.rs
+@@ -228,7 +228,7 @@
+ }
+ 
+ /// connect option
+-pub trait ConnectOptions: Any + Send + Sync + Debug + 'static {
++pub trait ConnectOptions: crate::connect_options_any::ConnectOptionsAny + Send + Sync + Debug + 'static {
+     /// Establish a new database connection with the options specified by `self`.
+     fn connect(&self) -> BoxFuture<'_, Result<Box<dyn Connection>, Error>>;
+ 
+@@ -276,11 +276,11 @@
+ /// database driver ConnectOptions
+ impl dyn ConnectOptions {
+     pub fn downcast_ref<E: ConnectOptions>(&self) -> Option<&E> {
+-        <dyn Any>::downcast_ref::<E>(self)
++        self.options_as_any().downcast_ref::<E>()
+     }
+ 
+     pub fn downcast_ref_mut<E: ConnectOptions>(&mut self) -> Option<&mut E> {
+-        <dyn Any>::downcast_mut::<E>(self)
++        self.options_as_any_mut().downcast_mut::<E>()
+     }
+ }
+ 
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -16,3 +16,5 @@
+ pub mod util;
+ pub use error::*;
+ pub use util::*;
++
++pub mod connect_options_any;

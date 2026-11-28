@@ -1,0 +1,1046 @@
+#![allow(unused_mut)]
+#![allow(unused_imports)]
+#![allow(unreachable_patterns)]
+#![allow(unused_variables)]
+#![allow(unused_assignments)]
+#![allow(unused_must_use)]
+#![allow(dead_code)]
+#![allow(mismatched_lifetime_syntaxes)]
+
+#[macro_use]
+extern crate rbatis;
+
+#[cfg(test)]
+mod test {
+    use dark_std::sync::SyncVec;
+    use futures_core::future::BoxFuture;
+    use futures_core::Stream;
+    use rbatis::executor::{Executor, RBatisConnExecutor};
+    use rbatis::intercept::{Intercept, ResultType};
+    use rbatis::plugin::PageRequest;
+    use rbatis::{Action, Error, RBatis};
+    use rbdc::datetime::DateTime;
+    use rbdc::db::{ConnectOptions, Connection, Driver, ExecResult, MetaData, Row};
+    use rbdc::rt::block_on;
+    use rbs::{from_value, value, Value};
+    use std::any::Any;
+    use std::collections::HashMap;
+    use std::fmt::{Debug, Formatter};
+    use std::pin::Pin;
+    use std::sync::Arc;
+
+    #[derive(Debug)]
+    pub struct MockIntercept {
+        pub sql_args: Arc<SyncVec<(String, Vec<Value>)>>,
+    }
+
+    impl MockIntercept {
+        fn new(inner: Arc<SyncVec<(String, Vec<Value>)>>) -> Self {
+            Self { sql_args: inner }
+        }
+    }
+
+    #[async_trait]
+    impl Intercept for MockIntercept {
+        async fn before(
+            &self,
+            task_id: i64,
+            rb: &dyn Executor,
+            sql: &mut String,
+            args: &mut Vec<Value>,
+            _result: ResultType<&mut Result<ExecResult, Error>, &mut Result<Value, Error>>,
+        ) -> Result<Action, Error> {
+            self.sql_args.push((sql.to_string(), args.clone()));
+            Ok(Action::Next)
+        }
+    }
+
+    #[derive(Debug, Clone)]
+    struct MockDriver {}
+
+    impl Driver for MockDriver {
+        fn name(&self) -> &str {
+            "test"
+        }
+
+        fn connect(&self, _url: &str) -> BoxFuture<'_, Result<Box<dyn Connection>, Error>> {
+            Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+        }
+
+        fn connect_opt<'a>(
+            &'a self,
+            _option: &'a dyn ConnectOptions,
+        ) -> BoxFuture<'a, Result<Box<dyn Connection>, Error>> {
+            Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+        }
+
+        fn default_option(&self) -> Box<dyn ConnectOptions> {
+            Box::new(MockConnectOptions {})
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockRowMetaData {
+        sql: String,
+    }
+
+    impl MetaData for MockRowMetaData {
+        fn column_len(&self) -> usize {
+            if self.sql.contains("select count") {
+                1
+            } else {
+                2
+            }
+        }
+
+        fn column_name(&self, i: usize) -> String {
+            if self.sql.contains("select count") {
+                "count".to_string()
+            } else {
+                if i == 0 {
+                    "sql".to_string()
+                } else {
+                    "count".to_string()
+                }
+            }
+        }
+
+        fn column_type(&self, _i: usize) -> String {
+            "String".to_string()
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockRow {
+        pub sql: String,
+        pub count: u64,
+    }
+
+    impl Row for MockRow {
+        fn meta_data(&self) -> Box<dyn MetaData> {
+            Box::new(MockRowMetaData {
+                sql: self.sql.clone(),
+            }) as Box<dyn MetaData>
+        }
+
+        fn get(&mut self, i: usize) -> Result<Value, Error> {
+            if self.sql.contains("select count") {
+                Ok(Value::U64(self.count))
+            } else {
+                if i == 0 {
+                    Ok(Value::String(self.sql.clone()))
+                } else {
+                    Ok(Value::U64(self.count))
+                }
+            }
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockConnection {}
+
+    impl Connection for MockConnection {
+        fn exec_rows(
+            &mut self,
+            sql: &str,
+            params: Vec<Value>,
+        ) -> BoxFuture<
+            '_,
+            Result<Pin<Box<dyn Stream<Item = Result<Box<dyn Row>, Error>> + Send + '_>>, Error>,
+        > {
+            let sql = sql.to_string();
+            Box::pin(async move {
+                let data = Box::new(MockRow { sql, count: 1 }) as Box<dyn Row>;
+                let stream: Pin<Box<dyn Stream<Item = Result<Box<dyn Row>, Error>> + Send + '_>> =
+                    Box::pin(futures::stream::iter(vec![Ok(data)]));
+                Ok(stream)
+            })
+        }
+
+        fn exec(
+            &mut self,
+            sql: &str,
+            params: Vec<Value>,
+        ) -> BoxFuture<'_, Result<ExecResult, Error>> {
+            Box::pin(async move {
+                Ok(ExecResult {
+                    rows_affected: 0,
+                    last_insert_id: Value::Null,
+                })
+            })
+        }
+
+        fn close(&mut self) -> BoxFuture<'_, Result<(), Error>> {
+            Box::pin(async { Ok(()) })
+        }
+
+        fn ping(&mut self) -> BoxFuture<'_, Result<(), Error>> {
+            Box::pin(async { Ok(()) })
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockConnectOptions {}
+
+    impl ConnectOptions for MockConnectOptions {
+        fn connect(&self) -> BoxFuture<'_, Result<Box<dyn Connection>, Error>> {
+            Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+        }
+
+        fn set_uri(&mut self, _uri: &str) -> Result<(), Error> {
+            Ok(())
+        }
+    }
+
+    #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+    struct MockTable {
+        pub id: Option<String>,
+        pub name: Option<String>,
+        pub pc_link: Option<String>,
+        pub h5_link: Option<String>,
+        pub pc_banner_img: Option<String>,
+        pub h5_banner_img: Option<String>,
+        pub sort: Option<String>,
+        pub status: Option<i32>,
+        pub remark: Option<String>,
+        pub create_time: Option<rbdc::datetime::DateTime>,
+        pub version: Option<i64>,
+        pub delete_flag: Option<i32>,
+        //exec sql
+        pub count: u64, //page count num
+    }
+
+    #[test]
+    fn test_exec_decode() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            #[html_sql(
+                r#"<mapper>
+            <select id="select_by_condition">
+            select ${id},${id},#{id},#{id}
+            </select>
+            </mapper>"#
+            )]
+            pub async fn test_same_id(rb: &RBatis, id: &u64) -> Result<Value, Error> {
+                impled!()
+            }
+            let r = test_same_id(&rb, &1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "select 1,1,?,?");
+            assert_eq!(args, vec![Value::U64(1), Value::U64(1)]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_macro() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            htmlsql!(test_same_id(rb: &RBatis, id: &u64)  -> Result<Value, Error> => r#"<mapper>
+            <select id="test_same_id">
+            select ${id},${id},#{id},#{id}
+            </select>
+            </mapper>"#);
+
+            let r = test_same_id(&rb, &1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "select 1,1,?,?");
+            assert_eq!(args, vec![Value::U64(1), Value::U64(1)]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_test_if() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            htmlsql!(test_if(rb: &RBatis, id: &u64)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_if(&rb, &1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "select * from table where id = 1");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_test_null() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            htmlsql!(test_null(rb: &RBatis, id: Option<i32>)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_null(&rb, None).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "select * from table where id = 1");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_method_call() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            pub trait Methods {
+                fn method(&self) -> Value;
+            }
+            impl Methods for Value {
+                fn method(&self) -> Value {
+                    Value::I32(1)
+                }
+            }
+            htmlsql!(test_method_call(rb: &RBatis, id: Option<i32>)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_method_call(&rb, None).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "select * from table where id = 1");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_binary() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_binary(rb: &RBatis, id: i32, b:bool)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_binary(&rb, 1, true).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql.replace("\r\n","").replace("\n",""), "2,0,1,1,0,1,1,true,false,true,false,true,false,0,true,true,2,0,1,1,0,false,false,true,false,true,false,true,false,0,true,true,2,0,1,1,0,1,1,true,false,true,false,true,false,0,true,true,2,0,1,1,0,1,1,true,false,true,false,true,false,0,true,true");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_unary() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_unary(rb: &RBatis, id: i32)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_unary(&rb, 1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "-1");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_paren() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_paren(rb: &RBatis, id: i32)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_paren(&rb, 1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "-1");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_field() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            htmlsql!(test_field(rb: &RBatis, t: MockTable)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_field(
+                &rb,
+                MockTable {
+                    id: None,
+                    name: Some("aaa".to_string()),
+                    pc_link: None,
+                    h5_link: None,
+                    pc_banner_img: None,
+                    h5_banner_img: None,
+                    sort: None,
+                    status: None,
+                    remark: None,
+                    create_time: None,
+                    version: None,
+                    delete_flag: None,
+                    count: 0,
+                },
+            )
+            .await
+            .unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "aaa");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_reference() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_reference(rb: &RBatis, t: MockTable)  -> Result<Value, Error> => "tests/test.html");
+
+            let r = test_reference(
+                &rb,
+                MockTable {
+                    id: None,
+                    name: Some("aaa".to_string()),
+                    pc_link: None,
+                    h5_link: None,
+                    pc_banner_img: None,
+                    h5_banner_img: None,
+                    sort: None,
+                    status: None,
+                    remark: None,
+                    create_time: None,
+                    version: None,
+                    delete_flag: None,
+                    count: 0,
+                },
+            )
+            .await
+            .unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "aaa");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_index() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_index(rb: &RBatis, arr: Vec<i32>, map:HashMap<String,String>)  -> Result<Value, Error> => "tests/test.html");
+            let mut m = HashMap::new();
+            m.insert("0".to_string(), "1".to_string());
+            let r = test_index(&rb, vec![1], m).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "11");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_lit() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_lit(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_lit(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "aaaa");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_where_empty() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_where_empty(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_where_empty(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_where_sql() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_where_sql(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_where_sql(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_bind() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_bind(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_bind(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            println!("sql={},args={}", sql, Value::Array(args.clone()));
+            assert_eq!(sql, "1");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_choose() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_choose(rb: &RBatis,a:i32)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_choose(&rb, 1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "true");
+            assert_eq!(args, vec![]);
+            let r = test_choose(&rb, 0).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "false");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_for() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_for(rb: &RBatis,ids:Vec<i32>)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_for(&rb, vec![0, 1, 2, 3]).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            println!("sql={},args={}", sql, Value::Array(args.clone()));
+            assert_eq!(sql, "(1,1), (2,2)");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_for_item() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            let v = value! {
+                "a":"a",
+                "b":"b"
+            };
+            htmlsql!(test_for_item(rb: &RBatis,ids:Vec<Value>)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_for_item(&rb, vec![v]).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            println!("sql={},args={}", sql, Value::Array(args.clone()));
+            assert_eq!(sql, "(a,b)");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_trim() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_trim(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_trim(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "()");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_trim2() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_trim2(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_trim2(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "()");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_trim3() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_trim3(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_trim3(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_trim4() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_trim3(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_trim3(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_include() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_include(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_include(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, "1");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_set() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_set(rb: &RBatis)  -> Result<Value, Error> => "tests/test.html");
+            let r = test_set(&rb).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(sql, " set 1 ");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_impl_level() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            pub struct UserMapper;
+
+            use super::*;
+            use rbatis::executor::Executor;
+
+            #[html_sql("tests/test.html")]
+            impl UserMapper {
+                pub async fn test_if(rb: &impl Executor, id: &u64) -> Result<Value, Error> {
+                    impled!()
+                }
+
+                pub async fn test_lit(rb: &impl Executor) -> Result<Value, Error> {
+                    impled!()
+                }
+            }
+
+            let r1 = UserMapper::test_if(&rb, &1).await.unwrap();
+            let (sql1, args1) = queue.pop().unwrap();
+            assert_eq!(sql1, "select * from table where id = 1");
+            assert_eq!(args1, vec![]);
+
+            let r2 = UserMapper::test_lit(&rb).await.unwrap();
+            let (sql2, args2) = queue.pop().unwrap();
+            assert_eq!(sql2, "aaaa");
+            assert_eq!(args2, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_impl_generic() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            pub struct GenericMapper<T> {
+                _phantom: std::marker::PhantomData<T>,
+            }
+
+            impl<T> GenericMapper<T> {
+                pub fn new() -> Self {
+                    Self {
+                        _phantom: std::marker::PhantomData,
+                    }
+                }
+            }
+
+            use super::*;
+            use rbatis::executor::Executor;
+
+            #[html_sql("tests/test.html")]
+            impl<T: Send + Sync> GenericMapper<T> {
+                pub async fn test_if(rb: &impl Executor, id: &u64) -> Result<Value, Error> {
+                    impled!()
+                }
+
+                pub async fn test_lit(rb: &impl Executor) -> Result<Value, Error> {
+                    impled!()
+                }
+            }
+
+            let mapper = GenericMapper::<String>::new();
+            let r1 = GenericMapper::<String>::test_if(&rb, &1).await.unwrap();
+            let (sql1, args1) = queue.pop().unwrap();
+            assert_eq!(sql1, "select * from table where id = 1");
+            assert_eq!(args1, vec![]);
+
+            let r2 = GenericMapper::<String>::test_lit(&rb).await.unwrap();
+            let (sql2, args2) = queue.pop().unwrap();
+            assert_eq!(sql2, "aaaa");
+            assert_eq!(args2, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_impl_trait() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            pub trait Mapper {
+                async fn test_if(rb: &impl Executor, id: &u64) -> Result<Value, Error>;
+                async fn test_lit(rb: &impl Executor) -> Result<Value, Error>;
+            }
+
+            pub struct TraitMapper;
+
+            use super::*;
+            use rbatis::executor::Executor;
+
+            #[html_sql("tests/test.html")]
+            impl Mapper for TraitMapper {
+                async fn test_if(rb: &impl Executor, id: &u64) -> Result<Value, Error> {
+                    impled!()
+                }
+
+                async fn test_lit(rb: &impl Executor) -> Result<Value, Error> {
+                    impled!()
+                }
+            }
+
+            let r1 = TraitMapper::test_if(&rb, &1).await.unwrap();
+            let (sql1, args1) = queue.pop().unwrap();
+            assert_eq!(sql1, "select * from table where id = 1");
+            assert_eq!(args1, vec![]);
+
+            let r2 = TraitMapper::test_lit(&rb).await.unwrap();
+            let (sql2, args2) = queue.pop().unwrap();
+            assert_eq!(sql2, "aaaa");
+            assert_eq!(args2, vec![]);
+        };
+        block_on(f);
+    }
+
+    /// Test automatic pagination detection with Page<T> return type
+    #[test]
+    fn test_auto_pagination() {
+        let f = async move {
+            use rbatis::plugin::{intercept_page::PageIntercept, Page, PageRequest};
+
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![
+                Arc::new(PageIntercept::new()),
+                Arc::new(MockIntercept::new(queue.clone())),
+            ]);
+
+            htmlsql!(test_page(rb: &RBatis, page_req: &dyn PageRequest, name: String) -> Result<Page<MockTable>, Error> => "tests/test.html");
+
+            let page_req = PageRequest::new(1, 10);
+            let r = test_page(&rb, &page_req, "test".to_string()).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+
+            // The first query should be a count query (if do_count is true)
+            // The second query should be a select query with limit/offset
+            // Check that SQL contains the expected content
+            assert!(sql.contains("select") || sql.contains("count"));
+
+            // Verify Page structure
+            assert_eq!(r.page_no, 1);
+            assert_eq!(r.page_size, 10);
+        };
+        block_on(f);
+    }
+
+    /// Test auto-pagination in impl block
+    #[test]
+    fn test_auto_pagination_impl() {
+        let f = async move {
+            use rbatis::plugin::{intercept_page::PageIntercept, Page, PageRequest};
+
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![
+                Arc::new(PageIntercept::new()),
+                Arc::new(MockIntercept::new(queue.clone())),
+            ]);
+
+            pub struct PageMapper;
+
+            #[html_sql("tests/test.html")]
+            impl PageMapper {
+                pub async fn test_page(
+                    rb: &RBatis,
+                    page_req: &dyn PageRequest,
+                    name: String,
+                ) -> Result<Page<MockTable>, Error> {
+                    impled!()
+                }
+            }
+
+            let page_req = PageRequest::new(2, 20);
+            let r = PageMapper::test_page(&rb, &page_req, "test".to_string())
+                .await
+                .unwrap();
+            let (sql, args) = queue.pop().unwrap();
+
+            // Verify Page structure
+            assert_eq!(r.page_no, 2);
+            assert_eq!(r.page_size, 20);
+        };
+        block_on(f);
+    }
+
+    /// drop every whitespace so that an assertion compares the SQL and not the layout
+    /// of the template
+    fn squeeze(sql: &str) -> String {
+        sql.chars().filter(|c| !c.is_whitespace()).collect()
+    }
+
+    #[test]
+    fn test_cmp_le_ge() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_cmp_le_ge(rb: &RBatis, id: i32) -> Result<Value, Error> => "tests/test.html");
+
+            let _ = test_cmp_le_ge(&rb, 1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            println!("sql={}", sql);
+            // `2 <= 1` and `1 >= 2` are the cases a `<=`/`>=` that is implemented as
+            // 'not less than' would answer with the wrong `true`
+            assert_eq!(squeeze(&sql), "true,false,true,false,true,true");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_not_unary() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_not_unary(rb: &RBatis, b: bool) -> Result<Value, Error> => "tests/test.html");
+
+            let _ = test_not_unary(&rb, true).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            assert_eq!(squeeze(&sql), "false");
+            let _ = test_not_unary(&rb, false).await.unwrap();
+            let (sql, _) = queue.pop().unwrap();
+            assert_eq!(squeeze(&sql), "true");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_not_if() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_not_if(rb: &RBatis, a: bool) -> Result<Value, Error> => "tests/test.html");
+
+            // <if test="!a"> is the negation of <if test="a">
+            let _ = test_not_if(&rb, true).await.unwrap();
+            let (sql, _) = queue.pop().unwrap();
+            assert_eq!(squeeze(&sql), "keep");
+            let _ = test_not_if(&rb, false).await.unwrap();
+            let (sql, _) = queue.pop().unwrap();
+            assert_eq!(squeeze(&sql), "skip");
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_bind_expr() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_bind_expr(rb: &RBatis, id: i32) -> Result<Value, Error> => "tests/test.html");
+
+            // `bound` is not an argument of the function, <bind> adds it to the argument
+            // map and ${bound} of the same statement reads it back
+            let _ = test_bind_expr(&rb, 1).await.unwrap();
+            let (sql, args) = queue.pop().unwrap();
+            println!("sql={},args={}", sql, Value::Array(args.clone()));
+            assert_eq!(squeeze(&sql), "2,true");
+            assert_eq!(args, vec![]);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_for_keeps_outer_separator() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+            htmlsql!(test_for_keeps_outer_separator(rb: &RBatis, ids: Vec<i32>) -> Result<Value, Error> => "tests/test.html");
+
+            let _ = test_for_keeps_outer_separator(&rb, vec![1, 2])
+                .await
+                .unwrap();
+            let (sql, _) = queue.pop().unwrap();
+            println!("sql={}", sql);
+            // the separator after the last item of the loop is dropped ...
+            assert_eq!(squeeze(&sql), "outer,(1),(2)end");
+
+            // ... and a ',' that was written before the <foreach> stays, even when the
+            // loop added no text at all (a <foreach> that trims the whole `sql` would
+            // remove it)
+            let _ = test_for_keeps_outer_separator(&rb, vec![]).await.unwrap();
+            let (sql, _) = queue.pop().unwrap();
+            println!("sql={}", sql);
+            assert_eq!(squeeze(&sql), "outer,end");
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_html_sql_inline_selects_by_id() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            #[html_sql(
+                r#"<select id="aaa_other_statement">`select wrong`</select><select id="test_html_sql_inline_selects_by_id">`select right`</select>"#
+            )]
+            pub async fn test_html_sql_inline_selects_by_id(rb: &RBatis) -> Result<Value, Error> {
+                impled!()
+            }
+
+            let _ = test_html_sql_inline_selects_by_id(&rb).await.unwrap();
+            let (sql, _) = queue.pop().unwrap();
+            println!("sql={}", sql);
+            // an inline template with more than one statement: the element with the id
+            // of the function is used, not just the first one of the template
+            assert_eq!(squeeze(&sql), "selectright");
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_html_sql_multiple_args() {
+        let f = async move {
+            let mut rb = RBatis::new();
+            rb.init(MockDriver {}, "test").unwrap();
+            let queue = Arc::new(SyncVec::new());
+            rb.set_intercepts(vec![Arc::new(MockIntercept::new(queue.clone()))]);
+
+            #[html_sql(
+                r#"<select id="test_html_sql_multiple_args">"#,
+                r#"`select 1`"#,
+                r#"</select>"#
+            )]
+            pub async fn test_html_sql_multiple_args(rb: &RBatis) -> Result<Value, Error> {
+                impled!()
+            }
+
+            let _ = test_html_sql_multiple_args(&rb).await.unwrap();
+            let (sql, _) = queue.pop().unwrap();
+            println!("sql={}", sql);
+            // every argument of the macro belongs to the template
+            assert_eq!(squeeze(&sql), "select1");
+        };
+        block_on(f);
+    }
+}

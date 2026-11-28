@@ -1,0 +1,273 @@
+//! ObjectId
+use super::IdGenerator;
+use hex::FromHexError;
+use rand::rng;
+use rand::RngExt;
+use std::sync::OnceLock;
+use std::{
+    error, fmt, result,
+    str::FromStr,
+    sync::atomic::{AtomicUsize, Ordering},
+    time::SystemTime,
+};
+
+const TIMESTAMP_SIZE: usize = 4;
+const PROCESS_ID_SIZE: usize = 5;
+const COUNTER_SIZE: usize = 3;
+
+const TIMESTAMP_OFFSET: usize = 0;
+const PROCESS_ID_OFFSET: usize = TIMESTAMP_OFFSET + TIMESTAMP_SIZE;
+const COUNTER_OFFSET: usize = PROCESS_ID_OFFSET + PROCESS_ID_SIZE;
+
+const MAX_U24: usize = 0xFF_FFFF;
+
+/// process wide counter used to make the last 3 bytes of an [`ObjectId`] unique
+pub static OID_COUNTER: AtomicUsize = AtomicUsize::new(0);
+
+/// Errors that can occur during OID construction and generation.
+#[derive(Debug)]
+#[non_exhaustive]
+pub enum Error {
+    /// An invalid argument was passed in.
+    ArgumentError {
+        /// description of the invalid argument
+        message: String,
+    },
+
+    /// An error occured parsing a hex string.
+    FromHexError(FromHexError),
+}
+
+impl From<FromHexError> for Error {
+    fn from(err: FromHexError) -> Error {
+        Error::FromHexError(err)
+    }
+}
+
+/// Alias for Result<T, oid::Error>.
+pub type Result<T> = result::Result<T, Error>;
+
+impl fmt::Display for Error {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Error::ArgumentError { ref message } => message.fmt(fmt),
+            Error::FromHexError(ref inner) => inner.fmt(fmt),
+        }
+    }
+}
+
+impl error::Error for Error {
+    fn cause(&self) -> Option<&dyn error::Error> {
+        match *self {
+            Error::ArgumentError { .. } => None,
+            Error::FromHexError(ref inner) => Some(inner),
+        }
+    }
+}
+
+/// A wrapper around raw 12-byte ObjectId representations.
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Hash, serde::Serialize, serde::Deserialize)]
+pub struct ObjectId {
+    /// timestamp(4 bytes) + process id(5 bytes) + counter(3 bytes), big endian
+    pub id: [u8; 12],
+}
+
+impl Default for ObjectId {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl FromStr for ObjectId {
+    type Err = Error;
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        Self::with_string(s)
+    }
+}
+
+impl ObjectId {
+    /// Generates a new ObjectID, represented in bytes.
+    /// See the [docs](http://docs.mongodb.org/manual/reference/object-id/)
+    /// for more information.
+    pub fn new() -> ObjectId {
+        let timestamp = ObjectId::gen_timestamp();
+        let process_id = ObjectId::gen_process_id();
+        let counter = ObjectId::gen_count();
+
+        let mut buf: [u8; 12] = [0; 12];
+        buf[TIMESTAMP_OFFSET..(TIMESTAMP_SIZE + TIMESTAMP_OFFSET)]
+            .clone_from_slice(&timestamp[..TIMESTAMP_SIZE]);
+        buf[PROCESS_ID_OFFSET..(PROCESS_ID_SIZE + PROCESS_ID_OFFSET)]
+            .clone_from_slice(&process_id[..PROCESS_ID_SIZE]);
+        buf[COUNTER_OFFSET..(COUNTER_SIZE + COUNTER_OFFSET)]
+            .clone_from_slice(&counter[..COUNTER_SIZE]);
+
+        ObjectId::with_bytes(buf)
+    }
+
+    /// Constructs a new ObjectId wrapper around the raw byte representation.
+    pub fn with_bytes(bytes: [u8; 12]) -> ObjectId {
+        ObjectId { id: bytes }
+    }
+
+    /// Creates an ObjectID using a 12-byte (24-char) hexadecimal string.
+    pub fn with_string(s: &str) -> Result<ObjectId> {
+        let bytes: Vec<u8> = hex::decode(s.as_bytes())?;
+        if bytes.len() != 12 {
+            Err(Error::ArgumentError {
+                message: "Provided string must be a 12-byte hexadecimal string.".to_owned(),
+            })
+        } else {
+            let mut byte_array: [u8; 12] = [0; 12];
+            byte_array[..].copy_from_slice(&bytes[..]);
+            Ok(ObjectId::with_bytes(byte_array))
+        }
+    }
+
+    /// Returns the raw byte representation of an ObjectId.
+    pub fn bytes(&self) -> [u8; 12] {
+        self.id
+    }
+
+    /// Convert the objectId to hex representation.
+    pub fn to_hex(&self) -> String {
+        hex::encode(self.id)
+    }
+
+    /// The three parts of the id packed into one decimal `u128`:
+    /// `process_id * 1e18 + timestamp * 1e8 + counter`.
+    ///
+    /// Every part stays below the multiplier of the next one, so
+    /// [`ObjectId::with_u128`] can read them back without them overlapping.
+    pub fn u128(&self) -> u128 {
+        //4-TIMESTAMP 10
+        let b: [u8; 4] = [self.id[0], self.id[1], self.id[2], self.id[3]];
+        let u4 = u32::from_be_bytes(b);
+
+        //5-PROCESS_ID_OFFSET 10
+        let b: [u8; 8] = [
+            0u8, 0u8, 0u8, self.id[4], self.id[5], self.id[6], self.id[7], self.id[8],
+        ];
+        let u5 = u64::from_be_bytes(b);
+
+        //3-COUNTER_OFFSET  8
+        let b: [u8; 4] = [0u8, self.id[9], self.id[10], self.id[11]];
+        let u3 = u32::from_be_bytes(b);
+
+        u5 as u128 * 1000000000000000000 + u4 as u128 * 100000000 + u3 as u128
+    }
+
+    /// rebuild an [`ObjectId`] from the `u128` produced by [`ObjectId::u128`]
+    pub fn with_u128(arg: u128) -> Self {
+        let u5 = (arg / 1000000000000000000) as u64;
+        let u4 = ((arg - u5 as u128 * 1000000000000000000) / 100000000) as u32;
+        let u3 = (arg - u5 as u128 * 1000000000000000000 - u4 as u128 * 100000000) as u32;
+
+        let u5 = u5.to_be_bytes();
+        let u3 = u3.to_be_bytes();
+        let u4 = u4.to_be_bytes();
+        //timestamp(4), PROCESS_ID(5),COUNTER(3)
+        ObjectId {
+            id: [
+                u4[0], u4[1], u4[2], u4[3], u5[3], u5[4], u5[5], u5[6], u5[7], u3[1], u3[2], u3[3],
+            ],
+        }
+    }
+
+    // Generates a new timestamp representing the current seconds since epoch.
+    // Represented in Big Endian.
+    fn gen_timestamp() -> [u8; 4] {
+        let timestamp: u32 = SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .expect("system clock is before 1970")
+            .as_secs()
+            .try_into()
+            .unwrap(); // will succeed until 2106 since timestamp is unsigned
+        timestamp.to_be_bytes()
+    }
+
+    // The process part of the id, created once per process. The random value is
+    // below 2^24, so written big endian it fills bytes 1..4 and leaves byte 0 and
+    // byte 4 at 0: 24 bits of entropy, 5 bytes of space.
+    fn gen_process_id() -> [u8; 5] {
+        pub static BUF: OnceLock<[u8; 5]> = OnceLock::new();
+        let r = BUF.get_or_init(|| {
+            let mut rng = rng();
+            let rng = rng.random_range(0..MAX_U24) as u32;
+            let mut buf: [u8; 5] = [0; 5];
+            buf[0..4].copy_from_slice(&rng.to_be_bytes());
+            buf
+        });
+        *r
+    }
+
+    // Gets an incremental 3-byte count.
+    // Represented in Big Endian.
+    fn gen_count() -> [u8; 3] {
+        let u_counter = OID_COUNTER.fetch_add(1, Ordering::SeqCst);
+
+        // Mod result instead of OID_COUNTER to prevent threading issues.
+        let u = u_counter % (MAX_U24 + 1);
+
+        // Convert usize to writable u64, then extract the first three bytes.
+        let u_int = u as u64;
+
+        let buf = u_int.to_be_bytes();
+        let buf_u24: [u8; 3] = [buf[5], buf[6], buf[7]];
+        buf_u24
+    }
+}
+
+impl fmt::Display for ObjectId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&self.to_hex())
+    }
+}
+
+impl fmt::Debug for ObjectId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&format!("ObjectId({})", self.to_hex()))
+    }
+}
+
+/// ObjectId ID generator wrapper
+#[derive(Debug, Clone)]
+pub struct ObjectIdGenerator;
+
+impl Default for ObjectIdGenerator {
+    fn default() -> Self {
+        Self
+    }
+}
+
+impl ObjectIdGenerator {
+    /// create a generator
+    pub fn new() -> Self {
+        Self
+    }
+
+    /// Generate a new ObjectId and return its [`ObjectId::u128`] value.
+    ///
+    /// note: that value needs more than 64 bits, so `as i64` drops the high bits
+    /// (it wraps, the result can even be negative). The kept bits are the ones of
+    /// the timestamp and of the counter, enough for the `task_id` rbatis uses an
+    /// [`IdGenerator`] for. For a collision free id use [`ObjectId::new`] and
+    /// [`ObjectId::to_hex`].
+    pub fn generate_id(&self) -> i64 {
+        ObjectId::new().u128() as i64
+    }
+}
+
+impl IdGenerator for ObjectId {
+    /// see [`ObjectId::generate_id`] for the `i64` truncation
+    fn generate(&self) -> i64 {
+        self.u128() as i64
+    }
+}
+
+impl IdGenerator for ObjectIdGenerator {
+    fn generate(&self) -> i64 {
+        self.generate_id()
+    }
+}

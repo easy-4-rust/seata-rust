@@ -1,0 +1,239 @@
+#![allow(mismatched_lifetime_syntaxes)]
+#[cfg(test)]
+mod test {
+    use async_trait::async_trait;
+    use dark_std::sync::SyncVec;
+    use futures_core::future::BoxFuture;
+    use futures_core::Stream;
+    use rbatis::executor::Executor;
+    use rbatis::intercept::{Intercept, ResultType};
+    use rbatis::{Action, Error, RBatis};
+    use rbdc::db::{ConnectOptions, Connection, Driver, ExecResult, MetaData, Row};
+    use rbdc::rt::block_on;
+    use rbs::Value;
+    use std::pin::Pin;
+    use std::sync::atomic::{AtomicI64, Ordering};
+    use std::sync::Arc;
+
+    #[derive(Debug, Clone)]
+    struct MockDriver {}
+
+    impl Driver for MockDriver {
+        fn name(&self) -> &str {
+            "test"
+        }
+
+        fn connect(&self, _url: &str) -> BoxFuture<'_, Result<Box<dyn Connection>, Error>> {
+            Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+        }
+
+        fn connect_opt<'a>(
+            &'a self,
+            _option: &'a dyn ConnectOptions,
+        ) -> BoxFuture<'a, Result<Box<dyn Connection>, Error>> {
+            Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+        }
+
+        fn default_option(&self) -> Box<dyn ConnectOptions> {
+            Box::new(MockConnectOptions {})
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockRowMetaData {
+        sql: String,
+    }
+
+    impl MetaData for MockRowMetaData {
+        fn column_len(&self) -> usize {
+            if self.sql.contains("select count") {
+                1
+            } else {
+                2
+            }
+        }
+
+        fn column_name(&self, i: usize) -> String {
+            if self.sql.contains("select count") {
+                "count".to_string()
+            } else {
+                if i == 0 {
+                    "sql".to_string()
+                } else {
+                    "count".to_string()
+                }
+            }
+        }
+
+        fn column_type(&self, _i: usize) -> String {
+            "String".to_string()
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockRow {
+        pub sql: String,
+        pub count: u64,
+    }
+
+    impl Row for MockRow {
+        fn meta_data(&self) -> Box<dyn MetaData> {
+            Box::new(MockRowMetaData {
+                sql: self.sql.clone(),
+            }) as Box<dyn MetaData>
+        }
+
+        fn get(&mut self, i: usize) -> Result<Value, Error> {
+            if self.sql.contains("select count") {
+                Ok(Value::U64(self.count))
+            } else {
+                if i == 0 {
+                    Ok(Value::String(self.sql.clone()))
+                } else {
+                    Ok(Value::U64(self.count))
+                }
+            }
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockConnection {}
+
+    impl Connection for MockConnection {
+        fn exec_rows(
+            &mut self,
+            sql: &str,
+            _params: Vec<Value>,
+        ) -> BoxFuture<
+            '_,
+            Result<Pin<Box<dyn Stream<Item = Result<Box<dyn Row>, Error>> + Send + '_>>, Error>,
+        > {
+            let sql = sql.to_string();
+            Box::pin(async move {
+                let data = Box::new(MockRow { sql, count: 1 }) as Box<dyn Row>;
+                let stream: Pin<Box<dyn Stream<Item = Result<Box<dyn Row>, Error>> + Send + '_>> =
+                    Box::pin(futures::stream::iter(vec![Ok(data)]));
+                Ok(stream)
+            })
+        }
+
+        fn exec(
+            &mut self,
+            _sql: &str,
+            _params: Vec<Value>,
+        ) -> BoxFuture<'_, Result<ExecResult, Error>> {
+            Box::pin(async move {
+                Ok(ExecResult {
+                    rows_affected: 0,
+                    last_insert_id: Value::Null,
+                })
+            })
+        }
+
+        fn close(&mut self) -> BoxFuture<'_, Result<(), Error>> {
+            Box::pin(async { Ok(()) })
+        }
+
+        fn ping(&mut self) -> BoxFuture<'_, Result<(), Error>> {
+            Box::pin(async { Ok(()) })
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    struct MockConnectOptions {}
+
+    impl ConnectOptions for MockConnectOptions {
+        fn connect(&self) -> BoxFuture<'_, Result<Box<dyn Connection>, Error>> {
+            Box::pin(async { Ok(Box::new(MockConnection {}) as Box<dyn Connection>) })
+        }
+
+        fn set_uri(&mut self, _uri: &str) -> Result<(), Error> {
+            Ok(())
+        }
+    }
+
+    #[derive(Debug)]
+    pub struct MockIntercept {}
+
+    #[async_trait]
+    impl Intercept for MockIntercept {
+        async fn before(
+            &self,
+            _task_id: i64,
+            _rb: &dyn Executor,
+            _sql: &mut String,
+            _args: &mut Vec<Value>,
+            result: ResultType<&mut Result<ExecResult, Error>, &mut Result<Value, Error>>,
+        ) -> Result<Action, Error> {
+            match result {
+                ResultType::Exec(v) => {
+                    *v = Ok(ExecResult {
+                        rows_affected: 1,
+                        last_insert_id: Value::U64(1),
+                    });
+                    Ok(Action::Return)
+                }
+                ResultType::Query(_) => Ok(Action::Next),
+            }
+        }
+    }
+
+    #[test]
+    fn test_mock_intercept() {
+        let rb = RBatis::new();
+        rb.init(MockDriver {}, "test").unwrap();
+        rb.intercepts.clear();
+        rb.intercepts.push(Arc::new(MockIntercept {}));
+        let f = async move {
+            let r = rb.exec("select * from table", vec![]).await.unwrap();
+            println!("r={}", r);
+            assert_eq!(r.rows_affected, 1);
+        };
+        block_on(f);
+    }
+
+    #[test]
+    fn test_get_intercept_type() {
+        #[derive(Debug)]
+        pub struct MockIntercept {
+            pub inner: AtomicI64,
+        }
+
+        #[async_trait]
+        impl Intercept for MockIntercept {}
+        let rb = RBatis::new();
+        rb.init(MockDriver {}, "test").unwrap();
+        rb.intercepts.push(Arc::new(MockIntercept {
+            inner: AtomicI64::new(0),
+        }));
+        let m = rb.get_intercept::<MockIntercept>();
+        assert!(m.is_some());
+        let m = m.unwrap();
+        m.inner.store(1, Ordering::SeqCst);
+        assert_eq!(m.inner.load(Ordering::Relaxed), 1);
+    }
+
+    #[test]
+    fn test_add_new_intercept() {
+        #[derive(Debug)]
+        pub struct MockIntercept {}
+
+        #[async_trait]
+        impl Intercept for MockIntercept {}
+        let rb = RBatis::new();
+        rb.init(MockDriver {}, "test").unwrap();
+        let f = async move {
+            let len = rb.intercepts.len();
+            println!("len={}", len);
+            let new_intercept = Arc::new(SyncVec::new());
+            let mut conn = rb.acquire().await.unwrap();
+            conn.intercepts = new_intercept;
+            conn.intercepts.push(Arc::new(MockIntercept {}));
+            println!("len={}", conn.intercepts.len());
+            let new_len = rb.intercepts.len();
+            println!("len={}", len);
+            assert_eq!(new_len, len);
+        };
+        block_on(f);
+    }
+}

@@ -40,3 +40,5 @@
 [原生借用式 SeaORM 连接](../phase-2/evidence/seaorm-borrowed/README.md)已实现可选 ConnectionTrait、同原事务有界 RR 查询及真实 Entity 模型插入/更新/删除；释放借用后继续原提交/补偿，不提供独立事务控制。双 Rust 十二笔原 TC 事务、原 Java Undo parser、原生列索引/时间读取、RR、预算拒绝及 MDL 取消均通过；各 850 passed / 418 ignored，严格 Clippy 通过。默认适配仍无 ORM 驱动，核心无 ORM 依赖。原生 ConnectionTrait/基本模型返回不再是完全缺失项，关系/聚合/更多表达式/流式/嵌套事务/迁移/2.x、完整 SQL 和生产范围仍开放。
 
 [原生单表计数/分页与只读 LIKE](../phase-2/evidence/seaorm-pagination/README.md)已补齐独立 COUNT(*) 计划和共用事务边界，不用普通读取 1025 行探测上限截断统计。双版本实际验证 3006 行原生 Paginator、分页流、LIKE/ESCAPE/NULL、RR/未提交可见性及十二笔原 TC 实体提交/补偿；各 853 passed / 419 ignored、严格 Clippy 通过。该受限分页矩阵不再是完全缺失项，通用聚合/关联、写入 LIKE、游标协议、嵌套事务和完整 ORM/更多适配器及后续阶段仍开放；rbatis 尚未接入，未作排除决定。
+
+[rbatis 接入前兼容基线](../phase-2/evidence/rbatis-compatibility/README.md)现已用发布包维护补丁验证当前 rbatis 4.9.11 的双 Rust 1.85/1.99 编译、八项实际 CRUD/动态宏分派及精确值测试，严格 Clippy 通过，恢复原宏驱动复现三项池查询失败。该探针独立于正式工作区，原十三个正式 crate 和根 lock 未改变；不能计为 rbatis adapter 已实现。正常依赖图还确认 time 0.3.45 的现有告警被 fastdate 激活，因此先继续处理生产接入所需依赖安全和正式原事务执行器、真实 TC 验收。完整计划范围与剩余门禁保持不变。
