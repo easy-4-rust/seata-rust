@@ -1,0 +1,33 @@
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/undo-retention-20261128_142719_8d7e8f11/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 53310
+    enable-check-auth: false
+    retry-dead-threshold: 1000
+    undo:
+      log-delete-period: 1000
+      log-save-days: 7
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:53305/tc_store?useSSL=false&allowPublicKeyRetrieval=true
+      user: root
+      password: seata-mysql-fixture-only
+      min-conn: 1
+      max-conn: 4

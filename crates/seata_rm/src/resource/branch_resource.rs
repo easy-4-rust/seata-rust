@@ -10,6 +10,18 @@ use std::pin::Pin;
 /// apply可能在Future取消后继续生效。recover返回NotApplied必须持久围栏所有旧尝试；
 /// 仅查询不到效果行不满足此条件。数据库效果与Undo的原子性由具体适配器负责。
 pub trait BranchResource: Debug + Send + Sync {
+    /// 参数为原通道单向清理能力；返回已确认提交的删除数。失败可能已有部分批次生效。
+    /// 对应 Java: RMHandlerAT#handle(UndoLogDeleteRequest)；默认明确拒绝不支持的资源，不执行删除。
+    fn delete_expired_undo<'a>(
+        &'a self,
+        _receipt: &'a crate::UndoLogDeleteReceipt,
+    ) -> Pin<Box<dyn Future<Output = Result<u64, RmError>> + Send + 'a>> {
+        Box::pin(async {
+            Err(RmError::Unavailable {
+                reason: "resource does not support Undo retention cleanup",
+            })
+        })
+    }
     /// 参数为原连接回调能力；返回资源是否仍有权复用日志 Completed，失败不得重新执行业务。
     /// 默认保留既有可信日志资源的行为；有独立持久控制状态的资源须核验该权威状态。
     fn verify_callback_completion<'a>(

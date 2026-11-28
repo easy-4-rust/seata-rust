@@ -65,6 +65,45 @@ fn fields(value: &Message) -> (ResultCode, i64, u8) {
 }
 
 #[tokio::test]
+async fn original_oneway_undo_cleanup_has_no_reply_and_keeps_the_registered_channel_usable() {
+    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let (rm, resource) = manager(&listener, Duration::from_secs(2)).await;
+    let mut socket = registered(&listener).await;
+    for (kind, id) in [
+        (BranchType::At, "mysql://exact-resource"),
+        (BranchType::At, "missing"),
+        (BranchType::Tcc, "mysql://exact-resource"),
+    ] {
+        let mut request = frame(
+            70,
+            Message::UndoLogDeleteRequest(seata_protocol::transaction::UndoLogDeleteRequest {
+                branch_type: kind,
+                resource_id: id.into(),
+                save_days: 7,
+            }),
+        );
+        request.message_type = RequestType::RequestOneway;
+        peer::write(&mut socket, request).await;
+        assert!(
+            tokio::time::timeout(Duration::from_millis(40), peer::read(&mut socket))
+                .await
+                .is_err(),
+            "oneway cleanup replied or closed its channel"
+        );
+    }
+    peer::write(
+        &mut socket,
+        frame(71, callback(true, 99, "mysql://exact-resource")),
+    )
+    .await;
+    let response = peer::read(&mut socket).await;
+    assert_eq!(response.id, 71);
+    assert_eq!(fields(response.body.as_ref().unwrap()).2, 5);
+    assert_eq!(resource.actions.load(Ordering::SeqCst), 1);
+    rm.shutdown().await.unwrap();
+}
+
+#[tokio::test]
 async fn duplicate_callbacks_keep_signed_id_nullable_headers_and_exact_branch_identity_without_reexecution(
 ) {
     let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();

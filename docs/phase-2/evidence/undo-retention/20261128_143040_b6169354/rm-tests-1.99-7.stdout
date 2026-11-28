@@ -1,0 +1,149 @@
+
+running 9 tests
+test model::undo_log_delete_receipt::tests::other_modes_and_invalid_resource_do_not_receive_cleanup_authority ... ok
+test model::undo_log_delete_receipt::tests::defaults_and_exact_resource_match_the_original_request ... ok
+test manager::callback_handler::tests::application_data_bounds_and_some_empty_are_checked_before_identity_construction ... ok
+test manager::callback_handler::tests::validation_uses_the_original_absolute_deadline_instead_of_starting_a_new_budget ... ok
+test manager::rm_metrics_sampler::tests::concurrent_completions_saturate_and_release_active ... ok
+test manager::rm_call_metrics_sampler::tests::concurrent_completions_saturate_without_losing_active_release ... ok
+test manager::callback_write_event::tests::original_result_and_cancelled_scope_each_emit_exactly_one_bounded_event ... ok
+test store::file_branch_store::tests::actual_write_failure_poison_prevents_a_later_false_completion ... ok
+test manager::callback_identity_tests::callback_identity_cannot_change_branch_or_resource_and_is_checked_before_completed_reuse ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+
+running 5 tests
+test failed_responses_and_invalid_issued_ids_do_not_count_as_observed ... ok
+test clones_share_single_receipt_and_lock_false_success_then_closed_calls_are_not_sent ... ok
+test cancellation_releases_active_without_inventing_a_result ... ok
+test unavailable_endpoint_has_explicit_not_sent_result ... ok
+test lost_responses_keep_unknown_once_without_automatic_replay ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+
+
+running 3 tests
+test invalid_later_batch_child_cannot_issue_first_child_callback_receipt ... ok
+test manual_dispatch_does_not_invoke_a_resource_callback_observer ... ok
+test cancelled_observer_leaves_pending_and_next_callback_recovers_without_apply ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+
+running 11 tests
+test cancelled_apply_leaves_pending_and_a_separate_dispatcher_queries_before_any_new_action ... ok
+test catalog_never_announces_a_replacement_or_an_unhandled_resource ... ok
+test metrics_cancelled_resource_keeps_pending_and_sampler_does_not_own_journal ... ok
+test pending_unknown_is_queried_without_action_and_authoritative_applied_finishes_without_replay ... ok
+test exact_duplicate_uses_completed_record_but_identity_or_phase_changes_do_not_execute ... ok
+test adapter_errors_keep_pending_and_recovery_errors_do_not_allow_another_action ... ok
+test metrics_resource_error_keeps_pending_without_fabricating_a_resolution ... ok
+test simultaneous_dispatchers_share_one_branch_lease_and_never_repeat_a_confirmed_action ... ok
+test authoritative_no_effect_and_rejection_have_different_retry_behavior ... ok
+test only_authoritative_recovery_no_effect_permits_a_new_attempt ... ok
+test metrics_distinguish_resource_decisions_reuse_recovery_and_phase_conflict ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+
+running 13 tests
+test branch_identity_rejects_ambiguous_or_invalid_fields_and_redacts_debug ... ok
+test empty_existing_file_is_corruption_and_not_a_new_journal ... ok
+test an_independent_owner_cannot_open_the_same_journal_while_it_is_owned ... ok
+test completed_rows_are_not_evicted_and_repeated_completion_adds_no_record ... ok
+test checksummed_but_invalid_sequence_state_and_identity_cannot_bypass_replay_validation ... ok
+test original_identity_and_phase_cannot_be_changed_even_after_restart ... ok
+test damaged_version_checksum_or_partial_tail_is_never_silently_truncated ... ok
+test cancelled_disk_operation_keeps_its_branch_and_budget_until_the_worker_really_finishes ... ok
+test record_and_file_budgets_fail_before_writing_or_acknowledging_completion ... ok
+test cancellation_or_owner_drop_leaves_durable_pending_instead_of_retry_permission ... ok
+test pending_and_completed_identity_survive_actual_close_and_reopen ... ok
+test metrics_replay_latest_states_and_retained_sampler_never_holds_the_file_lock ... ok
+test store_shared_leases_serialize_dispatchers_and_cancelled_waiters_release_budget ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+
+running 10 tests
+test shutdown_owns_cancelled_resource_tasks_and_leaves_durable_pending ... ok
+test an_unsupported_later_batch_child_rejects_before_the_first_resource_effect ... ok
+test dropping_manager_synchronously_closes_the_pool_for_all_client_clones ... ok
+test contradictory_directions_inside_one_batch_reject_before_any_resource_effect ... ok
+test missing_or_wrong_branch_type_resource_returns_explicit_failure_with_original_identity ... ok
+test flat_batch_preserves_order_and_exact_duplicate_children_apply_only_once ... ok
+test duplicate_callbacks_keep_signed_id_nullable_headers_and_exact_branch_identity_without_reexecution ... ok
+test shutdown_reports_an_external_journal_lease_instead_of_claiming_drain ... ok
+test original_oneway_undo_cleanup_has_no_reply_and_keeps_the_registered_channel_usable ... ok
+test callback_deadline_cancels_resource_future_and_next_instruction_recovers_without_replaying ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+
+running 7 tests
+test registered_rm_registers_reports_and_observes_lock_false_without_losing_fields ... ok
+test ambiguous_empty_optional_input_is_rejected_before_the_business_frame_and_closed_clients_stay_closed ... ok
+test wrong_response_family_is_protocol_uncertainty_and_not_definite_rejection ... ok
+test failed_lock_query_keeps_true_field_and_error_prefix_instead_of_returning_a_boolean ... ok
+test lost_registration_response_preserves_original_request_and_reconnect_never_replays_it ... ok
+test failed_phase_one_report_rejection_keeps_original_request_and_does_not_retry ... ok
+test shutdown_keeps_a_received_report_unknown_and_closes_all_client_clones ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+
+running 7 tests
+test failed_branch_registration_preserves_returned_id_message_exception_and_original_request ... ok
+test branch_report_preserves_java_absent_resource_and_application_data_without_filling_them ... ok
+test successful_registration_without_positive_issued_id_remains_protocol_uncertainty ... ok
+test callback_worker_budget_one_does_not_start_queued_resource_actions_during_shutdown ... ok
+test shutdown_reports_resource_cleanup_panic_instead_of_claiming_successful_drain ... ok
+test dynamic_resource_buffers_callbacks_and_business_until_the_full_revision_is_ready ... ok
+test callback_started_on_old_connection_never_sends_its_reply_on_the_replacement_connection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+
+running 2 tests
+test synchronous_cleanup_does_not_grant_a_retention_capability ... ok
+test resource_error_and_deadline_cancel_do_not_emit_reply_or_disconnect ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+
+running 3 tests
+test journal_process_child ... ignored, parent launches this exact helper in a separately owned process
+test commit_effect_survives_forced_process_exit_and_two_new_processes_do_not_repeat_it ... ok
+test rollback_effect_survives_forced_process_exit_and_two_new_processes_do_not_repeat_it ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+
+running 3 tests
+test issued_receipt_keeps_original_identity_optional_fields_and_exact_long ... ok
+test rejection_and_invalid_issued_ids_cannot_create_receipts ... ok
+test lost_issued_response_has_no_receipt_and_reconnection_does_not_register_again ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 9 tests
+test credential_bearing_resource_is_hashed_in_rm_event ... ok
+test branch_report_lost_response_emits_unknown_without_payload ... ok
+test branch_report_event_uses_resource_digest_and_omits_application_data ... ok
+test branch_report_rejection_stays_a_received_response ... ok
+test invalid_callback_batch_emits_no_branch_decision ... ok
+test callback_write_cases::flat_duplicate_batch_has_two_decisions_one_write_and_one_effect ... ok
+test callback_decisions_emit_original_branch_identity_without_replaying_effect ... ok
+test callback_write_cases::closed_original_generation_emits_not_sent_without_using_replacement ... ok
+test branch_report_unreachable_peer_emits_not_sent_without_request_id ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+
+running 2 tests
+test crates\seata_rm\src\model\branch_callback_receipt.rs - model::branch_callback_receipt::BranchCallbackReceipt (line 7) - compile fail ... ok
+test crates\seata_rm\src\model\registered_branch.rs - model::registered_branch::RegisteredBranch (line 9) - compile fail ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+

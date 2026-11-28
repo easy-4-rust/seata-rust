@@ -29,6 +29,40 @@ impl CallbackHandler {
         };
         let generation = inbound.connection().generation().value();
         let request = inbound.message();
+        if request.message_type == RequestType::RequestOneway {
+            if let Some(Message::UndoLogDeleteRequest(value)) = request.body.as_ref() {
+                match crate::UndoLogDeleteReceipt::received(value) {
+                    Ok(receipt) => {
+                        let result = tokio::time::timeout_at(
+                            deadline,
+                            self.dispatcher.delete_expired_undo(&receipt),
+                        )
+                        .await;
+                        match result {
+                            Ok(Ok(rows)) => tracing::debug!(
+                                operation = "undo_retention",
+                                outcome = "completed",
+                                deleted_rows = rows
+                            ),
+                            Ok(Err(_)) => tracing::warn!(
+                                operation = "undo_retention",
+                                outcome = "unavailable_or_unknown"
+                            ),
+                            Err(_) => tracing::warn!(
+                                operation = "undo_retention",
+                                outcome = "deadline_unknown"
+                            ),
+                        }
+                    }
+                    Err(_) => tracing::warn!(
+                        operation = "undo_retention",
+                        outcome = "invalid_resource_mode"
+                    ),
+                }
+                // 原 Java 单向消息无应答。资源错误不冒充协议损坏，也不关闭已登记通道。
+                return;
+            }
+        }
         if request.message_type != RequestType::RequestSync {
             inbound.connection().close();
             return;

@@ -13,6 +13,16 @@ pub struct BranchDispatcher {
     metrics: super::RmMetricsSampler,
 }
 impl BranchDispatcher {
+    /// 原通道能力按精确资源分派；不是单分支效果，不伪造分支租约或完成日志。
+    pub(crate) async fn delete_expired_undo(
+        &self,
+        receipt: &crate::UndoLogDeleteReceipt,
+    ) -> Result<u64, RmError> {
+        self.catalog
+            .lookup(receipt.resource())?
+            .delete_expired_undo(receipt)
+            .await
+    }
     /// 参数为目录及共享持久日志；返回不拥有网络重试调度的资源分派器。
     pub fn new(catalog: ResourceCatalog, store: FileBranchStore) -> Self {
         let metrics = store.metrics_sampler();

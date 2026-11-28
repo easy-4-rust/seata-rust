@@ -9,6 +9,23 @@ use sqlx::{
 /// 对应 Java: org.apache.seata.rm.datasource.undo.mysql.MySQLUndoLogManager（部分实现）。
 pub(crate) struct MySqlUndoLogManager;
 impl MySqlUndoLogManager {
+    /// 按已固定的 UTC 零点分界清理一批原行，包含所有过期状态；事务由调用方提交。
+    /// 对应 Java: MySQLUndoLogManager#deleteUndoLogByLogCreated，原 LIMIT_ROWS=3000。
+    pub(crate) async fn delete_expired_batch(
+        tx: &mut Transaction<'static, MySql>,
+        options: &MySqlConnectOptions,
+        database: &str,
+        cutoff: &str,
+    ) -> Result<u64, DbError> {
+        Self::validate_current_table(tx, options, database).await?;
+        sqlx::query("DELETE FROM undo_log WHERE log_created <= ? LIMIT 3000")
+            .persistent(false)
+            .bind(cutoff)
+            .execute(&mut **tx)
+            .await
+            .map(|result| result.rows_affected())
+            .map_err(|error| DbError::driver("Undo retention delete batch", error))
+    }
     /// 在原根身份锁内检查缺根或围栏分支；发现关联子片则拒绝空回滚。
     pub(crate) async fn require_no_rollback_children(
         tx: &mut Transaction<'static, MySql>,

@@ -148,6 +148,87 @@ impl MySqlDataSourceManager {
         id.resource() == &self.key && id.xid().len() <= 128
     }
 
+    async fn cleanup_expired_undo(
+        &self,
+        receipt: &seata_rm::UndoLogDeleteReceipt,
+    ) -> Result<u64, RmError> {
+        if receipt.resource() != &self.key {
+            return Err(RmError::IdentityConflict);
+        }
+        let deadline = Instant::now() + self.operation_timeout();
+        let action = async {
+            let cutoff =
+                crate::undo_retention_cutoff::UndoRetentionCutoff::now(receipt.save_days())?;
+            let mut total = 0_u64;
+            loop {
+                let mut connection = self
+                    .source
+                    .control_pool()
+                    .acquire()
+                    .await
+                    .map_err(|e| DbError::driver("Undo retention acquire", e))?;
+                connection.close_on_drop();
+                let mut tx = sqlx::Transaction::begin(connection, None)
+                    .await
+                    .map_err(|e| DbError::driver("Undo retention begin", e))?;
+                let actual: (String, String, String, bool, bool) = sqlx::query_as(
+                    "SELECT @@server_uuid,DATABASE(),@@session.time_zone,@@global.read_only,@@global.super_read_only")
+                    .fetch_one(&mut *tx).await.map_err(|e| DbError::driver("Undo retention physical identity", e))?;
+                if actual.0 != self.server_uuid()
+                    || actual.1 != self.source.database()
+                    || actual.2 != "+00:00"
+                    || actual.3
+                    || actual.4
+                {
+                    return Err(DbError::Unsupported {
+                        feature: "Undo retention requires original writable UTC database",
+                    });
+                }
+                let checks = self.registration_checks();
+                if checks.require_resource_binding
+                    || checks.require_tinyint_profile_binding
+                    || checks.require_jdbc_profile_binding
+                {
+                    let profile = (checks.require_tinyint_profile_binding
+                        || checks.require_jdbc_profile_binding)
+                        .then_some(self.profile);
+                    crate::mysql_resource_binding::MySqlResourceBinding::lock_verified(
+                        &mut tx,
+                        self.key.resource_id(),
+                        profile,
+                        checks.require_jdbc_profile_binding,
+                    )
+                    .await?;
+                }
+                let removed = crate::mysql::MySqlUndoLogManager::delete_expired_batch(
+                    &mut tx,
+                    &self.source.control_pool().connect_options(),
+                    self.source.database(),
+                    &cutoff,
+                )
+                .await?;
+                tx.commit()
+                    .await
+                    .map_err(|e| DbError::driver("Undo retention commit may be effective", e))?;
+                total = total.checked_add(removed).ok_or(DbError::Invalid {
+                    reason: "Undo retention count overflow",
+                })?;
+                if removed < 3000 {
+                    return Ok::<u64, DbError>(total);
+                }
+            }
+        };
+        match timeout_at(deadline, action).await {
+            Ok(Ok(rows)) => Ok(rows),
+            Ok(Err(_)) => Err(RmError::Unavailable {
+                reason: "MySQL Undo retention failed or is unknown",
+            }),
+            Err(_) => Err(RmError::Unavailable {
+                reason: "MySQL Undo retention deadline result is unknown",
+            }),
+        }
+    }
+
     #[cfg(feature = "experimental_changed_commit")]
     /// 参数为原回执与事务配置；返回当前独立观察者是否绑定同一资源和 JDBC 配置。
     pub(crate) fn accepts_commit_receipt(
@@ -678,6 +759,12 @@ impl MySqlDataSourceManager {
     }
 }
 impl BranchResource for MySqlDataSourceManager {
+    fn delete_expired_undo<'a>(
+        &'a self,
+        receipt: &'a seata_rm::UndoLogDeleteReceipt,
+    ) -> Pin<Box<dyn Future<Output = Result<u64, RmError>> + Send + 'a>> {
+        Box::pin(self.cleanup_expired_undo(receipt))
+    }
     fn callback_observer(&self) -> Option<&dyn seata_rm::BranchCallbackObserver> {
         Some(self)
     }

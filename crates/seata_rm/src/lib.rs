@@ -13,6 +13,7 @@ pub use model::RegisteredBranch;
 pub use model::RmBranchMetrics;
 pub use model::RmOperation;
 pub use model::RmOperationMetrics;
+pub use model::UndoLogDeleteReceipt;
 pub use model::{BranchIdentity, BranchKey, BranchPhase, BranchRecordState, JournalOptions};
 pub use resource::BranchCallbackObserver;
 pub use resource::{BranchResolution, BranchResource, ResourceCatalog};
