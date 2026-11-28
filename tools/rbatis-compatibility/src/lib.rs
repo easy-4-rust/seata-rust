@@ -270,3 +270,6 @@ mod tests {
         assert_eq!(request.pages(), 0);
     }
 }
+
+#[cfg(test)]
+mod cache_checks;

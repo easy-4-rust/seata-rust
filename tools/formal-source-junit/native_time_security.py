@@ -155,7 +155,7 @@ def run():
     write(out / "source-end.json", inputs())
     write(out / "report.json", {"source_backport_verified": True,
           "original_stack_crashes": 6, "fixed_workers": 12, "functional_per_rust": 8,
-          "rbatis_per_rust": 8, "upstream_version_advisory_reproduced": True,
+          "rbatis_per_rust": 9, "upstream_version_advisory_reproduced": True,
           "raw_audit_exit_codes": {r["label"]: r["returncode"] for r in commands if r["label"].startswith("audit-")},
           "formal_rbatis_adapter": "pending", "production_security_admission": "open"})
     write(out / "SHA256SUMS.json", {p.relative_to(out).as_posix(): sha(p)

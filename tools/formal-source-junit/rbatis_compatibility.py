@@ -118,7 +118,7 @@ def run():
                       "--no-fetch", "--json"], allowed=(0, 1))
     assert source == inputs(), "Runtime source changed during validation"
     write(out / "source-end.json", inputs())
-    write(out / "report.json", {"status": "compatibility-baseline-passed", "tests_per_rust": 8,
+    write(out / "report.json", {"status": "compatibility-baseline-passed", "tests_per_rust": 9,
                                 "original_macro_regression": "3 expected failures",
                                 "formal_adapter": "pending", "database_tc_validation": "pending",
                                 "security_admission": "open"})

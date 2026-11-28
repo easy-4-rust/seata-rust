@@ -30,19 +30,20 @@ def validate(out):
              "dynamic_sql_preserves_conditional_parameter_order"}
     for version in ("1.85.0", "1.99.0"):
         output = (out / ("test-" + version + ".stdout")).read_text(encoding="utf-8")
-        assert "8 passed; 0 failed; 0 ignored" in output
+        assert "9 passed; 0 failed; 0 ignored" in output
+        assert "test cache_checks::statement_cache_preserves_mutation_replacement_and_lru_resources ... ok" in output
         assert {line.split("::", 1)[1].split(" ... ")[0] for line in output.splitlines()
                 if line.startswith("test tests::") and line.endswith(" ... ok")} == tests
         for label in ("rustc-", "build-", "test-", "clippy-"):
             assert commands[label + version]["returncode"] == 0
     report = json.loads((out / "report.json").read_bytes())
-    assert report == {"status": "compatibility-baseline-passed", "tests_per_rust": 8,
+    assert report == {"status": "compatibility-baseline-passed", "tests_per_rust": 9,
                       "original_macro_regression": "3 expected failures",
                       "formal_adapter": "pending", "database_tc_validation": "pending",
                       "security_admission": "open"}
     assert commands["negative-macro"]["returncode"] == 101
     negative = (out / "negative-macro.stdout").read_text(encoding="utf-8")
-    assert "5 passed; 3 failed" in negative
+    assert "6 passed; 3 failed" in negative
     assert (out / "negative-macro.stderr").read_text(encoding="utf-8").count("rbatis pool not inited") == 3
     expected_negative = (ROOT / "tools/rbatis-compatibility/src/lib.rs").read_bytes()
     assert (out / "negative-inputs/src/lib.rs").read_bytes() == expected_negative

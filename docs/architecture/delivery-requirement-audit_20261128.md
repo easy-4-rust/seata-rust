@@ -2,7 +2,7 @@
 
 范围保持为[原架构计划 Phase 0–7](SEATA_RUST_ARCHITECTURE_PLAN.md)和[V1 WP00–07](../phase-0/v1-implementation-acceptance-checklist.md)。本文件是当前工作树的导航与差距记录，不替换正式需求、不豁免门禁。历史 README 中“尚未接入”的描述必须按对应日期理解，不能据此重复开发已经存在的能力。
 
-当前 Cargo 工作区包含 protocol、transport、tm、rm、at、datasource、db_mysql、sqlparser、test、observability、xa、tcc 以及 orm_seaorm 十三个正式 crate。未发现 Rust TC 服务端、PostgreSQL、Saga、集群/发现服务或 CLI 的正式工作区成员。不能把参考 Java 服务端、Python 运行器或测试夹具计为这些正式交付。
+当前 Cargo 工作区包含 protocol、transport、tm、rm、at、datasource、db_mysql、sqlparser、test、observability、xa、tcc 以及 orm_seaorm、orm_rbatis 十四个正式 crate。未发现 Rust TC 服务端、PostgreSQL、Saga、集群/发现服务或 CLI 的正式工作区成员。不能把参考 Java 服务端、Python 运行器或测试夹具计为这些正式交付。
 
 | 原要求 | 当前源码与权威证据入口 | 未完成或证据不足 |
 |---|---|---|
@@ -44,3 +44,5 @@
 [rbatis 接入前兼容基线](../phase-2/evidence/rbatis-compatibility/README.md)现已用发布包维护补丁验证当前 rbatis 4.9.11 的双 Rust 1.85/1.99 编译、八项实际 CRUD/动态宏分派及精确值测试，严格 Clippy 通过，恢复原宏驱动复现三项池查询失败。该探针独立于正式工作区，原十三个正式 crate 和根 lock 未改变；不能计为 rbatis adapter 已实现。正常依赖图还确认 time 0.3.45 的现有告警被 fastdate 激活，因此先继续处理生产接入所需依赖安全和正式原事务执行器、真实 TC 验收。完整计划范围与剩余门禁保持不变。
 
 [time RFC 2822 源码安全回移](../phase-2/evidence/time-rfc2822/README.md)已保留 Rust 1.85，并用六个原版独立进程栈溢出、双版本十二个同输入/同栈大小正常错误及官方递归函数对照验证修复。正式根与 rbatis 探针锁定 `0.3.45+seata.1`；双版本工作区各 853 passed / 419 ignored，功能与 rbatis 各八项及严格 Clippy 通过。未修改上游锁文件仍报告原 time 漏洞；维护 path 包在工具中未再报告该项，故不以退出码 0 冒充源码证明。SQLite 原发现和 rbatis 的 lru unsound 警告、下游补丁发布集成及生产安全门禁继续开放。下一步推进实际 rbatis 原事务执行器，同时处理其真实依赖安全缺口；完整 Phase 0–7 仍未完成。
+
+[正式 rbatis 原事务适配](../phase-2/evidence/rbatis-mysql/README.md)现已新增独立工作区 crate，真实 Executor 持有并交还原事务，原生 CRUD、COUNT、精确原值与回执通过双 Rust 十二笔原 TC 提交/补偿及原 Java parser/锁/SHA/回调核验。负 TIME/UTC、快照、配置/预算拒绝、取消毒化和 Drop 回滚/MDL 释放实际通过；各 861 passed / 420 ignored，四包严格 Clippy 及九项独立兼容/缓存检查通过。lru 0.18.2 已移除两项旧 unsound 警告，SQLite 原发现和维护补丁发布仍开放。rbatis 不再是完全未接入项；完整插件/分页/类型生态及全部 SQL、写入器、生产范围与后续阶段继续交付，不据此关闭完整 Phase 0–7。

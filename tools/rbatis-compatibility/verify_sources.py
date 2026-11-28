@@ -25,7 +25,7 @@ def verify():
         assert actual == {p: entry["sha256"] for p, entry in expected.items()}, directory
         changed = [p for p, entry in expected.items()
                    if entry["sha256"] != entry["upstream_sha256"]]
-        assert len(changed) == {"rbatis": 5, "rbdc": 3, "scraper": 2,
+        assert len(changed) == {"rbatis": 5, "rbdc": 4, "scraper": 2,
                                 "rbatis_macro_driver": 4, "time": 2}[directory], changed
         result[directory] = {"crate": manifest["crate"], "version": manifest["version"],
                              "files": len(actual), "changed": changed,

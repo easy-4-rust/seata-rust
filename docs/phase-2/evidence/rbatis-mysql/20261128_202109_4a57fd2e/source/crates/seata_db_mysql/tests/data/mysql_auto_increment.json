@@ -1,0 +1,381 @@
+{
+  "accepted": [
+    {
+      "id": "omitted_unsigned",
+      "sql": "INSERT INTO auto_items(v) VALUES (?)",
+      "params": [
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "101",
+          20
+        ]
+      ],
+      "last_insert_id": 101,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "null_unsigned",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (?,?)",
+      "params": [
+        null,
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "101",
+          20
+        ]
+      ],
+      "last_insert_id": 101,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "zero_default",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (?,?)",
+      "params": [
+        0,
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "101",
+          20
+        ]
+      ],
+      "last_insert_id": 101,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "zero_expression",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (? + ?,?)",
+      "params": [
+        0,
+        0,
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "101",
+          20
+        ]
+      ],
+      "last_insert_id": 101,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "zero_preserved",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (?,?)",
+      "params": [
+        0,
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "0",
+          20
+        ],
+        [
+          "1",
+          10
+        ]
+      ],
+      "last_insert_id": 0,
+      "no_zero": true,
+      "affected": 1
+    },
+    {
+      "id": "explicit_unsigned",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (?,?)",
+      "params": [
+        200,
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "200",
+          20
+        ]
+      ],
+      "last_insert_id": 200,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "explicit_batch",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (?,?),(?,?)",
+      "params": [
+        200,
+        20,
+        300,
+        30
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "200",
+          20
+        ],
+        [
+          "300",
+          30
+        ]
+      ],
+      "last_insert_id": 300,
+      "no_zero": false,
+      "affected": 2
+    },
+    {
+      "id": "signed_omitted",
+      "sql": "INSERT INTO auto_items(v) VALUES (?)",
+      "params": [
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "101",
+          20
+        ]
+      ],
+      "last_insert_id": 101,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "unsigned_high",
+      "sql": "INSERT INTO auto_items(v) VALUES (?)",
+      "params": [
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=9223372036854775808; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "9223372036854775810",
+          20
+        ]
+      ],
+      "last_insert_id": 9223372036854775810,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "concurrent_allocation",
+      "sql": "INSERT INTO auto_items(v) VALUES (?)",
+      "params": [
+        20
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10); INSERT INTO auto_items(v) VALUES(90)",
+      "seed": [
+        [
+          "1",
+          10
+        ],
+        [
+          "101",
+          90
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ],
+        [
+          "101",
+          90
+        ],
+        [
+          "108",
+          20
+        ]
+      ],
+      "last_insert_id": 108,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "update_auto",
+      "sql": "UPDATE auto_items SET v=? WHERE id=?",
+      "params": [
+        20,
+        1
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          20
+        ]
+      ],
+      "last_insert_id": 0,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "delete_auto",
+      "sql": "DELETE FROM auto_items WHERE id=?",
+      "params": [
+        1
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)",
+      "seed": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [],
+      "last_insert_id": 0,
+      "no_zero": false,
+      "affected": 1
+    },
+    {
+      "id": "delete_zero",
+      "sql": "DELETE FROM auto_items WHERE id=?",
+      "params": [
+        0
+      ],
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10); SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES,NO_AUTO_VALUE_ON_ZERO'; INSERT INTO auto_items(id,v) VALUES(0,9)",
+      "seed": [
+        [
+          "0",
+          9
+        ],
+        [
+          "1",
+          10
+        ]
+      ],
+      "expected": [
+        [
+          "1",
+          10
+        ]
+      ],
+      "last_insert_id": 0,
+      "no_zero": false,
+      "affected": 1
+    }
+  ],
+  "rejected": [
+    {
+      "id": "generated_batch",
+      "sql": "INSERT INTO auto_items(v) VALUES (20),(30)",
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)"
+    },
+    {
+      "id": "mixed_batch",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (NULL,20),(200,30)",
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)"
+    },
+    {
+      "id": "composite_auto",
+      "sql": "INSERT INTO auto_items(id,v) VALUES (200,20)",
+      "ddl": "DROP TABLE IF EXISTS auto_items; CREATE TABLE auto_items(id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,v INT NOT NULL,PRIMARY KEY(id,v)) ENGINE=InnoDB AUTO_INCREMENT=100; INSERT INTO auto_items(id,v) VALUES(1,10)"
+    }
+  ]
+}

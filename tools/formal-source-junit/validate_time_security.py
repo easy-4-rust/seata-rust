@@ -68,7 +68,7 @@ def validate(out):
         for label in ("build-", "clippy-", "rbatis-", "rbatis-clippy-", "workspace-"):
             assert commands[label + version]["returncode"] == 0
         rbatis = (out / ("rbatis-" + version + ".stdout")).read_text(encoding="utf-8")
-        assert "8 passed; 0 failed; 0 ignored" in rbatis
+        assert "9 passed; 0 failed; 0 ignored" in rbatis
         workspace = (out / ("workspace-" + version + ".stdout")).read_text(encoding="utf-8")
         groups = re.findall(r"test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored", workspace)
         assert groups
@@ -88,11 +88,11 @@ def validate(out):
         assert commands["audit-" + label]["returncode"] == (1 if audit["vulnerabilities"]["found"] else 0)
         assert audit["settings"]["ignore"] == []
         if label == "rbatis":
-            warnings = audit["warnings"]["unsound"]
-            assert {"RUSTSEC-2026-0002", "RUSTSEC-2026-0253"}.issubset({item["advisory"]["id"] for item in warnings})
+            warnings = audit["warnings"].get("unsound", [])
+            assert not {"RUSTSEC-2026-0002", "RUSTSEC-2026-0253"}.intersection({item["advisory"]["id"] for item in warnings})
     report = json.loads((out / "report.json").read_bytes())
     assert report == {"source_backport_verified": True, "original_stack_crashes": 6,
-                      "fixed_workers": 12, "functional_per_rust": 8, "rbatis_per_rust": 8,
+                      "fixed_workers": 12, "functional_per_rust": 8, "rbatis_per_rust": 9,
                       "upstream_version_advisory_reproduced": True,
                       "raw_audit_exit_codes": {"audit-original": 1, "audit-workspace": 1, "audit-rbatis": 0},
                       "formal_rbatis_adapter": "pending",

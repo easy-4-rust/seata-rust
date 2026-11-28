@@ -1,0 +1,254 @@
+use crate::mysql::{MySqlDeleteRecognizer, MySqlInsertRecognizer, MySqlUpdateRecognizer};
+use crate::{SqlError, SqlRecognizer};
+use sqlparser::ast::Statement;
+use sqlparser::dialect::MySqlDialect;
+use sqlparser::keywords::Keyword;
+use sqlparser::parser::Parser;
+use sqlparser::tokenizer::{Token, Tokenizer, Whitespace};
+
+/// 有界MySQL AT工厂；完整验证唯一语句后才暴露识别结果，不参与业务执行。
+/// 对应 Java: org.apache.seata.sqlparser.SQLRecognizerFactory；显式选择当前Rust/MySQL支持矩阵。
+pub struct SqlRecognizerFactory;
+impl SqlRecognizerFactory {
+    /// 参数为原SQL文本；返回完整已验证识别结果。超限、未支持语法与格式错误显式区分。
+    /// 字面值不进入错误或Debug；原SQL仍保留供绑定后执行，数据库元数据检查不得省略。
+    pub fn recognize(sql: &str) -> Result<SqlRecognizer, SqlError> {
+        let dialect = MySqlDialect {};
+        let tokens = Self::checked_tokens(sql, &dialect)?;
+        let statements = Parser::new(&dialect)
+            .with_recursion_limit(64)
+            .with_tokens(tokens.clone())
+            .parse_statements()
+            .map_err(|_| SqlError::Malformed)?;
+        if statements.len() != 1 {
+            return Err(SqlError::Invalid {
+                reason: "exactly one statement required",
+            });
+        }
+        let mut result = match &statements[0] {
+            Statement::Insert(value) => MySqlInsertRecognizer::recognize(value),
+            Statement::Update { .. } => MySqlUpdateRecognizer::recognize(&statements[0]),
+            Statement::Delete(value) => MySqlDeleteRecognizer::recognize(value),
+            _ => Err(SqlError::Unsupported {
+                feature: "non INSERT/UPDATE/DELETE statement",
+            }),
+        }?;
+        Self::verify_ast_tokens(&tokens, &statements[0], &dialect)?;
+        result.sql = sql.to_owned();
+        Ok(result)
+    }
+    fn checked_tokens(sql: &str, dialect: &MySqlDialect) -> Result<Vec<Token>, SqlError> {
+        Self::checked_tokens_for(sql, dialect, false)
+    }
+    /// 参数为原 SELECT 和固定方言；返回沿用原预算/注释禁令的词法序列。
+    pub(crate) fn checked_select_tokens(
+        sql: &str,
+        dialect: &MySqlDialect,
+    ) -> Result<Vec<Token>, SqlError> {
+        Self::checked_tokens_for(sql, dialect, true)
+    }
+    fn checked_tokens_for(
+        sql: &str,
+        dialect: &MySqlDialect,
+        allow_select: bool,
+    ) -> Result<Vec<Token>, SqlError> {
+        if sql.len() > 65_536 {
+            return Err(SqlError::Budget { limit: "SQL bytes" });
+        }
+        if sql.is_empty() || sql.bytes().any(|b| b == 0 || b == b'\\') {
+            return Err(SqlError::Invalid {
+                reason: "empty/NUL/backslash SQL",
+            });
+        }
+        let tokens = Tokenizer::new(dialect, sql)
+            .tokenize()
+            .map_err(|_| SqlError::Malformed)?;
+        if tokens.iter().any(|token| {
+            matches!(
+                token,
+                Token::Whitespace(
+                    Whitespace::SingleLineComment { .. } | Whitespace::MultiLineComment(_)
+                )
+            )
+        }) {
+            return Err(SqlError::Unsupported {
+                feature: "SQL comments/conditional comments/hints",
+            });
+        }
+        Self::check_tokens(&tokens, allow_select)?;
+        Ok(tokens
+            .into_iter()
+            .filter(|token| !matches!(token, Token::Whitespace(_)))
+            .collect())
+    }
+    /// 参数为原词法、完整 AST 与固定方言；返回 token 保真检查，拒绝解析器丢弃或改写的语义。
+    pub(crate) fn verify_ast_tokens(
+        original: &[Token],
+        statement: &Statement,
+        dialect: &MySqlDialect,
+    ) -> Result<(), SqlError> {
+        let canonical = Tokenizer::new(dialect, &statement.to_string())
+            .tokenize()
+            .map_err(|_| SqlError::Malformed)?;
+        let mut canonical: Vec<_> = canonical
+            .iter()
+            .filter(|token| !matches!(token, Token::Whitespace(_)))
+            .collect();
+        let original = if matches!(original.last(), Some(Token::SemiColon)) {
+            &original[..original.len() - 1]
+        } else {
+            original
+        };
+        // AST 为省略 AS 的安全单表别名补写 AS；只允许已识别表位置的这一个差异。
+        let alias_as = match statement {
+            Statement::Update { table, .. }
+                if matches!(
+                    &table.relation,
+                    sqlparser::ast::TableFactor::Table { alias: Some(_), .. }
+                ) =>
+            {
+                Some(2)
+            }
+            Statement::Delete(value) => match &value.from {
+                sqlparser::ast::FromTable::WithFromKeyword(tables)
+                    if tables.len() == 1
+                        && matches!(
+                            &tables[0].relation,
+                            sqlparser::ast::TableFactor::Table { alias: Some(_), .. }
+                        ) =>
+                {
+                    Some(3)
+                }
+                _ => None,
+            },
+            _ => None,
+        };
+        if let Some(index) = alias_as {
+            if original.len() + 1 == canonical.len()
+                && matches!(canonical.get(index), Some(Token::Word(w)) if w.keyword == Keyword::AS)
+                && !matches!(original.get(index), Some(Token::Word(w)) if w.keyword == Keyword::AS)
+            {
+                canonical.remove(index);
+            }
+        }
+        let equal = original.len() == canonical.len()
+            && original
+                .iter()
+                .zip(canonical)
+                .all(|(left, right)| match (left, right) {
+                    (Token::Word(a), Token::Word(b))
+                        if a.keyword != Keyword::NoKeyword
+                            && b.keyword != Keyword::NoKeyword
+                            && a.quote_style.is_none()
+                            && b.quote_style.is_none() =>
+                    {
+                        a.keyword == b.keyword && a.value.eq_ignore_ascii_case(&b.value)
+                    }
+                    _ => left == right,
+                });
+        if !equal {
+            return Err(SqlError::Unsupported {
+                feature: "parser normalized/discarded SQL tokens",
+            });
+        }
+        Ok(())
+    }
+    fn check_tokens(tokens: &[Token], allow_select: bool) -> Result<(), SqlError> {
+        let significant: Vec<_> = tokens
+            .iter()
+            .filter(|token| !matches!(token, Token::Whitespace(_)))
+            .collect();
+        if !matches!(significant.first(), Some(Token::Word(word)) if (matches!(word.keyword, Keyword::INSERT | Keyword::UPDATE | Keyword::DELETE) || (allow_select && word.keyword==Keyword::SELECT)))
+        {
+            return Err(SqlError::Unsupported {
+                feature: "non-DML first verb",
+            });
+        }
+        // 固定MySQL方言的DIV分支内部unwrap可能对坏输入panic；该运算本轮未支持，先拒绝。
+        if significant
+            .iter()
+            .any(|token| matches!(token, Token::Word(word) if word.keyword == Keyword::DIV))
+        {
+            return Err(SqlError::Unsupported {
+                feature: "MySQL DIV operator",
+            });
+        }
+        if significant.len() > 8192 {
+            return Err(SqlError::Budget {
+                limit: "SQL tokens",
+            });
+        }
+        // Pratt解析器可为扁平长链构造很深的左树；必须在AST分配和递归析构前限制。
+        let mut operators = 0;
+        let mut nesting = 0usize;
+        for token in &significant {
+            match token {
+                Token::LParen => {
+                    nesting += 1;
+                    if nesting > 64 {
+                        return Err(SqlError::Budget {
+                            limit: "SQL parentheses",
+                        });
+                    }
+                }
+                Token::RParen => {
+                    nesting = nesting.checked_sub(1).ok_or(SqlError::Malformed)?;
+                }
+                Token::Word(word)
+                    if matches!(
+                        word.keyword,
+                        Keyword::NoKeyword
+                            | Keyword::INSERT
+                            | Keyword::INTO
+                            | Keyword::VALUES
+                            | Keyword::UPDATE
+                            | Keyword::SET
+                            | Keyword::DELETE
+                            | Keyword::FROM
+                            | Keyword::WHERE
+                            | Keyword::NULL
+                            | Keyword::TRUE
+                            | Keyword::FALSE
+                    ) => {}
+                Token::Number(_, _)
+                | Token::SingleQuotedString(_)
+                | Token::DoubleQuotedString(_)
+                | Token::Placeholder(_)
+                | Token::Comma
+                | Token::SemiColon => {}
+                // 未支持的运算符也可能在解析器中形成深树，不能只计算AT白名单运算符。
+                _ => operators += 1,
+            }
+            if operators > 256 {
+                return Err(SqlError::Budget {
+                    limit: "SQL operators",
+                });
+            }
+        }
+        if nesting != 0 {
+            return Err(SqlError::Malformed);
+        }
+        let update = matches!(significant.first(), Some(Token::Word(word)) if word.keyword == Keyword::UPDATE);
+        if update
+            && significant
+                .iter()
+                .any(|token| matches!(token, Token::Word(word) if word.keyword == Keyword::FROM))
+        {
+            return Err(SqlError::Unsupported {
+                feature: "UPDATE FROM",
+            });
+        }
+        let terminators = significant
+            .iter()
+            .filter(|token| matches!(token, Token::SemiColon))
+            .count();
+        if terminators > 1
+            || (terminators == 1 && !matches!(significant.last(), Some(Token::SemiColon)))
+        {
+            return Err(SqlError::Unsupported {
+                feature: "multiple statements/terminators",
+            });
+        }
+        Ok(())
+    }
+}
