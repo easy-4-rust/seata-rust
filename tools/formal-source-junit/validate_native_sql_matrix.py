@@ -22,14 +22,14 @@ def verify(out, full):
     need(names == {p.relative_to(out).as_posix() for p in out.rglob('*') if p.is_file() and p.name != 'catalog.json'}, 'Catalog coverage differs')
     result = json.loads((out / 'result.json').read_bytes()); versions, directions = result['versions'], result['directions']
     if full: need(versions == ['1.99', '1.85'] and directions == ['commit', 'rollback'], 'Full matrix missing')
-    need(result['status'] == 'passed' and result['accepted'] == result['rejected'] == 22
-         and result['execution_rejected'] == 1 and result['globals'] == 22 * len(versions) * len(directions)
+    need(result['status'] == 'passed' and result['accepted'] == 28 and result['rejected'] == 22
+         and result['execution_rejected'] == 1 and result['globals'] == 28 * len(versions) * len(directions)
          and result['mocks'] is False and result['tc_sha256'] == reg.JAR_SHA, 'Native scope/count differs')
     for row in json.loads((out / 'source-inputs.json').read_bytes()):
         need(sha(ROOT / row['path']) == row['sha256'] == sha(out / 'source' / row['path']), 'Executed source differs')
     for row in json.loads((out / 'dependencies.json').read_bytes()): need(sha(Path(row['path'])) == row['sha256'], 'Java dependency differs')
     matrix = json.loads((ROOT / 'crates/seata_db_mysql/tests/data/mysql_sql_matrix.json').read_bytes())
-    cases = {c['id']: c for c in matrix['accepted']}; need(len(cases) == 22 and len(matrix['rejected']) == 22, 'Matrix asset differs')
+    cases = {c['id']: c for c in matrix['accepted']}; need(len(cases) == 28 and len(matrix['rejected']) == 22, 'Matrix asset differs')
     binaries = json.loads((out / 'rust-binaries.json').read_bytes()); commands = json.loads((out / 'commands.json').read_bytes())
     need(all(c['exit_code'] == 0 for c in commands), 'Native command failed')
     for version in versions:

@@ -64,7 +64,14 @@ impl MySqlImageReader {
         let table = MySqlTableMetaReader::fetch(tx, database, sql.table_name()).await?;
         Self::validate_columns(&table, sql)?;
         let predicate_parameters = &parameters[sql.predicate_parameter_start()..];
-        Self::read_locked(tx, &table, sql.predicate_sql(), predicate_parameters).await
+        Self::read_locked_with_alias(
+            tx,
+            &table,
+            sql.predicate_sql(),
+            predicate_parameters,
+            sql.table_alias(),
+        )
+        .await
     }
     /// 参数为同事务MDL下的完整表、受控条件与原生绑定；返回经过长度预算预检的全列镜像。
     pub(crate) async fn read_locked(
@@ -73,7 +80,16 @@ impl MySqlImageReader {
         predicate: Option<&str>,
         parameters: &[FieldValue],
     ) -> Result<TableRecords, DbError> {
-        let suffix = Self::suffix(table, predicate)?;
+        Self::read_locked_with_alias(tx, table, predicate, parameters, None).await
+    }
+    async fn read_locked_with_alias(
+        tx: &mut Transaction<'static, MySql>,
+        table: &TableMeta,
+        predicate: Option<&str>,
+        parameters: &[FieldValue],
+        alias: Option<&str>,
+    ) -> Result<TableRecords, DbError> {
+        let suffix = Self::suffix(table, predicate, alias)?;
         let quoted = table
             .columns()
             .iter()
@@ -175,7 +191,11 @@ impl MySqlImageReader {
         }
         Ok(())
     }
-    fn suffix(table: &TableMeta, predicate: Option<&str>) -> Result<String, DbError> {
+    fn suffix(
+        table: &TableMeta,
+        predicate: Option<&str>,
+        alias: Option<&str>,
+    ) -> Result<String, DbError> {
         if predicate.is_some_and(|value| value.len() > 1_048_576) {
             return Err(ImageError::Budget {
                 limit: "generated SQL",
@@ -183,13 +203,17 @@ impl MySqlImageReader {
             .into());
         }
         let predicate = predicate.map_or_else(String::new, |p| format!(" WHERE {p}"));
+        let alias = alias
+            .map(|name| TableMeta::quote_identifier(name).map(|name| format!(" AS {name}")))
+            .transpose()?
+            .unwrap_or_default();
         let keys = table
             .primary_key_columns()
             .map(|column| TableMeta::quote_identifier(column.name()))
             .collect::<Result<Vec<_>, _>>()?
             .join(", ");
         Ok(format!(
-            " FROM {}{predicate} ORDER BY {keys} LIMIT 1025 FOR UPDATE",
+            " FROM {}{alias}{predicate} ORDER BY {keys} LIMIT 1025 FOR UPDATE",
             TableMeta::quote_identifier(table.name())?
         ))
     }

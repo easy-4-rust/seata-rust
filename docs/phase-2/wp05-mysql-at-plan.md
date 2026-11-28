@@ -45,7 +45,8 @@ sequenceDiagram
 | 单表DELETE | 接受；有界WHERE | 完整before image与补偿约束 |
 | WHERE | 比较、AND/OR、IN常量列表、BETWEEN、IS NULL；仅本表标识符、绑定值或明确标量 | 排序/锁定完整PK集合，真实MySQL语义核对 |
 | 算术赋值 | 本行列、绑定值、数值、NULL、单引号文本；明确算术运算 | 精确类型范围、计算结果与after image核对 |
-| DDL、事务控制、CALL、SELECT、REPLACE、UPSERT、IGNORE、INSERT SELECT、RETURNING、CTE、子查询、JOIN/多表、跨schema、别名、ORDER/LIMIT、函数/变量、注释及反斜线文本 | 明确拒绝，整句拒绝发生在数据库副作用之前 | 未通过新规格/测试前保持拒绝，不猜测执行 |
+| 单表 UPDATE/DELETE 别名及本表限定列 | 按[别名增量契约](mysql-sql-alias-contract.md)接受显式/省略 AS；拒绝无绑定前缀 | 前镜像 FROM 使用同一别名；真实表名保持元数据/锁/Undo 身份 |
+| DDL、事务控制、CALL、SELECT、REPLACE、UPSERT、IGNORE、INSERT SELECT、RETURNING、CTE、子查询、JOIN/多表、跨schema、ORDER/LIMIT、函数/变量、注释及反斜线文本 | 明确拒绝，整句拒绝发生在数据库副作用之前 | 未通过新规格/测试前保持拒绝，不猜测执行 |
 
 这不是永久删除后续能力；能力扩充须更新矩阵并证明镜像、锁和补偿正确。原完整架构仍包含其他SQL、数据库与ORM。SQL标识符第一轮限制为ASCII字母/数字/下划线/美元符号，首字符不为数字，最长64字节；保留大小写，拒绝重复列（按MySQL列名大小写规则）。占位符仅原生`?`，不能把字符串里的问号计入参数。整句UTF-8字节预算64KiB、有效token8192、运算符256、括号深度64、占位符/列/VALUES行/IN项预算1024、AST表达式深度32。字节/token/运算符/括号预算在构建AST前检查，防止扁平长表达式构造深树后才拒绝或析构溢栈；各预算同时生效。MySQL不支持的UPDATE FROM关键字显式拒绝，不能依赖上游AST恰好保留被消费的关键字。IN列表仅允许绑定值/常量表达式；不把解析器支持的任意语法自动视为AT支持。
 

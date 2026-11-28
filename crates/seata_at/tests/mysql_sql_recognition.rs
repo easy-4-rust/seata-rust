@@ -72,7 +72,7 @@ fn rejects_entire_unsupported_statement_before_exposing_an_executable_plan() {
         "INSERT INTO accounts(id) VALUES(1) RETURNING id",
         "INSERT INTO accounts(id) VALUES ROW(1)",
         "INSERT INTO accounts(id) VALUES(DEFAULT)",
-        "UPDATE accounts a SET a.balance=1",
+        "UPDATE accounts a SET b.balance=1",
         "UPDATE accounts JOIN other ON accounts.id=other.id SET balance=1",
         "DELETE accounts FROM accounts JOIN other ON accounts.id=other.id",
         "DELETE FROM accounts ORDER BY id LIMIT 1",

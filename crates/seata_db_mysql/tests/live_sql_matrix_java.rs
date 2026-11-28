@@ -12,7 +12,7 @@ fn matrix() -> serde_json::Value {
 #[test]
 fn initial_sql_matrix_is_classified_without_broadening_unsupported_syntax() {
     let data = matrix();
-    assert_eq!(data["accepted"].as_array().unwrap().len(), 22);
+    assert_eq!(data["accepted"].as_array().unwrap().len(), 28);
     for case in data["accepted"].as_array().unwrap() {
         assert!(
             SqlRecognizerFactory::recognize(case["sql"].as_str().unwrap()).is_ok(),

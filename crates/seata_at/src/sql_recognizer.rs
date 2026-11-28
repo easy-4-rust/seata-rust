@@ -8,6 +8,7 @@ pub struct SqlRecognizer {
     pub(crate) sql: String,
     pub(crate) sql_type: SqlType,
     pub(crate) table_name: String,
+    pub(crate) table_alias: Option<String>,
     pub(crate) columns: Vec<String>,
     pub(crate) parameter_count: usize,
     pub(crate) predicate_parameter_start: usize,
@@ -31,6 +32,10 @@ impl SqlRecognizer {
     /// 无参数；返回解引用引号后的原大小写单表名称。
     pub fn table_name(&self) -> &str {
         &self.table_name
+    }
+    /// 无参数；返回当前单表语句的原拼写别名；不作为元数据或持久锁身份。
+    pub fn table_alias(&self) -> Option<&str> {
+        self.table_alias.as_deref()
     }
     /// 无参数；返回INSERT列或UPDATE赋值列，保留原顺序；DELETE返回空切片。
     pub fn columns(&self) -> &[String] {

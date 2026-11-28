@@ -26,13 +26,16 @@ impl MySqlDeleteRecognizer {
                 feature: "multiple DELETE tables",
             });
         }
-        let table_name = BaseMySqlRecognizer::table(&tables[0])?;
+        let (table_name, table_alias) = BaseMySqlRecognizer::table(&tables[0])?;
+        let qualifier = table_alias.as_deref().unwrap_or(&table_name);
         let mut parameter_count = 0;
-        let predicate_sql = BaseMySqlRecognizer::predicate(&value.selection, &mut parameter_count)?;
+        let predicate_sql =
+            BaseMySqlRecognizer::predicate(&value.selection, &mut parameter_count, qualifier)?;
         Ok(SqlRecognizer {
             sql: String::new(),
             sql_type: SqlType::Delete,
             table_name,
+            table_alias,
             columns: Vec::new(),
             parameter_count,
             predicate_parameter_start: 0,

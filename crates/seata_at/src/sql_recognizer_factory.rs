@@ -75,7 +75,7 @@ impl SqlRecognizerFactory {
         let canonical = Tokenizer::new(dialect, &statement.to_string())
             .tokenize()
             .map_err(|_| SqlError::Malformed)?;
-        let canonical: Vec<_> = canonical
+        let mut canonical: Vec<_> = canonical
             .iter()
             .filter(|token| !matches!(token, Token::Whitespace(_)))
             .collect();
@@ -84,6 +84,38 @@ impl SqlRecognizerFactory {
         } else {
             original
         };
+        // AST 为省略 AS 的安全单表别名补写 AS；只允许已识别表位置的这一个差异。
+        let alias_as = match statement {
+            Statement::Update { table, .. }
+                if matches!(
+                    &table.relation,
+                    sqlparser::ast::TableFactor::Table { alias: Some(_), .. }
+                ) =>
+            {
+                Some(2)
+            }
+            Statement::Delete(value) => match &value.from {
+                sqlparser::ast::FromTable::WithFromKeyword(tables)
+                    if tables.len() == 1
+                        && matches!(
+                            &tables[0].relation,
+                            sqlparser::ast::TableFactor::Table { alias: Some(_), .. }
+                        ) =>
+                {
+                    Some(3)
+                }
+                _ => None,
+            },
+            _ => None,
+        };
+        if let Some(index) = alias_as {
+            if original.len() + 1 == canonical.len()
+                && matches!(canonical.get(index), Some(Token::Word(w)) if w.keyword == Keyword::AS)
+                && !matches!(original.get(index), Some(Token::Word(w)) if w.keyword == Keyword::AS)
+            {
+                canonical.remove(index);
+            }
+        }
         let equal = original.len() == canonical.len()
             && original
                 .iter()

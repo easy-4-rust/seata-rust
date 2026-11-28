@@ -20,7 +20,8 @@ impl MySqlUpdateRecognizer {
                 feature: "UPDATE FROM/RETURNING",
             });
         };
-        let table_name = BaseMySqlRecognizer::table(table)?;
+        let (table_name, table_alias) = BaseMySqlRecognizer::table(table)?;
+        let qualifier = table_alias.as_deref().unwrap_or(&table_name);
         let mut names = Vec::new();
         let mut parameter_count = 0;
         for assignment in assignments {
@@ -29,17 +30,24 @@ impl MySqlUpdateRecognizer {
                     feature: "tuple assignment",
                 });
             };
-            BaseMySqlRecognizer::object(name)?;
-            names.push(name.0[0].clone());
-            BaseMySqlRecognizer::expression(&assignment.value, &mut parameter_count, 0, true)?;
+            let column = BaseMySqlRecognizer::column(&name.0, qualifier)?;
+            names.push(sqlparser::ast::Ident::new(column));
+            BaseMySqlRecognizer::expression(
+                &assignment.value,
+                &mut parameter_count,
+                0,
+                Some(qualifier),
+            )?;
         }
         let columns = BaseMySqlRecognizer::columns(&names)?;
         let predicate_parameter_start = parameter_count;
-        let predicate_sql = BaseMySqlRecognizer::predicate(selection, &mut parameter_count)?;
+        let predicate_sql =
+            BaseMySqlRecognizer::predicate(selection, &mut parameter_count, qualifier)?;
         Ok(SqlRecognizer {
             sql: String::new(),
             sql_type: SqlType::Update,
             table_name,
+            table_alias,
             columns,
             parameter_count,
             predicate_parameter_start,

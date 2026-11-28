@@ -37,7 +37,7 @@ def run(versions, directions):
     for row in json.loads((BASE / 'dependencies.json').read_bytes()):
         p = Path(row['path']); need(sha(p) == row['sha256'], 'Dependency differs')
         if not p.name.startswith(('mockito-', 'byte-buddy-', 'objenesis-', 'lombok-')): jars.append(p)
-    inputs = [Path(__file__).resolve(), ROOT / 'tools/formal-source-junit/SqlMatrixUndoOracle.java', ROOT / 'Cargo.toml', ROOT / 'Cargo.lock',
+    inputs = [ROOT / 'tools/formal-source-junit/validate_native_sql_matrix.py', ROOT / 'docs/phase-2/mysql-sql-alias-contract.md', Path(__file__).resolve(), ROOT / 'tools/formal-source-junit/SqlMatrixUndoOracle.java', ROOT / 'Cargo.toml', ROOT / 'Cargo.lock',
         *sorted(p for p in (ROOT / 'crates').rglob('*') if p.is_file()), ROOT / 'tools/formal-source-junit/java_writer_jdbc_profile_tc.py',
         Path(support.__file__), Path(reg.__file__), ROOT / 'tools/formal-tc-lock-coverage/live.py', ROOT / 'tools/formal-rm-java/validate.py',
         ROOT / 'tools/java-go-at-shared-lock/proxy.py', ROOT / 'tools/java-go-at-shared-lock/wire.py', ROOT / 'tools/go-java-v1-real-at/verify.py']
@@ -136,7 +136,7 @@ def run(versions, directions):
         command('java-oracle', oracle_args)
         need(len(json.loads((out / 'java-oracle.json').read_bytes())['cases']) == len(observations), 'Original Java parser coverage differs')
         for p in inputs: need(sha(p) == sha(out / 'source' / p.relative_to(ROOT)), 'Source drift during SQL matrix')
-        save(out / 'result.json', dict(status='passed', versions=versions, directions=directions, accepted=22, rejected=22, execution_rejected=1,
+        save(out / 'result.json', dict(status='passed', versions=versions, directions=directions, accepted=28, rejected=22, execution_rejected=1,
             globals=len(observations), mocks=False, tc_sha256=sha(jar), scope='initial approved SQL grammar; not all Java SQL or production admission'))
     finally:
         if relay: relay.close()

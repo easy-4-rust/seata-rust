@@ -26,3 +26,5 @@
 [首期 SQL 矩阵](../phase-2/evidence/initial-sql-matrix/README.md)现已取得双版本、提交/补偿的 88 笔实际全局事务与原 Java parser 重读证据，关闭对应分类器/明确矩阵项。完整 Java SQL 迁移仍开放。该长时现场还记录原 TC 的 111 单向清理指令；`CallbackHandler` 只接受同步分支回调，下一项具体工作是接入并验收正式 RM 的 Undo 定期清理，继续保留生产权限/认证等门禁。
 
 后续[Undo 定期清理增量](../phase-2/evidence/undo-retention/README.md)已接入正式 RM/MySQL，并通过未修改原 TC 的 180 秒定时任务。双 Rust 各删除 6107 条过期原行，UTC 边界与原 Java 三批删除一致；错误绑定和触发器拒绝、恢复清理及同一连接后续分支回调均有实际证据。双版本全工作区各 831 测试通过、413 忽略。真实权限撤销、批次提交未知结果和生产运维仍开放；不因此关闭 WP05/WP07，更不把本增量算作 Phase 5–7 的实现。
+
+[单表 SQL 别名](../phase-2/mysql-sql-alias-contract.md)现已补齐原 Java 支持的显式/省略 AS、合法限定列及带别名前镜像。扩展 SQL 矩阵在双版本提交/补偿下通过 112 笔真实全局事务，全部 Undo 由原 Java parser 读取，六个新增输入还直接对照原 Druid 识别器。未知前缀、跨 schema、重复赋值和连接仍拒绝。该项不再列为未实现，但 JOIN/子查询等完整 SQL、全部写入器、生产准入及后续阶段仍需继续交付。

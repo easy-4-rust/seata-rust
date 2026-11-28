@@ -69,7 +69,7 @@ impl MySqlInsertRecognizer {
             let mut templates = Vec::with_capacity(row.len());
             for expr in row {
                 let start = parameter_count;
-                BaseMySqlRecognizer::expression(expr, &mut parameter_count, 0, false)?;
+                BaseMySqlRecognizer::expression(expr, &mut parameter_count, 0, None)?;
                 templates.push(InsertValueTemplate::from_validated_ast(
                     expr.to_string(),
                     start,
@@ -82,6 +82,7 @@ impl MySqlInsertRecognizer {
             sql: String::new(),
             sql_type: SqlType::Insert,
             table_name,
+            table_alias: None,
             columns,
             parameter_count,
             predicate_parameter_start: parameter_count,

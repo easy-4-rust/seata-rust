@@ -55,8 +55,8 @@ impl BaseMySqlRecognizer {
             })
             .collect()
     }
-    /// 参数为原DML表表达式；返回单表名，拒绝连接、别名、分区及表函数。
-    pub(crate) fn table(table: &TableWithJoins) -> Result<String, SqlError> {
+    /// 参数为原DML表表达式；返回真实单表名与可选别名，拒绝连接、分区及表函数。
+    pub(crate) fn table(table: &TableWithJoins) -> Result<(String, Option<String>), SqlError> {
         if !table.joins.is_empty() {
             return Err(SqlError::Unsupported {
                 feature: "joined DML",
@@ -65,34 +65,57 @@ impl BaseMySqlRecognizer {
         match &table.relation {
             TableFactor::Table {
                 name,
-                alias: None,
+                alias,
                 args: None,
                 with_hints,
                 version: None,
                 with_ordinality: false,
                 partitions,
-            } if with_hints.is_empty() && partitions.is_empty() => Self::object(name),
+            } if with_hints.is_empty() && partitions.is_empty() => {
+                let alias = alias
+                    .as_ref()
+                    .map(|value| {
+                        if !value.columns.is_empty() {
+                            return Err(SqlError::Unsupported {
+                                feature: "table alias column list",
+                            });
+                        }
+                        Self::identifier(&value.name)
+                    })
+                    .transpose()?;
+                Ok((Self::object(name)?, alias))
+            }
             _ => Err(SqlError::Unsupported {
                 feature: "table alias/function/hint/partition",
             }),
         }
     }
-    /// 参数为原表达式、累计占位符数、深度和是否允许列引用；返回支持/预算校验结果。
+    /// 参数为列名分段及当前合法表前缀；返回真实列名，只接收本表的一段或两段引用。
+    pub(crate) fn column(parts: &[Ident], qualifier: &str) -> Result<String, SqlError> {
+        match parts {
+            [column] => Self::identifier(column),
+            [owner, column] if Self::identifier(owner)? == qualifier => Self::identifier(column),
+            _ => Err(SqlError::Unsupported {
+                feature: "unbound/cross-schema column qualifier",
+            }),
+        }
+    }
+    /// 参数为原表达式、累计占位符数、深度和可选合法表前缀；返回支持/预算校验结果。
     /// 成功时计数按原SQL遍历顺序增加；拒绝函数、子查询及未引用内建项。
     pub(crate) fn expression(
         value: &Expr,
         parameters: &mut usize,
         depth: usize,
-        columns: bool,
+        qualifier: Option<&str>,
     ) -> Result<(), SqlError> {
         if depth > 32 {
             return Err(SqlError::Budget {
                 limit: "expression depth",
             });
         }
-        let mut child = |value: &Expr| Self::expression(value, parameters, depth + 1, columns);
+        let mut child = |value: &Expr| Self::expression(value, parameters, depth + 1, qualifier);
         match value {
-            Expr::Identifier(name) if columns => {
+            Expr::Identifier(name) if qualifier.is_some() => {
                 // 上游MySQL AST会将部分无括号内建项表示成Identifier，不能据此当作稳定列。
                 if name.quote_style.is_none()
                     && matches!(
@@ -116,6 +139,9 @@ impl BaseMySqlRecognizer {
                     });
                 }
                 Self::identifier(name)?;
+            }
+            Expr::CompoundIdentifier(parts) if qualifier.is_some() => {
+                Self::column(parts, qualifier.ok_or(SqlError::Malformed)?)?;
             }
             Expr::Value(Value::Placeholder(marker)) if marker == "?" => {
                 *parameters += 1;
@@ -168,7 +194,7 @@ impl BaseMySqlRecognizer {
             Expr::InList { expr, list, .. } if !list.is_empty() && list.len() <= 1024 => {
                 child(expr)?;
                 for item in list {
-                    Self::expression(item, parameters, depth + 1, false)?;
+                    Self::expression(item, parameters, depth + 1, None)?;
                 }
             }
             _ => {
@@ -183,9 +209,10 @@ impl BaseMySqlRecognizer {
     pub(crate) fn predicate(
         value: &Option<Expr>,
         parameters: &mut usize,
+        qualifier: &str,
     ) -> Result<Option<String>, SqlError> {
         if let Some(value) = value {
-            Self::expression(value, parameters, 0, true)?;
+            Self::expression(value, parameters, 0, Some(qualifier))?;
             Ok(Some(value.to_string()))
         } else {
             Ok(None)
