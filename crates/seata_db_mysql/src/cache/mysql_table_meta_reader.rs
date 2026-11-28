@@ -238,12 +238,15 @@ impl MySqlTableMetaReader {
                 });
             }
             // AUTO_INCREMENT 位于标准输出的类型/NOT NULL 后，不能只核对整数类型。
-            if current
+            let physical_auto = current
                 .and_then(|line| line.strip_prefix(&kind))
-                .is_some_and(|rest| rest.starts_with(" NOT NULL AUTO_INCREMENT"))
-            {
+                .is_some_and(|rest| rest.starts_with(" NOT NULL AUTO_INCREMENT"));
+            let extra: String = column
+                .try_get("EXTRA")
+                .map_err(|error| DbError::driver("snapshot auto increment attribute", error))?;
+            if physical_auto != extra.eq_ignore_ascii_case("auto_increment") {
                 return Err(DbError::Unsupported {
-                    feature: "current physical auto increment column",
+                    feature: "auto increment changed after transaction metadata snapshot",
                 });
             }
             // 当前支持的类型均无引号内空格。检查类型后的词边界，防止 int 与 int unsigned 混同。
@@ -295,9 +298,11 @@ impl MySqlTableMetaReader {
         let name = text("COLUMN_NAME")?;
         let data_type = text("DATA_TYPE")?;
         let full_type = text("COLUMN_TYPE")?;
-        if !text("EXTRA")?.is_empty() || !text("GENERATION_EXPRESSION")?.is_empty() {
+        let extra = text("EXTRA")?;
+        let auto_increment = extra.eq_ignore_ascii_case("auto_increment");
+        if (!extra.is_empty() && !auto_increment) || !text("GENERATION_EXPRESSION")?.is_empty() {
             return Err(DbError::Unsupported {
-                feature: "generated/invisible/auto/default-updated column",
+                feature: "generated/invisible/default-updated column",
             });
         }
         let unsigned = full_type
@@ -367,6 +372,7 @@ impl MySqlTableMetaReader {
             precision.map(Self::u32).transpose()?,
             scale.map(Self::u32).transpose()?,
         )
+        .and_then(|column| column.with_auto_increment(auto_increment))
         .and_then(|column| column.with_domain(Self::domain(row, &data_type, unsigned)?))
         .and_then(|column| column.with_mysql_type(Self::native_type(&data_type, &full_type)?))
         .map_err(DbError::from)

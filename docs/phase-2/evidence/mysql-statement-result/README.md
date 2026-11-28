@@ -21,3 +21,5 @@ python -B tools/formal-source-junit/validate_seaorm_mysql.py docs/phase-2/eviden
 同目录封存全部组件/全工作区/Clippy 原始日志、实际 argv、依赖树和原审计结果，以及生成回归和汇总的脚本。原生复跑命令仍为 `python -B tools/formal-source-junit/native_seaorm_mysql.py`；组件与审计汇总须另按封存的命令执行后才作完整验收。
 
 未完成：正式 AT 自增列准入、缺省/NULL/零值与 SQL mode 的生成主键镜像定位、多行生成键支持、原生 ConnectionTrait、读写模型返回及完整 ORM。后续继续这些原范围，保持 Java Undo 格式、旧记录兼容及原提交/未知/恢复边界。WP05/WP07、完整 V1 与 Phase 5–7 未因此关闭。
+
+后续 [正式单行自增镜像](../mysql-auto-increment/README.md)已完成已列明范围的实现和 52 笔双版本原 TC 验证；缺省/NULL/零和原回执定位不再是完全缺失项。显式自增键的服务端 OK ID 可能为显式值，原接口持续原样传播。完整 ORM 与生成键批量仍开放。

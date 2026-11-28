@@ -34,3 +34,5 @@
 后续 [RSA 认证处置](../phase-2/evidence/mysql-rsa-auth/README.md)以明确的本地 SQLx 0.8.6 维护补丁替换旧 RSA 依赖，实际图与 lock 不再包含 rsa，Rust 1.85 保留。两版、三种公钥、两种认证插件/TLS 的十八笔正式 AT 事务及八项拒绝通过；真实认证帧、持有连接时 TLS 会话、原子 Undo/SHA 和原 TC 回调均独立核验，工作区各 840 passed / 415 ignored、严格 Clippy 通过。time/SQLite 告警仍保留，未发布消费者不会自动继承根 Cargo patch；发布集成、完整 ORM/SQL、生产运维及后续阶段继续开放。
 
 [原业务语句回执](../phase-2/evidence/mysql-statement-result/README.md)已从 StatementCallback 贯通正式事务和 SeaORM `execute_with_result`，u64 原始影响行数/ID 不经后续会话查询或镜像推算，旧行数接口兼容。底层大整数回执、会话值变更、批量首 ID、错误/回滚，以及双 Rust 十二笔实体原 TC 提交/补偿均实际验证；各 840 passed / 416 ignored、严格 Clippy 通过。本项只是生成主键能力的前置交付，正式自增表/缺省键镜像定位仍拒绝并待实施，原生 ConnectionTrait、完整读写和 Phase 5–7 不变为已完成。
+
+[正式单行自增主键](../phase-2/evidence/mysql-auto-increment/README.md)现已从元数据准入推进到同一原 INSERT 回执定位镜像，保留原 Java Undo 和旧构造兼容。双 Rust、步长 7/偏移 3、十三类输入的 52 笔原 TC 提交/补偿、三个执行前拒绝、属性新增/移除快照拒绝与原 Java parser 均通过；零键补偿恢复及大于 i64 上限的键有实际证据。全工作区各 845 passed / 417 ignored、三个受影响包严格 Clippy 通过。正式单行自增镜像不再列为未实施；生成键批量、全部整数/JDBC 配置认证、原生 ORM 连接/模型/查询等完整范围继续交付，不关闭 WP05/WP07 或后续阶段。

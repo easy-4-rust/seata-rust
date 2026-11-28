@@ -826,18 +826,20 @@ async fn independent_extra_ddl_rejects_invisible_generated_and_auto_increment_co
 
     let mut observer = admin().await;
     let ds = MySqlDataSource::connect(options("root")).await.unwrap();
-    for change in [
-        "ADD COLUMN hidden_value INT NULL INVISIBLE",
-        "MODIFY v INT GENERATED ALWAYS AS (id+1) STORED",
-        "MODIFY id INT NOT NULL AUTO_INCREMENT",
+    for (initial_auto, change) in [
+        (false, "ADD COLUMN hidden_value INT NULL INVISIBLE"),
+        (false, "MODIFY v INT GENERATED ALWAYS AS (id+1) STORED"),
+        (false, "MODIFY id INT NOT NULL AUTO_INCREMENT"),
+        (true, "MODIFY id INT NOT NULL"),
     ] {
-        sqlx::raw_sql(
+        sqlx::raw_sql(&format!(
             "DROP TABLE IF EXISTS extra_first,extra_later;
              CREATE TABLE extra_first(id INT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB;
-             CREATE TABLE extra_later(id INT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB;
+             CREATE TABLE extra_later(id INT {auto} PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB;
              INSERT INTO extra_first VALUES(1,10);
              INSERT INTO extra_later VALUES(1,10);",
-        )
+            auto = if initial_auto { "AUTO_INCREMENT" } else { "" }
+        ))
         .execute(&mut observer)
         .await
         .unwrap();

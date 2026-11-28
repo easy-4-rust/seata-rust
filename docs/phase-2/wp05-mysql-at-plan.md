@@ -204,3 +204,7 @@ MySQL TLS 和提交回调权限故障已在固定原 Java TC、MySQL 8.4.13 与 
 ### 原语句执行回执前置
 
 正式 MySQL/SeaORM 新增保留 u64 影响行数及原 last_insert_id 的 `execute_with_result`，不改变旧接口或提交能力。双 Rust 原回调大整数/后续会话值隔离、十二笔真实实体原 TC 事务和完整回归已验收：[证据及范围](evidence/mysql-statement-result/README.md)。正式自增表准入和用原回执定位生成键镜像仍待实现，不用本前置回执交付关闭生成主键/完整 ORM 要求。
+
+### 单行自增主键增量
+
+已实现当前物理/快照属性核对、缺省/NULL/零语义的单行生成键原回执定位、显式完整键批量及零键补偿恢复。双版本 52 笔原 TC 事务、原 Java Undo parser、执行前拒绝及双向属性 DDL 变化拒绝通过；各 845 passed / 417 ignored、严格 Clippy 通过。[范围与原始证据](evidence/mysql-auto-increment/README.md)。生成键批量、完整 ORM/API、完整 SQL/写入器准入和生产门禁仍开放。

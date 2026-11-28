@@ -14,6 +14,7 @@ pub struct ColumnMeta {
     numeric_scale: Option<u32>,
     domain: Option<ColumnDomain>,
     mysql_type: Option<MySqlType>,
+    auto_increment: bool,
 }
 impl ColumnMeta {
     /// 参数为原列名、值域、空值/物理/主键顺序和JDBC维度；返回已验证的不可变列。
@@ -61,7 +62,29 @@ impl ColumnMeta {
             numeric_scale,
             domain: None,
             mysql_type: None,
+            auto_increment: false,
         })
+    }
+    /// 参数为当前物理自增属性；返回已核对非空整数首主键的列，表级仍须核对唯一主键。
+    pub fn with_auto_increment(mut self, auto_increment: bool) -> Result<Self, MetadataError> {
+        if auto_increment
+            && (self.nullable
+                || self.primary_key_ordinal != Some(1)
+                || !matches!(
+                    self.kind,
+                    ColumnType::SignedInteger | ColumnType::UnsignedInteger
+                ))
+        {
+            return Err(MetadataError::Invalid {
+                reason: "auto increment requires a non-null integer primary column",
+            });
+        }
+        self.auto_increment = auto_increment;
+        Ok(self)
+    }
+    /// 无参数；返回已核对的物理自增属性；旧构造默认 false。
+    pub const fn is_auto_increment(&self) -> bool {
+        self.auto_increment
     }
     /// 参数为真实物理域；返回附加且已核对域的列，原八参数构造仍允许无域的内存元数据。
     pub fn with_domain(mut self, domain: ColumnDomain) -> Result<Self, MetadataError> {

@@ -296,6 +296,7 @@ impl MySqlDataSource {
         let identity = Arc::new(OnceLock::<Arc<str>>::new());
         let pool_identity = identity.clone();
         let pool_database = options.database.clone();
+        let no_auto_zero = options.no_auto_value_on_zero;
         let pool_options = MySqlPoolOptions::new()
             .max_connections(options.maximum_connections)
             .min_connections(0)
@@ -304,11 +305,14 @@ impl MySqlDataSource {
                 let identity = pool_identity.clone();
                 let database = pool_database.clone();
                 Box::pin(async move {
-                    sqlx::query(concat!(
-                        "SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES', ",
-                        "transaction_isolation='REPEATABLE-READ', innodb_lock_wait_timeout=2, ",
-                        "lock_wait_timeout=2, max_execution_time=2000",
-                    ))
+                    let setup = if no_auto_zero {
+                        concat!("SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES,NO_AUTO_VALUE_ON_ZERO', ",
+                            "transaction_isolation='REPEATABLE-READ', innodb_lock_wait_timeout=2, lock_wait_timeout=2, max_execution_time=2000")
+                    } else {
+                        concat!("SET SESSION sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION,NO_BACKSLASH_ESCAPES', ",
+                            "transaction_isolation='REPEATABLE-READ', innodb_lock_wait_timeout=2, lock_wait_timeout=2, max_execution_time=2000")
+                    };
+                    sqlx::query(setup)
                     .execute(&mut *connection)
                     .await?;
                     if let Some(expected) = identity.get() {

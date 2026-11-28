@@ -22,7 +22,7 @@ MySQL AT 已实现真实 SQL 执行、元数据与前后镜像、Java Undo 格�
 
 当前范围与原 Phase 0–7 差距见[全计划状态核对](docs/architecture/delivery-requirement-audit_20261128.md)。Rust TC、集群和完整生态尚未交付。
 
-正式 `seata-orm-seaorm` 已接入 SeaORM 1.1 实体 DML 构建器，在原 MySQL AT 事务中保持有序精确绑定。双 Rust 的十二笔真实提交/补偿、原 Java Undo parser 读取及完整字段核验通过；原生 ORM ConnectionTrait、完整读写/模型返回和其余生态仍待交付。[接入说明](crates/seata_orm_seaorm/README.md)、[验收证据](docs/phase-2/evidence/seaorm-mysql/README.md)。 现新增原语句计数/ID 回执 API，双版本大整数与十二笔事务通过；正式自增键镜像定位仍待实施。[回执验收](docs/phase-2/evidence/mysql-statement-result/README.md)。
+正式 `seata-orm-seaorm` 已接入 SeaORM 1.1 实体 DML 构建器，在原 MySQL AT 事务中保持有序精确绑定。双 Rust 的十二笔真实提交/补偿、原 Java Undo parser 读取及完整字段核验通过；原生 ORM ConnectionTrait、完整读写/模型返回和其余生态仍待交付。[接入说明](crates/seata_orm_seaorm/README.md)、[验收证据](docs/phase-2/evidence/seaorm-mysql/README.md)。 现新增原语句计数/ID 回执 API，双版本大整数与十二笔事务通过；正式单行自增键镜像定位及零键补偿现已通过双版本 52 笔原 TC 事务，完整 ORM 继续实施。[自增验收](docs/phase-2/evidence/mysql-auto-increment/README.md)。[回执验收](docs/phase-2/evidence/mysql-statement-result/README.md)。
 
 当前根构建通过明确的本地 SQLx 认证补丁移除旧 `rsa`，保留 Rust 1.85；十八笔真实认证/AT 事务与八项拒绝通过。该 root patch 尚需发布消费者集成，time/SQLite 锁项告警及完整生产门禁仍开放。[处置范围和证据](docs/phase-2/evidence/mysql-rsa-auth/README.md)。
 

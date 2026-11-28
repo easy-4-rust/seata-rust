@@ -37,3 +37,8 @@ mod mysql_undo_executor_source;
 mod mysql_undo_insert_executor_test;
 #[cfg(test)]
 mod mysql_undo_update_executor_test;
+
+mod my_sql_insert_key_plan;
+
+#[cfg(test)]
+mod my_sql_insert_key_plan_tests;

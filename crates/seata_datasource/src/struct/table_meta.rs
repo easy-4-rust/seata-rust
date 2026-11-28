@@ -43,6 +43,11 @@ impl TableMeta {
                 reason: "complete unique primary key order required",
             });
         }
+        if columns.iter().any(ColumnMeta::is_auto_increment) && primary.len() != 1 {
+            return Err(MetadataError::Invalid {
+                reason: "auto increment requires a sole primary column",
+            });
+        }
         Ok(Self {
             name,
             columns,

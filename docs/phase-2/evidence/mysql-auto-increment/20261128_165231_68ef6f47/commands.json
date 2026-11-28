@@ -1,0 +1,1026 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "compile-oracle",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\javac.exe",
+      "@D:\\codex-builds\\mysql-auto-increment-20261128_165231_68ef6f47\\compile.args"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.99",
+    "argv": [
+      "rustc",
+      "+1.99.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "classify-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "auto_increment_sql_cases_are_recognized",
+      "--",
+      "--exact"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-metadata-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_metadata",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.85",
+    "argv": [
+      "rustc",
+      "+1.85.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "classify-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "auto_increment_sql_cases_are_recognized",
+      "--",
+      "--exact"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-metadata-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--test",
+      "live_metadata",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "sql-matrix-20261128-165231-68ef6f47",
+      "--label",
+      "seata.fixture.owner=20261128_165231_68ef6f47",
+      "--mount",
+      "type=bind,source=D:/codex-builds/mysql-auto-increment-20261128_165231_68ef6f47/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:52400:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=admission",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+      "--auto-increment-increment=7",
+      "--auto-increment-offset=3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysqladmin",
+      "-h127.0.0.1",
+      "-uroot",
+      "-pseata-mysql-fixture-only",
+      "--wait=60",
+      "ping"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "metadata-1.99",
+    "argv": [
+      "D:\\codex-builds\\mysql-auto-increment-20261128_165231_68ef6f47\\metadata-1.99.exe",
+      "independent_extra_ddl_rejects_invisible_generated_and_auto_increment_columns",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "metadata-1.85",
+    "argv": [
+      "D:\\codex-builds\\mysql-auto-increment-20261128_165231_68ef6f47\\metadata-1.85.exe",
+      "independent_extra_ddl_rejects_invisible_generated_and_auto_increment_columns",
+      "--ignored",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-uroot",
+      "admission"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-omitted_unsigned-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-omitted_unsigned-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-omitted_unsigned-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(u.rollback_info),HEX(b.undo_sha256),b.first_phase_committed,b.jdbc_profile FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.log_status=0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-omitted_unsigned-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-omitted_unsigned-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-omitted_unsigned-recovery",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT phase,terminal,commit_terminal,first_phase_committed,HEX(undo_sha256) FROM seata_rs_at_branch_v1 WHERE xid=X'3139382e31382e302e313a35323430313a34303435303832303630393934393332373337' AND branch_id=4045082060994932739"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-omitted_unsigned-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-null_unsigned-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-null_unsigned-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-null_unsigned-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(u.rollback_info),HEX(b.undo_sha256),b.first_phase_committed,b.jdbc_profile FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.log_status=0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-null_unsigned-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-null_unsigned-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-null_unsigned-recovery",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT phase,terminal,commit_terminal,first_phase_committed,HEX(undo_sha256) FROM seata_rs_at_branch_v1 WHERE xid=X'3139382e31382e302e313a35323430313a34303435303832303630393934393332373833' AND branch_id=4045082060994932785"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-null_unsigned-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_default-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_default-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_default-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(u.rollback_info),HEX(b.undo_sha256),b.first_phase_committed,b.jdbc_profile FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.log_status=0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_default-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_default-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_default-recovery",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT phase,terminal,commit_terminal,first_phase_committed,HEX(undo_sha256) FROM seata_rs_at_branch_v1 WHERE xid=X'3139382e31382e302e313a35323430313a34303435303832303630393934393332383039' AND branch_id=4045082060994932811"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_default-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_expression-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_expression-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_expression-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(u.rollback_info),HEX(b.undo_sha256),b.first_phase_committed,b.jdbc_profile FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.log_status=0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_expression-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_expression-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_expression-recovery",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT phase,terminal,commit_terminal,first_phase_committed,HEX(undo_sha256) FROM seata_rs_at_branch_v1 WHERE xid=X'3139382e31382e302e313a35323430313a34303435303832303630393934393332383334' AND branch_id=4045082060994932836"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_expression-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_preserved-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_preserved-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_preserved-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(u.rollback_info),HEX(b.undo_sha256),b.first_phase_committed,b.jdbc_profile FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.log_status=0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_preserved-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_preserved-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT JSON_ARRAY(CAST(id AS CHAR),v) FROM auto_items ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_preserved-recovery",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT phase,terminal,commit_terminal,first_phase_committed,HEX(undo_sha256) FROM seata_rs_at_branch_v1 WHERE xid=X'3139382e31382e302e313a35323430313a34303435303832303630393934393332383631' AND branch_id=4045082060994932863"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-commit-zero_preserved-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-r",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop-mysql",
+    "argv": [
+      "docker",
+      "stop",
+      "--time=15",
+      "028d85a86d7d28c3ca52a9fd96db8bc6801c88a4c8097120b6a4e74986a69ec4"
+    ],
+    "exit_code": 0
+  }
+]

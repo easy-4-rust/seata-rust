@@ -1,3 +1,4 @@
+use super::my_sql_insert_key_plan::MySqlInsertKeyPlan;
 use crate::{
     cache::MySqlTableMetaReader, exec::StatementCallback, mysql_image_reader::MySqlImageReader,
     DbError, MySqlStatementResult,
@@ -10,7 +11,7 @@ use sqlx::{MySql, Row, Transaction};
 use std::sync::atomic::{AtomicU64, Ordering};
 static NEXT_STAGING_TABLE: AtomicU64 = AtomicU64::new(1);
 
-/// 显式完整PK的INSERT执行器，原表达式/原参数确定主键，不猜自增序列。
+/// 完整显式键或单行原生回执确定主键的 INSERT 执行器，不猜自增序列。
 /// 对应 Java: org.apache.seata.rm.datasource.exec.mysql.MySQLInsertExecutor#getPkValuesByColumn（部分实现）。
 pub(crate) struct MySqlInsertExecutor;
 impl MySqlInsertExecutor {
@@ -22,8 +23,9 @@ impl MySqlInsertExecutor {
         parameters: &[FieldValue],
     ) -> Result<(MySqlStatementResult, SqlUndoLog), DbError> {
         let table = MySqlTableMetaReader::fetch(tx, database, sql.table_name()).await?;
-        let keys = Self::primary_values(tx, &table, sql, parameters).await?;
+        let key_plan = Self::primary_values(tx, &table, sql, parameters).await?;
         let result = StatementCallback::execute(tx, sql, parameters).await?;
+        let keys = key_plan.resolve(result, &table)?;
         let after = MySqlImageReader::read_keys(tx, &table, &keys).await?;
         if result.rows_affected() != sql.insert_row_count() as u64
             || after.rows().len() != sql.insert_row_count()
@@ -42,7 +44,7 @@ impl MySqlInsertExecutor {
         table: &TableMeta,
         sql: &SqlRecognizer,
         parameters: &[FieldValue],
-    ) -> Result<Vec<Vec<FieldValue>>, DbError> {
+    ) -> Result<MySqlInsertKeyPlan, DbError> {
         for name in sql.columns() {
             if table.column(name).is_none() {
                 return Err(DbError::Input {
@@ -63,6 +65,15 @@ impl MySqlInsertExecutor {
             }
             .into());
         }
+        let auto = primary.len() == 1 && primary[0].is_auto_increment();
+        if auto
+            && !sql
+                .columns()
+                .iter()
+                .any(|name| name.eq_ignore_ascii_case(primary[0].name()))
+        {
+            return MySqlInsertKeyPlan::generated(sql.insert_row_count());
+        }
         let positions = primary
             .iter()
             .map(|column| {
@@ -77,7 +88,11 @@ impl MySqlInsertExecutor {
         let temp = Self::temporary_name(table)?;
         let mut definitions = vec!["`r` BIGINT UNSIGNED NOT NULL PRIMARY KEY".to_owned()];
         for (index, column) in primary.iter().enumerate() {
-            definitions.push(format!("`k{index}` {} NOT NULL", Self::definition(column)?));
+            definitions.push(format!(
+                "`k{index}` {} {}",
+                Self::definition(column)?,
+                if auto { "NULL" } else { "NOT NULL" }
+            ));
         }
         let create = format!(
             "CREATE TEMPORARY TABLE {temp} ({}) ENGINE=InnoDB",
@@ -166,7 +181,9 @@ impl MySqlInsertExecutor {
                     }
                     .into());
                 }
-                Field::new(column, value.clone())?;
+                if !(auto && matches!(value, FieldValue::Null)) {
+                    Field::new(column, value.clone())?;
+                }
                 key.push(value);
             }
             keys.push(key);
@@ -176,7 +193,21 @@ impl MySqlInsertExecutor {
             .execute(&mut **tx)
             .await
             .map_err(|e| DbError::driver("drop INSERT key staging", e))?;
-        Ok(keys)
+        let no_auto_zero = if auto
+            && keys.iter().any(|key| {
+                key.first()
+                    .is_some_and(|v| matches!(v, FieldValue::Signed(0) | FieldValue::Unsigned(0)))
+            }) {
+            let mode: String = sqlx::query_scalar("SELECT @@SESSION.sql_mode")
+                .fetch_one(&mut **tx)
+                .await
+                .map_err(|error| DbError::driver("original INSERT auto increment mode", error))?;
+            mode.split(',')
+                .any(|mode| mode.eq_ignore_ascii_case("NO_AUTO_VALUE_ON_ZERO"))
+        } else {
+            false
+        };
+        MySqlInsertKeyPlan::assigned(keys, auto, no_auto_zero)
     }
     fn temporary_name(table: &TableMeta) -> Result<String, DbError> {
         for _ in 0..2 {

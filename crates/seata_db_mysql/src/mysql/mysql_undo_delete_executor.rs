@@ -39,6 +39,20 @@ impl MySqlUndoDeleteExecutor {
         let sql = Self::build_undo_sql(table, row)?;
         let parameters: Vec<FieldValue> = fields.iter().map(|f| f.value().clone()).collect();
         MySqlImageReader::sql_budget(&sql)?;
+        // 显式零必须恢复原零；默认 MySQL 模式会把它再次解释为申请自增 ID。
+        // 调用方拥有 close_on_drop 的补偿租约，模式仅服务于原镜像恢复，不进入业务连接复用。
+        if row.primary_keys().any(|field| {
+            table
+                .column(field.name())
+                .is_some_and(|column| column.is_auto_increment())
+                && matches!(
+                    field.value(),
+                    FieldValue::Signed(0) | FieldValue::Unsigned(0)
+                )
+        }) {
+            sqlx::query("SET SESSION sql_mode=IF(FIND_IN_SET('NO_AUTO_VALUE_ON_ZERO',@@SESSION.sql_mode)>0,@@SESSION.sql_mode,CONCAT_WS(',',@@SESSION.sql_mode,'NO_AUTO_VALUE_ON_ZERO'))")
+                .execute(&mut **tx).await.map_err(|error|DbError::driver("preserve original zero primary compensation",error))?;
+        }
         let result = sqlx::query_with(&sql, MySqlImageReader::arguments(&parameters)?)
             .execute(&mut **tx)
             .await

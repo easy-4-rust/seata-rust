@@ -1,0 +1,2 @@
+mod postgresql_escape_handler;
+pub use postgresql_escape_handler::PostgresqlEscapeHandler;

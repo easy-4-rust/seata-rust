@@ -22,6 +22,7 @@ pub struct MySqlOptions {
     pub(crate) require_jdbc_profile_binding: bool,
     pub(crate) java_tc_mysql_lock_limits: bool,
     pub(crate) java_tc_mysql_lock_collation: bool,
+    pub(crate) no_auto_value_on_zero: bool,
     pub(crate) maximum_connections: u32,
     pub(crate) acquire_timeout: Duration,
     pub(crate) operation_timeout: Duration,
@@ -64,6 +65,7 @@ impl MySqlOptions {
             require_jdbc_profile_binding: false,
             java_tc_mysql_lock_limits: false,
             java_tc_mysql_lock_collation: false,
+            no_auto_value_on_zero: false,
             maximum_connections: 4,
             acquire_timeout: Duration::from_secs(3),
             operation_timeout: Duration::from_secs(3),
@@ -88,6 +90,12 @@ impl MySqlOptions {
         }
         self.insecure_loopback = true;
         Ok(self)
+    }
+    /// 无参数；返回启用 NO_AUTO_VALUE_ON_ZERO 的严格会话配置，使显式零主键保持零。
+    /// 仅改变自增零值语义，不开放任意 SQL mode 或提交入口；默认配置保持原模式。
+    pub fn with_no_auto_value_on_zero(mut self) -> Self {
+        self.no_auto_value_on_zero = true;
+        self
     }
     /// 参数为 1..65536 字节的 PEM CA 列表；返回保持 TLS 主机身份校验的配置。
     /// 配置阶段解析 PEM；证书结构、链及有效期在握手时由 SQLx/rustls 校验，禁止与关闭测试 TLS 混用。

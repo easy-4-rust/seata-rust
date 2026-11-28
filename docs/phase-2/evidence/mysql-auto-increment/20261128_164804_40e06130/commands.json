@@ -1,0 +1,192 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "compile-oracle",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\javac.exe",
+      "@D:\\codex-builds\\mysql-auto-increment-20261128_164804_40e06130\\compile.args"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.99",
+    "argv": [
+      "rustc",
+      "+1.99.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "classify-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "auto_increment_sql_cases_are_recognized",
+      "--",
+      "--exact"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_auto_increment_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "sql-matrix-20261128-164804-40e06130",
+      "--label",
+      "seata.fixture.owner=20261128_164804_40e06130",
+      "--mount",
+      "type=bind,source=D:/codex-builds/mysql-auto-increment-20261128_164804_40e06130/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:56343:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=admission",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+      "--auto-increment-increment=7",
+      "--auto-increment-offset=3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "96ba324048512256108f0ab0071bb08764df457e05f3eda40bcc3daa77359edc"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "96ba324048512256108f0ab0071bb08764df457e05f3eda40bcc3daa77359edc",
+      "mysqladmin",
+      "-h127.0.0.1",
+      "-uroot",
+      "-pseata-mysql-fixture-only",
+      "--wait=60",
+      "ping"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "96ba324048512256108f0ab0071bb08764df457e05f3eda40bcc3daa77359edc",
+      "mysql",
+      "-uroot",
+      "admission"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop-mysql",
+    "argv": [
+      "docker",
+      "stop",
+      "--time=15",
+      "96ba324048512256108f0ab0071bb08764df457e05f3eda40bcc3daa77359edc"
+    ],
+    "exit_code": 0
+  }
+]
