@@ -1,6 +1,6 @@
 use crate::{
     cache::MySqlTableMetaReader, exec::StatementCallback, mysql_image_reader::MySqlImageReader,
-    DbError,
+    DbError, MySqlStatementResult,
 };
 use seata_at::{SqlRecognizer, SqlType, SqlUndoLog};
 use seata_datasource::{
@@ -20,18 +20,20 @@ impl MySqlInsertExecutor {
         database: &str,
         sql: &SqlRecognizer,
         parameters: &[FieldValue],
-    ) -> Result<(u64, SqlUndoLog), DbError> {
+    ) -> Result<(MySqlStatementResult, SqlUndoLog), DbError> {
         let table = MySqlTableMetaReader::fetch(tx, database, sql.table_name()).await?;
         let keys = Self::primary_values(tx, &table, sql, parameters).await?;
-        let count = StatementCallback::execute(tx, sql, parameters).await?;
+        let result = StatementCallback::execute(tx, sql, parameters).await?;
         let after = MySqlImageReader::read_keys(tx, &table, &keys).await?;
-        if count != sql.insert_row_count() as u64 || after.rows().len() != sql.insert_row_count() {
+        if result.rows_affected() != sql.insert_row_count() as u64
+            || after.rows().len() != sql.insert_row_count()
+        {
             return Err(DbError::Input {
                 reason: "INSERT count and complete primary image differ",
             });
         }
         Ok((
-            count,
+            result,
             SqlUndoLog::new(SqlType::Insert, TableRecords::new(table), after)?,
         ))
     }

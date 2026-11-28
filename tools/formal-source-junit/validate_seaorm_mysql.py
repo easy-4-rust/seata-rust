@@ -40,6 +40,15 @@ def verify(out, full):
         need(('rustc ' + version + '.0').encode() in (out / ('rustc-' + version + '.stdout')).read_bytes(), 'Rust version differs')
         need(b'test result: ok. 1 passed;' in (out / ('classify-' + version + '.stdout')).read_bytes(), 'Classifier did not execute')
         need(any(c['label'] == 'clippy-' + version and c['argv'][-2:] == ['-D', 'warnings'] for c in commands), 'Strict Clippy missing')
+    receipts = json.loads((out / 'receipt-binaries.json').read_bytes())
+    for version in versions:
+        need(sha(Path(receipts[version]['path'])) == receipts[version]['sha256'], 'Receipt binary differs')
+        need(b'test result: ok. 1 passed;' in (out / ('receipt-' + version + '.stdout')).read_bytes(), 'Original callback test did not run')
+        receipt = json.loads((out / ('receipt-' + version + '.json')).read_bytes())
+        first = receipt['first']; batch = receipt['batch']
+        need(first == dict(rows_affected=1,last_insert_id=9223372036854775811) and receipt['actual_first_id'] == first['last_insert_id'] and receipt['later_session_id'] == 7, 'Original large OK receipt lost')
+        need(batch['rows_affected'] == 2 and batch['last_insert_id'] == receipt['actual_batch_ids'][0] and len(set(receipt['actual_batch_ids'])) == 2, 'Original batch receipt differs')
+        need(receipt['update_id'] == receipt['delete_id'] == 0 and receipt['duplicate_rejected'] is True and receipt['rows_after_rollback'] == 0, 'Receipt error/rollback differs')
     observations = json.loads((out / 'observations.json').read_bytes())
     need(len(observations) == result['globals'] and {(o['version'], o['direction'], o['id']) for o in observations}
          == {(v, d, id) for v in versions for d in directions for id in cases}, 'Observed coverage differs')
@@ -61,6 +70,7 @@ def verify(out, full):
     xids = set(); completed = set()
     for observation in observations:
         version, direction, id = observation['version'], observation['direction'], observation['id']
+        need(observation['phase']['last_insert_id'] == 0 and observation['phase']['affected_rows'] == 1, 'Entity raw OK receipt differs')
         case = cases[id]; label = version + '-' + direction; prefix = label + '-' + id; folder = out / label
         phase = json.loads((folder / (id + '.held.json')).read_bytes()); xid, branch = phase['xid'], phase['branch_id']
         need(phase == observation['phase'] and xid not in xids and phase['checksum_persisted'] is True, 'Phase identity differs'); xids.add(xid)
@@ -153,7 +163,7 @@ def verify(out, full):
     need(len(components) == 2 and {r['version'] for r in components} == {'1.99', '1.85'}, 'Component toolchains missing')
     for run in components:
         need(run['exit_code'] == 0 and run['component'] == dict(passed=7, failed=0, ignored=1)
-             and run['workspace'] == dict(passed=840, failed=0, ignored=414), 'Component/workspace regressions failed')
+             and run['workspace'] == dict(passed=840, failed=0, ignored=416), 'Component/workspace regressions failed')
         for log in run['logs']:
             need(sha(out / log['path']) == log['sha256'], 'Regression log changed')
             raw = (out / log['path']).read_bytes()
@@ -164,12 +174,12 @@ def verify(out, full):
     need(b'sea-orm v' not in (out / 'seaorm-tree-seata-db-mysql.log').read_bytes()
          and b'sqlx v' not in (out / 'seaorm-tree-sea-orm.log').read_bytes(), 'Core/ORM dependency boundary changed')
     tree = (out / 'seaorm-workspace-normal-tree.log').read_bytes()
-    need(not re.search(rb'\b(time|libsqlite3-sys|sqlx-sqlite) v\d', tree) and b'rsa v0.9.10' in tree, 'Activated dependency scope changed')
+    need(not re.search(rb'\b(rsa|time|libsqlite3-sys|sqlx-sqlite) v\d', tree) and b'aws-lc-rs v1.19.0' in tree, 'Activated dependency scope changed')
     audit = json.loads((out / 'seaorm-cargo-audit.json').read_bytes())
     command = json.loads((out / 'audit-command.json').read_bytes())
     need(command['exit_code'] == 1 and command['ignore'] == audit['settings']['ignore'] == []
          and command['lock_sha256'] == sha(ROOT / 'Cargo.lock') and command['database'] == audit['database']
-         and {v['advisory']['id'] for v in audit['vulnerabilities']['list']} == {'RUSTSEC-2023-0071','RUSTSEC-2026-0459','RUSTSEC-2026-0009'}, 'Audit findings were hidden or changed')
+         and {v['advisory']['id'] for v in audit['vulnerabilities']['list']} == {'RUSTSEC-2026-0459','RUSTSEC-2026-0009'}, 'Audit findings were hidden or changed')
     print('SEAORM_MYSQL_VERIFIED globals=' + str(len(xids)) + ' ' + sha(out / 'catalog.json'))
 
 

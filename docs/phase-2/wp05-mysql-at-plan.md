@@ -200,3 +200,7 @@ MySQL TLS 和提交回调权限故障已在固定原 Java TC、MySQL 8.4.13 与 
 ### Undo 摘要修复增量
 
 013 显式迁移与版本 4 登记现已实现。原业务事务将摘要与 Undo、见证共同持久化，独立恢复及正式回调对新记录校验摘要。原 Java Undo 格式保持原定义，旧版本记录继续采用历史语义。双工具链已通过改写拒绝、恢复原字节和原 TC 提交回调联试。[实施及证据](evidence/java-tc-changed-commit-report/README.md#undo-sha-256-与同一分支恢复)。上述完整性反例保留为修复前的真实记录。公开提交与完整写入器准入继续验收。
+
+### 原语句执行回执前置
+
+正式 MySQL/SeaORM 新增保留 u64 影响行数及原 last_insert_id 的 `execute_with_result`，不改变旧接口或提交能力。双 Rust 原回调大整数/后续会话值隔离、十二笔真实实体原 TC 事务和完整回归已验收：[证据及范围](evidence/mysql-statement-result/README.md)。正式自增表准入和用原回执定位生成键镜像仍待实现，不用本前置回执交付关闭生成主键/完整 ORM 要求。

@@ -158,7 +158,9 @@ mod native {
             let xid = global.xid().clone();
             let plan = entity_cases::plan(id);
             let mut local = source.begin().await.unwrap();
-            let affected = plan.execute(&mut local).await.unwrap();
+            let statement_result = plan.execute_with_result(&mut local).await.unwrap();
+            let affected = statement_result.rows_affected();
+            assert_eq!(statement_result.last_insert_id(), 0);
             assert_eq!(
                 rows(&mut admin).await,
                 data["seed"],
@@ -186,7 +188,7 @@ mod native {
                 &out,
                 &format!("{id}.held.json"),
                 serde_json::json!({"id":id,"xid":xid.as_str(),"branch_id":branch,
-                "resource":manager.key().resource_id(),"lock":receipt.lock_key(),"affected_rows":affected,
+                "resource":manager.key().resource_id(),"lock":receipt.lock_key(),"affected_rows":affected,"last_insert_id":statement_result.last_insert_id(),
                 "phase_one":rows(&mut admin).await,"checksum_persisted":true}),
             );
             signal(&out, &format!("{id}.release")).await;

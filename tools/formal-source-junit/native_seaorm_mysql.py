@@ -38,7 +38,9 @@ def run(versions, directions):
         p = Path(row['path']); need(sha(p) == row['sha256'], 'Dependency differs')
         if not p.name.startswith(('mockito-', 'byte-buddy-', 'objenesis-', 'lombok-')): jars.append(p)
     inputs = [ROOT / 'docs/phase-2/seaorm-mysql-contract.md', Path(__file__).resolve(), ROOT / 'tools/formal-source-junit/SqlMatrixUndoOracle.java', ROOT / 'Cargo.toml', ROOT / 'Cargo.lock',
-        *sorted(p for p in (ROOT / 'crates').rglob('*') if p.is_file()), ROOT / 'tools/formal-source-junit/java_writer_jdbc_profile_tc.py',
+        *sorted(p for p in (ROOT / 'crates').rglob('*') if p.is_file()),
+        *sorted(p for p in (ROOT / 'third_party/sqlx_mysql').rglob('*') if p.is_file()),
+        ROOT / 'tools/formal-source-junit/validate_seaorm_mysql.py', ROOT / 'tools/formal-source-junit/java_writer_jdbc_profile_tc.py',
         Path(support.__file__), Path(reg.__file__), ROOT / 'tools/formal-tc-lock-coverage/live.py', ROOT / 'tools/formal-rm-java/validate.py',
         ROOT / 'tools/java-go-at-shared-lock/proxy.py', ROOT / 'tools/java-go-at-shared-lock/wire.py', ROOT / 'tools/go-java-v1-real-at/verify.py']
     template_path = ROOT / 'docs/phase-2/evidence/exact-temporal-rust-owner-java/20261128_133635_d5470cdb/application.yml'
@@ -52,7 +54,7 @@ def run(versions, directions):
         '-encoding', 'UTF-8', '-cp', cp, '-d', classes, ROOT / 'tools/formal-source-junit/SqlMatrixUndoOracle.java']))
     command('compile-oracle', [reg.JAVA.with_name('javac.exe'), '@' + str(argfile)])
     for p in classes.rglob('*.class'): put(out / 'classes' / p.relative_to(classes), p.read_bytes())
-    binaries = {}
+    binaries = {}; receipt_binaries = {}
     for version in versions:
         env['CARGO_TARGET_DIR'] = str(ROOT.parent / ('.seata-target-nodebug' if version == '1.99' else '.seata-target-nodebug-185'))
         command('rustc-' + version, ['rustc', '+' + version + '.0', '--version'])
@@ -63,9 +65,14 @@ def run(versions, directions):
         artifacts = [json.loads(line) for line in raw.splitlines() if line.startswith(b'{')]
         original, = [Path(r['executable']) for r in artifacts if r.get('executable') and r['target']['name'] == 'live_entity_mysql_java']
         target = work / ('rust-' + version + '.exe'); put(target, original.read_bytes()); binaries[version] = dict(path=str(target), sha256=sha(target))
+        receipt_raw = command('build-receipt-' + version, ['cargo', '+' + version + '.0', 'test', '--manifest-path', ROOT / 'Cargo.toml', '--offline', '--locked', '-p', 'seata-db-mysql', '--lib', '--no-run', '--message-format=json'], timeout=240)
+        receipt_artifacts = [json.loads(line) for line in receipt_raw.splitlines() if line.startswith(b'{')]
+        receipt_original, = [Path(r['executable']) for r in receipt_artifacts if r.get('executable') and r['target']['name'] == 'seata_db_mysql']
+        receipt_target = work / ('receipt-' + version + '.exe'); put(receipt_target, receipt_original.read_bytes()); receipt_binaries[version] = dict(path=str(receipt_target),sha256=sha(receipt_target))
         command('clippy-' + version, ['cargo', '+' + version + '.0', 'clippy', '--manifest-path', ROOT / 'Cargo.toml', '--offline', '--locked', '-p', 'seata-orm-seaorm',
             '--features', 'experimental_changed_commit', '--test', 'live_entity_mysql_java', '--', '-D', 'warnings'], timeout=240)
     save(out / 'rust-binaries.json', binaries)
+    save(out / 'receipt-binaries.json', receipt_binaries)
     db_port, tc_port = port(), port(); need(db_port != tc_port, 'Port overlap')
     resource = 'jdbc:mysql://127.0.0.1:' + str(db_port) + '/admission'; data = work / 'data'; data.mkdir()
     container = command('create', ['docker', 'create', '--pull=never', '--name', 'sql-matrix-' + stamp.replace('_', '-'), '--label', 'seata.fixture.owner=' + stamp,
@@ -78,6 +85,10 @@ def run(versions, directions):
     matrix = json.loads(DATA.read_bytes())
     try:
         command('start', ['docker', 'start', container]); command('ready', ['docker', 'exec', container, 'mysqladmin', '-h127.0.0.1', '-uroot', '-p' + PASSWORD, '--wait=60', 'ping'])
+        for version in versions:
+            report = out / ('receipt-' + version + '.json')
+            env.update(SEATA_MYSQL_PORT=str(db_port),SEATA_MYSQL_DATABASE='admission',SEATA_MYSQL_PASSWORD=PASSWORD,SEATA_STATEMENT_RECEIPT_OUT=str(report))
+            command('receipt-' + version, [receipt_binaries[version]['path'], 'exec::statement_callback_tests::original_ok_receipt_survives_later_queries_without_signed_truncation', '--ignored', '--exact', '--nocapture'])
         ddl = b''.join(command(label + '-schema', ['git', '-C', reg.ORACLE, 'show', reg.PIN + ':' + path]) for label, path in [
             ('server', 'script/server/db/mysql.sql'), ('undo', 'script/client/at/db/mysql.sql')])
         for name in ['001_seata_rs_at_branch_v1.sql', '002_seata_rs_at_registration_origin.sql', '003_seata_rs_at_commit_decision.sql',

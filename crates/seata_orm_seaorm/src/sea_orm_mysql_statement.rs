@@ -59,6 +59,15 @@ impl SeaOrmMySqlStatement {
     pub fn parameters(&self) -> &[FieldValue] {
         &self.parameters
     }
+    /// 参数为调用方已拥有的正式本地事务；返回同一业务语句的原始 MySQL 回执，不另开连接或提交。
+    pub async fn execute_with_result(
+        &self,
+        transaction: &mut MySqlLocalTransaction,
+    ) -> Result<seata_db_mysql::MySqlStatementResult, SeaOrmMySqlError> {
+        Ok(transaction
+            .execute_with_result(&self.recognizer, &self.parameters)
+            .await?)
+    }
     /// 参数为调用方已拥有的正式本地事务；返回影响行数，沿用原毒化、取消、Undo 与提交门槛。
     pub async fn execute(
         &self,

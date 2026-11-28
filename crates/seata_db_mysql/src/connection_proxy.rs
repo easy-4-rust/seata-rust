@@ -276,6 +276,18 @@ impl MySqlLocalTransaction {
         sql: &SqlRecognizer,
         parameters: &[FieldValue],
     ) -> Result<u64, DbError> {
+        Ok(self
+            .execute_with_result(sql, parameters)
+            .await?
+            .rows_affected())
+    }
+    /// 参数为正式 SQL 与原绑定；返回同一语句原始 OK 回执，成功仅表示未提交的镜像与 Undo 已准备。
+    /// 保持原毒化、取消、超时与预算边界，不重放语句或增加提交入口。
+    pub async fn execute_with_result(
+        &mut self,
+        sql: &SqlRecognizer,
+        parameters: &[FieldValue],
+    ) -> Result<crate::MySqlStatementResult, DbError> {
         let guard = self
             .phase_one_metrics
             .begin(crate::MySqlPhaseOneOperation::Execute);
@@ -287,7 +299,7 @@ impl MySqlLocalTransaction {
         &mut self,
         sql: &SqlRecognizer,
         parameters: &[FieldValue],
-    ) -> Result<u64, DbError> {
+    ) -> Result<crate::MySqlStatementResult, DbError> {
         if self.poisoned {
             return Err(DbError::Poisoned);
         }
@@ -339,8 +351,8 @@ impl MySqlLocalTransaction {
         match result {
             Ok(result) => {
                 self.transaction = Some(transaction);
-                let (count, undo) = result?;
-                Self::verify_affected_rows_have_image(count, &undo)?;
+                let (statement_result, undo) = result?;
+                Self::verify_affected_rows_have_image(statement_result.rows_affected(), &undo)?;
                 // 本次DML可能已生效但未提交；准备日志预算失败必须保留poison并整体回滚。
                 if !(undo.before_image().rows().is_empty() && undo.after_image().rows().is_empty())
                 {
@@ -359,7 +371,7 @@ impl MySqlLocalTransaction {
                     self.undo_bytes = bytes;
                 }
                 self.poisoned = false;
-                Ok(count)
+                Ok(statement_result)
             }
             Err(_) => {
                 drop(transaction);

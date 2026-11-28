@@ -32,3 +32,5 @@
 原计划要求的独立 SeaORM 层已新增[正式实体 DML 适配](../phase-2/evidence/seaorm-mysql/README.md)，保持原 MySQL 本地事务、Undo、摘要、锁和提交/恢复门槛。双版本十二笔真实 Entity INSERT/UPDATE/DELETE 通过，DECIMAL/二进制/中文 JSON/NULL 全字段及原 Java parser 核验通过；全工作区各 840 通过、414 忽略。当前仍未提供原生 ConnectionTrait、完整读写/模型返回、生成 ID、关联和 2.x，不能标记完整 ORM/生态完成。最新全 lock 审计报告 rsa、time、libsqlite3-sys 三项；当前正常构建未启用后两者，但没有移除或忽略告警，生产安全门禁仍开放。下一步应依据最新上游修复和实际依赖链处理真实安全缺口，继续完整 ORM、SQL 和后续阶段交付。
 
 后续 [RSA 认证处置](../phase-2/evidence/mysql-rsa-auth/README.md)以明确的本地 SQLx 0.8.6 维护补丁替换旧 RSA 依赖，实际图与 lock 不再包含 rsa，Rust 1.85 保留。两版、三种公钥、两种认证插件/TLS 的十八笔正式 AT 事务及八项拒绝通过；真实认证帧、持有连接时 TLS 会话、原子 Undo/SHA 和原 TC 回调均独立核验，工作区各 840 passed / 415 ignored、严格 Clippy 通过。time/SQLite 告警仍保留，未发布消费者不会自动继承根 Cargo patch；发布集成、完整 ORM/SQL、生产运维及后续阶段继续开放。
+
+[原业务语句回执](../phase-2/evidence/mysql-statement-result/README.md)已从 StatementCallback 贯通正式事务和 SeaORM `execute_with_result`，u64 原始影响行数/ID 不经后续会话查询或镜像推算，旧行数接口兼容。底层大整数回执、会话值变更、批量首 ID、错误/回滚，以及双 Rust 十二笔实体原 TC 提交/补偿均实际验证；各 840 passed / 416 ignored、严格 Clippy 通过。本项只是生成主键能力的前置交付，正式自增表/缺省键镜像定位仍拒绝并待实施，原生 ConnectionTrait、完整读写和 Phase 5–7 不变为已完成。

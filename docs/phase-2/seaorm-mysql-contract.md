@@ -7,3 +7,9 @@
 SQL 仅允许正式 AT 识别器及真实表校验已支持的 INSERT/UPDATE/DELETE。拒绝非 MySQL Statement、DDL/事务控制/未支持 SQL、参数数量或预算不符及不能无损映射的值。保留 i64/u64、字节、文本、NULL、精确十进制、日期、TIME、DATETIME 与 UTC 时间点；JSON 文本 null 与 SQL NULL 区分，不用浮点中转 DECIMAL，不静默丢弃时间的亚微秒精度，不为巨大十进制指数分配无界展开字符串。Debug/错误不能暴露 SQL 字面值或绑定内容。
 
 验收包括真实 SeaORM Entity 的 INSERT/UPDATE/DELETE 构建、有序绑定及类型/边界拒绝测试，随后以未修改原 Java TC、真实 MySQL、双 Rust 的正式阶段一提交/补偿验证独立业务、Undo/checksum/历史见证、原登记/回调及原 Java parser 读取。未通过完整 ORM/生产门禁前，不把该适配增量表述为完整 SeaORM 生态已交付。
+
+## 原语句回执扩展（实施中）
+
+`MySqlLocalTransaction::execute_with_result` 与 SeaORM 适配器的同名方法必须返回同一条业务 DML 的 MySQL OK 回执：影响行数与原始 `last_insert_id`，二者均使用无损 u64。旧 `execute` 继续返回影响行数且行为兼容。不得通过后续 SELECT LAST_INSERT_ID、MAX、镜像主键、更新计数或批量编号推算返回 ID；后续镜像查询不得覆盖业务回执。仅在完整镜像与 Undo 准备成功后发布回执，失败、超时、取消保持原毒化与回滚边界，不重执行语句、不另开连接、不增加提交入口。指标对一次调用只结算一次。
+
+验证须覆盖真实服务端非零/大于 i64::MAX 的原始回执、后续会话状态变化、旧接口兼容及双 Rust 的真实 SeaORM DML 提交/补偿。该扩展只交付回执传播；自增表元数据、生成主键镜像定位、原生 ConnectionTrait 和实体模型返回仍须单独实施与验证，不因此视为完成。

@@ -1,4 +1,6 @@
-use crate::{exec::StatementCallback, mysql_image_reader::MySqlImageReader, DbError};
+use crate::{
+    exec::StatementCallback, mysql_image_reader::MySqlImageReader, DbError, MySqlStatementResult,
+};
 use seata_at::{SqlRecognizer, SqlType, SqlUndoLog};
 use seata_datasource::FieldValue;
 use sqlx::{MySql, Transaction};
@@ -13,11 +15,11 @@ impl UpdateExecutor {
         database: &str,
         sql: &SqlRecognizer,
         parameters: &[FieldValue],
-    ) -> Result<(u64, SqlUndoLog), DbError> {
+    ) -> Result<(MySqlStatementResult, SqlUndoLog), DbError> {
         let before = MySqlImageReader::read(tx, database, sql, parameters).await?;
         let keys = MySqlImageReader::primary_values(&before)?;
-        let count = StatementCallback::execute(tx, sql, parameters).await?;
+        let result = StatementCallback::execute(tx, sql, parameters).await?;
         let after = MySqlImageReader::read_keys(tx, before.table_meta(), &keys).await?;
-        Ok((count, SqlUndoLog::new(SqlType::Update, before, after)?))
+        Ok((result, SqlUndoLog::new(SqlType::Update, before, after)?))
     }
 }

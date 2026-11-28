@@ -95,7 +95,7 @@ impl MySqlPhaseOneGuard {
         });
     }
     /// 参数为原 DML 结果；无返回值，成功仅表示未提交作用域内的语句与镜像准备。
-    pub(crate) fn finish_execute(self, result: &Result<u64, crate::DbError>) {
+    pub(crate) fn finish_execute<T>(self, result: &Result<T, crate::DbError>) {
         self.finish(if result.is_ok() {
             Outcome::ExecutionCompleted
         } else {

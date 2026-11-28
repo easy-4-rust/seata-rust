@@ -4,3 +4,6 @@ mod update_executor;
 pub(crate) use delete_executor::DeleteExecutor;
 pub(crate) use statement_callback::StatementCallback;
 pub(crate) use update_executor::UpdateExecutor;
+
+#[cfg(test)]
+mod statement_callback_tests;

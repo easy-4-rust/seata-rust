@@ -1,0 +1,27 @@
+[workspace]
+members = ["crates/seata_protocol", "crates/seata_transport", "crates/seata_tm", "crates/seata_rm", "crates/seata_at", "crates/seata_datasource", "crates/seata_db_mysql", "crates/seata_sqlparser", "crates/seata_test", "crates/seata_observability", "crates/seata_xa", "crates/seata_tcc", "crates/seata_orm_seaorm"]
+exclude = ["tools/java-tc-integration/rust-client", "third_party/sqlx_mysql"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/easy-4-rust/seata-rust"
+
+[workspace.dependencies]
+thiserror = "=2.0.21"
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "net", "io-util", "sync", "time", "macros"] }
+tracing = "=0.1.44"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
+
+[patch.crates-io]
+sqlx-mysql = { path = "third_party/sqlx_mysql" }

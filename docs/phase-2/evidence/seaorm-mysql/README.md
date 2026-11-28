@@ -20,3 +20,5 @@ python -B tools/formal-source-junit/validate_seaorm_mysql.py docs/phase-2/eviden
 ```
 
 原始日志、运行输入与执行二进制、全部 Undo/Java 重编码、独立 SQL、原协议帧、组件/工作区回归及原始审计结果完整封存。自有回环 TC 关闭认证，MySQL 使用夹具 root，不作为生产权限或认证证明。
+
+后续 [原业务回执增量](../mysql-statement-result/README.md)已在正式事务及 SeaORM 输入适配器中贯通原始计数/ID，新增双版本底层大整数回执与十二笔原 TC 事务证据。权威现场 `20261128_163855_5075e62d` 使用当前 RSA 替换后的依赖图与审计，两项剩余告警继续保留；上述早期三告警结论只描述当时快照。全工作区现各 840 passed / 416 ignored，严格 Clippy 通过。自增表准入、生成主键镜像和完整 ORM 仍未交付。

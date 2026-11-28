@@ -245,3 +245,6 @@ mod mysql_tcc_fence_store;
 mod mysql_tcc_transaction;
 #[cfg(feature = "tcc")]
 pub use mysql_tcc_context_report_error::MySqlTccContextReportError;
+
+mod my_sql_statement_result;
+pub use my_sql_statement_result::MySqlStatementResult;
