@@ -36,3 +36,9 @@ DATE 必须对照原 JDBC 的日历和时区纪元处理，明确解决数据库
 每类均须有能暴露原缺口的失败测试、正式生产逻辑、原格式对照、主键锁键、真实第一阶段提交和回调/跨进程恢复证据。Rust 1.99 与 1.85 联试、旧 DATETIME/JSON/普通 AT 回归及独立原始证据核验通过后，才可标记该能力完成。旧配置编号、旧记录和 Undo SHA 原事务原子性保持现有契约。原实现诊断不替代这些验证。
 
 当前状态：原实现参考已取得；TIMESTAMP 已新增[独立原生值域和显式 UTC 正式回调](mysql-timestamp-contract.md)，专门跨进程重启恢复已通过[原 TC 下的独立进程补验](evidence/mysql-timestamp-restart/README.md)。DATE、TIME 的正式物理资源实施与验收尚未完成。完整 WP05、V1 生产门禁和 Phase 0–7 总计划保持开放。
+
+## 2026-11-28 增量：无损 DATE/TIME 表达组件
+
+已完成 [显式 JDBC 装饰器与 Rust 值模型](evidence/mysql-exact-temporal-adapter/README.md)组件验证：固定 Connector/J 8.0.27 的文本/二进制原始行无损读取，DATE 保留 Gregorian 日期，TIME 保留完整有符号微秒与实际物理精度。正式装饰器经原 Jackson 编码/解码及 JDBC 重绑定验证；原 Java 核心/parser 无改动。
+
+显式模式保留 Undo 对象图及 JDBC 91/92，但值类采用 String，不能称作原 java.sql.Date/Time 表示不变。旧配置 1–4 和默认记录不变；尚未发布新的 Rust 物理资源配置。后续接入须绑定精确模式、统一写入器、排空旧分支，并验证正式镜像/锁键、原子 Undo/SHA、回调及跨进程恢复。Fastjson 原比较器会转换字符串，本轮不认证该路径。此组件完成不关闭 DATE/TIME 能力或总门禁。

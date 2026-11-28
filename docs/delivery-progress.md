@@ -1381,3 +1381,7 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 最终双 Rust 工作区各 812 通过、403 忽略、187 个成功汇总，严格受影响 Clippy 通过。独立核验拒绝 264 项证据削弱和 11 项错误复位授权。生产 Rust 沿用 d30dae995，没有新增生产修复或更改默认提交开关。[现场](phase-2/evidence/mysql-timestamp-restart/README.md) · [ledger](phase-2/wp05-mysql-timestamp-restart.json)。
 
 该选定 UTC 恢复缺口已补齐；下一步推进 DATE/TIME 的完整值域与原 Java 格式兼容。完整 WP05/WP07、V1 生产准入及 Phase 5–7 按原计划继续。
+
+### 2026-11-28：DATE/TIME 无损组件
+
+已新增实际 JDBC 精确装饰器与 Rust LocalDate/InternalTime 值模型，[组件证据](phase-2/evidence/mysql-exact-temporal-adapter/README.md)绑定 32 组 1312 行观测，其中正式装饰器 328 行全部无损；原入口的 16 次改写和 4 次绑定异常作为失败对照保留。该显式模式保留原 Jackson Undo 图/JDBC 编号，DATE/TIME 值类改用 String，不自动升级旧记录。DATE/TIME 正式 Rust SQL/镜像/锁键/Undo 配置/TC 回调/重启恢复仍待完成；WP05、WP07、后续阶段和总目标继续开放。用户已明确授权全部提交并推送 GitHub，此授权持续有效。

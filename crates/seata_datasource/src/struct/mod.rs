@@ -5,6 +5,8 @@ mod column_type;
 mod decimal_value;
 mod field;
 mod field_value;
+mod internal_time;
+mod local_date;
 mod local_date_time;
 mod mysql_type;
 mod row;
@@ -24,3 +26,6 @@ pub use row::Row;
 pub use table_meta::TableMeta;
 pub use table_records::TableRecords;
 pub use timestamp::Timestamp;
+
+pub use internal_time::InternalTime;
+pub use local_date::LocalDate;
