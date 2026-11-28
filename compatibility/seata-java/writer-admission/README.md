@@ -9,6 +9,16 @@
 
 兼容层校验当前物理连接及原 Seata 资源标识，只支持当前版本的原绑定表和显式本地事务。数据库权限及应用部署负责限制绕过准入入口的写入。外部写入器完整验收继续由 WP05 跟踪。[验收契约](../../../docs/phase-2/tc-lock-coverage-contract.md#java-写入器事务准入)
 
+## 可选完整 JDBC 配置准入
+
+原三参数入口仍支持上述 Connector/J 8.0.33 及 005/011 部署。需要与 Rust 完整配置绑定协作时，先排空写入器与未完成分支，由部署账号应用 [021](../../../crates/seata_db_mysql/migrations/021_seata_rs_at_jdbc_profile_binding.sql)，预置 `jdbc_profile`，再调用四参数 `verify(connection, expectedServerUuid, expectedSchema, jdbcProfile)`。编号沿用 Rust 的 1–6；NULL、缺列和不匹配均拒绝。
+
+四参数入口要求实际 Connector/J 8.0.27。奇数码使用 Boolean TINYINT，偶数码使用数字映射。配置 3–6 还要求驱动 `connectionTimeZone=UTC`、实际 MySQL session `time_zone='+00:00'`、JVM 固定零偏移时区、原 Jackson Undo parser 固定零偏移时区。原版本没有 parser 时区 getter，守卫只读其固定版本字段；无法读取即拒绝，不修改进程全局配置。部署方必须在启动阶段配置这些约定，并保持到所有分支及回调结束。
+
+配置 5/6 必须把实际 `ExactTemporalDataSource` 放在原 Seata `DataSourceProxy` 直接内层；配置 1–4 不能使用该装饰器。旧入口无须编译或链接该装饰器。共享绑定行锁和 MDL 仍归首条业务 SQL 前的原事务持有，调用方须在失败时回滚。
+
+[真实数据库探针](../../../docs/phase-2/evidence/java-writer-jdbc-profile/README.md)证明六码绑定、时间与装饰器拒绝及持锁，并验证旧入口。该探针只替换 Seata 数据源身份，未覆盖完整 Java TC/RM 回调；完整写入器门禁仍开放。
+
 ## 账号权限验证
 
 固定 MySQL 8.4.13 联试对 Java 写入、Rust 写入以及只读业务查询使用三个独立账号。两个写入账号对 005/011 表仅授予 `SELECT`。部署账号负责 DDL、初始化绑定和后续变更。

@@ -1405,3 +1405,9 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 本轮实现合作 Rust 写入器的表示准入守卫，Java/其他写入器接入、所有写入器全局锁协作与权限准入、完整 SQL、WP07 与后续 Phase 5–7 继续开放。
 
 本次 JDBC 表示准入增量的双 Rust 全工作区各 824 项通过、409 项忽略，严格 Clippy 通过；最终证据 catalog 为 `fd8872664a3e19747675810ef946e7913119306482ab9e8cc3f87327890d1897`。
+
+### 2026-11-28：Java 完整 JDBC 配置准入入口
+
+原 `JavaAtWriterAdmission` 新增四参数入口，在首条业务 SQL 前核对固定驱动、实际映射、UTC/精确装饰器和完整绑定码；原三参数及旧 schema 行为保留。[真实 MySQL 探针](phase-2/evidence/java-writer-jdbc-profile/README.md)取得 6 接受、69 拒绝、6 组实际 1205 持锁及回滚释放，另核验缺列拒绝与 8.0.33 旧入口。独立校验器通过源码、依赖、编译类和实际类加载来源核验。
+
+本次仅数据源身份使用替身，原 ConnectionProxy/JDBC/数据库均实际执行。完整原 Java TC/RM 与新入口的集成、DATE/TIME Java RM 补偿以及所有写入器强制接入仍待完成；本次没有修改 Rust 源码，也未重复宣称新的双 Rust 全工作区测试结果。WP05/WP07 和 Phase 5–7 保持开放。

@@ -1,0 +1,12 @@
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at org.apache.seata.rm.datasource.ConnectionProxy.<clinit>(ConnectionProxy.java:55)
+	at JavaWriterJdbcProfileProbe.proxy(JavaWriterJdbcProfileProbe.java:110)
+	at JavaWriterJdbcProfileProbe.main(JavaWriterJdbcProfileProbe.java:42)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.springframework.core.env.ConfigurableEnvironment.getProperty(String, java.lang.Class)" because "environment" is null
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.getConfigFromEnvironment(SpringBootConfigurationProvider.java:230)
+	at org.apache.seata.spring.boot.autoconfigure.provider.SpringBootConfigurationProvider.lambda$provide$0(SpringBootConfigurationProvider.java:74)
+	at org.apache.seata.config.FileConfiguration$$EnhancerByCGLIB$$9e6bf6fd.getConfig(<generated>)
+	at org.apache.seata.config.ConfigurationFactory.getConfigType(ConfigurationFactory.java:148)
+	at org.apache.seata.config.ConfigurationFactory.maybeNeedOriginFileInstance(ConfigurationFactory.java:133)
+	at org.apache.seata.config.ConfigurationFactory.<clinit>(ConfigurationFactory.java:64)
+	... 3 more

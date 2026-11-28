@@ -10,4 +10,12 @@
 
 ## 2026-11-28 验证状态
 
-上述可选严格入口已实现，并取得[真实双 Rust/原 TC 现场](evidence/mysql-jdbc-profile-admission/README.md)：两个启用位置各自生效，八笔全局事务、40 次错误配置拒绝；每个版本的六码矩阵为 6 接受/30 拒绝，旧表、缺列、NULL、未知码与实际共享锁等待均核验。218 次证据削弱被拒绝。此状态关闭本增量的表示绑定守卫，不关闭所有写入器的全局锁、账号权限和生产准入门禁。
+Rust 可选严格入口已实现，并取得[真实双 Rust/原 TC 现场](evidence/mysql-jdbc-profile-admission/README.md)：两个启用位置各自生效，八笔全局事务、40 次错误配置拒绝；每个版本的六码矩阵为 6 接受/30 拒绝，旧表、缺列、NULL、未知码与实际共享锁等待均核验。218 次证据削弱被拒绝。此状态关闭 Rust 表示绑定守卫增量，不关闭所有写入器的全局锁、账号权限和生产准入门禁。
+
+## Java 写入器完整配置入口
+
+沿用 `JavaAtWriterAdmission` 原显式事务调用点，增加四参数 `verify(connection, uuid, schema, jdbcProfile)`；三参数入口保持 005/011 兼容行为。新入口只接受稳定码 1–6，核对实际 Connector/J 8.0.27、TINYINT 映射和 021 完整码。配置 3–6 要求 JVM、原 Jackson Undo 时区、实际驱动时区及 MySQL session 显式 UTC；配置 5–6 要求实际内层数据源是精确 DATE/TIME 装饰器，1–4 不允许该装饰器。仅有调用方声明不足以通过。
+
+检查、共享行锁与 MDL 留在首条业务 SQL 前的原连接和事务；失败由调用方回滚，不改原 Undo、配置默认值或编号。此入口仍为协作式应用接入，不能阻止任意应用绕过，也不直接证明全部 Java RM 时间类型补偿兼容。测试须分别标明真实数据库检查、替身身份边界与完整原 TC/RM 现场的证据范围。
+
+实现已通过[真实 MySQL 探针](evidence/java-writer-jdbc-profile/README.md)：6 接受、69 拒绝、6 次绑定更新超时与回滚后释放；原三参数入口在 NULL/缺列和 Connector/J 8.0.33 下保持兼容。原 `ConnectionProxy` 与驱动实际执行，`DataSourceProxy` 身份使用替身。完整 Java TC/RM 集成和所有写入器门禁继续开放。
