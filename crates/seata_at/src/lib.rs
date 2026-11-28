@@ -30,3 +30,6 @@ pub use undo::{
 
 mod mysql_select_recognizer;
 pub use mysql_select_recognizer::MySqlSelectRecognizer;
+
+mod my_sql_count_recognizer;
+pub use my_sql_count_recognizer::MySqlCountRecognizer;

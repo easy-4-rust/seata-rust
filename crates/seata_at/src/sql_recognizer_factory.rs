@@ -81,6 +81,7 @@ impl SqlRecognizerFactory {
             .filter(|token| !matches!(token, Token::Whitespace(_)))
             .collect())
     }
+    /// 参数为原词法、完整 AST 与固定方言；返回 token 保真检查，拒绝解析器丢弃或改写的语义。
     pub(crate) fn verify_ast_tokens(
         original: &[Token],
         statement: &Statement,

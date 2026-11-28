@@ -1,0 +1,266 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "compile-oracle",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\javac.exe",
+      "@D:\\codex-builds\\seaorm-pagination-20261128_175407_dca921bf\\compile.args"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.99",
+    "argv": [
+      "rustc",
+      "+1.99.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "classify-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-orm-seaorm",
+      "--features",
+      "experimental_changed_commit,borrowed_connection",
+      "--test",
+      "live_pagination_mysql_java",
+      "borrowed_entity_queries_are_classified_without_interpolating_bindings",
+      "--",
+      "--exact"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-orm-seaorm",
+      "--features",
+      "experimental_changed_commit,borrowed_connection",
+      "--test",
+      "live_pagination_mysql_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-orm-seaorm",
+      "--features",
+      "experimental_changed_commit,borrowed_connection",
+      "--test",
+      "live_pagination_mysql_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.85",
+    "argv": [
+      "rustc",
+      "+1.85.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "classify-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-orm-seaorm",
+      "--features",
+      "experimental_changed_commit,borrowed_connection",
+      "--test",
+      "live_pagination_mysql_java",
+      "borrowed_entity_queries_are_classified_without_interpolating_bindings",
+      "--",
+      "--exact"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "build-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-orm-seaorm",
+      "--features",
+      "experimental_changed_commit,borrowed_connection",
+      "--test",
+      "live_pagination_mysql_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-orm-seaorm",
+      "--features",
+      "experimental_changed_commit,borrowed_connection",
+      "--test",
+      "live_pagination_mysql_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "sql-matrix-20261128-175407-dca921bf",
+      "--label",
+      "seata.fixture.owner=20261128_175407_dca921bf",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seaorm-pagination-20261128_175407_dca921bf/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:50612:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=admission",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+      "--auto-increment-increment=7",
+      "--auto-increment-offset=3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "60256755ff4b41feaf4d2df1fd2255b01a88c1635ac440529c799f67ad88e6c5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "60256755ff4b41feaf4d2df1fd2255b01a88c1635ac440529c799f67ad88e6c5",
+      "mysqladmin",
+      "-h127.0.0.1",
+      "-uroot",
+      "-pseata-mysql-fixture-only",
+      "--wait=60",
+      "ping"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "60256755ff4b41feaf4d2df1fd2255b01a88c1635ac440529c799f67ad88e6c5",
+      "mysql",
+      "-uroot",
+      "admission"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop-mysql",
+    "argv": [
+      "docker",
+      "stop",
+      "--time=15",
+      "60256755ff4b41feaf4d2df1fd2255b01a88c1635ac440529c799f67ad88e6c5"
+    ],
+    "exit_code": 0
+  }
+]

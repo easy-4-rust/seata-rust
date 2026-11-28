@@ -212,3 +212,7 @@ MySQL TLS 和提交回调权限故障已在固定原 Java TC、MySQL 8.4.13 与 
 ### 原生 ORM 连接与有界读取
 
 新增可选 borrowed_connection，以真实 ConnectionTrait 借用原事务，保留 SQLx 原生结果类型与列序；有界单表 SELECT 用原 RR 快照并保留取消/poison 边界。双版本 Entity 模型插入/更新/删除的十二笔正式原 TC 事务、原 Java parser、读取/预算/取消及全回归验证通过：[证据与未完成范围](evidence/seaorm-borrowed/README.md)。完整 ORM 生态、SQL/写入器和生产门禁继续实施。
+
+### 单表计数、原生分页与只读 LIKE
+
+独立密封 COUNT(*) 与原查询共用参数/元数据/RR/取消边界，统计不受数据读取探测行数截断。双 Rust 3006 行原生分页/分页流、LIKE/ESCAPE/NULL、RR/未提交变化以及十二笔原 TC 实体提交/补偿通过；全工作区各 853 passed / 419 ignored、严格 Clippy 通过。[证据及剩余范围](evidence/seaorm-pagination/README.md)。核心不绑定 ORM；rbatis 和更多适配器仍待实际实施/验证，完整 SQL、写入器和生产门禁继续。

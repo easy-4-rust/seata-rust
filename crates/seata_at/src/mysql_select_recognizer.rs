@@ -126,7 +126,7 @@ impl MySqlSelectRecognizer {
         }
         let mut parameters = 0;
         let mut bounds = Vec::new();
-        let predicate = Base::predicate(&select.selection, &mut parameters, qualifier)?;
+        let predicate = Base::read_predicate(&select.selection, &mut parameters, qualifier)?;
         let mut suffix = format!(" FROM {}", select.from[0]);
         if let Some(predicate) = predicate {
             suffix.push_str(&format!(" WHERE {predicate}"));

@@ -250,3 +250,6 @@ mod my_sql_statement_result;
 pub use my_sql_statement_result::MySqlStatementResult;
 
 mod my_sql_select_reader;
+
+mod my_sql_count_reader;
+mod my_sql_read_operation;

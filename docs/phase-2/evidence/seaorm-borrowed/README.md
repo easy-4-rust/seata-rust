@@ -23,3 +23,5 @@ python -B tools/formal-source-junit/validate_seaorm_borrowed_regression.py docs/
 原生运行输入、二进制哈希、原帧/SQL/Undo/Java 重编码、回归命令与原日志、默认/全特性依赖树、审计及生成脚本均封存。新现场须另按封存命令执行回归与汇总后再作完整验收。完整 lock 审计退出 1，保留 time/SQLite 两项告警，无 ignore；正常 all-features 图未激活它们和 rsa。root/关闭 TC 认证的回环现场不作为生产权限或认证证明。
 
 完整 ORM 仍开放：关系/连接、聚合与完整分页、LIKE 等更多表达式、流式读取、嵌套事务、迁移、2.x 和各物理类型/配置的完整认证。生成键批量、完整 SQL/全部写入器、生产门禁、WP07 和 Phase 5–7 不因本增量关闭。
+
+后续 [原生单表统计/分页](../seaorm-pagination/README.md)已补齐 COUNT(*)、一层受控统计派生表与只读 LIKE；双版本 3006 行分页、分页流和十二笔实体原 TC 事务通过，全工作区各 853 passed / 419 ignored。上述初始读取范围中的这部分缺口已有证据，通用聚合/关联、更多表达式及完整生态继续开放。

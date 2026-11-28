@@ -14,3 +14,6 @@ mod sea_orm_mysql_connection;
 mod sea_orm_mysql_read_statement;
 #[cfg(feature = "borrowed_connection")]
 pub use sea_orm_mysql_connection::SeaOrmMySqlConnection;
+
+#[cfg(feature = "borrowed_connection")]
+mod sea_orm_mysql_read_plan;

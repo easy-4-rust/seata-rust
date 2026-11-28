@@ -1,13 +1,13 @@
+use crate::sea_orm_mysql_read_plan::SeaOrmMySqlReadPlan;
 use crate::{sea_orm_mysql_bindings::SeaOrmMySqlBindings, SeaOrmMySqlError};
 use sea_orm::{DbBackend, QueryResult, Statement};
-use seata_at::MySqlSelectRecognizer;
 use seata_datasource::FieldValue;
 use seata_db_mysql::MySqlLocalTransaction;
 /// 原事务的已验证有界 SELECT，保留原生 SQLx 行及列序，不进行 BTreeMap 结果模拟。
 /// 对应 Java: 无直接对象；Rust SeaORM 查询输入适配扩展。
 #[derive(Debug)]
 pub(crate) struct SeaOrmMySqlReadStatement {
-    recognizer: MySqlSelectRecognizer,
+    recognizer: SeaOrmMySqlReadPlan,
     parameters: Vec<FieldValue>,
 }
 impl SeaOrmMySqlReadStatement {
@@ -18,7 +18,7 @@ impl SeaOrmMySqlReadStatement {
                 reason: "MySQL read backend required",
             });
         }
-        let recognizer = MySqlSelectRecognizer::recognize(&statement.sql)?;
+        let recognizer = SeaOrmMySqlReadPlan::recognize(&statement.sql)?;
         let parameters = SeaOrmMySqlBindings::convert(
             statement.values.map(|v| v.0).unwrap_or_default(),
             recognizer.parameter_count(),
@@ -34,11 +34,6 @@ impl SeaOrmMySqlReadStatement {
         &self,
         transaction: &mut MySqlLocalTransaction,
     ) -> Result<Vec<QueryResult>, SeaOrmMySqlError> {
-        Ok(transaction
-            .query(&self.recognizer, &self.parameters)
-            .await?
-            .into_iter()
-            .map(QueryResult::from)
-            .collect())
+        self.recognizer.execute(transaction, &self.parameters).await
     }
 }

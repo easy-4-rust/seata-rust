@@ -405,13 +405,37 @@ impl MySqlLocalTransaction {
         sql: &seata_at::MySqlSelectRecognizer,
         parameters: &[FieldValue],
     ) -> Result<Vec<sqlx::mysql::MySqlRow>, DbError> {
+        self.query_read(
+            crate::my_sql_read_operation::MySqlReadOperation::Select(sql),
+            parameters,
+        )
+        .await
+    }
+    /// 参数为密封计数计划和原绑定；返回同一 RR 快照中的一个原生计数行，不截断计数输入。
+    pub async fn query_count(
+        &mut self,
+        sql: &seata_at::MySqlCountRecognizer,
+        parameters: &[FieldValue],
+    ) -> Result<Vec<sqlx::mysql::MySqlRow>, DbError> {
+        self.query_read(
+            crate::my_sql_read_operation::MySqlReadOperation::Count(sql),
+            parameters,
+        )
+        .await
+    }
+    async fn query_read(
+        &mut self,
+        operation: crate::my_sql_read_operation::MySqlReadOperation<'_>,
+        parameters: &[FieldValue],
+    ) -> Result<Vec<sqlx::mysql::MySqlRow>, DbError> {
         if self.poisoned {
             return Err(DbError::Poisoned);
         }
         if self.undo_flushed {
             return Err(DbError::UndoSealed);
         }
-        sql.validate_binding_bounds(parameters)
+        operation
+            .validate_binding_bounds(parameters)
             .map_err(|error| match error {
                 seata_at::SqlError::Budget { limit } => {
                     DbError::Image(ImageError::Budget { limit })
@@ -442,16 +466,12 @@ impl MySqlLocalTransaction {
                 &mut transaction,
                 &self.metadata_options,
                 &self.database,
-                sql.table_name(),
+                operation.table_name(),
             )
             .await?;
-            crate::my_sql_select_reader::MySqlSelectReader::read(
-                &mut transaction,
-                &self.database,
-                sql,
-                parameters,
-            )
-            .await
+            operation
+                .execute(&mut transaction, &self.database, parameters)
+                .await
         })
         .await;
         match result {

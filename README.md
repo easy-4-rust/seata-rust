@@ -80,3 +80,5 @@ WP05推进[SQL parser core原对象迁移](docs/phase-2/evidence/sqlparser-index
 
 
 [TableMeta首期差分](docs/phase-2/evidence/sqlparser-table-gate/README.md)：原76案例双工具链MATCH，TableMeta仍PARTIAL，源对象13完整/1部分/17缺失；完整交付继续OPEN。
+
+可选原生 ORM 连接现支持受控单表 COUNT(*)、原生分页/分页流和只读 LIKE；双版本实际统计 3006 行并验证十二笔原 TC 实体提交/补偿，全工作区各 853 passed / 419 ignored。[分页验收与范围](docs/phase-2/evidence/seaorm-pagination/README.md)。完整 ORM 与其余计划继续实施，rbatis 尚未接入且未被排除。

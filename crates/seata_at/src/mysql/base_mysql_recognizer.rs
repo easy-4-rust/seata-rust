@@ -108,12 +108,23 @@ impl BaseMySqlRecognizer {
         depth: usize,
         qualifier: Option<&str>,
     ) -> Result<(), SqlError> {
+        Self::check_expression(value, parameters, depth, qualifier, false)
+    }
+    fn check_expression(
+        value: &Expr,
+        parameters: &mut usize,
+        depth: usize,
+        qualifier: Option<&str>,
+        read_like: bool,
+    ) -> Result<(), SqlError> {
         if depth > 32 {
             return Err(SqlError::Budget {
                 limit: "expression depth",
             });
         }
-        let mut child = |value: &Expr| Self::expression(value, parameters, depth + 1, qualifier);
+        let mut child = |value: &Expr| {
+            Self::check_expression(value, parameters, depth + 1, qualifier, read_like)
+        };
         match value {
             Expr::Identifier(name) if qualifier.is_some() => {
                 // 上游MySQL AST会将部分无括号内建项表示成Identifier，不能据此当作稳定列。
@@ -183,6 +194,24 @@ impl BaseMySqlRecognizer {
                 child(left)?;
                 child(right)?;
             }
+            Expr::Like {
+                any: false,
+                expr,
+                pattern,
+                escape_char,
+                ..
+            } if read_like => {
+                if escape_char
+                    .as_ref()
+                    .is_some_and(|value| value.chars().count() != 1)
+                {
+                    return Err(SqlError::Invalid {
+                        reason: "single LIKE escape character required",
+                    });
+                }
+                child(expr)?;
+                Self::expression(pattern, parameters, depth + 1, None)?;
+            }
             Expr::IsNull(value) | Expr::IsNotNull(value) => child(value)?,
             Expr::Between {
                 expr, low, high, ..
@@ -204,6 +233,20 @@ impl BaseMySqlRecognizer {
             }
         }
         Ok(())
+    }
+    /// 参数为只读 WHERE、累计绑定数及合法限定名；返回有界纯谓词，LIKE 不扩大写入准入。
+    pub(crate) fn read_predicate(
+        value: &Option<Expr>,
+        parameters: &mut usize,
+        qualifier: &str,
+    ) -> Result<Option<String>, SqlError> {
+        value
+            .as_ref()
+            .map(|value| {
+                Self::check_expression(value, parameters, 0, Some(qualifier), true)?;
+                Ok(value.to_string())
+            })
+            .transpose()
     }
     /// 参数为原可选WHERE及累计占位符数；返回重建的条件或None，成功时保留绑定顺序。
     pub(crate) fn predicate(
