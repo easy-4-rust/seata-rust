@@ -133,6 +133,15 @@ impl PreparedFormat {
             Value::Null
         } else {
             let payload = match field.value() {
+                FieldValue::LocalDateTime(value) => {
+                    let millis =
+                        value.epoch_seconds() * 1000 + i64::from(value.nanosecond() / 1_000_000);
+                    if value.nanosecond() % 1_000_000 == 0 {
+                        Value::Number(millis.into())
+                    } else {
+                        serde_json::json!([millis, value.nanosecond()])
+                    }
+                }
                 FieldValue::Null => Value::Null,
                 FieldValue::Signed(value) => Value::Number((*value).into()),
                 FieldValue::Unsigned(value) => Value::Number((*value).into()),
@@ -196,11 +205,17 @@ impl PreparedFormat {
             Some(ColumnDomain::Integer { unsigned: true, .. })
         );
         Ok(match native {
+            MySqlType::DateTime => {
+                if !profile.utc_temporal() {
+                    return Err(UndoCodecError::Unsupported {
+                        kind: "explicit UTC DATETIME profile required",
+                    });
+                }
+                (93, ValueEncoding::Typed("java.time.LocalDateTime"))
+            }
             MySqlType::TinyInt {
                 display_width_one: true,
-            } if !unsigned && profile == MySqlJdbcProfile::Connector8Default => {
-                (-7, ValueEncoding::Boolean)
-            }
+            } if !unsigned && profile.boolean_tinyint() => (-7, ValueEncoding::Boolean),
             MySqlType::TinyInt { .. } => (-6, ValueEncoding::Natural),
             MySqlType::SmallInt => (5, ValueEncoding::Natural),
             MySqlType::MediumInt => (4, ValueEncoding::Natural),

@@ -51,10 +51,7 @@ impl MySqlResourceBinding {
             .fetch_one(&mut **transaction)
             .await
             .map_err(|error| DbError::driver("read AT TINYINT(1) profile binding", error))?;
-            let expected = match profile {
-                MySqlJdbcProfile::Connector8Default => 1,
-                MySqlJdbcProfile::Connector8NumericTinyInt => 0,
-            };
+            let expected = u8::from(profile.boolean_tinyint());
             if mapped != Some(expected) {
                 return Err(DbError::Input {
                     reason: "MySQL AT TINYINT(1) profile binding is missing or differs",

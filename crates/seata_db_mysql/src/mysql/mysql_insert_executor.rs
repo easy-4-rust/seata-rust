@@ -123,7 +123,7 @@ impl MySqlInsertExecutor {
             });
         }
         let mut columns = (0..primary.len())
-            .map(|index| format!("`k{index}`"))
+            .map(|index| MySqlImageReader::projection(primary[index], &format!("`k{index}`")))
             .collect::<Vec<_>>();
         columns.push("`r`".to_owned());
         let select = format!(
@@ -192,6 +192,9 @@ impl MySqlInsertExecutor {
         match column.domain().ok_or(DbError::Unsupported {
             feature: "physical primary column domain",
         })? {
+            ColumnDomain::LocalDateTime { fractional_seconds } => {
+                Ok(format!("DATETIME({fractional_seconds})"))
+            }
             ColumnDomain::Json => Err(DbError::Unsupported {
                 feature: "JSON primary key",
             }),

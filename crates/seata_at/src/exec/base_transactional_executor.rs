@@ -112,7 +112,7 @@ impl BaseTransactionalExecutor {
                 field.column().domain(),
                 Some(ColumnDomain::Integer { unsigned: true, .. })
             )
-            && profile == MySqlJdbcProfile::Connector8Default
+            && profile.boolean_tinyint()
         {
             return match field.value() {
                 FieldValue::Signed(0) => output.push("false"),
@@ -123,6 +123,14 @@ impl BaseTransactionalExecutor {
             };
         }
         match field.value() {
+            FieldValue::LocalDateTime(value) => {
+                if !profile.utc_temporal() {
+                    return Err(LockKeyError::Unsupported {
+                        feature: "explicit UTC DATETIME profile required",
+                    });
+                }
+                output.push(&value.to_java_string())
+            }
             FieldValue::Signed(value) => output.push(&value.to_string()),
             FieldValue::Unsigned(value) => output.push(&value.to_string()),
             FieldValue::Text(value) => {

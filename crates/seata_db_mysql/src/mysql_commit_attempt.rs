@@ -42,11 +42,8 @@ impl MySqlCommitAttempt {
         let stored_version: u16 = row
             .try_get("schema_version")
             .map_err(|error| DbError::driver("commit attempt read version", error))?;
-        let stored_profile = match number("jdbc_profile")? {
-            1 => MySqlJdbcProfile::Connector8Default,
-            2 => MySqlJdbcProfile::Connector8NumericTinyInt,
-            _ => return Err(DbError::RecoveryConflict),
-        };
+        let stored_profile = MySqlJdbcProfile::from_storage_code(number("jdbc_profile")?)
+            .ok_or(DbError::RecoveryConflict)?;
         if stored_version != 1
             || stored_branch != branch_id
             || bytes("xid")? != xid.as_bytes()

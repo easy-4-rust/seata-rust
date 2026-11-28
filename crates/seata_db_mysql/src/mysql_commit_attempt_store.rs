@@ -190,10 +190,7 @@ impl MySqlCommitAttemptStore {
             .bind(id.resource().resource_id().as_bytes())
             .bind(id.application_data().map(str::as_bytes))
             .bind(receipt.lock_key().map(str::as_bytes))
-            .bind(match profile {
-                MySqlJdbcProfile::Connector8Default => 1_u8,
-                MySqlJdbcProfile::Connector8NumericTinyInt => 2_u8,
-            })
+            .bind(profile.storage_code())
             .bind(receipt.response().response.result_code.to_java_v1())
             .bind(receipt.response().response.transaction_exception_code.to_java_v1())
             .execute(&mut *tx)
@@ -247,10 +244,7 @@ impl MySqlCommitAttemptStore {
                     != id.application_data().map(str::as_bytes)
                 || optional("lock_key")?.as_deref() != receipt.lock_key().map(str::as_bytes)
                 || number("jdbc_profile")?
-                    != match profile {
-                        MySqlJdbcProfile::Connector8Default => 1,
-                        MySqlJdbcProfile::Connector8NumericTinyInt => 2,
-                    }
+                    != profile.storage_code()
                 || number("response_result_code")?
                     != receipt.response().response.result_code.to_java_v1()
                 || number("response_exception_code")?

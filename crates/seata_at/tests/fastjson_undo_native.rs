@@ -84,6 +84,9 @@ fn schema_with_decimal(precision: u32, scale: u32) -> TableMeta {
         .enumerate()
         .map(|(index, (name, kind, native, length, scale))| {
             let domain = match kind {
+                ColumnType::LocalDateTime => ColumnDomain::LocalDateTime {
+                    fractional_seconds: 6,
+                },
                 ColumnType::SignedInteger | ColumnType::UnsignedInteger => ColumnDomain::Integer {
                     bits: if name == "small" { 32 } else { 64 },
                     unsigned: kind == ColumnType::UnsignedInteger,
@@ -147,6 +150,7 @@ fn original_fastjson_restores_complete_ordered_insert_update_delete() {
                         })
                     };
                     let canonical = match field.value() {
+                        FieldValue::LocalDateTime(value) => value.to_java_string(),
                         FieldValue::Null => "null".to_owned(),
                         FieldValue::Signed(value) => value.to_string(),
                         FieldValue::Unsigned(value) => value.to_string(),

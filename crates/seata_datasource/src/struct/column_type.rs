@@ -2,6 +2,8 @@
 /// 对应 Java: java.sql.Types与ColumnMeta#dataType的Rust显式映射；尚不覆盖全部JDBC类型。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ColumnType {
+    /// 无时区日历日期时间；与整数纪元或普通文本分开保存。
+    LocalDateTime,
     /// 有符号整数，读取时使用i64保持精度。
     SignedInteger,
     /// 无符号整数，读取时使用u64保持精度。

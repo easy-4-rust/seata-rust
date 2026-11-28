@@ -15,6 +15,7 @@
 | Rust RM 登记、分支报告、回调与持久状态 | 初期 RM profile 已验证 | [WP04](../phase-1/evidence/rm-gate/README.md)验证重复与重连；其资源动作夹具不证明 MySQL Undo 原子性。 |
 | MySQL AT SQL/Undo 准备及真实数据库局部行为 | 实施与验证中 | [WP05 各增量](../phase-0/v1-implementation-acceptance-checklist.md#wp-05--mysql-at-phase-1)包含真实 MySQL 与固定 TC 选定场景；完整 SQL 支持矩阵、外部写入器锁覆盖和一阶段故障门禁未结。 |
 | MySQL 原生 JSON 非主键列 | 选定 JDBC / MySQL 配置已验证 | 元数据、精确服务器文本镜像、原 Java Undo 及原 TC 补偿已通过双 Rust 现场；SQL NULL 与 JSON null 分离，原生类型和字段预算严格核对。[JSON 证据](evidence/mysql-json/README.md)。SQL 语法和生产提交准入不因类型扩展而放开。 |
+| MySQL DATETIME 与主键 | 选定显式 UTC 配置已验证 | 1000–9999、0–6 精度、原 Java 93/LocalDateTime Undo、主键和补偿通过双 Rust 原 TC；新配置编号 3/4，旧 1/2 不猜时区。DATE/TIME/TIMESTAMP 及其他组合继续实施。[证据](evidence/mysql-datetime/README.md)。 |
 | 无变化、无分支本地 COMMIT | 受限实现 | `MySqlCommitCheckedTransaction::commit_no_change` 仅允许无登记、无 Undo、无见证作用域；成功不证明有变化业务的 Undo 原子提交。见[提交契约](mysql-first-phase-commit-contract.md)。 |
 | 有变化本地 COMMIT、原报告和跨进程 RM 恢复 | **默认关闭的实验特性** | `experimental_changed_commit` 下的 006 尝试记录、004 见证、007 报告门闩有[选定故障证据](evidence/mysql-commit-attempt-arm/README.md)。两个真正独立恢复者进程竞争已在[受控 RM 对端](evidence/mysql-report-process-race/README.md)与[固定原 Java TC](evidence/java-tc-changed-commit-report/README.md)的真实 MySQL 场景双工具链通过；持久 TM 接管已有[停止证明与原 TC 联试](evidence/tm-stop-nodes/README.md)，完整外部写入器准入和生产部署继续验收。 |
 | Undo SHA-256 | 013 迁移的新版本行已验证 | 版本 4 的摘要与业务、Undo、见证同事务提交，独立恢复和正式回调拒绝改写。旧行保留 NULL 摘要及历史语义。[双工具链现场证据](evidence/java-tc-changed-commit-report/README.md#undo-sha-256-与同一分支恢复)。 |

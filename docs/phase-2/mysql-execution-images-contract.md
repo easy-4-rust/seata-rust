@@ -28,3 +28,8 @@
 ## 原生 JSON 列增量（2026-11-28）
 
 非主键 JSON 已接入正式元数据、镜像、Java Undo 和实际补偿。保留服务器文本，区分 SQL NULL 与 JSON null；原生值类型与 1 MiB 预算分别验证。未扩大 SQL 语法。见 [契约](mysql-json-contract.md)、[双 Rust 原 Java / 原 TC 证据](evidence/mysql-json/README.md)。
+
+
+## DATETIME 精确日历与主键（2026-11-28）
+
+已实现 1000–9999、0–6 位精度、SQL NULL/零日期分离、同精度主键暂存及 Java 锁键。只有明确 UTC 配置可生成相应原 Java Undo；真实提交/补偿和旧 JSON/普通 AT 回归通过。[契约](mysql-datetime-contract.md)、[证据](evidence/mysql-datetime/README.md)。

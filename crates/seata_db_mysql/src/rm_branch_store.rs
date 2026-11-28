@@ -186,10 +186,7 @@ impl RmBranchStore {
         Ok(())
     }
     fn profile(profile: MySqlJdbcProfile) -> u8 {
-        match profile {
-            MySqlJdbcProfile::Connector8Default => 1,
-            MySqlJdbcProfile::Connector8NumericTinyInt => 2,
-        }
+        profile.storage_code()
     }
     /// 参数为 TC 原方向；返回固定持久值，方向一旦绑定不能切换。
     pub(crate) fn phase(phase: BranchPhase) -> u8 {

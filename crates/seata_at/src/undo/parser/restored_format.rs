@@ -203,6 +203,32 @@ impl RestoredFormat {
             FieldValue::Null
         } else {
             match column.kind() {
+                ColumnType::LocalDateTime => {
+                    let (millis, extra) = if let Some(a) = payload.as_array() {
+                        if a.len() != 2 {
+                            return Err(Self::bad("DATETIME timestamp shape"));
+                        }
+                        let nanos = a[1]
+                            .as_u64()
+                            .and_then(|n| u32::try_from(n).ok())
+                            .filter(|n| *n < 1_000_000_000)
+                            .ok_or(Self::bad("DATETIME nanos"))?;
+                        (
+                            a[0].as_i64().ok_or(Self::bad("DATETIME millis"))?,
+                            nanos % 1_000_000,
+                        )
+                    } else {
+                        (payload.as_i64().ok_or(Self::bad("DATETIME millis"))?, 0)
+                    };
+                    let nanos = (millis.rem_euclid(1000) as u32) * 1_000_000 + extra;
+                    FieldValue::LocalDateTime(
+                        seata_datasource::LocalDateTime::from_epoch_seconds(
+                            millis.div_euclid(1000),
+                            nanos,
+                        )
+                        .map_err(|_| Self::bad("DATETIME calendar"))?,
+                    )
+                }
                 ColumnType::SignedInteger => {
                     FieldValue::Signed(if let Some(v) = payload.as_bool() {
                         i64::from(v)

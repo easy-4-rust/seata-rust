@@ -114,7 +114,7 @@ impl MySqlTableMetaReader {
                 .map_err(|e| DbError::driver("primary order", e))?;
             primary_order.insert(name.to_ascii_lowercase(), Self::u32(position)?);
         }
-        let columns=sqlx::query("SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS COLUMN_NAME, CAST(DATA_TYPE AS CHAR CHARACTER SET utf8mb4) AS DATA_TYPE, CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4) AS COLUMN_TYPE, CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4) AS IS_NULLABLE, CAST(ORDINAL_POSITION AS UNSIGNED) AS ORDINAL_POSITION, CAST(CHARACTER_OCTET_LENGTH AS UNSIGNED) AS CHARACTER_OCTET_LENGTH, CAST(CHARACTER_MAXIMUM_LENGTH AS UNSIGNED) AS CHARACTER_MAXIMUM_LENGTH, CAST(NUMERIC_PRECISION AS UNSIGNED) AS NUMERIC_PRECISION, CAST(NUMERIC_SCALE AS UNSIGNED) AS NUMERIC_SCALE, CAST(EXTRA AS CHAR CHARACTER SET utf8mb4) AS EXTRA, CAST(GENERATION_EXPRESSION AS CHAR CHARACTER SET utf8mb4) AS GENERATION_EXPRESSION, CAST(CHARACTER_SET_NAME AS CHAR CHARACTER SET utf8mb4) AS CHARACTER_SET_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? ORDER BY ORDINAL_POSITION LIMIT 129")
+        let columns=sqlx::query("SELECT CAST(COLUMN_NAME AS CHAR CHARACTER SET utf8mb4) AS COLUMN_NAME, CAST(DATA_TYPE AS CHAR CHARACTER SET utf8mb4) AS DATA_TYPE, CAST(COLUMN_TYPE AS CHAR CHARACTER SET utf8mb4) AS COLUMN_TYPE, CAST(IS_NULLABLE AS CHAR CHARACTER SET utf8mb4) AS IS_NULLABLE, CAST(ORDINAL_POSITION AS UNSIGNED) AS ORDINAL_POSITION, CAST(CHARACTER_OCTET_LENGTH AS UNSIGNED) AS CHARACTER_OCTET_LENGTH, CAST(CHARACTER_MAXIMUM_LENGTH AS UNSIGNED) AS CHARACTER_MAXIMUM_LENGTH, CAST(NUMERIC_PRECISION AS UNSIGNED) AS NUMERIC_PRECISION, CAST(NUMERIC_SCALE AS UNSIGNED) AS NUMERIC_SCALE, CAST(DATETIME_PRECISION AS UNSIGNED) AS DATETIME_PRECISION, CAST(EXTRA AS CHAR CHARACTER SET utf8mb4) AS EXTRA, CAST(GENERATION_EXPRESSION AS CHAR CHARACTER SET utf8mb4) AS GENERATION_EXPRESSION, CAST(CHARACTER_SET_NAME AS CHAR CHARACTER SET utf8mb4) AS CHARACTER_SET_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? ORDER BY ORDINAL_POSITION LIMIT 129")
             .bind(database).bind(table).fetch_all(&mut **tx).await.map_err(|e|DbError::driver("column metadata",e))?;
         if columns.len() > 128 {
             return Err(MetadataError::Budget {
@@ -287,6 +287,7 @@ impl MySqlTableMetaReader {
             .split_whitespace()
             .any(|value| value.eq_ignore_ascii_case("unsigned"));
         let kind = match data_type.as_str() {
+            "datetime" => ColumnType::LocalDateTime,
             "tinyint" | "smallint" | "mediumint" | "int" | "bigint" => {
                 if unsigned {
                     ColumnType::UnsignedInteger
@@ -353,6 +354,7 @@ impl MySqlTableMetaReader {
     fn native_type(data_type: &str, full_type: &str) -> Result<MySqlType, MetadataError> {
         // 同值域的TEXT/BLOB子类仍需保留身份；TINYINT(1)只保留事实，不在这里丢失整数值。
         Ok(match data_type {
+            "datetime" => MySqlType::DateTime,
             "json" => MySqlType::Json,
             "tinyint" => MySqlType::TinyInt {
                 display_width_one: full_type
@@ -401,6 +403,20 @@ impl MySqlTableMetaReader {
             return Ok(ColumnDomain::Integer { bits, unsigned });
         }
         match data_type {
+            "datetime" => {
+                let precision = row.try_get::<u64, _>("DATETIME_PRECISION").map_err(|_| {
+                    MetadataError::Invalid {
+                        reason: "DATETIME fractional precision",
+                    }
+                })?;
+                Ok(ColumnDomain::LocalDateTime {
+                    fractional_seconds: u8::try_from(precision).map_err(|_| {
+                        MetadataError::Invalid {
+                            reason: "DATETIME fractional precision",
+                        }
+                    })?,
+                })
+            }
             "json" => Ok(ColumnDomain::Json),
             "char" | "varchar" | "tinytext" | "text" | "mediumtext" | "longtext" => {
                 let charset = match row

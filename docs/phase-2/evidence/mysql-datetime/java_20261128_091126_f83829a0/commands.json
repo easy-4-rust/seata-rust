@@ -1,0 +1,807 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-datetime-20261128-091126-f83829a0",
+      "--label",
+      "seata.xa.owner=683d6ccf491f4b95bdc184b5881c7b60",
+      "--mount",
+      "type=bind,source=E:/codex-builds/seata-datetime-20261128_091126_f83829a0/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:63161:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_datetime_683d6ccf491f",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "install-server-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_datetime_683d6ccf491f"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_datetime_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime(id INT PRIMARY KEY,v DATETIME(6) NULL,d0 DATETIME(0) NULL,d1 DATETIME(1) NULL,d2 DATETIME(2) NULL,d3 DATETIME(3) NULL,d4 DATETIME(4) NULL,d5 DATETIME(5) NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime VALUES(1,'1000-01-01 00:00:00.000001','1000-01-01 00:00:00','1000-01-01 00:00:00.1','1000-01-01 00:00:00.12','1000-01-01 00:00:00.123','1000-01-01 00:00:00.1234','1000-01-01 00:00:00.12345'),(2,'1582-10-04 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'1969-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1970-01-01 00:00:00',NULL,NULL,NULL,NULL,NULL,NULL),(6,'2000-02-29 12:34:56.123456',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1900-03-01 00:00:00.000001',NULL,NULL,NULL,NULL,NULL,NULL),(8,'9999-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(20001,'2026-11-28 01:02:03.001001','2026-11-28 01:02:03',NULL,NULL,'2026-11-28 01:02:03.001',NULL,NULL); DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime_keys; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime_keys(k DATETIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime_keys VALUES('1970-01-01 00:00:00.000001',7),('2038-01-19 03:14:07.123456',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_datetime_683d6ccf491f' AND TABLE_NAME='undo_datetime' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_datetime_683d6ccf491f.undo_datetime_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_datetime_683d6ccf491f.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_datetime_683d6ccf491f.undo_datetime ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_datetime_683d6ccf491f.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.global_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.branch_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_work%' OR argument LIKE 'INSERT INTO undo_work%' OR argument LIKE 'DELETE FROM undo_work%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime(id INT PRIMARY KEY,v DATETIME(6) NULL,d0 DATETIME(0) NULL,d1 DATETIME(1) NULL,d2 DATETIME(2) NULL,d3 DATETIME(3) NULL,d4 DATETIME(4) NULL,d5 DATETIME(5) NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime VALUES(1,'1000-01-01 00:00:00.000001','1000-01-01 00:00:00','1000-01-01 00:00:00.1','1000-01-01 00:00:00.12','1000-01-01 00:00:00.123','1000-01-01 00:00:00.1234','1000-01-01 00:00:00.12345'),(2,'1582-10-04 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'1969-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1970-01-01 00:00:00',NULL,NULL,NULL,NULL,NULL,NULL),(6,'2000-02-29 12:34:56.123456',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1900-03-01 00:00:00.000001',NULL,NULL,NULL,NULL,NULL,NULL),(8,'9999-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(20001,'2026-11-28 01:02:03.001001','2026-11-28 01:02:03',NULL,NULL,'2026-11-28 01:02:03.001',NULL,NULL); DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime_keys; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime_keys(k DATETIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime_keys VALUES('1970-01-01 00:00:00.000001',7),('2038-01-19 03:14:07.123456',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_datetime_683d6ccf491f' AND TABLE_NAME='undo_datetime' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_datetime_683d6ccf491f.undo_datetime_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_datetime_683d6ccf491f.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_datetime_683d6ccf491f.undo_datetime ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_datetime_683d6ccf491f.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.global_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.branch_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_work%' OR argument LIKE 'INSERT INTO undo_work%' OR argument LIKE 'DELETE FROM undo_work%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime(id INT PRIMARY KEY,v DATETIME(6) NULL,d0 DATETIME(0) NULL,d1 DATETIME(1) NULL,d2 DATETIME(2) NULL,d3 DATETIME(3) NULL,d4 DATETIME(4) NULL,d5 DATETIME(5) NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime VALUES(1,'1000-01-01 00:00:00.000001','1000-01-01 00:00:00','1000-01-01 00:00:00.1','1000-01-01 00:00:00.12','1000-01-01 00:00:00.123','1000-01-01 00:00:00.1234','1000-01-01 00:00:00.12345'),(2,'1582-10-04 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'1969-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1970-01-01 00:00:00',NULL,NULL,NULL,NULL,NULL,NULL),(6,'2000-02-29 12:34:56.123456',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1900-03-01 00:00:00.000001',NULL,NULL,NULL,NULL,NULL,NULL),(8,'9999-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(20001,'2026-11-28 01:02:03.001001','2026-11-28 01:02:03',NULL,NULL,'2026-11-28 01:02:03.001',NULL,NULL); DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime_keys; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime_keys(k DATETIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime_keys VALUES('1970-01-01 00:00:00.000001',7),('2038-01-19 03:14:07.123456',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_datetime_683d6ccf491f' AND TABLE_NAME='undo_datetime' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_datetime_683d6ccf491f.undo_datetime_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_datetime_683d6ccf491f.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_datetime_683d6ccf491f.undo_datetime ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_datetime_683d6ccf491f.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.global_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.branch_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_work%' OR argument LIKE 'INSERT INTO undo_work%' OR argument LIKE 'DELETE FROM undo_work%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime(id INT PRIMARY KEY,v DATETIME(6) NULL,d0 DATETIME(0) NULL,d1 DATETIME(1) NULL,d2 DATETIME(2) NULL,d3 DATETIME(3) NULL,d4 DATETIME(4) NULL,d5 DATETIME(5) NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime VALUES(1,'1000-01-01 00:00:00.000001','1000-01-01 00:00:00','1000-01-01 00:00:00.1','1000-01-01 00:00:00.12','1000-01-01 00:00:00.123','1000-01-01 00:00:00.1234','1000-01-01 00:00:00.12345'),(2,'1582-10-04 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'1969-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1970-01-01 00:00:00',NULL,NULL,NULL,NULL,NULL,NULL),(6,'2000-02-29 12:34:56.123456',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1900-03-01 00:00:00.000001',NULL,NULL,NULL,NULL,NULL,NULL),(8,'9999-12-31 23:59:59.999999',NULL,NULL,NULL,NULL,NULL,NULL),(20001,'2026-11-28 01:02:03.001001','2026-11-28 01:02:03',NULL,NULL,'2026-11-28 01:02:03.001',NULL,NULL); DROP TABLE IF EXISTS undo_datetime_683d6ccf491f.undo_datetime_keys; CREATE TABLE undo_datetime_683d6ccf491f.undo_datetime_keys(k DATETIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_datetime_683d6ccf491f.undo_datetime_keys VALUES('1970-01-01 00:00:00.000001',7),('2038-01-19 03:14:07.123456',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_datetime_683d6ccf491f' AND TABLE_NAME='undo_datetime' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_datetime_683d6ccf491f.undo_datetime_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_datetime_683d6ccf491f.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_datetime_683d6ccf491f.undo_datetime ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_datetime_683d6ccf491f.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.global_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.branch_table),(SELECT COUNT(*) FROM undo_datetime_683d6ccf491f.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_work%' OR argument LIKE 'INSERT INTO undo_work%' OR argument LIKE 'DELETE FROM undo_work%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect-stopped",
+    "argv": [
+      "docker",
+      "inspect",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "c389bc481ec63b1295cac77f8ba0a99095dd5e5fed7b749dcadaf739f39ae16b"
+    ],
+    "exit_code": 1
+  }
+]

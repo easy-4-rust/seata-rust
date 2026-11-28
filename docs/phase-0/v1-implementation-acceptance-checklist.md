@@ -329,6 +329,8 @@ Gate verification 2026-11-13: [formal peer-profile evidence](../phase-1/evidence
 
 **2026-11-28 native JSON increment:** non-primary JSON columns now preserve original MySQL text and JSON identity, use original Connector/J 8.0.27 JDBC -1/String Undo, distinguish SQL NULL and JSON null, and enforce native wire type/field budgets. Four original TC JSON transactions, 64 ordinary AT concurrent regressions, 102 evidence weakenings and six source counterexamples verify on Rust 1.99/1.85; each workspace passes 804 tests with 397 ignored. SQL grammar, default experimental commit and full WP05 gate remain unchanged. [Evidence](../phase-2/evidence/mysql-json/README.md).
 
+**2026-11-28 DATETIME increment:** explicit UTC profiles 3/4 preserve old 1/2, cover Gregorian 1000–9999 and fractional precision 0–6, Java 93/LocalDateTime Undo and primary-key staging/locking. Eight original TC cases, four JSON and 64 ordinary AT regressions, 262 evidence weakenings and eight source counterexamples pass on Rust 1.99/1.85; each workspace passes 808 tests with 398 ignored. Other temporal types/configurations and full WP05 remain open. [Evidence](../phase-2/evidence/mysql-datetime/README.md).
+
 ### WP-06 — MySQL AT phase 2
 
 **Depends on:** WP-05.
