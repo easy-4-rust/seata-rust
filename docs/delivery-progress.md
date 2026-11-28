@@ -1417,3 +1417,9 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 后续[联试已完成新入口的真实 Java TM/RM 接入](phase-2/evidence/java-writer-jdbc-profile-tc/README.md)，不替换原 DataSourceProxy 身份。12 笔全局事务覆盖六码提交/回滚、60 次 Begin/登记前错误绑定拒绝。精确模式四笔事务实际执行七条 DML、生成原 DATE/TIME String Undo，并由原 RM 提交或恢复原字节；DATE/TIME 主键锁、原协议回调、分支身份与空终态已独立核验。catalog 为 `148d183d72bc36cbe698eeaee866e773beb8b4e0ab3627f35a8ec9d7456a2d01`。
 
 本轮未修改 Rust 源码和原 Java TC/RM。该现场不替代 Java/Rust 混合竞争、生产权限与认证、全部 SQL/值组合、WP07 以及 Phase 5–7。
+
+### 2026-11-28：Java 持锁与双 Rust 精确时间锁竞争
+
+[新增正式混合联试](phase-2/mysql-exact-temporal-mixed-lock-contract.md)通过：六码 Java 基线重新运行，双 Rust 1.99/1.85 在配置 5/6、Java 提交/回滚两种终结下，对 DATE/TIME 同键取得 16 次原 TC 冲突拒绝和释放后 16 次成功登记。原 Java 业务/锁保持、Rust 本地撤销、原 TC 回调及 `GlobalFinished` 围栏均按原身份独立核验。44 笔全局事务，catalog 为 `ffeee9ef7bd0ff281da6723f0f659adba1695fdf5df4564b1b892f26c262a6e7`。
+
+本轮只增加 Rust 联试目标和夹具，未改生产组件。新增目标的双版本严格 Clippy 通过。当前关闭 Java 持锁方向的选定精确键竞争缺口；反向 Rust 持锁/Java 竞争、全部 SQL、生产权限/认证、WP07 和 Phase 5–7 仍开放。

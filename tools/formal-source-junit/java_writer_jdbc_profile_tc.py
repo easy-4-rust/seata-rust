@@ -38,7 +38,7 @@ def wait(check, process, detail, seconds=90):
         time.sleep(.1)
 
 
-def run(profiles, directions):
+def run(profiles, directions, mixed_versions=None):
     stamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:8]
     out = ROOT / 'docs/phase-2/evidence/java-writer-jdbc-profile-tc' / stamp
     work = Path('D:/codex-builds') / ('java-writer-profile-tc-' + stamp)
@@ -49,6 +49,7 @@ def run(profiles, directions):
     for key in ('JAVA_TOOL_OPTIONS', 'JDK_JAVA_OPTIONS', '_JAVA_OPTIONS', 'SEATA_CONFIG_NAME', 'SEATA_ENV'):
         env.pop(key, None)
     commands = []
+    mixed = None
 
     def command(label, argv, expected=0, data=None, timeout=120):
         if (out / (label + '.stdout')).exists():
@@ -75,6 +76,9 @@ def run(profiles, directions):
         path = Path(row['path']); need(sha(path) == row['sha256'], 'Runtime dependency differs')
         if not path.name.startswith(('mockito-', 'byte-buddy-', 'objenesis-', 'lombok-')):
             jars.append(path)
+    if mixed_versions:
+        from java_writer_jdbc_profile_mixed import MixedRust
+        mixed = MixedRust(work, out, env, command, mixed_versions)
     adapter = ROOT / 'compat/java/src/main/java/io/github/easy4j/seata/rust/jdbc'
     sources = [ACTOR, GUARD, *sorted(adapter.glob('*.java'))]
     inputs = [*sources, Path(__file__).resolve(), ROOT / 'tools/java-go-at-shared-lock/proxy.py',
@@ -83,6 +87,9 @@ def run(profiles, directions):
               ROOT / 'tools/formal-rm-java/validate.py',
               *[MIGRATIONS / name for name in ('005_seata_rs_at_resource_binding.sql',
                  '011_seata_rs_at_tinyint_profile_binding.sql', '021_seata_rs_at_jdbc_profile_binding.sql')]]
+    if mixed:
+        inputs.extend(mixed.inputs())
+    inputs = list(dict.fromkeys(inputs))
     for source in inputs:
         put(out / 'source' / source.relative_to(ROOT), source.read_bytes())
     save(out / 'source-inputs.json', [dict(path=p.relative_to(ROOT).as_posix(), sha256=sha(p)) for p in inputs])
@@ -116,6 +123,12 @@ def run(profiles, directions):
         ddl = server_schema + undo_schema + '\n'.join((MIGRATIONS / name).read_text(encoding='utf-8') for name in (
             '005_seata_rs_at_resource_binding.sql', '011_seata_rs_at_tinyint_profile_binding.sql',
             '021_seata_rs_at_jdbc_profile_binding.sql')).encode()
+        if mixed:
+            ddl += '\n'.join((MIGRATIONS / name).read_text(encoding='utf-8') for name in (
+                '001_seata_rs_at_branch_v1.sql', '002_seata_rs_at_registration_origin.sql',
+                '003_seata_rs_at_commit_decision.sql', '004_seata_rs_at_first_phase_witness.sql',
+                '006_seata_rs_at_commit_attempt.sql', '007_seata_rs_at_commit_report_started.sql',
+                '013_seata_rs_at_undo_checksum.sql')).encode()
         command('schema', ['docker', 'exec', '-i', '-e', 'MYSQL_PWD=' + PASSWORD, container, 'mysql', '-uroot', 'admission'], data=ddl)
         server_uuid = command('server-facts', sql + ['SELECT @@server_uuid,VERSION(),@@global.sql_mode']).stdout.decode().split('\t')[0]
         config = f'''spring:
@@ -162,6 +175,7 @@ seata:
         for profile in profiles:
             for direction in directions:
                 label = str(profile) + '-' + direction
+                if mixed: mixed.reset(label, sql)
                 case = out / label; case.mkdir(); case_work = work / label; case_work.mkdir()
                 seed = '''DROP TABLE IF EXISTS admission_business,temporal_values,temporal_dates,temporal_times;
 CREATE TABLE admission_business(id INT PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB;
@@ -241,20 +255,24 @@ REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_
                 need(len(lock_rows) == len(expected_locks) and all(r[:2] == [phase['xid'], str(phase['branch_id'])] for r in lock_rows)
                      and {tuple(r[2:]) for r in lock_rows} == expected_locks, 'Original TC lock rows differ')
                 need(command(label + '-binding-released', sql + ['SET innodb_lock_wait_timeout=1; UPDATE seata_rs_at_resource_binding SET jdbc_profile=jdbc_profile WHERE slot=1; SELECT jdbc_profile FROM seata_rs_at_resource_binding']).stdout.strip() == str(profile).encode(), 'Binding not released after original commit')
+                if mixed and profile >= 5:
+                    mixed.held(profile, label, case, listener, db_port, sql, phase, phase_business)
                 put(case_work / 'decision-release', direction)
                 wait((case_work / 'finished').exists, actor, label + ' decision')
                 wait(lambda: command(label + '-terminal-poll', sql + [counts]).stdout.strip() == b'0\t0\t0\t0',
                      actor, label + ' terminal', seconds=90)
                 final = command(label + '-final-business', sql + [business]).stdout
                 need(final == (before if direction == 'rollback' else phase_business), 'Original callback changed exact business values')
+                if mixed and profile >= 5:
+                    mixed.released(label, case, sql, final)
                 relay.close(); relay = None
                 frames = json.loads((case / 'proxy-events.json').read_bytes())
                 decoded = [(r['direction'], decoder.decode(r)) for r in frames if r['event'] == 'wire']
-                registers = [r for d, r in decoded if d == 'sdk-to-tc' and r['code'] == 11]
+                registers = [r for d, r in decoded if d == 'sdk-to-tc' and r['code'] == 11 and r['xid'] == phase['xid']]
                 need(len(registers) == 1 and registers[0]['xid'] == phase['xid'] and registers[0]['resource'] == resource, 'Original register differs')
                 callback_code, reply_code, status = (5, 6, 8) if direction == 'rollback' else (3, 4, 5)
-                callbacks = [r for d, r in decoded if d == 'tc-to-sdk' and r['code'] == callback_code]
-                replies = [r for d, r in decoded if d == 'sdk-to-tc' and r['code'] == reply_code]
+                callbacks = [r for d, r in decoded if d == 'tc-to-sdk' and r['code'] == callback_code and r['xid'] == phase['xid']]
+                replies = [r for d, r in decoded if d == 'sdk-to-tc' and r['code'] == reply_code and r['xid'] == phase['xid']]
                 need(len(callbacks) >= 1 and len(replies) >= 1 and all(r['xid'] == phase['xid'] and r['branch_id'] == phase['branch_id'] for r in callbacks + replies)
                      and any(r['result'] == 1 and r['status'] == status for r in replies), 'Original RM callback missing or unsuccessful')
                 put(case_work / 'stop', 'Observation complete'); need(actor.wait(timeout=10) == 0, 'Java actor stop failed'); actor = None
@@ -266,8 +284,10 @@ REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_
             need(sha(source) == sha(out / 'source' / source.relative_to(ROOT)), 'Source drift during native integration')
         save(out / 'result.json', dict(status='passed', profiles=profiles, directions=directions,
             cases=len(observations), rejected=5 * len(observations), mocks=False, tc_jar_sha256=sha(jar),
+            mixed_rust_versions=mixed_versions or [],
             fixture_auth='disabled on owned loopback TC; not production authentication certification'))
     finally:
+        if mixed: mixed.close()
         if relay: relay.close()
         support.stop(actor); support.stop(tc)
         command('stop-mysql', ['docker', 'stop', '--time=15', container], timeout=40)

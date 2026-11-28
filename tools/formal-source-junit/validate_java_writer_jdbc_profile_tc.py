@@ -101,7 +101,7 @@ def verify(out, full):
         proxy = json.loads((case / 'proxy-result.json').read_bytes())
         need(not proxy['errors'] and not proxy['field_translation'] and not proxy['fault_injection'], 'Proxy altered/faulted')
         decoded = [(r, decoder.decode(r)) for r in frames if r['event'] == 'wire']
-        registers = [v for r, v in decoded if r['direction'] == 'sdk-to-tc' and v['code'] == 11]
+        registers = [v for r, v in decoded if r['direction'] == 'sdk-to-tc' and v['code'] == 11 and v['xid'] == phase['xid']]
         need(len(registers) == 1 and registers[0]['xid'] == phase['xid'] and registers[0]['resource'] == phase['resource'],
              'Original registration differs')
         registration = registers[0]
@@ -110,7 +110,7 @@ def verify(out, full):
         need(len(registered) == 1 and registered[0]['result'] == 1 and registered[0]['branch_id'] == phase['branch_id'],
              'Original registration response differs')
         tm_code, tm_reply, tm_status = (9, 10, 11) if direction == 'rollback' else (7, 8, 9)
-        decisions = [v for r, v in decoded if r['direction'] == 'sdk-to-tc' and v['code'] == tm_code]
+        decisions = [v for r, v in decoded if r['direction'] == 'sdk-to-tc' and v['code'] == tm_code and v['xid'] == phase['xid']]
         need(len(decisions) == 1 and decisions[0]['xid'] == phase['xid'], 'Original TM decision differs')
         decided = [v for r, v in decoded if r['direction'] == 'tc-to-sdk' and v['code'] == tm_reply
                    and v['connection'] == decisions[0]['connection'] and v['id'] == decisions[0]['id']]
@@ -119,8 +119,8 @@ def verify(out, full):
              and decided[0]['status'] in ({8, tm_status} if direction == 'commit' else {tm_status}),
              'Original TM response differs')
         callback, reply, status = (5, 6, 8) if direction == 'rollback' else (3, 4, 5)
-        callbacks = [(r, v) for r, v in decoded if r['direction'] == 'tc-to-sdk' and v['code'] == callback]
-        replies = [(r, v) for r, v in decoded if r['direction'] == 'sdk-to-tc' and v['code'] == reply]
+        callbacks = [(r, v) for r, v in decoded if r['direction'] == 'tc-to-sdk' and v['code'] == callback and v['xid'] == phase['xid']]
+        replies = [(r, v) for r, v in decoded if r['direction'] == 'sdk-to-tc' and v['code'] == reply and v['xid'] == phase['xid']]
         need(callbacks and replies, 'Callback missing')
         for request, value in callbacks:
             matches = [v for r, v in replies if r['connection'] == request['connection'] and r['id'] == request['id']]
