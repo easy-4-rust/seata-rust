@@ -26,4 +26,4 @@ Rust 1.99/1.85 × 配置 3/4 × Commit/Rollback 的正式 TC 矩阵，包含 0�
 
 该矩阵不替代进程故障重启、所有时区、所有 MySQL/Java 版本、Fastjson 时间类型、完整 SQL 或生产准入；相应要求继续在原 WP05/WP07 和全计划范围中。
 
-当前选定 UTC 原生读写、主键与正式回调已取得[现场证据](evidence/mysql-timestamp/README.md)和 [ledger](wp05-mysql-timestamp.json)。专门的 TIMESTAMP 跨进程重启恢复仍未验证，不关闭 TIMESTAMP 完整门禁、完整时间类型或 WP05。
+当前选定 UTC 原生读写、主键与正式回调已取得[现场证据](evidence/mysql-timestamp/README.md)和 [ledger](wp05-mysql-timestamp.json)。专门的 TIMESTAMP 跨进程重启恢复现已取得[强杀原进程、新 RM 接管的补验证据](evidence/mysql-timestamp-restart/README.md)。其他配置/格式、完整时间类型和 WP05 仍未关闭。

@@ -1,0 +1,28 @@
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error: this `as_str` is redundant and can be removed as the method immediately following exists on `String` too
+   --> crates\seata_db_mysql\tests\live_timestamp_restart_java.rs:431:681
+    |
+431 | ...) AND b.first_phase_committed=1)").bind(xid.as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xi...
+    |                                                ^^^^^^^^^^^^^^^^^ help: try: `as_bytes`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#redundant_as_str
+    = note: `-D clippy::redundant-as-str` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::redundant_as_str)]`
+
+error: this `as_str` is redundant and can be removed as the method immediately following exists on `String` too
+   --> crates\seata_db_mysql\tests\live_timestamp_restart_java.rs:431:724
+    |
+431 | ....as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xi...
+    |                                                ^^^^^^^^^^^^^^^^^ help: try: `as_bytes`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#redundant_as_str
+
+error: this `as_str` is redundant and can be removed as the method immediately following exists on `String` too
+   --> crates\seata_db_mysql\tests\live_timestamp_restart_java.rs:431:767
+    |
+431 | ....as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xid.as_str()).bind(branch).bind(xid.as_str())...
+    |                                                ^^^^^^^^^^^^^^^^^ help: try: `as_bytes`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#redundant_as_str
+
+error: could not compile `seata-db-mysql` (test "live_timestamp_restart_java") due to 3 previous errors

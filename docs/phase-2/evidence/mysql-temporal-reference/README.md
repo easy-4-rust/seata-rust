@@ -23,4 +23,4 @@ python -B tools/formal-source-junit/validate_temporal_reference.py `
 
 初次探索 [java_20261128_092933_975ec997](java_20261128_092933_975ec997/result.json) 使用 Java `List.of` 作为日志集合，实际类型是 `ImmutableCollections$List12`；随后入口改为原常见 `ArrayList` 并完整重跑，以上权威运行采用后者。初次探索保留作诊断，不能替代最终输入绑定。两个运行的专属 MySQL 容器均已移除，停止后的数据保留在其 `cleanup.json` 记录的 D 盘目录，没有删除历史缓存。
 
-后续已新增 [TIMESTAMP 选定 UTC 原生实现和正式回调证据](../mysql-timestamp/README.md)；专门跨进程恢复、DATE 日历和 TIME 表达差异继续实施。完整范围没有缩减，未把这些反例标成“兼容通过”。
+后续已新增 [TIMESTAMP 选定 UTC 原生实现和正式回调证据](../mysql-timestamp/README.md)；[专门跨进程恢复](../mysql-timestamp-restart/README.md)已补验；DATE 日历和 TIME 表达差异继续实施。完整范围没有缩减，未把这些反例标成“兼容通过”。

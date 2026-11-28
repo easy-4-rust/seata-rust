@@ -1,0 +1,46 @@
+    Checking seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error: this boolean expression can be simplified
+   --> crates\seata_db_mysql\tests\live_timestamp_restart_java.rs:121:11
+    |
+121 |       while !std::fs::read(path)
+    |  ___________^
+122 | |         .ok()
+123 | |         .is_some_and(|bytes| serde_json::from_slice::<serde_json::Value>(&bytes).is_ok())
+    | |_________________________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#nonminimal_bool
+    = note: `-D clippy::nonminimal-bool` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::nonminimal_bool)]`
+help: try
+    |
+121 ~     while std::fs::read(path)
+122 +         .ok().is_none_or(|bytes| serde_json::from_slice::<serde_json::Value>(&bytes).is_err())
+    |
+
+error: this `as_str` is redundant and can be removed as the method immediately following exists on `String` too
+   --> crates\seata_db_mysql\tests\live_timestamp_restart_java.rs:431:681
+    |
+431 | ...56)) AND b.first_phase_committed=1)").bind(xid.as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xid.a...
+    |                                                   ^^^^^^^^^^^^^^^^^ help: try: `as_bytes`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_as_str
+    = note: `-D clippy::redundant-as-str` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::redundant_as_str)]`
+
+error: this `as_str` is redundant and can be removed as the method immediately following exists on `String` too
+   --> crates\seata_db_mysql\tests\live_timestamp_restart_java.rs:431:724
+    |
+431 | ...xid.as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xid.a...
+    |                                                   ^^^^^^^^^^^^^^^^^ help: try: `as_bytes`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_as_str
+
+error: this `as_str` is redundant and can be removed as the method immediately following exists on `String` too
+   --> crates\seata_db_mysql\tests\live_timestamp_restart_java.rs:431:767
+    |
+431 | ...xid.as_str().as_bytes()).bind(branch).bind(xid.as_str().as_bytes()).bind(branch).bind(xid.as_str()).bind(branch).bind(xid.as_str()).bi...
+    |                                                   ^^^^^^^^^^^^^^^^^ help: try: `as_bytes`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_as_str
+
+error: could not compile `seata-db-mysql` (test "live_timestamp_restart_java") due to 4 previous errors

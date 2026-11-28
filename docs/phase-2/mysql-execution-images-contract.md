@@ -40,4 +40,4 @@ DATE / TIME / TIMESTAMP 的原 JDBC、原 Undo 与数据库重绑定边界以[�
 
 ### TIMESTAMP 的显式 UTC 原生路径
 
-按 [TIMESTAMP 契约](mysql-timestamp-contract.md)提供独立时间点/物理域和原 Java Timestamp 格式；同一持 MDL 的业务/回调/恢复事务实际查询 `@@session.time_zone`，只接受明确 UTC。精确投影、绑定、主键及正式提交/回滚见[双 Rust 原 TC 现场](evidence/mysql-timestamp/README.md)。专门跨进程重启恢复、其他时区/格式及完整时间类型仍待验收。
+按 [TIMESTAMP 契约](mysql-timestamp-contract.md)提供独立时间点/物理域和原 Java Timestamp 格式；同一持 MDL 的业务/回调/恢复事务实际查询 `@@session.time_zone`，只接受明确 UTC。精确投影、绑定、主键及正式提交/回滚见[双 Rust 原 TC 现场](evidence/mysql-timestamp/README.md)。专门跨进程重启恢复已通过[强杀与新 RM 接管补验](evidence/mysql-timestamp-restart/README.md)；其他时区/格式及完整时间类型仍待验收。

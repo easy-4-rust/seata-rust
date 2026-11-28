@@ -1,0 +1,30 @@
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/seata-timestamp-restart-20261128_100535_9b22b7fc/1.85-numeric-commit/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 56239
+    enable-check-auth: true
+    retry-dead-threshold: 1000
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:63625/undo_timestamp_2b71408d302c?useSSL=false&allowPublicKeyRetrieval=true
+      user: root
+      password: seata-mysql-fixture-only
+      min-conn: 1
+      max-conn: 4

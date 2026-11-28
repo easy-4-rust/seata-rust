@@ -1373,3 +1373,11 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 回归含 8 笔 DATETIME、4 笔 JSON、64 笔普通 AT 事务；独立验证拒绝 422 项证据削弱。双 Rust 工作区各 812 通过、400 忽略、186 个成功汇总，严格受影响 Clippy 通过。原生类型识别的运行失败与绿色回归均已保存，未用编译错误充作 RED。[契约](phase-2/mysql-timestamp-contract.md) · [现场](phase-2/evidence/mysql-timestamp/README.md) · [ledger](phase-2/wp05-mysql-timestamp.json)。
 
 TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/写入器准入、WP07 和 Phase 5–7 继续实施。默认有变化 COMMIT 和完整 WP05/生产门禁状态没有放开。
+
+## 2026-11-28：TIMESTAMP 强杀与独立进程恢复补验
+
+按[已有时间类型验收](phase-2/mysql-timestamp-restart-contract.md)，TM 监督进程持有原全局事务，业务进程完成原事务 Undo/SHA/见证及报告后由实际 OS 句柄强杀，全新 RM 进程从持久记录和匹配配置接管原分支，原 TC 的回调只走新连接。八笔事务覆盖 Rust 1.99/1.85 × 两种 UTC 配置 × Commit/Rollback，共 24 个实际 Rust 进程实例。外部 CIM/句柄、原帧、原对象图、业务/主键值、Undo/分支终态及日志 CRC/Completed 全部核对。
+
+最终双 Rust 工作区各 812 通过、403 忽略、187 个成功汇总，严格受影响 Clippy 通过。独立核验拒绝 264 项证据削弱和 11 项错误复位授权。生产 Rust 沿用 d30dae995，没有新增生产修复或更改默认提交开关。[现场](phase-2/evidence/mysql-timestamp-restart/README.md) · [ledger](phase-2/wp05-mysql-timestamp-restart.json)。
+
+该选定 UTC 恢复缺口已补齐；下一步推进 DATE/TIME 的完整值域与原 Java 格式兼容。完整 WP05/WP07、V1 生产准入及 Phase 5–7 按原计划继续。

@@ -1,6 +1,6 @@
 # TIMESTAMP：独立时间点、UTC 会话与原 Java TC
 
-对应 [TIMESTAMP 契约](../../mysql-timestamp-contract.md)与 [ledger](../../wp05-mysql-timestamp.json)。已实现选定 UTC 配置的正式原生路径；专门跨进程重启恢复尚待验证，不能据此关闭 TIMESTAMP 完整门禁、DATE/TIME、完整 WP05 或生产门禁。
+对应 [TIMESTAMP 契约](../../mysql-timestamp-contract.md)与 [ledger](../../wp05-mysql-timestamp.json)。已实现选定 UTC 配置的正式原生路径；专门跨进程重启恢复现已另行取得[强杀与新 RM 接管补验证据](../mysql-timestamp-restart/README.md)，不能据此关闭 TIMESTAMP 完整门禁、DATE/TIME、完整 WP05 或生产门禁。
 
 ```mermaid
 flowchart TD
@@ -52,4 +52,4 @@ python -B tools/formal-source-junit/validate_timestamp_column.py `
 
 ## 尚未完成
 
-下一步需实际运行独立进程的 TIMESTAMP 重启恢复，验证新进程从数据库 Undo 和持久配置重建时间点、恢复主键并完成同一分支。现有回调证据不能代替此项。DATE/TIME 的完整值域、其他时区/驱动/序列化格式、完整 SQL 与写入器准入、WP07 及 Phase 5–7 保持原计划范围。
+独立进程 TIMESTAMP 重启恢复现已通过[专门补验](../mysql-timestamp-restart/README.md)，原业务进程被实际强杀，新 RM 从持久记录和匹配配置恢复原分支。本页原生读写/回调现场不混入新补验的事务数量。DATE/TIME 的完整值域、其他时区/驱动/序列化格式、完整 SQL 与写入器准入、WP07 及 Phase 5–7 保持原计划范围。
