@@ -4,6 +4,8 @@ use crate::{ColumnDomain, ColumnMeta, MetadataError};
 /// 对应 Java: com.mysql.cj.MysqlType及ColumnMeta#dataTypeName（当前已认证物理类型子集）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MySqlType {
+    /// MySQL TIMESTAMP 原生时间点。
+    Timestamp,
     /// MySQL DATETIME，保留 0–6 位小数秒的独立物理域。
     DateTime,
     /// 原生 JSON；JDBC 使用 LONGVARCHAR/String，仍独立于 TEXT 保存物理身份。
@@ -54,6 +56,7 @@ impl MySqlType {
         let valid = matches!(
             (self, column.domain()),
             (Self::DateTime, Some(ColumnDomain::LocalDateTime { .. }))
+                | (Self::Timestamp, Some(ColumnDomain::Timestamp { .. }))
                 | (Self::Json, Some(ColumnDomain::Json))
                 | (
                     Self::TinyInt { .. },

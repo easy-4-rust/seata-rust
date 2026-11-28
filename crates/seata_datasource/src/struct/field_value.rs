@@ -1,10 +1,12 @@
-use crate::{DecimalValue, LocalDateTime};
+use crate::{DecimalValue, LocalDateTime, Timestamp};
 use std::fmt;
 
 /// 精确且可脱敏的数据库值域，NULL与空值独立。
 /// 对应 Java: org.apache.seata.rm.datasource.sql.struct.Field#value的Object；Rust穷尽值域扩展。
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum FieldValue {
+    /// MySQL TIMESTAMP 的 UTC 时间点。
+    Timestamp(Timestamp),
     /// MySQL DATETIME 日历值，不经浮点数和主机时区。
     LocalDateTime(LocalDateTime),
     /// 数据库NULL。
@@ -24,7 +26,7 @@ impl FieldValue {
     /// 无参数；返回值负载字节，不包含容器、列名或元数据开销。
     pub fn value_bytes(&self) -> usize {
         match self {
-            Self::LocalDateTime(_) => 26,
+            Self::Timestamp(_) | Self::LocalDateTime(_) => 26,
             Self::Null => 0,
             Self::Signed(_) | Self::Unsigned(_) => 8,
             Self::Text(v) => v.len(),
@@ -36,6 +38,7 @@ impl FieldValue {
 impl fmt::Debug for FieldValue {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let kind = match self {
+            Self::Timestamp(_) => "Timestamp",
             Self::LocalDateTime(_) => "LocalDateTime",
             Self::Null => "Null",
             Self::Signed(_) => "Signed",

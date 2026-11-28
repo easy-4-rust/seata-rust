@@ -4,6 +4,11 @@ use crate::{CharacterSet, ColumnMeta, ColumnType, FieldValue, MetadataError};
 /// 对应 Java: org.apache.seata.sqlparser.struct.ColumnMeta的类型、长度、精度与unsigned；Rust结构化扩展。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ColumnDomain {
+    /// TIMESTAMP 时间点的原物理小数秒精度。
+    Timestamp {
+        /// 原物理列小数秒位数，范围 0–6。
+        fractional_seconds: u8,
+    },
     /// DATETIME 日历域，不使用字符维度；原精度为 0–6 位小数秒。
     LocalDateTime {
         /// 原物理列小数秒位数。
@@ -42,6 +47,11 @@ impl ColumnDomain {
     /// 参数为完整列元数据；返回物理域与通用值域/维度的一致性结果。
     pub(crate) fn validate(&self, column: &ColumnMeta) -> Result<(), MetadataError> {
         let valid = match self {
+            Self::Timestamp { fractional_seconds } => {
+                *fractional_seconds <= 6
+                    && column.kind() == ColumnType::Timestamp
+                    && column.char_octet_length().is_none()
+            }
             Self::LocalDateTime { fractional_seconds } => {
                 *fractional_seconds <= 6
                     && column.kind() == ColumnType::LocalDateTime
@@ -96,6 +106,9 @@ impl ColumnDomain {
             return true;
         }
         match (self, value) {
+            (Self::Timestamp { fractional_seconds }, FieldValue::Timestamp(v)) => {
+                v.nanosecond() % 10u32.pow(9 - u32::from(*fractional_seconds)) == 0
+            }
             (Self::LocalDateTime { fractional_seconds }, FieldValue::LocalDateTime(v)) => {
                 v.nanosecond() % 10u32.pow(9 - u32::from(*fractional_seconds)) == 0
             }

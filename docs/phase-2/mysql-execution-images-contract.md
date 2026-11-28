@@ -37,3 +37,7 @@
 ### 其余时间类型的真实兼容前提
 
 DATE / TIME / TIMESTAMP 的原 JDBC、原 Undo 与数据库重绑定边界以[时间类型契约](mysql-temporal-compatibility-contract.md)和[固定原实现现场](evidence/mysql-temporal-reference/README.md)为依据。原 TIME 存在精度丢失及有符号/超日时长取值失败；DATE 存在混合日历缺口；TIMESTAMP 与 DATETIME 虽同为 JDBC 93，Java 类与时间点语义不同。这些类型的正式物理资源门禁仍开放，不以原运行器退出码零推断兼容通过。
+
+### TIMESTAMP 的显式 UTC 原生路径
+
+按 [TIMESTAMP 契约](mysql-timestamp-contract.md)提供独立时间点/物理域和原 Java Timestamp 格式；同一持 MDL 的业务/回调/恢复事务实际查询 `@@session.time_zone`，只接受明确 UTC。精确投影、绑定、主键及正式提交/回滚见[双 Rust 原 TC 现场](evidence/mysql-timestamp/README.md)。专门跨进程重启恢复、其他时区/格式及完整时间类型仍待验收。

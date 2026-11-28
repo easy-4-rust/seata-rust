@@ -203,6 +203,30 @@ impl RestoredFormat {
             FieldValue::Null
         } else {
             match column.kind() {
+                ColumnType::Timestamp => {
+                    let (millis, nanos) = if let Some(a) = payload.as_array() {
+                        if a.len() != 2 {
+                            return Err(Self::bad("TIMESTAMP timestamp shape"));
+                        }
+                        let millis = a[0].as_i64().ok_or(Self::bad("TIMESTAMP millis"))?;
+                        let nanos = a[1]
+                            .as_u64()
+                            .and_then(|n| u32::try_from(n).ok())
+                            .ok_or(Self::bad("TIMESTAMP nanos"))?;
+                        (millis, nanos)
+                    } else {
+                        let millis = payload.as_i64().ok_or(Self::bad("TIMESTAMP millis"))?;
+                        (millis, millis.rem_euclid(1000) as u32 * 1_000_000)
+                    };
+                    // 原 Timestamp#setNanos 覆盖完整秒内纳秒，不能采用 LocalDateTime 的仅追加余数规则。
+                    FieldValue::Timestamp(
+                        seata_datasource::Timestamp::from_epoch_seconds(
+                            millis.div_euclid(1000),
+                            nanos,
+                        )
+                        .map_err(|_| Self::bad("TIMESTAMP epoch or precision"))?,
+                    )
+                }
                 ColumnType::LocalDateTime => {
                     let (millis, extra) = if let Some(a) = payload.as_array() {
                         if a.len() != 2 {

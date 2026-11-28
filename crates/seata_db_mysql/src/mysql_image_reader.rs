@@ -85,7 +85,7 @@ impl MySqlImageReader {
             .zip(&quoted)
             .map(|(column, name)| {
                 let expression = match column.kind() {
-                    ColumnType::LocalDateTime => {
+                    ColumnType::Timestamp | ColumnType::LocalDateTime => {
                         format!("CASE WHEN {name} IS NULL THEN NULL ELSE 26 END")
                     }
                     ColumnType::SignedInteger | ColumnType::UnsignedInteger => {
@@ -192,6 +192,7 @@ impl MySqlImageReader {
         let mut arguments = MySqlArguments::default();
         for value in parameters {
             let result = match value {
+                FieldValue::Timestamp(v) => arguments.add(v.to_sql_utc_string()),
                 FieldValue::LocalDateTime(v) => arguments.add(v.to_sql_string()),
                 FieldValue::Null => arguments.add(Option::<i64>::None),
                 FieldValue::Signed(v) => arguments.add(*v),
@@ -259,25 +260,35 @@ impl MySqlImageReader {
                 feature: "JSON image native type differs",
             });
         }
-        if column.kind() == ColumnType::LocalDateTime && raw.type_info().name() != "VARCHAR" {
+        if matches!(
+            column.kind(),
+            ColumnType::Timestamp | ColumnType::LocalDateTime
+        ) && raw.type_info().name() != "VARCHAR"
+        {
             return Err(DbError::Unsupported {
-                feature: "DATETIME requires the bounded calendar projection",
+                feature: "temporal value requires the bounded calendar projection",
             });
         }
         if raw.is_null() {
             return Ok(FieldValue::Null);
         }
         match column.kind() {
-            ColumnType::LocalDateTime => {
+            ColumnType::Timestamp | ColumnType::LocalDateTime => {
                 let bytes: &[u8] = row
                     .try_get(index)
-                    .map_err(|e| DbError::driver("DATETIME projected text", e))?;
+                    .map_err(|e| DbError::driver("temporal projected text", e))?;
                 let text = std::str::from_utf8(bytes).map_err(|_| DbError::Input {
-                    reason: "DATETIME text encoding",
+                    reason: "temporal text encoding",
                 })?;
-                Ok(FieldValue::LocalDateTime(
-                    seata_datasource::LocalDateTime::parse_sql(text)?,
-                ))
+                if column.kind() == ColumnType::Timestamp {
+                    Ok(FieldValue::Timestamp(
+                        seata_datasource::Timestamp::parse_sql_utc(text)?,
+                    ))
+                } else {
+                    Ok(FieldValue::LocalDateTime(
+                        seata_datasource::LocalDateTime::parse_sql(text)?,
+                    ))
+                }
             }
             ColumnType::SignedInteger => row
                 .try_get(index)
@@ -318,8 +329,11 @@ impl MySqlImageReader {
     }
     /// 参数为原列元数据和已验证带引号标识符；返回有界日历投影或原标识符。
     pub(crate) fn projection(column: &ColumnMeta, quoted: &str) -> String {
-        // 原事务已经持有 MDL 并复核 DATETIME 物理定义；显式日历投影避免零日期被 SQLx 变成 NULL。
-        if column.kind() == ColumnType::LocalDateTime {
+        // 原事务已经持有 MDL 并复核 DATETIME/TIMESTAMP 物理定义；显式日历投影避免零日期被 SQLx 变成 NULL。
+        if matches!(
+            column.kind(),
+            ColumnType::Timestamp | ColumnType::LocalDateTime
+        ) {
             format!("CAST({quoted} AS CHAR CHARACTER SET utf8mb4)")
         } else {
             quoted.to_owned()

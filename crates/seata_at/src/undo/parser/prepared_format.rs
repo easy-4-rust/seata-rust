@@ -133,6 +133,15 @@ impl PreparedFormat {
             Value::Null
         } else {
             let payload = match field.value() {
+                FieldValue::Timestamp(value) => {
+                    let millis =
+                        value.epoch_seconds() * 1000 + i64::from(value.nanosecond() / 1_000_000);
+                    if value.nanosecond() % 1_000_000 == 0 {
+                        Value::Number(millis.into())
+                    } else {
+                        serde_json::json!([millis, value.nanosecond()])
+                    }
+                }
                 FieldValue::LocalDateTime(value) => {
                     let millis =
                         value.epoch_seconds() * 1000 + i64::from(value.nanosecond() / 1_000_000);
@@ -205,6 +214,14 @@ impl PreparedFormat {
             Some(ColumnDomain::Integer { unsigned: true, .. })
         );
         Ok(match native {
+            MySqlType::Timestamp => {
+                if !profile.utc_temporal() {
+                    return Err(UndoCodecError::Unsupported {
+                        kind: "explicit UTC TIMESTAMP profile required",
+                    });
+                }
+                (93, ValueEncoding::Typed("java.sql.Timestamp"))
+            }
             MySqlType::DateTime => {
                 if !profile.utc_temporal() {
                     return Err(UndoCodecError::Unsupported {

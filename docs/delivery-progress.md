@@ -1365,3 +1365,11 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 按原计划完整时间类型范围推进，新增[实施契约](phase-2/mysql-temporal-compatibility-contract.md)和[原 Java 实际现场](phase-2/evidence/mysql-temporal-reference/README.md)。固定原源码、Connector/J 8.0.27、Jackson 2.18.3 和真实 MySQL，在四种 JVM/驱动会话时区组合中完成 116 次 JDBC/Undo/重绑定观测。每组确认 7 个原读取异常、4 个 TIME 物理值变化与 2 个 TIME Java 值变化；独立验证拒绝 52 项结果削弱。TIMESTAMP 保留微秒，但 Rust 正式物理类型仍待实现，不能将原实现参考当作正式 TC 验收。
 
 下一步是 TIMESTAMP 的独立值域、会话时区、正式回调/恢复和主键验证；DATE 混合日历与 TIME 时长/精度差异保持完整待办。WP05、V1 生产门禁和 Phase 0–7 全计划没有关闭。
+
+## 2026-11-28：TIMESTAMP 显式 UTC 原生实现与正式回调
+
+新增独立 `Timestamp` 时间点、原生元数据/精度、UTC 会话事实检查、有界投影/精确绑定、Java 93/Timestamp Undo 与恢复解析、主键暂存和 Java 锁键，保留旧配置编号与记录。固定原 Java TC、MySQL 8.4.13、Rust 1.99/1.85 的 8 笔 TIMESTAMP 事务验证提交/回滚、原事务 Undo/SHA、旧配置拒绝和物理终态。每次现场还验证 UTC、+08:00、SYSTEM 三个真实会话，确认 16 次非 UTC 拒绝。
+
+回归含 8 笔 DATETIME、4 笔 JSON、64 笔普通 AT 事务；独立验证拒绝 422 项证据削弱。双 Rust 工作区各 812 通过、400 忽略、186 个成功汇总，严格受影响 Clippy 通过。原生类型识别的运行失败与绿色回归均已保存，未用编译错误充作 RED。[契约](phase-2/mysql-timestamp-contract.md) · [现场](phase-2/evidence/mysql-timestamp/README.md) · [ledger](phase-2/wp05-mysql-timestamp.json)。
+
+TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/写入器准入、WP07 和 Phase 5–7 继续实施。默认有变化 COMMIT 和完整 WP05/生产门禁状态没有放开。

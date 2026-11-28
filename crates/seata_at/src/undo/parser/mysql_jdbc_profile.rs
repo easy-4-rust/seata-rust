@@ -2,9 +2,9 @@
 /// 对应 Java: com.mysql.cj.jdbc.DatabaseMetaData的tinyInt1isBit配置；Rust显式转换策略扩展。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MySqlJdbcProfile {
-    /// 原 Connector8 Boolean 映射，额外要求 Java Jackson LocalDateTime 序列化为 UTC；持久码 3。
+    /// 原 Connector8 Boolean 映射，额外要求 Java Jackson LocalDateTime 序列化为 UTC，TIMESTAMP 锁键使用 UTC JVM；持久码 3。
     Connector8DefaultUtc,
-    /// 原 Connector8 数字 TINYINT 映射，额外要求 Java Jackson LocalDateTime 序列化为 UTC；持久码 4。
+    /// 原 Connector8 数字 TINYINT 映射，额外要求 Java Jackson LocalDateTime 序列化为 UTC，TIMESTAMP 锁键使用 UTC JVM；持久码 4。
     Connector8NumericTinyIntUtc,
     /// 原8.0.27默认配置；signed TINYINT(1)只对物理0/1允许无损Boolean编码。
     Connector8Default,
@@ -36,7 +36,7 @@ impl MySqlJdbcProfile {
     pub const fn boolean_tinyint(self) -> bool {
         matches!(self, Self::Connector8Default | Self::Connector8DefaultUtc)
     }
-    /// 无参数；返回是否明确约定 Java LocalDateTime 的 UTC 序列化。
+    /// 无参数；返回是否明确约定 Java LocalDateTime UTC 序列化及 Timestamp UTC 锁键。
     pub const fn utc_temporal(self) -> bool {
         matches!(
             self,

@@ -127,7 +127,24 @@ impl MySqlTableMetaReader {
             .iter()
             .map(|row| Self::column(row, &primary_order))
             .collect::<Result<Vec<_>, _>>()?;
-        TableMeta::new(table.into(), columns).map_err(DbError::from)
+        let table = TableMeta::new(table.into(), columns)?;
+        if table
+            .columns()
+            .iter()
+            .any(|column| column.kind() == ColumnType::Timestamp)
+        {
+            // 同一独占业务/恢复事务读取会话事实，避免把偏移后的文本误当成 UTC 时间点。
+            let zone: String = sqlx::query_scalar("SELECT @@session.time_zone")
+                .fetch_one(&mut **tx)
+                .await
+                .map_err(|e| DbError::driver("TIMESTAMP session zone", e))?;
+            if zone != "+00:00" {
+                return Err(DbError::Unsupported {
+                    feature: "TIMESTAMP requires verified UTC session",
+                });
+            }
+        }
+        Ok(table)
     }
     /// 参数为持锁表与字典主键顺序；与服务器当前物理建表定义逐项核对。
     async fn verify_physical_primary(
@@ -287,6 +304,7 @@ impl MySqlTableMetaReader {
             .split_whitespace()
             .any(|value| value.eq_ignore_ascii_case("unsigned"));
         let kind = match data_type.as_str() {
+            "timestamp" => ColumnType::Timestamp,
             "datetime" => ColumnType::LocalDateTime,
             "tinyint" | "smallint" | "mediumint" | "int" | "bigint" => {
                 if unsigned {
@@ -354,6 +372,7 @@ impl MySqlTableMetaReader {
     fn native_type(data_type: &str, full_type: &str) -> Result<MySqlType, MetadataError> {
         // 同值域的TEXT/BLOB子类仍需保留身份；TINYINT(1)只保留事实，不在这里丢失整数值。
         Ok(match data_type {
+            "timestamp" => MySqlType::Timestamp,
             "datetime" => MySqlType::DateTime,
             "json" => MySqlType::Json,
             "tinyint" => MySqlType::TinyInt {
@@ -403,18 +422,20 @@ impl MySqlTableMetaReader {
             return Ok(ColumnDomain::Integer { bits, unsigned });
         }
         match data_type {
-            "datetime" => {
+            "timestamp" | "datetime" => {
                 let precision = row.try_get::<u64, _>("DATETIME_PRECISION").map_err(|_| {
                     MetadataError::Invalid {
                         reason: "DATETIME fractional precision",
                     }
                 })?;
-                Ok(ColumnDomain::LocalDateTime {
-                    fractional_seconds: u8::try_from(precision).map_err(|_| {
-                        MetadataError::Invalid {
-                            reason: "DATETIME fractional precision",
-                        }
-                    })?,
+                let fractional_seconds =
+                    u8::try_from(precision).map_err(|_| MetadataError::Invalid {
+                        reason: "temporal fractional precision",
+                    })?;
+                Ok(if data_type == "timestamp" {
+                    ColumnDomain::Timestamp { fractional_seconds }
+                } else {
+                    ColumnDomain::LocalDateTime { fractional_seconds }
                 })
             }
             "json" => Ok(ColumnDomain::Json),
@@ -468,5 +489,56 @@ impl MySqlTableMetaReader {
             }
             .into()
         })
+    }
+}
+
+#[cfg(test)]
+mod timestamp_tests {
+    #![allow(clippy::unwrap_used)]
+    use super::MySqlTableMetaReader;
+    use seata_datasource::MySqlType;
+
+    #[test]
+    fn timestamp_is_a_distinct_native_type() {
+        let native = MySqlTableMetaReader::native_type("timestamp", "timestamp(6)");
+        assert!(native.is_ok(), "TIMESTAMP must have a native identity");
+        assert_ne!(native.ok(), Some(MySqlType::DateTime));
+    }
+
+    #[tokio::test]
+    #[ignore = "requires owned native TIMESTAMP table; run timestamp_column_java.py"]
+    async fn timestamp_checks_the_actual_database_session_zone() {
+        let database = std::env::var("SEATA_MYSQL_DATABASE").unwrap();
+        assert!(database.starts_with("undo_timestamp_"));
+        for zone in ["+00:00", "+08:00", "SYSTEM"] {
+            let options = sqlx::mysql::MySqlConnectOptions::new()
+                .host("127.0.0.1")
+                .port(std::env::var("SEATA_MYSQL_PORT").unwrap().parse().unwrap())
+                .username("root")
+                .password(&std::env::var("SEATA_MYSQL_PASSWORD").unwrap())
+                .database(&database)
+                .timezone(Some(zone.into()))
+                .ssl_mode(sqlx::mysql::MySqlSslMode::Disabled);
+            let pool = sqlx::mysql::MySqlPoolOptions::new()
+                .max_connections(1)
+                .connect_with(options)
+                .await
+                .unwrap();
+            let mut tx = pool.begin().await.unwrap();
+            let result = MySqlTableMetaReader::fetch(&mut tx, &database, "undo_timestamp").await;
+            if zone == "+00:00" {
+                assert!(result.is_ok());
+            } else {
+                assert!(matches!(
+                    result,
+                    Err(crate::DbError::Unsupported {
+                        feature: "TIMESTAMP requires verified UTC session"
+                    })
+                ));
+            }
+            tx.rollback().await.unwrap();
+            pool.close().await;
+            println!("TIMESTAMP_ACTUAL_SESSION_CHECKED {zone}");
+        }
     }
 }

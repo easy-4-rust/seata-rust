@@ -192,6 +192,9 @@ impl MySqlInsertExecutor {
         match column.domain().ok_or(DbError::Unsupported {
             feature: "physical primary column domain",
         })? {
+            ColumnDomain::Timestamp { fractional_seconds } => {
+                Ok(format!("TIMESTAMP({fractional_seconds})"))
+            }
             ColumnDomain::LocalDateTime { fractional_seconds } => {
                 Ok(format!("DATETIME({fractional_seconds})"))
             }

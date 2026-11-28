@@ -15,7 +15,8 @@
 | Rust RM 登记、分支报告、回调与持久状态 | 初期 RM profile 已验证 | [WP04](../phase-1/evidence/rm-gate/README.md)验证重复与重连；其资源动作夹具不证明 MySQL Undo 原子性。 |
 | MySQL AT SQL/Undo 准备及真实数据库局部行为 | 实施与验证中 | [WP05 各增量](../phase-0/v1-implementation-acceptance-checklist.md#wp-05--mysql-at-phase-1)包含真实 MySQL 与固定 TC 选定场景；完整 SQL 支持矩阵、外部写入器锁覆盖和一阶段故障门禁未结。 |
 | MySQL 原生 JSON 非主键列 | 选定 JDBC / MySQL 配置已验证 | 元数据、精确服务器文本镜像、原 Java Undo 及原 TC 补偿已通过双 Rust 现场；SQL NULL 与 JSON null 分离，原生类型和字段预算严格核对。[JSON 证据](evidence/mysql-json/README.md)。SQL 语法和生产提交准入不因类型扩展而放开。 |
-| MySQL DATETIME 与主键 | 选定显式 UTC 配置已验证 | 1000–9999、0–6 精度、原 Java 93/LocalDateTime Undo、主键和补偿通过双 Rust 原 TC；新配置编号 3/4，旧 1/2 不猜时区。DATE/TIME/TIMESTAMP 及其他组合继续实施。[证据](evidence/mysql-datetime/README.md)。 |
+| MySQL DATETIME 与主键 | 选定显式 UTC 配置已验证 | 1000–9999、0–6 精度、原 Java 93/LocalDateTime Undo、主键和补偿通过双 Rust 原 TC；新配置编号 3/4，旧 1/2 不猜时区。DATE/TIME 及其他组合继续实施。[证据](evidence/mysql-datetime/README.md)。 |
+| MySQL TIMESTAMP 与主键 | 选定显式 UTC 读写及回调已验证 | 独立时间点、0–6 精度、93/java.sql.Timestamp Undo、UTC 实际会话检查、主键和双 Rust 原 TC 提交/补偿已验证。专门的跨进程重启恢复及完整时间类型门禁保持开放。[证据](evidence/mysql-timestamp/README.md)。 |
 | 无变化、无分支本地 COMMIT | 受限实现 | `MySqlCommitCheckedTransaction::commit_no_change` 仅允许无登记、无 Undo、无见证作用域；成功不证明有变化业务的 Undo 原子提交。见[提交契约](mysql-first-phase-commit-contract.md)。 |
 | 有变化本地 COMMIT、原报告和跨进程 RM 恢复 | **默认关闭的实验特性** | `experimental_changed_commit` 下的 006 尝试记录、004 见证、007 报告门闩有[选定故障证据](evidence/mysql-commit-attempt-arm/README.md)。两个真正独立恢复者进程竞争已在[受控 RM 对端](evidence/mysql-report-process-race/README.md)与[固定原 Java TC](evidence/java-tc-changed-commit-report/README.md)的真实 MySQL 场景双工具链通过；持久 TM 接管已有[停止证明与原 TC 联试](evidence/tm-stop-nodes/README.md)，完整外部写入器准入和生产部署继续验收。 |
 | Undo SHA-256 | 013 迁移的新版本行已验证 | 版本 4 的摘要与业务、Undo、见证同事务提交，独立恢复和正式回调拒绝改写。旧行保留 NULL 摘要及历史语义。[双工具链现场证据](evidence/java-tc-changed-commit-report/README.md#undo-sha-256-与同一分支恢复)。 |
@@ -129,4 +130,4 @@ Tokio 的底层信号处理器是进程级的，监听器 Drop 不保证恢复 O
 
 ### DATE / TIME / TIMESTAMP：实施前原实现参考
 
-已取得[四种时区组合的真实 JDBC / Undo / 重绑定证据](evidence/mysql-temporal-reference/README.md)及[实施契约](mysql-temporal-compatibility-contract.md)，116 次观测。TIME 的原精度丢失、DATE 的历法缺口如实计为差异；TIMESTAMP 的原保真结果不能替代 Rust 正式回调与恢复验收。三个类型的正式生产能力仍待实现；完整时间类型要求没有缩减。
+已取得[四种时区组合的真实 JDBC / Undo / 重绑定证据](evidence/mysql-temporal-reference/README.md)及[实施契约](mysql-temporal-compatibility-contract.md)，116 次观测。TIME 的原精度丢失、DATE 的历法缺口如实计为差异；TIMESTAMP 的原保真结果不能替代 Rust 正式回调与恢复验收。TIMESTAMP 已新增[选定 UTC 正式实现及回调](evidence/mysql-timestamp/README.md)，专门跨进程重启恢复尚待验收；DATE/TIME 继续实施，完整时间类型要求没有缩减。

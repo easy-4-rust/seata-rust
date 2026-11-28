@@ -123,6 +123,14 @@ impl BaseTransactionalExecutor {
             };
         }
         match field.value() {
+            FieldValue::Timestamp(value) => {
+                if !profile.utc_temporal() {
+                    return Err(LockKeyError::Unsupported {
+                        feature: "explicit UTC TIMESTAMP profile required",
+                    });
+                }
+                output.push(&value.to_java_utc_string())
+            }
             FieldValue::LocalDateTime(value) => {
                 if !profile.utc_temporal() {
                     return Err(LockKeyError::Unsupported {

@@ -227,6 +227,7 @@ impl MySqlOptions {
             .password(&self.password)
             .database(&self.database)
             .charset("utf8mb4")
+            .timezone(Some("+00:00".into()))
             .ssl_mode(if self.insecure_loopback {
                 MySqlSslMode::Disabled
             } else {
