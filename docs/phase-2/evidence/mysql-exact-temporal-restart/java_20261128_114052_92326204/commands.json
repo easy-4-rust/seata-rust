@@ -1,0 +1,1474 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-exact_temporal_restart-20261128-114052-92326204",
+      "--label",
+      "seata.xa.owner=d7b34ecdce3345bc9e69419640a1685d",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata-exact-temporal-restart-20261128_114052_92326204/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:49584:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_exact_temporal_restart_d7b34ecdce33",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "install-server-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_exact_temporal_restart_d7b34ecdce33"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_restart_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-numeric-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-build",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_restart_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-commit-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-boolean-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_d7b34ecdce33' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-keys",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(CAST(k AS CHAR)),v FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart_keys ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-state",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,phase,terminal,commit_authorized,commit_terminal,first_phase_committed,HEX(undo_sha256),jdbc_profile FROM undo_exact_temporal_restart_d7b34ecdce33.seata_rs_at_branch_v1 ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT id,HEX(CAST(v AS CHAR)),HEX(CAST(d0 AS CHAR)),HEX(CAST(d1 AS CHAR)),HEX(CAST(d2 AS CHAR)),HEX(CAST(d3 AS CHAR)),HEX(CAST(d4 AS CHAR)),HEX(CAST(d5 AS CHAR)) FROM undo_exact_temporal_restart_d7b34ecdce33.undo_exact_temporal_restart ORDER BY id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT HEX(xid),branch_id,log_status FROM undo_exact_temporal_restart_d7b34ecdce33.undo_log ORDER BY branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-independent-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.global_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.branch_table),(SELECT COUNT(*) FROM undo_exact_temporal_restart_d7b34ecdce33.lock_table)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-numeric-rollback-native-commands",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT event_time,thread_id,argument FROM mysql.general_log WHERE command_type='Query' AND (argument LIKE 'UPDATE undo_exact_temporal_restart%' OR argument LIKE 'INSERT INTO undo_exact_temporal_restart%' OR argument LIKE 'DELETE FROM undo_exact_temporal_restart%') ORDER BY event_time,thread_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect-stopped",
+    "argv": [
+      "docker",
+      "inspect",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "885110af93e891d2b18e17150fb04a73993690041d443034cddf093df08243ac"
+    ],
+    "exit_code": 1
+  }
+]

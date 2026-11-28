@@ -1,0 +1,213 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-exact_temporal_restart-20261128-113733-65e8a413",
+      "--label",
+      "seata.xa.owner=9d20e6219be046c0a9938b85c71b40e0",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata-exact-temporal-restart-20261128_113733_65e8a413/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:64408:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=undo_exact_temporal_restart_9d20e6219be0",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "install-server-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "undo_exact_temporal_restart_9d20e6219be0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-build",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_restart_java",
+      "--offline",
+      "--locked",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-json-schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "DROP TABLE IF EXISTS undo_exact_temporal_restart_9d20e6219be0.undo_exact_temporal_restart; CREATE TABLE undo_exact_temporal_restart_9d20e6219be0.undo_exact_temporal_restart(id INT PRIMARY KEY,v DATE NULL,d0 DATE NULL,d1 DATE NULL,d2 DATE NULL,d3 DATE NULL,d4 DATE NULL,d5 DATE NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_9d20e6219be0.undo_exact_temporal_restart VALUES(1,'1000-01-01','1000-01-01','1500-02-28','1582-10-05','1582-10-10','1582-10-14','9999-12-31'),(2,'1500-02-28',NULL,NULL,NULL,NULL,NULL,NULL),(3,'1582-10-04',NULL,NULL,NULL,NULL,NULL,NULL),(4,'1582-10-05',NULL,NULL,NULL,NULL,NULL,NULL),(5,'1582-10-10',NULL,NULL,NULL,NULL,NULL,NULL),(6,'1582-10-14',NULL,NULL,NULL,NULL,NULL,NULL),(7,'1582-10-15',NULL,NULL,NULL,NULL,NULL,NULL),(8,'1582-10-29',NULL,NULL,NULL,NULL,NULL,NULL),(9,'1969-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(10,'1970-01-01',NULL,NULL,NULL,NULL,NULL,NULL),(11,'2000-02-29',NULL,NULL,NULL,NULL,NULL,NULL),(12,'9999-12-31',NULL,NULL,NULL,NULL,NULL,NULL),(20001,NULL,NULL,NULL,NULL,NULL,NULL,NULL); DROP TABLE IF EXISTS undo_exact_temporal_restart_9d20e6219be0.undo_exact_temporal_restart_keys; CREATE TABLE undo_exact_temporal_restart_9d20e6219be0.undo_exact_temporal_restart_keys(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO undo_exact_temporal_restart_9d20e6219be0.undo_exact_temporal_restart_keys VALUES('-838:59:59.000000',6),('-00:00:00.000001',7),('838:59:59.000000',9)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-json-metadata",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_SET_NAME,CHARACTER_OCTET_LENGTH,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='undo_exact_temporal_restart_9d20e6219be0' AND TABLE_NAME='undo_exact_temporal_restart' ORDER BY ORDINAL_POSITION"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-boolean-rollback-enable-log",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET GLOBAL general_log=OFF; SET GLOBAL log_output='TABLE'; TRUNCATE TABLE mysql.general_log; SET GLOBAL general_log=ON"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect-stopped",
+    "argv": [
+      "docker",
+      "inspect",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "50fc9ef33d29eb8aadaa5d6179cab67c57a752437f5369c590a6b35a2a71b651"
+    ],
+    "exit_code": 1
+  }
+]

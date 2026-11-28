@@ -1391,3 +1391,9 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 独立列域、精确镜像/参数、INSERT 键暂存、原 Jackson 编码/恢复、锁键与持久配置 5/6 已接入。取得[原 TC 八笔真实全局事务](phase-2/evidence/mysql-exact_date_time/README.md)，含双 Rust、两种配置、提交/回滚和 48 条 DML；原 Java 精确数据源/原 parser 与 Rust 的两张表对象图一致，原子 Undo/SHA、恢复配置隔离和原 TC 回调已现场核验。160 次证据削弱被拒绝。TIME 主键、DATE 普通列完整矩阵、专用跨进程/篡改恢复及原类型现场回归仍待完成；不关闭 WP05、V1 或总目标。
 
 本次正式路径增量的 Rust 1.99/1.85 全工作区各 822 项通过、404 项忽略，严格 Clippy 均通过；最终源码/现场封存 catalog 为 `91023027c93f2c44cc119f4fa6ee0130ec13d18c3ef70c43db75adccb577cdcd`。
+
+### 2026-11-28：DATE/TIME 真实主键与独立进程改写恢复
+
+补齐[DATE 普通列、TIME 主键及新配置独立进程恢复](phase-2/evidence/mysql-exact-temporal-restart/README.md)的选定现场。双 Rust、两配置、提交/回滚共八笔真实全局事务、48 条 DML、24 个 Rust 进程实例：生产者被核实强杀后，新进程拒绝合法等长改写的 Undo，原 TC 实际回调返回可重试失败；观察真实失败回包后恢复原字节，同一分支经原 TC 自然重试完成，未重登记或重报一阶段。原 Java 图、原始帧、数据库、OS 句柄和 checksum 事件独立核验通过，320 次证据削弱被拒绝。全工作区两版本各 822 项通过、407 项忽略，严格 Clippy 均通过。
+
+生产代码与配置编号未改。完整时间能力仍待原类型专门现场回归与写入器准入；WP05 完整 SQL、WP07 生产验收和 Phase 5–7 仍开放。后续继续推进这些能力，不把本次恢复补验扩张成全计划完成。
