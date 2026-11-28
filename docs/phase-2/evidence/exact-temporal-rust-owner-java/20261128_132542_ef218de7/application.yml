@@ -1,0 +1,29 @@
+spring:
+  main:
+    web-application-type: none
+logging:
+  file:
+    path: D:/codex-builds/reverse-temporal-20261128_132542_ef218de7/logs
+seata:
+  config:
+    type: file
+  registry:
+    type: file
+  server:
+    service-port: 64236
+    enable-check-auth: false
+  store:
+    mode: db
+    session:
+      mode: db
+    lock:
+      mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:64235/admission?useSSL=false&allowPublicKeyRetrieval=true
+      user: root
+      password: seata-mysql-fixture-only
+      min-conn: 1
+      max-conn: 4

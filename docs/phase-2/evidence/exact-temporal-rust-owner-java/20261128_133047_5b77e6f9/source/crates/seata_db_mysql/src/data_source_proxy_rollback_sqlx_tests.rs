@@ -1,0 +1,296 @@
+//! 通过回环协议夹具验证生产回滚入口的 SQLx 连接生命周期。
+use super::MySqlDataSource;
+use crate::{
+    mysql_loopback_fixture::{
+        authenticate, read_command, reject_authentication, write_error, write_packet,
+    },
+    DbError, UndoRollbackError,
+};
+use seata_at::MySqlJdbcProfile;
+use sqlx::mysql::{MySqlConnectOptions, MySqlPoolOptions, MySqlSslMode};
+use std::{error::Error, io, time::Duration};
+use tokio::{
+    net::{TcpListener, TcpStream},
+    sync::oneshot,
+    time::{timeout, Instant},
+};
+
+const XID: &str = "sqlx-cleanup:42";
+const FIXTURE_WATCHDOG: Duration = Duration::from_secs(8);
+
+#[tokio::test]
+async fn sqlx_closes_failed_rollback_connection_after_error_reply() -> Result<(), Box<dyn Error>> {
+    timeout(
+        FIXTURE_WATCHDOG,
+        assert_sqlx_rollback_cleanup(false, check_direct_failure),
+    )
+    .await?
+}
+
+#[tokio::test]
+async fn sqlx_closes_failed_rollback_connection_without_reply() -> Result<(), Box<dyn Error>> {
+    timeout(
+        FIXTURE_WATCHDOG,
+        assert_sqlx_rollback_cleanup(true, check_direct_failure),
+    )
+    .await?
+}
+
+#[tokio::test]
+async fn undo_acquisition_authentication_rejection_keeps_original_identity_and_diagnostics(
+) -> Result<(), Box<dyn Error>> {
+    timeout(FIXTURE_WATCHDOG, async {
+        let listener = TcpListener::bind("127.0.0.1:0").await?;
+        let source = loopback_source(listener.local_addr()?.port(), Duration::from_secs(3));
+        let peer = tokio::spawn(async move {
+            let (mut socket, _) = listener.accept().await?;
+            reject_authentication(&mut socket, 1).await?;
+            assert!(read_command(&mut socket).await?.is_none(), "SQL after rejected authentication");
+            assert!(timeout(Duration::from_millis(75), listener.accept()).await.is_err());
+            Ok::<(), io::Error>(())
+        });
+        let failure = acquisition_failure(&source).await?;
+        assert!(matches!(
+            failure,
+            UndoRollbackError::BeforeCommit {
+                source: DbError::Driver { operation: "Undo rollback acquire", code: Some(1045), sql_state: Some(ref state), .. },
+                ..
+            } if state == "28000"
+        ));
+        source.close().await?;
+        peer.await??;
+        Ok(())
+    }).await?
+}
+
+#[tokio::test]
+async fn undo_acquisition_pool_deadline_is_reported_before_begin() -> Result<(), Box<dyn Error>> {
+    check_blocked_acquisition(Duration::from_millis(300), "Undo rollback acquire").await
+}
+
+#[tokio::test]
+async fn undo_acquisition_obeys_shorter_operation_deadline() -> Result<(), Box<dyn Error>> {
+    check_blocked_acquisition(Duration::from_secs(3), "Undo rollback").await
+}
+
+async fn check_blocked_acquisition(
+    pool_budget: Duration,
+    deadline_stage: &'static str,
+) -> Result<(), Box<dyn Error>> {
+    timeout(FIXTURE_WATCHDOG, async {
+        let listener = TcpListener::bind("127.0.0.1:0").await?;
+        let source = loopback_source(listener.local_addr()?.port(), pool_budget);
+        let (finished, wait_for_finish) = oneshot::channel();
+        let peer = tokio::spawn(async move {
+            let (mut socket, _) = listener.accept().await?;
+            authenticate(&mut socket, 1).await?;
+            tokio::select! {
+                biased;
+                command = read_command(&mut socket) => return Err(io::Error::other(format!("command before lease release: {:?}", command?))),
+                accepted = listener.accept() => return Err(io::Error::other(format!("unexpected second connection: {}", accepted?.1))),
+                result = wait_for_finish => result.map_err(io::Error::other)?,
+            }
+            serve_idle_connection(&mut socket).await
+        });
+        // 保留唯一连接的租约，目标回滚无法取得连接。
+        let lease = source.pool.acquire().await?;
+        let failure = acquisition_failure(&source).await?;
+        assert!(matches!(
+            failure,
+            UndoRollbackError::BeforeCommit {
+                source: DbError::Deadline { operation },
+                ..
+            }
+            if operation == deadline_stage
+        ), "wrong deadline stage (expected {deadline_stage}): {failure:?}");
+        finished.send(()).map_err(|()| "pool exhaustion fixture ended early")?;
+        drop(lease);
+        source.close().await?;
+        peer.await??;
+        Ok(())
+    }).await?
+}
+
+async fn acquisition_failure(
+    source: &MySqlDataSource,
+) -> Result<UndoRollbackError, Box<dyn Error>> {
+    let failure = source
+        .rollback_undo_log("xid", 42, MySqlJdbcProfile::Connector8Default)
+        .await
+        .err()
+        .ok_or("expected Undo connection acquisition failure")?;
+    assert_eq!(failure.identity(), Some(("xid", 42)));
+    assert!(!failure.is_unknown_outcome());
+    Ok(failure)
+}
+
+pub(crate) async fn assert_sqlx_rollback_cleanup(
+    withhold_rollback_reply: bool,
+    check_failure: impl AsyncFnOnce(&MySqlDataSource) -> Result<(), Box<dyn Error>>,
+) -> Result<(), Box<dyn Error>> {
+    let listener = TcpListener::bind("127.0.0.1:0").await?;
+    let port = listener.local_addr()?.port();
+    let (rollback_seen, wait_for_rollback) = oneshot::channel();
+    let (allow_reply, wait_to_reply) = oneshot::channel();
+    let peer = tokio::spawn(serve(
+        listener,
+        withhold_rollback_reply,
+        rollback_seen,
+        wait_to_reply,
+    ));
+    let source = loopback_source(port, Duration::from_secs(3));
+    let started = Instant::now();
+    let mut operation = std::pin::pin!(check_failure(&source));
+    // 先观察回环服务收到 ROLLBACK，并证明生产调用仍然等待它的完成。
+    tokio::select! {
+        biased;
+        _ = &mut operation => return Err("rollback completed before its reply was released".into()),
+        receipt = wait_for_rollback => receipt?,
+    }
+    tokio::select! {
+        biased;
+        _ = &mut operation => return Err("rollback completed before its reply was released".into()),
+        _ = std::future::ready(()) => {},
+    }
+    if !withhold_rollback_reply {
+        allow_reply
+            .send(())
+            .map_err(|()| "rollback peer closed before releasing its error")?;
+    }
+    operation.await?;
+    if withhold_rollback_reply {
+        assert!(started.elapsed() >= source.operation_timeout());
+    }
+    // 容量只有一个借用位，下一次获取必须能握手建立第二条物理连接。
+    let replacement = source.pool.acquire().await?;
+    drop(replacement);
+    source.close().await?;
+    timeout(Duration::from_secs(3), peer).await???;
+    Ok(())
+}
+
+pub(crate) fn loopback_source(port: u16, acquire_timeout: Duration) -> MySqlDataSource {
+    let options = MySqlConnectOptions::new()
+        .host("127.0.0.1")
+        .port(port)
+        .username("fixture")
+        .ssl_mode(MySqlSslMode::Disabled);
+    MySqlDataSource {
+        pool: MySqlPoolOptions::new()
+            .max_connections(1)
+            .acquire_timeout(acquire_timeout)
+            .connect_lazy_with(options),
+        database: "undo_fixture".into(),
+        server_version: "8.0.36".into(),
+        server_uuid: "fixture".into(),
+        registration_checks: Default::default(),
+        operation_timeout: Duration::from_millis(1_500),
+        recovery_metrics: crate::MySqlRecoveryMetricsSampler::new(),
+        undo_metrics: crate::MySqlUndoMetricsSampler::new(),
+        phase_one_metrics: crate::MySqlPhaseOneMetricsSampler::new(),
+    }
+}
+
+async fn check_direct_failure(source: &MySqlDataSource) -> Result<(), Box<dyn Error>> {
+    let failure = source
+        .rollback_undo_log(XID, 42, MySqlJdbcProfile::Connector8Default)
+        .await
+        .err()
+        .ok_or("fixture must reject metadata access")?;
+    assert_eq!(failure.identity(), Some((XID, 42)));
+    assert!(!failure.is_unknown_outcome());
+    assert!(matches!(
+        failure,
+        UndoRollbackError::BeforeCommit {
+            source: DbError::Driver {
+                operation: "metadata visibility",
+                sql_state: Some(ref state),
+                code: Some(1142),
+                ..
+            },
+            ..
+        } if state == "42000"
+    ));
+    Ok(())
+}
+
+async fn serve(
+    listener: TcpListener,
+    withhold_rollback_reply: bool,
+    rollback_seen: oneshot::Sender<()>,
+    wait_to_reply: oneshot::Receiver<()>,
+) -> io::Result<()> {
+    let (mut first, _) = listener.accept().await?;
+    authenticate(&mut first, 1).await?;
+    assert_eq!(
+        read_command(&mut first).await?.as_deref(),
+        Some(b"\x03BEGIN".as_slice())
+    );
+    write_packet(&mut first, 1, &[0, 0, 0, 3, 0, 0, 0]).await?;
+    let lock = read_command(&mut first).await?;
+    assert!(matches!(
+        lock.as_deref(),
+        Some(b"\x16SELECT branch_id FROM undo_log WHERE 1=0 FOR UPDATE")
+            | Some(b"\x16SELECT xid FROM seata_rs_at_branch_v1 WHERE 1=0 FOR UPDATE")
+    ));
+    write_packet(&mut first, 1, &[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).await?;
+    let execute_lock = read_command(&mut first)
+        .await?
+        .ok_or_else(|| io::Error::other("missing metadata lock"))?;
+    assert!(execute_lock.starts_with(&[0x17, 1, 0, 0, 0]));
+    write_packet(&mut first, 1, &[0, 0, 0, 3, 0, 0, 0]).await?;
+
+    assert_eq!(
+        read_command(&mut first).await?.as_deref(),
+        Some(b"\x16SHOW GRANTS".as_slice())
+    );
+    // 先成功分配语句，随后使执行失败，对照 Java executeQuery 报错的阶段。
+    write_packet(&mut first, 1, &[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).await?;
+    let execute = read_command(&mut first)
+        .await?
+        .ok_or_else(|| io::Error::other("missing SHOW GRANTS execution"))?;
+    assert!(execute.starts_with(&[0x17, 2, 0, 0, 0]));
+    write_error(&mut first, 1142, b"42000").await?;
+    assert_eq!(
+        read_command(&mut first).await?.as_deref(),
+        Some(b"\x03ROLLBACK".as_slice())
+    );
+    rollback_seen
+        .send(())
+        .map_err(|()| io::Error::other("rollback test completed without waiting"))?;
+    if !withhold_rollback_reply {
+        wait_to_reply.await.map_err(io::Error::other)?;
+        write_error(&mut first, 1205, b"HY000").await?;
+    }
+    while let Some(command) = read_command(&mut first).await? {
+        match command.as_slice() {
+            // SQLx 在回滚 Future 被取消或返回错误后允许发送析构清理。
+            b"\x03ROLLBACK" => {}
+            b"\x01" => {}
+            _ => {
+                return Err(io::Error::other(
+                    "unexpected command on rejected connection",
+                ))
+            }
+        }
+    }
+
+    let (mut second, _) = listener.accept().await?;
+    authenticate(&mut second, 2).await?;
+    serve_idle_connection(&mut second).await
+}
+
+pub(crate) async fn serve_idle_connection(socket: &mut TcpStream) -> io::Result<()> {
+    while let Some(command) = read_command(socket).await? {
+        match command.as_slice() {
+            b"\x01" => {}
+            b"\x0e" => write_packet(socket, 1, &[0, 0, 0, 2, 0, 0, 0]).await?,
+            _ => {
+                return Err(io::Error::other(
+                    "unexpected command on replacement connection",
+                ))
+            }
+        }
+    }
+    Ok(())
+}

@@ -1,0 +1,5240 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-session-helper",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:server/src/main/java/org/apache/seata/server/session/SessionHelper.java"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-default-values",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:common/src/main/java/org/apache/seata/common/DefaultValues.java"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "compile-java",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\javac.exe",
+      "@D:\\codex-builds\\reverse-temporal-20261128_133635_d5470cdb\\compile.args"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.99",
+    "argv": [
+      "rustc",
+      "+1.99.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "cargo-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.85",
+    "argv": [
+      "rustc",
+      "+1.85.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "cargo-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "reverse-temporal-20261128-133635-d5470cdb",
+      "--label",
+      "seata.fixture.owner=20261128_133635_d5470cdb",
+      "--mount",
+      "type=bind,source=D:/codex-builds/reverse-temporal-20261128_133635_d5470cdb/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:55585:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=admission",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysqladmin",
+      "-h127.0.0.1",
+      "-uroot",
+      "-pseata-mysql-fixture-only",
+      "--connect-timeout=2",
+      "--wait=60",
+      "ping"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-uroot",
+      "admission"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-facts",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT @@server_uuid,VERSION()"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',1,5)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088577' AND u.branch_id=4045082012760088579"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088577' AND u.branch_id=4045082012760088579"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-terminal-26",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-terminal-27",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-terminal-28",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-terminal-29",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-35",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-36",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-37",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-terminal-43",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-terminal-44",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-terminal-45",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-terminal-46",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-terminal-47",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',1,5)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088624' AND u.branch_id=4045082012760088626"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088624' AND u.branch_id=4045082012760088626"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-owner-terminal-60",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-owner-terminal-61",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-owner-terminal-62",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-owner-terminal-63",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-date-terminal-69",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-date-terminal-70",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-date-terminal-71",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-time-terminal-77",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-time-terminal-78",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-prior-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-reset-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DELETE FROM undo_log WHERE log_status=1 AND ((xid=X'3139382e31382e302e313a35353538363a34303435303832303132373630303838363234' AND branch_id=4045082012760088626)); SELECT ROW_COUNT()"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',0,6)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088665' AND u.branch_id=4045082012760088667"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088665' AND u.branch_id=4045082012760088667"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-owner-terminal-93",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-owner-terminal-94",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-owner-terminal-95",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-date-terminal-101",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-date-terminal-102",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-date-terminal-103",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-time-terminal-109",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-time-terminal-110",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-time-terminal-111",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-time-terminal-112",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-commit-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',0,6)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088724' AND u.branch_id=4045082012760088726"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088724' AND u.branch_id=4045082012760088726"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-owner-terminal-125",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-owner-terminal-126",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-owner-terminal-127",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-owner-terminal-128",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-date-terminal-134",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-date-terminal-135",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-date-terminal-136",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-time-terminal-142",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-time-terminal-143",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-time-terminal-144",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-time-terminal-145",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-6-rollback-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-prior-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-reset-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DELETE FROM undo_log WHERE log_status=1 AND ((xid=X'3139382e31382e302e313a35353538363a34303435303832303132373630303838373234' AND branch_id=4045082012760088726)); SELECT ROW_COUNT()"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',1,5)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088765' AND u.branch_id=4045082012760088767"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088765' AND u.branch_id=4045082012760088767"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-owner-terminal-160",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-owner-terminal-161",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-date-terminal-167",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-date-terminal-168",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-date-terminal-169",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-terminal-175",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-terminal-176",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-terminal-177",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-terminal-178",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-terminal-179",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-commit-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',1,5)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088827' AND u.branch_id=4045082012760088829"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088827' AND u.branch_id=4045082012760088829"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-owner-terminal-192",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-owner-terminal-193",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-owner-terminal-194",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-owner-terminal-195",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-date-terminal-201",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-date-terminal-202",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-date-terminal-203",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-terminal-209",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-terminal-210",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-terminal-211",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-terminal-212",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-terminal-213",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-5-rollback-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-prior-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-reset-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DELETE FROM undo_log WHERE log_status=1 AND ((xid=X'3139382e31382e302e313a35353538363a34303435303832303132373630303838383237' AND branch_id=4045082012760088829)); SELECT ROW_COUNT()"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',0,6)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088865' AND u.branch_id=4045082012760088867"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088865' AND u.branch_id=4045082012760088867"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-owner-terminal-228",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-date-terminal-234",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-date-terminal-235",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-date-terminal-236",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-date-terminal-237",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-terminal-243",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-terminal-244",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-terminal-245",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-terminal-246",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-terminal-247",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-commit-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353538352f61646d697373696f6e',0,6)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088922' AND u.branch_id=4045082012760088924"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55586:4045082012760088922' AND u.branch_id=4045082012760088924"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-owner-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-date-terminal-265",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-date-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-date-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-admitted-time-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-admitted-time-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-terminal-271",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-terminal-272",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-terminal-273",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-terminal-274",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-terminal-275",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log WHERE log_status=0)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-time-final",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.85-6-rollback-final-fences",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,log_status,HEX(rollback_info),context FROM undo_log ORDER BY xid,branch_id"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop-mysql",
+    "argv": [
+      "docker",
+      "stop",
+      "--time=15",
+      "f7c7bfef527a3893640ec97f9dd81ef0421f4bedde7af7b7fad6da28076c7e1b"
+    ],
+    "exit_code": 0
+  }
+]

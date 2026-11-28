@@ -1,0 +1,340 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "compile-java",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\javac.exe",
+      "@D:\\codex-builds\\reverse-temporal-20261128_132542_ef218de7\\compile.args"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.99",
+    "argv": [
+      "rustc",
+      "+1.99.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "cargo-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "reverse-temporal-20261128-132542-ef218de7",
+      "--label",
+      "seata.fixture.owner=20261128_132542_ef218de7",
+      "--mount",
+      "type=bind,source=D:/codex-builds/reverse-temporal-20261128_132542_ef218de7/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:64235:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=admission",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysqladmin",
+      "-h127.0.0.1",
+      "-uroot",
+      "-pseata-mysql-fixture-only",
+      "--connect-timeout=2",
+      "--wait=60",
+      "ping"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-uroot",
+      "admission"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-facts",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT @@server_uuid,VERSION()"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a36343233352f61646d697373696f6e',1,5)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:64236:4045082010062831617' AND u.branch_id=4045082010062831619"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-rollback-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:64236:4045082010062831617' AND u.branch_id=4045082010062831619"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop-mysql",
+    "argv": [
+      "docker",
+      "stop",
+      "--time=15",
+      "a1226a9895b14d3da679ac076eccb401670cb3b0941546003335ef6b3d60d44c"
+    ],
+    "exit_code": 0
+  }
+]

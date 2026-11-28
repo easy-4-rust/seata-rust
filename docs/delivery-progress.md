@@ -1423,3 +1423,9 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 [新增正式混合联试](phase-2/mysql-exact-temporal-mixed-lock-contract.md)通过：六码 Java 基线重新运行，双 Rust 1.99/1.85 在配置 5/6、Java 提交/回滚两种终结下，对 DATE/TIME 同键取得 16 次原 TC 冲突拒绝和释放后 16 次成功登记。原 Java 业务/锁保持、Rust 本地撤销、原 TC 回调及 `GlobalFinished` 围栏均按原身份独立核验。44 笔全局事务，catalog 为 `ffeee9ef7bd0ff281da6723f0f659adba1695fdf5df4564b1b892f26c262a6e7`。
 
 本轮只增加 Rust 联试目标和夹具，未改生产组件。新增目标的双版本严格 Clippy 通过。当前关闭 Java 持锁方向的选定精确键竞争缺口；反向 Rust 持锁/Java 竞争、全部 SQL、生产权限/认证、WP07 和 Phase 5–7 仍开放。
+
+### 2026-11-28：反向 Rust 已提交持锁、原 Java 竞争
+
+[反向完整矩阵](phase-2/evidence/exact-temporal-rust-owner-java/README.md)已通过：Rust 1.99/1.85、配置 5/6、Rust 提交/回滚八组、40 笔全局事务。正式有变化阶段一先持有 DATE/TIME 原锁，Java 16 次登记被原 TC 拒绝；释放后 Java 16 次登记及真实原 RM 补偿通过。阶段一 checksum 与历史见证持久化、精确业务、全部回调及原围栏独立核验，双目标严格 Clippy 通过。
+
+catalog 为 `87c385aff3d1d4fddfc393bced4c07691764f6d5f53140dd27c76ecf2f2baea6`。本轮仅新增联试及契约/证据，没有改生产 Rust 或原 Java 实现。所选 DATE/TIME 键的双向竞争缺口已补齐；完整 SQL、所有写入器强制准入、生产权限/认证、WP07 和 Phase 5–7 继续开放。

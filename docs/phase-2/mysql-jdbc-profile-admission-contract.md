@@ -23,3 +23,5 @@ Rust 可选严格入口已实现，并取得[真实双 Rust/原 TC 现场](evide
 后续已补[完整原 Java TC/RM 集成](evidence/java-writer-jdbc-profile-tc/README.md)：六码各自提交和回滚，共 12 笔全局事务、60 次登记前错误绑定拒绝；不再替换数据源身份。配置 5/6 的七条业务 SQL 实际生成原 Undo，原 RM 提交/补偿、DATE/TIME 普通列与主键、数据库终态和原回调帧均独立核验。该增量关闭新入口的选定原 Java TC/RM 链路缺口；所有写入器的混合竞争、权限/认证、全部 SQL 和生产门禁仍开放。
 
 新增[Java 持锁、双 Rust 竞争契约](mysql-exact-temporal-mixed-lock-contract.md)：配置 5/6 的 DATE/TIME 原键在 Java 持锁时取得 16 次原 TC 冲突拒绝，Java 释放后 16 次 Rust 准备登记成功；双工具链、Java 提交/回滚均覆盖。未提交分支回滚后保留原 `GlobalFinished` 围栏，独立观察按原身份核对。反向持锁与全部写入器门禁继续开放。
+
+后续已补[反向 Rust 已提交持锁、原 Java 竞争](evidence/exact-temporal-rust-owner-java/README.md)：双版本、配置 5/6、Rust 提交/回滚八组取得 40 笔实际全局事务；Java 16 次原 TC 冲突拒绝、16 次释放后成功登记及原 RM 补偿。阶段一原 Undo checksum、历史见证和保留围栏分别核验。选定精确键的双向竞争链路已验证；完整 SQL、权限/认证及生产准入仍开放。

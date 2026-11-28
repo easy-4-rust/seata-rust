@@ -1,0 +1,3511 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-session-helper",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:server/src/main/java/org/apache/seata/server/session/SessionHelper.java"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "original-default-values",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:common/src/main/java/org/apache/seata/common/DefaultValues.java"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "compile-java",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\javac.exe",
+      "@D:\\codex-builds\\reverse-temporal-20261128_133235_b67fa7fd\\compile.args"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.99",
+    "argv": [
+      "rustc",
+      "+1.99.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "cargo-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.99",
+    "argv": [
+      "cargo",
+      "+1.99.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "rustc-1.85",
+    "argv": [
+      "rustc",
+      "+1.85.0",
+      "--version"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "cargo-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "test",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "clippy-1.85",
+    "argv": [
+      "cargo",
+      "+1.85.0",
+      "clippy",
+      "--manifest-path",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\Cargo.toml",
+      "--offline",
+      "--locked",
+      "-p",
+      "seata-db-mysql",
+      "--features",
+      "experimental_changed_commit",
+      "--test",
+      "live_exact_temporal_rust_owner_java",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "reverse-temporal-20261128-133235-b67fa7fd",
+      "--label",
+      "seata.fixture.owner=20261128_133235_b67fa7fd",
+      "--mount",
+      "type=bind,source=D:/codex-builds/reverse-temporal-20261128_133235_b67fa7fd/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:55596:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=admission",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "ready",
+    "argv": [
+      "docker",
+      "exec",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysqladmin",
+      "-h127.0.0.1",
+      "-uroot",
+      "-pseata-mysql-fixture-only",
+      "--connect-timeout=2",
+      "--wait=60",
+      "ping"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/server/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "undo-schema",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "show",
+      "cba73e180fd8896a99df6415b859d275122feaa7:script/client/at/db/mysql.sql"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-i",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-uroot",
+      "admission"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "server-facts",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT @@server_uuid,VERSION()"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-seed",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "DROP TABLE IF EXISTS temporal_dates,temporal_times;CREATE TABLE temporal_dates(k DATE PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_dates VALUES('1582-10-05',10);CREATE TABLE temporal_times(k TIME(6) PRIMARY KEY,v INT NOT NULL) ENGINE=InnoDB; INSERT INTO temporal_times VALUES('-25:01:02.123456',20);REPLACE INTO seata_rs_at_resource_binding(slot,resource_id,tinyint1_is_bit,jdbc_profile) VALUES(1,X'6a6462633a6d7973716c3a2f2f3132372e302e302e313a35353539362f61646d697373696f6e',1,5)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-before",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-held-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-held-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-held-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55597:4045082011864547329' AND u.branch_id=4045082011864547332"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-rejected-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-rejected-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-rejected-undo",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT HEX(rollback_info),HEX(b.undo_sha256),b.jdbc_profile,b.first_phase_committed,u.log_status FROM undo_log u JOIN seata_rs_at_branch_v1 b ON b.xid=CAST(u.xid AS BINARY) AND b.branch_id=u.branch_id WHERE u.xid='198.18.0.1:55597:4045082011864547329' AND u.branch_id=4045082011864547332"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-owner-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-admitted-date-tc",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT xid,branch_id,resource_id,status FROM branch_table; SELECT xid,branch_id,table_name,pk FROM lock_table ORDER BY table_name,pk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-admitted-date-business",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT CAST(k AS CHAR),v FROM temporal_dates ORDER BY k; SELECT CAST(k AS CHAR),v FROM temporal_times ORDER BY k"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-30",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-31",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-32",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-33",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-34",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-35",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-36",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-37",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-38",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-39",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-40",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-41",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-42",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-43",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-44",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-45",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-46",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-47",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-48",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-49",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-50",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-51",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-52",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-53",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-54",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-55",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-56",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-57",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-58",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-59",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-60",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-61",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-62",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-63",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-64",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-65",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-66",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-67",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-68",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-69",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-70",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-71",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-72",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-73",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-74",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-75",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-76",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-77",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-78",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-79",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-80",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-81",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-82",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-83",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-84",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-85",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-86",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-87",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-88",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-89",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-90",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-91",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-92",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-93",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-94",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-95",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-96",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-97",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-98",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-99",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-100",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-101",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-102",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-103",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-104",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-105",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-106",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-107",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-108",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-109",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-110",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-111",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-112",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-113",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-114",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-115",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-116",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-117",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-118",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-119",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-120",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-121",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-122",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-123",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-124",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-125",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-126",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-127",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-128",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-129",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-130",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-131",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-132",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-133",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-134",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-135",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-136",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-137",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-138",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-139",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-140",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-141",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-142",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-143",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-144",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-145",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-146",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-147",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-148",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-149",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-150",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-151",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-152",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-153",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-154",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-155",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-156",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-157",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-158",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-159",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-160",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-161",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-162",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-163",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-164",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-165",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-166",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-167",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-168",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-169",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-170",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-171",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-172",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-173",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-174",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-175",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-176",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-177",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-178",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-179",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-180",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-181",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-182",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-183",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-184",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-185",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-186",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "1.99-5-commit-date-terminal-187",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "admission",
+      "-e",
+      "SELECT (SELECT COUNT(*) FROM global_table),(SELECT COUNT(*) FROM branch_table),(SELECT COUNT(*) FROM lock_table),(SELECT COUNT(*) FROM undo_log)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop-mysql",
+    "argv": [
+      "docker",
+      "stop",
+      "--time=15",
+      "c3eda019a696143cda9ddfc67f28539d86a5d120faf4e47ac723db13a4fba362"
+    ],
+    "exit_code": 0
+  }
+]

@@ -21,4 +21,4 @@
 
 后续已取得[原 Java TC/RM 的严格入口与 DATE/TIME 补偿证据](../phase-2/evidence/java-writer-jdbc-profile-tc/README.md)：六码共十二笔全局事务和六十次错误绑定拒绝，选定精确 DATE/TIME 普通列及主键的原 RM 回调通过。新入口的原 Java 集成不再是未实施项；下一步核对两种语言在同一精确锁键上的混合竞争与准入，继续保留完整 SQL、生产权限/认证、WP07 和 Phase 5–7 的缺口。
 
-Java 持锁方向的[精确 DATE/TIME 混合竞争](../phase-2/mysql-exact-temporal-mixed-lock-contract.md)现已通过双 Rust 的真实原 TC 现场；下一步补反向 Rust 已提交持锁时的 Java 竞争。当前证据覆盖选定键、配置与生命周期，不关闭全部写入器及生产门禁。
+精确 DATE/TIME 的[双向混合竞争](../phase-2/mysql-exact-temporal-mixed-lock-contract.md)已取得双 Rust、配置 5/6 的真实原 TC 证据。反向还核验正式已提交阶段一的 checksum 和历史见证、Java 原 RM 的实际补偿及围栏保留。下一步继续对照 WP05 的完整 SQL/写入器要求和 WP07 生产门禁核对实际剩余项；不把选定键的互操作验证等同于全部写入器准入完成。
