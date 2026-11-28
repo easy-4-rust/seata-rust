@@ -65,6 +65,12 @@ MySQL部分无括号内建项在替代解析器中会被表示为普通Identifie
 
 ## 证据与剩余工作
 
+### 首期 SQL 矩阵端到端补验
+
+沿用上文已确认的语法边界，建立可执行矩阵，覆盖显式列及多行/混合参数 INSERT、原 WHERE 变化后的 UPDATE、单表 DELETE、六种比较、AND/OR、IN/NOT IN、BETWEEN/NOT BETWEEN、NULL 谓词、确定性算术和引号文本。每个接受用例须在双 Rust、原 TC 的提交及补偿两种决策下实际执行，独立核对预期业务、原登记和锁、同事务 Undo/checksum 与原 Java parser 读取。拒绝用例须区分识别拒绝与真实元数据/执行前拒绝。矩阵通过只证明已声明的首期范围，不扩大为完整 Java SQL 迁移或关闭全部 WP05 门禁。
+
+[该矩阵已验证](evidence/initial-sql-matrix/README.md)：22 个接受、22 个语法拒绝、1 个真实元数据拒绝用例；双工具链分别完成接受用例的提交和补偿，共 88 笔全局事务。原 Java parser 重读全部 88 份正式 Undo，业务字段重编码一致。此状态关闭首期分类器/明确矩阵这一项，其他 WP05、生产准入及完整 Java 迁移要求保持原门禁。
+
 固定原 Java TC 的跨表原子性及重叠锁批次并发登记已由 Rust 1.99/1.85 在真实 MySQL 上核对。两个 TC 数据库线程都写入独有键后才竞争公共键，失败方的独有锁随登记一起回滚。外部写入器准入及公开业务 COMMIT 门槛继续开放。[锁原子性证据](tc-lock-coverage-contract.md#重叠锁批次的并发登记)。
 
 固定 Java AT 写入器现有可选事务准入入口。错误资源 ID、物理 UUID 或 Connector/J 映射在首条业务 SQL 前被拒绝。原 Java 与 Rust 读取同一 005/011 绑定，双版本实测匹配配置下锁竞争及锁释放。仍需验证生产权限和其他写入器。[准入证据](tc-lock-coverage-contract.md#java-写入器事务准入)。

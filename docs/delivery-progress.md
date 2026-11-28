@@ -1429,3 +1429,9 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 [反向完整矩阵](phase-2/evidence/exact-temporal-rust-owner-java/README.md)已通过：Rust 1.99/1.85、配置 5/6、Rust 提交/回滚八组、40 笔全局事务。正式有变化阶段一先持有 DATE/TIME 原锁，Java 16 次登记被原 TC 拒绝；释放后 Java 16 次登记及真实原 RM 补偿通过。阶段一 checksum 与历史见证持久化、精确业务、全部回调及原围栏独立核验，双目标严格 Clippy 通过。
 
 catalog 为 `87c385aff3d1d4fddfc393bced4c07691764f6d5f53140dd27c76ecf2f2baea6`。本轮仅新增联试及契约/证据，没有改生产 Rust 或原 Java 实现。所选 DATE/TIME 键的双向竞争缺口已补齐；完整 SQL、所有写入器强制准入、生产权限/认证、WP07 和 Phase 5–7 继续开放。
+
+### 2026-11-28：首期 SQL 可执行矩阵
+
+[首期已批准语法的端到端矩阵](phase-2/evidence/initial-sql-matrix/README.md)通过双 Rust：22 接受 / 22 语法拒绝 / 1 元数据拒绝用例，接受项各自提交和补偿，共 88 笔原 TC 全局事务。独立核验前后镜像、原锁、一次成功报告、同事务 Undo/checksum、恢复终态与最终业务；原 Java parser 重读并语义重编码 88 份 Undo。双版本分类测试和新增目标严格 Clippy 通过。
+
+对应 WP05 的“分类器/明确支持矩阵”和“明确不支持 SQL 的拒绝行为”两项已记录为完成；首期范围、默认实验 COMMIT 门槛、完整 Java SQL 与总 Gate 不变。catalog 为 `e980032696b95661939b4104cdb5be6d467eb9bae84ca3daf771c19b09e1d437`。现场新增定位到原 TC 单向 111 清理指令尚未接入 RM 执行，列为下一项具体生产差距；不以协议已解码代替清理已执行。

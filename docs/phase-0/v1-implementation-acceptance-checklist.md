@@ -192,7 +192,7 @@ Gate verification 2026-11-13: [formal peer-profile evidence](../phase-1/evidence
 **Depends on:** WP-04 and a chosen MySQL driver.
 
 - [ ] Establish local transaction boundary.
-- [ ] SQL parser/classifier with explicit supported SQL matrix.
+- [x] SQL parser/classifier with explicit supported SQL matrix — the approved initial grammar has an [executable 22-accept / 22-reject matrix](../phase-2/evidence/initial-sql-matrix/README.md), dual-toolchain classification and 88 original-TC commit/compensation globals. Physical primary-key updates are separately rejected by metadata validation. This does not certify all Java SQL or close the WP05 gate.
 - [ ] Resolve table metadata and primary keys.
 - [ ] Capture before image.
 - [ ] Generate canonical lock keys and register branch before committing business changes.
@@ -204,7 +204,7 @@ Gate verification 2026-11-13: [formal peer-profile evidence](../phase-1/evidence
 - [ ] Report PhaseOne_Done only after local commit is known successful.
 - [ ] On definite local failure, rollback and report phase-1 failure where branch registration succeeded.
 - [ ] On ambiguous DB commit result, reconcile local state and Undo Log; never replay SQL blindly.
-- [ ] Define unsupported SQL behavior as fail-closed.
+- [x] Define unsupported SQL behavior as fail-closed — the approved grammar and rejection boundary are explicit; the [executable matrix](../phase-2/evidence/initial-sql-matrix/README.md) verifies 22 syntax rejections and a distinct physical primary-key-update rejection. Full Java SQL migration and the WP05 production gate remain open.
 
 **Gate:** integration tests prove business data + Undo Log atomicity for supported SQL; crash/fault injection proves no committed business row without Undo Log.
 

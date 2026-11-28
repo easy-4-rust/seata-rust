@@ -1,0 +1,6638 @@
+[
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "insert_single",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450307,
+      "checksum_persisted": true,
+      "id": "insert_single",
+      "lock": "sql_matrix_records:11",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "new"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450305"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ],
+      [
+        11,
+        25,
+        "new"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "insert_multi_mixed",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572450325,
+      "checksum_persisted": true,
+      "id": "insert_multi_mixed",
+      "lock": "sql_matrix_records:11,12,13",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "literal ?"
+        ],
+        [
+          12,
+          5,
+          "second"
+        ],
+        [
+          13,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450323"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ],
+      [
+        11,
+        25,
+        "literal ?"
+      ],
+      [
+        12,
+        5,
+        "second"
+      ],
+      [
+        13,
+        null,
+        null
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "insert_column_order",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450350,
+      "checksum_persisted": true,
+      "id": "insert_column_order",
+      "lock": "sql_matrix_records:14",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          14,
+          7,
+          "reordered"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450348"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ],
+      [
+        14,
+        7,
+        "reordered"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "unary_plus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450375,
+      "checksum_persisted": true,
+      "id": "unary_plus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450373"
+    },
+    "final": [
+      [
+        1,
+        7,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "unary_minus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450398,
+      "checksum_persisted": true,
+      "id": "unary_minus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          -11,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450396"
+    },
+    "final": [
+      [
+        1,
+        -11,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "multiply",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450420,
+      "checksum_persisted": true,
+      "id": "multiply",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          24,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450418"
+    },
+    "final": [
+      [
+        1,
+        24,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "divide",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450448,
+      "checksum_persisted": true,
+      "id": "divide",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          4,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450446"
+    },
+    "final": [
+      [
+        1,
+        4,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "modulo",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450472,
+      "checksum_persisted": true,
+      "id": "modulo",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          2,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450470"
+    },
+    "final": [
+      [
+        1,
+        2,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "between_and_not",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572450498,
+      "checksum_persisted": true,
+      "id": "between_and_not",
+      "lock": "sql_matrix_records:1,2",
+      "phase_one": [
+        [
+          1,
+          15,
+          "one"
+        ],
+        [
+          2,
+          23,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450496"
+    },
+    "final": [
+      [
+        1,
+        15,
+        "one"
+      ],
+      [
+        2,
+        23,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "in_or_comparisons",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572450524,
+      "checksum_persisted": true,
+      "id": "in_or_comparisons",
+      "lock": "sql_matrix_records:1,2,4",
+      "phase_one": [
+        [
+          1,
+          10,
+          "one"
+        ],
+        [
+          2,
+          18,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          38,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450522"
+    },
+    "final": [
+      [
+        1,
+        10,
+        "one"
+      ],
+      [
+        2,
+        18,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        38,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "not_in",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450548,
+      "checksum_persisted": true,
+      "id": "not_in",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          0,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450546"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        0,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "not_between",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450575,
+      "checksum_persisted": true,
+      "id": "not_between",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          1,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450573"
+    },
+    "final": [
+      [
+        1,
+        1,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "is_null",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450598,
+      "checksum_persisted": true,
+      "id": "is_null",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          "changed"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450596"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        "changed"
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "is_not_null_and_not_equal",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450626,
+      "checksum_persisted": true,
+      "id": "is_not_null_and_not_equal",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          12,
+          null
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450624"
+    },
+    "final": [
+      [
+        1,
+        12,
+        null
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "less_greater",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572450654,
+      "checksum_persisted": true,
+      "id": "less_greater",
+      "lock": "sql_matrix_records:1,4",
+      "phase_one": [
+        [
+          1,
+          99,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          99,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450652"
+    },
+    "final": [
+      [
+        1,
+        99,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        99,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "boolean_literals",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450674,
+      "checksum_persisted": true,
+      "id": "boolean_literals",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          6,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450672"
+    },
+    "final": [
+      [
+        1,
+        6,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "quoted_text_and_columns",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450716,
+      "checksum_persisted": true,
+      "id": "quoted_text_and_columns",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "can't ?"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450714"
+    },
+    "final": [
+      [
+        1,
+        7,
+        "can't ?"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "update_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572450736,
+      "checksum_persisted": true,
+      "id": "update_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "all"
+        ],
+        [
+          2,
+          20,
+          "all"
+        ],
+        [
+          3,
+          null,
+          "all"
+        ],
+        [
+          4,
+          40,
+          "all"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450734"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "all"
+      ],
+      [
+        2,
+        20,
+        "all"
+      ],
+      [
+        3,
+        null,
+        "all"
+      ],
+      [
+        4,
+        40,
+        "all"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "changed_original_where",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450762,
+      "checksum_persisted": true,
+      "id": "changed_original_where",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          13,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450760"
+    },
+    "final": [
+      [
+        1,
+        13,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "delete_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572450787,
+      "checksum_persisted": true,
+      "id": "delete_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450785"
+    },
+    "final": [],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "delete_between_null",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572450811,
+      "checksum_persisted": true,
+      "id": "delete_between_null",
+      "lock": "sql_matrix_records:2,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          3,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450809"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        3,
+        null,
+        null
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "commit",
+    "id": "delete_in_parameters",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572450835,
+      "checksum_persisted": true,
+      "id": "delete_in_parameters",
+      "lock": "sql_matrix_records:1,3",
+      "phase_one": [
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450833"
+    },
+    "final": [
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": []
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "insert_single",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450864,
+      "checksum_persisted": true,
+      "id": "insert_single",
+      "lock": "sql_matrix_records:11",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "new"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450862"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "insert_multi_mixed",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572450896,
+      "checksum_persisted": true,
+      "id": "insert_multi_mixed",
+      "lock": "sql_matrix_records:11,12,13",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "literal ?"
+        ],
+        [
+          12,
+          5,
+          "second"
+        ],
+        [
+          13,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450894"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "insert_column_order",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450916,
+      "checksum_persisted": true,
+      "id": "insert_column_order",
+      "lock": "sql_matrix_records:14",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          14,
+          7,
+          "reordered"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450914"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "unary_plus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450934,
+      "checksum_persisted": true,
+      "id": "unary_plus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450932"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "unary_minus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450951,
+      "checksum_persisted": true,
+      "id": "unary_minus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          -11,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450949"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "multiply",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572450988,
+      "checksum_persisted": true,
+      "id": "multiply",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          24,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572450986"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "divide",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451007,
+      "checksum_persisted": true,
+      "id": "divide",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          4,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451005"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "modulo",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451029,
+      "checksum_persisted": true,
+      "id": "modulo",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          2,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451027"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "between_and_not",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451047,
+      "checksum_persisted": true,
+      "id": "between_and_not",
+      "lock": "sql_matrix_records:1,2",
+      "phase_one": [
+        [
+          1,
+          15,
+          "one"
+        ],
+        [
+          2,
+          23,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451045"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "in_or_comparisons",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572451066,
+      "checksum_persisted": true,
+      "id": "in_or_comparisons",
+      "lock": "sql_matrix_records:1,2,4",
+      "phase_one": [
+        [
+          1,
+          10,
+          "one"
+        ],
+        [
+          2,
+          18,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          38,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451064"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "not_in",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451085,
+      "checksum_persisted": true,
+      "id": "not_in",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          0,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451082"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "not_between",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451099,
+      "checksum_persisted": true,
+      "id": "not_between",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          1,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451097"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "is_null",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451118,
+      "checksum_persisted": true,
+      "id": "is_null",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          "changed"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451116"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "is_not_null_and_not_equal",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451132,
+      "checksum_persisted": true,
+      "id": "is_not_null_and_not_equal",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          12,
+          null
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451130"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "less_greater",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451149,
+      "checksum_persisted": true,
+      "id": "less_greater",
+      "lock": "sql_matrix_records:1,4",
+      "phase_one": [
+        [
+          1,
+          99,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          99,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451147"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "boolean_literals",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451165,
+      "checksum_persisted": true,
+      "id": "boolean_literals",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          6,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451163"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "quoted_text_and_columns",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451182,
+      "checksum_persisted": true,
+      "id": "quoted_text_and_columns",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "can't ?"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451180"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "update_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572451199,
+      "checksum_persisted": true,
+      "id": "update_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "all"
+        ],
+        [
+          2,
+          20,
+          "all"
+        ],
+        [
+          3,
+          null,
+          "all"
+        ],
+        [
+          4,
+          40,
+          "all"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451197"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "changed_original_where",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451215,
+      "checksum_persisted": true,
+      "id": "changed_original_where",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          13,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451213"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "delete_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572451236,
+      "checksum_persisted": true,
+      "id": "delete_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451234"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "delete_between_null",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451255,
+      "checksum_persisted": true,
+      "id": "delete_between_null",
+      "lock": "sql_matrix_records:2,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          3,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451253"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1"
+    ]
+  },
+  {
+    "version": "1.99",
+    "direction": "rollback",
+    "id": "delete_in_parameters",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451277,
+      "checksum_persisted": true,
+      "id": "delete_in_parameters",
+      "lock": "sql_matrix_records:1,3",
+      "phase_one": [
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451275"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "insert_single",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451300,
+      "checksum_persisted": true,
+      "id": "insert_single",
+      "lock": "sql_matrix_records:11",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "new"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451298"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ],
+      [
+        11,
+        25,
+        "new"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "insert_multi_mixed",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572451332,
+      "checksum_persisted": true,
+      "id": "insert_multi_mixed",
+      "lock": "sql_matrix_records:11,12,13",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "literal ?"
+        ],
+        [
+          12,
+          5,
+          "second"
+        ],
+        [
+          13,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451330"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ],
+      [
+        11,
+        25,
+        "literal ?"
+      ],
+      [
+        12,
+        5,
+        "second"
+      ],
+      [
+        13,
+        null,
+        null
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "insert_column_order",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451359,
+      "checksum_persisted": true,
+      "id": "insert_column_order",
+      "lock": "sql_matrix_records:14",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          14,
+          7,
+          "reordered"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451357"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ],
+      [
+        14,
+        7,
+        "reordered"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "unary_plus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451384,
+      "checksum_persisted": true,
+      "id": "unary_plus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451381"
+    },
+    "final": [
+      [
+        1,
+        7,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "unary_minus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451404,
+      "checksum_persisted": true,
+      "id": "unary_minus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          -11,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451402"
+    },
+    "final": [
+      [
+        1,
+        -11,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "multiply",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451433,
+      "checksum_persisted": true,
+      "id": "multiply",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          24,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451431"
+    },
+    "final": [
+      [
+        1,
+        24,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "divide",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451455,
+      "checksum_persisted": true,
+      "id": "divide",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          4,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451453"
+    },
+    "final": [
+      [
+        1,
+        4,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "modulo",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451478,
+      "checksum_persisted": true,
+      "id": "modulo",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          2,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451476"
+    },
+    "final": [
+      [
+        1,
+        2,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "between_and_not",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451505,
+      "checksum_persisted": true,
+      "id": "between_and_not",
+      "lock": "sql_matrix_records:1,2",
+      "phase_one": [
+        [
+          1,
+          15,
+          "one"
+        ],
+        [
+          2,
+          23,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451503"
+    },
+    "final": [
+      [
+        1,
+        15,
+        "one"
+      ],
+      [
+        2,
+        23,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "in_or_comparisons",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572451527,
+      "checksum_persisted": true,
+      "id": "in_or_comparisons",
+      "lock": "sql_matrix_records:1,2,4",
+      "phase_one": [
+        [
+          1,
+          10,
+          "one"
+        ],
+        [
+          2,
+          18,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          38,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451525"
+    },
+    "final": [
+      [
+        1,
+        10,
+        "one"
+      ],
+      [
+        2,
+        18,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        38,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "not_in",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451552,
+      "checksum_persisted": true,
+      "id": "not_in",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          0,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451550"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        0,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "not_between",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451580,
+      "checksum_persisted": true,
+      "id": "not_between",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          1,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451578"
+    },
+    "final": [
+      [
+        1,
+        1,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "is_null",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451607,
+      "checksum_persisted": true,
+      "id": "is_null",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          "changed"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451605"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        "changed"
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "is_not_null_and_not_equal",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451634,
+      "checksum_persisted": true,
+      "id": "is_not_null_and_not_equal",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          12,
+          null
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451632"
+    },
+    "final": [
+      [
+        1,
+        12,
+        null
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "less_greater",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451662,
+      "checksum_persisted": true,
+      "id": "less_greater",
+      "lock": "sql_matrix_records:1,4",
+      "phase_one": [
+        [
+          1,
+          99,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          99,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451660"
+    },
+    "final": [
+      [
+        1,
+        99,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        99,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "boolean_literals",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451701,
+      "checksum_persisted": true,
+      "id": "boolean_literals",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          6,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451699"
+    },
+    "final": [
+      [
+        1,
+        6,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "quoted_text_and_columns",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451723,
+      "checksum_persisted": true,
+      "id": "quoted_text_and_columns",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "can't ?"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451721"
+    },
+    "final": [
+      [
+        1,
+        7,
+        "can't ?"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "update_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572451747,
+      "checksum_persisted": true,
+      "id": "update_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "all"
+        ],
+        [
+          2,
+          20,
+          "all"
+        ],
+        [
+          3,
+          null,
+          "all"
+        ],
+        [
+          4,
+          40,
+          "all"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451745"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "all"
+      ],
+      [
+        2,
+        20,
+        "all"
+      ],
+      [
+        3,
+        null,
+        "all"
+      ],
+      [
+        4,
+        40,
+        "all"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "changed_original_where",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451771,
+      "checksum_persisted": true,
+      "id": "changed_original_where",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          13,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451769"
+    },
+    "final": [
+      [
+        1,
+        13,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "delete_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572451793,
+      "checksum_persisted": true,
+      "id": "delete_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451791"
+    },
+    "final": [],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "delete_between_null",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451822,
+      "checksum_persisted": true,
+      "id": "delete_between_null",
+      "lock": "sql_matrix_records:2,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          3,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451819"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        3,
+        null,
+        null
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "commit",
+    "id": "delete_in_parameters",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572451844,
+      "checksum_persisted": true,
+      "id": "delete_in_parameters",
+      "lock": "sql_matrix_records:1,3",
+      "phase_one": [
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451841"
+    },
+    "final": [
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "insert_single",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451865,
+      "checksum_persisted": true,
+      "id": "insert_single",
+      "lock": "sql_matrix_records:11",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "new"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451863"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "insert_multi_mixed",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572451890,
+      "checksum_persisted": true,
+      "id": "insert_multi_mixed",
+      "lock": "sql_matrix_records:11,12,13",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          11,
+          25,
+          "literal ?"
+        ],
+        [
+          12,
+          5,
+          "second"
+        ],
+        [
+          13,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451888"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "insert_column_order",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451911,
+      "checksum_persisted": true,
+      "id": "insert_column_order",
+      "lock": "sql_matrix_records:14",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ],
+        [
+          14,
+          7,
+          "reordered"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451909"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "unary_plus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451930,
+      "checksum_persisted": true,
+      "id": "unary_plus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451928"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "unary_minus",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451946,
+      "checksum_persisted": true,
+      "id": "unary_minus",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          -11,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451944"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "multiply",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451966,
+      "checksum_persisted": true,
+      "id": "multiply",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          24,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451964"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "divide",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572451982,
+      "checksum_persisted": true,
+      "id": "divide",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          4,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572451980"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "modulo",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452005,
+      "checksum_persisted": true,
+      "id": "modulo",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          2,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452003"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "between_and_not",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572452028,
+      "checksum_persisted": true,
+      "id": "between_and_not",
+      "lock": "sql_matrix_records:1,2",
+      "phase_one": [
+        [
+          1,
+          15,
+          "one"
+        ],
+        [
+          2,
+          23,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452026"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "in_or_comparisons",
+    "phase": {
+      "affected_rows": 3,
+      "branch_id": 4045082017572452046,
+      "checksum_persisted": true,
+      "id": "in_or_comparisons",
+      "lock": "sql_matrix_records:1,2,4",
+      "phase_one": [
+        [
+          1,
+          10,
+          "one"
+        ],
+        [
+          2,
+          18,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          38,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452044"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "not_in",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452063,
+      "checksum_persisted": true,
+      "id": "not_in",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          0,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452061"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "not_between",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452081,
+      "checksum_persisted": true,
+      "id": "not_between",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          1,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452079"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "is_null",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452103,
+      "checksum_persisted": true,
+      "id": "is_null",
+      "lock": "sql_matrix_records:3",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          "changed"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452101"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "is_not_null_and_not_equal",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452124,
+      "checksum_persisted": true,
+      "id": "is_not_null_and_not_equal",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          12,
+          null
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452122"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "less_greater",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572452143,
+      "checksum_persisted": true,
+      "id": "less_greater",
+      "lock": "sql_matrix_records:1,4",
+      "phase_one": [
+        [
+          1,
+          99,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          99,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452141"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "boolean_literals",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452161,
+      "checksum_persisted": true,
+      "id": "boolean_literals",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          6,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452159"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1",
+      "198.18.0.1:63916:4045082017572452159\t4045082017572452161\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "quoted_text_and_columns",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452179,
+      "checksum_persisted": true,
+      "id": "quoted_text_and_columns",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          7,
+          "can't ?"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452176"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1",
+      "198.18.0.1:63916:4045082017572452159\t4045082017572452161\t1",
+      "198.18.0.1:63916:4045082017572452176\t4045082017572452179\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "update_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572452195,
+      "checksum_persisted": true,
+      "id": "update_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "all"
+        ],
+        [
+          2,
+          20,
+          "all"
+        ],
+        [
+          3,
+          null,
+          "all"
+        ],
+        [
+          4,
+          40,
+          "all"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452192"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1",
+      "198.18.0.1:63916:4045082017572452159\t4045082017572452161\t1",
+      "198.18.0.1:63916:4045082017572452176\t4045082017572452179\t1",
+      "198.18.0.1:63916:4045082017572452192\t4045082017572452195\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "changed_original_where",
+    "phase": {
+      "affected_rows": 1,
+      "branch_id": 4045082017572452210,
+      "checksum_persisted": true,
+      "id": "changed_original_where",
+      "lock": "sql_matrix_records:1",
+      "phase_one": [
+        [
+          1,
+          13,
+          "one"
+        ],
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          3,
+          null,
+          null
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452207"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1",
+      "198.18.0.1:63916:4045082017572452159\t4045082017572452161\t1",
+      "198.18.0.1:63916:4045082017572452176\t4045082017572452179\t1",
+      "198.18.0.1:63916:4045082017572452192\t4045082017572452195\t1",
+      "198.18.0.1:63916:4045082017572452207\t4045082017572452210\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "delete_all",
+    "phase": {
+      "affected_rows": 4,
+      "branch_id": 4045082017572452229,
+      "checksum_persisted": true,
+      "id": "delete_all",
+      "lock": "sql_matrix_records:1,2,3,4",
+      "phase_one": [],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452227"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1",
+      "198.18.0.1:63916:4045082017572452159\t4045082017572452161\t1",
+      "198.18.0.1:63916:4045082017572452176\t4045082017572452179\t1",
+      "198.18.0.1:63916:4045082017572452192\t4045082017572452195\t1",
+      "198.18.0.1:63916:4045082017572452207\t4045082017572452210\t1",
+      "198.18.0.1:63916:4045082017572452227\t4045082017572452229\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "delete_between_null",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572452244,
+      "checksum_persisted": true,
+      "id": "delete_between_null",
+      "lock": "sql_matrix_records:2,4",
+      "phase_one": [
+        [
+          1,
+          12,
+          "one"
+        ],
+        [
+          3,
+          null,
+          null
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452242"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1",
+      "198.18.0.1:63916:4045082017572452159\t4045082017572452161\t1",
+      "198.18.0.1:63916:4045082017572452176\t4045082017572452179\t1",
+      "198.18.0.1:63916:4045082017572452192\t4045082017572452195\t1",
+      "198.18.0.1:63916:4045082017572452207\t4045082017572452210\t1",
+      "198.18.0.1:63916:4045082017572452227\t4045082017572452229\t1",
+      "198.18.0.1:63916:4045082017572452242\t4045082017572452244\t1"
+    ]
+  },
+  {
+    "version": "1.85",
+    "direction": "rollback",
+    "id": "delete_in_parameters",
+    "phase": {
+      "affected_rows": 2,
+      "branch_id": 4045082017572452260,
+      "checksum_persisted": true,
+      "id": "delete_in_parameters",
+      "lock": "sql_matrix_records:1,3",
+      "phase_one": [
+        [
+          2,
+          20,
+          "two"
+        ],
+        [
+          4,
+          40,
+          "four"
+        ]
+      ],
+      "resource": "jdbc:mysql://127.0.0.1:63915/admission",
+      "xid": "198.18.0.1:63916:4045082017572452258"
+    },
+    "final": [
+      [
+        1,
+        12,
+        "one"
+      ],
+      [
+        2,
+        20,
+        "two"
+      ],
+      [
+        3,
+        null,
+        null
+      ],
+      [
+        4,
+        40,
+        "four"
+      ]
+    ],
+    "fences": [
+      "198.18.0.1:63916:4045082017572450862\t4045082017572450864\t1",
+      "198.18.0.1:63916:4045082017572450894\t4045082017572450896\t1",
+      "198.18.0.1:63916:4045082017572450914\t4045082017572450916\t1",
+      "198.18.0.1:63916:4045082017572450932\t4045082017572450934\t1",
+      "198.18.0.1:63916:4045082017572450949\t4045082017572450951\t1",
+      "198.18.0.1:63916:4045082017572450986\t4045082017572450988\t1",
+      "198.18.0.1:63916:4045082017572451005\t4045082017572451007\t1",
+      "198.18.0.1:63916:4045082017572451027\t4045082017572451029\t1",
+      "198.18.0.1:63916:4045082017572451045\t4045082017572451047\t1",
+      "198.18.0.1:63916:4045082017572451064\t4045082017572451066\t1",
+      "198.18.0.1:63916:4045082017572451082\t4045082017572451085\t1",
+      "198.18.0.1:63916:4045082017572451097\t4045082017572451099\t1",
+      "198.18.0.1:63916:4045082017572451116\t4045082017572451118\t1",
+      "198.18.0.1:63916:4045082017572451130\t4045082017572451132\t1",
+      "198.18.0.1:63916:4045082017572451147\t4045082017572451149\t1",
+      "198.18.0.1:63916:4045082017572451163\t4045082017572451165\t1",
+      "198.18.0.1:63916:4045082017572451180\t4045082017572451182\t1",
+      "198.18.0.1:63916:4045082017572451197\t4045082017572451199\t1",
+      "198.18.0.1:63916:4045082017572451213\t4045082017572451215\t1",
+      "198.18.0.1:63916:4045082017572451234\t4045082017572451236\t1",
+      "198.18.0.1:63916:4045082017572451253\t4045082017572451255\t1",
+      "198.18.0.1:63916:4045082017572451275\t4045082017572451277\t1",
+      "198.18.0.1:63916:4045082017572451863\t4045082017572451865\t1",
+      "198.18.0.1:63916:4045082017572451888\t4045082017572451890\t1",
+      "198.18.0.1:63916:4045082017572451909\t4045082017572451911\t1",
+      "198.18.0.1:63916:4045082017572451928\t4045082017572451930\t1",
+      "198.18.0.1:63916:4045082017572451944\t4045082017572451946\t1",
+      "198.18.0.1:63916:4045082017572451964\t4045082017572451966\t1",
+      "198.18.0.1:63916:4045082017572451980\t4045082017572451982\t1",
+      "198.18.0.1:63916:4045082017572452003\t4045082017572452005\t1",
+      "198.18.0.1:63916:4045082017572452026\t4045082017572452028\t1",
+      "198.18.0.1:63916:4045082017572452044\t4045082017572452046\t1",
+      "198.18.0.1:63916:4045082017572452061\t4045082017572452063\t1",
+      "198.18.0.1:63916:4045082017572452079\t4045082017572452081\t1",
+      "198.18.0.1:63916:4045082017572452101\t4045082017572452103\t1",
+      "198.18.0.1:63916:4045082017572452122\t4045082017572452124\t1",
+      "198.18.0.1:63916:4045082017572452141\t4045082017572452143\t1",
+      "198.18.0.1:63916:4045082017572452159\t4045082017572452161\t1",
+      "198.18.0.1:63916:4045082017572452176\t4045082017572452179\t1",
+      "198.18.0.1:63916:4045082017572452192\t4045082017572452195\t1",
+      "198.18.0.1:63916:4045082017572452207\t4045082017572452210\t1",
+      "198.18.0.1:63916:4045082017572452227\t4045082017572452229\t1",
+      "198.18.0.1:63916:4045082017572452242\t4045082017572452244\t1",
+      "198.18.0.1:63916:4045082017572452258\t4045082017572452260\t1"
+    ]
+  }
+]
