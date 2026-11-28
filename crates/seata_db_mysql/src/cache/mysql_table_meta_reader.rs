@@ -304,6 +304,8 @@ impl MySqlTableMetaReader {
             .split_whitespace()
             .any(|value| value.eq_ignore_ascii_case("unsigned"));
         let kind = match data_type.as_str() {
+            "date" => ColumnType::LocalDate,
+            "time" => ColumnType::InternalTime,
             "timestamp" => ColumnType::Timestamp,
             "datetime" => ColumnType::LocalDateTime,
             "tinyint" | "smallint" | "mediumint" | "int" | "bigint" => {
@@ -372,6 +374,8 @@ impl MySqlTableMetaReader {
     fn native_type(data_type: &str, full_type: &str) -> Result<MySqlType, MetadataError> {
         // 同值域的TEXT/BLOB子类仍需保留身份；TINYINT(1)只保留事实，不在这里丢失整数值。
         Ok(match data_type {
+            "date" => MySqlType::Date,
+            "time" => MySqlType::Time,
             "timestamp" => MySqlType::Timestamp,
             "datetime" => MySqlType::DateTime,
             "json" => MySqlType::Json,
@@ -422,7 +426,8 @@ impl MySqlTableMetaReader {
             return Ok(ColumnDomain::Integer { bits, unsigned });
         }
         match data_type {
-            "timestamp" | "datetime" => {
+            "date" => Ok(ColumnDomain::LocalDate),
+            "timestamp" | "datetime" | "time" => {
                 let precision = row.try_get::<u64, _>("DATETIME_PRECISION").map_err(|_| {
                     MetadataError::Invalid {
                         reason: "DATETIME fractional precision",
@@ -432,7 +437,9 @@ impl MySqlTableMetaReader {
                     u8::try_from(precision).map_err(|_| MetadataError::Invalid {
                         reason: "temporal fractional precision",
                     })?;
-                Ok(if data_type == "timestamp" {
+                Ok(if data_type == "time" {
+                    ColumnDomain::InternalTime { fractional_seconds }
+                } else if data_type == "timestamp" {
                     ColumnDomain::Timestamp { fractional_seconds }
                 } else {
                     ColumnDomain::LocalDateTime { fractional_seconds }

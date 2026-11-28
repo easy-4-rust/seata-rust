@@ -123,6 +123,33 @@ impl BaseTransactionalExecutor {
             };
         }
         match field.value() {
+            FieldValue::LocalDate(value) => {
+                if !profile.exact_date_time() {
+                    return Err(LockKeyError::Unsupported {
+                        feature: "explicit exact DATE/TIME String profile required",
+                    });
+                }
+                output.push(&value.to_sql_string())
+            }
+            FieldValue::InternalTime(value) => {
+                if !profile.exact_date_time() {
+                    return Err(LockKeyError::Unsupported {
+                        feature: "explicit exact DATE/TIME String profile required",
+                    });
+                }
+                let Some(ColumnDomain::InternalTime { fractional_seconds }) =
+                    field.column().domain()
+                else {
+                    return Err(LockKeyError::Unsupported {
+                        feature: "TIME physical precision",
+                    });
+                };
+                output.push(&value.to_sql_string(*fractional_seconds).map_err(|_| {
+                    LockKeyError::Invalid {
+                        reason: "TIME physical precision",
+                    }
+                })?)
+            }
             FieldValue::Timestamp(value) => {
                 if !profile.utc_temporal() {
                     return Err(LockKeyError::Unsupported {

@@ -1385,3 +1385,9 @@ TIMESTAMP 专门的跨进程重启恢复尚未验证；DATE/TIME、完整 SQL/�
 ### 2026-11-28：DATE/TIME 无损组件
 
 已新增实际 JDBC 精确装饰器与 Rust LocalDate/InternalTime 值模型，[组件证据](phase-2/evidence/mysql-exact-temporal-adapter/README.md)绑定 32 组 1312 行观测，其中正式装饰器 328 行全部无损；原入口的 16 次改写和 4 次绑定异常作为失败对照保留。该显式模式保留原 Jackson Undo 图/JDBC 编号，DATE/TIME 值类改用 String，不自动升级旧记录。DATE/TIME 正式 Rust SQL/镜像/锁键/Undo 配置/TC 回调/重启恢复仍待完成；WP05、WP07、后续阶段和总目标继续开放。用户已明确授权全部提交并推送 GitHub，此授权持续有效。
+
+### 2026-11-28：DATE/TIME 正式 SQL/Undo 增量
+
+独立列域、精确镜像/参数、INSERT 键暂存、原 Jackson 编码/恢复、锁键与持久配置 5/6 已接入。取得[原 TC 八笔真实全局事务](phase-2/evidence/mysql-exact_date_time/README.md)，含双 Rust、两种配置、提交/回滚和 48 条 DML；原 Java 精确数据源/原 parser 与 Rust 的两张表对象图一致，原子 Undo/SHA、恢复配置隔离和原 TC 回调已现场核验。160 次证据削弱被拒绝。TIME 主键、DATE 普通列完整矩阵、专用跨进程/篡改恢复及原类型现场回归仍待完成；不关闭 WP05、V1 或总目标。
+
+本次正式路径增量的 Rust 1.99/1.85 全工作区各 822 项通过、404 项忽略，严格 Clippy 均通过；最终源码/现场封存 catalog 为 `91023027c93f2c44cc119f4fa6ee0130ec13d18c3ef70c43db75adccb577cdcd`。

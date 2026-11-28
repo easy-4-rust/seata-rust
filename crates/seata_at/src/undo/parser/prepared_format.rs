@@ -133,6 +133,19 @@ impl PreparedFormat {
             Value::Null
         } else {
             let payload = match field.value() {
+                FieldValue::LocalDate(value) => Value::String(value.to_sql_string()),
+                FieldValue::InternalTime(value) => {
+                    let Some(ColumnDomain::InternalTime { fractional_seconds }) =
+                        field.column().domain()
+                    else {
+                        return Err(Self::shape("TIME physical precision"));
+                    };
+                    Value::String(
+                        value
+                            .to_sql_string(*fractional_seconds)
+                            .map_err(|_| Self::shape("TIME physical precision"))?,
+                    )
+                }
                 FieldValue::Timestamp(value) => {
                     let millis =
                         value.epoch_seconds() * 1000 + i64::from(value.nanosecond() / 1_000_000);
@@ -194,7 +207,14 @@ impl PreparedFormat {
         let class = match encoding {
             ValueEncoding::Typed(class) => class,
             ValueEncoding::Boolean => "java.lang.Boolean",
-            ValueEncoding::Natural if column.kind() == seata_datasource::ColumnType::Text => {
+            ValueEncoding::Natural
+                if matches!(
+                    column.kind(),
+                    seata_datasource::ColumnType::Text
+                        | seata_datasource::ColumnType::LocalDate
+                        | seata_datasource::ColumnType::InternalTime
+                ) =>
+            {
                 "java.lang.String"
             }
             ValueEncoding::Natural => "java.lang.Integer",
@@ -214,6 +234,17 @@ impl PreparedFormat {
             Some(ColumnDomain::Integer { unsigned: true, .. })
         );
         Ok(match native {
+            MySqlType::Date | MySqlType::Time => {
+                if !profile.exact_date_time() {
+                    return Err(UndoCodecError::Unsupported {
+                        kind: "explicit exact DATE/TIME String profile required",
+                    });
+                }
+                (
+                    if native == MySqlType::Date { 91 } else { 92 },
+                    ValueEncoding::Natural,
+                )
+            }
             MySqlType::Timestamp => {
                 if !profile.utc_temporal() {
                     return Err(UndoCodecError::Unsupported {

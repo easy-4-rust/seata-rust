@@ -16,7 +16,9 @@ impl Field {
             });
         }
         let matches = match (&value, column.kind()) {
-            (FieldValue::LocalDateTime(_), ColumnType::LocalDateTime)
+            (FieldValue::LocalDate(_), ColumnType::LocalDate)
+            | (FieldValue::InternalTime(_), ColumnType::InternalTime)
+            | (FieldValue::LocalDateTime(_), ColumnType::LocalDateTime)
             | (FieldValue::Timestamp(_), ColumnType::Timestamp) => true,
             (FieldValue::Null, _) => column.nullable(),
             (FieldValue::Signed(_), ColumnType::SignedInteger)

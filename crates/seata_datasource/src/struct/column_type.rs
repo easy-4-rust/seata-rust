@@ -2,6 +2,10 @@
 /// 对应 Java: java.sql.Types与ColumnMeta#dataType的Rust显式映射；尚不覆盖全部JDBC类型。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ColumnType {
+    /// 无时区 Gregorian 日期，保持 MySQL DATE 的独立身份。
+    LocalDate,
+    /// MySQL TIME 有符号微秒时长，独立于日内时钟。
+    InternalTime,
     /// UTC 时间点，独立于无时区日历类型。
     Timestamp,
     /// 无时区日历日期时间；与整数纪元或普通文本分开保存。

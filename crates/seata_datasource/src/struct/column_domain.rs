@@ -4,6 +4,13 @@ use crate::{CharacterSet, ColumnMeta, ColumnType, FieldValue, MetadataError};
 /// 对应 Java: org.apache.seata.sqlparser.struct.ColumnMeta的类型、长度、精度与unsigned；Rust结构化扩展。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ColumnDomain {
+    /// MySQL DATE 的完整 Gregorian 日历域。
+    LocalDate,
+    /// MySQL TIME 有符号时长与真实物理精度。
+    InternalTime {
+        /// 原物理小数秒位数，范围 0–6。
+        fractional_seconds: u8,
+    },
     /// TIMESTAMP 时间点的原物理小数秒精度。
     Timestamp {
         /// 原物理列小数秒位数，范围 0–6。
@@ -47,6 +54,14 @@ impl ColumnDomain {
     /// 参数为完整列元数据；返回物理域与通用值域/维度的一致性结果。
     pub(crate) fn validate(&self, column: &ColumnMeta) -> Result<(), MetadataError> {
         let valid = match self {
+            Self::LocalDate => {
+                column.kind() == ColumnType::LocalDate && column.char_octet_length().is_none()
+            }
+            Self::InternalTime { fractional_seconds } => {
+                *fractional_seconds <= 6
+                    && column.kind() == ColumnType::InternalTime
+                    && column.char_octet_length().is_none()
+            }
             Self::Timestamp { fractional_seconds } => {
                 *fractional_seconds <= 6
                     && column.kind() == ColumnType::Timestamp
@@ -106,6 +121,10 @@ impl ColumnDomain {
             return true;
         }
         match (self, value) {
+            (Self::LocalDate, FieldValue::LocalDate(_)) => true,
+            (Self::InternalTime { fractional_seconds }, FieldValue::InternalTime(v)) => {
+                v.to_sql_string(*fractional_seconds).is_ok()
+            }
             (Self::Timestamp { fractional_seconds }, FieldValue::Timestamp(v)) => {
                 v.nanosecond() % 10u32.pow(9 - u32::from(*fractional_seconds)) == 0
             }

@@ -1,0 +1,1 @@
+The red run failed with 11 missing DATE/TIME column/profile APIs before implementation. The first green run passed three targeted behavioral tests. A fourth NULL/profile isolation test was then added; final full-workspace evidence is authoritative for current sources. These command logs are retained as development history, not full acceptance.

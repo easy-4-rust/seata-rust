@@ -42,3 +42,13 @@ DATE 必须对照原 JDBC 的日历和时区纪元处理，明确解决数据库
 已完成 [显式 JDBC 装饰器与 Rust 值模型](evidence/mysql-exact-temporal-adapter/README.md)组件验证：固定 Connector/J 8.0.27 的文本/二进制原始行无损读取，DATE 保留 Gregorian 日期，TIME 保留完整有符号微秒与实际物理精度。正式装饰器经原 Jackson 编码/解码及 JDBC 重绑定验证；原 Java 核心/parser 无改动。
 
 显式模式保留 Undo 对象图及 JDBC 91/92，但值类采用 String，不能称作原 java.sql.Date/Time 表示不变。旧配置 1–4 和默认记录不变；尚未发布新的 Rust 物理资源配置。后续接入须绑定精确模式、统一写入器、排空旧分支，并验证正式镜像/锁键、原子 Undo/SHA、回调及跨进程恢复。Fastjson 原比较器会转换字符串，本轮不认证该路径。此组件完成不关闭 DATE/TIME 能力或总门禁。
+
+### 正式接入的增量设计
+
+新增稳定配置码 5（Connector8 默认 TINYINT Boolean + UTC + 精确 DATE/TIME String）和 6（数字 TINYINT + UTC + 精确 DATE/TIME String）。它们是显式选择的同资源完整表示约定，不重解释 1–4。恢复和回调继续使用已持久化的精确配置；旧配置拒绝新 DATE/TIME 列（包括 NULL），避免把相同 JDBC 编号误读成原 sql.Date/Time。新配置仍使用原 Jackson 对象图，DATE/TIME 的值为规范字符串，JDBC 编号 91/92；恢复后重新编码校验原表示，拒绝包装类、非规范精度及错误 JDBC 编号。
+
+DATE 和 TIME 分别具有独立 ColumnType、ColumnDomain、MySqlType 和 FieldValue。TIME 域保留物理 FSP 0–6；镜像经受控 CAST 获取原日历/时长文本，严格解析后检查列精度。主键采用 Java 精确 String 的文本，TIME 必须固定为物理 FSP；临时 INSERT 键表保持 DATE/TIME(fsp) 原类型。现有原子 Undo/SHA、配置绑定、资源身份和恢复门禁沿用既有实现。此设计不把单元验证视为真实 TC 或重启验收，后者仍需独立现场。
+
+### 2026-11-28 正式路径增量现场
+
+配置码 5/6 已接入正式 Rust SQL/Undo 路径，并取得[原 Java TC 八笔全局事务现场](evidence/mysql-exact_date_time/README.md)：双 Rust、两种 TINYINT 映射、提交/回滚；TIME FSP 0–6 镜像和 DATE 主键的三类 DML 已验证。此状态更新先前“仅组件阶段、尚未发布编号”的描述；旧码 1–4 仍保持原含义。专门 TIME 主键、DATE 普通列完整矩阵及新配置的跨进程恢复/篡改恢复现场尚待补齐，不关闭完整能力与总门禁。

@@ -1,0 +1,69 @@
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0599]: no variant, associated function, or constant named `LocalDate` found for enum `ColumnType` in the current scope
+ --> crates\seata_db_mysql\tests\exact_date_time_column.rs:6:50
+  |
+6 |  let date=ColumnMeta::new("d".into(),ColumnType::LocalDate,false,1,Some(1),None,None,None).unwrap().with_domain(ColumnDomain::LocalDa...
+  |                                                  ^^^^^^^^^ variant, associated function, or constant not found in `ColumnType`
+
+error[E0599]: no variant, associated function, or constant named `LocalDate` found for enum `ColumnDomain` in the current scope
+ --> crates\seata_db_mysql\tests\exact_date_time_column.rs:6:127
+  |
+6 | ...ith_domain(ColumnDomain::LocalDate).unwrap().with_mysql_type(MySqlType::Date).unwrap();
+  |                             ^^^^^^^^^ variant, associated function, or constant not found in `ColumnDomain`
+
+error[E0599]: no variant, associated function, or constant named `Date` found for enum `MySqlType` in the current scope
+ --> crates\seata_db_mysql\tests\exact_date_time_column.rs:6:174
+  |
+6 | ...).with_mysql_type(MySqlType::Date).unwrap();
+  |                                 ^^^^ variant, associated function, or constant not found in `MySqlType`
+
+error[E0599]: no variant, associated function, or constant named `InternalTime` found for enum `ColumnType` in the current scope
+ --> crates\seata_db_mysql\tests\exact_date_time_column.rs:7:50
+  |
+7 |  let time=ColumnMeta::new("t".into(),ColumnType::InternalTime,false,2,Some(2),None,None,None).unwrap().with_domain(ColumnDomain::Inte...
+  |                                                  ^^^^^^^^^^^^ variant, associated function, or constant not found in `ColumnType`
+
+error[E0599]: no variant named `InternalTime` found for enum `ColumnDomain`
+ --> crates\seata_db_mysql\tests\exact_date_time_column.rs:7:130
+  |
+7 | ...None).unwrap().with_domain(ColumnDomain::InternalTime{fractional_seconds:fsp}).unwrap().with_mysql_type(MySqlType::Time).unwrap();
+  |                                             ^^^^^^^^^^^^ variant not found in `ColumnDomain`
+
+error[E0599]: no variant, associated function, or constant named `Time` found for enum `MySqlType` in the current scope
+ --> crates\seata_db_mysql\tests\exact_date_time_column.rs:7:204
+  |
+7 | ...).with_mysql_type(MySqlType::Time).unwrap();
+  |                                 ^^^^ variant, associated function, or constant not found in `MySqlType`
+
+error[E0599]: no variant, associated function, or constant named `LocalDate` found for enum `FieldValue` in the current scope
+  --> crates\seata_db_mysql\tests\exact_date_time_column.rs:12:74
+   |
+12 | ....columns()[0],FieldValue::LocalDate(LocalDate::parse_sql(date).unwrap())).unwrap(),Field::new(&table.columns()[1],FieldValue::Int...
+   |                              ^^^^^^^^^ variant, associated function, or constant not found in `FieldValue`
+
+error[E0599]: no variant, associated function, or constant named `InternalTime` found for enum `FieldValue` in the current scope
+  --> crates\seata_db_mysql\tests\exact_date_time_column.rs:12:174
+   |
+12 | ...olumns()[1],FieldValue::InternalTime(InternalTime::parse_sql(time).unwrap())).unwrap()]).unwrap()).unwrap();rows
+   |                            ^^^^^^^^^^^^ variant, associated function, or constant not found in `FieldValue`
+
+error[E0599]: no method named `exact_date_time` found for enum `MySqlJdbcProfile` in the current scope
+  --> crates\seata_db_mysql\tests\exact_date_time_column.rs:16:125
+   |
+16 | ...(p.storage_code(),code);assert_eq!(p.exact_date_time(),code>=5);assert_eq!(p.utc_temporal(),code>=3);assert_eq!(p.boolean_tinyint...
+   |                                         ^^^^^^^^^^^^^^^ method not found in `MySqlJdbcProfile`
+
+error[E0599]: no variant, associated function, or constant named `InternalTime` found for enum `FieldValue` in the current scope
+  --> crates\seata_db_mysql\tests\exact_date_time_column.rs:34:63
+   |
+34 |  if fsp<6 {assert!(Field::new(&table.columns()[1],FieldValue::InternalTime(InternalTime::from_microseconds(-1).unwrap())).is_err());}
+   |                                                               ^^^^^^^^^^^^ variant, associated function, or constant not found in `FieldValue`
+
+error[E0599]: no variant, associated function, or constant named `Time` found for enum `MySqlType` in the current scope
+  --> crates\seata_db_mysql\tests\exact_date_time_column.rs:35:64
+   |
+35 |  assert!(table.columns()[0].clone().with_mysql_type(MySqlType::Time).is_err());
+   |                                                                ^^^^ variant, associated function, or constant not found in `MySqlType`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `seata-db-mysql` (test "exact_date_time_column") due to 11 previous errors

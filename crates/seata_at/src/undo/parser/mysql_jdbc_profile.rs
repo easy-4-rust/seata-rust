@@ -2,6 +2,10 @@
 /// 对应 Java: com.mysql.cj.jdbc.DatabaseMetaData的tinyInt1isBit配置；Rust显式转换策略扩展。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MySqlJdbcProfile {
+    /// 默认 Boolean、UTC 及显式精确 DATE/TIME String；持久码 5，要求 Java 精确数据源。
+    Connector8ExactTemporalUtc,
+    /// 数字 TINYINT、UTC 及显式精确 DATE/TIME String；持久码 6，要求 Java 精确数据源。
+    Connector8NumericTinyIntExactTemporalUtc,
     /// 原 Connector8 Boolean 映射，额外要求 Java Jackson LocalDateTime 序列化为 UTC，TIMESTAMP 锁键使用 UTC JVM；持久码 3。
     Connector8DefaultUtc,
     /// 原 Connector8 数字 TINYINT 映射，额外要求 Java Jackson LocalDateTime 序列化为 UTC，TIMESTAMP 锁键使用 UTC JVM；持久码 4。
@@ -16,6 +20,8 @@ impl MySqlJdbcProfile {
     /// 无参数；返回稳定持久编号，保留原 1/2 编号，不按 Rust 枚举顺序转换。
     pub const fn storage_code(self) -> u8 {
         match self {
+            Self::Connector8ExactTemporalUtc => 5,
+            Self::Connector8NumericTinyIntExactTemporalUtc => 6,
             Self::Connector8Default => 1,
             Self::Connector8NumericTinyInt => 2,
             Self::Connector8DefaultUtc => 3,
@@ -25,6 +31,8 @@ impl MySqlJdbcProfile {
     /// 参数为持久编号；返回原明确配置，未知编号不猜测。
     pub const fn from_storage_code(code: u8) -> Option<Self> {
         match code {
+            5 => Some(Self::Connector8ExactTemporalUtc),
+            6 => Some(Self::Connector8NumericTinyIntExactTemporalUtc),
             1 => Some(Self::Connector8Default),
             2 => Some(Self::Connector8NumericTinyInt),
             3 => Some(Self::Connector8DefaultUtc),
@@ -32,15 +40,28 @@ impl MySqlJdbcProfile {
             _ => None,
         }
     }
+    /// 无参数；返回是否显式约定 DATE/TIME 使用原 JDBC 编号下的精确 String。
+    pub const fn exact_date_time(self) -> bool {
+        matches!(
+            self,
+            Self::Connector8ExactTemporalUtc | Self::Connector8NumericTinyIntExactTemporalUtc
+        )
+    }
     /// 无参数；返回该配置是否使用原 Boolean TINYINT(1) 映射。
     pub const fn boolean_tinyint(self) -> bool {
-        matches!(self, Self::Connector8Default | Self::Connector8DefaultUtc)
+        matches!(
+            self,
+            Self::Connector8Default | Self::Connector8DefaultUtc | Self::Connector8ExactTemporalUtc
+        )
     }
     /// 无参数；返回是否明确约定 Java LocalDateTime UTC 序列化及 Timestamp UTC 锁键。
     pub const fn utc_temporal(self) -> bool {
         matches!(
             self,
-            Self::Connector8DefaultUtc | Self::Connector8NumericTinyIntUtc
+            Self::Connector8DefaultUtc
+                | Self::Connector8NumericTinyIntUtc
+                | Self::Connector8ExactTemporalUtc
+                | Self::Connector8NumericTinyIntExactTemporalUtc
         )
     }
 }

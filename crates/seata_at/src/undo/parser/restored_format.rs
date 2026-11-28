@@ -203,6 +203,18 @@ impl RestoredFormat {
             FieldValue::Null
         } else {
             match column.kind() {
+                ColumnType::LocalDate => FieldValue::LocalDate(
+                    seata_datasource::LocalDate::parse_sql(
+                        payload.as_str().ok_or(Self::bad("DATE String payload"))?,
+                    )
+                    .map_err(|_| Self::bad("DATE calendar"))?,
+                ),
+                ColumnType::InternalTime => FieldValue::InternalTime(
+                    seata_datasource::InternalTime::parse_sql(
+                        payload.as_str().ok_or(Self::bad("TIME String payload"))?,
+                    )
+                    .map_err(|_| Self::bad("TIME signed microseconds"))?,
+                ),
                 ColumnType::Timestamp => {
                     let (millis, nanos) = if let Some(a) = payload.as_array() {
                         if a.len() != 2 {

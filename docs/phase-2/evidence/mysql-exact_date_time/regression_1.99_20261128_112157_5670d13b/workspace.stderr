@@ -1,0 +1,55 @@
+   Compiling seata-tcc v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_tcc)
+   Compiling seata-at v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_at)
+   Compiling seata-datasource v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_datasource)
+   Compiling seata-db-mysql v0.1.0 (E:\workspaces\workspace-github-easy-4-rust\seata-rust-phase09-validation\crates\seata_db_mysql)
+error[E0004]: non-exhaustive patterns: `ColumnType::LocalDate` and `ColumnType::InternalTime` not covered
+   --> crates\seata_at\tests\fastjson_undo_native.rs:86:32
+    |
+ 86 |             let domain = match kind {
+    |                                ^^^^ patterns `ColumnType::LocalDate` and `ColumnType::InternalTime` not covered
+    |
+note: `ColumnType` defined here
+   --> crates\seata_datasource\src\struct\column_type.rs:4:1
+    |
+  4 | pub enum ColumnType {
+    | ^^^^^^^^^^^^^^^^^^^
+  5 |     /// 无时区 Gregorian 日期，保持 MySQL DATE 的独立身份。
+  6 |     LocalDate,
+    |     --------- not covered
+  7 |     /// MySQL TIME 有符号微秒时长，独立于日内时钟。
+  8 |     InternalTime,
+    |     ------------ not covered
+    = note: the matched value is of type `ColumnType`
+help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern, a match arm with multiple or-patterns as shown, or multiple match arms
+    |
+103 ~                 ColumnType::Decimal => ColumnDomain::Decimal { unsigned: false },
+104 ~                 ColumnType::LocalDate | ColumnType::InternalTime => todo!(),
+    |
+
+error[E0004]: non-exhaustive patterns: `&FieldValue::LocalDate(_)` and `&FieldValue::InternalTime(_)` not covered
+   --> crates\seata_at\tests\fastjson_undo_native.rs:155:43
+    |
+155 |                     let canonical = match field.value() {
+    |                                           ^^^^^^^^^^^^^ patterns `&FieldValue::LocalDate(_)` and `&FieldValue::InternalTime(_)` not covered
+    |
+note: `FieldValue` defined here
+   --> crates\seata_datasource\src\struct\field_value.rs:7:1
+    |
+  7 | pub enum FieldValue {
+    | ^^^^^^^^^^^^^^^^^^^
+  8 |     /// MySQL DATE 日历日期。
+  9 |     LocalDate(LocalDate),
+    |     --------- not covered
+ 10 |     /// MySQL TIME 有符号微秒时长。
+ 11 |     InternalTime(InternalTime),
+    |     ------------ not covered
+    = note: the matched value is of type `&FieldValue`
+help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern, a match arm with multiple or-patterns as shown, or multiple match arms
+    |
+163 ~                         FieldValue::Binary(value) => hex(value),
+164 ~                         &FieldValue::LocalDate(_) | &FieldValue::InternalTime(_) => todo!(),
+    |
+
+For more information about this error, try `rustc --explain E0004`.
+error: could not compile `seata-at` (test "fastjson_undo_native") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

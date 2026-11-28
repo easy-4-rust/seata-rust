@@ -4,6 +4,10 @@ use crate::{ColumnDomain, ColumnMeta, MetadataError};
 /// 对应 Java: com.mysql.cj.MysqlType及ColumnMeta#dataTypeName（当前已认证物理类型子集）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MySqlType {
+    /// MySQL DATE 原生日期。
+    Date,
+    /// MySQL TIME 原生有符号时长。
+    Time,
     /// MySQL TIMESTAMP 原生时间点。
     Timestamp,
     /// MySQL DATETIME，保留 0–6 位小数秒的独立物理域。
@@ -55,7 +59,9 @@ impl MySqlType {
     pub(crate) fn validate(self, column: &ColumnMeta) -> Result<(), MetadataError> {
         let valid = matches!(
             (self, column.domain()),
-            (Self::DateTime, Some(ColumnDomain::LocalDateTime { .. }))
+            (Self::Date, Some(ColumnDomain::LocalDate))
+                | (Self::Time, Some(ColumnDomain::InternalTime { .. }))
+                | (Self::DateTime, Some(ColumnDomain::LocalDateTime { .. }))
                 | (Self::Timestamp, Some(ColumnDomain::Timestamp { .. }))
                 | (Self::Json, Some(ColumnDomain::Json))
                 | (

@@ -1,0 +1,35 @@
+{
+  "status": "DATE_TIME_SQL_UNDO_INCREMENT_VERIFIED",
+  "native_catalog_sha256": "a30c2955b07293b2310bac4c4bb79e8a1bbcd8204a3ebf7a484a9451ad447bb3",
+  "actual_global_transactions": 8,
+  "business_dml": 48,
+  "rejected_weakening_controls": 160,
+  "Rust_versions": [
+    "1.99.0",
+    "1.85.0"
+  ],
+  "passed_per_workspace": 822,
+  "ignored_per_workspace": 404,
+  "authorities": [
+    {
+      "path": "regression_1.99_20261128_112535_a8c2d04e",
+      "catalog_sha256": "543d94d561cb711c49e6155990ed0550a0aedc3397b34a843b7004d73859886c"
+    },
+    {
+      "path": "regression_1.85_20261128_112553_d9cc40ff",
+      "catalog_sha256": "f9017f185122c72948c9b1625741b6ec70a3523149298e5128162a25c4a1f159"
+    }
+  ],
+  "native_to_final_test_helper_difference": [
+    {
+      "path": "crates/seata_at/tests/fastjson_undo_native.rs",
+      "native_sha256": "1faf2cbcb9723346d2eadc633e483edce4db06d88213e4acba49c5af200ddfdf",
+      "final_sha256": "701b0b32fae1a63dcb116f869f669179a300c385d696ca544d716cc7ef63a9a8",
+      "reason": "Six exhaustive match arms in an unrelated legacy test helper; final workspace regressed"
+    }
+  ],
+  "time_primary_key_live_verified": false,
+  "dedicated_process_restart_verified": false,
+  "full_date_time_support": false,
+  "whole_plan_complete": false
+}

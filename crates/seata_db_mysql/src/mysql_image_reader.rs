@@ -85,6 +85,12 @@ impl MySqlImageReader {
             .zip(&quoted)
             .map(|(column, name)| {
                 let expression = match column.kind() {
+                    ColumnType::LocalDate => {
+                        format!("CASE WHEN {name} IS NULL THEN NULL ELSE 10 END")
+                    }
+                    ColumnType::InternalTime => {
+                        format!("CASE WHEN {name} IS NULL THEN NULL ELSE 17 END")
+                    }
                     ColumnType::Timestamp | ColumnType::LocalDateTime => {
                         format!("CASE WHEN {name} IS NULL THEN NULL ELSE 26 END")
                     }
@@ -192,6 +198,8 @@ impl MySqlImageReader {
         let mut arguments = MySqlArguments::default();
         for value in parameters {
             let result = match value {
+                FieldValue::LocalDate(v) => arguments.add(v.to_sql_string()),
+                FieldValue::InternalTime(v) => arguments.add(v.to_sql_string(6)?),
                 FieldValue::Timestamp(v) => arguments.add(v.to_sql_utc_string()),
                 FieldValue::LocalDateTime(v) => arguments.add(v.to_sql_string()),
                 FieldValue::Null => arguments.add(Option::<i64>::None),
@@ -262,7 +270,10 @@ impl MySqlImageReader {
         }
         if matches!(
             column.kind(),
-            ColumnType::Timestamp | ColumnType::LocalDateTime
+            ColumnType::Timestamp
+                | ColumnType::LocalDateTime
+                | ColumnType::LocalDate
+                | ColumnType::InternalTime
         ) && raw.type_info().name() != "VARCHAR"
         {
             return Err(DbError::Unsupported {
@@ -273,14 +284,25 @@ impl MySqlImageReader {
             return Ok(FieldValue::Null);
         }
         match column.kind() {
-            ColumnType::Timestamp | ColumnType::LocalDateTime => {
+            ColumnType::Timestamp
+            | ColumnType::LocalDateTime
+            | ColumnType::LocalDate
+            | ColumnType::InternalTime => {
                 let bytes: &[u8] = row
                     .try_get(index)
                     .map_err(|e| DbError::driver("temporal projected text", e))?;
                 let text = std::str::from_utf8(bytes).map_err(|_| DbError::Input {
                     reason: "temporal text encoding",
                 })?;
-                if column.kind() == ColumnType::Timestamp {
+                if column.kind() == ColumnType::LocalDate {
+                    Ok(FieldValue::LocalDate(
+                        seata_datasource::LocalDate::parse_sql(text)?,
+                    ))
+                } else if column.kind() == ColumnType::InternalTime {
+                    Ok(FieldValue::InternalTime(
+                        seata_datasource::InternalTime::parse_sql(text)?,
+                    ))
+                } else if column.kind() == ColumnType::Timestamp {
                     Ok(FieldValue::Timestamp(
                         seata_datasource::Timestamp::parse_sql_utc(text)?,
                     ))
@@ -332,7 +354,10 @@ impl MySqlImageReader {
         // 原事务已经持有 MDL 并复核 DATETIME/TIMESTAMP 物理定义；显式日历投影避免零日期被 SQLx 变成 NULL。
         if matches!(
             column.kind(),
-            ColumnType::Timestamp | ColumnType::LocalDateTime
+            ColumnType::Timestamp
+                | ColumnType::LocalDateTime
+                | ColumnType::LocalDate
+                | ColumnType::InternalTime
         ) {
             format!("CAST({quoted} AS CHAR CHARACTER SET utf8mb4)")
         } else {
