@@ -1359,3 +1359,9 @@ Rust 1.99/1.85 各 14 组真实 MySQL/HTTP 及六组固定原 Java TC 场景通�
 ## WP05 DATETIME 与明确 UTC 身份（2026-11-28）
 
 已实现精确日历、0–6 精度、主键、JDBC 93 / LocalDateTime UTC Undo 和实际补偿；保留旧配置 1/2，新配置为 3/4。原 Java 双表对象图、双 Rust 八笔原 TC 事务、错误旧配置/非法及零日期拒绝通过；每版本逐日核对 3,287,182 个合法日期。另有 JSON 四笔与普通 AT 64 笔回归、262 项证据削弱和八项源码反例。工作区各 808 passed / 398 ignored、184 摘要与严格 Clippy 通过。[证据](phase-2/evidence/mysql-datetime/README.md)、[ledger](phase-2/wp05-mysql-datetime.json)。DATE/TIME/TIMESTAMP、其他时间配置及完整 WP05/生产/后续阶段继续实施。
+
+## 2026-11-28：DATE / TIME / TIMESTAMP 原实现保真核对
+
+按原计划完整时间类型范围推进，新增[实施契约](phase-2/mysql-temporal-compatibility-contract.md)和[原 Java 实际现场](phase-2/evidence/mysql-temporal-reference/README.md)。固定原源码、Connector/J 8.0.27、Jackson 2.18.3 和真实 MySQL，在四种 JVM/驱动会话时区组合中完成 116 次 JDBC/Undo/重绑定观测。每组确认 7 个原读取异常、4 个 TIME 物理值变化与 2 个 TIME Java 值变化；独立验证拒绝 52 项结果削弱。TIMESTAMP 保留微秒，但 Rust 正式物理类型仍待实现，不能将原实现参考当作正式 TC 验收。
+
+下一步是 TIMESTAMP 的独立值域、会话时区、正式回调/恢复和主键验证；DATE 混合日历与 TIME 时长/精度差异保持完整待办。WP05、V1 生产门禁和 Phase 0–7 全计划没有关闭。

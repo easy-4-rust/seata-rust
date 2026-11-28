@@ -126,3 +126,7 @@ application_signals 功能由应用显式启用；默认不注册任何 OS 处�
 Tokio 的底层信号处理器是进程级的，监听器 Drop 不保证恢复 OS 默认处理方式，连续事件可能合并。第二次信号不隐式强杀；强制终止策略须由应用明确实现。该入口不处理 Windows 服务控制事件或保证系统关机宽限期。
 
 验收必须使用独立进程接收真实 OS 事件，并在原生 TM 的 Commit 响应被屏障持有时验证：收到事件后拒绝新准入、超时保留原许可及通讯所有者；释放响应后原事务完成、排空成功且 socket EOF。当前 Windows 现场与其他平台的验证状态分别记录，不以编译替代平台实测。
+
+### DATE / TIME / TIMESTAMP：实施前原实现参考
+
+已取得[四种时区组合的真实 JDBC / Undo / 重绑定证据](evidence/mysql-temporal-reference/README.md)及[实施契约](mysql-temporal-compatibility-contract.md)，116 次观测。TIME 的原精度丢失、DATE 的历法缺口如实计为差异；TIMESTAMP 的原保真结果不能替代 Rust 正式回调与恢复验收。三个类型的正式生产能力仍待实现；完整时间类型要求没有缩减。

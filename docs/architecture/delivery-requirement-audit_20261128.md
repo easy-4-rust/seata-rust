@@ -16,3 +16,5 @@
 | Phase 7：完整生态 | 原模块差异矩阵和 Phase 7 | Saga、PostgreSQL、更多 ORM/RPC、CLI、插件和 Java 2.x 完整功能对照仍未交付。 |
 
 后续执行先推进阻挡 V1 稳定性的真实缺口：对照 WP05 完整 SQL 与所有写入器准入要求补证/修复，再完成 WP07 的部署、安全、长期负载与运维验收。XA/TCC 只为已命名的未闭合要求补工作，不通过无限细分相同故障切点替代上述交付。达到既有 V1 稳定性条件后，按原路线实现 Phase 5–7。每次完成声明须绑定实际源码、运行输入和原始结果；本文件不构成任何总阶段已经完成的声明。
+
+时间类型后续核对：[DATE/TIME/TIMESTAMP 原实现保真契约](../phase-2/mysql-temporal-compatibility-contract.md)已绑定 116 次真实观测。DATE 原读取存在历法缺口，TIME 原链路存在精度丢失；不是简单复制 DATETIME 就能完成的缺口。下一步实现 TIMESTAMP 独立原生身份及正式恢复，随后解决 DATE/TIME 的完整值域表达；不据原参考结果关闭完整 WP05。

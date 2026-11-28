@@ -33,3 +33,7 @@
 ## DATETIME 精确日历与主键（2026-11-28）
 
 已实现 1000–9999、0–6 位精度、SQL NULL/零日期分离、同精度主键暂存及 Java 锁键。只有明确 UTC 配置可生成相应原 Java Undo；真实提交/补偿和旧 JSON/普通 AT 回归通过。[契约](mysql-datetime-contract.md)、[证据](evidence/mysql-datetime/README.md)。
+
+### 其余时间类型的真实兼容前提
+
+DATE / TIME / TIMESTAMP 的原 JDBC、原 Undo 与数据库重绑定边界以[时间类型契约](mysql-temporal-compatibility-contract.md)和[固定原实现现场](evidence/mysql-temporal-reference/README.md)为依据。原 TIME 存在精度丢失及有符号/超日时长取值失败；DATE 存在混合日历缺口；TIMESTAMP 与 DATETIME 虽同为 JDBC 93，Java 类与时间点语义不同。这些类型的正式物理资源门禁仍开放，不以原运行器退出码零推断兼容通过。

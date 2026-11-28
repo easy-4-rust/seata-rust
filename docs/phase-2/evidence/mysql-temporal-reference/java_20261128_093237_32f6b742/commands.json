@@ -1,0 +1,189 @@
+[
+  {
+    "label": "java-pin",
+    "argv": [
+      "git",
+      "-C",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-java-phase09-oracle",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "create",
+    "argv": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "seata-temporal-20261128-093237-32f6b742",
+      "--label",
+      "seata.temporal.owner=014f2b82bc9e44abb99200fdea9077ba",
+      "--mount",
+      "type=bind,source=D:/codex-builds/seata-temporal-20261128_093237_32f6b742/data,target=/var/lib/mysql",
+      "-p",
+      "127.0.0.1:59638:3306",
+      "-e",
+      "MYSQL_ROOT_PASSWORD=seata-mysql-fixture-only",
+      "-e",
+      "MYSQL_ROOT_HOST=%",
+      "-e",
+      "MYSQL_DATABASE=temporal_reference",
+      "sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "start",
+    "argv": [
+      "docker",
+      "start",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "schema",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET time_zone='+00:00'; SET sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION'; USE temporal_reference;CREATE TABLE probe_date(id INT PRIMARY KEY,v DATE NULL) ENGINE=InnoDB;CREATE TABLE probe_date_restored LIKE probe_date;INSERT INTO probe_date VALUES(1,'1000-01-01');INSERT INTO probe_date VALUES(2,'1500-02-28');INSERT INTO probe_date VALUES(3,'1582-10-04');INSERT INTO probe_date VALUES(4,'1582-10-05');INSERT INTO probe_date VALUES(5,'1582-10-10');INSERT INTO probe_date VALUES(6,'1582-10-14');INSERT INTO probe_date VALUES(7,'1582-10-15');INSERT INTO probe_date VALUES(8,'1582-10-29');INSERT INTO probe_date VALUES(9,'1969-12-31');INSERT INTO probe_date VALUES(10,'1970-01-01');INSERT INTO probe_date VALUES(11,'2000-02-29');INSERT INTO probe_date VALUES(12,'9999-12-31');INSERT INTO probe_date VALUES(13,NULL);CREATE TABLE probe_time(id INT PRIMARY KEY,v TIME(6) NULL) ENGINE=InnoDB;CREATE TABLE probe_time_restored LIKE probe_time;INSERT INTO probe_time VALUES(1,'-838:59:59.000000');INSERT INTO probe_time VALUES(2,'-25:01:02.000000');INSERT INTO probe_time VALUES(3,'-00:00:00.000001');INSERT INTO probe_time VALUES(4,'00:00:00.000000');INSERT INTO probe_time VALUES(5,'00:00:00.000001');INSERT INTO probe_time VALUES(6,'12:34:56.123456');INSERT INTO probe_time VALUES(7,'23:59:59.999999');INSERT INTO probe_time VALUES(8,'24:00:00.000000');INSERT INTO probe_time VALUES(9,'838:59:59.000000');INSERT INTO probe_time VALUES(10,NULL);CREATE TABLE probe_timestamp(id INT PRIMARY KEY,v TIMESTAMP(6) NULL) ENGINE=InnoDB;CREATE TABLE probe_timestamp_restored LIKE probe_timestamp;INSERT INTO probe_timestamp VALUES(1,'1970-01-01 00:00:01.000000');INSERT INTO probe_timestamp VALUES(3,'1970-01-01 00:00:01.000001');INSERT INTO probe_timestamp VALUES(4,'2000-02-29 12:34:56.123456');INSERT INTO probe_timestamp VALUES(5,'2038-01-19 03:14:07.000000');INSERT INTO probe_timestamp VALUES(6,'2038-01-19 03:14:07.999999');INSERT INTO probe_timestamp VALUES(7,NULL)"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "timestamp-below-range",
+    "argv": [
+      "docker",
+      "exec",
+      "-e",
+      "MYSQL_PWD=seata-mysql-fixture-only",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2",
+      "mysql",
+      "-h127.0.0.1",
+      "-uroot",
+      "-N",
+      "-B",
+      "-e",
+      "SET time_zone='+00:00'; SET sql_mode='STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION'; USE temporal_reference;INSERT INTO probe_timestamp VALUES(2,'1969-12-31 23:59:59.999999')"
+    ],
+    "exit_code": 1
+  },
+  {
+    "label": "UTC-utc",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\java.exe",
+      "-Duser.timezone=UTC",
+      "-Djava.io.tmpdir=D:/Temp",
+      "-Xlog:class+load=info:file=E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-2/evidence/mysql-temporal-reference/java_20261128_093237_32f6b742/UTC-utc/class-load.log",
+      "-cp",
+      "D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\classes;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-annotations-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-core-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-databind-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-datatype-jsr310-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\caffeine-2.9.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-common-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-core-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\slf4j-api-2.0.17.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-classic-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-core-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\commons-lang3-3.19.0.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\guava-32.1.3-jre.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\mysql-connector-java-8.0.27.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-0;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-1",
+      "org.apache.seata.rm.datasource.sql.struct.cache.TemporalColumnOracle",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\mysql-temporal-reference\\java_20261128_093237_32f6b742\\UTC-utc",
+      "+00:00"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "UTC-east8",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\java.exe",
+      "-Duser.timezone=UTC",
+      "-Djava.io.tmpdir=D:/Temp",
+      "-Xlog:class+load=info:file=E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-2/evidence/mysql-temporal-reference/java_20261128_093237_32f6b742/UTC-east8/class-load.log",
+      "-cp",
+      "D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\classes;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-annotations-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-core-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-databind-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-datatype-jsr310-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\caffeine-2.9.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-common-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-core-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\slf4j-api-2.0.17.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-classic-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-core-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\commons-lang3-3.19.0.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\guava-32.1.3-jre.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\mysql-connector-java-8.0.27.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-0;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-1",
+      "org.apache.seata.rm.datasource.sql.struct.cache.TemporalColumnOracle",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\mysql-temporal-reference\\java_20261128_093237_32f6b742\\UTC-east8",
+      "+08:00"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "Asia-Shanghai-utc",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\java.exe",
+      "-Duser.timezone=Asia/Shanghai",
+      "-Djava.io.tmpdir=D:/Temp",
+      "-Xlog:class+load=info:file=E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-2/evidence/mysql-temporal-reference/java_20261128_093237_32f6b742/Asia-Shanghai-utc/class-load.log",
+      "-cp",
+      "D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\classes;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-annotations-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-core-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-databind-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-datatype-jsr310-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\caffeine-2.9.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-common-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-core-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\slf4j-api-2.0.17.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-classic-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-core-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\commons-lang3-3.19.0.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\guava-32.1.3-jre.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\mysql-connector-java-8.0.27.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-0;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-1",
+      "org.apache.seata.rm.datasource.sql.struct.cache.TemporalColumnOracle",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\mysql-temporal-reference\\java_20261128_093237_32f6b742\\Asia-Shanghai-utc",
+      "+00:00"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "Asia-Shanghai-east8",
+    "argv": [
+      "D:\\Java\\jdk-17.0.12\\bin\\java.exe",
+      "-Duser.timezone=Asia/Shanghai",
+      "-Djava.io.tmpdir=D:/Temp",
+      "-Xlog:class+load=info:file=E:/workspaces/workspace-github-easy-4-rust/seata-rust-phase09-validation/docs/phase-2/evidence/mysql-temporal-reference/java_20261128_093237_32f6b742/Asia-Shanghai-east8/class-load.log",
+      "-cp",
+      "D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\classes;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-annotations-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-core-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-databind-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\jackson-datatype-jsr310-2.18.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\caffeine-2.9.3.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-common-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\seata-core-2.8.0-SNAPSHOT.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\slf4j-api-2.0.17.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-classic-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\logback-core-1.5.32.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\commons-lang3-3.19.0.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\guava-32.1.3-jre.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\lib\\mysql-connector-java-8.0.27.jar;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-0;D:\\codex-builds\\seata-temporal-20261128_093237_32f6b742\\temporal-oracle\\fallback-1",
+      "org.apache.seata.rm.datasource.sql.struct.cache.TemporalColumnOracle",
+      "E:\\workspaces\\workspace-github-easy-4-rust\\seata-rust-phase09-validation\\docs\\phase-2\\evidence\\mysql-temporal-reference\\java_20261128_093237_32f6b742\\Asia-Shanghai-east8",
+      "+08:00"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "inspect",
+    "argv": [
+      "docker",
+      "inspect",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "mysql-log",
+    "argv": [
+      "docker",
+      "logs",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "stop",
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "remove",
+    "argv": [
+      "docker",
+      "rm",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "confirm-removed",
+    "argv": [
+      "docker",
+      "inspect",
+      "6d9096c7267cc6cc55b607a6f9517511a27442961ddc704b534ed8b7f23ec4c2"
+    ],
+    "exit_code": 1
+  }
+]
